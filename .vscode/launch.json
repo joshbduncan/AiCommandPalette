@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "extendscript-debug",
+      "request": "attach",
+      "name": "Start debugger—AI",
+      "hostAppSpecifier": "illustrator",
+      "engineName": "main"
+    }
+  ]
+}
