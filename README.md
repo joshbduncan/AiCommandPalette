@@ -11,6 +11,12 @@ If you have worked with Alfred app or VS Code you know how great the “command 
 
 **AND you can build custom commands that chain other commands together!** 🤯
 
+## Video Demo
+
+<p align="center">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Jhh_Dvfs0ro" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
+
 I recommend installing this action into your scripts folder, then tying it to a keyboard shortcut using something like [Keyboard Maestro](https://www.keyboardmaestro.com/main/) (Mac), [BetterTouchTool](https://folivora.ai/) (Mac), or [AutoHotkey](https://www.autohotkey.com/) (Windows).
 
 ℹ️ I like to use the keyboard shortcut Command-Shift-P since it is somewhat mnemonic for "palette".

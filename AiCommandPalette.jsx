@@ -355,7 +355,11 @@ function configHideCommand() {
   var commands, result;
   var ct = 0;
 
-  commands = filterOutCommands(getObjectKeys(commandsData), ["config", "script"]);
+  commands = filterOutCommands(getObjectKeys(commandsData), [
+    "config",
+    "custom",
+    "script",
+  ]);
   if (commands.length > 0) {
     result = commandPalette(
       (arr = commands),
