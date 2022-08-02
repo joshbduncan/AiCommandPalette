@@ -483,7 +483,8 @@ USER DIALOGS (and accompanying functions)
 /** show the command palette to the user populated with commands from `arr` */
 function commandPalette(arr, title, bounds, multiselect, filter) {
   var q, filteredArr, matches, temp;
-  var cur = 0;
+  var visibleListItems = 9;
+  var frameStart = 0;
 
   var win = new Window("dialog");
   win.text = title;
@@ -512,6 +513,7 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
 
   // as a query is typed update the list box
   q.onChanging = function () {
+    frameStart = 0;
     q = this.text;
     matches = q === "" ? filteredArr : scoreMatches(q, arr);
     if (matches.length > 0) {
@@ -528,31 +530,70 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
     }
   };
 
-  if (!multiselect) {
-    // move palette selection with arrow keys
-    q.addEventListener("keydown", function (k) {
-      if (k.keyName == "Up") {
-        k.preventDefault();
+  /*
+  Move the listbox frame of visible items when using the
+  up and down arrow keys while in the `q` edittext.
+
+  One problem with this functionality is that when a listbox listitem
+  is selected via a script the API moves the visible "frame" of items
+  so that the new selection is at the top. This is not standard behavior,
+  and not even how the listbox behaves when you use the up and down keys inside
+  of the actual listbox.
+
+  Only works if multiselect if set to false.
+  */
+  var info = win.add("statictext", undefined, "INFO");
+  info.text =
+    "CUR: " +
+    list.selection.index +
+    ", START: " +
+    frameStart +
+    ", END: " +
+    (frameStart + visibleListItems - 1);
+
+  q.addEventListener("keydown", function (k) {
+    if (k.keyName == "Up") {
+      k.preventDefault();
+      if (list.selection.index > 0) {
         list.selection = list.selection.index - 1;
-        if (cur > 0) {
-          cur--;
-        }
-      } else if (k.keyName == "Down") {
-        k.preventDefault();
+        if (list.selection.index < frameStart) frameStart--;
+      }
+    } else if (k.keyName == "Down") {
+      k.preventDefault();
+      if (list.selection.index < list.items.length) {
         list.selection = list.selection.index + 1;
-        if (cur < list.items.length) {
-          cur++;
+        if (list.selection.index > frameStart + visibleListItems - 1) {
+          if (frameStart < list.items.length - visibleListItems) {
+            frameStart++;
+          } else {
+            frameStart = frameStart;
+          }
         }
       }
-      // FIXME: check to see if palette also shows 9 rows on windows or offset reveal may be wrong
-      // move the visible list item to keep selected item from jumping to top
-      if (cur < 9) {
-        list.revealItem(0);
-      } else {
-        list.revealItem(cur - 8);
-      }
-    });
-  }
+    }
+    /*
+    If a selection is made inside of the actual listbox frame by the user,
+    the API doesn't offer any way to know which part of the list is currently
+    visible in the listbox "frame". If the user was to re-enter the `q` edittext
+    and then hit an arrow key the above event listener will not work correctly so
+    I just move the next selection (be it up or down) to the middle of the "frame".
+    */
+    if (
+      list.selection.index < frameStart ||
+      list.selection.index > frameStart + visibleListItems - 1
+    )
+      frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+    // move the frame by revealing the calculated `frameStart`
+    list.revealItem(frameStart);
+
+    info.text =
+      "CUR: " +
+      list.selection.index +
+      ", START: " +
+      frameStart +
+      ", END: " +
+      (frameStart + visibleListItems - 1);
+  });
 
   // close window when double-clicking a selection
   list.onDoubleClick = function () {
@@ -713,7 +754,6 @@ function scoreMatches(q, arr) {
       word = words[n];
       if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null) score++;
     }
-    var x = {arr[i]: score}
     if (score > 0) scores[arr[i]] = score;
   }
   return sortKeysByValue(scores, "score", "name");
@@ -727,7 +767,6 @@ function scoreMatches(q, arr) {
 function sortKeysByValue(obj) {
   var sorted = [];
   for (var key in obj) {
-    console.log("KEY:" + key + " = " + obj[key]);
     for (var i = 0; i < sorted.length; i++) {
       if (obj[key] > obj[sorted[i]]) break;
     }
