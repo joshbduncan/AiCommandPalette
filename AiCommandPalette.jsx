@@ -696,38 +696,44 @@ function customCommandsBuilder(arr, title, bounds, multiselect) {
   return false;
 }
 
-/** score matching `arr` list items by count of matching words with `q` */
+/**
+ * Score array items based on string match with query.
+ * @param   {String} q   String to search for withing `arr`
+ * @param   {Array}  arr String items to try and match.
+ * @returns {Array}      Matching items sorted by score.
+ */
 function scoreMatches(q, arr) {
-  var score, word;
+  var word;
+  var words = [];
+  var scores = {};
   var words = q.split(" ");
-  var results = [];
   for (var i = 0; i < arr.length; i++) {
-    score = 0;
+    var score = 0;
     for (var n = 0; n < words.length; n++) {
-      word = words[n].toLowerCase();
-      if (word != "" && arr[i].toLowerCase().indexOf(word) >= 0) score++;
+      word = words[n];
+      if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null) score++;
     }
-    if (score > 0) results.push({ cmd: arr[i], score: score });
+    var x = {arr[i]: score}
+    if (score > 0) scores[arr[i]] = score;
   }
-  return sortResults(results, "score");
+  return sortKeysByValue(scores, "score", "name");
 }
 
-/** sort list `arr` objects in descending order by `key` */
-function sortResults(arr, key) {
-  var cur;
-  var sortedResults = [];
-  var sortedArr = [arr.shift()];
-  while (arr.length >= 1) {
-    cur = arr.shift();
-    for (var i = 0; i < sortedArr.length; i++) {
-      if (sortedArr[i][key] < cur[key]) break;
+/**
+ * Sort an objects key by their value.
+ * @param   {Object} obj Simple object with `key`: `value` pairs.
+ * @returns {Array}      Array of sorted keys.
+ */
+function sortKeysByValue(obj) {
+  var sorted = [];
+  for (var key in obj) {
+    console.log("KEY:" + key + " = " + obj[key]);
+    for (var i = 0; i < sorted.length; i++) {
+      if (obj[key] > obj[sorted[i]]) break;
     }
-    sortedArr.splice(i, 0, cur);
+    sorted.splice(i, 0, key);
   }
-  for (var i = 0; i < sortedArr.length; i++) {
-    sortedResults.push(sortedArr[i]["cmd"]);
-  }
-  return sortedResults;
+  return sorted;
 }
 
 /**************************************************
