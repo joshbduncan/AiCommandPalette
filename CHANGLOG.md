@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Hide Built-In Commands no longer shows "custom" commands
+- `scoreMatches()` improvements
+    - using regex to match instead of indexOf
+    - not counting repeating words for better scoring
+    - simplified sorting function
 
 ## [0.1.0] - 2022-07-27
 ### Added
