@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - YouTube Video Demo
+- A check to make sure loaded scripts still exist at the location they were loaded.
+    - if script doesn't exists it will be remove from user prefs
+    - will update so any custom commands that rely on a script that no longer exists can be edited
 
 ### Changed
 - Hide Built-In Commands no longer shows "custom" commands

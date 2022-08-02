@@ -135,10 +135,18 @@ function executeCommandAction(action) {
       break;
     case "script":
       f = new File(action.value.scriptPath);
-      try {
-        $.evalFile(f);
-      } catch (e) {
-        alert("Error executing script: " + action.value.scriptName + "\n" + e);
+      if (!f.exists) {
+        alert(
+          "Sorry, script no longer exists. Try reloading.\nPLEASE NOTE: This script has been removed from your user preferences and will no longer work in any custom commands you previously created where this script was a step.\n\nYou must reload your script and rebuild any custom commands that use it."
+        );
+        delete data.commands[type]["Script: " + action.value.scriptName];
+        writeUserData(dataFile);
+      } else {
+        try {
+          $.evalFile(f);
+        } catch (e) {
+          alert("Error executing script: " + action.value.scriptName + "\n" + e);
+        }
       }
       break;
     default:
@@ -542,15 +550,6 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
 
   Only works if multiselect if set to false.
   */
-  var info = win.add("statictext", undefined, "INFO");
-  info.text =
-    "CUR: " +
-    list.selection.index +
-    ", START: " +
-    frameStart +
-    ", END: " +
-    (frameStart + visibleListItems - 1);
-
   q.addEventListener("keydown", function (k) {
     if (k.keyName == "Up") {
       k.preventDefault();
@@ -585,14 +584,6 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
       frameStart = list.selection.index - Math.floor(visibleListItems / 2);
     // move the frame by revealing the calculated `frameStart`
     list.revealItem(frameStart);
-
-    info.text =
-      "CUR: " +
-      list.selection.index +
-      ", START: " +
-      frameStart +
-      ", END: " +
-      (frameStart + visibleListItems - 1);
   });
 
   // close window when double-clicking a selection
