@@ -17,10 +17,10 @@ var _copyright = "Copyright 2022 Josh Duncan";
 var _website = "joshbduncan.com";
 var _github = "https://github.com/joshbduncan";
 
-// setup main script variables
+// Setup main script variables
 var data, dataFolder, dataFile, commandsData, allCommands, filteredCommands, result;
 
-// ai command palette data object
+// Ai Command Palette data object
 data = {
   commands: {
     custom: {},
@@ -74,17 +74,17 @@ data = {
   },
 };
 
-// load user data if available and add to data object
+// Load user data
 dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
 dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
 loadUserData(dataFile);
 
-// setup commands for palette
-commandsData = buildCommands(data.commands);
+// Setup commands for Ai Command Palette
+commandsData = buildCommands();
 allCommands = getObjectKeys(commandsData);
-filteredCommands = filterHiddenCommands(allCommands);
+filteredCommands = filterHiddenCommands();
 
-// present the command palette
+// Present the Ai Command Palette
 result = commandPalette(
   (arr = filteredCommands),
   (title = _title),
@@ -98,18 +98,23 @@ if (result) processCommandActions(result, commandsData);
 COMMAND EXECUTION
 **************************************************/
 
-/** iterate over the actions for the picked command */
-function processCommandActions(command, commandsObject) {
-  var cmdActions = commandsObject[command].cmdActions;
+/**
+ * Iterate over each action for `command`.
+ * @param {String} command Command to execute.
+ */
+function processCommandActions(command) {
+  var cmdActions = commandsData[command].cmdActions;
   for (var i = 0; i < cmdActions.length; i++) {
     executeCommandAction(cmdActions[i]);
   }
 }
 
-/** execute `action` based on `action.type` */
+/**
+ * Execute `action` based on `action.type`.
+ * @param {Object} action Action to execute.
+ */
 function executeCommandAction(action) {
   var type, f;
-
   type = action.type;
   switch (type.toLowerCase()) {
     case "config":
@@ -137,7 +142,9 @@ function executeCommandAction(action) {
       f = new File(action.value.scriptPath);
       if (!f.exists) {
         alert(
-          "Sorry, script no longer exists. Try reloading.\nPLEASE NOTE: This script has been removed from your user preferences and will no longer work in any custom commands you previously created where this script was a step.\n\nYou must reload your script and rebuild any custom commands that use it."
+          "Script no longer exists.\nOriginal Path: " +
+            action.value.scriptPath +
+            "\n\nPLEASE NOTE: Deleted commands will longer work in any custom commands you previously created where they were used as a step."
         );
         delete data.commands[type]["Script: " + action.value.scriptName];
         writeUserData(dataFile);
@@ -163,11 +170,10 @@ function executeCommandAction(action) {
 CONFIGURATION OPERATIONS
 **************************************************/
 
-/** execute command palette configuration actions */
+/** Execute configuration actions. */
 function configAction(action) {
   var result;
   var write = true;
-
   switch (action) {
     case "paletteSettings":
       configPaletteSettings();
@@ -205,6 +211,7 @@ function configAction(action) {
   if (write) writeUserData(dataFile);
 }
 
+/** Show Ai Command Palette About Dialog. */
 function aboutDialog() {
   var win = new Window("dialog");
   win.text = "Ai Command Palette " + _version;
@@ -249,7 +256,7 @@ function aboutDialog() {
   win.show();
 }
 
-/** show all config commands in a palette */
+/** Present all config commands. */
 function configPaletteSettings() {
   var result = commandPalette(
     (arr = getObjectKeys(data.commands.config)),
@@ -261,60 +268,37 @@ function configPaletteSettings() {
   if (result) processCommandActions(result, commandsData);
 }
 
-/** load external scripts into the command palette */
+/** Load external scripts into Ai Command Palette. */
 function configLoadScript() {
   var files, f, fname;
   var ct = 0;
-
-  var files = File.openDialog("Load Script File(s)", "", true);
-  if (files) {
+  var files = loadFileTypes("Load Script File(s)", true, ".jsx$|.js$");
+  if (files.length > 0) {
     for (var i = 0; i < files.length; i++) {
       f = files[i];
       fname = decodeURI(f.name);
-      if (f.name.search(".jsx$|.js$") >= 0) {
-        if (data.commands.script.hasOwnProperty("Script: " + fname)) {
-          if (
-            data.commands.script["Script: " + fname].cmdActions[0].value.scriptPath ==
-            f.fsName
-          ) {
-            alert("Script " + fname + " already loaded at exact same file path!");
-            continue;
-          } else {
-            if (
-              !Window.confirm(
-                "Replace " + fname + " script that is already loaded?",
-                "noAsDflt",
-                "Script Load Conflict"
-              )
-            )
-              continue;
-          }
-        }
-        try {
-          data.commands.script["Script: " + fname] = {
-            cmdType: "script",
-            cmdActions: [
-              {
-                type: "script",
-                value: {
-                  scriptName: fname,
-                  scriptPath: f.fsName,
-                },
-              },
-            ],
-          };
-          ct++;
-        } catch (e) {
-          alert("Error loading script: " + fname + "\nPath: " + f.fsName);
-        }
+      if (data.commands.script.hasOwnProperty("Script: " + fname)) {
+        if (
+          !Window.confirm(
+            "Script " +
+              fname +
+              " already loaded! \n Would you like to replace the previous script with the new one?",
+            "noAsDflt",
+            "Script Load Conflict"
+          )
+        )
+          continue;
       }
+      ct += insertScriptIntoUserData(f);
     }
     if (ct > 0) buildCommands(data.commands, true);
     alert("Total scripts loaded: " + ct);
+  } else {
+    alert("No script file(s) selected.");
   }
 }
 
-/** build custom commands with step from other commands */
+/** Build custom commands with steps from other commands. */
 function configBuildCustomCommand() {
   var command;
   var cmdActions = [];
@@ -346,7 +330,7 @@ function configBuildCustomCommand() {
   }
 }
 
-/** show all builtin menu commands in a palette */
+/** Show all built-in Ai menu commands. */
 function showBuiltInMenuCommands() {
   result = commandPalette(
     (arr = getObjectKeys(data.commands.menu)),
@@ -358,7 +342,7 @@ function showBuiltInMenuCommands() {
   if (result) processCommandActions(result, commandsData);
 }
 
-/** hide commands from the command palette results */
+/** Hide commands from Ai Command Palette. */
 function configHideCommand() {
   var commands, result;
   var ct = 0;
@@ -398,7 +382,7 @@ function configHideCommand() {
   }
 }
 
-/** unhide commands from the users settings */
+/** Unhide user hidden commands. */
 function configUnhideCommand() {
   var result;
   var ct = 0;
@@ -437,7 +421,7 @@ function configUnhideCommand() {
   }
 }
 
-/** delete commands from the command palette */
+/** Delete user added commands from the Ai Command Palette. */
 function configDeleteCommand() {
   var commands, result, cmdToDelete, type;
   var ct = 0;
@@ -459,7 +443,9 @@ function configDeleteCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Delete Command(s)?\n" + result.join("\n"),
+          "Delete Command(s)?\n" +
+            "PLEASE NOTE: Deleted commands will longer work in any custom commands you previously created where they were used as a step.\n\n" +
+            result.join("\n"),
           "noAsDflt",
           "Confirm Command(s) To Delete"
         )
@@ -488,7 +474,15 @@ function configDeleteCommand() {
 USER DIALOGS (and accompanying functions)
 **************************************************/
 
-/** show the command palette to the user populated with commands from `arr` */
+/**
+ * Command palette dialog.
+ * @param   {Array}   arr         ListBox list items.
+ * @param   {String}  title       Dialog title.
+ * @param   {Array}   bounds      Dialog size.
+ * @param   {Boolean} multiselect Can the user select multiple ListBox items.
+ * @param   {Array}   filter      Types of commands to filter out from `arr`.
+ * @returns {Array}               Selected ListBox list items.
+ */
 function commandPalette(arr, title, bounds, multiselect, filter) {
   var q, filteredArr, matches, temp;
   var visibleListItems = 9;
@@ -538,53 +532,55 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
     }
   };
 
-  /*
-  Move the listbox frame of visible items when using the
-  up and down arrow keys while in the `q` edittext.
+  if (!multiselect) {
+    /*
+    Move the listbox frame of visible items when using the
+    up and down arrow keys while in the `q` edittext.
 
-  One problem with this functionality is that when a listbox listitem
-  is selected via a script the API moves the visible "frame" of items
-  so that the new selection is at the top. This is not standard behavior,
-  and not even how the listbox behaves when you use the up and down keys inside
-  of the actual listbox.
+    One problem with this functionality is that when a listbox listitem
+    is selected via a script the API moves the visible "frame" of items
+    so that the new selection is at the top. This is not standard behavior,
+    and not even how the listbox behaves when you use the up and down keys inside
+    of the actual listbox.
 
-  Only works if multiselect if set to false.
-  */
-  q.addEventListener("keydown", function (k) {
-    if (k.keyName == "Up") {
-      k.preventDefault();
-      if (list.selection.index > 0) {
-        list.selection = list.selection.index - 1;
-        if (list.selection.index < frameStart) frameStart--;
-      }
-    } else if (k.keyName == "Down") {
-      k.preventDefault();
-      if (list.selection.index < list.items.length) {
-        list.selection = list.selection.index + 1;
-        if (list.selection.index > frameStart + visibleListItems - 1) {
-          if (frameStart < list.items.length - visibleListItems) {
-            frameStart++;
-          } else {
-            frameStart = frameStart;
+    Only works if multiselect if set to false.
+    */
+    q.addEventListener("keydown", function (k) {
+      if (k.keyName == "Up") {
+        k.preventDefault();
+        if (list.selection.index > 0) {
+          list.selection = list.selection.index - 1;
+          if (list.selection.index < frameStart) frameStart--;
+        }
+      } else if (k.keyName == "Down") {
+        k.preventDefault();
+        if (list.selection.index < list.items.length) {
+          list.selection = list.selection.index + 1;
+          if (list.selection.index > frameStart + visibleListItems - 1) {
+            if (frameStart < list.items.length - visibleListItems) {
+              frameStart++;
+            } else {
+              frameStart = frameStart;
+            }
           }
         }
       }
-    }
-    /*
-    If a selection is made inside of the actual listbox frame by the user,
-    the API doesn't offer any way to know which part of the list is currently
-    visible in the listbox "frame". If the user was to re-enter the `q` edittext
-    and then hit an arrow key the above event listener will not work correctly so
-    I just move the next selection (be it up or down) to the middle of the "frame".
-    */
-    if (
-      list.selection.index < frameStart ||
-      list.selection.index > frameStart + visibleListItems - 1
-    )
-      frameStart = list.selection.index - Math.floor(visibleListItems / 2);
-    // move the frame by revealing the calculated `frameStart`
-    list.revealItem(frameStart);
-  });
+      /*
+      If a selection is made inside of the actual listbox frame by the user,
+      the API doesn't offer any way to know which part of the list is currently
+      visible in the listbox "frame". If the user was to re-enter the `q` edittext
+      and then hit an arrow key the above event listener will not work correctly so
+      I just move the next selection (be it up or down) to the middle of the "frame".
+      */
+      if (
+        list.selection.index < frameStart ||
+        list.selection.index > frameStart + visibleListItems - 1
+      )
+        frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+      // move the frame by revealing the calculated `frameStart`
+      list.revealItem(frameStart);
+    });
+  }
 
   // close window when double-clicking a selection
   list.onDoubleClick = function () {
@@ -599,7 +595,14 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   return false;
 }
 
-/** show the custom commands builder palette populated with commands from `arr` */
+/**
+ * Custom commands builder palette dialog.
+ * @param   {Array}   arr         ListBox list items.
+ * @param   {String}  title       Dialog title.
+ * @param   {Array}   bounds      Dialog size.
+ * @param   {Boolean} multiselect Can the user select multiple ListBox items.
+ * @returns {Object}              Custom command object.
+ */
 function customCommandsBuilder(arr, title, bounds, multiselect) {
   var win = new Window("dialog");
   win.text = title;
@@ -770,28 +773,32 @@ function sortKeysByValue(obj) {
 SUPPLEMENTAL FUNCTIONS
 **************************************************/
 
-/** build overall command object and list objects from `obj` */
-function buildCommands(obj) {
+/** Build overall commands data object. */
+function buildCommands() {
   var commandsData = {};
-  for (var commandsType in obj) {
-    for (var command in obj[commandsType]) {
-      commandsData[command] = obj[commandsType][command];
+  for (var type in data.commands) {
+    for (var command in data.commands[type]) {
+      commandsData[command] = data.commands[type][command];
     }
   }
   return commandsData;
 }
 
-/** get all commands that aren't of specific type or name */
-function filterOutCommands(commandsArr, types) {
+/**
+ * Get all commands that aren't of specific type or name.
+ * @param   {Array} commands Commands to filter through.
+ * @param   {Array} types    Types of commands to filter out.
+ * @returns {Array}          Filtered array of commands not matching any of `type`.
+ */
+function filterOutCommands(commands, types) {
   var filtered = [];
-  for (var i = 0; i < commandsArr.length; i++) {
-    if (!includes(types, commandsData[commandsArr[i]].cmdType))
-      filtered.push(commandsArr[i]);
+  for (var i = 0; i < commands.length; i++) {
+    if (!includes(types, commandsData[commands[i]].cmdType)) filtered.push(commands[i]);
   }
   return filtered;
 }
 
-/** filter out all commands hidden by user */
+/** Filter out all commands hidden by user. */
 function filterHiddenCommands() {
   var arr = [];
   for (var i = 0; i < allCommands.length; i++) {
@@ -801,7 +808,7 @@ function filterHiddenCommands() {
   return arr;
 }
 
-/** get all currently installed action sets and actions */
+/** Get all currently installed action sets and actions. */
 function getAllActions() {
   var currentPath, setName, actionCount, actionName;
   var actions = {};
@@ -838,7 +845,11 @@ function getAllActions() {
   return actions;
 }
 
-/** get all key from `obj` */
+/**
+ * Return all keys from `obj`.
+ * @param   {Object} obj Object to extract keys from.
+ * @returns {Array}      Array of all keys from `obj`.
+ */
 function getObjectKeys(obj) {
   var keys = [];
   for (var k in obj) {
@@ -847,7 +858,12 @@ function getObjectKeys(obj) {
   return keys;
 }
 
-/** check to see if `arr` includes `q` */
+/**
+ * Check to see if array `arr` contains item `q`.
+ * @param   {Array}  arr Array to check for item `q` in.
+ * @param   {String} q   Item to check for.
+ * @returns {Bool}       Whether or not item is in array.
+ */
 function includes(arr, q) {
   for (var i = 0; i < arr.length; i++) {
     if (q === arr[i]) return true;
@@ -855,7 +871,59 @@ function includes(arr, q) {
   return false;
 }
 
-/** open `url` in browser */
+/**
+ * Present the File.openDialog() window for the user to select certain files to load.
+ * @param {String}  prompt        Prompt for open file dialog.
+ * @param {Boolean} multiselect   Can the user select multiple files.
+ * @param {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
+ * @returns
+ */
+function loadFileTypes(prompt, multiselect, fileTypeRegex) {
+  var results = [];
+  var files = File.openDialog(prompt, "", multiselect);
+  if (files) {
+    for (var i = 0; i < files.length; i++) {
+      f = files[i];
+      fname = decodeURI(f.name);
+      if (f.name.search(fileTypeRegex) >= 0) {
+        results.push(f);
+      }
+    }
+  }
+  return results;
+}
+
+/**
+ *
+ * @param {Object} f JavaScript file to load as a File object.
+ * @returns
+ */
+function insertScriptIntoUserData(f) {
+  fname = decodeURI(f.name);
+  try {
+    data.commands.script["Script: " + fname] = {
+      cmdType: "script",
+      cmdActions: [
+        {
+          type: "script",
+          value: {
+            scriptName: fname,
+            scriptPath: f.fsName,
+          },
+        },
+      ],
+    };
+    return 1;
+  } catch (e) {
+    alert("Error loading script: " + fname + "\nPath: " + f.fsName);
+    return 0;
+  }
+}
+
+/**
+ * Open a url in the system browser.
+ * @param {String} url URL to open.
+ */
 function openURL(url) {
   var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
   html.open("w");
@@ -872,7 +940,10 @@ function openURL(url) {
 FILE/FOLDER OPERATIONS
 **************************************************/
 
-/** load user saved preferences from disk at `f` and add to `data` object */
+/**
+ * Load user saved preferences from disk at file object `f` and add to `data` object.
+ * @param   {Object} f File object for user preference data.
+ */
 function loadUserData(f) {
   var userData = {};
   if (f.exists) {
@@ -883,10 +954,12 @@ function loadUserData(f) {
       }
     }
   }
-  return userData;
 }
 
-/** write user data to disk */
+/**
+ * Write user preference data to disk at file object `f`.
+ * @param {Object} f File object for user preference data.
+ */
 function writeUserData(f) {
   var userData = {
     commands: {
@@ -898,22 +971,34 @@ function writeUserData(f) {
   writeJSONData(userData, f);
 }
 
-/** setup a new folder object at `path` and create if doesn't exists */
+/**
+ * Setup a new folder object at `path` and create if ir doesn't exist.
+ * @param   {String} path System folder path.
+ * @returns {Object}      Folder object.
+ */
 function setupFolderObject(path) {
   var folder = new Folder(path);
   if (!folder.exists) folder.create();
   return folder;
 }
 
-/** setup a new file object with name `fName` at `folderPath` */
-function setupFileObject(folderPath, fName) {
-  return new File(folderPath + "/" + fName);
+/**
+ * Setup a new file object with name `name` at `path`.
+ * @param   {Object} path Folder object where file should exist,
+ * @param   {String} name File name.
+ * @returns {Object}      File object.
+ */
+function setupFileObject(path, name) {
+  return new File(path + "/" + name);
 }
 
-/** read ai "json-like" data from file `f` */
+/**
+ * Read Ai "json-like" data from file `f`.
+ * @param   {Object} f File object to read.
+ * @returns {Object}   Evaluated JSON data.
+ */
 function readJSONData(f) {
   var json, obj;
-
   try {
     f.encoding = "UTF-8";
     f.open("r");
@@ -926,7 +1011,11 @@ function readJSONData(f) {
   return obj;
 }
 
-/** write ai "json-like" data in `obj` to file `f` */
+/**
+ * Write Ai "json-like" data from `obj` to file `f`.
+ * @param {Object} obj Data to be written using the Ai `toSource()` method.
+ * @param {Object} f   File object to write to.
+ */
 function writeJSONData(obj, f) {
   var data = obj.toSource();
   try {
@@ -939,7 +1028,7 @@ function writeJSONData(obj, f) {
   }
 }
 
-/** default ai menu commands */
+/** Default Ai Menu Commands */
 function builtinMenuCommands() {
   return {
     "File > New": {
