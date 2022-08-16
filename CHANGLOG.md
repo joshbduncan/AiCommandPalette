@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- FIX to German tool names
+
 ## [0.2.0] - 2022-08-16
 ### Added
 - Ability to activate 80+ of Ai's built-in tools 
@@ -18,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error checking with alerts for most functions
 - YouTube Video Demo
 - A check to make sure loaded scripts still exist at the location they were loaded.
-    - If a script doesn't exists it will be remove from user prefs.
+    - If a script doesn't exist it will be removed from user prefs.
     - Will update so any workflows that rely on a script that no longer exists can be edited
 - Added docstrings
 - Added a Python translator for translating commands and dialogs to other languages [LEARN MORE](/localization/README.md).
