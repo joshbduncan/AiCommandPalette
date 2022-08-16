@@ -1,5 +1,5 @@
 /*
-Ai Command Palette
+Kurzbefehle
 Copyright 2022 Josh Duncan
 https://joshbduncan.com
 
@@ -9,7 +9,7 @@ See the LICENSE file for details.
 
 //@target illustrator
 
-const _title = "Ai Command Palette";
+const _title = "Kurzbefehle";
 const _version = "0.2.0";
 const _copyright = "Copyright 2022 Josh Duncan";
 const _website = "joshbduncan.com";
@@ -21,7 +21,7 @@ polyfills();
 RUN THE SCRIPT
 **************************************************/
 
-// Ai Command Palette data object
+// Kurzbefehle data object
 const data = {
   commands: {
     script: {},
@@ -36,47 +36,47 @@ const data = {
     menu: builtinMenuCommands(),
     tool: builtinTools(),
     config: {
-      "About Ai Command Palette...": {
+      "Über\ … Kurzbefehle...": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "about" }],
       },
-      "Build Workflow...": {
+      "Arbeitsablauf\ erstellen\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "buildWorkflow" }],
       },
-      "Edit Workflow...": {
+      "Arbeitsablauf\ bearbeiten\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "editWorkflow" }],
       },
-      "Workflows Needing Attention...": {
+      "Achtung\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "workflowsNeedingAttention" }],
       },
-      "Load Scripts...": {
+      "Skripte\ laden\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "loadScript" }],
       },
-      "Show All Built-In Menu Commands...": {
+      "Alle\ integrierten\ Menübefehle\ anzeigen\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "showBuiltInMenuCommands" }],
       },
-      "Show All Built-In Tools...": {
+      "Alle\ integrierten\ Werkzeuge\ anzeigen\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "showBuiltInTools" }],
       },
-      "Hide Commands...": {
+      "Befehle\ ausblenden\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "hideCommand" }],
       },
-      "Reveal Commands...": {
+      "Befehle\ einblenden\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "unhideCommand" }],
       },
-      "Delete Commands...": {
+      "Befehle\ löschen\ …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "deleteCommand" }],
       },
-      "Reveal Preferences File": {
+      "Einstellungen\-Datei\ anzeigen": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "revealPrefFile" }],
       },
@@ -93,12 +93,12 @@ const dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
 const dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
 loadUserData(dataFile);
 
-// Setup commands for Ai Command Palette
+// Setup commands for Kurzbefehle
 const commandsData = buildCommands();
 const allCommands = Object.keys(commandsData);
 const filteredCommands = filterHiddenCommands();
 
-// Present the Ai Command Palette
+// Present the Kurzbefehle
 var result = commandPalette(
   (arr = filteredCommands),
   (title = _title),
@@ -122,9 +122,9 @@ function processCommandActions(command) {
     type = commandsData[command].cmdType;
     actions = commandsData[command].cmdActions;
     // check to make sure any workflow steps haven't been deleted
-    if (type === "workflow" && actions.join(" ").indexOf("**DELETED**") >= 0) {
+    if (type === "workflow" && actions.join(" ").indexOf("**GELÖSCHT**") >= 0) {
       alert(
-        "Workflow needs attention.\nThis workflow contains action steps that have been deleted.\n\n" +
+        "Achtung:\ Dieser\ Arbeitsablauf\ beinhaltet\ Aktionsschritte,\ die\ gelöscht\ worden\ sind\.\n\n" +
           command
       );
     } else {
@@ -137,8 +137,8 @@ function processCommandActions(command) {
       }
     }
   } else {
-    alert("Command was deleted.\nEdit any workflows where it was used.\n\n" + command);
-    if (command.indexOf("**DELETED**") < 0) deletedCommandNeedsAttention(command);
+    alert("Der\ Befehl\ wurde\ gelöscht\.\nBearbeiten\ Sie\ die\ Arbeitsabläufe,\ in\ denen\ er\ benutzt\ wurde\.\n\n" + command);
+    if (command.indexOf("**GELÖSCHT**") < 0) deletedCommandNeedsAttention(command);
   }
 }
 
@@ -154,47 +154,47 @@ function executeCommandAction(action) {
       try {
         configAction(action.value);
       } catch (e) {
-        alert("Error executing command:\n" + action.value + "\n\n" + e);
+        alert("Fehler\ beim\ Ausführen\ des\ Befehls:\n" + action.value + "\n\n" + e);
       }
       break;
     case "menu":
       try {
         app.executeMenuCommand(action.value);
       } catch (e) {
-        alert("Error executing command:\n" + action.value + "\n\n" + e);
+        alert("Fehler\ beim\ Ausführen\ des\ Befehls:\n" + action.value + "\n\n" + e);
       }
       break;
     case "tool":
       try {
         app.selectTool(action.value);
       } catch (e) {
-        alert("Error selecting tool:\n" + action.value + "\n\n" + e);
+        alert("Fehler\ beim\ Auswählen\ des\ Werkzeugs:\n" + action.value + "\n\n" + e);
       }
       break;
     case "action":
       try {
         app.doScript(action.value.actionName, action.value.actionSet);
       } catch (e) {
-        alert("Error executing action:\n" + action.value.actionName + "\n\n" + e);
+        alert("Fehler\ beim\ Ausführen\ der\ Aktion:\n" + action.value.actionName + "\n\n" + e);
       }
       break;
     case "script":
       f = new File(action.value.scriptPath);
       if (!f.exists) {
-        alert("Script no longer exists at original path.\n" + action.value.scriptPath);
-        delete data.commands[type]["Script: " + action.value.scriptName];
-        if (action.value.scriptName.indexOf("**DELETED**") < 0)
-          deletedCommandNeedsAttention("Script: " + action.value.scriptName);
+        alert("Skript\ existiert\ nicht\ mehr\ am\ ursprünglichen\ Ort\.\n" + action.value.scriptPath);
+        delete data.commands[type]["Skript: " + action.value.scriptName];
+        if (action.value.scriptName.indexOf("**GELÖSCHT**") < 0)
+          deletedCommandNeedsAttention("Skript: " + action.value.scriptName);
       } else {
         try {
           $.evalFile(f);
         } catch (e) {
-          alert("Error executing script:\n" + action.value.scriptName + "\n\n" + e);
+          alert("Fehler\ beim\ Ausführen\ des\ Skripts:\n" + action.value.scriptName + "\n\n" + e);
         }
       }
       break;
     default:
-      alert("Invalid command type:" + type);
+      alert("Ungültiger\ Befehlstyp:" + type);
   }
   try {
     app.redraw();
@@ -256,19 +256,19 @@ function configAction(action) {
       write = false;
       break;
     default:
-      alert("Invalid configuration option:" + action);
+      alert("Ungültige\ Konfigurationsoption:" + action);
   }
   if (write) writeUserData(dataFile);
 }
 
-/** Show Ai Command Palette About Dialog. */
+/** Show Kurzbefehle Über\ … Dialog. */
 function aboutDialog() {
   var win = new Window("dialog");
-  win.text = "About";
+  win.text = "Über\ …";
   win.alignChildren = "fill";
 
   // script info
-  var pAbout = win.add("panel", undefined, "About Ai Command Palette");
+  var pAbout = win.add("panel", undefined, "Über\ … Kurzbefehle");
   pAbout.margins = 20;
   pAbout.alignChildren = "fill";
   var aboutText =
@@ -283,7 +283,7 @@ function aboutDialog() {
   links.add("statictext", undefined, "Version " + _version);
   links.add("statictext", undefined, _copyright);
   var githubText =
-    "Click here to learn more: https://github.com/joshbduncan/AiCommandPalette";
+    "Klicken\ Sie\ hier\ für\ weitere\ Informationen: https://github.com/joshbduncan/AiCommandPalette";
   var github = links.add("statictext", undefined, githubText);
   // window buttons
   var winButtons = win.add("group");
@@ -299,11 +299,11 @@ function aboutDialog() {
   win.show();
 }
 
-/** Show all Ai Command Palette configuration commands. */
+/** Show all Kurzbefehle configuration commands. */
 function configPaletteSettings() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.config)),
-    (title = "Palette Settings and Configuration"),
+    (title = "Paletteneinstellungen\ und\ \-konfiguration"),
     (bounds = [0, 0, 500, 182]),
     (multiselect = false),
     (filter = [])
@@ -311,21 +311,21 @@ function configPaletteSettings() {
   if (result) processCommandActions(result);
 }
 
-/** Load external scripts into Ai Command Palette. */
+/** Load external scripts into Kurzbefehle. */
 function configLoadScript() {
   var files, f, fname;
   var ct = 0;
-  var files = loadFileTypes("Load Script File(s)", true, ".jsx$|.js$");
+  var files = loadFileTypes("Skriptdateien\ laden", true, ".jsx$|.js$");
   if (files.length > 0) {
     for (var i = 0; i < files.length; i++) {
       f = files[i];
       fname = decodeURI(f.name);
-      if (data.commands.script.hasOwnProperty("Script: " + fname)) {
+      if (data.commands.script.hasOwnProperty("Skript: " + fname)) {
         if (
           !Window.confirm(
-            "Script already loaded.\nWould you like to replace the previous script with the new one?",
+            "Skript\ bereits\ geladen\.\nMöchten\ Sie\ es\ ersetzen\?",
             "noAsDflt",
-            "Script Load Conflict"
+            "Skriptladekonflikt"
           )
         )
           continue;
@@ -333,9 +333,9 @@ function configLoadScript() {
       if (insertScriptIntoUserData(f)) ct++;
     }
     if (ct > 0) buildCommands(data.commands, true);
-    alert("Total scripts loaded: " + ct);
+    alert("Geladene\ Skripte\ insgesamt:" + ct);
   } else {
-    alert("No script file(s) selected.\nMust be JavaScript '.js' or '.jsx' files.");
+    alert("Keine\ Skriptdateien\ ausgewählt\.\nEs\ müssen\ JavaScript\-'\.js'\-\ oder\ '\.jsx'\-Dateien\ sein\.");
   }
 }
 
@@ -348,7 +348,7 @@ function configBuildWorkflow(workflow) {
   var cmdActions = [];
   result = workflowBuilder(
     (arr = filterOutCommands(filteredCommands, ["config"])),
-    (title = "Workflow Builder"),
+    (title = "Arbeitsablauf\-Generator"),
     (bounds = [0, 0, 500, 182]),
     (multiselect = false),
     (edit = workflow)
@@ -360,7 +360,7 @@ function configBuildWorkflow(workflow) {
     while (workflows.includes(result.name)) {
       if (
         Window.confirm(
-          "A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?",
+          "Ein\ Arbeitsablauf\ mit\ diesem\ Namen\ existiert\ bereits\.\nSoll\ der\ bestehende\ Arbeitsablauf\ überschrieben\ werden\?",
           "noAsDflt",
           "Save Workflow Name Conflict"
         )
@@ -368,15 +368,15 @@ function configBuildWorkflow(workflow) {
         break;
       } else {
         newName = Window.prompt(
-          "Enter a new name for your workflow.",
+          "Geben\ Sie\ einen\ neuen\ Namen\ für\ den\ Arbeitsablauf\ an\.",
           "",
-          "New Workflow Name"
+          "Name\ des\ neuen\ Arbeitsablaufs"
         );
         if (newName == undefined || newName == null || newName === "") {
           alert("Workflow not saved.");
           return false;
         } else {
-          result.name = "Workflow: " + newName;
+          result.name = "Arbeitsablauf: " + newName;
         }
       }
     }
@@ -393,7 +393,7 @@ function configBuildWorkflow(workflow) {
         cmdActions: cmdActions,
       };
     } catch (e) {
-      alert("Error saving workflow:\n" + result.name);
+      alert("Fehler\ beim\ Speichern\ des\ Arbeitsablaufs:\n" + result.name);
     }
   }
 }
@@ -402,7 +402,7 @@ function configBuildWorkflow(workflow) {
 function configEditWorkflow() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.workflow)),
-    (title = "Choose A Workflow To Edit"),
+    (title = "Wählen\ Sie\ einen\ Arbeitsablauf\ zum\ Bearbeiten\ aus\."),
     (bounds = [0, 0, 500, 182]),
     (multiselect = false),
     (filter = [])
@@ -414,21 +414,21 @@ function configEditWorkflow() {
 function configWorkflowsNeedingAttention() {
   var commands = [];
   for (var p in data.commands.workflow) {
-    if (data.commands.workflow[p].cmdActions.join(" ").indexOf("**DELETED**") >= 0)
+    if (data.commands.workflow[p].cmdActions.join(" ").indexOf("**GELÖSCHT**") >= 0)
       commands.push(p);
   }
 
   if (commands.length > 0) {
     var result = commandPalette(
       (arr = commands),
-      (title = "Choose A Workflow To Edit"),
+      (title = "Wählen\ Sie\ einen\ Arbeitsablauf\ zum\ Bearbeiten\ aus\."),
       (bounds = [0, 0, 500, 182]),
       (multiselect = false),
       (filter = [])
     );
     if (result) configBuildWorkflow(result);
   } else {
-    alert("There are no workflows that need attention.");
+    alert("Es\ gibt\ keine\ Arbeitsabläufe,\ die\ beachtet\ werden\ müssen\.");
   }
 }
 
@@ -436,7 +436,7 @@ function configWorkflowsNeedingAttention() {
 function showBuiltInMenuCommands() {
   result = commandPalette(
     (arr = Object.keys(data.commands.menu)),
-    (title = "All Built-In Menu Commands"),
+    (title = "Alle\ integrierten\ Menübefehle"),
     (bounds = [0, 0, 500, 182]),
     (multiselect = false),
     (filter = [])
@@ -448,7 +448,7 @@ function showBuiltInMenuCommands() {
 function showBuiltInTools() {
   result = commandPalette(
     (arr = Object.keys(data.commands.tool)),
-    (title = "All Built-In Tools"),
+    (title = "Alle\ integrierten\ Werkzeuge"),
     (bounds = [0, 0, 500, 182]),
     (multiselect = false),
     (filter = [])
@@ -456,7 +456,7 @@ function showBuiltInTools() {
   if (result) processCommandActions(result);
 }
 
-/** Hide commands from Ai Command Palette. */
+/** Hide commands from Kurzbefehle. */
 function configHideCommand() {
   var commands, result;
   var ct = 0;
@@ -468,7 +468,7 @@ function configHideCommand() {
   if (commands.length > 0) {
     result = commandPalette(
       (arr = commands),
-      (title = "Select Menu Command(s) To Hide"),
+      (title = "Wählen\ Sie\ die\ auszublendenden\ Menübefehle\ aus\."),
       (bounds = [0, 0, 500, 182]),
       (multiselect = true),
       (filter = [])
@@ -476,9 +476,9 @@ function configHideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Hide Command(s)?\n" + result.join("\n"),
+          "Befehle\ ausblenden\?\n" + result.join("\n"),
           "noAsDflt",
-          "Confirm Command(s) To Hide"
+          "Auszublendende\ Befehle\ bestätigen"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -488,10 +488,10 @@ function configHideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Total commands hidden: " + ct);
+      alert("Gesamtzahl\ der\ ausgeblendeten\ Befehle:" + ct);
     }
   } else {
-    alert("There are no commands to hide.");
+    alert("Es\ gibt\ keine\ Befehle\ zum\ Ausblenden\.");
   }
 }
 
@@ -503,7 +503,7 @@ function configUnhideCommand() {
   if (data.settings.hiddenCommands.length > 0) {
     result = commandPalette(
       (arr = data.settings.hiddenCommands),
-      (title = "Select Hidden Menu Command(s) To Reveal"),
+      (title = "Wählen\ Sie\ die\ ausgeblendeten\ Menübefehle\ aus,\ die\ angezeigt\ werden\ sollen\."),
       (bounds = [0, 0, 500, 182]),
       (multiselect = true),
       (filter = [])
@@ -511,9 +511,9 @@ function configUnhideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Reveal Hidden Command(s)?\n" + result.join("\n"),
+          "Verborgene\ Befehle\ anzeigen\?" + result.join("\n"),
           "noAsDflt",
-          "Confirm Command(s) To Reveal"
+          "Die\ ausgewählten\ Befehle\ anzeigen\?"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -527,14 +527,14 @@ function configUnhideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Total hidden commands revealed: " + ct);
+      alert("Anzahl\ der\ verborgenen\ Befehle,\ die\ wieder\ angezeigt\ werden:" + ct);
     }
   } else {
-    alert("There are no hidden commands to reveal.");
+    alert("Keine\ verborgenen\ Befehle\ vorhanden\.");
   }
 }
 
-/** Delete user added commands from Ai Command Palette. */
+/** Löschen user added commands from Kurzbefehle. */
 function configDeleteCommand() {
   var commands, result, cmdToDelete, type;
   var ct = 0;
@@ -548,7 +548,7 @@ function configDeleteCommand() {
   if (commands.length > 0) {
     result = commandPalette(
       (arr = commands),
-      (title = "Select Menu Commands To Delete"),
+      (title = "Wählen\ Sie\ die\ zu\ löschenden\ Menübefehle\ aus\."),
       (bounds = [0, 0, 500, 182]),
       (multiselect = true),
       (filter = [])
@@ -556,10 +556,10 @@ function configDeleteCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Delete Command(s)?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n" +
+          "Befehle\ löschen\?\nGelöschte\ Befehle\ werden\ in\ bestehenden\ Arbeitsabläufen\ nicht\ mehr\ funktionieren\.\n\n" +
             result.join("\n"),
           "noAsDflt",
-          "Confirm Command(s) To Delete"
+          "Bestätigen\ Sie\ die\ zu\ löschenden\ Befehle\."
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -570,16 +570,16 @@ function configDeleteCommand() {
             ct++;
             deletedCommandNeedsAttention(cmdToDelete);
           } catch (e) {
-            alert(cmdToDelete + " couldn't be deleted.");
+            alert(cmdToDelete + " konnte\ nicht\ gelöscht\ werden\.");
           }
         }
       }
     }
     if (ct > 0) {
-      alert("Total commands deleted: " + ct);
+      alert("Insgesamt\ gelöschte\ Befehle:" + ct);
     }
   } else {
-    alert("There are no commands to delete.");
+    alert("Es\ gibt\ keine\ Befehle\ zum\ Löschen\.");
   }
 }
 
@@ -588,7 +588,7 @@ USER DIALOGS (and accompanying functions)
 **************************************************/
 
 /**
- * Ai Command Palette dialog.
+ * Kurzbefehle dialog.
  * @param   {Array}   arr         Commands to list in the ListBox.
  * @param   {String}  title       Dialog title.
  * @param   {Array}   bounds      Dialog size.
@@ -605,7 +605,7 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   win.text = title;
   win.alignChildren = "fill";
   var q = win.add("edittext");
-  q.helpTip = "Search for commands, actions, and loaded scripts.";
+  q.helpTip = "Befehle,\ Aktionen\ und\ geladene\ Skripte\ suchen\.";
   q.active = true;
 
   if (filter.length > 0) {
@@ -623,7 +623,7 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   winButtons.alignChildren = ["center", "center"];
   var ok = winButtons.add("button", undefined, "OK");
   ok.preferredSize.width = 100;
-  var cancel = winButtons.add("button", undefined, "Cancel", { name: "cancel" });
+  var cancel = winButtons.add("button", undefined, "Abbrechen", { name: "cancel" });
   cancel.preferredSize.width = 100;
 
   // as a query is typed update the list box
@@ -726,38 +726,38 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   var command = "";
   var actions = [];
   if (edit != undefined) {
-    command = edit[0].text.replace(/^Workflow:\s/, "");
+    command = edit[0].text.replace(/^Arbeitsablauf:\s/, "");
     actions = commandsData[edit].cmdActions;
   }
 
   // command search
-  var pSearch = win.add("panel", undefined, "Search For Commands");
+  var pSearch = win.add("panel", undefined, "Befehle\ suchen\.");
   pSearch.alignChildren = ["fill", "center"];
   pSearch.margins = 20;
   var q = pSearch.add("edittext");
-  q.helpTip = "Search for commands, actions, and loaded scripts.";
+  q.helpTip = "Befehle,\ Aktionen\ und\ geladene\ Skripte\ suchen\.";
   q.active = true;
   var commands = pSearch.add("listbox", bounds, arr, { multiselect: multiselect });
-  commands.helpTip = "Double-click a command to add it as a workflow step below.";
+  commands.helpTip = "Doppelklicken\ Sie\ auf\ einen\ Befehl,\ um\ ihn\ unten\ als\ benutzerdefinierten\ Schritt\ hinzuzufügen\.";
   commands.selection = 0;
 
   // workflow steps
-  var pSteps = win.add("panel", undefined, "Workflow Steps");
+  var pSteps = win.add("panel", undefined, "Arbeitsablaufschritte");
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
   var steps = pSteps.add("listbox", bounds, actions, { multiselect: false });
   steps.helpTip = "Commands will run in order from top to bottom.";
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
-  var up = stepButtons.add("button", undefined, "Move Up");
+  var up = stepButtons.add("button", undefined, "Nach\ oben");
   up.preferredSize.width = 100;
-  var down = stepButtons.add("button", undefined, "Move Down");
+  var down = stepButtons.add("button", undefined, "Nach\ unten");
   down.preferredSize.width = 100;
-  var del = stepButtons.add("button", undefined, "Delete");
+  var del = stepButtons.add("button", undefined, "Löschen");
   del.preferredSize.width = 100;
 
   // command name
-  var pName = win.add("panel", undefined, "Save Workflow As");
+  var pName = win.add("panel", undefined, "Arbeitsablauf\ speichern\ als");
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;
   var name = pName.add("edittext", undefined, command);
@@ -770,7 +770,7 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   var ok = winButtons.add("button", undefined, "OK");
   ok.preferredSize.width = 100;
   ok.enabled = edit == undefined ? false : true;
-  var cancel = winButtons.add("button", undefined, "Cancel", { name: "cancel" });
+  var cancel = winButtons.add("button", undefined, "Abbrechen", { name: "cancel" });
   cancel.preferredSize.width = 100;
 
   // as a query is typed update the list box
@@ -849,7 +849,7 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   }
 
   if (win.show() == 1) {
-    var finalName = "Workflow: " + name.text.trim();
+    var finalName = "Arbeitsablauf: " + name.text.trim();
     return { name: finalName, items: steps.items };
   }
   return false;
@@ -921,7 +921,7 @@ function deletedCommandNeedsAttention(action) {
     for (var n = 0; n < actions.length; n++) {
       curAction = actions[n];
       if (curAction === action) {
-        data.commands.workflow[command].cmdActions[n] = curAction + " **DELETED**";
+        data.commands.workflow[command].cmdActions[n] = curAction + " **GELÖSCHT**";
       }
     }
   }
@@ -972,7 +972,7 @@ function loadAllActions() {
       actionName = pref.getStringPreference(
         currentPath + "action-" + j.toString() + "/name"
       );
-      actions["Action: " + actionName + " [" + setName + "]"] = {
+      actions["Aktion: " + actionName + " [" + setName + "]"] = {
         cmdType: "action",
         cmdActions: [
           {
@@ -1053,7 +1053,7 @@ function loadFileTypes(prompt, multiselect, fileTypeRegex) {
 function insertScriptIntoUserData(f) {
   fname = decodeURI(f.name);
   try {
-    data.commands.script["Script: " + fname] = {
+    data.commands.script["Skript: " + fname] = {
       cmdType: "script",
       cmdActions: [
         {
@@ -1067,7 +1067,7 @@ function insertScriptIntoUserData(f) {
     };
     return true;
   } catch (e) {
-    alert("Error loading script:\n" + f.fsName);
+    alert("Fehler\ beim\ Laden\ des\ Skripts:\n" + f.fsName);
     return false;
   }
 }
@@ -1182,7 +1182,7 @@ function writeJSONData(obj, f) {
     f.write(data);
     f.close();
   } catch (e) {
-    alert("Error writing file:\n" + f);
+    alert("Fehler\ beim\ Schreiben\ der\ Datei\n:" + f);
   }
 }
 
@@ -1282,359 +1282,367 @@ function polyfills() {
 /** Default Ai Tools */
 function builtinTools() {
   return {
-    "Add Anchor Point Tool": {
+    "Ankerpunkt\-hinzufügen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Add Anchor Point Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Ankerpunkt\-hinzufügen\-Werkzeug" }],
     },
-    "Anchor Point Tool": {
+    "Ankerpunkt\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Anchor Point Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Ankerpunkt\-Werkzeug" }],
     },
-    "Arc Tool": {
+    "Bogen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Arc Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Bogen\-Werkzeug" }],
     },
-    "Area Graph Tool": {
+    "Flächendiagramm": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Area Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Flächendiagramm" }],
     },
-    "Area Type Tool": {
+    "Flächentext\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Area Type Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Flächentext\-Werkzeug" }],
     },
-    "Artboard Tool": {
+    "Zeichenflächen\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Crop Tool" }],
     },
-    "Bar Graph Tool": {
+    "Horizontales\ Balkendiagramm": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Bar Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Horizontales\ Balkendiagramm" }],
     },
-    "Blend Tool": {
+    "Angleichen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Blend Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Angleichen\-Werkzeug" }],
     },
-    "Bloat Tool": {
+    "Aufblasen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Bloat Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Aufblasen\-Werkzeug" }],
     },
-    "Blob Brush Tool": {
+    "Tropfenpinsel\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Blob Brush Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Tropfenpinsel\-Werkzeug" }],
     },
-    "Column Graph Tool": {
+    "Vertikales\ Balkendiagramm": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Column Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Vertikales\ Balkendiagramm" }],
     },
-    "Crystallize Tool": {
+    "Kristallisieren\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Cyrstallize Tool" }],
     },
-    "Curvature Tool": {
+    "Kurvenzeichner": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Curvature Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Kurvenzeichner" }],
     },
-    "Delete Anchor Point Tool": {
+    "Löschen Ankerpunkt\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Delete Anchor Point Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Löschen Ankerpunkt\-Werkzeug" }],
     },
-    "Direct Selection Tool": {
+    "Direktauswahl\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Select Tool" }],
     },
-    "Ellipse Tool": {
+    "Ellipse\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Ellipse Shape Tool" }],
     },
-    "Eraser Tool": {
+    "Radiergummi\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Eraser Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Radiergummi\-Werkzeug" }],
     },
-    "Eyedropper Tool": {
+    "Pipette\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Eyedropper Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Pipette\-Werkzeug" }],
     },
-    "Flare Tool": {
+    "Blendenflecke\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Flare Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Blendenflecke\-Werkzeug" }],
     },
-    "Free Transform Tool": {
+    "Frei\-transformieren\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Free Transform Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Frei\-transformieren\-Werkzeug" }],
     },
-    "Gradient Tool": {
+    "Verlauf\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Gradient Vector Tool" }],
     },
-    "Group Selection Tool": {
+    "Gruppenauswahl\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Object Select Tool" }],
     },
-    "Hand Tool": {
+    "Hand\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scroll Tool" }],
     },
-    "Join Tool": {
+    "Zusammenfügen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Corner Join Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Corner Zusammenfügen\-Werkzeug" }],
     },
-    "Knife Tool": {
+    "Messer\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Knife Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Messer\-Werkzeug" }],
     },
-    "Lasso Tool": {
+    "Lasso\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Direct Lasso Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Direct Lasso\-Werkzeug" }],
     },
-    "Line Graph Tool": {
+    "Liniendiagramm": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Line Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Liniendiagramm" }],
     },
-    "Line Segment Tool": {
+    "Liniensegment\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Line Tool" }],
     },
-    "Live Paint Bucket Tool": {
+    "Interaktiv\-malen\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Planar Paintbucket Tool" }],
     },
-    "Live Paint Selection Tool": {
+    "Interaktiv\-malen\-Auswahlwerkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Planar Face Select Tool" }],
     },
-    "Magic Wand Tool": {
+    "Zauberstab\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Magic Wand Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Zauberstab\-Werkzeug" }],
     },
-    "Measure Tool": {
+    "Mess\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Measure Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Mess\-Werkzeug" }],
     },
-    "Mesh Tool": {
+    "Gitter\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Mesh Editing Tool" }],
     },
-    "Paintbrush Tool": {
+    "Pinsel\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Brush Tool" }],
     },
-    "Path Eraser Tool": {
+    "Path Radiergummi\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Erase Tool" }],
     },
-    "Pattern Tile Tool": {
+    "Musterelement\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Pattern Tile Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Musterelement\-Werkzeug" }],
     },
-    "Pen Tool": {
+    "Zeichenstift\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Pen Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Zeichenstift\-Werkzeug" }],
     },
-    "Pencil Tool": {
+    "Buntstift\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Tool" }],
     },
-    "Perspective Grid Tool": {
+    "Perspektivenraster\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Perspective Grid Tool" }],
+      cmdActions: [{ type: "tool", value: "Perspektivenraster\-Werkzeug" }],
     },
-    "Perspective Selection Tool": {
+    "Perspektivenauswahl\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Perspective Selection Tool" }],
+      cmdActions: [{ type: "tool", value: "Perspektivenauswahl\-Werkzeug" }],
     },
-    "Pie Graph Tool": {
+    "Kreisdiagramm\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Pie Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Kreisdiagramm\-Werkzeug" }],
     },
-    "Polar Grid Tool": {
+    "Place Tool": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Polar Grid Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Place Gun Tool" }],
     },
-    "Polygon Tool": {
+    "Radiales\-Raster\-Werkzeug": {
+      cmdType: "tool",
+      cmdActions: [{ type: "tool", value: "Adobe Radiales\-Raster\-Werkzeug" }],
+    },
+    "Polygon\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [
-        { type: "tool", value: "Adobe Shape Construction Regular Polygon Tool" },
+        { type: "tool", value: "Adobe Shape Construction Regular Polygon\-Werkzeug" },
       ],
     },
-    "Print Tiling Tool": {
+    "Druckaufteilungs\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Page Tool" }],
     },
-    "Pucker Tool": {
+    "Zusammenziehen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Pucker Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Zusammenziehen\-Werkzeug" }],
     },
-    "Puppet Warp Tool": {
+    "Formgitter\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Puppet Warp Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Formgitter\-Werkzeug" }],
     },
-    "Radar Graph Tool": {
+    "Netzdiagramm": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Radar Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Netzdiagramm" }],
     },
-    "Rectangle Tool": {
+    "Rechteck\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rectangle Shape Tool" }],
     },
-    "Rectangular Grid Tool": {
+    "Rechteckiges\-Raster\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Rectangular Grid Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Rechteckiges\-Raster\-Werkzeug" }],
     },
-    "Reflect Tool": {
+    "Spiegeln\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Reflect Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Spiegeln\-Werkzeug" }],
     },
-    "Reshape Tool": {
+    "Form\-ändern\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Reshape Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Form\-ändern\-Werkzeug" }],
     },
-    "Rotate Tool": {
+    "Drehen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Rotate Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Drehen\-Werkzeug" }],
     },
-    "Rotate View Tool": {
+    "Ansichtdrehung\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rotate Canvas Tool" }],
     },
-    "Rounded Rectangle Tool": {
+    "Rounded Rechteck\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Rounded Rectangle Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Rounded Rechteck\-Werkzeug" }],
     },
-    "Scale Tool": {
+    "Skalieren\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Scale Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Skalieren\-Werkzeug" }],
     },
-    "Scallop Tool": {
+    "Ausbuchten\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Scallop Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Ausbuchten\-Werkzeug" }],
     },
-    "Scatter Graph Tool": {
+    "Streudiagramm": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Scatter Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Streudiagramm" }],
     },
-    "Scissors Tool": {
+    "Schere\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Scissors Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Schere\-Werkzeug" }],
     },
-    "Selection Tool": {
+    "Auswahl\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Select Tool" }],
     },
-    "Shape Builder Tool": {
+    "Formerstellungs\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Shape Builder Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Formerstellungs\-Werkzeug" }],
     },
-    "Shaper Tool": {
+    "Shaper\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Shaper Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Shaper\-Werkzeug" }],
     },
-    "Shear Tool": {
+    "Verbiegen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Shear Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Verbiegen\-Werkzeug" }],
     },
-    "Slice Tool": {
+    "Slice\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Slice Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Slice\-Werkzeug" }],
     },
-    "Slice Selection Tool": {
+    "Slice Auswahl\-Werkzeug": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Slice Select Tool" }],
     },
-    "Smooth Tool": {
+    "Glätten\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Freehand Smooth Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Freehand Glätten\-Werkzeug" }],
     },
-    "Spiral Tool": {
+    "Spirale\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Shape Construction Spiral Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Shape Construction Spirale\-Werkzeug" }],
     },
-    "Stacked Bar Graph Tool": {
+    "Stacked Horizontales\ Balkendiagramm": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Stacked Bar Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Stacked Horizontales\ Balkendiagramm" }],
     },
-    "Stacked Column Graph Tool": {
+    "Stacked Vertikales\ Balkendiagramm": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Stacked Column Graph Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Stacked Vertikales\ Balkendiagramm" }],
     },
-    "Star Tool": {
+    "Stern\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Shape Construction Star Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Shape Construction Stern\-Werkzeug" }],
     },
-    "Symbol Screener Tool": {
+    "Stencil Tool": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Symbol Screener Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Stencil Tool" }],
     },
-    "Symbol Scruncher Tool": {
+    "Symbol\-transparent\-gestalten\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Symbol Scruncher Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Symbol\-transparent\-gestalten\-Werkzeug" }],
     },
-    "Symbol Shifter Tool": {
+    "Symbol\-stauchen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Symbol Shifter Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Symbol\-stauchen\-Werkzeug" }],
     },
-    "Symbol Sizer Tool": {
+    "Symbol\-verschieben\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Symbol Sizer Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Symbol\-verschieben\-Werkzeug" }],
     },
-    "Symbol Spinner Tool": {
+    "Symbol\-skalieren\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Symbol Spinner Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Symbol\-skalieren\-Werkzeug" }],
     },
-    "Symbol Sprayer Tool": {
+    "Symbol\-drehen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Symbol Sprayer Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Symbol\-drehen\-Werkzeug" }],
     },
-    "Symbol Stainer Tool": {
+    "Symbol\-aufsprühen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Symbol Stainer Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Symbol\-aufsprühen\-Werkzeug" }],
     },
-    "Symbol Styler Tool": {
+    "Symbol\-färben\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Symbol Styler Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Symbol\-färben\-Werkzeug" }],
     },
-    "Touch Type Tool": {
+    "Symbol\-gestalten\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Touch Type Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Symbol\-gestalten\-Werkzeug" }],
     },
-    "Twirl Tool": {
+    "Touch\-Type\-Textwerkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe New Twirl Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Touch\-Type\-Textwerkzeug" }],
     },
-    "Type Tool": {
+    "Strudel\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Type Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe New Strudel\-Werkzeug" }],
     },
-    "Type on a Path Tool": {
+    "Text\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Path Type Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Text\-Werkzeug" }],
     },
-    "Vertical Area Type Tool": {
+    "Pfadtext\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Vertical Area Type Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Path Text\-Werkzeug" }],
     },
-    "Vertical Type Tool": {
+    "Vertical Flächentext\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Vertical Type Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Vertical Flächentext\-Werkzeug" }],
     },
-    "Vertical Type on a Path Tool": {
+    "Vertical Text\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Vertical Path Type Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Vertical Text\-Werkzeug" }],
     },
-    "Warp Tool": {
+    "Vertical Pfadtext\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Warp Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Vertical Path Text\-Werkzeug" }],
     },
-    "Width Tool": {
+    "Verkrümmen\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Width Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Verkrümmen\-Werkzeug" }],
     },
-    "Wrinkle Tool": {
+    "Breiten\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Wrinkle Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Breiten\-Werkzeug" }],
     },
-    "Zoom Tool": {
+    "Zerknittern\-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Adobe Zoom Tool" }],
+      cmdActions: [{ type: "tool", value: "Adobe Zerknittern\-Werkzeug" }],
+    },
+    "Zoom\-Werkzeug": {
+      cmdType: "tool",
+      cmdActions: [{ type: "tool", value: "Adobe Zoom\-Werkzeug" }],
     },
   };
 }
@@ -1642,1866 +1650,1841 @@ function builtinTools() {
 /** Default Ai Menu Commands */
 function builtinMenuCommands() {
   return {
-    "File > New...": { cmdType: "menu", cmdActions: [{ type: "menu", value: "new" }] },
-    "File > New from Template...": {
+    "Datei\ >\ Neu\ …": { cmdType: "menu", cmdActions: [{ type: "menu", value: "new" }] },
+    "Datei\ >\ Neu\ aus\ Vorlage\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "newFromTemplate" }],
     },
-    "File > Open...": {
+    "Datei\ >\ Öffnen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "open" }],
     },
-    "File > Browse in Bridge...": {
+    "Datei\ >\ Bridge\ durchsuchen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Bridge Browse" }],
     },
-    "File > Close": { cmdType: "menu", cmdActions: [{ type: "menu", value: "close" }] },
-    "File > Save": { cmdType: "menu", cmdActions: [{ type: "menu", value: "save" }] },
-    "File > Save As...": {
+    "Datei\ >\ Schließen": { cmdType: "menu", cmdActions: [{ type: "menu", value: "close" }] },
+    "Datei\ >\ Speichern": { cmdType: "menu", cmdActions: [{ type: "menu", value: "save" }] },
+    "Datei\ >\ Speichern As...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveas" }],
     },
-    "File > Save a Copy...": {
+    "Datei\ >\ Speichern a Copy...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveacopy" }],
     },
-    "File > Save as Template...": {
+    "Datei\ >\ Speichern as Template...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveastemplate" }],
     },
-    "File > Save Selected Slices...": {
+    "Datei\ >\ Speichern Selected Slices...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe AI Save Selected Slices" }],
     },
-    "File > Revert": {
+    "Datei\ >\ Zurück\ zur\ letzten\ Version": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "revert" }],
     },
-    "File > Search Adobe Stock": {
+    "Datei\ >\ Adobe\ Stock\ durchsuchen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Search Adobe Stock" }],
     },
-    "File > Place...": {
+    "Datei\ >\ Platzieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Place" }],
     },
-    "File > Export > Export For Screens...": {
+    "Datei\ >\ Exportieren\ >\ Für\ Bildschirme\ exportieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "exportForScreens" }],
     },
-    "File > Export > Export As...": {
+    "Datei\ >\ Exportieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "export" }],
     },
-    "File > Export > Save for Web (Legacy)...": {
+    "Datei\ >\ Für\ Web\ speichern\ \(Legacy\)\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe AI Save For Web" }],
     },
-    "File > Export Selection...": {
+    "Datei\ >\ Auswahl\ exportieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "exportSelection" }],
     },
-    "File > Package": {
+    "Datei\ >\ Verpacken\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Package Menu Item" }],
     },
-    "File > Scripts > Other Script...": {
+    "Datei\ >\ Skripten\ >\ Anderes\ Skript\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ai_browse_for_script" }],
     },
-    "File > Document Setup...": {
+    "Datei\ >\ Dokument\ einrichten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "document" }],
     },
-    "File > Document Color Mode > CMYK Color": {
+    "Datei\ >\ Dokumentfarbmodus\ >\ CMYK\-Farbe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "doc-color-cmyk" }],
     },
-    "File > Document Color Mode > RGB Color": {
+    "Datei\ >\ Dokumentfarbmodus\ >\ RGB\-Farbe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "doc-color-rgb" }],
     },
-    "File > File Info...": {
+    "Datei\ >\ Dateiinformationen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "File Info" }],
     },
-    "File > Print...": {
+    "Datei\ >\ Drucken\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Print" }],
     },
-    "File > Exit": { cmdType: "menu", cmdActions: [{ type: "menu", value: "quit" }] },
-    "Edit > Undo": { cmdType: "menu", cmdActions: [{ type: "menu", value: "undo" }] },
-    "Edit > Redo": { cmdType: "menu", cmdActions: [{ type: "menu", value: "redo" }] },
-    "Edit > Cut": { cmdType: "menu", cmdActions: [{ type: "menu", value: "cut" }] },
-    "Edit > Copy": { cmdType: "menu", cmdActions: [{ type: "menu", value: "copy" }] },
-    "Edit > Paste": { cmdType: "menu", cmdActions: [{ type: "menu", value: "paste" }] },
-    "Edit > Paste in Front": {
+    "Datei\ >\ Illustrator\ beenden": { cmdType: "menu", cmdActions: [{ type: "menu", value: "quit" }] },
+    "Bearbeiten\ >\ Rückgängig": { cmdType: "menu", cmdActions: [{ type: "menu", value: "undo" }] },
+    "Bearbeiten\ >\ Wiederholen": { cmdType: "menu", cmdActions: [{ type: "menu", value: "redo" }] },
+    "Bearbeiten\ >\ Ausschneiden": { cmdType: "menu", cmdActions: [{ type: "menu", value: "cut" }] },
+    "Bearbeiten\ >\ Kopieren": { cmdType: "menu", cmdActions: [{ type: "menu", value: "copy" }] },
+    "Bearbeiten\ >\ Einfügen": { cmdType: "menu", cmdActions: [{ type: "menu", value: "paste" }] },
+    "Bearbeiten\ >\ Einfügen in Front": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteFront" }],
     },
-    "Edit > Paste in Back": {
+    "Bearbeiten\ >\ Einfügen in Back": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteBack" }],
     },
-    "Edit > Paste in Place": {
+    "Bearbeiten\ >\ Einfügen in Place": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteInPlace" }],
     },
-    "Edit > Paste on All Artboards": {
+    "Bearbeiten\ >\ Einfügen on All Artboards": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteInAllArtboard" }],
     },
-    "Edit > Paste without Formatting": {
+    "Bearbeiten\ >\ Ohne\ Formatierung\ einfügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteWithoutFormatting" }],
     },
-    "Edit > Clear": { cmdType: "menu", cmdActions: [{ type: "menu", value: "clear" }] },
-    "Edit > Find & Replace...": {
+    "Bearbeiten\ >\ Löschen": { cmdType: "menu", cmdActions: [{ type: "menu", value: "clear" }] },
+    "Bearbeiten\ >\ Suchen\ und\ ersetzen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find and Replace" }],
     },
-    "Edit > Find Next": {
+    "Bearbeiten\ >\ Weitersuchen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Next" }],
     },
-    "Edit > Spelling > Auto Spell Check": {
-      cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "Auto Spell Check" }],
-    },
-    "Edit > Spelling > Check Spelling...": {
+    "Bearbeiten\ >\ Rechtschreibung\ >\ Rechtschreibprüfung\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Check Spelling" }],
     },
-    "Edit > Edit Custom Dictionary...": {
+    "Bearbeiten\ >\ Eigenes\ Wörterbuch\ bearbeiten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Edit Custom Dictionary..." }],
     },
-    "Edit > Edit Colors > Recolor Artwork...": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ Bildmaterial\ neu\ färben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Recolor Art Dialog" }],
     },
-    "Edit > Edit Colors > Adjust Color Balance...": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ Farbbalance\ einstellen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adjust3" }],
     },
-    "Edit > Edit Colors > Blend Front to Back": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ Vorne\ \->\ Hinten\ angleichen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors3" }],
     },
-    "Edit > Edit Colors > Blend Horizontally": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ Horizontal\ angleichen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors4" }],
     },
-    "Edit > Edit Colors > Blend Vertically": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ Vertikal\ angleichen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors5" }],
     },
-    "Edit > Edit Colors > Convert to CMYK": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ In\ CMYK\ konvertieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors8" }],
     },
-    "Edit > Edit Colors > Convert to Grayscale": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ In\ Graustufen\ konvertieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors7" }],
     },
-    "Edit > Edit Colors > Convert to RGB": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ In\ RGB\ konvertieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors9" }],
     },
-    "Edit > Edit Colors > Invert Colors": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ Farben\ invertieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors6" }],
     },
-    "Edit > Edit Colors > Overprint Black...": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ Schwarz\ überdrucken\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Overprint2" }],
     },
-    "Edit > Edit Colors > Saturate...": {
+    "Bearbeiten\ >\ Farben\ bearbeiten\ >\ Sättigung\ erhöhen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Saturate3" }],
     },
-    "Edit > Edit Original": {
+    "Bearbeiten\ >\ Original\ bearbeiten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "EditOriginal Menu Item" }],
     },
-    "Edit > Transparency Flattener Presets...": {
+    "Bearbeiten\ >\ Transparenzreduzierungsvorgaben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Transparency Presets" }],
     },
-    "Edit > Print Presets...": {
+    "Bearbeiten\ >\ Druckvorgaben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Print Presets" }],
     },
-    "Edit > Adobe PDF Presets...": {
+    "Bearbeiten\ >\ Adobe\ PDF\-Vorgaben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "PDF Presets" }],
     },
-    "Edit > Perspective Grid Presets...": {
+    "Bearbeiten\ >\ Vorgaben\ für\ Perspektivenraster\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "PerspectiveGridPresets" }],
     },
-    "Edit > Color Settings...": {
+    "Bearbeiten\ >\ Farbeinstellungen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "color" }],
     },
-    "Edit > Assign Profile...": {
+    "Bearbeiten\ >\ Profil\ zuweisen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "assignprofile" }],
     },
-    "Edit > Keyboard Shortcuts...": {
+    "Bearbeiten\ >\ Tastaturbefehle\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "KBSC Menu Item" }],
     },
-    "Object > Transform > Transform Again": {
+    "Objekt\ >\ Transformieren\ >\ Erneut\ transformieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformagain" }],
     },
-    "Object > Transform > Move...": {
+    "Objekt\ >\ Transformieren\ >\ Verschieben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformmove" }],
     },
-    "Object > Transform > Rotate...": {
+    "Objekt\ >\ Transformieren\ >\ Drehen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformrotate" }],
     },
-    "Object > Transform > Reflect...": {
+    "Objekt\ >\ Transformieren\ >\ Spiegeln\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformreflect" }],
     },
-    "Object > Transform > Scale...": {
+    "Objekt\ >\ Transformieren\ >\ Skalieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformscale" }],
     },
-    "Object > Transform > Shear...": {
+    "Objekt\ >\ Transformieren\ >\ Verbiegen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformshear" }],
     },
-    "Object > Transform Each...": {
+    "Objekt\ >\ Transformieren\ >\ Einzeln\ transformieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Transform v23" }],
     },
-    "Object > Transform > Reset Bounding Box": {
+    "Objekt\ >\ Transform\ >\ Begrenzungsrahmen\ zurücksetzen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Reset Bounding Box" }],
     },
-    "Object > Arrange > Bring to Front": {
+    "Objekt\ >\ Anordnen\ >\ In\ den\ Vordergrund": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "sendToFront" }],
     },
-    "Object > Arrange > Bring Forward": {
+    "Objekt\ >\ Anordnen\ >\ Schrittweise\ nach\ vorne": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "sendForward" }],
     },
-    "Object > Arrange > Send Backward": {
+    "Objekt\ >\ Anordnen\ >\ Schrittweise\ nach\ hinten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "sendBackward" }],
     },
-    "Object > Arrange > Send to Back": {
+    "Objekt\ >\ Anordnen\ >\ In\ den\ Hintergrund": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "sendToBack" }],
     },
-    "Object > Arrange > Send to Current Layer": {
+    "Objekt\ >\ Anordnen\ >\ In\ aktuelle\ Ebene\ verschieben": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 2" }],
     },
-    "Object > Align > Horizontal Align Left": {
+    "Objekt\ >\ Ausrichten\ >\ Horizontal\ links\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Horizontal Align Left" }],
     },
-    "Object > Align > Horizontal Align Center": {
+    "Objekt\ >\ Ausrichten\ >\ Horizontal\ zentriert\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Horizontal Align Center" }],
     },
-    "Object > Align > Horizontal Align Right": {
+    "Objekt\ >\ Ausrichten\ >\ Horizontal\ rechts\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Horizontal Align Right" }],
     },
-    "Object > Align > Vertical Align Top": {
+    "Objekt\ >\ Ausrichten\ >\ Vertikal\ oben\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Vertical Align Top" }],
     },
-    "Object > Align > Vertical Align Center": {
+    "Objekt\ >\ Ausrichten\ >\ Vertikal\ zentriert\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Vertical Align Center" }],
     },
-    "Object > Align > Vertical Align Bottom": {
+    "Objekt\ >\ Ausrichten\ >\ Vertikal\ unten\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Vertical Align Bottom" }],
     },
-    "Object > Group": {
+    "Objekt\ >\ Gruppieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "group" }],
     },
-    "Object > Ungroup": {
+    "Objekt\ >\ Gruppierung\ aufheben": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ungroup" }],
     },
-    "Object > Lock > Selection": {
+    "Objekt\ >\ Sperren\ >\ Auswahl": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "lock" }],
     },
-    "Object > Lock > All Artwork Above": {
+    "Objekt\ >\ Sperren\ >\ Sämtliches\ Bildmaterial\ darüber": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 5" }],
     },
-    "Object > Lock > Other Layers": {
+    "Objekt\ >\ Sperren\ >\ Andere\ Ebenen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 7" }],
     },
-    "Object > Unlock All": {
+    "Objekt\ >\ Alle\ entsperren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "unlockAll" }],
     },
-    "Object > Hide > Selection": {
+    "Objekt\ >\ Ausblenden\ >\ Auswahl": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "hide" }],
     },
-    "Object > Hide > All Artwork Above": {
+    "Objekt\ >\ Ausblenden\ >\ Sämtliches\ Bildmaterial\ darüber": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 4" }],
     },
-    "Object > Hide > Other Layers": {
+    "Objekt\ >\ Ausblenden\ >\ Andere\ Ebenen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 6" }],
     },
-    "Object > Show All": {
+    "Objekt\ >\ Alles\ einblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showAll" }],
     },
-    "Object > Crop Image": {
+    "Objekt\ >\ Bild\ zuschneiden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Crop Image" }],
     },
-    "Object > Rasterize...": {
+    "Objekt\ >\ In\ Pixelbild\ umwandeln\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Rasterize 8 menu item" }],
     },
-    "Object > Create Gradient Mesh...": {
+    "Objekt\ >\ Verlaufsgitter\ erstellen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "make mesh" }],
     },
-    "Object > Create Object Mosaic...": {
+    "Objekt\ >\ Objektmosaik\ erstellen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Object Mosaic Plug-in4" }],
     },
-    "Object > Create Trim Marks...": {
+    "Objekt\ >\ Schnittmarken\ erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "TrimMark v25" }],
     },
-    "Object > Flatten Transparency...": {
+    "Objekt\ >\ Transparenz\ reduzieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Flatten Transparency" }],
     },
-    "Object > Make Pixel Perfect": {
+    "Objekt\ >\ Pixelgenaue\ Darstellung\ anwenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Pixel Perfect" }],
     },
-    "Object > Slice > Make": {
+    "Objekt\ >\ Slice\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Make Slice" }],
     },
-    "Object > Slice > Release": {
+    "Objekt\ >\ Slice\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Release Slice" }],
     },
-    "Object > Slice > Create from Guides": {
+    "Objekt\ >\ Slice\ >\ Aus\ Hilfslinien\ erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Create from Guides" }],
     },
-    "Object > Slice > Create from Selection": {
+    "Objekt\ >\ Slice\ >\ Aus\ Auswahl\ erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Create from Selection" }],
     },
-    "Object > Slice > Duplicate Slice": {
+    "Objekt\ >\ Slice\ >\ Slice\ duplizieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Duplicate" }],
     },
-    "Object > Slice > Combine Slices": {
+    "Objekt\ >\ Slice\ >\ Slices\ kombinieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Combine" }],
     },
-    "Object > Slice > Divide Slices...": {
+    "Objekt\ >\ Slice\ >\ Slices\ unterteilen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Divide" }],
     },
-    "Object > Slice > Delete All": {
+    "Object > Slice > Löschen All": {
       cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "AISlice Delete All Slices" }],
+      cmdActions: [{ type: "menu", value: "AISlice Löschen All Slices" }],
     },
-    "Object > Slice > Slice Options...": {
+    "Objekt\ >\ Slice\ >\ Slice\-Optionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Slice Options" }],
     },
-    "Object > Slice > Clip to Artboard": {
+    "Objekt\ >\ Slice\ >\ Ganze\ Zeichenfläche\ exportieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Clip to Artboard" }],
     },
-    "Object > Expand...": {
+    "Objekt\ >\ Umwandeln\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand3" }],
     },
-    "Object > Expand Appearance": {
+    "Objekt\ >\ Aussehen\ umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "expandStyle" }],
     },
-    "Object > Path > Join": {
+    "Objekt\ >\ Pfad\ >\ Zusammenfügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "join" }],
     },
-    "Object > Path > Average...": {
+    "Objekt\ >\ Pfad\ >\ Durchschnitt\ berechnen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "average" }],
     },
-    "Object > Path > Outline Stroke": {
+    "Objekt\ >\ Pfad\ >\ Konturlinie": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "OffsetPath v22" }],
     },
-    "Object > Path > Offset Path...": {
+    "Objekt\ >\ Pfad\ >\ Pfad\ verschieben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "OffsetPath v23" }],
     },
-    "Object > Path > Reverse Path Direction": {
+    "Objekt\ >\ Pfad\ >\ Pfadrichtung\ umkehren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Reverse Path Direction" }],
     },
-    "Object > Path > Simplify...": {
+    "Objekt\ >\ Pfad\ >\ Vereinfachen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "simplify menu item" }],
     },
-    "Object > Path > Add Anchor Points": {
+    "Objekt\ >\ Pfad\ >\ Ankerpunkte\ hinzufügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Add Anchor Points2" }],
     },
-    "Object > Path > Remove Anchor Points": {
+    "Objekt\ >\ Pfad\ >\ Ankerpunkte\ entfernen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Remove Anchor Points menu" }],
     },
-    "Object > Path > Divide Objects Below": {
+    "Objekt\ >\ Pfad\ >\ Darunter\ liegende\ Objekte\ aufteilen": {
       cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "Knife Tool2" }],
+      cmdActions: [{ type: "menu", value: "Messer\-Werkzeug2" }],
     },
-    "Object > Path > Split Into Grid...": {
+    "Objekt\ >\ Pfad\ >\ In\ Raster\ teilen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Rows and Columns...." }],
     },
-    "Object > Path > Clean Up...": {
+    "Objekt\ >\ Pfad\ >\ Aufräumen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "cleanup menu item" }],
     },
-    "Object > Shape > Convert to Shapes": {
+    "Objekt\ >\ Form\ >\ In\ Form\ umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Convert to Shape" }],
     },
-    "Object > Shape > Expand Shapes": {
+    "Objekt\ >\ Form\ >\ Form\ umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand Shape" }],
     },
-    "Object > Pattern > Make": {
+    "Objekt\ >\ Muster\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Make Pattern" }],
     },
-    "Object > Pattern > Edit Pattern": {
+    "Objekt\ >\ Muster\ >\ Muster\ bearbeiten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Edit Pattern" }],
     },
-    "Object > Pattern > Tile Edge Color...": {
+    "Objekt\ >\ Muster\ >\ Farbe\ für\ Musterelement\-Kante": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Pattern Tile Color" }],
     },
-    "Object > Repeat > Make Radial": {
+    "Objekt\ >\ Wiederholen\ >\ Radial": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Radial Repeat" }],
     },
-    "Object > Repeat > Make Grid": {
+    "Objekt\ >\ Wiederholen\ >\ Raster": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Grid Repeat" }],
     },
-    "Object > Repeat > Make Symmetry": {
+    "Objekt\ >\ Wiederholen\ >\ Spiegeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Symmetry Repeat" }],
     },
-    "Object > Repeat > Release": {
+    "Objekt\ >\ Wiederholen\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Repeat Art" }],
     },
-    "Object > Repeat > Repeat Art Options...": {
+    "Objekt\ >\ Wiederholen\ >\ Optionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Repeat Art Options" }],
     },
-    "Object > Blend > Make": {
+    "Objekt\ >\ Angleichen\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Make" }],
     },
-    "Object > Blend > Release": {
+    "Objekt\ >\ Angleichen\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Release" }],
     },
-    "Object > Blend > Blend Options...": {
+    "Objekt\ >\ Angleichen\ >\ Angleichung\-Optionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Options" }],
     },
-    "Object > Blend > Expand": {
+    "Objekt\ >\ Angleichen\ >\ Umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Expand" }],
     },
-    "Object > Blend > Replace Spine": {
+    "Objekt\ >\ Angleichen\ >\ Achse\ ersetzen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Replace Spine" }],
     },
-    "Object > Blend > Reverse Spine": {
+    "Objekt\ >\ Angleichen\ >\ Achse\ umkehren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Reverse Spine" }],
     },
-    "Object > Blend > Reverse Front to Back": {
+    "Objekt\ >\ Angleichen\ >\ Farbrichtung\ umkehren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Reverse Stack" }],
     },
-    "Object > Envelope Distort > Make with Warp...": {
+    "Objekt\ >\ Verzerrungshülle\ >\ Mit\ Verkrümmung\ erstellen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Warp" }],
     },
-    "Object > Envelope Distort > Make with Mesh...": {
+    "Objekt\ >\ Verzerrungshülle\ >\ Mit\ Gitter\ erstellen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Create Envelope Grid" }],
     },
-    "Object > Envelope Distort > Make with Top Object": {
+    "Objekt\ >\ Verzerrungshülle\ >\ Mit\ oberstem\ Objekt\ erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Envelope" }],
     },
-    "Object > Envelope Distort > Release": {
+    "Objekt\ >\ Verzerrungshülle\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Envelope" }],
     },
-    "Object > Envelope Distort > Envelope Options...": {
+    "Objekt\ >\ Verzerrungshülle\ >\ Hüllen\-Optionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Envelope Options" }],
     },
-    "Object > Envelope Distort > Expand": {
+    "Objekt\ >\ Verzerrungshülle\ >\ Umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand Envelope" }],
     },
-    "Object > Envelope Distort > Edit Contents": {
+    "Objekt\ >\ Verzerrungshülle\ >\ Inhalt\ bearbeiten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Edit Envelope Contents" }],
     },
-    "Object > Perspective > Attach to Active Plane": {
+    "Objekt\ >\ Perspektive\ >\ Aktiver\ Ebene\ anhängen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Attach to Active Plane" }],
     },
-    "Object > Perspective > Release with Perspective": {
+    "Objekt\ >\ Perspektive\ >\ Aus\ Perspektive\ freigeben": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release with Perspective" }],
     },
-    "Object > Perspective > Move Plane to Match Object": {
+    "Objekt\ >\ Perspektive\ >\ Ebene\ an\ Objekt\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Show Object Grid Plane" }],
     },
-    "Object > Perspective > Edit Text": {
+    "Objekt\ >\ Perspektive\ >\ Text\ bearbeiten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Edit Original Object" }],
     },
-    "Object > Live Paint > Make": {
+    "Objekt\ >\ Interaktiv\ malen\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Planet X" }],
     },
-    "Object > Live Paint > Merge": {
+    "Objekt\ >\ Interaktiv\ malen\ >\ Zusammenfügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Marge Planet X" }],
     },
-    "Object > Live Paint > Release": {
+    "Objekt\ >\ Interaktiv\ malen\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Planet X" }],
     },
-    "Object > Live Paint > Gap Options...": {
+    "Objekt\ >\ Interaktiv\ malen\ >\ Lückenoptionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Planet X Options" }],
     },
-    "Object > Live Paint > Expand": {
+    "Objekt\ >\ Interaktiv\ malen\ >\ Umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand Planet X" }],
     },
-    "Object > Image Trace > Make": {
+    "Objekt\ >\ Bildnachzeichner\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Image Tracing" }],
     },
-    "Object > Image Trace > Make and Expand": {
+    "Objekt\ >\ Bildnachzeichner\ >\ Erstellen and Expand": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make and Expand Image Tracing" }],
     },
-    "Object > Image Trace > Release": {
+    "Objekt\ >\ Bildnachzeichner\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Image Tracing" }],
     },
-    "Object > Image Trace > Expand": {
+    "Objekt\ >\ Bildnachzeichner\ >\ Umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand Image Tracing" }],
     },
-    "Object > Text Wrap > Make": {
+    "Objekt\ >\ Textumfluss\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Text Wrap" }],
     },
-    "Object > Text Wrap > Release": {
+    "Objekt\ >\ Textumfluss\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Text Wrap" }],
     },
-    "Object > Text Wrap > Text Wrap Options...": {
+    "Objekt\ >\ Textumfluss\ >\ Textumflussoptionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Text Wrap Options..." }],
     },
-    "Object > Clipping Mask > Make": {
+    "Objekt\ >\ Schnittmaske\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "makeMask" }],
     },
-    "Object > Clipping Mask > Release": {
+    "Objekt\ >\ Schnittmaske\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "releaseMask" }],
     },
-    "Object > Clipping Mask > Edit Mask": {
+    "Objekt\ >\ Schnittmaske\ >\ Maske\ bearbeiten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "editMask" }],
     },
-    "Object > Compound Path > Make": {
+    "Objekt\ >\ Zusammengesetzter\ Pfad\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "compoundPath" }],
     },
-    "Object > Compound Path > Release": {
+    "Objekt\ >\ Zusammengesetzter\ Pfad\ >\ Zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "noCompoundPath" }],
     },
-    "Object > Artboards > Convert to Artboards": {
+    "Objekt\ >\ Zeichenflächen\ >\ In\ Zeichenflächen\ konvertieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "setCropMarks" }],
     },
-    "Object > Artboards > Rearrange All Artboards": {
+    "Objekt\ >\ Zeichenflächen\ >\ Alle\ Zeichenflächen\ neu\ anordnen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ReArrange Artboards" }],
     },
-    "Object > Artboards > Fit to Artwork Bounds": {
+    "Objekt\ >\ Zeichenflächen\ >\ An\ Bildmaterialbegrenzungen\ anpassen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Fit Artboard to artwork bounds" }],
     },
-    "Object > Artboards > Fit to Selected Art": {
+    "Objekt\ >\ Zeichenflächen\ >\ An\ ausgewählte\ Grafik\ anpassen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Fit Artboard to selected Art" }],
     },
-    "Object > Graph > Type...": {
+    "Objekt\ >\ Diagramm\ >\ Art\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "setGraphStyle" }],
     },
-    "Object > Graph > Data...": {
+    "Objekt\ >\ Diagramm\ >\ Daten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "editGraphData" }],
     },
-    "Object > Graph > Design...": {
+    "Objekt\ >\ Diagramm\ >\ Designs\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "graphDesigns" }],
     },
-    "Object > Graph > Column...": {
+    "Objekt\ >\ Diagramm\ >\ Balken\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "setBarDesign" }],
     },
-    "Object > Graph > Marker...": {
+    "Objekt\ >\ Diagramm\ >\ Punkte\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "setIconDesign" }],
     },
-    "Type > More from Adobe Fonts...": {
+    "Schrift\ >\ Mehr\ bei\ Adobe\ Fonts\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Browse Typekit Fonts Menu IllustratorUI" }],
     },
-    "Type > Glyphs": {
+    "Schrift\ >\ Glyphen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "alternate glyph palette plugin" }],
     },
-    "Type > Area Type Options...": {
+    "Schrift\ >\ Flächentextoptionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "area-type-options" }],
     },
-    "Type > Type on a Path > Rainbow": {
+    "Schrift\ >\ Pfadtext\ >\ Regenbogen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Rainbow" }],
     },
-    "Type > Type on a Path > Skew": {
+    "Schrift\ >\ Pfadtext\ >\ Asymmetrie": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Skew" }],
     },
-    "Type > Type on a Path > 3D Ribbon": {
+    "Schrift\ >\ Pfadtext\ >\ 3D\-Band": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "3D ribbon" }],
     },
-    "Type > Type on a Path > Stair Step": {
+    "Schrift\ >\ Pfadtext\ >\ Treppenstufe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Stair Step" }],
     },
-    "Type > Type on a Path > Gravity": {
+    "Schrift\ >\ Pfadtext\ >\ Schwerkraft": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Gravity" }],
     },
-    "Type > Type on a Path > Type on a Path Options...": {
+    "Schrift\ >\ Pfadtext\ >\ Pfadtextoptionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "typeOnPathOptions" }],
     },
-    "Type > Type on a Path > Update Legacy Type on a Path": {
+    "Schrift\ >\ Pfadtext\ >\ Alten\ Pfadtext\ aktualisieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "updateLegacyTOP" }],
     },
-    "Type > Threaded Text > Create": {
+    "Schrift\ >\ Verketteter\ Text\ >\ Erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "threadTextCreate" }],
     },
-    "Type > Threaded Text > Release Selection": {
+    "Schrift\ >\ Verketteter\ Text\ >\ Auswahl\ zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "releaseThreadedTextSelection" }],
     },
-    "Type > Threaded Text > Remove Threading": {
+    "Schrift\ >\ Verketteter\ Text\ >\ Verkettung\ entfernen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "removeThreading" }],
     },
-    "Type > Fit Headline": {
+    "Schrift\ >\ Überschrift\ einpassen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "fitHeadline" }],
     },
-    "Type > Resolve Missing Fonts...": {
+    "Schrift\ >\ Fehlende\ Schriftarten\ auflösen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe IllustratorUI Resolve Missing Font" }],
     },
-    "Type > Find/Replace Font...": {
+    "Schrift\ >\ Schriftart\ suchen/ersetzen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Illustrator Find Font Menu Item" }],
     },
-    "Type > Change Case > UPPERCASE": {
+    "Schrift\ >\ Groß\-/Kleinschreibung\ ändern\ >\ GROSSBUCHSTABEN": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "UpperCase Change Case Item" }],
     },
-    "Type > Change Case > lowercase": {
+    "Schrift\ >\ Groß\-/Kleinschreibung\ ändern\ >\ kleinbuchstaben": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "LowerCase Change Case Item" }],
     },
-    "Type > Change Case > Title Case": {
+    "Schrift\ >\ Groß\-/Kleinschreibung\ ändern\ >\ Erster\ Buchstabe\ Im\ Wort\ Groß": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Title Case Change Case Item" }],
     },
-    "Type > Change Case > Sentence case": {
+    "Schrift\ >\ Groß\-/Kleinschreibung\ ändern\ >\ Erster\ buchstabe\ im\ satz\ groß": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Sentence case Change Case Item" }],
     },
-    "Type > Smart Punctuation...": {
+    "Schrift\ >\ Satz\-/Sonderzeichen\ …": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "Adobe Illustrator Smart Punctuation Menu Item" },
       ],
     },
-    "Type > Create Outlines": {
+    "Schrift\ >\ In\ Pfade\ umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "outline" }],
     },
-    "Type > Optical Margin Alignment": {
+    "Schrift\ >\ Optischer\ Randausgleich": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Optical Alignment Item" }],
     },
-    "Type > Show Hidden Characters": {
+    "Schrift\ >\ Verborgene\ Zeichen\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showHiddenChar" }],
     },
-    "Type > Type Orientation > Horizontal": {
+    "Schrift\ >\ Textausrichtung\ >\ Horizontal": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "type-horizontal" }],
     },
-    "Type > Type Orientation > Vertical": {
+    "Schrift\ >\ Textausrichtung\ >\ Vertikal": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "type-vertical" }],
     },
-    "Select > All": {
+    "Auswahl\ >\ Alles\ auswählen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "selectall" }],
     },
-    "Select > All on Active Artboard": {
+    "Auswahl\ >\ Alles\ auswählen on Active Artboard": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "selectallinartboard" }],
     },
-    "Select > Deselect": {
+    "Auswahl\ >\ Auswahl\ aufheben": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "deselectall" }],
     },
-    "Select > Reselect": {
+    "Auswahl\ >\ Erneut\ auswählen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Reselect menu item" }],
     },
-    "Select > Inverse": {
+    "Auswahl\ >\ Auswahl\ umkehren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Inverse menu item" }],
     },
-    "Select > Next Object Above": {
+    "Auswahl\ >\ Nächstes\ Objekt\ darüber": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 8" }],
     },
-    "Select > Next Object Below": {
+    "Auswahl\ >\ Nächstes\ Objekt\ darunter": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 9" }],
     },
-    "Select > Same > Appearance": {
+    "Auswahl\ >\ Gleich\ >\ Aussehen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Appearance menu item" }],
     },
-    "Select > Same > Appearance Attribute": {
+    "Auswahl\ >\ Gleich\ >\ Aussehen Attribute": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Appearance Attributes menu item" }],
     },
-    "Select > Same > Blending Mode": {
+    "Auswahl\ >\ Gleich\ >\ Füllmethode": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Blending Mode menu item" }],
     },
-    "Select > Same > Fill & Stroke": {
+    "Auswahl\ >\ Gleich\ >\ Fläche\ und\ Kontur": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Fill & Stroke menu item" }],
     },
-    "Select > Same > Fill Color": {
+    "Auswahl\ >\ Gleich\ >\ Flächenfarbe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Fill Color menu item" }],
     },
-    "Select > Same > Opacity": {
+    "Auswahl\ >\ Gleich\ >\ Deckkraft": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Opacity menu item" }],
     },
-    "Select > Same > Stroke Color": {
+    "Auswahl\ >\ Gleich\ >\ Konturfarbe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Stroke Color menu item" }],
     },
-    "Select > Same > Stroke Weight": {
+    "Auswahl\ >\ Gleich\ >\ Konturstärke": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Stroke Weight menu item" }],
     },
-    "Select > Same > Graphic Style": {
+    "Auswahl\ >\ Gleich\ >\ Grafikstil": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Style menu item" }],
     },
-    "Select > Same > Shape": {
+    "Auswahl\ >\ Gleich\ >\ Form": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Live Shape menu item" }],
     },
-    "Select > Same > Symbol Instance": {
+    "Auswahl\ >\ Gleich\ >\ Symbolinstanz": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Symbol Instance menu item" }],
     },
-    "Select > Same > Link Block Series": {
+    "Auswahl\ >\ Gleich\ >\ Verknüpfungsblockreihen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Link Block Series menu item" }],
     },
-    "Select > Same > Font Family": {
+    "Auswahl\ >\ Gleich\ >\ Schriftfamilie": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Font Family menu item" }],
     },
-    "Select > Same > Font Family & Style": {
+    "Auswahl\ >\ Gleich\ >\ Schriftfamilie & Style": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Font Family Style menu item" }],
     },
-    "Select > Same > Font Family, Style & Size": {
+    "Auswahl\ >\ Gleich\ >\ Schriftfamilie, Style & Size": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "Find Text Font Family Style Size menu item" },
       ],
     },
-    "Select > Same > Font Size": {
+    "Auswahl\ >\ Gleich\ >\ Schriftgrad": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Font Size menu item" }],
     },
-    "Select > Same > Text Fill Color": {
+    "Auswahl\ >\ Gleich\ >\ Textflächenfarbe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Fill Color menu item" }],
     },
-    "Select > Same > Text Stroke Color": {
+    "Auswahl\ >\ Gleich\ >\ Textkonturfarbe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Stroke Color menu item" }],
     },
-    "Select > Same > Text Fill & Stroke Color": {
+    "Auswahl\ >\ Gleich\ >\ Textflächen\-\ und\ \-konturfarbe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Fill Stroke Color menu item" }],
     },
-    "Select > Object > All on Same Layers": {
+    "Auswahl\ >\ Objekt\ >\ Alles\ auf\ denselben\ Ebenen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 3" }],
     },
-    "Select > Object > Direction Handles": {
+    "Auswahl\ >\ Objekt\ >\ Richtungsgriffe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 1" }],
     },
-    "Select > Object > Bristle Brush Strokes": {
+    "Auswahl\ >\ Objekt\ >\ Borstenpinselstriche": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Bristle Brush Strokes menu item" }],
     },
-    "Select > Object > Brush Strokes": {
+    "Auswahl\ >\ Objekt\ >\ Pinselkonturen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Brush Strokes menu item" }],
     },
-    "Select > Object > Clipping Masks": {
+    "Auswahl\ >\ Objekt\ >\ Schnittmasken": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Clipping Masks menu item" }],
     },
-    "Select > Object > Stray Points": {
+    "Auswahl\ >\ Objekt\ >\ Einzelne\ Ankerpunkte": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Stray Points menu item" }],
     },
-    "Select > Object > All Text Objects": {
+    "Auswahl\ >\ Objekt\ >\ Alle\ Textobjekte": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Text Objects menu item" }],
     },
-    "Select > Object > Point Text Objects": {
+    "Auswahl\ >\ Objekt\ >\ Punkttextobjekte": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Point Text Objects menu item" }],
     },
-    "Select > Object > Area Text Objects": {
+    "Auswahl\ >\ Objekt\ >\ Flächenttextobjekte": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Area Text Objects menu item" }],
     },
-    "Select > Start/Stop Global Edit": {
+    "Auswahl\ >\ Globale\ Bearbeitung\ starten/anhalten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "SmartEdit Menu Item" }],
     },
-    "Select > Save Selection...": {
+    "Auswahl\ >\ Auswahl\ speichern\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 10" }],
     },
-    "Select > Edit Selection...": {
+    "Auswahl\ >\ Auswahl\ bearbeiten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 11" }],
     },
-    "Effect > Apply Last Effect": {
+    "Effekt\ >\ Letzten\ Effekt\ anwenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Apply Last Effect" }],
     },
-    "Effect > Last Effect": {
+    "Effekt\ >\ Letzter\ Effekt": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Last Effect" }],
     },
-    "Effect > Document Raster Effects Settings...": {
+    "Effekt\ >\ Dokument\-Rastereffekt\-Einstellungen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Rasterize Effect Setting" }],
     },
-    "Effect > 3D and Materials > Extrude & Bevel...": {
+    "Effekt\ >\ 3D\ und\ Materialien\ >\ Extrudieren\ und\ abgeflachte\ Kante\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Extrude" }],
     },
-    "Effect > 3D and Materials > Revolve...": {
+    "Effekt\ >\ 3D\ und\ Materialien\ >\ Kreiseln\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Revolve" }],
     },
-    "Effect > 3D and Materials > Inflate...": {
+    "Effekt\ >\ 3D\ und\ Materialien\ >\ Aufblasen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Inflate" }],
     },
-    "Effect > 3D and Materials > Rotate...": {
+    "Effekt\ >\ 3D\ und\ Materialien\ >\ Drehen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Rotate" }],
     },
-    "Effect > 3D and Materials > Materials...": {
+    "Effekt\ >\ 3D\ und\ Materialien\ >\ Materialien\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Materials" }],
     },
-    "Effect > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...": {
+    "Effekt\ >\ 3D\ \(klassisch\)\ >\ Extrudieren\ und\ abgeflachte\ Kante\ \(klassisch\)\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live 3DExtrude" }],
     },
-    "Effect > 3D and Materials > 3D (Classic) > Revolve (Classic)...": {
+    "Effekt\ >\ 3D\ \(klassisch\)\ >\ Kreiseln\ \(klassisch\)\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live 3DRevolve" }],
     },
-    "Effect > 3D and Materials > 3D (Classic) > Rotate (Classic)...": {
+    "Effekt\ >\ 3D\ \(klassisch\)\ >\ Drehen\ \(klassisch\)\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live 3DRotate" }],
     },
-    "Effect > Convert to Shape > Rectangle...": {
+    "Effekt\ >\ In\ Form\ umwandeln\ >\ Rechteck\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Rectangle" }],
     },
-    "Effect > Convert to Shape > Rounded Rectangle...": {
+    "Effekt\ >\ In\ Form\ umwandeln\ >\ Abgerundetes\ Rechteck\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Rounded Rectangle" }],
     },
-    "Effect > Convert to Shape > Ellipse...": {
+    "Effekt\ >\ In\ Form\ umwandeln\ >\ Ellipse\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Ellipse" }],
     },
-    "Effect > Crop Marks": {
+    "Effekt\ >\ Schnittmarken": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Trim Marks" }],
     },
-    "Effect > Distort & Transform > Free Distort...": {
+    "Effekt\ >\ Verzerrungs\-\ und\ Transformationsfilter\ >\ Frei\ verzerren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Free Distort" }],
     },
-    "Effect > Distort & Transform > Pucker & Bloat...": {
+    "Effekt\ >\ Verzerrungs\-\ und\ Transformationsfilter\ >\ Zusammenziehen\ und\ aufblasen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pucker & Bloat" }],
     },
-    "Effect > Distort & Transform > Roughen...": {
+    "Effekt\ >\ Verzerrungs\-\ und\ Transformationsfilter\ >\ Aufrauen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Roughen" }],
     },
-    "Effect > Distort & Transform > Transform...": {
+    "Effekt\ >\ Verzerrungs\-\ und\ Transformationsfilter\ >\ Transformieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Transform" }],
     },
-    "Effect > Distort & Transform > Tweak...": {
+    "Effekt\ >\ Verzerrungs\-\ und\ Transformationsfilter\ >\ Tweak\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Scribble and Tweak" }],
     },
-    "Effect > Distort & Transform > Twist...": {
+    "Effekt\ >\ Verzerrungs\-\ und\ Transformationsfilter\ >\ Wirbel\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Twist" }],
     },
-    "Effect > Distort & Transform > Zig Zag...": {
+    "Effekt\ >\ Verzerrungs\-\ und\ Transformationsfilter\ >\ Zickzack\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Zig Zag" }],
     },
-    "Effect > Path > Offset Path...": {
+    "Effekt\ >\ Pfad\ >\ Pfad\ verschieben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Offset Path" }],
     },
-    "Effect > Path > Outline Object": {
+    "Effekt\ >\ Pfad\ >\ Kontur\ nachzeichnen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Outline Object" }],
     },
-    "Effect > Path > Outline Stroke": {
+    "Effekt\ >\ Pfad\ >\ Konturlinie": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Outline Stroke" }],
     },
-    "Effect > Pathfinder > Add": {
+    "Effekt\ >\ Pathfinder\ >\ Hinzufügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Add" }],
     },
-    "Effect > Pathfinder > Intersect": {
+    "Effekt\ >\ Pathfinder\ >\ Schnittmenge\ bilden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Intersect" }],
     },
-    "Effect > Pathfinder > Exclude": {
+    "Effekt\ >\ Pathfinder\ >\ Schnittmenge\ entfernen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Exclude" }],
     },
-    "Effect > Pathfinder > Subtract": {
+    "Effekt\ >\ Pathfinder\ >\ Subtrahieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Subtract" }],
     },
-    "Effect > Pathfinder > Minus Back": {
+    "Effekt\ >\ Pathfinder\ >\ Hinteres\ Objekt\ abziehen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Minus Back" }],
     },
-    "Effect > Pathfinder > Divide": {
+    "Effekt\ >\ Pathfinder\ >\ Unterteilen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Divide" }],
     },
-    "Effect > Pathfinder > Trim": {
+    "Effekt\ >\ Pathfinder\ >\ Überlappungsbereich\ entfernen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Trim" }],
     },
-    "Effect > Pathfinder > Merge": {
+    "Effekt\ >\ Pathfinder\ >\ Verdeckte\ Fläche\ entfernen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Merge" }],
     },
-    "Effect > Pathfinder > Crop": {
+    "Effekt\ >\ Pathfinder\ >\ Schnittmengenfläche": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Crop" }],
     },
-    "Effect > Pathfinder > Outline": {
+    "Effekt\ >\ Pathfinder\ >\ Kontur\ aufteilen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Outline" }],
     },
-    "Effect > Pathfinder > Hard Mix": {
+    "Effekt\ >\ Pathfinder\ >\ Hart\ mischen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Hard Mix" }],
     },
-    "Effect > Pathfinder > Soft Mix...": {
+    "Effekt\ >\ Pathfinder\ >\ Weich\ mischen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Soft Mix" }],
     },
-    "Effect > Pathfinder > Trap...": {
+    "Effekt\ >\ Pathfinder\ >\ Überfüllen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Trap" }],
     },
-    "Effect > Rasterize...": {
+    "Effekt\ >\ In\ Pixelbild\ umwandeln\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Rasterize" }],
     },
-    "Effect > Stylize > Drop Shadow...": {
+    "Effekt\ >\ Stilisierungsfilter\ >\ Schlagschatten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Drop Shadow" }],
     },
-    "Effect > Stylize > Feather...": {
+    "Effekt\ >\ Stilisierungsfilter\ >\ Weiche\ Kante\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Feather" }],
     },
-    "Effect > Stylize > Inner Glow...": {
+    "Effekt\ >\ Stilisierungsfilter\ >\ Schein\ nach\ innen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Inner Glow" }],
     },
-    "Effect > Stylize > outer Glow...": {
+    "Effekt\ >\ Stilisierungsfilter\ >\ Schein\ nach\ außen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Outer Glow" }],
     },
-    "Effect > Stylize > Round Corners...": {
+    "Effekt\ >\ Stilisierungsfilter\ >\ Ecken\ abrunden\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Round Corners" }],
     },
-    "Effect > Stylize > Scribble...": {
+    "Effekt\ >\ Stilisierungsfilter\ >\ Scribble\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Scribble Fill" }],
     },
-    "Effect > SVG Filters > Apply SVG Filter...": {
+    "Effekt\ >\ SVG\-Filter\ >\ SVG\-Filter\ anwenden\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live SVG Filters" }],
     },
-    "Effect > SVG Filters > Import SVG Filter...": {
+    "Effekt\ >\ SVG\-Filter\ >\ SVG\-Filter\ importieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "SVG Filter Import" }],
     },
-    "Effect > Warp > Arc...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Bogen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Arc" }],
     },
-    "Effect > Warp > Arc Lower...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Bogen\ unten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Arc Lower" }],
     },
-    "Effect > Warp > Arc Upper...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Bogen\ oben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Arc Upper" }],
     },
-    "Effect > Warp > Arch...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Torbogen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Arch" }],
     },
-    "Effect > Warp > Bulge...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Wulst\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Bulge" }],
     },
-    "Effect > Warp > Shell Lower...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Muschel\ unten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Shell Lower" }],
     },
-    "Effect > Warp > Shell Upper...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Muschel\ oben\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Shell Upper" }],
     },
-    "Effect > Warp > Flag...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Flagge\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Flag" }],
     },
-    "Effect > Warp > Wave...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Schwingungen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Wave" }],
     },
-    "Effect > Warp > Fish...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Fisch\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Fish" }],
     },
-    "Effect > Warp > Rise...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Ansteigend\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Rise" }],
     },
-    "Effect > Warp > Fisheye...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Fischauge\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Fisheye" }],
     },
-    "Effect > Warp > Inflate...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Aufblasen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Inflate" }],
     },
-    "Effect > Warp > Squeeze...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Stauchen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Squeeze" }],
     },
-    "Effect > Warp > Twist...": {
+    "Effekt\ >\ Verkrümmungsfilter\ >\ Wirbel\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Twist" }],
     },
-    "Effect > Effect Gallery...": {
+    "Effekt\ >\ Effekte\-Galerie\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_GEfc" }],
     },
-    "Effect > Artistic > Colored Pencil...": {
+    "Effekt\ >\ Kunstfilter\ >\ Buntstiftschraffur\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_ClrP" }],
     },
-    "Effect > Artistic > Cutout...": {
+    "Effekt\ >\ Kunstfilter\ >\ Farbpapier\-Collage\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Ct  " }],
     },
-    "Effect > Artistic > Dry Brush...": {
+    "Effekt\ >\ Kunstfilter\ >\ Grobe\ Malerei\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_DryB" }],
     },
-    "Effect > Artistic > Film Grain...": {
+    "Effekt\ >\ Kunstfilter\ >\ Körnung\ \&\ Aufhellung\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_FlmG" }],
     },
-    "Effect > Artistic > Fresco...": {
+    "Effekt\ >\ Kunstfilter\ >\ Fresko\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Frsc" }],
     },
-    "Effect > Artistic > Neon Glow...": {
+    "Effekt\ >\ Kunstfilter\ >\ Neonschein\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_NGlw" }],
     },
-    "Effect > Artistic > Paint Daubs...": {
+    "Effekt\ >\ Kunstfilter\ >\ Ölfarbe\ getupft\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_PntD" }],
     },
-    "Effect > Artistic > Palette Knife...": {
+    "Effekt\ >\ Kunstfilter\ >\ Malmesser\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_PltK" }],
     },
-    "Effect > Artistic > Plastic Wrap...": {
+    "Effekt\ >\ Kunstfilter\ >\ Kunststofffolie\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_PlsW" }],
     },
-    "Effect > Artistic > Poster Edges...": {
+    "Effekt\ >\ Kunstfilter\ >\ Tontrennung\ \&\ Kantenbetonung\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_PstE" }],
     },
-    "Effect > Artistic > Rough Pastels...": {
+    "Effekt\ >\ Kunstfilter\ >\ Grobes\ Pastell\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_RghP" }],
     },
-    "Effect > Artistic > Smudge Stick...": {
+    "Effekt\ >\ Kunstfilter\ >\ Diagonal\ verwischen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_SmdS" }],
     },
-    "Effect > Artistic > Sponge...": {
+    "Effekt\ >\ Kunstfilter\ >\ Schwamm\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Spng" }],
     },
-    "Effect > Artistic > Underpainting...": {
+    "Effekt\ >\ Kunstfilter\ >\ Malgrund\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Undr" }],
     },
-    "Effect > Artistic > Watercolor...": {
+    "Effekt\ >\ Kunstfilter\ >\ Aquarell\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Wtrc" }],
     },
-    "Effect > Blur > Gaussian Blur...": {
+    "Effekt\ >\ Weichzeichnungsfilter\ >\ Gaußscher\ Weichzeichner\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe PSL Gaussian Blur" }],
     },
-    "Effect > Blur > Radial Blur...": {
+    "Effekt\ >\ Weichzeichnungsfilter\ >\ Radialer\ Weichzeichner\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_RdlB" }],
     },
-    "Effect > Blur > Smart Blur...": {
+    "Effekt\ >\ Weichzeichnungsfilter\ >\ Selektiver\ Weichzeichner\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_SmrB" }],
     },
-    "Effect > Brush Strokes > Accented Edges...": {
+    "Effekt\ >\ Malfilter\ >\ Kanten\ betonen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_AccE" }],
     },
-    "Effect > Brush Strokes > Angled Strokes...": {
+    "Effekt\ >\ Malfilter\ >\ Gekreuzte\ Malstriche\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_AngS" }],
     },
-    "Effect > Brush Strokes > Crosshatch...": {
+    "Effekt\ >\ Malfilter\ >\ Kreuzschraffur\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Crsh" }],
     },
-    "Effect > Brush Strokes > Dark Strokes...": {
+    "Effekt\ >\ Malfilter\ >\ Dunkle\ Malstriche\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_DrkS" }],
     },
-    "Effect > Brush Strokes > Ink Outlines...": {
+    "Effekt\ >\ Malfilter\ >\ Konturen\ mit\ Tinte\ nachzeichnen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_InkO" }],
     },
-    "Effect > Brush Strokes > Spatter...": {
+    "Effekt\ >\ Malfilter\ >\ Spritzer\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Spt " }],
     },
-    "Effect > Brush Strokes > Sprayed Strokes...": {
+    "Effekt\ >\ Malfilter\ >\ Verwackelte\ Striche\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_SprS" }],
     },
-    "Effect > Brush Strokes > Sumi-e...": {
+    "Effekt\ >\ Malfilter\ >\ Sumi\-e\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Smie" }],
     },
-    "Effect > Distort > Diffuse Glow...": {
+    "Effekt\ >\ Verzerrungsfilter\ >\ Weiches\ Licht\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_DfsG" }],
     },
-    "Effect > Distort > Glass...": {
+    "Effekt\ >\ Verzerrungsfilter\ >\ Glas\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Gls " }],
     },
-    "Effect > Distort > Ocean Ripple...": {
+    "Effekt\ >\ Verzerrungsfilter\ >\ Ozeanwellen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_OcnR" }],
     },
-    "Effect > Pixelate > Color Halftone...": {
+    "Effekt\ >\ Vergröberungsfilter\ >\ Farbraster\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_ClrH" }],
     },
-    "Effect > Pixelate > Crystallize...": {
+    "Effekt\ >\ Vergröberungsfilter\ >\ Kristallisieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Crst" }],
     },
-    "Effect > Pixelate > Mezzotint...": {
+    "Effekt\ >\ Vergröberungsfilter\ >\ Mezzotint\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Mztn" }],
     },
-    "Effect > Pixelate > Pointillize...": {
+    "Effekt\ >\ Vergröberungsfilter\ >\ Punktieren\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Pntl" }],
     },
-    "Effect > Sketch > Bas Relief...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Basrelief\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_BsRl" }],
     },
-    "Effect > Sketch > Chalk & Charcoal...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Chalk\ \&\ Charcoal\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_ChlC" }],
     },
-    "Effect > Sketch > Charcoal...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Kohleumsetzung\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Chrc" }],
     },
-    "Effect > Sketch > Chrome...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Chrom\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Chrm" }],
     },
-    "Effect > Sketch > Conté Crayon...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Conté\-Stifte\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_CntC" }],
     },
-    "Effect > Sketch > Graphic Pen...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Strichumsetzung\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_GraP" }],
     },
-    "Effect > Sketch > Halftone Pattern...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Rasterungseffekt\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_HlfS" }],
     },
-    "Effect > Sketch > Note Paper...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Prägepapier\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_NtPr" }],
     },
-    "Effect > Sketch > Photocopy...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Fotokopie\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Phtc" }],
     },
-    "Effect > Sketch > Plaster...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Stuck\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Plst" }],
     },
-    "Effect > Sketch > Reticulation...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Punktierstich\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Rtcl" }],
     },
-    "Effect > Sketch > Stamp...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Stempel\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Stmp" }],
     },
-    "Effect > Sketch > Torn Edges...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Gerissene\ Kanten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_TrnE" }],
     },
-    "Effect > Sketch > Water Paper...": {
+    "Effekt\ >\ Zeichenfilter\ >\ Feuchtes\ Papier\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_WtrP" }],
     },
-    "Effect > Stylize > Glowing Edges...": {
+    "Effekt\ >\ Stilisierungsfilter\ >\ Leuchtende\ Konturen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_GlwE" }],
     },
-    "Effect > Texture > Craquelure...": {
+    "Effekt\ >\ Strukturierungsfilter\ >\ Risse\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Crql" }],
     },
-    "Effect > Texture > Grain...": {
+    "Effekt\ >\ Strukturierungsfilter\ >\ Körnung\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Grn " }],
     },
-    "Effect > Texture > Mosaic Tiles...": {
+    "Effekt\ >\ Strukturierungsfilter\ >\ Kacheln\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_MscT" }],
     },
-    "Effect > Texture > Patchwork...": {
+    "Effekt\ >\ Strukturierungsfilter\ >\ Patchwork\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Ptch" }],
     },
-    "Effect > Texture > Stained Glass...": {
+    "Effekt\ >\ Strukturierungsfilter\ >\ Buntglas\-Mosaik\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_StnG" }],
     },
-    "Effect > Texture > Texturizer...": {
+    "Effekt\ >\ Strukturierungsfilter\ >\ Mit\ Struktur\ versehen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Txtz" }],
     },
-    "Effect > Video > De-Interlace...": {
+    "Effekt\ >\ Videofilter\ >\ De\-Interlace\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Dntr" }],
     },
-    "Effect > Video > NTSC Colors": {
+    "Effekt\ >\ Videofilter\ >\ NTSC\-Farben": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_NTSC" }],
     },
-    "View > Outline / Preview": {
+    "Ansicht\ >\ Vorschau\ /\ Pfadansicht": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "preview" }],
     },
-    "View > GPU Preview / Preview on CPU": {
-      cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "GPU Preview" }],
-    },
-    "View > Overprint Preview": {
+    "Ansicht\ >\ Überdruckenvorschau": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ink" }],
     },
-    "View > Pixel Preview": {
+    "Ansicht\ >\ Pixelvorschau": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "raster" }],
     },
-    "View > Proof Setup > Working CMYK": {
+    "Ansicht\ >\ Proof\ einrichten\ >\ Dokument\-CMYK": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-document" }],
     },
-    "View > Proof Setup > Legacy Macintosh RGB (Gamma 1.8)": {
+    "Ansicht\ >\ Proof\ einrichten\ >\ Altes\ Macintosh\-RGB\ \(Gamma\ 1\.8\)": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-mac-rgb" }],
     },
-    "View > Proof Setup > Internet Standard RGB (sRGB)": {
+    "Ansicht\ >\ Proof\ einrichten\ >\ Internet\-Standard\-RGB\ \(sRGB\)": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-win-rgb" }],
     },
-    "View > Proof Setup > Monitor RGB": {
+    "Ansicht\ >\ Proof\ einrichten\ >\ Monitor\-RGB": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-monitor-rgb" }],
     },
-    "View > Proof Setup > Color blindness - Protanopia-type": {
+    "Ansicht\ >\ Proof\ einrichten\ >\ Farbenblindheit\ \(Protanopie\)": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-colorblindp" }],
     },
-    "View > Proof Setup > Color blindness - Deuteranopia-type": {
+    "Ansicht\ >\ Proof\ einrichten\ >\ Farbenblindheit\ \(Deuteranopie\)": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-colorblindd" }],
     },
-    "View > Proof Setup > Customize...": {
+    "Ansicht\ >\ Proof\ einrichten\ >\ Anpassen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-custom" }],
     },
-    "View > Proof Colors": {
+    "Ansicht\ >\ Farbproof": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proofColors" }],
     },
-    "View > Zoom In": {
+    "Ansicht\ >\ Einzoomen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "zoomin" }],
     },
-    "View > Zoom Out": {
+    "Ansicht\ >\ Auszoomen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "zoomout" }],
     },
-    "View > Fit Artboard in Window": {
+    "Ansicht\ >\ Zeichenfläche\ in\ Fenster\ einpassen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "fitin" }],
     },
-    "View > Fit All in Window": {
+    "Ansicht\ >\ Alle\ in\ Fenster\ einpassen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "fitall" }],
     },
-    "View > Show / Hide Slices": {
+    "Ansicht\ >\ Slices\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Feedback Menu" }],
     },
-    "View > Lock Slices": {
+    "Ansicht\ >\ Slices\ fixieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Lock Menu" }],
     },
-    "View > Show / Hide Bounding Box": {
+    "Ansicht\ >\ Begrenzungsrahmen\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Bounding Box Toggle" }],
     },
-    "View > Show / Hide Transparency Grid": {
+    "Ansicht\ >\ Transparenzraster\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "TransparencyGrid Menu Item" }],
     },
-    "View > Actual Size": {
+    "Ansicht\ >\ Originalgröße": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "actualsize" }],
     },
-    "View > Show Live Paint Gaps": {
+    "Ansicht\ >\ Interaktive\ Mallücken\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Show Gaps Planet X" }],
     },
-    "View > Show / Hide Gradient Annotator": {
+    "Ansicht\ >\ Verlaufsoptimierer\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Gradient Feedback" }],
     },
-    "View > Show|Hide Corner Widget": {
+    "Ansicht\ >\ Ecken\-Widget\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Corner Annotator" }],
     },
-    "View > Show / Hide Edges": {
+    "Ansicht\ >\ Ecken\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "edge" }],
     },
-    "View > Smart Guides": {
+    "Ansicht\ >\ Intelligente\ Hilfslinien": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Snapomatic on-off menu item" }],
     },
-    "View > Perspective Grid > Show / Hide Grid": {
+    "Ansicht\ >\ Perspektivenraster\ >\ Raster\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Show Perspective Grid" }],
     },
-    "View > Perspective Grid > Show / Hide Rulers": {
+    "Ansicht\ >\ Perspektivenraster\ >\ Lineale\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Show Ruler" }],
     },
-    "View > Perspective Grid > Snap to Grid": {
+    "Ansicht\ >\ Perspektivenraster\ >\ Am\ Raster\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Snap to Grid" }],
     },
-    "View > Perspective Grid > Lock Grid": {
+    "Ansicht\ >\ Perspektivenraster\ >\ Raster\ sperren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Lock Perspective Grid" }],
     },
-    "View > Perspective Grid > Lock Station Point": {
+    "Ansicht\ >\ Perspektivenraster\ >\ Bezugspunkt\ sperren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Lock Station Point" }],
     },
-    "View > Perspective Grid > Define Grid": {
+    "Ansicht\ >\ Perspektivenraster\ >\ Raster\ definieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Define Perspective Grid" }],
     },
-    "View > Perspective Grid > Save Grid as Preset": {
+    "Ansicht\ >\ Perspektivenraster\ >\ Raster\ als\ Vorgabe\ speichern": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Save Perspective Grid as Preset" }],
     },
-    "View > Show / Hide Artboards": {
+    "Ansicht\ >\ Zeichenflächen\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "artboard" }],
     },
-    "View > Show / Hide Print Tiling": {
+    "Ansicht\ >\ Druckaufteilung\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pagetiling" }],
     },
-    "View > Show / Hide Template": {
+    "Ansicht\ >\ Vorlage\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showtemplate" }],
     },
-    "View > Rulers > Show / Hide Rulers": {
+    "Ansicht\ >\ Lineale\ >\ Lineale\ einblende\ /\ ausblendenn": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ruler" }],
     },
-    "View > Rulers > Change to Global Rulers": {
+    "Ansicht\ >\ Lineale\ >\ In\ globale\ Lineale\ ändern": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "rulerCoordinateSystem" }],
     },
-    "View > Rulers > Show / Hide Video Rulers": {
+    "Ansicht\ >\ Lineale\ >\ Videolineale\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "videoruler" }],
     },
-    "View > Show / Hide Text Threads": {
+    "Ansicht\ >\ Textverkettungen\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "textthreads" }],
     },
-    "View > Guides > Show / Hide Guides": {
+    "Ansicht\ >\ Hilfslinien\ >\ Hilfslinien\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showguide" }],
     },
-    "View > Guides > Lock Guides": {
+    "Ansicht\ >\ Hilfslinien\ >\ Hilfslinien\ sperren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "lockguide" }],
     },
-    "View > Guides > Make Guides": {
+    "Ansicht\ >\ Hilfslinien\ >\ Hilfslinien\ erstellen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "makeguide" }],
     },
-    "View > Guides > Release Guides": {
+    "Ansicht\ >\ Hilfslinien\ >\ Hilfslinien\ zurückwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "releaseguide" }],
     },
-    "View > Guides > Clear Guides": {
+    "Ansicht\ >\ Hilfslinien\ >\ Hilfslinien\ löschen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "clearguide" }],
     },
-    "View > Show / Hide Grid": {
+    "Ansicht\ >\ Raster\ einblenden\ /\ ausblenden": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showgrid" }],
     },
-    "View > Snap to Grid": {
+    "Ansicht\ >\ Am\ Raster\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "snapgrid" }],
     },
-    "View > Snap to Point": {
+    "Ansicht\ >\ An\ Punkt\ ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "snappoint" }],
     },
-    "View > New View...": {
+    "Ansicht\ >\ Neue\ Ansicht\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "newview" }],
     },
-    "View > Edit Views...": {
+    "Ansicht\ >\ Ansicht\ bearbeiten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "editview" }],
     },
-    "Window > New Window": {
+    "Fenster\ >\ Neues\ Fenster": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "newwindow" }],
     },
-    "Window > Arrange > Cascade": {
+    "Fenster\ >\ Anordnen\ >\ Überlappend": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "cascade" }],
     },
-    "Window > Arrange > Tile": {
+    "Fenster\ >\ Anordnen\ >\ Nebeneinander": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "tile" }],
     },
-    "Window > Arrange > Float in Window": {
+    "Fenster\ >\ Anordnen\ >\ In\ Fenster\ verschiebbar\ machen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "floatInWindow" }],
     },
-    "Window > Arrange > Float All in Windows": {
+    "Fenster\ >\ Anordnen\ >\ Alle\ in\ Fenstern\ verschiebbar\ machen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "floatAllInWindows" }],
     },
-    "Window > Arrange > Consolidate All Windows": {
+    "Fenster\ >\ Anordnen\ >\ Alle\ Fenster\ zusammenführen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "consolidateAllWindows" }],
     },
-    "Window > Reset Workspace": {
+    "Fenster\ >\ Arbeitsbereich\ >\ Zurücksetzen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Reset Workspace" }],
     },
-    "Window > Workspace > New Workspace...": {
+    "Fenster\ >\ Arbeitsbereich\ >\ Neuer\ Arbeitsbereich\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Workspace" }],
     },
-    "Window > Workspace > Manage Workspaces...": {
+    "Fenster\ >\ Arbeitsbereich\ >\ Arbeitsbereiche\ verwalten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Manage Workspace" }],
     },
-    "Window > Find Extensions on Exchange...": {
+    "Fenster\ >\ Erweiterungen\ auf\ Exchange\ suchen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Browse Add-Ons Menu" }],
     },
-    "Window > Control": {
+    "Fenster\ >\ Steuerung": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "drover control palette plugin" }],
     },
-    "Window > Toolbars > Advanced": {
+    "Fenster\ >\ Werkzeugleisten\ >\ Erweitert": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Advanced Toolbar Menu" }],
     },
-    "Window > Toolbars > Basic": {
+    "Fenster\ >\ Werkzeugleisten\ >\ Einfach": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Basic Toolbar Menu" }],
     },
-    "Window > Toolbars > New Toolbar...": {
+    "Fenster\ >\ Werkzeugleisten\ >\ Neue\ Werkzeugleiste\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "New Tools Panel" }],
     },
-    "Window > Toolbars > Manage Toolbar...": {
+    "Fenster\ >\ Werkzeugleisten\ >\ Werkzeugleisten\ verwalten\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Manage Tools Panel" }],
     },
-    "Window > 3D and Materials": {
+    "Fenster\ >\ 3D\ und\ Materialien": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe 3D Panel" }],
     },
-    "Window > Actions": {
+    "Fenster\ >\ Aktionen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Action Palette" }],
     },
-    "Window > Align": {
+    "Fenster\ >\ Ausrichten": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeAlignObjects2" }],
     },
-    "Window > Appearance": {
+    "Fenster\ >\ Aussehen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Style Palette" }],
     },
-    "Window > Artboards": {
+    "Fenster\ >\ Zeichenflächen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Artboard Palette" }],
     },
-    "Window > Asset Export": {
+    "Fenster\ >\ Export\ von\ Element": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe SmartExport Panel Menu Item" }],
     },
-    "Window > Attributes": {
+    "Fenster\ >\ Attribute": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-attributes" },
       ],
     },
-    "Window > Brushes": {
+    "Fenster\ >\ Pinsel": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe BrushManager Menu Item" }],
     },
-    "Window > Color": {
+    "Fenster\ >\ Farbe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Color Palette" }],
     },
-    "Window > Color Guide": {
+    "Fenster\ >\ Farbe Guide": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Harmony Palette" }],
     },
-    "Window > Comments": {
+    "Fenster\ >\ Kommentare": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Commenting Palette" }],
     },
-    "Window > CSS Properties": {
+    "CSS\-Eigenschaften": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "CSS Menu Item" }],
     },
-    "Window > Document Info": {
+    "Fenster\ >\ Dokumentinformationen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "DocInfo1" }],
     },
-    "Window > Flattener Preview": {
+    "Fenster\ >\ Reduzierungsvorschau": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Flattening Preview" }],
     },
-    "Window > Gradient": {
+    "Fenster\ >\ Verlauf": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Gradient Palette" }],
     },
-    "Window > Graphic Styles": {
+    "Fenster\ >\ Grafikstile": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Style Palette" }],
     },
-    "Window > History": {
-      cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "Adobe HistoryPanel Menu Item" }],
-    },
-    "Window > Info": {
+    "Fenster\ >\ Info": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-info" },
       ],
     },
-    "Window > Layers": {
+    "Fenster\ >\ Ebenen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeLayerPalette1" }],
     },
-    "Window > Libraries": {
-      cmdType: "menu",
-      cmdActions: [
-        {
-          type: "menu",
-          value: "Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries",
-        },
-      ],
-    },
-    "Window > Links": {
+    "Fenster\ >\ Verknüpfungen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe LinkPalette Menu Item" }],
     },
-    "Window > Magic Wand": {
+    "Fenster\ >\ Zauberstab": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Magic Wand" }],
     },
-    "Window > Navigator": {
+    "Fenster\ >\ Navigator": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeNavigator" }],
     },
-    "Window > Pathfinder": {
+    "Fenster\ >\ Pathfinder": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe PathfinderUI" }],
     },
-    "Window > Pattern Options": {
+    "Fenster\ >\ Musteroptionen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Pattern Panel Toggle" }],
     },
-    "Window > Properties": {
+    "Fenster\ >\ Eigenschaften": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Property Palette" }],
     },
-    "Window > Separations Preview": {
+    "Fenster\ >\ Separationenvorschau": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Separation Preview Panel" }],
     },
-    "Window > Stroke": {
+    "Fenster\ >\ Kontur": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Stroke Palette" }],
     },
-    "Window > SVG Interactivity": {
+    "Fenster\ >\ SVG\-Interaktivität": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe SVG Interactivity Palette" }],
     },
-    "Window > Swatches": {
+    "Fenster\ >\ Farbfelder": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Swatches Menu Item" }],
     },
-    "Window > Symbols": {
+    "Fenster\ >\ Symbole": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Symbol Palette" }],
     },
-    "Window > Transform": {
+    "Fenster\ >\ Transformieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeTransformObjects1" }],
     },
-    "Window > Transparency": {
+    "Fenster\ >\ Transparenz": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Transparency Palette Menu Item" }],
     },
-    "Window > Type > Character": {
+    "Fenster\ >\ Schrift\ >\ Zeichen": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-character" },
       ],
     },
-    "Window > Type > Character Styles": {
+    "Fenster\ >\ Schrift\ >\ Zeichen Styles": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Character Styles" }],
     },
-    "Window > Type > Glyphs": {
+    "Window > Schrift\ >\ Glyphen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "alternate glyph palette plugin 2" }],
     },
-    "Window > Type > OpenType": {
+    "Fenster\ >\ Schrift\ >\ OpenType": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-opentype" },
       ],
     },
-    "Window > Type > Paragraph": {
+    "Fenster\ >\ Schrift\ >\ Absatz": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-paragraph" },
       ],
     },
-    "Window > Type > Paragraph Styles": {
+    "Fenster\ >\ Schrift\ >\ Absatz Styles": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Paragraph Styles Palette" }],
     },
-    "Window > Type > Tabs": {
+    "Fenster\ >\ Schrift\ >\ Tabulatoren": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-tab" },
       ],
     },
-    "Window > Variables": {
+    "Fenster\ >\ Variablen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Variables Palette Menu Item" }],
     },
-    "Window > Version History": {
+    "Fenster\ >\ Versionsverlauf": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Version History File Menu Item" }],
     },
-    "Window > Brush Libraries > Other Library": {
+    "Fenster\ >\ Pinsel\-Bibliotheken\ >\ Andere\ Bibliothek\ …": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "AdobeBrushMgrUI Other libraries menu item" },
       ],
     },
-    "Window > Graphic Style Libraries > Other Library...": {
+    "Fenster\ >\ Grafikstil\-Bibliotheken\ >\ Andere\ Bibliothek\ …": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "Adobe Art Style Plugin Other libraries menu item" },
       ],
     },
-    "Window > Swatch Libraries > Other Library...": {
-      cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "AdobeSwatch_ Other libraries menu item" }],
-    },
-    "Window > Symbol Libraries > Other Library...": {
+    "Fenster\ >\ Symbol\-Bibliotheken\ >\ Andere\ Bibliothek\ …": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3510,119 +3493,119 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Help > Illustrator Help...": {
+    "Hilfe\ >\ Illustrator\-Hilfe\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "helpcontent" }],
     },
-    "Help > Support Community": {
+    "Hilfe\ >\ Support\-Community": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "supportCommunity" }],
     },
-    "Help > Submit Bug/Feature Request...": {
+    "Hilfe\ >\ Fehlermeldung\ /\ Funktionswunsch\ senden\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "wishform" }],
     },
-    "Help > System Info...": {
+    "Hilfe\ >\ Systeminformationen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "System Info" }],
     },
-    "Palette > Actions > Batch...": {
+    "Anderes\ Bedienfeld\ >\ Aktionsstapel\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Actions Batch" }],
     },
-    "Palette > Appearance > Add New Fill": {
+    "Anderes\ Bedienfeld\ >\ Neue\ Fläche\ hinzufügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Fill Shortcut" }],
     },
-    "Palette > Appearance > Add New Stroke": {
+    "Anderes\ Bedienfeld\ >\ Neue\ Kontur\ hinzufügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Stroke Shortcut" }],
     },
-    "Palette > Graphic Styles > New Graphic Style...": {
+    "Anderes\ Bedienfeld\ >\ Neuer\ Grafikstil\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Style Shortcut" }],
     },
-    "Palette > Layers > New Layer": {
+    "Anderes\ Bedienfeld\ >\ Neue\ Ebene": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeLayerPalette2" }],
     },
-    "Palette > Layers > New Layer with Dialog...": {
+    "Anderes\ Bedienfeld\ >\ Neue\ Ebene with Dialog...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeLayerPalette3" }],
     },
-    "Palette > Links > Update Link": {
+    "Anderes\ Bedienfeld\ >\ Verknüpfung\ aktualisieren": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Update Link Shortcut" }],
     },
-    "Palette > Swatches > New Swatch...": {
+    "Anderes\ Bedienfeld\ >\ Neues\ Farbfeld\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Swatch Shortcut Menu" }],
     },
-    "Palette > Symbols > New Symbol...": {
+    "Anderes\ Bedienfeld\ >\ Neues\ Symbol\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Symbol Shortcut" }],
     },
-    "About Illustrator...": {
+    "Über\ … Illustrator...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "about" }],
     },
-    "Preferences > General...": {
+    "Voreinstellungen\ >\ Allgemein\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "preference" }],
     },
-    "Preferences > Selection & Anchor Display...": {
+    "Voreinstellungen\ >\ Auswahl\ und\ Ankerpunkt\-Anzeige\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "selectPref" }],
     },
-    "Preferences > Type...": {
+    "Voreinstellungen\ >\ Schrift\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "keyboardPref" }],
     },
-    "Preferences > Units...": {
+    "Voreinstellungen\ >\ Einheit\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "unitundoPref" }],
     },
-    "Preferences > Guides & Grid...": {
+    "Voreinstellungen\ >\ Hilfslinien\ und\ Raster\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "guidegridPref" }],
     },
-    "Preferences > Smart Guides...": {
+    "Voreinstellungen\ >\ Intelligente\ Hilfslinien\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "snapPref" }],
     },
-    "Preferences > Slices...": {
+    "Voreinstellungen\ >\ Slices\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "slicePref" }],
     },
-    "Preferences > Hyphenation...": {
+    "Voreinstellungen\ >\ Silbentrennung\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "hyphenPref" }],
     },
-    "Preferences > Plug-ins & Scratch Disks...": {
+    "Voreinstellungen\ >\ Zusatzmodule\ und\ virtueller\ Speicher\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pluginPref" }],
     },
-    "Preferences > User Interface...": {
+    "Voreinstellungen\ >\ Benutzeroberfläche\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "UIPref" }],
     },
-    "Preferences > Performance": {
+    "Voreinstellungen\ >\ Leistung\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "GPUPerformancePref" }],
     },
-    "Preferences > File Handling...": {
+    "Voreinstellungen\ >\ Dateihandhabung…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "FilePref" }],
     },
-    "Preferences > Clipboard Handling": {
+    "Voreinstellungen\ >\ Zwischenablageoptionen\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ClipboardPref" }],
     },
-    "Preferences > Appearance of Black...": {
+    "Bearbeiten\ >\ Voreinstellungen\ >\ Aussehen\ von\ Schwarz\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "BlackPref" }],
     },
-    "Preferences > Devices": {
+    "Voreinstellungen\ >\ Geräte\ …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "DevicesPref" }],
     },
