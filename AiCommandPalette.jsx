@@ -10,7 +10,7 @@ See the LICENSE file for details.
 //@target illustrator
 
 const _title = "Ai Command Palette";
-const _version = "0.2.0";
+const _version = "0.2.1";
 const _copyright = "Copyright 2022 Josh Duncan";
 const _website = "joshbduncan.com";
 const _github = "https://github.com/joshbduncan";
@@ -182,9 +182,9 @@ function executeCommandAction(action) {
       f = new File(action.value.scriptPath);
       if (!f.exists) {
         alert("Script no longer exists at original path.\n" + action.value.scriptPath);
-        delete data.commands[type]["Script: " + action.value.scriptName];
+        delete data.commands[type]["Script:" + " " + action.value.scriptName];
         if (action.value.scriptName.indexOf("**DELETED**") < 0)
-          deletedCommandNeedsAttention("Script: " + action.value.scriptName);
+          deletedCommandNeedsAttention("Script:" + " " + action.value.scriptName);
       } else {
         try {
           $.evalFile(f);
@@ -194,7 +194,7 @@ function executeCommandAction(action) {
       }
       break;
     default:
-      alert("Invalid command type:" + type);
+      alert("Invalid command type:\n" + type);
   }
   try {
     app.redraw();
@@ -256,7 +256,7 @@ function configAction(action) {
       write = false;
       break;
     default:
-      alert("Invalid configuration option:" + action);
+      alert("Invalid configuration option:\n" + action);
   }
   if (write) writeUserData(dataFile);
 }
@@ -283,7 +283,9 @@ function aboutDialog() {
   links.add("statictext", undefined, "Version " + _version);
   links.add("statictext", undefined, _copyright);
   var githubText =
-    "Click here to learn more: https://github.com/joshbduncan/AiCommandPalette";
+    "Click here to learn more:" +
+    " " +
+    "https://github.com/joshbduncan/AiCommandPalette";
   var github = links.add("statictext", undefined, githubText);
   // window buttons
   var winButtons = win.add("group");
@@ -315,12 +317,12 @@ function configPaletteSettings() {
 function configLoadScript() {
   var files, f, fname;
   var ct = 0;
-  var files = loadFileTypes("Load Script File(s)", true, ".jsx$|.js$");
+  var files = loadFileTypes("Load Script Files", true, ".jsx$|.js$");
   if (files.length > 0) {
     for (var i = 0; i < files.length; i++) {
       f = files[i];
       fname = decodeURI(f.name);
-      if (data.commands.script.hasOwnProperty("Script: " + fname)) {
+      if (data.commands.script.hasOwnProperty("Script:" + " " + fname)) {
         if (
           !Window.confirm(
             "Script already loaded.\nWould you like to replace the previous script with the new one?",
@@ -333,9 +335,9 @@ function configLoadScript() {
       if (insertScriptIntoUserData(f)) ct++;
     }
     if (ct > 0) buildCommands(data.commands, true);
-    alert("Total scripts loaded: " + ct);
+    alert("Total scripts loaded:\n" + ct);
   } else {
-    alert("No script file(s) selected.\nMust be JavaScript '.js' or '.jsx' files.");
+    alert("No script files selected.\nMust be JavaScript '.js' or '.jsx' files.");
   }
 }
 
@@ -362,7 +364,7 @@ function configBuildWorkflow(workflow) {
         Window.confirm(
           "A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?",
           "noAsDflt",
-          "Save Workflow Name Conflict"
+          "Save Workflow Conflict"
         )
       ) {
         break;
@@ -376,7 +378,7 @@ function configBuildWorkflow(workflow) {
           alert("Workflow not saved.");
           return false;
         } else {
-          result.name = "Workflow: " + newName;
+          result.name = "Workflow:" + " " + newName;
         }
       }
     }
@@ -468,7 +470,7 @@ function configHideCommand() {
   if (commands.length > 0) {
     result = commandPalette(
       (arr = commands),
-      (title = "Select Menu Command(s) To Hide"),
+      (title = "Select Menu Commands To Hide"),
       (bounds = [0, 0, 500, 182]),
       (multiselect = true),
       (filter = [])
@@ -476,9 +478,9 @@ function configHideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Hide Command(s)?\n" + result.join("\n"),
+          "Hide Commands?\n" + result.join("\n"),
           "noAsDflt",
-          "Confirm Command(s) To Hide"
+          "Confirm Commands To Hide"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -488,7 +490,7 @@ function configHideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Total commands hidden: " + ct);
+      alert("Total commands hidden:" + " " + ct);
     }
   } else {
     alert("There are no commands to hide.");
@@ -503,7 +505,7 @@ function configUnhideCommand() {
   if (data.settings.hiddenCommands.length > 0) {
     result = commandPalette(
       (arr = data.settings.hiddenCommands),
-      (title = "Select Hidden Menu Command(s) To Reveal"),
+      (title = "Select Hidden Menu Commands To Reveal"),
       (bounds = [0, 0, 500, 182]),
       (multiselect = true),
       (filter = [])
@@ -511,9 +513,9 @@ function configUnhideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Reveal Hidden Command(s)?\n" + result.join("\n"),
+          "Reveal Hidden Commands?\n" + result.join("\n"),
           "noAsDflt",
-          "Confirm Command(s) To Reveal"
+          "Confirm Commands To Reveal"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -527,7 +529,7 @@ function configUnhideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Total hidden commands revealed: " + ct);
+      alert("Total hidden commands revealed:\n" + ct);
     }
   } else {
     alert("There are no hidden commands to reveal.");
@@ -556,10 +558,10 @@ function configDeleteCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Delete Command(s)?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n" +
+          "Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n" +
             result.join("\n"),
           "noAsDflt",
-          "Confirm Command(s) To Delete"
+          "Confirm Commands To Delete"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -570,13 +572,13 @@ function configDeleteCommand() {
             ct++;
             deletedCommandNeedsAttention(cmdToDelete);
           } catch (e) {
-            alert(cmdToDelete + " couldn't be deleted.");
+            alert("Command couldn't be deleted.\n" + cmdToDelete);
           }
         }
       }
     }
     if (ct > 0) {
-      alert("Total commands deleted: " + ct);
+      alert("Total commands deleted:\n" + ct);
     }
   } else {
     alert("There are no commands to delete.");
@@ -726,7 +728,7 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   var command = "";
   var actions = [];
   if (edit != undefined) {
-    command = edit[0].text.replace(/^Workflow:\s/, "");
+    command = edit[0].text.replace(/^ + "Workflow:" + \s/, "");
     actions = commandsData[edit].cmdActions;
   }
 
@@ -746,7 +748,7 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
   var steps = pSteps.add("listbox", bounds, actions, { multiselect: false });
-  steps.helpTip = "Commands will run in order from top to bottom.";
+  steps.helpTip = "Workflows will run in order from top to bottom.";
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
   var up = stepButtons.add("button", undefined, "Move Up");
@@ -849,7 +851,7 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   }
 
   if (win.show() == 1) {
-    var finalName = "Workflow: " + name.text.trim();
+    var finalName = "Workflow:" + " " + name.text.trim();
     return { name: finalName, items: steps.items };
   }
   return false;
@@ -921,7 +923,7 @@ function deletedCommandNeedsAttention(action) {
     for (var n = 0; n < actions.length; n++) {
       curAction = actions[n];
       if (curAction === action) {
-        data.commands.workflow[command].cmdActions[n] = curAction + " **DELETED**";
+        data.commands.workflow[command].cmdActions[n] = curAction + " " + "**DELETED**";
       }
     }
   }
@@ -972,7 +974,7 @@ function loadAllActions() {
       actionName = pref.getStringPreference(
         currentPath + "action-" + j.toString() + "/name"
       );
-      actions["Action: " + actionName + " [" + setName + "]"] = {
+      actions["Action:" + " " + actionName + " [" + setName + "]"] = {
         cmdType: "action",
         cmdActions: [
           {
@@ -988,40 +990,6 @@ function loadAllActions() {
   }
   return actions;
 }
-
-/**
- * Return an objects keys.
- * @param   {Object} obj Object to extract keys from.
- * @returns {Array}      Array of all keys from `obj`.
- */
-// function getObjectKeys(obj) {
-//   var keys = [];
-//   for (var k in obj) {
-//     keys.push(k);
-//   }
-//   return keys;
-// }
-
-/**
- * Check if an array contains an item.
- * @param   {Array}  arr Array to check for item `q` in.
- * @param   {String} q   Item to check for.
- * @returns {Bool}       Whether or not item is in array.
- */
-// function includes(arr, q) {
-//   for (var i = 0; i < arr.length; i++) {
-//     if (q === arr[i]) return true;
-//   }
-//   return false;
-// }
-
-/**
- * Present the File.openDialog() window for the user to select certain files to load.
- * @param   {String}  prompt        Prompt for open file dialog.
- * @param   {Boolean} multiselect   Can the user select multiple files.
- * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
- * @returns {Array}                 Selected file(s).
- */
 
 /**
  * Present File.openDialog() for user to select files to load.
@@ -1053,7 +1021,7 @@ function loadFileTypes(prompt, multiselect, fileTypeRegex) {
 function insertScriptIntoUserData(f) {
   fname = decodeURI(f.name);
   try {
-    data.commands.script["Script: " + fname] = {
+    data.commands.script["Script:" + " " + fname] = {
       cmdType: "script",
       cmdActions: [
         {
@@ -1163,7 +1131,7 @@ function readJSONData(f) {
     json = f.read();
     f.close();
   } catch (e) {
-    alert("Error loading " + f + " file!");
+    alert("Error loading file:\n" + f);
   }
   obj = eval(json);
   return obj;

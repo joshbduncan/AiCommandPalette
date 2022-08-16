@@ -6,8 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2022-08-16
 ### Changed
 - FIX to German tool names
+- FIX to translate.py to only replace whole strings
+- Updated sample.csv
+- Update dialog strings to make it easier to do translation
 
 ## [0.2.0] - 2022-08-16
 ### Added

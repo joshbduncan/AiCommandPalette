@@ -56,7 +56,7 @@ def main():
     translated_content = content_to_translate
     for k, v in d.items():
         translated_content = re.sub(
-            "\\b" + re.escape(k), re.escape(v), translated_content
+            '"' + re.escape(k) + '"', re.escape('"' + v + '"'), translated_content
         )
 
     # write translated file

@@ -1,6 +1,6 @@
 English,Translation
 Ai Command Palette,Kurzbefehle
-Workflow Settings...,Einstellungen …
+Command Palette Settings...,Kurzbefehle Einstellungen …
 About Ai Command Palette...,Über Kurzbefehle …
 Build Workflow...,Arbeitsablauf erstellen …
 Edit Workflow...,Arbeitsablauf bearbeiten …
@@ -12,57 +12,59 @@ Hide Commands...,Befehle ausblenden …
 Reveal Commands...,Befehle einblenden …
 Delete Commands...,Befehle löschen …
 Reveal Preferences File,Einstellungen-Datei anzeigen
-Workflow:,Arbeitsablauf:
-Script:,Skript:
-Action:,Aktion:
-Workflow ',Arbeitsablauf '
+AiCommandPalette.json,Kurzbefehle.json
+**DELETED**,**GELÖSCHT**
 Workflow needs attention.\nThis workflow contains action steps that have been deleted.\n\n,"Achtung: Dieser Arbeitsablauf beinhaltet Aktionsschritte, die gelöscht worden sind.\n\n"
 Command was deleted.\nEdit any workflows where it was used.\n\n,"Der Befehl wurde gelöscht.\nBearbeiten Sie die Arbeitsabläufe, in denen er benutzt wurde.\n\n"
-DELETED,GELÖSCHT
 Error executing command:\n,Fehler beim Ausführen des Befehls:\n
 Error selecting tool:\n,Fehler beim Auswählen des Werkzeugs:\n
 Error executing action:\n,Fehler beim Ausführen der Aktion:\n
 Script no longer exists at original path.\n,Skript existiert nicht mehr am ursprünglichen Ort.\n
+Script:,Skript:
 Error executing script:\n,Fehler beim Ausführen des Skripts:\n
-Invalid command type:,Ungültiger Befehlstyp:
-Invalid configuration option:,Ungültige Konfigurationsoption:
+Invalid command type:\n,Ungültiger Befehlstyp:\n
+Invalid configuration option:\n,Ungültige Konfigurationsoption:\n
 Cancel,Abbrechen
 About,Über …
+About Ai Command Palette,Über Kurzbefehle …
 "Boost your Adobe Illustrator efficiency with quick access to most menu commands, tools, all of your actions, and any script you load right from your keyboard. AND, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.","Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie, alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität."
 Click here to learn more:,Klicken Sie hier für weitere Informationen:
 Palette Settings and Configuration,Paletteneinstellungen und -konfiguration
-Load Script File(s),Skriptdateien laden
+Load Script Files,Skriptdateien laden
 Script already loaded.\nWould you like to replace the previous script with the new one?,Skript bereits geladen.\nMöchten Sie es ersetzen?
 Script Load Conflict,Skriptladekonflikt
-Total scripts loaded: ,Geladene Skripte insgesamt:
-No script file(s) selected.\nMust be JavaScript '.js' or '.jsx' files.,Keine Skriptdateien ausgewählt.\nEs müssen JavaScript-'.js'- oder '.jsx'-Dateien sein.
+Total scripts loaded:\n,Geladene Skripte insgesamt:\n
+No script files selected.\nMust be JavaScript '.js' or '.jsx' files.,Keine Skriptdateien ausgewählt.\nEs müssen JavaScript-'.js'- oder '.jsx'-Dateien sein.
 Workflow Builder,Arbeitsablauf-Generator
 A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?,Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf überschrieben werden?
 Save Workflow Conflict,Arbeitsablauf-Konflikt speichern?
 Enter a new name for your workflow.,Geben Sie einen neuen Namen für den Arbeitsablauf an.
 New Workflow Name,Name des neuen Arbeitsablaufs
+Workflow not saved.,Arbeitsablauf nicht gespeichert
 Error saving workflow:\n,Fehler beim Speichern des Arbeitsablaufs:\n
 Choose A Workflow To Edit,Wählen Sie einen Arbeitsablauf zum Bearbeiten aus.
 There are no workflows that need attention.,"Es gibt keine Arbeitsabläufe, die beachtet werden müssen."
 All Built-In Menu Commands,Alle integrierten Menübefehle
 All Built-In Tools,Alle integrierten Werkzeuge
-Select Menu Command(s) To Hide,Wählen Sie die auszublendenden Menübefehle aus.
-Hide Command(s)?\n,Befehle ausblenden?\n
-Confirm Command(s) To Hide,Auszublendende Befehle bestätigen
-Total commands hidden: ,Gesamtzahl der ausgeblendeten Befehle:
+Select Menu Commands To Hide,Wählen Sie die auszublendenden Menübefehle aus.
+Hide Commands?\n,Befehle ausblenden?\n
+Confirm Commands To Hide,Auszublendende Befehle bestätigen
+Total commands hidden:,Gesamtzahl der ausgeblendeten Befehle:
 There are no commands to hide.,Es gibt keine Befehle zum Ausblenden.
-Select Hidden Menu Command(s) To Reveal,"Wählen Sie die ausgeblendeten Menübefehle aus, die angezeigt werden sollen."
-Reveal Hidden Command(s)?\n,Verborgene Befehle anzeigen?
-Confirm Command(s) To Reveal,Die ausgewählten Befehle anzeigen?
-Total hidden commands revealed: ,"Anzahl der verborgenen Befehle, die wieder angezeigt werden:"
+Select Hidden Menu Commands To Reveal,"Wählen Sie die ausgeblendeten Menübefehle aus, die angezeigt werden sollen."
+Reveal Hidden Commands?\n,Verborgene Befehle anzeigen?
+Confirm Commands To Reveal,Die ausgewählten Befehle anzeigen?
+Total hidden commands revealed:\n,"Anzahl der verborgenen Befehle, die wieder angezeigt werden:\n"
 There are no hidden commands to reveal.,Keine verborgenen Befehle vorhanden.
 Select Menu Commands To Delete,Wählen Sie die zu löschenden Menübefehle aus.
-Delete Command(s)?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n,Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n
-Confirm Command(s) To Delete,Bestätigen Sie die zu löschenden Befehle.
-couldn't be deleted.,konnte nicht gelöscht werden.
-Total commands deleted: ,Insgesamt gelöschte Befehle:
+Delete Command?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n,Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n
+Confirm Commands To Delete,Bestätigen Sie die zu löschenden Befehle.
+Command couldn't be deleted.,Befehle konnte nicht gelöscht werden.
+Total commands deleted:\n,Insgesamt gelöschte Befehle:
 There are no commands to delete.,Es gibt keine Befehle zum Löschen.
 "Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen."
+Cancel,Abbrechen
+Workflow:,Arbeitsablauf:
 Search For Commands,Befehle suchen.
 Double-click a command to add it as a workflow step below.,"Doppelklicken Sie auf einen Befehl, um ihn unten als benutzerdefinierten Schritt hinzuzufügen."
 Workflow Steps,Arbeitsablaufschritte
@@ -71,7 +73,9 @@ Move Up,Nach oben
 Move Down,Nach unten
 Delete,Löschen
 Save Workflow As,Arbeitsablauf speichern als
+Action:,Aktion:
 Error loading script:\n,Fehler beim Laden des Skripts:\n
+Error loading file:\n,Fehler beim Laden der Datei:\n
 Error writing file:\n,Fehler beim Schreiben der Datei\n:
 File > New...,Datei > Neu …
 File > New from Template...,Datei > Neu aus Vorlage …

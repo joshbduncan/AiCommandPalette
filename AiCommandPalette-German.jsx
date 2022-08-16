@@ -1,5 +1,5 @@
 /*
-Kurzbefehle
+Ai Command Palette
 Copyright 2022 Josh Duncan
 https://joshbduncan.com
 
@@ -10,7 +10,7 @@ See the LICENSE file for details.
 //@target illustrator
 
 const _title = "Kurzbefehle";
-const _version = "0.2.0";
+const _version = "0.2.1";
 const _copyright = "Copyright 2022 Josh Duncan";
 const _website = "joshbduncan.com";
 const _github = "https://github.com/joshbduncan";
@@ -21,14 +21,14 @@ polyfills();
 RUN THE SCRIPT
 **************************************************/
 
-// Kurzbefehle data object
+// Ai Command Palette data object
 const data = {
   commands: {
     script: {},
     workflow: {},
     action: loadAllActions(),
     defaults: {
-      "Command Palette Settings...": {
+      "Kurzbefehle Einstellungen …": {
         cmdType: "defaults",
         cmdActions: [{ type: "config", value: "paletteSettings" }],
       },
@@ -36,7 +36,7 @@ const data = {
     menu: builtinMenuCommands(),
     tool: builtinTools(),
     config: {
-      "Über … Kurzbefehle...": {
+      "Über Kurzbefehle …": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "about" }],
       },
@@ -90,15 +90,15 @@ const data = {
 
 // Load user data
 const dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
-const dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
+const dataFile = setupFileObject(dataFolder, "Kurzbefehle.json");
 loadUserData(dataFile);
 
-// Setup commands for Kurzbefehle
+// Setup commands for Ai Command Palette
 const commandsData = buildCommands();
 const allCommands = Object.keys(commandsData);
 const filteredCommands = filterHiddenCommands();
 
-// Present the Kurzbefehle
+// Present the Ai Command Palette
 var result = commandPalette(
   (arr = filteredCommands),
   (title = _title),
@@ -190,9 +190,9 @@ function executeCommandAction(action) {
           "Skript existiert nicht mehr am ursprünglichen Ort.\n" +
             action.value.scriptPath
         );
-        delete data.commands[type]["Skript: " + action.value.scriptName];
+        delete data.commands[type]["Skript:" + " " + action.value.scriptName];
         if (action.value.scriptName.indexOf("**GELÖSCHT**") < 0)
-          deletedCommandNeedsAttention("Skript: " + action.value.scriptName);
+          deletedCommandNeedsAttention("Skript:" + " " + action.value.scriptName);
       } else {
         try {
           $.evalFile(f);
@@ -207,7 +207,7 @@ function executeCommandAction(action) {
       }
       break;
     default:
-      alert("Ungültiger Befehlstyp:" + type);
+      alert("Ungültiger Befehlstyp:\n" + type);
   }
   try {
     app.redraw();
@@ -269,19 +269,19 @@ function configAction(action) {
       write = false;
       break;
     default:
-      alert("Ungültige Konfigurationsoption:" + action);
+      alert("Ungültige Konfigurationsoption:\n" + action);
   }
   if (write) writeUserData(dataFile);
 }
 
-/** Show Kurzbefehle Über\ … Dialog. */
+/** Show Ai Command Palette About Dialog. */
 function aboutDialog() {
   var win = new Window("dialog");
   win.text = "Über …";
   win.alignChildren = "fill";
 
   // script info
-  var pAbout = win.add("panel", undefined, "Über … Kurzbefehle");
+  var pAbout = win.add("panel", undefined, "Über Kurzbefehle …");
   pAbout.margins = 20;
   pAbout.alignChildren = "fill";
   var aboutText =
@@ -296,7 +296,9 @@ function aboutDialog() {
   links.add("statictext", undefined, "Version " + _version);
   links.add("statictext", undefined, _copyright);
   var githubText =
-    "Klicken Sie hier für weitere Informationen: https://github.com/joshbduncan/AiCommandPalette";
+    "Klicken Sie hier für weitere Informationen:" +
+    " " +
+    "https://github.com/joshbduncan/AiCommandPalette";
   var github = links.add("statictext", undefined, githubText);
   // window buttons
   var winButtons = win.add("group");
@@ -312,7 +314,7 @@ function aboutDialog() {
   win.show();
 }
 
-/** Show all Kurzbefehle configuration commands. */
+/** Show all Ai Command Palette configuration commands. */
 function configPaletteSettings() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.config)),
@@ -324,7 +326,7 @@ function configPaletteSettings() {
   if (result) processCommandActions(result);
 }
 
-/** Load external scripts into Kurzbefehle. */
+/** Load external scripts into Ai Command Palette. */
 function configLoadScript() {
   var files, f, fname;
   var ct = 0;
@@ -333,7 +335,7 @@ function configLoadScript() {
     for (var i = 0; i < files.length; i++) {
       f = files[i];
       fname = decodeURI(f.name);
-      if (data.commands.script.hasOwnProperty("Skript: " + fname)) {
+      if (data.commands.script.hasOwnProperty("Skript:" + " " + fname)) {
         if (
           !Window.confirm(
             "Skript bereits geladen.\nMöchten Sie es ersetzen?",
@@ -346,7 +348,7 @@ function configLoadScript() {
       if (insertScriptIntoUserData(f)) ct++;
     }
     if (ct > 0) buildCommands(data.commands, true);
-    alert("Geladene Skripte insgesamt:" + ct);
+    alert("Geladene Skripte insgesamt:\n" + ct);
   } else {
     alert(
       "Keine Skriptdateien ausgewählt.\nEs müssen JavaScript-'.js'- oder '.jsx'-Dateien sein."
@@ -377,7 +379,7 @@ function configBuildWorkflow(workflow) {
         Window.confirm(
           "Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf überschrieben werden?",
           "noAsDflt",
-          "Save Workflow Name Conflict"
+          "Arbeitsablauf-Konflikt speichern?"
         )
       ) {
         break;
@@ -388,10 +390,10 @@ function configBuildWorkflow(workflow) {
           "Name des neuen Arbeitsablaufs"
         );
         if (newName == undefined || newName == null || newName === "") {
-          alert("Workflow not saved.");
+          alert("Arbeitsablauf nicht gespeichert");
           return false;
         } else {
-          result.name = "Arbeitsablauf: " + newName;
+          result.name = "Arbeitsablauf:" + " " + newName;
         }
       }
     }
@@ -471,7 +473,7 @@ function showBuiltInTools() {
   if (result) processCommandActions(result);
 }
 
-/** Hide commands from Kurzbefehle. */
+/** Hide commands from Ai Command Palette. */
 function configHideCommand() {
   var commands, result;
   var ct = 0;
@@ -503,7 +505,7 @@ function configHideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Gesamtzahl der ausgeblendeten Befehle:" + ct);
+      alert("Gesamtzahl der ausgeblendeten Befehle:" + " " + ct);
     }
   } else {
     alert("Es gibt keine Befehle zum Ausblenden.");
@@ -543,14 +545,14 @@ function configUnhideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Anzahl der verborgenen Befehle, die wieder angezeigt werden:" + ct);
+      alert("Anzahl der verborgenen Befehle, die wieder angezeigt werden:\n" + ct);
     }
   } else {
     alert("Keine verborgenen Befehle vorhanden.");
   }
 }
 
-/** Löschen user added commands from Kurzbefehle. */
+/** Delete user added commands from Ai Command Palette. */
 function configDeleteCommand() {
   var commands, result, cmdToDelete, type;
   var ct = 0;
@@ -572,7 +574,7 @@ function configDeleteCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n" +
+          "Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n" +
             result.join("\n"),
           "noAsDflt",
           "Bestätigen Sie die zu löschenden Befehle."
@@ -586,7 +588,7 @@ function configDeleteCommand() {
             ct++;
             deletedCommandNeedsAttention(cmdToDelete);
           } catch (e) {
-            alert(cmdToDelete + " konnte nicht gelöscht werden.");
+            alert("Command couldn't be deleted.\n" + cmdToDelete);
           }
         }
       }
@@ -604,7 +606,7 @@ USER DIALOGS (and accompanying functions)
 **************************************************/
 
 /**
- * Kurzbefehle dialog.
+ * Ai Command Palette dialog.
  * @param   {Array}   arr         Commands to list in the ListBox.
  * @param   {String}  title       Dialog title.
  * @param   {Array}   bounds      Dialog size.
@@ -742,7 +744,7 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   var command = "";
   var actions = [];
   if (edit != undefined) {
-    command = edit[0].text.replace(/^Arbeitsablauf:\s/, "");
+    command = edit[0].text.replace(/^ + "Arbeitsablauf:" + \s/, "");
     actions = commandsData[edit].cmdActions;
   }
 
@@ -763,7 +765,8 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
   var steps = pSteps.add("listbox", bounds, actions, { multiselect: false });
-  steps.helpTip = "Commands will run in order from top to bottom.";
+  steps.helpTip =
+    "Die Arbeitsabläufe werden in der Reihenfolge von oben nach unten ausgeführt.";
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
   var up = stepButtons.add("button", undefined, "Nach oben");
@@ -866,7 +869,7 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   }
 
   if (win.show() == 1) {
-    var finalName = "Arbeitsablauf: " + name.text.trim();
+    var finalName = "Arbeitsablauf:" + " " + name.text.trim();
     return { name: finalName, items: steps.items };
   }
   return false;
@@ -938,7 +941,8 @@ function deletedCommandNeedsAttention(action) {
     for (var n = 0; n < actions.length; n++) {
       curAction = actions[n];
       if (curAction === action) {
-        data.commands.workflow[command].cmdActions[n] = curAction + " **GELÖSCHT**";
+        data.commands.workflow[command].cmdActions[n] =
+          curAction + " " + "**GELÖSCHT**";
       }
     }
   }
@@ -989,7 +993,7 @@ function loadAllActions() {
       actionName = pref.getStringPreference(
         currentPath + "action-" + j.toString() + "/name"
       );
-      actions["Aktion: " + actionName + " [" + setName + "]"] = {
+      actions["Aktion:" + " " + actionName + " [" + setName + "]"] = {
         cmdType: "action",
         cmdActions: [
           {
@@ -1005,40 +1009,6 @@ function loadAllActions() {
   }
   return actions;
 }
-
-/**
- * Return an objects keys.
- * @param   {Object} obj Object to extract keys from.
- * @returns {Array}      Array of all keys from `obj`.
- */
-// function getObjectKeys(obj) {
-//   var keys = [];
-//   for (var k in obj) {
-//     keys.push(k);
-//   }
-//   return keys;
-// }
-
-/**
- * Check if an array contains an item.
- * @param   {Array}  arr Array to check for item `q` in.
- * @param   {String} q   Item to check for.
- * @returns {Bool}       Whether or not item is in array.
- */
-// function includes(arr, q) {
-//   for (var i = 0; i < arr.length; i++) {
-//     if (q === arr[i]) return true;
-//   }
-//   return false;
-// }
-
-/**
- * Present the File.openDialog() window for the user to select certain files to load.
- * @param   {String}  prompt        Prompt for open file dialog.
- * @param   {Boolean} multiselect   Can the user select multiple files.
- * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
- * @returns {Array}                 Selected file(s).
- */
 
 /**
  * Present File.openDialog() for user to select files to load.
@@ -1070,7 +1040,7 @@ function loadFileTypes(prompt, multiselect, fileTypeRegex) {
 function insertScriptIntoUserData(f) {
   fname = decodeURI(f.name);
   try {
-    data.commands.script["Skript: " + fname] = {
+    data.commands.script["Skript:" + " " + fname] = {
       cmdType: "script",
       cmdActions: [
         {
@@ -1180,7 +1150,7 @@ function readJSONData(f) {
     json = f.read();
     f.close();
   } catch (e) {
-    alert("Error loading " + f + " file!");
+    alert("Fehler beim Laden der Datei:\n" + f);
   }
   obj = eval(json);
   return obj;
@@ -1453,11 +1423,11 @@ function builtinTools() {
     },
     "Perspektivenraster-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Perspective Grid Tool" }],
+      cmdActions: [{ type: "tool", value: "Perspektivenraster-Werkzeug" }],
     },
     "Perspektivenauswahl-Werkzeug": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Perspective Selection Tool" }],
+      cmdActions: [{ type: "tool", value: "Perspektivenauswahl-Werkzeug" }],
     },
     "Kreisdiagramm-Werkzeug": {
       cmdType: "tool",
@@ -1680,19 +1650,19 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "save" }],
     },
-    "Datei > Speichern As...": {
+    "Datei > Speichern unter …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveas" }],
     },
-    "Datei > Speichern a Copy...": {
+    "Datei > Kopie speichern …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveacopy" }],
     },
-    "Datei > Speichern as Template...": {
+    "Datei > Als Vorlage speichern …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveastemplate" }],
     },
-    "Datei > Speichern Selected Slices...": {
+    "Datei > Ausgewählte Slices speichern …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe AI Save Selected Slices" }],
     },
@@ -1776,19 +1746,19 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "paste" }],
     },
-    "Bearbeiten > Einfügen in Front": {
+    "Bearbeiten > Davor einfügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteFront" }],
     },
-    "Bearbeiten > Einfügen in Back": {
+    "Bearbeiten > Dahinter einfügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteBack" }],
     },
-    "Bearbeiten > Einfügen in Place": {
+    "Bearbeiten > An Originalposition einfügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteInPlace" }],
     },
-    "Bearbeiten > Einfügen on All Artboards": {
+    "Bearbeiten > In alle Zeichenflächen einfügen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteInAllArtboard" }],
     },
@@ -2068,9 +2038,9 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Divide" }],
     },
-    "Object > Slice > Löschen All": {
+    "Objekt > Slice > Alle löschen": {
       cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "AISlice Löschen All Slices" }],
+      cmdActions: [{ type: "menu", value: "AISlice Delete All Slices" }],
     },
     "Objekt > Slice > Slice-Optionen …": {
       cmdType: "menu",
@@ -2122,7 +2092,7 @@ function builtinMenuCommands() {
     },
     "Objekt > Pfad > Darunter liegende Objekte aufteilen": {
       cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "Messer-Werkzeug2" }],
+      cmdActions: [{ type: "menu", value: "Knife Tool2" }],
     },
     "Objekt > Pfad > In Raster teilen …": {
       cmdType: "menu",
@@ -2268,7 +2238,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Image Tracing" }],
     },
-    "Objekt > Bildnachzeichner > Erstellen and Expand": {
+    "Objekt > Bildnachzeichner > Erstellen und umwandeln": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make and Expand Image Tracing" }],
     },
@@ -2458,7 +2428,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "selectall" }],
     },
-    "Auswahl > Alles auswählen on Active Artboard": {
+    "Auswahl > Alles auf der aktiven Zeichenfläche": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "selectallinartboard" }],
     },
@@ -2486,7 +2456,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Appearance menu item" }],
     },
-    "Auswahl > Gleich > Aussehen Attribute": {
+    "Auswahl > Gleich > Aussehensattribute": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Appearance Attributes menu item" }],
     },
@@ -2534,11 +2504,11 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Font Family menu item" }],
     },
-    "Auswahl > Gleich > Schriftfamilie & Style": {
+    "Auswahl > Gleich > Schriftfamilie und -schnitt": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Font Family Style menu item" }],
     },
-    "Auswahl > Gleich > Schriftfamilie, Style & Size": {
+    "Auswahl > Gleich > Schriftfamilie, -schnitt und -grad": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "Find Text Font Family Style Size menu item" },
@@ -3383,7 +3353,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Color Palette" }],
     },
-    "Fenster > Farbe Guide": {
+    "Fenster > Farbhilfe": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Harmony Palette" }],
     },
@@ -3492,11 +3462,11 @@ function builtinMenuCommands() {
         { type: "menu", value: "internal palettes posing as plug-in menus-character" },
       ],
     },
-    "Fenster > Schrift > Zeichen Styles": {
+    "Fenster > Schrift > Zeichenformate": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Character Styles" }],
     },
-    "Window > Schrift > Glyphen": {
+    "Fenster > Schrift > Glyphen": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "alternate glyph palette plugin 2" }],
     },
@@ -3512,7 +3482,7 @@ function builtinMenuCommands() {
         { type: "menu", value: "internal palettes posing as plug-in menus-paragraph" },
       ],
     },
-    "Fenster > Schrift > Absatz Styles": {
+    "Fenster > Schrift > Absatzformate": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Paragraph Styles Palette" }],
     },
@@ -3591,7 +3561,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeLayerPalette2" }],
     },
-    "Anderes Bedienfeld > Neue Ebene with Dialog...": {
+    "Anderes Bedienfeld > Neue Ebene mit Dialog …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeLayerPalette3" }],
     },
@@ -3607,7 +3577,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Symbol Shortcut" }],
     },
-    "Über … Illustrator...": {
+    "Über Illustrator …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "about" }],
     },
