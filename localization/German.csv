@@ -1,6 +1,6 @@
 English,Translation
 Ai Command Palette,Kurzbefehle
-Command Palette Settings...,Kurzbefehle Einstellungen …
+Command Palette Settings...,Kurzbefehle – Einstellungen …
 About Ai Command Palette...,Über Kurzbefehle …
 Build Workflow...,Arbeitsablauf erstellen …
 Edit Workflow...,Arbeitsablauf bearbeiten …
@@ -25,9 +25,9 @@ Error executing script:\n,Fehler beim Ausführen des Skripts:\n
 Invalid command type:\n,Ungültiger Befehlstyp:\n
 Invalid configuration option:\n,Ungültige Konfigurationsoption:\n
 Cancel,Abbrechen
-About,Über …
-About Ai Command Palette,Über Kurzbefehle …
-"Boost your Adobe Illustrator efficiency with quick access to most menu commands, tools, all of your actions, and any script you load right from your keyboard. AND, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.","Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie, alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität."
+About,Über Kurzbefehle …
+About Ai Command Palette,Kurzbefehle
+"Boost your Adobe Illustrator efficiency with quick access to most menu commands, all of your actions, and any script you load right from your keyboard. AND, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.","Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie, alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität."
 Click here to learn more:,Klicken Sie hier für weitere Informationen:
 Palette Settings and Configuration,Paletteneinstellungen und -konfiguration
 Load Script Files,Skriptdateien laden
@@ -35,7 +35,7 @@ Script already loaded.\nWould you like to replace the previous script with the n
 Script Load Conflict,Skriptladekonflikt
 Total scripts loaded:\n,Geladene Skripte insgesamt:\n
 No script files selected.\nMust be JavaScript '.js' or '.jsx' files.,Keine Skriptdateien ausgewählt.\nEs müssen JavaScript-'.js'- oder '.jsx'-Dateien sein.
-Workflow Builder,Arbeitsablauf-Generator
+Workflow Builder,Arbeitsabläufe erstellen
 A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?,Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf überschrieben werden?
 Save Workflow Conflict,Arbeitsablauf-Konflikt speichern?
 Enter a new name for your workflow.,Geben Sie einen neuen Namen für den Arbeitsablauf an.
@@ -57,7 +57,7 @@ Confirm Commands To Reveal,Die ausgewählten Befehle anzeigen?
 Total hidden commands revealed:\n,"Anzahl der verborgenen Befehle, die wieder angezeigt werden:\n"
 There are no hidden commands to reveal.,Keine verborgenen Befehle vorhanden.
 Select Menu Commands To Delete,Wählen Sie die zu löschenden Menübefehle aus.
-Delete Command?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n,Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n
+Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n,Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n
 Confirm Commands To Delete,Bestätigen Sie die zu löschenden Befehle.
 Command couldn't be deleted.,Befehle konnte nicht gelöscht werden.
 Total commands deleted:\n,Insgesamt gelöschte Befehle:
@@ -67,8 +67,8 @@ Cancel,Abbrechen
 Workflow:,Arbeitsablauf:
 Search For Commands,Befehle suchen.
 Double-click a command to add it as a workflow step below.,"Doppelklicken Sie auf einen Befehl, um ihn unten als benutzerdefinierten Schritt hinzuzufügen."
-Workflow Steps,Arbeitsablaufschritte
-Workflows will run in order from top to bottom.,Die Arbeitsabläufe werden in der Reihenfolge von oben nach unten ausgeführt.
+Workflow Steps,Befehlskombinationen
+Workflows will run in order from top to bottom.,Die Befehlskombinationen werden in der Reihenfolge von oben nach unten ausgeführt.
 Move Up,Nach oben
 Move Down,Nach unten
 Delete,Löschen
@@ -414,7 +414,7 @@ Effect > Sketch > Bas Relief...,Effekt > Zeichenfilter > Basrelief …
 Effect > Sketch > Chalk & Charcoal...,Effekt > Zeichenfilter > Chalk & Charcoal …
 Effect > Sketch > Charcoal...,Effekt > Zeichenfilter > Kohleumsetzung …
 Effect > Sketch > Chrome...,Effekt > Zeichenfilter > Chrom …
-Effect > Sketch > Conté Crayon...,Effekt > Zeichenfilter > Conté-Stifte …
+Effect > Sketch > Cont\u00E9 Crayon...,Effekt > Zeichenfilter > Conté-Stifte …
 Effect > Sketch > Graphic Pen...,Effekt > Zeichenfilter > Strichumsetzung …
 Effect > Sketch > Halftone Pattern...,Effekt > Zeichenfilter > Rasterungseffekt …
 Effect > Sketch > Note Paper...,Effekt > Zeichenfilter > Prägepapier …
@@ -454,7 +454,7 @@ View > Lock Slices,Ansicht > Slices fixieren
 View > Show / Hide Bounding Box,Ansicht > Begrenzungsrahmen einblenden / ausblenden
 View > Show / Hide Transparency Grid,Ansicht > Transparenzraster einblenden / ausblenden
 View > Actual Size,Ansicht > Originalgröße
-View > Show Live Paint Gaps,Ansicht > Interaktive Mallücken einblenden / ausblenden
+View > Show / Hide Live Paint Gaps,Ansicht > Interaktive Mallücken einblenden / ausblenden
 View > Show / Hide Gradient Annotator,Ansicht > Verlaufsoptimierer einblenden / ausblenden
 View > Show|Hide Corner Widget,Ansicht > Ecken-Widget einblenden / ausblenden
 View > Show / Hide Edges,Ansicht > Ecken einblenden / ausblenden
