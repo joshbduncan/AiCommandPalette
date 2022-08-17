@@ -10,11 +10,12 @@ See the LICENSE file for details.
 //@target illustrator
 
 const _title = "Ai Command Palette";
-const _version = "0.2.2";
+const _version = "0.2.3";
 const _copyright = "Copyright 2022 Josh Duncan";
 const _website = "joshbduncan.com";
 const _github = "https://github.com/joshbduncan";
 
+// Load Needed JavaScript Polyfills
 polyfills();
 
 /**************************************************
@@ -99,10 +100,11 @@ const allCommands = Object.keys(commandsData);
 const filteredCommands = filterHiddenCommands();
 
 // Present the Ai Command Palette
+const paletteWidth = 600;
 var result = commandPalette(
   (arr = filteredCommands),
   (title = _title),
-  (bounds = [0, 0, 500, 182]),
+  (bounds = [0, 0, paletteWidth, 182]),
   (multiselect = false),
   (filter = ["action", "menu", "tool", "config"])
 );
@@ -306,7 +308,7 @@ function configPaletteSettings() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.config)),
     (title = "Настройка\ и\ конфигурация\ панели"),
-    (bounds = [0, 0, 500, 182]),
+    (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
   );
@@ -350,9 +352,6 @@ function configBuildWorkflow(workflow) {
   var cmdActions = [];
   result = workflowBuilder(
     (arr = filterOutCommands(filteredCommands, ["config"])),
-    (title = "Редактор\ наборов\ команд"),
-    (bounds = [0, 0, 500, 182]),
-    (multiselect = false),
     (edit = workflow)
   );
   if (result) {
@@ -405,7 +404,7 @@ function configEditWorkflow() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.workflow)),
     (title = "Выберите\ набор\ для\ редактирования"),
-    (bounds = [0, 0, 500, 182]),
+    (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
   );
@@ -424,7 +423,7 @@ function configWorkflowsNeedingAttention() {
     var result = commandPalette(
       (arr = commands),
       (title = "Выберите\ набор\ для\ редактирования"),
-      (bounds = [0, 0, 500, 182]),
+      (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = false),
       (filter = [])
     );
@@ -439,7 +438,7 @@ function showBuiltInMenuCommands() {
   result = commandPalette(
     (arr = Object.keys(data.commands.menu)),
     (title = "Стандартные\ команды\ меню"),
-    (bounds = [0, 0, 500, 182]),
+    (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
   );
@@ -451,7 +450,7 @@ function showBuiltInTools() {
   result = commandPalette(
     (arr = Object.keys(data.commands.tool)),
     (title = "Стандартные\ инструменты"),
-    (bounds = [0, 0, 500, 182]),
+    (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
   );
@@ -471,7 +470,7 @@ function configHideCommand() {
     result = commandPalette(
       (arr = commands),
       (title = "Выбрать\ команды\ меню\ для\ скрытия"),
-      (bounds = [0, 0, 500, 182]),
+      (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
     );
@@ -506,7 +505,7 @@ function configUnhideCommand() {
     result = commandPalette(
       (arr = data.settings.hiddenCommands),
       (title = "Выберите\ скрытые\ команды\ для\ показа"),
-      (bounds = [0, 0, 500, 182]),
+      (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
     );
@@ -551,7 +550,7 @@ function configDeleteCommand() {
     result = commandPalette(
       (arr = commands),
       (title = "Выбрать\ команды\ меню\ для\ удаления"),
-      (bounds = [0, 0, 500, 182]),
+      (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
     );
@@ -713,15 +712,12 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
 /**
  * Workflow builder palette dialog.
  * @param   {Array}   arr         Commands to list in the ListBox.
- * @param   {String}  title       Dialog title.
- * @param   {Array}   bounds      Dialog size.
- * @param   {Boolean} multiselect Can multiple ListBox items be selected.
  * @param   {String}  edit        Workflow command to edit.
  * @returns {Object}              Workflow command object.
  */
-function workflowBuilder(arr, title, bounds, multiselect, edit) {
+function workflowBuilder(arr, edit) {
   var win = new Window("dialog");
-  win.text = title;
+  win.text = "Редактор\ наборов\ команд";
   win.alignChildren = "fill";
 
   // if editing a command, pull in variables to prefill dialog with
@@ -739,7 +735,9 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   var q = pSearch.add("edittext");
   q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
   q.active = true;
-  var commands = pSearch.add("listbox", bounds, arr, { multiselect: multiselect });
+  var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
+    multiselect: false,
+  });
   commands.helpTip = "Нажмите\ дважды\ на\ команду,\ чтобы\ добавить\ ее\ как\ шаг\ набора";
   commands.selection = 0;
 
@@ -747,7 +745,9 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   var pSteps = win.add("panel", undefined, "Шаги\ набора");
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
-  var steps = pSteps.add("listbox", bounds, actions, { multiselect: false });
+  var steps = pSteps.add("listbox", [0, 0, paletteWidth + 40, 182], actions, {
+    multiselect: true,
+  });
   steps.helpTip = "Набор\ выполняется\ сверху\ вниз";
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
@@ -807,25 +807,63 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
   };
 
   up.onClick = function () {
-    var n = steps.selection.index;
-    if (n > 0) {
-      swap(steps.items[n - 1], steps.items[n]);
-      steps.selection = n - 1;
+    var selected = sortByListboxIndex(steps.selection);
+    for (var i = 0; i < selected.length; i++) {
+      if (selected[i] == 0 || !contiguous(selected)) {
+        return;
+      } else {
+        swap(steps.items[selected[i] - 1], steps.items[selected[i]]);
+      }
+      steps.selection = null;
+      for (var n = 0; n < selected.length; n++) steps.selection = selected[n] - 1;
     }
   };
 
   down.onClick = function () {
-    var n = steps.selection.index;
-    if (n < steps.items.length - 1) {
-      swap(steps.items[n], steps.items[n + 1]);
-      steps.selection = n + 1;
+    var selected = sortIndexes(steps.selection);
+    for (var i = 0; i < selected.length; i++) {
+      if (
+        selected[selected.length - 1] == steps.items.length - 1 ||
+        !contiguous(selected)
+      ) {
+        return;
+      } else {
+        swap(steps.items[selected[i]], steps.items[selected[i] + 1]);
+      }
+      steps.selection = null;
+      for (var n = 0; n < selected.length; n++) steps.selection = selected[n] + 1;
     }
   };
 
+  // the api gives your the selected items in the order they
+  // were actually selected so their actual list indexes need
+  // to be sorted for the up and down buttons to work
+  function sortIndexes(sel) {
+    var indexes = [];
+    for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
+    return indexes.sort();
+  }
+
+  // check to make sure selection is contiguous
+  function contiguous(sel) {
+    return sel.length == sel[sel.length - 1] - sel[0] + 1;
+  }
+
+  /** swap listbox items in place */
+  function swap(x, y) {
+    var t = x.text;
+    x.text = y.text;
+    y.text = t;
+  }
+
   del.onClick = function () {
-    if (steps.selection) {
-      steps.remove(steps.selection.index);
-      if (steps.items.length == 0) {
+    var selected = sortIndexes(steps.selection);
+    for (var i = steps.selection.length - 1; i > -1; i--) {
+      steps.remove(selected[i]);
+    }
+    steps.selection == null;
+    if (steps.items.length == 0) {
+      {
         name.enabled = false;
         ok.enabled = false;
       }
@@ -842,13 +880,6 @@ function workflowBuilder(arr, title, bounds, multiselect, edit) {
       }
     }
   };
-
-  /** swap listbox items in place */
-  function swap(x, y) {
-    var t = x.text;
-    x.text = y.text;
-    y.text = t;
-  }
 
   if (win.show() == 1) {
     var finalName = "Набор:" + " " + name.text.trim();

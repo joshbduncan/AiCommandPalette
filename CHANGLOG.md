@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2022-08-17
+### Changed
+- Increased the palette size to accommodate alternate languages with longer text
+- Workflow steps are now multiselect (you can select more than one at a time)
+    - You can move multiple steps up and down (if the selection is contiguous)
+    - You can deleted multiple steps in one-click (not required to be contiguous)
+
 ## [0.2.2] - 2022-08-17
 ### Added
 - New localized Russian version from @creold
