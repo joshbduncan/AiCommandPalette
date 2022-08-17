@@ -60,11 +60,11 @@ Do You...
 
 !["Built-In Tools"](/images/workflow-builder.png)
 
-The simple workflow above takes your current selection of objects, blends them together, opens the blend options dialog so you can make any necessary adjustments, then expands your blend, and saves your file for web using an action.
+The simple workflow above takes your current selection of objects, blends them together, opens the blend options dialog so you can make any necessary adjustments, then expands your blend, and saves your file for the web using an action.
 
 ## Settings
 
-You can access the settings for Ai Command Palette by selecting the "Command Palette Settings..." option (or via search). Most settings are self explanatory but I'll cover a few here to try and makes things clear.
+You can access the settings for Ai Command Palette by selecting the "Command Palette Settings..." option (or via search). Most settings are self explanatory but I'll cover a few here to try and make things clear.
 
 ### Workflows Needing Attention...
 
@@ -100,7 +100,7 @@ All of your Ai Command Palette settings are saved on your system to a "json-like
 
 ## Localization
 
-With the help of [Kurt Gold](https://community.adobe.com/t5/user/viewprofilepage/user-id/8354168), Ai Command Palette is currently localized for German versions of Illustrator. This includes all dialogs, menu command, and tools.
+With the help of [Kurt Gold](https://community.adobe.com/t5/user/viewprofilepage/user-id/8354168), Ai Command Palette is currently localized for German versions of Illustrator. This includes all dialogs, menu commands, and tools.
 
 To make this easier in the future (for new versions or other languages), I built a [simple translation utility](translate.py) in Python.
 
