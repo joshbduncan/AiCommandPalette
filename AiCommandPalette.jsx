@@ -89,6 +89,41 @@ const data = {
   },
 };
 
+// Check Ai version for proper functionality
+const aiVersion = parseFloat(app.version);
+const versionedCommands = {
+  "Window > History": {
+    minVersion: 36.4, // set to 36.4 for testing (should be 26.4)
+    type: "commands",
+    subtype: "menu",
+  },
+  tool: {
+    minVersion: 34, // set to 34 for testing (should be 24)
+    type: "commands",
+    subtype: "tool",
+  },
+  "Show All Built-In Tools...": {
+    minVersion: 34, // set to 34 for testing (should be 24)
+    type: "commands",
+    subtype: "config",
+  },
+};
+var cmd, minVersion, type, subtype;
+for (cmd in versionedCommands) {
+  minVersion = versionedCommands[cmd].minVersion;
+  type = versionedCommands[cmd].type;
+  subtype = versionedCommands[cmd].subtype;
+  if (aiVersion < minVersion) {
+    // this is to delete the entire tool object
+    // as it was not supported before Ai v24
+    if (cmd == subtype) {
+      delete data[type][subtype];
+    } else {
+      delete data[type][subtype][cmd];
+    }
+  }
+}
+
 // Load user data
 const dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
 const dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
