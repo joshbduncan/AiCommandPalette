@@ -853,12 +853,7 @@ function workflowBuilder(arr, edit) {
         multiselect: commands.properties.multiselect,
       });
       // add command when double-clicking
-      temp.onDoubleClick = function () {
-        if (commands.selection) {
-          steps.add("item", commands.selection);
-          name.enabled = true;
-        }
-      };
+      temp.onDoubleClick = commands.onDoubleClick;
       pSearch.remove(commands);
       commands = temp;
       commands.selection = 0;
@@ -867,11 +862,7 @@ function workflowBuilder(arr, edit) {
   };
 
   name.onChanging = function () {
-    if (name.text.length > 0) {
-      ok.enabled = true;
-    } else {
-      ok.enabled = false;
-    }
+    ok.enabled = name.text.length > 0 ? true : false;
   };
 
   up.onClick = function () {
@@ -924,22 +915,15 @@ function workflowBuilder(arr, edit) {
       steps.remove(selected[i]);
     }
     steps.selection == null;
-    if (steps.items.length == 0) {
-      {
-        name.enabled = false;
-        ok.enabled = false;
-      }
-    }
+    name.enabled = steps.items.length > 0 ? true : false;
+    ok.enabled = name.text.length > 0 ? true : false;
   };
 
-  // add command when double-clicking
   commands.onDoubleClick = function () {
     if (commands.selection) {
       steps.add("item", commands.selection);
-      name.enabled = true;
-      if (steps.items.length > 0) {
-        ok.enabled = true;
-      }
+      name.enabled = steps.items.length > 0 ? true : false;
+      ok.enabled = name.text.length > 0 ? true : false;
     }
   };
 
