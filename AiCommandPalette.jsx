@@ -355,7 +355,7 @@ function configBuildWorkflow(workflow) {
     (edit = workflow)
   );
   if (result) {
-    // check to make sure there isn't a workflow already save with the same name
+    // check to make sure there isn't a workflow already saved with the same name
     var newName;
     var workflows = Object.keys(data.commands.workflow);
     while (workflows.includes(result.name)) {
@@ -724,7 +724,8 @@ function workflowBuilder(arr, edit) {
   var command = "";
   var actions = [];
   if (edit != undefined) {
-    command = edit[0].text.replace(/^ + "Workflow:" + \s/, "");
+    var regex = new RegExp("^" + "Workflow:" + "\\s");
+    command = edit[0].text.replace(regex, "");
     actions = commandsData[edit].cmdActions;
   }
 

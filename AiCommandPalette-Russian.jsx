@@ -29,7 +29,7 @@ const data = {
     workflow: {},
     action: loadAllActions(),
     defaults: {
-      "Настройки": {
+      Настройки: {
         cmdType: "defaults",
         cmdActions: [{ type: "config", value: "paletteSettings" }],
       },
@@ -37,47 +37,47 @@ const data = {
     menu: builtinMenuCommands(),
     tool: builtinTools(),
     config: {
-      "Об\ Ai\ Command\ Palette": {
+      "Об Ai Command Palette": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "about" }],
       },
-      "Создать\ набор\ команд": {
+      "Создать набор команд": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "buildWorkflow" }],
       },
-      "Редактировать\ набор\ команд": {
+      "Редактировать набор команд": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "editWorkflow" }],
       },
-      "Наборы\ требующие\ внимания": {
+      "Наборы требующие внимания": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "workflowsNeedingAttention" }],
       },
-      "Загрузить\ скрипты": {
+      "Загрузить скрипты": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "loadScript" }],
       },
-      "Показать\ стандартные\ команды\ меню": {
+      "Показать стандартные команды меню": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "showBuiltInMenuCommands" }],
       },
-      "Показать\ стандартные\ инструменты": {
+      "Показать стандартные инструменты": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "showBuiltInTools" }],
       },
-      "Скрыть\ команды": {
+      "Скрыть команды": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "hideCommand" }],
       },
-      "Показать\ команды": {
+      "Показать команды": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "unhideCommand" }],
       },
-      "Удалить\ команды": {
+      "Удалить команды": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "deleteCommand" }],
       },
-      "Показать\ файл\ настроек": {
+      "Показать файл настроек": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "revealPrefFile" }],
       },
@@ -124,10 +124,9 @@ function processCommandActions(command) {
     type = commandsData[command].cmdType;
     actions = commandsData[command].cmdActions;
     // check to make sure any workflow steps haven't been deleted
-    if (type === "workflow" && actions.join(" ").indexOf("\*\*УДАЛЕНО\*\*") >= 0) {
+    if (type === "workflow" && actions.join(" ").indexOf("**УДАЛЕНО**") >= 0) {
       alert(
-        "Внимание\nЭтот\ набор\ команд\ включает\ шаги,\ которые\ были\ удалены\n\n" +
-          command
+        "Внимание\nЭтот набор команд включает шаги, которые были удалены\n\n" + command
       );
     } else {
       for (var i = 0; i < actions.length; i++) {
@@ -139,8 +138,11 @@ function processCommandActions(command) {
       }
     }
   } else {
-    alert("Команда\ удалена\nОтредактируйте\ наборы,\ в\ которых\ она\ использовалась\n\n" + command);
-    if (command.indexOf("\*\*УДАЛЕНО\*\*") < 0) deletedCommandNeedsAttention(command);
+    alert(
+      "Команда удалена\nОтредактируйте наборы, в которых она использовалась\n\n" +
+        command
+    );
+    if (command.indexOf("**УДАЛЕНО**") < 0) deletedCommandNeedsAttention(command);
   }
 }
 
@@ -156,47 +158,47 @@ function executeCommandAction(action) {
       try {
         configAction(action.value);
       } catch (e) {
-        alert("Ошибка\ запуска\ команды:\n" + action.value + "\n\n" + e);
+        alert("Ошибка запуска команды:\n" + action.value + "\n\n" + e);
       }
       break;
     case "menu":
       try {
         app.executeMenuCommand(action.value);
       } catch (e) {
-        alert("Ошибка\ запуска\ команды:\n" + action.value + "\n\n" + e);
+        alert("Ошибка запуска команды:\n" + action.value + "\n\n" + e);
       }
       break;
     case "tool":
       try {
         app.selectTool(action.value);
       } catch (e) {
-        alert("Ошибка\ выбора\ инструмента:\n" + action.value + "\n\n" + e);
+        alert("Ошибка выбора инструмента:\n" + action.value + "\n\n" + e);
       }
       break;
     case "action":
       try {
         app.doScript(action.value.actionName, action.value.actionSet);
       } catch (e) {
-        alert("Ошибка\ запуска\ операции:\n" + action.value.actionName + "\n\n" + e);
+        alert("Ошибка запуска операции:\n" + action.value.actionName + "\n\n" + e);
       }
       break;
     case "script":
       f = new File(action.value.scriptPath);
       if (!f.exists) {
-        alert("Скрипт\ не\ найден\ в\ указанной\ папке\n" + action.value.scriptPath);
+        alert("Скрипт не найден в указанной папке\n" + action.value.scriptPath);
         delete data.commands[type]["Скрипт:" + " " + action.value.scriptName];
-        if (action.value.scriptName.indexOf("\*\*УДАЛЕНО\*\*") < 0)
+        if (action.value.scriptName.indexOf("**УДАЛЕНО**") < 0)
           deletedCommandNeedsAttention("Скрипт:" + " " + action.value.scriptName);
       } else {
         try {
           $.evalFile(f);
         } catch (e) {
-          alert("Ошибка\ запуска\ скрипта:\n" + action.value.scriptName + "\n\n" + e);
+          alert("Ошибка запуска скрипта:\n" + action.value.scriptName + "\n\n" + e);
         }
       }
       break;
     default:
-      alert("Неправильный\ тип:\n" + type);
+      alert("Неправильный тип:\n" + type);
   }
   try {
     app.redraw();
@@ -258,7 +260,7 @@ function configAction(action) {
       write = false;
       break;
     default:
-      alert("Неправильный\ параметр\ конфигурации:\n" + action);
+      alert("Неправильный параметр конфигурации:\n" + action);
   }
   if (write) writeUserData(dataFile);
 }
@@ -266,15 +268,15 @@ function configAction(action) {
 /** Show Ai Command Palette About Dialog. */
 function aboutDialog() {
   var win = new Window("dialog");
-  win.text = "О\ скрипте";
+  win.text = "О скрипте";
   win.alignChildren = "fill";
 
   // script info
-  var pAbout = win.add("panel", undefined, "Об\ Ai\ Command\ Palette");
+  var pAbout = win.add("panel", undefined, "Об Ai Command Palette");
   pAbout.margins = 20;
   pAbout.alignChildren = "fill";
   var aboutText =
-    "Повысьте\ скорость\ работы\ в\ Adobe\ Illustrator\ благодаря\ быстрому\ доступу\ к\ большинству\ команд\ меню,\ инструментам,\ всем\ операциям\ и\ любым\ загруженным\ скриптам\ прямо\ с\ клавиатуры\.\ А\ пользовательские\ наборы\ позволяют\ комбинировать\ несколько\ команд,\ операций\ и\ скриптов\.\ Замените\ повторяющиеся\ задачи\ наборами\ команд\ и\ повысьте\ свою\ производительность\.";
+    "Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность.";
   pAbout.add("statictext", [0, 0, 500, 100], aboutText, {
     multiline: true,
   });
@@ -285,7 +287,7 @@ function aboutDialog() {
   links.add("statictext", undefined, "Version " + _version);
   links.add("statictext", undefined, _copyright);
   var githubText =
-    "Нажмите,\ чтобы\ узнать\ больше:" +
+    "Нажмите, чтобы узнать больше:" +
     " " +
     "https://github.com/joshbduncan/AiCommandPalette";
   var github = links.add("statictext", undefined, githubText);
@@ -307,7 +309,7 @@ function aboutDialog() {
 function configPaletteSettings() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.config)),
-    (title = "Настройка\ и\ конфигурация\ панели"),
+    (title = "Настройка и конфигурация панели"),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
@@ -319,7 +321,7 @@ function configPaletteSettings() {
 function configLoadScript() {
   var files, f, fname;
   var ct = 0;
-  var files = loadFileTypes("Загрузка\ файлов\ скриптов", true, ".jsx$|.js$");
+  var files = loadFileTypes("Загрузка файлов скриптов", true, ".jsx$|.js$");
   if (files.length > 0) {
     for (var i = 0; i < files.length; i++) {
       f = files[i];
@@ -327,9 +329,9 @@ function configLoadScript() {
       if (data.commands.script.hasOwnProperty("Скрипт:" + " " + fname)) {
         if (
           !Window.confirm(
-            "Скрипт\ уже\ загружен\nХотите\ его\ заменить\?",
+            "Скрипт уже загружен\nХотите его заменить?",
             "noAsDflt",
-            "Проблема\ загрузки\ скрипта"
+            "Проблема загрузки скрипта"
           )
         )
           continue;
@@ -337,9 +339,9 @@ function configLoadScript() {
       if (insertScriptIntoUserData(f)) ct++;
     }
     if (ct > 0) buildCommands(data.commands, true);
-    alert("Загружено\ скриптов:\n" + ct);
+    alert("Загружено скриптов:\n" + ct);
   } else {
-    alert("Не\ выбраны\ скрипты\nФайлы\ JavaScript\ имеют\ расширение\ '\.js'\ или\ '\.jsx'");
+    alert("Не выбраны скрипты\nФайлы JavaScript имеют расширение '.js' или '.jsx'");
   }
 }
 
@@ -355,26 +357,22 @@ function configBuildWorkflow(workflow) {
     (edit = workflow)
   );
   if (result) {
-    // check to make sure there isn't a workflow already save with the same name
+    // check to make sure there isn't a workflow already saved with the same name
     var newName;
     var workflows = Object.keys(data.commands.workflow);
     while (workflows.includes(result.name)) {
       if (
         Window.confirm(
-          "Набор\ с\ таким\ именем\ уже\ существует\nХотите\ перезаписать\ предыдущий\?",
+          "Набор с таким именем уже существует\nХотите перезаписать предыдущий?",
           "noAsDflt",
-          "Проблема\ сохранения\ набора"
+          "Проблема сохранения набора"
         )
       ) {
         break;
       } else {
-        newName = Window.prompt(
-          "Введите\ новое\ имя\ набора",
-          "",
-          "Имя\ нового\ набора"
-        );
+        newName = Window.prompt("Введите новое имя набора", "", "Имя нового набора");
         if (newName == undefined || newName == null || newName === "") {
-          alert("Набор\ не\ сохранен");
+          alert("Набор не сохранен");
           return false;
         } else {
           result.name = "Набор:" + " " + newName;
@@ -394,7 +392,7 @@ function configBuildWorkflow(workflow) {
         cmdActions: cmdActions,
       };
     } catch (e) {
-      alert("Ошибка\ сохранения\ набора:\n" + result.name);
+      alert("Ошибка сохранения набора:\n" + result.name);
     }
   }
 }
@@ -403,7 +401,7 @@ function configBuildWorkflow(workflow) {
 function configEditWorkflow() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.workflow)),
-    (title = "Выберите\ набор\ для\ редактирования"),
+    (title = "Выберите набор для редактирования"),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
@@ -415,21 +413,21 @@ function configEditWorkflow() {
 function configWorkflowsNeedingAttention() {
   var commands = [];
   for (var p in data.commands.workflow) {
-    if (data.commands.workflow[p].cmdActions.join(" ").indexOf("\*\*УДАЛЕНО\*\*") >= 0)
+    if (data.commands.workflow[p].cmdActions.join(" ").indexOf("**УДАЛЕНО**") >= 0)
       commands.push(p);
   }
 
   if (commands.length > 0) {
     var result = commandPalette(
       (arr = commands),
-      (title = "Выберите\ набор\ для\ редактирования"),
+      (title = "Выберите набор для редактирования"),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = false),
       (filter = [])
     );
     if (result) configBuildWorkflow(result);
   } else {
-    alert("Нет\ наборов\ требующих\ внимания");
+    alert("Нет наборов требующих внимания");
   }
 }
 
@@ -437,7 +435,7 @@ function configWorkflowsNeedingAttention() {
 function showBuiltInMenuCommands() {
   result = commandPalette(
     (arr = Object.keys(data.commands.menu)),
-    (title = "Стандартные\ команды\ меню"),
+    (title = "Стандартные команды меню"),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
@@ -449,7 +447,7 @@ function showBuiltInMenuCommands() {
 function showBuiltInTools() {
   result = commandPalette(
     (arr = Object.keys(data.commands.tool)),
-    (title = "Стандартные\ инструменты"),
+    (title = "Стандартные инструменты"),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
@@ -469,7 +467,7 @@ function configHideCommand() {
   if (commands.length > 0) {
     result = commandPalette(
       (arr = commands),
-      (title = "Выбрать\ команды\ меню\ для\ скрытия"),
+      (title = "Выбрать команды меню для скрытия"),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
@@ -477,9 +475,9 @@ function configHideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Скрыть\ команды\?\n" + result.join("\n"),
+          "Скрыть команды?\n" + result.join("\n"),
           "noAsDflt",
-          "Подтвердить\ скрытие\ команд"
+          "Подтвердить скрытие команд"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -489,10 +487,10 @@ function configHideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Скрыто\ команд:" + " " + ct);
+      alert("Скрыто команд:" + " " + ct);
     }
   } else {
-    alert("Нет\ команд\ для\ скрытия");
+    alert("Нет команд для скрытия");
   }
 }
 
@@ -504,7 +502,7 @@ function configUnhideCommand() {
   if (data.settings.hiddenCommands.length > 0) {
     result = commandPalette(
       (arr = data.settings.hiddenCommands),
-      (title = "Выберите\ скрытые\ команды\ для\ показа"),
+      (title = "Выберите скрытые команды для показа"),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
@@ -512,9 +510,9 @@ function configUnhideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Показать\ скрытые\ команды\?\n" + result.join("\n"),
+          "Показать скрытые команды?\n" + result.join("\n"),
           "noAsDflt",
-          "Подтвердить\ показ\ команд"
+          "Подтвердить показ команд"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -528,10 +526,10 @@ function configUnhideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Показано\ скрытых\ команд:\n" + ct);
+      alert("Показано скрытых команд:\n" + ct);
     }
   } else {
-    alert("Нет\ скрытых\ команд");
+    alert("Нет скрытых команд");
   }
 }
 
@@ -549,7 +547,7 @@ function configDeleteCommand() {
   if (commands.length > 0) {
     result = commandPalette(
       (arr = commands),
-      (title = "Выбрать\ команды\ меню\ для\ удаления"),
+      (title = "Выбрать команды меню для удаления"),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
@@ -557,10 +555,10 @@ function configDeleteCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Удалить\ команду\?\nУдаленные\ команды\ больше\ не\ будут\ работать\ в\ любых\ созданных\ наборах,\ где\ они\ использовались\n\n" +
+          "Удалить команду?\nУдаленные команды больше не будут работать в любых созданных наборах, где они использовались\n\n" +
             result.join("\n"),
           "noAsDflt",
-          "Подтвердить\ удаление\ команд"
+          "Подтвердить удаление команд"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -577,10 +575,10 @@ function configDeleteCommand() {
       }
     }
     if (ct > 0) {
-      alert("Удалено\ команд:" + ct);
+      alert("Удалено команд:" + ct);
     }
   } else {
-    alert("Нет\ команд\ для\ удаления");
+    alert("Нет команд для удаления");
   }
 }
 
@@ -606,7 +604,7 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   win.text = title;
   win.alignChildren = "fill";
   var q = win.add("edittext");
-  q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
+  q.helpTip = "Поиск команд, операций и загруженных скриптов";
   q.active = true;
 
   if (filter.length > 0) {
@@ -717,38 +715,39 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
  */
 function workflowBuilder(arr, edit) {
   var win = new Window("dialog");
-  win.text = "Редактор\ наборов\ команд";
+  win.text = "Редактор наборов команд";
   win.alignChildren = "fill";
 
   // if editing a command, pull in variables to prefill dialog with
   var command = "";
   var actions = [];
   if (edit != undefined) {
-    command = edit[0].text.replace(/^ + "Набор:" + \s/, "");
+    var regex = new RegExp("^" + "Набор:" + "\\s");
+    command = edit[0].text.replace(regex, "");
     actions = commandsData[edit].cmdActions;
   }
 
   // command search
-  var pSearch = win.add("panel", undefined, "Поиск\ команд");
+  var pSearch = win.add("panel", undefined, "Поиск команд");
   pSearch.alignChildren = ["fill", "center"];
   pSearch.margins = 20;
   var q = pSearch.add("edittext");
-  q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
+  q.helpTip = "Поиск команд, операций и загруженных скриптов";
   q.active = true;
   var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
     multiselect: false,
   });
-  commands.helpTip = "Нажмите\ дважды\ на\ команду,\ чтобы\ добавить\ ее\ как\ шаг\ набора";
+  commands.helpTip = "Нажмите дважды на команду, чтобы добавить ее как шаг набора";
   commands.selection = 0;
 
   // workflow steps
-  var pSteps = win.add("panel", undefined, "Шаги\ набора");
+  var pSteps = win.add("panel", undefined, "Шаги набора");
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
   var steps = pSteps.add("listbox", [0, 0, paletteWidth + 40, 182], actions, {
     multiselect: true,
   });
-  steps.helpTip = "Набор\ выполняется\ сверху\ вниз";
+  steps.helpTip = "Набор выполняется сверху вниз";
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
   var up = stepButtons.add("button", undefined, "Наверх");
@@ -759,7 +758,7 @@ function workflowBuilder(arr, edit) {
   del.preferredSize.width = 100;
 
   // command name
-  var pName = win.add("panel", undefined, "Сохранить\ набор\ как");
+  var pName = win.add("panel", undefined, "Сохранить набор как");
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;
   var name = pName.add("edittext", undefined, command);
@@ -948,7 +947,7 @@ function deletedCommandNeedsAttention(action) {
     for (var n = 0; n < actions.length; n++) {
       curAction = actions[n];
       if (curAction === action) {
-        data.commands.workflow[command].cmdActions[n] = curAction + " " + "\*\*УДАЛЕНО\*\*";
+        data.commands.workflow[command].cmdActions[n] = curAction + " " + "**УДАЛЕНО**";
       }
     }
   }
@@ -1060,7 +1059,7 @@ function insertScriptIntoUserData(f) {
     };
     return true;
   } catch (e) {
-    alert("Ошибка\ загрузки\ скрипта:\n" + f.fsName);
+    alert("Ошибка загрузки скрипта:\n" + f.fsName);
     return false;
   }
 }
@@ -1156,7 +1155,7 @@ function readJSONData(f) {
     json = f.read();
     f.close();
   } catch (e) {
-    alert("Ошибка\ загрузки\ файла:\n" + f);
+    alert("Ошибка загрузки файла:\n" + f);
   }
   obj = eval(json);
   return obj;
@@ -1175,7 +1174,7 @@ function writeJSONData(obj, f) {
     f.write(data);
     f.close();
   } catch (e) {
-    alert("Ошибка\ записи\ файла:\n" + f);
+    alert("Ошибка записи файла:\n" + f);
   }
 }
 
@@ -1275,357 +1274,357 @@ function polyfills() {
 /** Default Ai Tools */
 function builtinTools() {
   return {
-    "Инструмент:\ Добавить\ опорную\ точку": {
+    "Инструмент: Добавить опорную точку": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Add Anchor Point Tool" }],
     },
-    "Инструмент:\ Опорная\ точка": {
+    "Инструмент: Опорная точка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Anchor Point Tool" }],
     },
-    "Инструмент:\ Дуга": {
+    "Инструмент: Дуга": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Arc Tool" }],
     },
-    "Инструмент:\ Диаграмма\ с\ областями": {
+    "Инструмент: Диаграмма с областями": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Area Graph Tool" }],
     },
-    "Инструмент:\ Текст\ в\ области": {
+    "Инструмент: Текст в области": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Area Type Tool" }],
     },
-    "Инструмент:\ Монтажная\ область": {
+    "Инструмент: Монтажная область": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Crop Tool" }],
     },
-    "Инструмент:\ Диаграмма\ горизонтальные\ полосы": {
+    "Инструмент: Диаграмма горизонтальные полосы": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Bar Graph Tool" }],
     },
-    "Инструмент:\ Переход": {
+    "Инструмент: Переход": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Blend Tool" }],
     },
-    "Инструмент:\ Раздувание": {
+    "Инструмент: Раздувание": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Bloat Tool" }],
     },
-    "Инструмент:\ Кисть\-клякса": {
+    "Инструмент: Кисть-клякса": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Blob Brush Tool" }],
     },
-    "Инструмент:\ Диаграмма\ вертикальные\ полосы": {
+    "Инструмент: Диаграмма вертикальные полосы": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Column Graph Tool" }],
     },
-    "Инструмент:\ Кристаллизация": {
+    "Инструмент: Кристаллизация": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Cyrstallize Tool" }],
     },
-    "Инструмент:\ Кривизна": {
+    "Инструмент: Кривизна": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Curvature Tool" }],
     },
-    "Инструмент:\ Удалить\ опорную\ точку": {
+    "Инструмент: Удалить опорную точку": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Delete Anchor Point Tool" }],
     },
-    "Инструмент:\ Прямое\ выделение": {
+    "Инструмент: Прямое выделение": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Select Tool" }],
     },
-    "Инструмент:\ Эллипс": {
+    "Инструмент: Эллипс": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Ellipse Shape Tool" }],
     },
-    "Инструмент:\ Ластик": {
+    "Инструмент: Ластик": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Eraser Tool" }],
     },
-    "Инструмент:\ Пипетка": {
+    "Инструмент: Пипетка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Eyedropper Tool" }],
     },
-    "Инструмент:\ Блик": {
+    "Инструмент: Блик": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Flare Tool" }],
     },
-    "Инструмент:\ Свободное\ трансформирование": {
+    "Инструмент: Свободное трансформирование": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Free Transform Tool" }],
     },
-    "Инструмент:\ Градиент": {
+    "Инструмент: Градиент": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Gradient Vector Tool" }],
     },
-    "Инструмент:\ Групповое\ выделение": {
+    "Инструмент: Групповое выделение": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Object Select Tool" }],
     },
-    "Инструмент:\ Рука": {
+    "Инструмент: Рука": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scroll Tool" }],
     },
-    "Инструмент:\ Соединение": {
+    "Инструмент: Соединение": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Corner Join Tool" }],
     },
-    "Инструмент:\ Нож": {
+    "Инструмент: Нож": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Knife Tool" }],
     },
-    "Инструмент:\ Лассо": {
+    "Инструмент: Лассо": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Lasso Tool" }],
     },
-    "Инструмент:\ Линейная\ диаграмма": {
+    "Инструмент: Линейная диаграмма": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Line Graph Tool" }],
     },
-    "Инструмент:\ Отрезок\ линии": {
+    "Инструмент: Отрезок линии": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Line Tool" }],
     },
-    "Инструмент:\ Быстрая\ заливка": {
+    "Инструмент: Быстрая заливка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Planar Paintbucket Tool" }],
     },
-    "Инструмент:\ Выделение\ быстрых\ заливок": {
+    "Инструмент: Выделение быстрых заливок": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Planar Face Select Tool" }],
     },
-    "Инструмент:\ Волшебная\ палочка": {
+    "Инструмент: Волшебная палочка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Magic Wand Tool" }],
     },
-    "Инструмент:\ Линейка": {
+    "Инструмент: Линейка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Measure Tool" }],
     },
-    "Инструмент:\ Сетка": {
+    "Инструмент: Сетка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Mesh Editing Tool" }],
     },
-    "Инструмент:\ Кисть": {
+    "Инструмент: Кисть": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Brush Tool" }],
     },
-    "Инструмент:\ Стирание\ контура": {
+    "Инструмент: Стирание контура": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Erase Tool" }],
     },
-    "Инструмент:\ Элемент\ узора": {
+    "Инструмент: Элемент узора": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pattern Tile Tool" }],
     },
-    "Инструмент:\ Перо": {
+    "Инструмент: Перо": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pen Tool" }],
     },
-    "Инструмент:\ Карандаш": {
+    "Инструмент: Карандаш": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Tool" }],
     },
-    "Инструмент:\ Сетка\ перспективы": {
+    "Инструмент: Сетка перспективы": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Инструмент:\ Сетка\ перспективы" }],
+      cmdActions: [{ type: "tool", value: "Инструмент: Сетка перспективы" }],
     },
-    "Инструмент:\ Выбор\ перспективы": {
+    "Инструмент: Выбор перспективы": {
       cmdType: "tool",
-      cmdActions: [{ type: "tool", value: "Инструмент:\ Выбор\ перспективы" }],
+      cmdActions: [{ type: "tool", value: "Инструмент: Выбор перспективы" }],
     },
-    "Инструмент:\ Круговая\ диаграмма": {
+    "Инструмент: Круговая диаграмма": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pie Graph Tool" }],
     },
-    "Инструмент:\ Полярная\ сетка": {
+    "Инструмент: Полярная сетка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Polar Grid Tool" }],
     },
-    "Инструмент:\ Многоугольник": {
+    "Инструмент: Многоугольник": {
       cmdType: "tool",
       cmdActions: [
         { type: "tool", value: "Adobe Shape Construction Regular Polygon Tool" },
       ],
     },
-    "Инструмент:\ Разбиение\ для\ печати": {
+    "Инструмент: Разбиение для печати": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Page Tool" }],
     },
-    "Инструмент:\ Втягивание": {
+    "Инструмент: Втягивание": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pucker Tool" }],
     },
-    "Инструмент:\ Марионеточная\ деформация": {
+    "Инструмент: Марионеточная деформация": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Puppet Warp Tool" }],
     },
-    "Инструмент:\ Диаграмма\ радар": {
+    "Инструмент: Диаграмма радар": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Radar Graph Tool" }],
     },
-    "Инструмент:\ Прямоугольник": {
+    "Инструмент: Прямоугольник": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rectangle Shape Tool" }],
     },
-    "Инструмент:\ Прямоугольная\ сетка": {
+    "Инструмент: Прямоугольная сетка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rectangular Grid Tool" }],
     },
-    "Инструмент:\ Зеркальное\ отражение": {
+    "Инструмент: Зеркальное отражение": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Reflect Tool" }],
     },
-    "Инструмент:\ Перерисовка": {
+    "Инструмент: Перерисовка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Reshape Tool" }],
     },
-    "Инструмент:\ Поворот": {
+    "Инструмент: Поворот": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rotate Tool" }],
     },
-    "Инструмент:\ Поворот\ вида": {
+    "Инструмент: Поворот вида": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rotate Canvas Tool" }],
     },
-    "Инструмент:\ Прямоугольник\ со\ скругленными\ углами": {
+    "Инструмент: Прямоугольник со скругленными углами": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rounded Rectangle Tool" }],
     },
-    "Инструмент:\ Масштаб": {
+    "Инструмент: Масштаб": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scale Tool" }],
     },
-    "Инструмент:\ Зубцы": {
+    "Инструмент: Зубцы": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scallop Tool" }],
     },
-    "Инструмент:\ Точечная\ диаграмма": {
+    "Инструмент: Точечная диаграмма": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scatter Graph Tool" }],
     },
-    "Инструмент:\ Ножницы": {
+    "Инструмент: Ножницы": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scissors Tool" }],
     },
-    "Инструмент:\ Выделение": {
+    "Инструмент: Выделение": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Select Tool" }],
     },
-    "Инструмент:\ Создание\ фигур": {
+    "Инструмент: Создание фигур": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Builder Tool" }],
     },
-    "Инструмент:\ Shaper": {
+    "Инструмент: Shaper": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shaper Tool" }],
     },
-    "Инструмент:\ Наклон": {
+    "Инструмент: Наклон": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shear Tool" }],
     },
-    "Инструмент:\ Фрагменты": {
+    "Инструмент: Фрагменты": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Slice Tool" }],
     },
-    "Инструмент:\ Выделение\ фрагмента": {
+    "Инструмент: Выделение фрагмента": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Slice Select Tool" }],
     },
-    "Инструмент:\ Сглаживание": {
+    "Инструмент: Сглаживание": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Smooth Tool" }],
     },
-    "Инструмент:\ Спираль": {
+    "Инструмент: Спираль": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Construction Spiral Tool" }],
     },
-    "Инструмент:\ Диаграмма\ горизонтальный\ стек": {
+    "Инструмент: Диаграмма горизонтальный стек": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Stacked Bar Graph Tool" }],
     },
-    "Инструмент:\ Диаграмма\ вертикальный\ стек": {
+    "Инструмент: Диаграмма вертикальный стек": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Stacked Column Graph Tool" }],
     },
-    "Инструмент:\ Звезда": {
+    "Инструмент: Звезда": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Construction Star Tool" }],
     },
-    "Инструмент:\ Прозрачность\ символов": {
+    "Инструмент: Прозрачность символов": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Screener Tool" }],
     },
-    "Инструмент:\ Уплотнение\ символов": {
+    "Инструмент: Уплотнение символов": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Scruncher Tool" }],
     },
-    "Инструмент:\ Смещение\ символов": {
+    "Инструмент: Смещение символов": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Shifter Tool" }],
     },
-    "Инструмент:\ Размер\ символов": {
+    "Инструмент: Размер символов": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Sizer Tool" }],
     },
-    "Инструмент:\ Вращение\ символов": {
+    "Инструмент: Вращение символов": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Spinner Tool" }],
     },
-    "Инструмент:\ Распыление\ символов": {
+    "Инструмент: Распыление символов": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Sprayer Tool" }],
     },
-    "Инструмент:\ Обесцвечивание\ символов": {
+    "Инструмент: Обесцвечивание символов": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Stainer Tool" }],
     },
-    "Инструмент:\ Стили\ символов": {
+    "Инструмент: Стили символов": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Styler Tool" }],
     },
-    "Инструмент:\ Изменение\ текста": {
+    "Инструмент: Изменение текста": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Touch Type Tool" }],
     },
-    "Инструмент:\ Воронка": {
+    "Инструмент: Воронка": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe New Twirl Tool" }],
     },
-    "Инструмент:\ Текст": {
+    "Инструмент: Текст": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Type Tool" }],
     },
-    "Инструмент:\ Текст\ по\ контуру": {
+    "Инструмент: Текст по контуру": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Path Type Tool" }],
     },
-    "Инструмент:\ Вертикальный\ текст\ в\ области": {
+    "Инструмент: Вертикальный текст в области": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Area Type Tool" }],
     },
-    "Инструмент:\ Вертикальный\ текст": {
+    "Инструмент: Вертикальный текст": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Type Tool" }],
     },
-    "Инструмент:\ Вертикальный\ текст\ по\ контуру": {
+    "Инструмент: Вертикальный текст по контуру": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Path Type Tool" }],
     },
-    "Инструмент:\ Деформация": {
+    "Инструмент: Деформация": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Warp Tool" }],
     },
-    "Инструмент:\ Ширина": {
+    "Инструмент: Ширина": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Width Tool" }],
     },
-    "Инструмент:\ Морщины": {
+    "Инструмент: Морщины": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Wrinkle Tool" }],
     },
-    "Инструмент:\ Масштаб": {
+    "Инструмент: Масштаб": {
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Zoom Tool" }],
     },
@@ -1635,1493 +1634,1522 @@ function builtinTools() {
 /** Default Ai Menu Commands */
 function builtinMenuCommands() {
   return {
-    "Файл\ >\ Новый\.\.\.": { cmdType: "menu", cmdActions: [{ type: "menu", value: "new" }] },
-    "Файл\ >\ Новый\ из\ шаблона\.\.\.": {
+    "Файл > Новый...": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "new" }],
+    },
+    "Файл > Новый из шаблона...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "newFromTemplate" }],
     },
-    "Файл\ >\ Открыть\.\.\.": {
+    "Файл > Открыть...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "open" }],
     },
-    "Файл\ >\ Обзор\ в\ Bridge\.\.\.": {
+    "Файл > Обзор в Bridge...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Bridge Browse" }],
     },
-    "Файл\ >\ Закрыть": { cmdType: "menu", cmdActions: [{ type: "menu", value: "close" }] },
-    "Файл\ >\ Сохранить": { cmdType: "menu", cmdActions: [{ type: "menu", value: "save" }] },
-    "Файл\ >\ Сохранить\ как\.\.\.": {
+    "Файл > Закрыть": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "close" }],
+    },
+    "Файл > Сохранить": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "save" }],
+    },
+    "Файл > Сохранить как...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveas" }],
     },
-    "Файл\ >\ Сохранить\ копию\.\.\.": {
+    "Файл > Сохранить копию...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveacopy" }],
     },
-    "Файл\ >\ Журнал\ версий": {
+    "Файл > Журнал версий": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveastemplate" }],
     },
-    "Файл\ >\ Сохранить\ как\ шаблон": {
+    "Файл > Сохранить как шаблон": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe AI Save Selected Slices" }],
     },
-    "Файл\ >\ Восстановить": {
+    "Файл > Восстановить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "revert" }],
     },
-    "Файл\ >\ Поиск\ в\ Adobe\ Stock\.\.\.": {
+    "Файл > Поиск в Adobe Stock...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Search Adobe Stock" }],
     },
-    "Файл\ >\ Поместить\.\.\.": {
+    "Файл > Поместить...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Place" }],
     },
-    "Файл\ >\ Экспорт\ для\ экранов\.\.\.": {
+    "Файл > Экспорт для экранов...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "exportForScreens" }],
     },
-    "Файл\ >\ Экспортировать\ как\.\.\.": {
+    "Файл > Экспортировать как...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "export" }],
     },
-    "Файл\ >\ Сохранить\ для\ браузеров\.\.\.": {
+    "Файл > Сохранить для браузеров...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe AI Save For Web" }],
     },
-    "Файл\ >\ Экспортировать\ выделенные\ элементы\.\.\.": {
+    "Файл > Экспортировать выделенные элементы...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "exportSelection" }],
     },
-    "Файл\ >\ Упаковать\.\.\.": {
+    "Файл > Упаковать...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Package Menu Item" }],
     },
-    "Файл\ >\ Сценарии\ >\ Другой\ сценарий\.\.\.": {
+    "Файл > Сценарии > Другой сценарий...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ai_browse_for_script" }],
     },
-    "Файл\ >\ Параметры\ документа\.\.\.": {
+    "Файл > Параметры документа...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "document" }],
     },
-    "Файл\ >\ Цветовой\ режим\ документа\ >\ CMYK": {
+    "Файл > Цветовой режим документа > CMYK": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "doc-color-cmyk" }],
     },
-    "Файл\ >\ Цветовой\ режим\ документа\ >\ RGB": {
+    "Файл > Цветовой режим документа > RGB": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "doc-color-rgb" }],
     },
-    "Файл\ >\ Сведения\ о\ файле\.\.\.": {
+    "Файл > Сведения о файле...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "File Info" }],
     },
-    "Файл\ >\ Печать\.\.\.": {
+    "Файл > Печать...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Print" }],
     },
-    "Файл\ >\ Выход": { cmdType: "menu", cmdActions: [{ type: "menu", value: "quit" }] },
-    "Редактирование\ >\ Отменить": { cmdType: "menu", cmdActions: [{ type: "menu", value: "undo" }] },
-    "Редактирование\ >\ Повторить": { cmdType: "menu", cmdActions: [{ type: "menu", value: "redo" }] },
-    "Редактирование\ >\ Вырезать": { cmdType: "menu", cmdActions: [{ type: "menu", value: "cut" }] },
-    "Редактирование\ >\ Копировать": { cmdType: "menu", cmdActions: [{ type: "menu", value: "copy" }] },
-    "Редактирование\ >\ Вставить": { cmdType: "menu", cmdActions: [{ type: "menu", value: "paste" }] },
-    "Редактирование\ >\ Вставить\ на\ передний\ план": {
+    "Файл > Выход": { cmdType: "menu", cmdActions: [{ type: "menu", value: "quit" }] },
+    "Редактирование > Отменить": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "undo" }],
+    },
+    "Редактирование > Повторить": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "redo" }],
+    },
+    "Редактирование > Вырезать": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "cut" }],
+    },
+    "Редактирование > Копировать": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "copy" }],
+    },
+    "Редактирование > Вставить": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "paste" }],
+    },
+    "Редактирование > Вставить на передний план": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteFront" }],
     },
-    "Редактирование\ >\ Вставить\ на\ задний\ план": {
+    "Редактирование > Вставить на задний план": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteBack" }],
     },
-    "Редактирование\ >\ Вставить\ на\ то\ же\ место": {
+    "Редактирование > Вставить на то же место": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteInPlace" }],
     },
-    "Редактирование\ >\ Вставить\ на\ все\ монтажные\ области": {
+    "Редактирование > Вставить на все монтажные области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteInAllArtboard" }],
     },
-    "Редактирование\ >\ Вставить\ без\ форматирования": {
+    "Редактирование > Вставить без форматирования": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pasteWithoutFormatting" }],
     },
-    "Редактирование\ >\ Очистить": { cmdType: "menu", cmdActions: [{ type: "menu", value: "clear" }] },
-    "Редактирование\ >\ Найти\ и\ заменить\.\.\.": {
+    "Редактирование > Очистить": {
+      cmdType: "menu",
+      cmdActions: [{ type: "menu", value: "clear" }],
+    },
+    "Редактирование > Найти и заменить...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find and Replace" }],
     },
-    "Редактирование\ >\ Найти\ следующий": {
+    "Редактирование > Найти следующий": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Next" }],
     },
-    "Редактирование\ >\ Орфография\ >\ Автоматическая\ проверка\ орфографии": {
+    "Редактирование > Орфография > Автоматическая проверка орфографии": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Auto Spell Check" }],
     },
-    "Редактирование\ >\ Орфография\ >\ Проверка\ орфографии…": {
+    "Редактирование > Орфография > Проверка орфографии…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Check Spelling" }],
     },
-    "Редактирование\ >\ Редактировать\ заказной\ словарь\.\.\.": {
+    "Редактирование > Редактировать заказной словарь...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Edit Custom Dictionary..." }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Перекрасить\ графический\ объект\.\.\.": {
+    "Редактирование > Редактировать цвета > Перекрасить графический объект...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Recolor Art Dialog" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Коррекция\ цветового\ баланса\.\.\.": {
+    "Редактирование > Редактировать цвета > Коррекция цветового баланса...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adjust3" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Переход\ от\ верхнего\ к\ нижнему": {
+    "Редактирование > Редактировать цвета > Переход от верхнего к нижнему": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors3" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Переход\ по\ горизонтали": {
+    "Редактирование > Редактировать цвета > Переход по горизонтали": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors4" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Переход\ по\ вертикали": {
+    "Редактирование > Редактировать цвета > Переход по вертикали": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors5" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Преобразовать\ в\ CMYK": {
+    "Редактирование > Редактировать цвета > Преобразовать в CMYK": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors8" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Преобразовать\ в\ градации\ серого": {
+    "Редактирование > Редактировать цвета > Преобразовать в градации серого": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors7" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Преобразовать\ в\ RGB": {
+    "Редактирование > Редактировать цвета > Преобразовать в RGB": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors9" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Негатив": {
+    "Редактирование > Редактировать цвета > Негатив": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Colors6" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Наложение\ черного\ цвета\.\.\.": {
+    "Редактирование > Редактировать цвета > Наложение черного цвета...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Overprint2" }],
     },
-    "Редактирование\ >\ Редактировать\ цвета\ >\ Изменить\ насыщенность\.\.\.": {
+    "Редактирование > Редактировать цвета > Изменить насыщенность...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Saturate3" }],
     },
-    "Редактирование\ >\ Редактировать\ оригинал": {
+    "Редактирование > Редактировать оригинал": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "EditOriginal Menu Item" }],
     },
-    "Редактирование\ >\ Стили\ обработки\ прозрачности\.\.\.": {
+    "Редактирование > Стили обработки прозрачности...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Transparency Presets" }],
     },
-    "Редактирование\ >\ Стили\ печати\.\.\.": {
+    "Редактирование > Стили печати...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Print Presets" }],
     },
-    "Редактирование\ >\ Стили\ преобразования\ в\ Adobe\ PDF\.\.\.": {
+    "Редактирование > Стили преобразования в Adobe PDF...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "PDF Presets" }],
     },
-    "Редактирование\ >\ Стили\ сетки\ перспективы\.\.\.": {
+    "Редактирование > Стили сетки перспективы...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "PerspectiveGridPresets" }],
     },
-    "Редактирование\ >\ Настройка\ цветова\.\.\.": {
+    "Редактирование > Настройка цветова...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "color" }],
     },
-    "Редактирование\ >\ Назначить\ профиль\.\.\.": {
+    "Редактирование > Назначить профиль...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "assignprofile" }],
     },
-    "Редактирование\ >\ Комбинации\ клавиш\.\.\.": {
+    "Редактирование > Комбинации клавиш...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "KBSC Menu Item" }],
     },
-    "Объект\ >\ Трансформировать\ >\ Повторить\ трансформирование": {
+    "Объект > Трансформировать > Повторить трансформирование": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformagain" }],
     },
-    "Объект\ >\ Трансформировать\ >\ Перемещение\.\.\.": {
+    "Объект > Трансформировать > Перемещение...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformmove" }],
     },
-    "Объект\ >\ Трансформировать\ >\ Поворот\.\.\.": {
+    "Объект > Трансформировать > Поворот...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformrotate" }],
     },
-    "Объект\ >\ Трансформировать\ >\ Зеркальное\ отражение\.\.\.": {
+    "Объект > Трансформировать > Зеркальное отражение...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformreflect" }],
     },
-    "Объект\ >\ Трансформировать\ >\ Масштабирование\.\.\.": {
+    "Объект > Трансформировать > Масштабирование...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformscale" }],
     },
-    "Объект\ >\ Трансформировать\ >\ Наклон\.\.\.": {
+    "Объект > Трансформировать > Наклон...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "transformshear" }],
     },
-    "Объект\ >\ Трансформировать\ >\ Трансформировать\ каждый\.\.\.": {
+    "Объект > Трансформировать > Трансформировать каждый...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Transform v23" }],
     },
-    "Объект\ >\ Трансформировать\ >\ Восстановить\ настройки\ по\ умолчанию\ ограничительной\ рамки": {
-      cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "AI Reset Bounding Box" }],
-    },
-    "Объект\ >\ Монтаж\ >\ На\ передний\ план": {
+    "Объект > Трансформировать > Восстановить настройки по умолчанию ограничительной рамки":
+      {
+        cmdType: "menu",
+        cmdActions: [{ type: "menu", value: "AI Reset Bounding Box" }],
+      },
+    "Объект > Монтаж > На передний план": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "sendToFront" }],
     },
-    "Объект\ >\ Монтаж\ >\ На\ задний\ план": {
+    "Объект > Монтаж > На задний план": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "sendForward" }],
     },
-    "Объект\ >\ Монтаж\ >\ Переложить\ вперед": {
+    "Объект > Монтаж > Переложить вперед": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "sendBackward" }],
     },
-    "Объект\ >\ Монтаж\ >\ Переложить\ назад": {
+    "Объект > Монтаж > Переложить назад": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "sendToBack" }],
     },
-    "Объект\ >\ Монтаж\ >\ Отправить\ на\ текущий\ слой": {
+    "Объект > Монтаж > Отправить на текущий слой": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 2" }],
     },
-    "Объект\ >\ Выравнивание\ >\ Горизонтальное\ выравнивание,\ влево": {
+    "Объект > Выравнивание > Горизонтальное выравнивание, влево": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Horizontal Align Left" }],
     },
-    "Объект\ >\ Выравнивание\ >\ Горизонтальное\ выравнивание,\ центр": {
+    "Объект > Выравнивание > Горизонтальное выравнивание, центр": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Horizontal Align Center" }],
     },
-    "Объект\ >\ Выравнивание\ >\ Горизонтальное\ выравнивание,\ вправо": {
+    "Объект > Выравнивание > Горизонтальное выравнивание, вправо": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Horizontal Align Right" }],
     },
-    "Объект\ >\ Выравнивание\ >\ Вертикальное\ выравнивание,\ вверх": {
+    "Объект > Выравнивание > Вертикальное выравнивание, вверх": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Vertical Align Top" }],
     },
-    "Объект\ >\ Выравнивание\ >\ Вертикальное\ выравнивание,\ центр": {
+    "Объект > Выравнивание > Вертикальное выравнивание, центр": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Vertical Align Center" }],
     },
-    "Объект\ >\ Выравнивание\ >\ Вертикальное\ выравнивание,\ вниз": {
+    "Объект > Выравнивание > Вертикальное выравнивание, вниз": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Vertical Align Bottom" }],
     },
-    "Объект\ >\ Сгруппировать": {
+    "Объект > Сгруппировать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "group" }],
     },
-    "Объект\ >\ Разгруппировать": {
+    "Объект > Разгруппировать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ungroup" }],
     },
-    "Объект\ >\ Закрепить\ >\ Выделенное": {
+    "Объект > Закрепить > Выделенное": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "lock" }],
     },
-    "Объект\ >\ Закрепить\ >\ Все\ объекты\ выше": {
+    "Объект > Закрепить > Все объекты выше": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 5" }],
     },
-    "Объект\ >\ Закрепить\ >\ Остальные\ слои": {
+    "Объект > Закрепить > Остальные слои": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 7" }],
     },
-    "Объект\ >\ Освободить\ все": {
+    "Объект > Освободить все": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "unlockAll" }],
     },
-    "Объект\ >\ Скрыть\ >\ Выделенное": {
+    "Объект > Скрыть > Выделенное": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "hide" }],
     },
-    "Объект\ >\ Скрыть\ >\ Все\ объекты\ выше": {
+    "Объект > Скрыть > Все объекты выше": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 4" }],
     },
-    "Объект\ >\ Скрыть\ >\ Остальные\ слои": {
+    "Объект > Скрыть > Остальные слои": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 6" }],
     },
-    "Объект\ >\ Показать\ все": {
+    "Объект > Показать все": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showAll" }],
     },
-    "Объект\ >\ Обрезать\ изображение": {
+    "Объект > Обрезать изображение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Crop Image" }],
     },
-    "Объект\ >\ Растрировать\.\.\.": {
+    "Объект > Растрировать...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Rasterize 8 menu item" }],
     },
-    "Объект\ >\ Создать\ сетчатый\ градиент\.\.\.": {
+    "Объект > Создать сетчатый градиент...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "make mesh" }],
     },
-    "Объект\ >\ Создать\ фрагментацию\.\.\.": {
+    "Объект > Создать фрагментацию...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Object Mosaic Plug-in4" }],
     },
-    "Объект\ >\ Создать\ метки\ обреза": {
+    "Объект > Создать метки обреза": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "TrimMark v25" }],
     },
-    "Объект\ >\ Обработка\ прозрачности\.\.\.": {
+    "Объект > Обработка прозрачности...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Flatten Transparency" }],
     },
-    "Объект\ >\ Коррекция\ на\ уровне\ пикселов": {
+    "Объект > Коррекция на уровне пикселов": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Pixel Perfect" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Создать": {
+    "Объект > Фрагменты > Создать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Make Slice" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Расформировать": {
+    "Объект > Фрагменты > Расформировать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Release Slice" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Создать\ по\ направляющим": {
+    "Объект > Фрагменты > Создать по направляющим": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Create from Guides" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Создать\ по\ выделенной\ области": {
+    "Объект > Фрагменты > Создать по выделенной области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Create from Selection" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Создать\ дубликат\ фрагмента": {
+    "Объект > Фрагменты > Создать дубликат фрагмента": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Duplicate" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Объединить\ фрагменты": {
+    "Объект > Фрагменты > Объединить фрагменты": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Combine" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Разделить\ фрагменты\.\.\.": {
+    "Объект > Фрагменты > Разделить фрагменты...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Divide" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Удалить\ все": {
+    "Объект > Фрагменты > Удалить все": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Delete All Slices" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Параметры\ фрагмента\.\.\.": {
+    "Объект > Фрагменты > Параметры фрагмента...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Slice Options" }],
     },
-    "Объект\ >\ Фрагменты\ >\ Обрезать\ по\ монтажной\ области": {
+    "Объект > Фрагменты > Обрезать по монтажной области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Clip to Artboard" }],
     },
-    "Объект\ >\ Разобрать…": {
+    "Объект > Разобрать…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand3" }],
     },
-    "Объект\ >\ Разобрать\ оформление": {
+    "Объект > Разобрать оформление": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "expandStyle" }],
     },
-    "Объект\ >\ Контур\ >\ Соединить": {
+    "Объект > Контур > Соединить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "join" }],
     },
-    "Объект\ >\ Контур\ >\ Усреднить…": {
+    "Объект > Контур > Усреднить…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "average" }],
     },
-    "Объект\ >\ Контур\ >\ Преобразовать\ обводку\ в\ кривые": {
+    "Объект > Контур > Преобразовать обводку в кривые": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "OffsetPath v22" }],
     },
-    "Объект\ >\ Контур\ >\ Создать\ параллельный\ контур…": {
+    "Объект > Контур > Создать параллельный контур…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "OffsetPath v23" }],
     },
-    "Объект\ >\ Контур\ >\ Изменение\ направления\ контура": {
+    "Объект > Контур > Изменение направления контура": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Reverse Path Direction" }],
     },
-    "Объект\ >\ Контур\ >\ Упростить…": {
+    "Объект > Контур > Упростить…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "simplify menu item" }],
     },
-    "Объект\ >\ Контур\ >\ Добавить\ опорные\ точки": {
+    "Объект > Контур > Добавить опорные точки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Add Anchor Points2" }],
     },
-    "Объект\ >\ Контур\ >\ Удалить\ опорные\ точки": {
+    "Объект > Контур > Удалить опорные точки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Remove Anchor Points menu" }],
     },
-    "Объект\ >\ Контур\ >\ Разделить\ нижние\ объекты": {
+    "Объект > Контур > Разделить нижние объекты": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Knife Tool2" }],
     },
-    "Объект\ >\ Контур\ >\ Создать\ сетку\.\.\.": {
+    "Объект > Контур > Создать сетку...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Rows and Columns...." }],
     },
-    "Объект\ >\ Контур\ >\ Вычистить…": {
+    "Объект > Контур > Вычистить…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "cleanup menu item" }],
     },
-    "Объект\ >\ Фигура\ >\ Преобразовать\ в\ фигуры": {
+    "Объект > Фигура > Преобразовать в фигуры": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Convert to Shape" }],
     },
-    "Объект\ >\ Фигура\ >\ Разобрать\ фигуру": {
+    "Объект > Фигура > Разобрать фигуру": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand Shape" }],
     },
-    "Объект\ >\ Узор\ >\ Создать": {
+    "Объект > Узор > Создать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Make Pattern" }],
     },
-    "Объект\ >\ Узор\ >\ Редактировать\ узор": {
+    "Объект > Узор > Редактировать узор": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Edit Pattern" }],
     },
-    "Объект\ >\ Узор\ >\ Цвет\ края\ элемента\.\.\.": {
+    "Объект > Узор > Цвет края элемента...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Pattern Tile Color" }],
     },
-    "Объект\ >\ Повторить\ >\ Радиальный": {
+    "Объект > Повторить > Радиальный": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Radial Repeat" }],
     },
-    "Объект\ >\ Повторить\ >\ Сетка": {
+    "Объект > Повторить > Сетка": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Grid Repeat" }],
     },
-    "Объект\ >\ Повторить\ >\ Зеркально": {
+    "Объект > Повторить > Зеркально": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Symmetry Repeat" }],
     },
-    "Объект\ >\ Повторить\ >\ Освободить": {
+    "Объект > Повторить > Освободить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Repeat Art" }],
     },
-    "Объект\ >\ Повторить\ >\ Параметры…": {
+    "Объект > Повторить > Параметры…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Repeat Art Options" }],
     },
-    "Объект\ >\ Переход\ >\ Создать": {
+    "Объект > Переход > Создать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Make" }],
     },
-    "Объект\ >\ Переход\ >\ Отменить": {
+    "Объект > Переход > Отменить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Release" }],
     },
-    "Объект\ >\ Переход\ >\ Параметры\ перехода…": {
+    "Объект > Переход > Параметры перехода…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Options" }],
     },
-    "Объект\ >\ Переход\ >\ Разобрать": {
+    "Объект > Переход > Разобрать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Expand" }],
     },
-    "Объект\ >\ Переход\ >\ Заменить\ траекторию": {
+    "Объект > Переход > Заменить траекторию": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Replace Spine" }],
     },
-    "Объект\ >\ Переход\ >\ Изменить\ направление": {
+    "Объект > Переход > Изменить направление": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Reverse Spine" }],
     },
-    "Объект\ >\ Переход\ >\ Изменить\ порядок": {
+    "Объект > Переход > Изменить порядок": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Path Blend Reverse Stack" }],
     },
-    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Деформация\.\.\.": {
+    "Объект > Искажение с помощью оболочки > Деформация...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Warp" }],
     },
-    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ По\ сетке\.\.\.": {
+    "Объект > Искажение с помощью оболочки > По сетке...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Create Envelope Grid" }],
     },
-    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ По\ форме\ верхнего\ объекта": {
+    "Объект > Искажение с помощью оболочки > По форме верхнего объекта": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Envelope" }],
     },
-    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Отделить": {
+    "Объект > Искажение с помощью оболочки > Отделить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Envelope" }],
     },
-    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Параметры\ оболочки\.\.\.": {
+    "Объект > Искажение с помощью оболочки > Параметры оболочки...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Envelope Options" }],
     },
-    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Разобрать": {
+    "Объект > Искажение с помощью оболочки > Разобрать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand Envelope" }],
     },
-    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Редактировать\ содержимое": {
+    "Объект > Искажение с помощью оболочки > Редактировать содержимое": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Edit Envelope Contents" }],
     },
-    "Объект\ >\ Перспектива\ >\ Прикрепить\ к\ активной\ плоскости": {
+    "Объект > Перспектива > Прикрепить к активной плоскости": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Attach to Active Plane" }],
     },
-    "Объект\ >\ Перспектива\ >\ Открепить\ с\ сохранением\ перспективы": {
+    "Объект > Перспектива > Открепить с сохранением перспективы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release with Perspective" }],
     },
-    "Объект\ >\ Перспектива\ >\ Переместить\ плоскость\ для\ подгонки\ по\ объекту": {
+    "Объект > Перспектива > Переместить плоскость для подгонки по объекту": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Show Object Grid Plane" }],
     },
-    "Объект\ >\ Перспектива\ >\ Редактировать\ текст": {
+    "Объект > Перспектива > Редактировать текст": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Edit Original Object" }],
     },
-    "Объект\ >\ Быстрая\ заливка\ >\ Создать": {
+    "Объект > Быстрая заливка > Создать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Planet X" }],
     },
-    "Объект\ >\ Быстрая\ заливка\ >\ Объединить": {
+    "Объект > Быстрая заливка > Объединить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Marge Planet X" }],
     },
-    "Объект\ >\ Быстрая\ заливка\ >\ Расформировать": {
+    "Объект > Быстрая заливка > Расформировать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Planet X" }],
     },
-    "Объект\ >\ Быстрая\ заливка\ >\ Параметры\ зазоров…": {
+    "Объект > Быстрая заливка > Параметры зазоров…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Planet X Options" }],
     },
-    "Объект\ >\ Быстрая\ заливка\ >\ Разобрать": {
+    "Объект > Быстрая заливка > Разобрать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand Planet X" }],
     },
-    "Объект\ >\ Трассировка\ изображения\ >\ Создать": {
+    "Объект > Трассировка изображения > Создать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Image Tracing" }],
     },
-    "Объект\ >\ Трассировка\ изображения\ >\ Создать\ и\ разобрать": {
+    "Объект > Трассировка изображения > Создать и разобрать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make and Expand Image Tracing" }],
     },
-    "Объект\ >\ Трассировка\ изображения\ >\ Расформировать": {
+    "Объект > Трассировка изображения > Расформировать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Image Tracing" }],
     },
-    "Объект\ >\ Трассировка\ изображения\ >\ Разобрать": {
+    "Объект > Трассировка изображения > Разобрать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Expand Image Tracing" }],
     },
-    "Объект\ >\ Обтекание\ текстом\ >\ Создать": {
+    "Объект > Обтекание текстом > Создать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Make Text Wrap" }],
     },
-    "Объект\ >\ Обтекание\ текстом\ >\ Освободить": {
+    "Объект > Обтекание текстом > Освободить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Release Text Wrap" }],
     },
-    "Объект\ >\ Обтекание\ текстом\ >\ Параметры\ обтекания\ текстом\.\.\.": {
+    "Объект > Обтекание текстом > Параметры обтекания текстом...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Text Wrap Options..." }],
     },
-    "Объект\ >\ Обтравочная\ маска\ >\ Создать": {
+    "Объект > Обтравочная маска > Создать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "makeMask" }],
     },
-    "Объект\ >\ Обтравочная\ маска\ >\ Отменить": {
+    "Объект > Обтравочная маска > Отменить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "releaseMask" }],
     },
-    "Объект\ >\ Обтравочная\ маска\ >\ Редактировать\ маску": {
+    "Объект > Обтравочная маска > Редактировать маску": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "editMask" }],
     },
-    "Объект\ >\ Составной\ контур\ >\ Создать": {
+    "Объект > Составной контур > Создать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "compoundPath" }],
     },
-    "Объект\ >\ Составной\ контур\ >\ Отменить": {
+    "Объект > Составной контур > Отменить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "noCompoundPath" }],
     },
-    "Объект\ >\ Монтажные\ области\ >\ Преобразовать\ в\ монтажные\ области": {
+    "Объект > Монтажные области > Преобразовать в монтажные области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "setCropMarks" }],
     },
-    "Объект\ >\ Монтажные\ области\ >\ Переупорядочить\ все\ монт\.\ обл\.": {
+    "Объект > Монтажные области > Переупорядочить все монт. обл.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ReArrange Artboards" }],
     },
-    "Объект\ >\ Монтажные\ области\ >\ Подогнать\ по\ границам\ иллюстрации": {
+    "Объект > Монтажные области > Подогнать по границам иллюстрации": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Fit Artboard to artwork bounds" }],
     },
-    "Объект\ >\ Монтажные\ области\ >\ Подогнать\ по\ границам\ выделенной\ иллюстрации": {
+    "Объект > Монтажные области > Подогнать по границам выделенной иллюстрации": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Fit Artboard to selected Art" }],
     },
-    "Объект\ >\ Диаграмма\ >\ Тип…": {
+    "Объект > Диаграмма > Тип…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "setGraphStyle" }],
     },
-    "Объект\ >\ Диаграмма\ >\ Данные…": {
+    "Объект > Диаграмма > Данные…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "editGraphData" }],
     },
-    "Объект\ >\ Диаграмма\ >\ Оформление…": {
+    "Объект > Диаграмма > Оформление…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "graphDesigns" }],
     },
-    "Объект\ >\ Диаграмма\ >\ Столбец…": {
+    "Объект > Диаграмма > Столбец…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "setBarDesign" }],
     },
-    "Объект\ >\ Диаграмма\ >\ Маркер…": {
+    "Объект > Диаграмма > Маркер…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "setIconDesign" }],
     },
-    "Текст\ >\ Найти\ больше\ в\ Adobe\ Fonts\.\.\.": {
+    "Текст > Найти больше в Adobe Fonts...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Browse Typekit Fonts Menu IllustratorUI" }],
     },
-    "Текст\ >\ Глифы": {
+    "Текст > Глифы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "alternate glyph palette plugin" }],
     },
-    "Текст\ >\ Параметры\ текста\ в\ области…": {
+    "Текст > Параметры текста в области…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "area-type-options" }],
     },
-    "Текст\ >\ Текст\ по\ контуру\ >\ Радуга": {
+    "Текст > Текст по контуру > Радуга": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Rainbow" }],
     },
-    "Текст\ >\ Текст\ по\ контуру\ >\ Наклон": {
+    "Текст > Текст по контуру > Наклон": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Skew" }],
     },
-    "Текст\ >\ Текст\ по\ контуру\ >\ Каскад": {
+    "Текст > Текст по контуру > Каскад": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "3D ribbon" }],
     },
-    "Текст\ >\ Текст\ по\ контуру\ >\ Лесенка": {
+    "Текст > Текст по контуру > Лесенка": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Stair Step" }],
     },
-    "Текст\ >\ Текст\ по\ контуру\ >\ Гравитация": {
+    "Текст > Текст по контуру > Гравитация": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Gravity" }],
     },
-    "Текст\ >\ Текст\ по\ контуру\ >\ Параметры\ текста\ по\ контуру\.\.\.": {
+    "Текст > Текст по контуру > Параметры текста по контуру...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "typeOnPathOptions" }],
     },
-    "Текст\ >\ Текст\ по\ контуру\ >\ Обновить\ прежнюю\ версию\ текста\ по\ контуру": {
+    "Текст > Текст по контуру > Обновить прежнюю версию текста по контуру": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "updateLegacyTOP" }],
     },
-    "Текст\ >\ Связанные\ текстовые\ блоки\ >\ Связать": {
+    "Текст > Связанные текстовые блоки > Связать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "threadTextCreate" }],
     },
-    "Текст\ >\ Связанные\ текстовые\ блоки\ >\ Исключить\ выделенные": {
+    "Текст > Связанные текстовые блоки > Исключить выделенные": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "releaseThreadedTextSelection" }],
     },
-    "Текст\ >\ Связанные\ текстовые\ блоки\ >\ Удалить\ связь\ текстовых\ блоков": {
+    "Текст > Связанные текстовые блоки > Удалить связь текстовых блоков": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "removeThreading" }],
     },
-    "Текст\ >\ Разогнать\ заголовок": {
+    "Текст > Разогнать заголовок": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "fitHeadline" }],
     },
-    "Текст\ >\ Сопоставить\ отсутствующие\ шрифты\.\.\.": {
+    "Текст > Сопоставить отсутствующие шрифты...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe IllustratorUI Resolve Missing Font" }],
     },
-    "Текст\ >\ Найти/заменить\ шрифт\.\.\.": {
+    "Текст > Найти/заменить шрифт...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Illustrator Find Font Menu Item" }],
     },
-    "Текст\ >\ Изменить\ регистр\ >\ ВСЕ\ ПРОПИСНЫЕ": {
+    "Текст > Изменить регистр > ВСЕ ПРОПИСНЫЕ": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "UpperCase Change Case Item" }],
     },
-    "Текст\ >\ Изменить\ регистр\ >\ все\ строчные": {
+    "Текст > Изменить регистр > все строчные": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "LowerCase Change Case Item" }],
     },
-    "Текст\ >\ Изменить\ регистр\ >\ Прописная\ В\ Начале\ Каждого\ Слова": {
+    "Текст > Изменить регистр > Прописная В Начале Каждого Слова": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Title Case Change Case Item" }],
     },
-    "Текст\ >\ Изменить\ регистр\ >\ Прописная\ в\ начале\ предложения": {
+    "Текст > Изменить регистр > Прописная в начале предложения": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Sentence case Change Case Item" }],
     },
-    "Текст\ >\ Типографская\ пунктуация\.\.\.": {
+    "Текст > Типографская пунктуация...": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "Adobe Illustrator Smart Punctuation Menu Item" },
       ],
     },
-    "Текст\ >\ Преобразовать\ в\ кривые": {
+    "Текст > Преобразовать в кривые": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "outline" }],
     },
-    "Текст\ >\ Визуальное\ выравнивание\ полей": {
+    "Текст > Визуальное выравнивание полей": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Optical Alignment Item" }],
     },
-    "Текст\ >\ Показать\ скрытые\ символы": {
+    "Текст > Показать скрытые символы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showHiddenChar" }],
     },
-    "Текст\ >\ Ориентация\ текста\ >\ Горизонтальная": {
+    "Текст > Ориентация текста > Горизонтальная": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "type-horizontal" }],
     },
-    "Текст\ >\ Ориентация\ текста\ >\ Вертикальная": {
+    "Текст > Ориентация текста > Вертикальная": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "type-vertical" }],
     },
-    "Выделение\ >\ Все": {
+    "Выделение > Все": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "selectall" }],
     },
-    "Выделение\ >\ Все\ объекты\ в\ активной\ монтажной\ области": {
+    "Выделение > Все объекты в активной монтажной области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "selectallinartboard" }],
     },
-    "Выделение\ >\ Отменить\ выделение": {
+    "Выделение > Отменить выделение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "deselectall" }],
     },
-    "Выделение\ >\ Выделить\ снова": {
+    "Выделение > Выделить снова": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Reselect menu item" }],
     },
-    "Выделение\ >\ Инверсия": {
+    "Выделение > Инверсия": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Inverse menu item" }],
     },
-    "Выделение\ >\ Следующий\ объект\ сверху": {
+    "Выделение > Следующий объект сверху": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 8" }],
     },
-    "Выделение\ >\ Следующий\ объект\ снизу": {
+    "Выделение > Следующий объект снизу": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 9" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Оформление": {
+    "Выделение > По общему признаку > Оформление": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Appearance menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Атрибуты\ оформления": {
+    "Выделение > По общему признаку > Атрибуты оформления": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Appearance Attributes menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковым\ режимом\ наложения": {
+    "Выделение > По общему признаку > С одинаковым режимом наложения": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Blending Mode menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковыми\ заливкой\ и\ обводкой": {
+    "Выделение > По общему признаку > С одинаковыми заливкой и обводкой": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Fill & Stroke menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковым\ цветом\ заливки": {
+    "Выделение > По общему признаку > С одинаковым цветом заливки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Fill Color menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковой\ непрозрачностью": {
+    "Выделение > По общему признаку > С одинаковой непрозрачностью": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Opacity menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковым\ цветом\ обводки": {
+    "Выделение > По общему признаку > С одинаковым цветом обводки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Stroke Color menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковой\ толщиной\ обводки": {
+    "Выделение > По общему признаку > С одинаковой толщиной обводки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Stroke Weight menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Стиль\ графики": {
+    "Выделение > По общему признаку > Стиль графики": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Style menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Фигура": {
+    "Выделение > По общему признаку > Фигура": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Live Shape menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Одинаковые\ образцы\ символа": {
+    "Выделение > По общему признаку > Одинаковые образцы символа": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Symbol Instance menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Последовательность\ связанных\ блоков": {
+    "Выделение > По общему признаку > Последовательность связанных блоков": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Link Block Series menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Семейство\ шрифтов": {
+    "Выделение > По общему признаку > Семейство шрифтов": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Font Family menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Семейство\ и\ стиль\ шрифтов": {
+    "Выделение > По общему признаку > Семейство и стиль шрифтов": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Font Family Style menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Семейство,\ стиль\ и\ размер\ шрифтов": {
+    "Выделение > По общему признаку > Семейство, стиль и размер шрифтов": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "Find Text Font Family Style Size menu item" },
       ],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Размер\ шрифта": {
+    "Выделение > По общему признаку > Размер шрифта": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Font Size menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Цвет\ заливки\ текста": {
+    "Выделение > По общему признаку > Цвет заливки текста": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Fill Color menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Цвет\ обводки\ текста": {
+    "Выделение > По общему признаку > Цвет обводки текста": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Stroke Color menu item" }],
     },
-    "Выделение\ >\ По\ общему\ признаку\ >\ Цвет\ заливки\ и\ обводки\ текста": {
+    "Выделение > По общему признаку > Цвет заливки и обводки текста": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Find Text Fill Stroke Color menu item" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Все\ на\ этом\ же\ слое": {
+    "Выделение > По типу объектов > Все на этом же слое": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 3" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Управляющие\ манипуляторы": {
+    "Выделение > По типу объектов > Управляющие манипуляторы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 1" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Мазки\ для\ кисти\ из\ щетины": {
+    "Выделение > По типу объектов > Мазки для кисти из щетины": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Bristle Brush Strokes menu item" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Мазки\ кисти": {
+    "Выделение > По типу объектов > Мазки кисти": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Brush Strokes menu item" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Обтравочные\ маски": {
+    "Выделение > По типу объектов > Обтравочные маски": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Clipping Masks menu item" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Изолированные\ точки": {
+    "Выделение > По типу объектов > Изолированные точки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Stray Points menu item" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Все\ объекты\ текста": {
+    "Выделение > По типу объектов > Все объекты текста": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Text Objects menu item" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Объекты\ текста\ из\ точки": {
+    "Выделение > По типу объектов > Объекты текста из точки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Point Text Objects menu item" }],
     },
-    "Выделение\ >\ По\ типу\ объектов\ >\ Объекты\ текста\ в\ области": {
+    "Выделение > По типу объектов > Объекты текста в области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Area Text Objects menu item" }],
     },
-    "Выделение\ >\ Начать\ глобальное\ изменение": {
+    "Выделение > Начать глобальное изменение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "SmartEdit Menu Item" }],
     },
-    "Выделение\ >\ Сохранить\ выделенную\ область…": {
+    "Выделение > Сохранить выделенную область…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 10" }],
     },
-    "Выделение\ >\ Редактировать\ выделенную\ область…": {
+    "Выделение > Редактировать выделенную область…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Selection Hat 11" }],
     },
-    "Эффект\ >\ Применить\ последний\ эффект": {
+    "Эффект > Применить последний эффект": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Apply Last Effect" }],
     },
-    "Эффект\ >\ Последний\ эффект": {
+    "Эффект > Последний эффект": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Last Effect" }],
     },
-    "Эффект\ >\ Параметры\ растровых\ эффектов\ в\ документе\.\.\.": {
+    "Эффект > Параметры растровых эффектов в документе...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Rasterize Effect Setting" }],
     },
-    "Эффект\ >\ 3D\ и\ материалы\ >\ Вытягивание\ и\ фаска\.\.\.": {
+    "Эффект > 3D и материалы > Вытягивание и фаска...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Extrude" }],
     },
-    "Эффект\ >\ 3D\ и\ материалы\ >\ Вращение…": {
+    "Эффект > 3D и материалы > Вращение…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Revolve" }],
     },
-    "Эффект\ >\ 3D\ и\ материалы\ >\ Раздувание…": {
+    "Эффект > 3D и материалы > Раздувание…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Inflate" }],
     },
-    "Эффект\ >\ 3D\ и\ материалы\ >\ Поворот…": {
+    "Эффект > 3D и материалы > Поворот…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Rotate" }],
     },
-    "Эффект\ >\ 3D\ и\ материалы\ >\ Материалы…": {
+    "Эффект > 3D и материалы > Материалы…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Geometry3D Materials" }],
     },
-    "Эффект\ >\ 3D\ \(классическое\)\ >\ Вытягивание\ и\ фаска\ \(классический\)…": {
+    "Эффект > 3D (классическое) > Вытягивание и фаска (классический)…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live 3DExtrude" }],
     },
-    "Эффект\ >\ 3D\ \(классическое\)\ >\ Вращение\ \(классическое\)…": {
+    "Эффект > 3D (классическое) > Вращение (классическое)…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live 3DRevolve" }],
     },
-    "Эффект\ >\ 3D\ \(классическое\)\ >\ Поворот\ \(классический\)…": {
+    "Эффект > 3D (классическое) > Поворот (классический)…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live 3DRotate" }],
     },
-    "Эффект\ >\ Преобразовать\ в\ фигуру>\ Прямоугольник…": {
+    "Эффект > Преобразовать в фигуру> Прямоугольник…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Rectangle" }],
     },
-    "Эффект\ >\ Преобразовать\ в\ фигуру>\ Прямоугольник\ со\ скругленными\ углами…": {
+    "Эффект > Преобразовать в фигуру> Прямоугольник со скругленными углами…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Rounded Rectangle" }],
     },
-    "Эффект\ >\ Преобразовать\ в\ фигуру>\ Эллипс…": {
+    "Эффект > Преобразовать в фигуру> Эллипс…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Ellipse" }],
     },
-    "Эффект\ >\ Метки\ обрезки": {
+    "Эффект > Метки обрезки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Trim Marks" }],
     },
-    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Произвольное\ искажение\.\.\.": {
+    "Эффект > Исказить и трансформировать > Произвольное искажение...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Free Distort" }],
     },
-    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Втягивание\ и\ раздувание\.\.\.": {
+    "Эффект > Исказить и трансформировать > Втягивание и раздувание...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pucker & Bloat" }],
     },
-    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Огрубление\.\.\.": {
+    "Эффект > Исказить и трансформировать > Огрубление...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Roughen" }],
     },
-    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Трансформировать\.\.\.": {
+    "Эффект > Исказить и трансформировать > Трансформировать...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Transform" }],
     },
-    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Помарки\.\.\.": {
+    "Эффект > Исказить и трансформировать > Помарки...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Scribble and Tweak" }],
     },
-    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Скручивание\.\.\.": {
+    "Эффект > Исказить и трансформировать > Скручивание...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Twist" }],
     },
-    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Зигзаг\.\.\.": {
+    "Эффект > Исказить и трансформировать > Зигзаг...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Zig Zag" }],
     },
-    "Эффект\ >\ Контур\ >\ Создать\ параллельный\ контур\.\.\.": {
+    "Эффект > Контур > Создать параллельный контур...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Offset Path" }],
     },
-    "Эффект\ >\ Контур\ >\ Контурный\ объект": {
+    "Эффект > Контур > Контурный объект": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Outline Object" }],
     },
-    "Эффект\ >\ Контур\ >\ Преобразовать\ обводку\ в\ кривые": {
+    "Эффект > Контур > Преобразовать обводку в кривые": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Outline Stroke" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Добавить": {
+    "Эффект > Обработка контуров > Добавить": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Add" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Пересечение": {
+    "Эффект > Обработка контуров > Пересечение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Intersect" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Исключение": {
+    "Эффект > Обработка контуров > Исключение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Exclude" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Вычитание": {
+    "Эффект > Обработка контуров > Вычитание": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Subtract" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Минус\ нижний": {
+    "Эффект > Обработка контуров > Минус нижний": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Minus Back" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Разделение": {
+    "Эффект > Обработка контуров > Разделение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Divide" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Обрезка": {
+    "Эффект > Обработка контуров > Обрезка": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Trim" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Объединение": {
+    "Эффект > Обработка контуров > Объединение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Merge" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Кадрировать": {
+    "Эффект > Обработка контуров > Кадрировать": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Crop" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Контур": {
+    "Эффект > Обработка контуров > Контур": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Outline" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Жесткое\ смешивание": {
+    "Эффект > Обработка контуров > Жесткое смешивание": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Hard Mix" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Нежесткое\ смешивание\.\.\.": {
+    "Эффект > Обработка контуров > Нежесткое смешивание...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Soft Mix" }],
     },
-    "Эффект\ >\ Обработка\ контуров\ >\ Треппинг…": {
+    "Эффект > Обработка контуров > Треппинг…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Pathfinder Trap" }],
     },
-    "Эффект\ >\ Растрировать\.\.\.": {
+    "Эффект > Растрировать...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Rasterize" }],
     },
-    "Эффект\ >\ Стилизация\ >\ Тень\.\.\.": {
+    "Эффект > Стилизация > Тень...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Drop Shadow" }],
     },
-    "Эффект\ >\ Стилизация\ >\ Растушевка\.\.\.": {
+    "Эффект > Стилизация > Растушевка...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Feather" }],
     },
-    "Эффект\ >\ Стилизация\ >\ Внутреннее\ свечение\.\.\.": {
+    "Эффект > Стилизация > Внутреннее свечение...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Inner Glow" }],
     },
-    "Эффект\ >\ Стилизация\ >\ Внешнее\ свечение\.\.\.": {
+    "Эффект > Стилизация > Внешнее свечение...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Outer Glow" }],
     },
-    "Эффект\ >\ Стилизация\ >\ Скругленные\ углы\.\.\.": {
+    "Эффект > Стилизация > Скругленные углы...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe Round Corners" }],
     },
-    "Эффект\ >\ Стилизация\ >\ Каракули…": {
+    "Эффект > Стилизация > Каракули…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Scribble Fill" }],
     },
-    "Эффект\ >\ Фильтры\ SVG\ >\ Применить\ SVG\-фильтр\.\.\.": {
+    "Эффект > Фильтры SVG > Применить SVG-фильтр...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live SVG Filters" }],
     },
-    "Эффект\ >\ Фильтры\ SVG\ >\ Импортировать\ фильтр\ SVG\.\.\.": {
+    "Эффект > Фильтры SVG > Импортировать фильтр SVG...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "SVG Filter Import" }],
     },
-    "Эффект\ >\ Деформация\ >\ Дуга…": {
+    "Эффект > Деформация > Дуга…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Arc" }],
     },
-    "Эффект\ >\ Деформация\ >\ Дуга\ вниз…": {
+    "Эффект > Деформация > Дуга вниз…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Arc Lower" }],
     },
-    "Эффект\ >\ Деформация\ >\ Дуга\ вверх…": {
+    "Эффект > Деформация > Дуга вверх…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Arc Upper" }],
     },
-    "Эффект\ >\ Деформация\ >\ Арка…": {
+    "Эффект > Деформация > Арка…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Arch" }],
     },
-    "Эффект\ >\ Деформация\ >\ Выпуклость…": {
+    "Эффект > Деформация > Выпуклость…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Bulge" }],
     },
-    "Эффект\ >\ Деформация\ >\ Панцирь\ вниз…": {
+    "Эффект > Деформация > Панцирь вниз…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Shell Lower" }],
     },
-    "Эффект\ >\ Деформация\ >\ Панцирь\ вверх…": {
+    "Эффект > Деформация > Панцирь вверх…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Shell Upper" }],
     },
-    "Эффект\ >\ Деформация\ >\ Флаг…": {
+    "Эффект > Деформация > Флаг…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Flag" }],
     },
-    "Эффект\ >\ Деформация\ >\ Волна…": {
+    "Эффект > Деформация > Волна…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Wave" }],
     },
-    "Эффект\ >\ Деформация\ >\ Рыба…": {
+    "Эффект > Деформация > Рыба…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Fish" }],
     },
-    "Эффект\ >\ Деформация\ >\ Подъем…": {
+    "Эффект > Деформация > Подъем…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Rise" }],
     },
-    "Эффект\ >\ Деформация\ >\ Рыбий\ глаз…": {
+    "Эффект > Деформация > Рыбий глаз…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Fisheye" }],
     },
-    "Эффект\ >\ Деформация\ >\ Раздувание…": {
+    "Эффект > Деформация > Раздувание…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Inflate" }],
     },
-    "Эффект\ >\ Деформация\ >\ Сжатие…": {
+    "Эффект > Деформация > Сжатие…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Squeeze" }],
     },
-    "Эффект\ >\ Деформация\ >\ Скручивание…": {
+    "Эффект > Деформация > Скручивание…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Deform Twist" }],
     },
-    "Эффект\ >\ Галерея\ эффектов…": {
+    "Эффект > Галерея эффектов…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_GEfc" }],
     },
-    "Эффект\ >\ Имитация\ >\ Цветные\ карандаши…": {
+    "Эффект > Имитация > Цветные карандаши…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_ClrP" }],
     },
-    "Эффект\ >\ Имитация\ >\ Аппликация…": {
+    "Эффект > Имитация > Аппликация…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Ct  " }],
     },
-    "Эффект\ >\ Имитация\ >\ Сухая\ кисть…": {
+    "Эффект > Имитация > Сухая кисть…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_DryB" }],
     },
-    "Эффект\ >\ Имитация\ >\ Зернистость\ пленки…": {
+    "Эффект > Имитация > Зернистость пленки…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_FlmG" }],
     },
-    "Эффект\ >\ Имитация\ >\ Фреска…": {
+    "Эффект > Имитация > Фреска…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Frsc" }],
     },
-    "Эффект\ >\ Имитация\ >\ Неоновый\ свет…": {
+    "Эффект > Имитация > Неоновый свет…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_NGlw" }],
     },
-    "Эффект\ >\ Имитация\ >\ Масляная\ живопись…": {
+    "Эффект > Имитация > Масляная живопись…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_PntD" }],
     },
-    "Эффект\ >\ Имитация\ >\ Шпатель…": {
+    "Эффект > Имитация > Шпатель…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_PltK" }],
     },
-    "Эффект\ >\ Имитация\ >\ Целлофановая\ упаковка…": {
+    "Эффект > Имитация > Целлофановая упаковка…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_PlsW" }],
     },
-    "Эффект\ >\ Имитация\ >\ Очерченные\ края…": {
+    "Эффект > Имитация > Очерченные края…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_PstE" }],
     },
-    "Эффект\ >\ Имитация\ >\ Пастель…": {
+    "Эффект > Имитация > Пастель…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_RghP" }],
     },
-    "Эффект\ >\ Имитация\ >\ Растушевка…": {
+    "Эффект > Имитация > Растушевка…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_SmdS" }],
     },
-    "Эффект\ >\ Имитация\ >\ Губка…": {
+    "Эффект > Имитация > Губка…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Spng" }],
     },
-    "Эффект\ >\ Имитация\ >\ Рисование\ на\ обороте…": {
+    "Эффект > Имитация > Рисование на обороте…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Undr" }],
     },
-    "Эффект\ >\ Имитация\ >\ Акварель…": {
+    "Эффект > Имитация > Акварель…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Wtrc" }],
     },
-    "Эффект\ >\ Размытие\ >\ Размытие\ по\ Гауссу\.\.\.": {
+    "Эффект > Размытие > Размытие по Гауссу...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Adobe PSL Gaussian Blur" }],
     },
-    "Эффект\ >\ Размытие\ >\ Радиальное\ размытие\.\.\.": {
+    "Эффект > Размытие > Радиальное размытие...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_RdlB" }],
     },
-    "Эффект\ >\ Размытие\ >\ Умное\ размытие\.\.\.": {
+    "Эффект > Размытие > Умное размытие...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_SmrB" }],
     },
-    "Эффект\ >\ Штрихи\ >\ Акцент\ на\ краях…": {
+    "Эффект > Штрихи > Акцент на краях…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_AccE" }],
     },
-    "Эффект\ >\ Штрихи\ >\ Наклонные\ штрихи…": {
+    "Эффект > Штрихи > Наклонные штрихи…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_AngS" }],
     },
-    "Эффект\ >\ Штрихи\ >\ Перекрестные\ штрихи…": {
+    "Эффект > Штрихи > Перекрестные штрихи…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Crsh" }],
     },
-    "Эффект\ >\ Штрихи\ >\ Темные\ штрихи…": {
+    "Эффект > Штрихи > Темные штрихи…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_DrkS" }],
     },
-    "Эффект\ >\ Штрихи\ >\ Обводка…": {
+    "Эффект > Штрихи > Обводка…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_InkO" }],
     },
-    "Эффект\ >\ Штрихи\ >\ Разбрызгивание…": {
+    "Эффект > Штрихи > Разбрызгивание…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Spt " }],
     },
-    "Эффект\ >\ Штрихи\ >\ Аэрограф…": {
+    "Эффект > Штрихи > Аэрограф…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_SprS" }],
     },
-    "Эффект\ >\ Штрихи\ >\ Суми\-э…": {
+    "Эффект > Штрихи > Суми-э…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Smie" }],
     },
-    "Эффект\ >\ Искажение\ >\ Рассеянное\ свечение…": {
+    "Эффект > Искажение > Рассеянное свечение…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_DfsG" }],
     },
-    "Эффект\ >\ Искажение\ >\ Стекло…": {
+    "Эффект > Искажение > Стекло…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Gls " }],
     },
-    "Эффект\ >\ Искажение\ >\ Океанские\ волны…": {
+    "Эффект > Искажение > Океанские волны…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_OcnR" }],
     },
-    "Эффект\ >\ Оформление\ >\ Цветные\ полутона…": {
+    "Эффект > Оформление > Цветные полутона…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_ClrH" }],
     },
-    "Эффект\ >\ Оформление\ >\ Кристаллизация…": {
+    "Эффект > Оформление > Кристаллизация…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Crst" }],
     },
-    "Эффект\ >\ Оформление\ >\ Меццо\-тинто…": {
+    "Эффект > Оформление > Меццо-тинто…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Mztn" }],
     },
-    "Эффект\ >\ Оформление\ >\ Пуантилизм…": {
+    "Эффект > Оформление > Пуантилизм…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Pntl" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Рельеф…": {
+    "Эффект > Эскиз > Рельеф…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_BsRl" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Мел\ и\ уголь…": {
+    "Эффект > Эскиз > Мел и уголь…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_ChlC" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Уголь…": {
+    "Эффект > Эскиз > Уголь…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Chrc" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Хром…": {
+    "Эффект > Эскиз > Хром…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Chrm" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Волшебный\ карандаш…": {
+    "Эффект > Эскиз > Волшебный карандаш…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_CntC" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Тушь…": {
+    "Эффект > Эскиз > Тушь…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_GraP" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Полутоновый\ узор…": {
+    "Эффект > Эскиз > Полутоновый узор…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_HlfS" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Почтовая\ бумага…": {
+    "Эффект > Эскиз > Почтовая бумага…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_NtPr" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Ксерокопия…": {
+    "Эффект > Эскиз > Ксерокопия…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Phtc" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Гипс…": {
+    "Эффект > Эскиз > Гипс…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Plst" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Ретикуляция…": {
+    "Эффект > Эскиз > Ретикуляция…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Rtcl" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Линогравюра…": {
+    "Эффект > Эскиз > Линогравюра…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Stmp" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Рваные\ края…": {
+    "Эффект > Эскиз > Рваные края…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_TrnE" }],
     },
-    "Эффект\ >\ Эскиз\ >\ Мокрая\ бумага…": {
+    "Эффект > Эскиз > Мокрая бумага…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_WtrP" }],
     },
-    "Эффект\ >\ Стилизация\ >\ Свечение\ краев…": {
+    "Эффект > Стилизация > Свечение краев…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_GlwE" }],
     },
-    "Эффект\ >\ Текстура\ >\ Кракелюры…": {
+    "Эффект > Текстура > Кракелюры…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Crql" }],
     },
-    "Эффект\ >\ Текстура\ >\ Зерно…": {
+    "Эффект > Текстура > Зерно…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Grn " }],
     },
-    "Эффект\ >\ Текстура\ >\ Мозаичные\ фрагменты…": {
+    "Эффект > Текстура > Мозаичные фрагменты…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_MscT" }],
     },
-    "Эффект\ >\ Текстура\ >\ Цветная\ плитка…": {
+    "Эффект > Текстура > Цветная плитка…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Ptch" }],
     },
-    "Эффект\ >\ Текстура\ >\ Витраж…": {
+    "Эффект > Текстура > Витраж…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_StnG" }],
     },
-    "Эффект\ >\ Текстура\ >\ Текстуризатор…": {
+    "Эффект > Текстура > Текстуризатор…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Txtz" }],
     },
-    "Эффект\ >\ Видео\ >\ Устранение\ чересстрочной\ развертки\.\.\.": {
+    "Эффект > Видео > Устранение чересстрочной развертки...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Dntr" }],
     },
-    "Эффект\ >\ Видео\ >\ Цвета\ NTSC": {
+    "Эффект > Видео > Цвета NTSC": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_NTSC" }],
     },
-    "Просмотр\ >\ Контуры\ /\ Иллюстрация": {
+    "Просмотр > Контуры / Иллюстрация": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "preview" }],
     },
-    "Просмотр\ >\ Просмотр\ с\ использованием\ ЦП\ /\ ГП": {
+    "Просмотр > Просмотр с использованием ЦП / ГП": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "GPU Preview" }],
     },
-    "Просмотр\ >\ Просмотр\ наложения\ цветов": {
+    "Просмотр > Просмотр наложения цветов": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ink" }],
     },
-    "Просмотр\ >\ Просмотр\ в\ виде\ пикселов": {
+    "Просмотр > Просмотр в виде пикселов": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "raster" }],
     },
-    "Просмотр\ >\ Параметры\ цветопробы\ >\ Рабочее\ пространство\ CMYK": {
+    "Просмотр > Параметры цветопробы > Рабочее пространство CMYK": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-document" }],
     },
-    "Просмотр\ >\ Параметры\ цветопробы\ >\ Ранняя\ версия\ Macintosh\ RGB\ \(Gamma\ 1\.8\)": {
+    "Просмотр > Параметры цветопробы > Ранняя версия Macintosh RGB (Gamma 1.8)": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-mac-rgb" }],
     },
-    "Просмотр\ >\ Параметры\ цветопробы\ >\ Стандартная\ палитра\ RGB\ \(sRGB\)\ для\ сети\ Интернет": {
-      cmdType: "menu",
-      cmdActions: [{ type: "menu", value: "proof-win-rgb" }],
-    },
-    "Просмотр\ >\ Параметры\ цветопробы\ >\ Палитра\ RGB\ монитора": {
+    "Просмотр > Параметры цветопробы > Стандартная палитра RGB (sRGB) для сети Интернет":
+      {
+        cmdType: "menu",
+        cmdActions: [{ type: "menu", value: "proof-win-rgb" }],
+      },
+    "Просмотр > Параметры цветопробы > Палитра RGB монитора": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-monitor-rgb" }],
     },
-    "Просмотр\ >\ Параметры\ цветопробы\ >\ Дальтонизм\ \-\ протанопия": {
+    "Просмотр > Параметры цветопробы > Дальтонизм - протанопия": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-colorblindp" }],
     },
-    "Просмотр\ >\ Параметры\ цветопробы\ >\ Дальтонизм\ \-\ дейтеранопия": {
+    "Просмотр > Параметры цветопробы > Дальтонизм - дейтеранопия": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-colorblindd" }],
     },
-    "Просмотр\ >\ Параметры\ цветопробы\ >\ Заказные\ параметры…": {
+    "Просмотр > Параметры цветопробы > Заказные параметры…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proof-custom" }],
     },
-    "Просмотр\ >\ Цветопроба": {
+    "Просмотр > Цветопроба": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "proofColors" }],
     },
-    "Просмотр\ >\ Увеличение": {
+    "Просмотр > Увеличение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "zoomin" }],
     },
-    "Просмотр\ >\ Уменьшение": {
+    "Просмотр > Уменьшение": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "zoomout" }],
     },
-    "Просмотр\ >\ Подогнать\ монтажную\ область\ по\ размеру\ окна": {
+    "Просмотр > Подогнать монтажную область по размеру окна": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "fitin" }],
     },
-    "Просмотр\ >\ Подогнать\ все\ по\ размеру\ окна": {
+    "Просмотр > Подогнать все по размеру окна": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "fitall" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ фрагменты": {
+    "Просмотр > Показать / спрятать фрагменты": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Feedback Menu" }],
     },
-    "Просмотр\ >\ Закрепить\ фрагменты": {
+    "Просмотр > Закрепить фрагменты": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AISlice Lock Menu" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ ограничительную\ рамку": {
+    "Просмотр > Показать / спрятать ограничительную рамку": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Bounding Box Toggle" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ сетку\ прозрачности": {
+    "Просмотр > Показать / спрятать сетку прозрачности": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "TransparencyGrid Menu Item" }],
     },
-    "Просмотр\ >\ Реальный\ размер": {
+    "Просмотр > Реальный размер": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "actualsize" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ зазоры\ быстрых\ заливок": {
+    "Просмотр > Показать / спрятать зазоры быстрых заливок": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Show Gaps Planet X" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ градиентный\ аннотатор": {
+    "Просмотр > Показать / спрятать градиентный аннотатор": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Gradient Feedback" }],
     },
@@ -3129,251 +3157,251 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live Corner Annotator" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ границы": {
+    "Просмотр > Показать / спрятать границы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "edge" }],
     },
-    "Просмотр\ >\ Быстрые\ направляющие": {
+    "Просмотр > Быстрые направляющие": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Snapomatic on-off menu item" }],
     },
-    "Просмотр\ >\ Сетка\ перспективы\ >\ Показать\ /\ скрыть\ сетку": {
+    "Просмотр > Сетка перспективы > Показать / скрыть сетку": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Show Perspective Grid" }],
     },
-    "Просмотр\ >\ Сетка\ перспективы\ >\ Показать\ /\ скрыть\ линейки": {
+    "Просмотр > Сетка перспективы > Показать / скрыть линейки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Show Ruler" }],
     },
-    "Просмотр\ >\ Сетка\ перспективы\ >\ Привязать\ к\ сетке": {
+    "Просмотр > Сетка перспективы > Привязать к сетке": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Snap to Grid" }],
     },
-    "Просмотр\ >\ Сетка\ перспективы\ >\ Закрепить\ сетку": {
+    "Просмотр > Сетка перспективы > Закрепить сетку": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Lock Perspective Grid" }],
     },
-    "Просмотр\ >\ Сетка\ перспективы\ >\ Закрепить\ точку\ наблюдения": {
+    "Просмотр > Сетка перспективы > Закрепить точку наблюдения": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Lock Station Point" }],
     },
-    "Просмотр\ >\ Сетка\ перспективы\ >\ Определить\ сетку\.\.\.": {
+    "Просмотр > Сетка перспективы > Определить сетку...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Define Perspective Grid" }],
     },
-    "Просмотр\ >\ Сетка\ перспективы\ >\ Сохранить\ сетку\ как\ стиль\.\.\.": {
+    "Просмотр > Сетка перспективы > Сохранить сетку как стиль...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Save Perspective Grid as Preset" }],
     },
-    "Просмотр\ >\ Показать\ /\ скрыть\ монтажные\ области": {
+    "Просмотр > Показать / скрыть монтажные области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "artboard" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ разбиение\ для\ печати": {
+    "Просмотр > Показать / спрятать разбиение для печати": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pagetiling" }],
     },
-    "Просмотр\ >\ Спрятать\ шаблон": {
+    "Просмотр > Спрятать шаблон": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showtemplate" }],
     },
-    "Просмотр\ >\ Показать\ /\ скрыть\ линейки": {
+    "Просмотр > Показать / скрыть линейки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ruler" }],
     },
-    "Просмотр\ >\ Линейки\ >\ Сменить\ на\ общие\ линейки\ /\ монтажной\ области": {
+    "Просмотр > Линейки > Сменить на общие линейки / монтажной области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "rulerCoordinateSystem" }],
     },
-    "Просмотр\ >\ Показать\ /\ скрыть\ линейки\ видео": {
+    "Просмотр > Показать / скрыть линейки видео": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "videoruler" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ связи\ текстовых\ блоков": {
+    "Просмотр > Показать / спрятать связи текстовых блоков": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "textthreads" }],
     },
-    "Просмотр\ >\ Направляющие\ >\ Показать\ /\ спрятать\ направляющие": {
+    "Просмотр > Направляющие > Показать / спрятать направляющие": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showguide" }],
     },
-    "Просмотр\ >\ Направляющие\ >\ Закрепить\ направляющие": {
+    "Просмотр > Направляющие > Закрепить направляющие": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "lockguide" }],
     },
-    "Просмотр\ >\ Направляющие\ >\ Создать\ направляющие": {
+    "Просмотр > Направляющие > Создать направляющие": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "makeguide" }],
     },
-    "Просмотр\ >\ Направляющие\ >\ Освободить\ направляющие": {
+    "Просмотр > Направляющие > Освободить направляющие": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "releaseguide" }],
     },
-    "Просмотр\ >\ Направляющие\ >\ Удалить\ направляющие": {
+    "Просмотр > Направляющие > Удалить направляющие": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "clearguide" }],
     },
-    "Просмотр\ >\ Показать\ /\ спрятать\ сетку": {
+    "Просмотр > Показать / спрятать сетку": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "showgrid" }],
     },
-    "Просмотр\ >\ Выравнивать\ по\ сетке": {
+    "Просмотр > Выравнивать по сетке": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "snapgrid" }],
     },
-    "Просмотр\ >\ Выравнивать\ по\ точкам": {
+    "Просмотр > Выравнивать по точкам": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "snappoint" }],
     },
-    "Просмотр\ >\ Новый\ вид…": {
+    "Просмотр > Новый вид…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "newview" }],
     },
-    "Просмотр\ >\ Редактировать\ виды…": {
+    "Просмотр > Редактировать виды…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "editview" }],
     },
-    "Окно\ >\ Новое\ окно": {
+    "Окно > Новое окно": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "newwindow" }],
     },
-    "Окно\ >\ Упорядить\ >\ Каскадом": {
+    "Окно > Упорядить > Каскадом": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "cascade" }],
     },
-    "Окно\ >\ Упорядить\ >\ Мозаикой": {
+    "Окно > Упорядить > Мозаикой": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "tile" }],
     },
-    "Окно\ >\ Упорядить\ >\ Плавающее\ в\ окне": {
+    "Окно > Упорядить > Плавающее в окне": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "floatInWindow" }],
     },
-    "Окно\ >\ Упорядить\ >\ Все\ плавающие\ в\ окнах": {
+    "Окно > Упорядить > Все плавающие в окнах": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "floatAllInWindows" }],
     },
-    "Окно\ >\ Упорядить\ >\ Объединить\ все\ окна": {
+    "Окно > Упорядить > Объединить все окна": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "consolidateAllWindows" }],
     },
-    "Окно\ >\ Восстановить\ рабочую\ среду": {
+    "Окно > Восстановить рабочую среду": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Reset Workspace" }],
     },
-    "Окно\ >\ Рабочая\ среда\ >\ Создать\ рабочую\ среду\.\.\.": {
+    "Окно > Рабочая среда > Создать рабочую среду...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Workspace" }],
     },
-    "Окно\ >\ Рабочая\ среда\ >\ Управление\ рабочими\ средами\.\.\.": {
+    "Окно > Рабочая среда > Управление рабочими средами...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Manage Workspace" }],
     },
-    "Окно\ >\ Поиск\ расширений\ на\ Exchange\.\.\.": {
+    "Окно > Поиск расширений на Exchange...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Browse Add-Ons Menu" }],
     },
-    "Окно\ >\ Панель\ управления": {
+    "Окно > Панель управления": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "drover control palette plugin" }],
     },
-    "Окно\ >\ Панели\ инструментов\ >\ Дополнительные": {
+    "Окно > Панели инструментов > Дополнительные": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Advanced Toolbar Menu" }],
     },
-    "Окно\ >\ Панели\ инструментов\ >\ Основные": {
+    "Окно > Панели инструментов > Основные": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Basic Toolbar Menu" }],
     },
-    "Окно\ >\ Панели\ инструментов\ >\ Новая\ панель\ инструментов\.\.\.": {
+    "Окно > Панели инструментов > Новая панель инструментов...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "New Tools Panel" }],
     },
-    "Окно\ >\ Панели\ инструментов\ >\ Управление\ панелями\ инструментов\.\.\.": {
+    "Окно > Панели инструментов > Управление панелями инструментов...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Manage Tools Panel" }],
     },
-    "Окно\ >\ 3D\ и\ материалы": {
+    "Окно > 3D и материалы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe 3D Panel" }],
     },
-    "Окно\ >\ Операции": {
+    "Окно > Операции": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Action Palette" }],
     },
-    "Окно\ >\ Выравнивание": {
+    "Окно > Выравнивание": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeAlignObjects2" }],
     },
-    "Окно\ >\ Оформление": {
+    "Окно > Оформление": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Style Palette" }],
     },
-    "Окно\ >\ Монтажные\ области": {
+    "Окно > Монтажные области": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Artboard Palette" }],
     },
-    "Окно\ >\ Экспорт\ ресурсов": {
+    "Окно > Экспорт ресурсов": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe SmartExport Panel Menu Item" }],
     },
-    "Окно\ >\ Атрибуты": {
+    "Окно > Атрибуты": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-attributes" },
       ],
     },
-    "Окно\ >\ Кисти": {
+    "Окно > Кисти": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe BrushManager Menu Item" }],
     },
-    "Окно\ >\ Цвет": {
+    "Окно > Цвет": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Color Palette" }],
     },
-    "Окно\ >\ Каталог\ цветов": {
+    "Окно > Каталог цветов": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Harmony Palette" }],
     },
-    "Окно\ >\ Комментарии": {
+    "Окно > Комментарии": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Commenting Palette" }],
     },
-    "Окно\ >\ Свойства\ CSS": {
+    "Окно > Свойства CSS": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "CSS Menu Item" }],
     },
-    "Окно\ >\ Информация\ о\ документе": {
+    "Окно > Информация о документе": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "DocInfo1" }],
     },
-    "Окно\ >\ Просмотр\ результатов\ сведения": {
+    "Окно > Просмотр результатов сведения": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Flattening Preview" }],
     },
-    "Окно\ >\ Градиент": {
+    "Окно > Градиент": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Gradient Palette" }],
     },
-    "Окно\ >\ Стили\ графики": {
+    "Окно > Стили графики": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Style Palette" }],
     },
-    "Окно\ >\ История": {
+    "Окно > История": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe HistoryPanel Menu Item" }],
     },
-    "Окно\ >\ Информация": {
+    "Окно > Информация": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-info" },
       ],
     },
-    "Окно\ >\ Слои": {
+    "Окно > Слои": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeLayerPalette1" }],
     },
-    "Окно\ >\ Библиотеки": {
+    "Окно > Библиотеки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3382,119 +3410,119 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно\ >\ Связи": {
+    "Окно > Связи": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe LinkPalette Menu Item" }],
     },
-    "Окно\ >\ Волшебная\ палочка": {
+    "Окно > Волшебная палочка": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AI Magic Wand" }],
     },
-    "Окно\ >\ Навигатор": {
+    "Окно > Навигатор": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeNavigator" }],
     },
-    "Окно\ >\ Обработка\ контуров": {
+    "Окно > Обработка контуров": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe PathfinderUI" }],
     },
-    "Окно\ >\ Параметры\ узора": {
+    "Окно > Параметры узора": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Pattern Panel Toggle" }],
     },
-    "Окно\ >\ Свойства": {
+    "Окно > Свойства": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Property Palette" }],
     },
-    "Окно\ >\ Просмотр\ цветоделений": {
+    "Окно > Просмотр цветоделений": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Separation Preview Panel" }],
     },
-    "Окно\ >\ Обводка": {
+    "Окно > Обводка": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Stroke Palette" }],
     },
-    "Окно\ >\ Интерактивность\ SVG": {
+    "Окно > Интерактивность SVG": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe SVG Interactivity Palette" }],
     },
-    "Окно\ >\ Образцы": {
+    "Окно > Образцы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Swatches Menu Item" }],
     },
-    "Окно\ >\ Символы": {
+    "Окно > Символы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Symbol Palette" }],
     },
-    "Окно\ >\ Трансформирование": {
+    "Окно > Трансформирование": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeTransformObjects1" }],
     },
-    "Окно\ >\ Прозрачность": {
+    "Окно > Прозрачность": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Transparency Palette Menu Item" }],
     },
-    "Окно\ >\ Текст\ >\ Символ": {
+    "Окно > Текст > Символ": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-character" },
       ],
     },
-    "Окно\ >\ Текст\ >\ Стили\ символов": {
+    "Окно > Текст > Стили символов": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Character Styles" }],
     },
-    "Окно\ >\ Текст\ >\ Глифы": {
+    "Окно > Текст > Глифы": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "alternate glyph palette plugin 2" }],
     },
-    "Окно\ >\ Текст\ >\ OpenType": {
+    "Окно > Текст > OpenType": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-opentype" },
       ],
     },
-    "Окно\ >\ Текст\ >\ Абзац": {
+    "Окно > Текст > Абзац": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-paragraph" },
       ],
     },
-    "Окно\ >\ Текст\ >\ Стили\ абзацев": {
+    "Окно > Текст > Стили абзацев": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Paragraph Styles Palette" }],
     },
-    "Окно\ >\ Текст\ >\ Табуляция": {
+    "Окно > Текст > Табуляция": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "internal palettes posing as plug-in menus-tab" },
       ],
     },
-    "Окно\ >\ Переменные": {
+    "Окно > Переменные": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Variables Palette Menu Item" }],
     },
-    "Окно\ >\ Журнал\ версий": {
+    "Окно > Журнал версий": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Version History File Menu Item" }],
     },
-    "Окно\ >\ Библиотеки\ кистей\ >\ Другая\ библиотека\.\.\.": {
+    "Окно > Библиотеки кистей > Другая библиотека...": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "AdobeBrushMgrUI Other libraries menu item" },
       ],
     },
-    "Окно\ >\ Библиотеки\ стилей\ графики\ >\ Другая\ библиотека\.\.\.": {
+    "Окно > Библиотеки стилей графики > Другая библиотека...": {
       cmdType: "menu",
       cmdActions: [
         { type: "menu", value: "Adobe Art Style Plugin Other libraries menu item" },
       ],
     },
-    "Окно\ >\ Библиотеки\ образцов\ >\ Другая\ библиотека\.\.\.": {
+    "Окно > Библиотеки образцов > Другая библиотека...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeSwatch_ Other libraries menu item" }],
     },
-    "Окно\ >\ Библиотеки\ символов\ >\ Другая\ библиотека\.\.\.": {
+    "Окно > Библиотеки символов > Другая библиотека...": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3503,119 +3531,119 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Справка\ >\ Справка\ программы\ Illustrator\.\.\.": {
+    "Справка > Справка программы Illustrator...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "helpcontent" }],
     },
-    "Справка\ >\ Сообщество\ службы\ поддержки": {
+    "Справка > Сообщество службы поддержки": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "supportCommunity" }],
     },
-    "Справка\ >\ Сообщение\ об\ ошибке/запрос\ на\ добавление\ новых\ функций\.\.\.": {
+    "Справка > Сообщение об ошибке/запрос на добавление новых функций...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "wishform" }],
     },
-    "Справка\ >\ Информация\ о\ системе…": {
+    "Справка > Информация о системе…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "System Info" }],
     },
-    "Палитра\ >\ Операции\ >\ Пакетная\ обработка…": {
+    "Палитра > Операции > Пакетная обработка…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Actions Batch" }],
     },
-    "Палитра\ >\ Оформление\ >\ Добавить\ новую\ заливку": {
+    "Палитра > Оформление > Добавить новую заливку": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Fill Shortcut" }],
     },
-    "Палитра\ >\ Оформление\ >\ Добавить\ новую\ обводку": {
+    "Палитра > Оформление > Добавить новую обводку": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Stroke Shortcut" }],
     },
-    "Палитра\ >\ Стили\ графики\ >\ Новый\ стиль\ графики": {
+    "Палитра > Стили графики > Новый стиль графики": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Style Shortcut" }],
     },
-    "Палитра\ >\ Слои\ >\ Создать\ новый\ слой": {
+    "Палитра > Слои > Создать новый слой": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeLayerPalette2" }],
     },
-    "Палитра\ >\ Слои\ >\ Создать\ новый\ с\ параметрами\.\.\.": {
+    "Палитра > Слои > Создать новый с параметрами...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "AdobeLayerPalette3" }],
     },
-    "Палитра\ >\ Связи\ >\ Обновить\ связь": {
+    "Палитра > Связи > Обновить связь": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe Update Link Shortcut" }],
     },
-    "Палитра\ >\ Образцы\ >\ Новый\ образец": {
+    "Палитра > Образцы > Новый образец": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Swatch Shortcut Menu" }],
     },
-    "Палитра\ >\ Символы\ >\ Новый\ символ": {
+    "Палитра > Символы > Новый символ": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe New Symbol Shortcut" }],
     },
-    "О\ программе\ Illustrator…": {
+    "О программе Illustrator…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "about" }],
     },
-    "Установки\ >\ Основные…": {
+    "Установки > Основные…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "preference" }],
     },
-    "Установки\ >\ Отображение\ выделения\ и\ опорных\ точек…": {
+    "Установки > Отображение выделения и опорных точек…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "selectPref" }],
     },
-    "Установки\ >\ Текст…": {
+    "Установки > Текст…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "keyboardPref" }],
     },
-    "Установки\ >\ Единицы\ измерения…": {
+    "Установки > Единицы измерения…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "unitundoPref" }],
     },
-    "Установки\ >\ Направляющие\ и\ сетка…": {
+    "Установки > Направляющие и сетка…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "guidegridPref" }],
     },
-    "Установки\ >\ Быстрые\ направляющие…": {
+    "Установки > Быстрые направляющие…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "snapPref" }],
     },
-    "Установки\ >\ Фрагменты…": {
+    "Установки > Фрагменты…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "slicePref" }],
     },
-    "Установки\ >\ Расстановка\ переносов…": {
+    "Установки > Расстановка переносов…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "hyphenPref" }],
     },
-    "Установки\ >\ Внешние\ модули\ и\ рабочие\ диски…": {
+    "Установки > Внешние модули и рабочие диски…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "pluginPref" }],
     },
-    "Установки\ >\ Интерфейс\ пользователя…": {
+    "Установки > Интерфейс пользователя…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "UIPref" }],
     },
-    "Установки\ >\ Производительность…": {
+    "Установки > Производительность…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "GPUPerformancePref" }],
     },
-    "Установки\ >\ Обработка\ файлов…": {
+    "Установки > Обработка файлов…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "FilePref" }],
     },
-    "Установки\ >\ Обработка\ буфера…": {
+    "Установки > Обработка буфера…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ClipboardPref" }],
     },
-    "Установки\ >\ Воспроизведение\ черного\ цвета\.\.\.": {
+    "Установки > Воспроизведение черного цвета...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "BlackPref" }],
     },
-    "Установки\ >\ Устройства…": {
+    "Установки > Устройства…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "DevicesPref" }],
     },
