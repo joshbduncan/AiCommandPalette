@@ -10,7 +10,7 @@ See the LICENSE file for details.
 //@target illustrator
 
 const _title = "Ai Command Palette";
-const _version = "0.2.3";
+const _version = "0.2.4";
 const _copyright = "Copyright 2022 Josh Duncan";
 const _website = "joshbduncan.com";
 const _github = "https://github.com/joshbduncan";
@@ -807,7 +807,7 @@ function workflowBuilder(arr, edit) {
   };
 
   up.onClick = function () {
-    var selected = sortByListboxIndex(steps.selection);
+    var selected = sortIndexes(steps.selection);
     for (var i = 0; i < selected.length; i++) {
       if (selected[i] == 0 || !contiguous(selected)) {
         return;
