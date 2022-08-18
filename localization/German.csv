@@ -27,7 +27,7 @@ Invalid configuration option:\n,Ungültige Konfigurationsoption:\n
 Cancel,Abbrechen
 About,Über Kurzbefehle …
 About Ai Command Palette,Kurzbefehle
-"Boost your Adobe Illustrator efficiency with quick access to most menu commands, all of your actions, and any script you load right from your keyboard. AND, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.","Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie, alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität."
+"Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.","Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität."
 Click here to learn more:,Klicken Sie hier für weitere Informationen:
 Palette Settings and Configuration,Paletteneinstellungen und -konfiguration
 Load Script Files,Skriptdateien laden
@@ -59,7 +59,7 @@ There are no hidden commands to reveal.,Keine verborgenen Befehle vorhanden.
 Select Menu Commands To Delete,Wählen Sie die zu löschenden Menübefehle aus.
 Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n,Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n
 Confirm Commands To Delete,Bestätigen Sie die zu löschenden Befehle.
-Command couldn't be deleted.,Befehle konnte nicht gelöscht werden.
+Command couldn't be deleted.,Befehl konnte nicht gelöscht werden.
 Total commands deleted:\n,Insgesamt gelöschte Befehle:
 There are no commands to delete.,Es gibt keine Befehle zum Löschen.
 "Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen."

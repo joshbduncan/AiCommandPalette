@@ -512,7 +512,7 @@ function configUnhideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Показать\ скрытые\ команды\?" + result.join("\n"),
+          "Показать\ скрытые\ команды\?\n" + result.join("\n"),
           "noAsDflt",
           "Подтвердить\ показ\ команд"
         )
@@ -1642,7 +1642,7 @@ function builtinTools() {
 function builtinMenuCommands() {
   return {
     "Файл\ >\ Новый\.\.\.": { cmdType: "menu", cmdActions: [{ type: "menu", value: "new" }] },
-    "Файл\ >\ Новый\ из\ шалона\.\.\.": {
+    "Файл\ >\ Новый\ из\ шаблона\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "newFromTemplate" }],
     },
@@ -3617,7 +3617,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "ClipboardPref" }],
     },
-    "Bearbeiten\ >\ Установки\ >\ Воспроизведение\ черного\ цвета\.\.\.": {
+    "Установки\ >\ Воспроизведение\ черного\ цвета\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "BlackPref" }],
     },

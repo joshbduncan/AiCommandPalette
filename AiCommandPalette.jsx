@@ -274,7 +274,7 @@ function aboutDialog() {
   pAbout.margins = 20;
   pAbout.alignChildren = "fill";
   var aboutText =
-    "Boost your Adobe Illustrator efficiency with quick access to most menu commands, all of your actions, and any script you load right from your keyboard. AND, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.";
+    "Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.";
   pAbout.add("statictext", [0, 0, 500, 100], aboutText, {
     multiline: true,
   });

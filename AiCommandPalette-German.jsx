@@ -274,7 +274,7 @@ function aboutDialog() {
   pAbout.margins = 20;
   pAbout.alignChildren = "fill";
   var aboutText =
-    "Steigern\ Sie\ Ihre\ Effizienz\ in\ Adobe\ Illustrator\ mit\ schnellem\ Zugriff\ auf\ die\ meisten\ Menübefehle\ und\ Werkzeuge\ sowie,\ alle\ Aktionen\ und\ Skripte,\ die\ direkt\ über\ die\ Tastatur\ ausgeführt\ werden\ können\.\ Mit\ benutzerdefinierten\ Arbeitsabläufen\ können\ Sie\ mehrere\ Befehle,\ Aktionen\ und\ Skripte\ kombinieren\.\ Erledigen\ Sie\ wiederkehrende\ Aufgaben\ mit\ Arbeitsabläufen\ und\ steigern\ Sie\ Ihre\ Produktivität\.";
+    "Steigern\ Sie\ Ihre\ Effizienz\ in\ Adobe\ Illustrator\ mit\ schnellem\ Zugriff\ auf\ die\ meisten\ Menübefehle\ und\ Werkzeuge\ sowie\ alle\ Aktionen\ und\ Skripte,\ die\ direkt\ über\ die\ Tastatur\ ausgeführt\ werden\ können\.\ Mit\ benutzerdefinierten\ Arbeitsabläufen\ können\ Sie\ mehrere\ Befehle,\ Aktionen\ und\ Skripte\ kombinieren\.\ Erledigen\ Sie\ wiederkehrende\ Aufgaben\ mit\ Arbeitsabläufen\ und\ steigern\ Sie\ Ihre\ Produktivität\.";
   pAbout.add("statictext", [0, 0, 500, 100], aboutText, {
     multiline: true,
   });

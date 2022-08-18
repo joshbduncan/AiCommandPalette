@@ -126,7 +126,7 @@ Using Ai Command Palette requires some basic knowledge of Illustrator. The scrip
 
 ### Localization
 - [Kurt Gold](https://community.adobe.com/t5/user/viewprofilepage/user-id/8354168) for his work localizing the German.
-- [@creold] for his work localizing the Russian version.
+- [Sergey Osokin](https://github.com/creold) for his work localizing the Russian version.
 
 ### Built-In Menu Commands and Tools
 - [krasnovpro](https://community.adobe.com/t5/user/viewprofilepage/user-id/9425584)
