@@ -808,36 +808,30 @@ function workflowBuilder(arr, edit) {
 
   up.onClick = function () {
     var selected = sortIndexes(steps.selection);
-    for (var i = 0; i < selected.length; i++) {
-      if (selected[i] == 0 || !contiguous(selected)) {
-        return;
-      } else {
-        swap(steps.items[selected[i] - 1], steps.items[selected[i]]);
-      }
-      steps.selection = null;
-      for (var n = 0; n < selected.length; n++) steps.selection = selected[n] - 1;
-    }
+    if (selected[i] == 0 || !contiguous(selected)) return;
+    for (var i = 0; i < selected.length; i++)
+      swap(steps.items[selected[i] - 1], steps.items[selected[i]]);
+    steps.selection = null;
+    for (var n = 0; n < selected.length; n++) steps.selection = selected[n] - 1;
   };
 
   down.onClick = function () {
     var selected = sortIndexes(steps.selection);
-    for (var i = 0; i < selected.length; i++) {
-      if (
-        selected[selected.length - 1] == steps.items.length - 1 ||
-        !contiguous(selected)
-      ) {
-        return;
-      } else {
-        swap(steps.items[selected[i]], steps.items[selected[i] + 1]);
-      }
-      steps.selection = null;
-      for (var n = 0; n < selected.length; n++) steps.selection = selected[n] + 1;
-    }
+    if (
+      selected[selected.length - 1] == steps.items.length - 1 ||
+      !contiguous(selected)
+    )
+      return;
+    for (var i = steps.selection.length - 1; i > -1; i--)
+      swap(steps.items[selected[i]], steps.items[selected[i] + 1]);
+    steps.selection = null;
+    for (var n = 0; n < selected.length; n++) steps.selection = selected[n] + 1;
   };
 
-  // the api gives your the selected items in the order they
-  // were actually selected so their actual list indexes need
-  // to be sorted for the up and down buttons to work
+  // the api returns the selected items in the order they were
+  // selected/clicked by the user when you call `list.selection`
+  // so their actual listbox indexes need to be sorted for the
+  // up, down, and delete buttons to work when multiple items are selected
   function sortIndexes(sel) {
     var indexes = [];
     for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
