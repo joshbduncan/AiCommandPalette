@@ -93,17 +93,17 @@ const data = {
 const aiVersion = parseFloat(app.version);
 const versionedCommands = {
   "Window > History": {
-    minVersion: 16.4, // set to 36.4 for testing (should be 26.4)
+    minVersion: 36.4, // set to 36.4 for testing (should be 26.4)
     type: "commands",
     subtype: "menu",
   },
   tool: {
-    minVersion: 14, // set to 34 for testing (should be 24)
+    minVersion: 34, // set to 34 for testing (should be 24)
     type: "commands",
     subtype: "tool",
   },
   "Show All Built-In Tools...": {
-    minVersion: 14, // set to 34 for testing (should be 24)
+    minVersion: 34, // set to 34 for testing (should be 24)
     type: "commands",
     subtype: "config",
   },

@@ -158,25 +158,57 @@ function processCommandActions(command) {
   if (commandsData.hasOwnProperty(command)) {
     type = commandsData[command].cmdType;
     actions = commandsData[command].cmdActions;
-    // check to make sure any workflow steps haven't been deleted
-    if (type === "workflow" && actions.join(" ").indexOf("\*\*УДАЛЕНО\*\*") >= 0) {
-      alert(
-        "Внимание\nЭтот\ набор\ команд\ включает\ шаги,\ которые\ были\ удалены\n\n" +
-          command
-      );
-    } else {
-      for (var i = 0; i < actions.length; i++) {
-        if (type === "workflow") {
-          processCommandActions(actions[i]);
-        } else {
-          executeCommandAction(actions[i]);
-        }
+    if (type === "workflow" && !checkWorkflow(command, actions)) return;
+    for (var i = 0; i < actions.length; i++) {
+      if (type === "workflow") {
+        processCommandActions(actions[i]);
+      } else {
+        executeCommandAction(actions[i]);
       }
     }
   } else {
     alert("Команда\ удалена\nОтредактируйте\ наборы,\ в\ которых\ она\ использовалась\n\n" + command);
     if (command.indexOf("\*\*УДАЛЕНО\*\*") < 0) deletedCommandNeedsAttention(command);
   }
+}
+
+/**
+ * Check to make sure a workflow doesn't have any deleted commands
+ * or contains functions not compatible with the Ai version.
+ * @param {String} workflow Workflow to check.
+ * @param {Array}  actions  Workflow action steps to check.
+ */
+function checkWorkflow(workflow, actions) {
+  // check to make sure any workflow steps haven't been deleted
+  // if (actions.join(" ").indexOf("\*\*УДАЛЕНО\*\*") >= 0) {
+  //   alert(
+  //     "Внимание\nЭтот\ набор\ команд\ включает\ шаги,\ которые\ были\ удалены\n\n" +
+  //       workflow
+  //   );
+  // }
+  // check to make sure all workflow steps are available in this version
+  var deletedActions = [];
+  var incompatibleActions = [];
+  for (var i = 0; i < actions.length; i++) {
+    var regex = new RegExp("\\s" + "\\*\\*DELETED\\*\\*" + "$");
+    if (actions[i].indexOf("\*\*УДАЛЕНО\*\*") > -1) {
+      deletedActions.push(actions[i].replace(regex, ""));
+    } else if (!allCommands.includes(actions[i])) {
+      incompatibleActions.push(actions[i]);
+    }
+  }
+  if (deletedActions.length > 0)
+    alert(
+      "Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\n" +
+        deletedActions.join("\n")
+    );
+  if (incompatibleActions.length > 0) {
+    alert(
+      "Workflow needs attention.\nThe following action steps from your workflow are incompatible with your version of Illustrator.\n\n" +
+        incompatibleActions.join("\n")
+    );
+  }
+  return deletedActions.length == 0 && incompatibleActions == 0;
 }
 
 /**
