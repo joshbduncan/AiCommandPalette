@@ -158,12 +158,26 @@ function processCommandActions(command) {
   if (commandsData.hasOwnProperty(command)) {
     type = commandsData[command].cmdType;
     actions = commandsData[command].cmdActions;
-    // check to make sure any workflow steps haven't been deleted
-    if (type === "workflow" && actions.join(" ").indexOf("**DELETED**") >= 0) {
-      alert(
-        "Workflow needs attention.\nThis workflow contains action steps that have been deleted.\n\n" +
-          command
-      );
+    if (type === "workflow") {
+      // check to make sure any workflow steps haven't been deleted
+      if (actions.join(" ").indexOf("**DELETED**") >= 0) {
+        alert(
+          "Workflow needs attention.\nThis workflow contains action steps that have been deleted.\n\n" +
+            command
+        );
+      }
+      // check to make sure all workflow steps are available in this version
+      var incompatibleActions = [];
+      for (var i = 0; i < actions.length; i++) {
+        if (!allCommands.hasOwnProperty(actions[i]))
+          incompatibleActions.push(actions[i]);
+      }
+      if (incompatibleActions.length > 0) {
+        alert(
+          "Incompatible Workflow.\nYour workflow contains the following steps that are incompatible with your version if Illustrator.\n\n" +
+            incompatibleActions.join("\n")
+        );
+      }
     } else {
       for (var i = 0; i < actions.length; i++) {
         if (type === "workflow") {
