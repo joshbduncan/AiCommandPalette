@@ -93,17 +93,17 @@ const data = {
 const aiVersion = parseFloat(app.version);
 const versionedCommands = {
   "Window > History": {
-    minVersion: 36.4, // set to 36.4 for testing (should be 26.4)
+    minVersion: 16.4, // set to 36.4 for testing (should be 26.4)
     type: "commands",
     subtype: "menu",
   },
   tool: {
-    minVersion: 34, // set to 34 for testing (should be 24)
+    minVersion: 14, // set to 34 for testing (should be 24)
     type: "commands",
     subtype: "tool",
   },
   "Show All Built-In Tools...": {
-    minVersion: 34, // set to 34 for testing (should be 24)
+    minVersion: 14, // set to 34 for testing (should be 24)
     type: "commands",
     subtype: "config",
   },
@@ -158,39 +158,57 @@ function processCommandActions(command) {
   if (commandsData.hasOwnProperty(command)) {
     type = commandsData[command].cmdType;
     actions = commandsData[command].cmdActions;
-    if (type === "workflow") {
-      // check to make sure any workflow steps haven't been deleted
-      if (actions.join(" ").indexOf("**DELETED**") >= 0) {
-        alert(
-          "Workflow needs attention.\nThis workflow contains action steps that have been deleted.\n\n" +
-            command
-        );
-      }
-      // check to make sure all workflow steps are available in this version
-      var incompatibleActions = [];
-      for (var i = 0; i < actions.length; i++) {
-        if (!allCommands.hasOwnProperty(actions[i]))
-          incompatibleActions.push(actions[i]);
-      }
-      if (incompatibleActions.length > 0) {
-        alert(
-          "Incompatible Workflow.\nYour workflow contains the following steps that are incompatible with your version if Illustrator.\n\n" +
-            incompatibleActions.join("\n")
-        );
-      }
-    } else {
-      for (var i = 0; i < actions.length; i++) {
-        if (type === "workflow") {
-          processCommandActions(actions[i]);
-        } else {
-          executeCommandAction(actions[i]);
-        }
+    if (type === "workflow" && !checkWorkflow(command, actions)) return;
+    for (var i = 0; i < actions.length; i++) {
+      if (type === "workflow") {
+        processCommandActions(actions[i]);
+      } else {
+        executeCommandAction(actions[i]);
       }
     }
   } else {
     alert("Command was deleted.\nEdit any workflows where it was used.\n\n" + command);
     if (command.indexOf("**DELETED**") < 0) deletedCommandNeedsAttention(command);
   }
+}
+
+/**
+ * Check to make sure a workflow doesn't have any deleted commands
+ * or contains functions not compatible with the Ai version.
+ * @param {String} workflow Workflow to check.
+ * @param {Array}  actions  Workflow action steps to check.
+ */
+function checkWorkflow(workflow, actions) {
+  // check to make sure any workflow steps haven't been deleted
+  // if (actions.join(" ").indexOf("**DELETED**") >= 0) {
+  //   alert(
+  //     "Workflow needs attention.\nThis workflow contains action steps that have been deleted.\n\n" +
+  //       workflow
+  //   );
+  // }
+  // check to make sure all workflow steps are available in this version
+  var deletedActions = [];
+  var incompatibleActions = [];
+  for (var i = 0; i < actions.length; i++) {
+    var regex = new RegExp("\\s" + "\\*\\*DELETED\\*\\*" + "$");
+    if (actions[i].indexOf("**DELETED**") > -1) {
+      deletedActions.push(actions[i].replace(regex, ""));
+    } else if (!allCommands.includes(actions[i])) {
+      incompatibleActions.push(actions[i]);
+    }
+  }
+  if (deletedActions.length > 0)
+    alert(
+      "Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\n" +
+        deletedActions.join("\n")
+    );
+  if (incompatibleActions.length > 0) {
+    alert(
+      "Workflow needs attention.\nThe following action steps from your workflow are incompatible with your version of Illustrator.\n\n" +
+        incompatibleActions.join("\n")
+    );
+  }
+  return deletedActions.length == 0 && incompatibleActions == 0;
 }
 
 /**
