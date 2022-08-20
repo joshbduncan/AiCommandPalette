@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Type on renamed function for moving steps in Workflow builder. (`sortIndexes`)
 - Incorrect regex when editing workflows
 - Workflow builder name and ok being enabled at wrong times
+- Changed some variables from const back to var after reported issues
 
 ## [0.2.4] - 2022-08-17
 ### Changed

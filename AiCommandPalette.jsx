@@ -9,11 +9,11 @@ See the LICENSE file for details.
 
 //@target illustrator
 
-const _title = "Ai Command Palette";
-const _version = "0.2.4";
-const _copyright = "Copyright 2022 Josh Duncan";
-const _website = "joshbduncan.com";
-const _github = "https://github.com/joshbduncan";
+var _title = "Ai Command Palette";
+var _version = "0.2.4";
+var _copyright = "Copyright 2022 Josh Duncan";
+var _website = "joshbduncan.com";
+var _github = "https://github.com/joshbduncan";
 
 // Load Needed JavaScript Polyfills
 polyfills();
@@ -23,7 +23,7 @@ RUN THE SCRIPT
 **************************************************/
 
 // Ai Command Palette data object
-const data = {
+var data = {
   commands: {
     script: {},
     workflow: {},
@@ -90,17 +90,17 @@ const data = {
 };
 
 // Load user data
-const dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
-const dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
+var dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
+var dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
 loadUserData(dataFile);
 
 // Setup commands for Ai Command Palette
-const commandsData = buildCommands();
-const allCommands = Object.keys(commandsData);
-const filteredCommands = filterHiddenCommands();
+var commandsData = buildCommands();
+var allCommands = Object.keys(commandsData);
+var filteredCommands = filterHiddenCommands();
 
 // Present the Ai Command Palette
-const paletteWidth = 600;
+var paletteWidth = 600;
 var result = commandPalette(
   (arr = filteredCommands),
   (title = _title),
