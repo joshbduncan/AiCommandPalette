@@ -14,8 +14,7 @@ const _version = "0.2.4";
 const _copyright = "Copyright 2022 Josh Duncan";
 const _website = "joshbduncan.com";
 const _github = "https://github.com/joshbduncan";
-// const aiVersion = parseFloat(app.version);
-const aiVersion = 0;
+const aiVersion = parseFloat(app.version);
 
 // Load Needed JavaScript Polyfills
 polyfills();
@@ -101,18 +100,6 @@ loadUserData(dataFile);
 const commandsData = buildCommands();
 const allCommands = Object.keys(commandsData);
 const filteredCommands = filterHiddenCommands();
-
-// Object data export for dev testing
-// var testFiles = {
-//   "data(object).json": data,
-//   "commandsData.json": commandsData,
-//   "allCommands.json": allCommands,
-// };
-// var f;
-// for (var p in testFiles) {
-//   f = setupFileObject(dataFolder, "TEST - " + p);
-//   writeJSONData(testFiles[p], f);
-// }
 
 // Present the Ai Command Palette
 const paletteWidth = 600;
