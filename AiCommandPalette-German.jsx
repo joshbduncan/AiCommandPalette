@@ -9,13 +9,12 @@ See the LICENSE file for details.
 
 //@target illustrator
 
-const _title = "Kurzbefehle";
-const _version = "0.2.4";
-const _copyright = "Copyright 2022 Josh Duncan";
-const _website = "joshbduncan.com";
-const _github = "https://github.com/joshbduncan";
-// const aiVersion = parseFloat(app.version);
-const aiVersion = 0;
+var _title = "Kurzbefehle";
+var _version = "0.2.4";
+var _copyright = "Copyright 2022 Josh Duncan";
+var _website = "joshbduncan.com";
+var _github = "https://github.com/joshbduncan";
+var aiVersion = parseFloat(app.version);
 
 // Load Needed JavaScript Polyfills
 polyfills();
@@ -25,7 +24,7 @@ RUN THE SCRIPT
 **************************************************/
 
 // Ai Command Palette data object
-const data = {
+var data = {
   commands: {
     script: {},
     workflow: {},
@@ -93,29 +92,17 @@ const data = {
 };
 
 // Load user data
-const dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
-const dataFile = setupFileObject(dataFolder, "Kurzbefehle\.json");
+var dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
+var dataFile = setupFileObject(dataFolder, "Kurzbefehle\.json");
 loadUserData(dataFile);
 
 // Setup commands for Ai Command Palette
-const commandsData = buildCommands();
-const allCommands = Object.keys(commandsData);
-const filteredCommands = filterHiddenCommands();
-
-// Object data export for dev testing
-// var testFiles = {
-//   "data(object).json": data,
-//   "commandsData.json": commandsData,
-//   "allCommands.json": allCommands,
-// };
-// var f;
-// for (var p in testFiles) {
-//   f = setupFileObject(dataFolder, "TEST - " + p);
-//   writeJSONData(testFiles[p], f);
-// }
+var commandsData = buildCommands();
+var allCommands = Object.keys(commandsData);
+var filteredCommands = filterHiddenCommands();
 
 // Present the Ai Command Palette
-const paletteWidth = 600;
+var paletteWidth = 600;
 var result = commandPalette(
   (arr = filteredCommands),
   (title = _title),
