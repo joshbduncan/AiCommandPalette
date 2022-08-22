@@ -142,36 +142,6 @@ function processCommandActions(command) {
 }
 
 /**
- * Check to make sure a workflow doesn't contain deleted actions
- * or actions that are not compatible with the current Ai version.
- * @param {Array} actions  Workflow action steps to check.
- */
-function checkWorkflowActions(actions) {
-  var deletedActions = [];
-  var incompatibleActions = [];
-  for (var i = 0; i < actions.length; i++) {
-    if (actions[i].indexOf("\*\*УДАЛЕНО\*\*") > -1) {
-      var regex = new RegExp("\\s" + "\\*\\*DELETED\\*\\*" + "$");
-      deletedActions.push(actions[i].replace(regex, ""));
-    } else if (!allCommands.includes(actions[i])) {
-      incompatibleActions.push(actions[i]);
-    }
-  }
-  if (deletedActions.length > 0)
-    alert(
-      "Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\n" +
-        deletedActions.join("\n")
-    );
-  if (incompatibleActions.length > 0) {
-    alert(
-      "Workflow needs attention.\nThe following action steps from your workflow are incompatible with your version of Illustrator.\n\n" +
-        incompatibleActions.join("\n")
-    );
-  }
-  return deletedActions.length == 0 && incompatibleActions == 0;
-}
-
-/**
  * Execute command action based.
  * @param {Object} action Action to execute.
  */
@@ -363,8 +333,6 @@ function configLoadScript() {
       }
       if (insertScriptIntoUserData(f)) ct++;
     }
-    // FIXME not sure why this is here?
-    if (ct > 0) buildCommands(data.commands, true);
     alert("Загружено\ скриптов:\n" + ct);
   } else {
     alert("Не\ выбраны\ скрипты\nФайлы\ JavaScript\ имеют\ расширение\ '\.js'\ или\ '\.jsx'");
@@ -942,10 +910,16 @@ function buildCommands() {
   var commandsData = {};
   for (var type in data.commands) {
     for (var command in data.commands[type]) {
-      // check to make sure command meets minimum Ai version
+      // check to make sure command meets minimum/maximum Ai version
       if (
         data.commands[type][command].hasOwnProperty("minVersion") &&
         data.commands[type][command].minVersion > aiVersion
+      ) {
+        delete data.commands[type][command];
+        continue;
+      } else if (
+        data.commands[type][command].hasOwnProperty("maxVersion") &&
+        data.commands[type][command].maxVersion < aiVersion
       ) {
         delete data.commands[type][command];
         continue;
@@ -954,6 +928,36 @@ function buildCommands() {
     }
   }
   return commandsData;
+}
+
+/**
+ * Check to make sure a workflow doesn't contain deleted actions
+ * or actions that are not compatible with the current Ai version.
+ * @param {Array} actions  Workflow action steps to check.
+ */
+function checkWorkflowActions(actions) {
+  var deletedActions = [];
+  var incompatibleActions = [];
+  for (var i = 0; i < actions.length; i++) {
+    if (actions[i].indexOf("\*\*УДАЛЕНО\*\*") > -1) {
+      var regex = new RegExp("\\s" + "\\*\\*DELETED\\*\\*" + "$");
+      deletedActions.push(actions[i].replace(regex, ""));
+    } else if (!allCommands.includes(actions[i])) {
+      incompatibleActions.push(actions[i]);
+    }
+  }
+  if (deletedActions.length > 0)
+    alert(
+      "Внимание\nУказанные\ шаги\ в\ вашем\ наборе\ команд\ больше\ недоступны\n\n" +
+        deletedActions.join("\n")
+    );
+  if (incompatibleActions.length > 0) {
+    alert(
+      "Внимание\nУказанные\ шаги\ в\ вашем\ наборе\ команд\ несовместимы\ с\ этой\ версией\ Illustrator\n\n" +
+        incompatibleActions.join("\n")
+    );
+  }
+  return deletedActions.length == 0 && incompatibleActions == 0;
 }
 
 /**
@@ -1157,12 +1161,6 @@ function setupFolderObject(path) {
 function setupFileObject(path, name) {
   return new File(path + "/" + name);
 }
-
-/**
- * Read Ai "json-like" data from file `f`.
- * @param   {Object} f File object to read.
- * @returns {Object}   Evaluated JSON data.
- */
 
 /**
  * Read Ai "json-like" data from file.
@@ -1767,11 +1765,11 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveacopy" }],
     },
-    "Файл\ >\ Журнал\ версий": {
+    "Файл\ >\ Сохранить\ как\ шаблон\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveastemplate" }],
     },
-    "Файл\ >\ Сохранить\ как\ шаблон": {
+    "Файл\ >\ Файл\ >\ Сохранить\ выделенные\ фрагменты\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe AI Save Selected Slices" }],
     },
@@ -1942,7 +1940,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "PerspectiveGridPresets" }],
     },
-    "Редактирование\ >\ Настройка\ цветова\.\.\.": {
+    "Редактирование\ >\ Настройка\ цветов\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "color" }],
     },

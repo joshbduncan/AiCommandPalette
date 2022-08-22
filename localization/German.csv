@@ -14,7 +14,8 @@ Delete Commands...,Befehle löschen …
 Reveal Preferences File,Einstellungen-Datei anzeigen
 AiCommandPalette.json,Kurzbefehle.json
 **DELETED**,**GELÖSCHT**
-Workflow needs attention.\nThis workflow contains action steps that have been deleted.\n\n,"Achtung: Dieser Arbeitsablauf beinhaltet Aktionsschritte, die gelöscht worden sind.\n\n"
+Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\n,Achtung: Die folgenden Aktionen in Ihrem Arbeitsablauf sind nicht mehr verfügbar.\n\n,
+Workflow needs attention.\nThe following action steps from your workflow are incompatible with your version of Illustrator.\n\n,Achtung: Die folgenden Aktionen in Ihrem Arbeitsablauf sind mit Ihrer Illustrator-Version inkompatibel.\n\n
 Command was deleted.\nEdit any workflows where it was used.\n\n,"Der Befehl wurde gelöscht.\nBearbeiten Sie die Arbeitsabläufe, in denen er benutzt wurde.\n\n"
 Error executing command:\n,Fehler beim Ausführen des Befehls:\n
 Error selecting tool:\n,Fehler beim Auswählen des Werkzeugs:\n
