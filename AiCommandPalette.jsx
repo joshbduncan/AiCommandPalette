@@ -14,6 +14,8 @@ var _version = "0.2.4";
 var _copyright = "Copyright 2022 Josh Duncan";
 var _website = "joshbduncan.com";
 var _github = "https://github.com/joshbduncan";
+
+// get current Ai version to check for function compatibility
 var aiVersion = parseFloat(app.version);
 
 // Load Needed JavaScript Polyfills
