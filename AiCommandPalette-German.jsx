@@ -913,13 +913,13 @@ function buildCommands() {
       // check to make sure command meets minimum/maximum Ai version
       if (
         data.commands[type][command].hasOwnProperty("minVersion") &&
-        data.commands[type][command].minVersion > aiVersion
+        data.commands[type][command].minVersion >= aiVersion
       ) {
         delete data.commands[type][command];
         continue;
       } else if (
         data.commands[type][command].hasOwnProperty("maxVersion") &&
-        data.commands[type][command].maxVersion < aiVersion
+        data.commands[type][command].maxVersion <= aiVersion
       ) {
         delete data.commands[type][command];
         continue;
