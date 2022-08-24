@@ -1,663 +1,664 @@
-"English",""
-"Ai Command Palette",""
-"Command Palette Settings...",""
-"About Ai Command Palette...",""
-"Build Workflow...",""
-"Edit Workflow...",""
-"Workflows Needing Attention...",""
-"Load Scripts...",""
-"Show All Built-In Menu Commands...",""
-"Show All Built-In Tools...",""
-"Hide Commands...",""
-"Reveal Commands...",""
-"Delete Commands...",""
-"Reveal Preferences File",""
-"AiCommandPalette.json",""
-"**DELETED**",""
-"Workflow needs attention.\nThis workflow contains action steps that have been deleted.\n\n",""
-"Command was deleted.\nEdit any workflows where it was used.\n\n",""
-"Error executing command:\n",""
-"Error selecting tool:\n",""
-"Error executing action:\n",""
-"Script no longer exists at original path.\n",""
-"Script:",""
-"Error executing script:\n",""
-"Invalid command type:\n",""
-"Invalid configuration option:\n",""
-"Cancel",""
-"About",""
-"About Ai Command Palette",""
+English,
+Ai Command Palette,
+Command Palette Settings...,
+About Ai Command Palette...,
+Build Workflow...,
+Edit Workflow...,
+Workflows Needing Attention...,
+Load Scripts...,
+Show All Built-In Menu Commands...,
+Show All Built-In Tools...,
+Hide Commands...,
+Reveal Commands...,
+Delete Commands...,
+Reveal Preferences File,
+AiCommandPalette.json,
+**DELETED**,
+Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\n,
+Workflow needs attention.\nThe following action steps from your workflow are incompatible with your version of Illustrator.\n\n,
+Command was deleted.\nEdit any workflows where it was used.\n\n,
+Error executing command:\n,
+Error selecting tool:\n,
+Error executing action:\n,
+Script no longer exists at original path.\n,
+Script:,
+Error executing script:\n,
+Invalid command type:\n,
+Invalid configuration option:\n,
+Cancel,
+About,
+About Ai Command Palette,
 "Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.",""
-"Click here to learn more:",""
-"Palette Settings and Configuration",""
-"Load Script Files",""
-"Script already loaded.\nWould you like to replace the previous script with the new one?",""
-"Script Load Conflict",""
-"Total scripts loaded:\n",""
-"No script files selected.\nMust be JavaScript '.js' or '.jsx' files.",""
-"Workflow Builder",""
-"A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?",""
-"Save Workflow Conflict",""
-"Enter a new name for your workflow.",""
-"New Workflow Name",""
-"Workflow not saved.",""
-"Error saving workflow:\n",""
-"Choose A Workflow To Edit",""
-"There are no workflows that need attention.",""
-"All Built-In Menu Commands",""
-"All Built-In Tools",""
-"Select Menu Commands To Hide",""
-"Hide Commands?\n",""
-"Confirm Commands To Hide",""
-"Total commands hidden:",""
-"There are no commands to hide.",""
-"Select Hidden Menu Commands To Reveal",""
-"Reveal Hidden Commands?\n",""
-"Confirm Commands To Reveal",""
-"Total hidden commands revealed:\n",""
-"There are no hidden commands to reveal.",""
-"Select Menu Commands To Delete",""
-"Delete Command?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n",""
-"Confirm Commands To Delete",""
-"Command couldn't be deleted.",""
-"Total commands deleted:\n",""
-"There are no commands to delete.",""
+Click here to learn more:,
+Palette Settings and Configuration,
+Load Script Files,
+Script already loaded.\nWould you like to replace the previous script with the new one?,
+Script Load Conflict,
+Total scripts loaded:\n,
+No script files selected.\nMust be JavaScript '.js' or '.jsx' files.,
+Workflow Builder,
+A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?,
+Save Workflow Conflict,
+Enter a new name for your workflow.,
+New Workflow Name,
+Workflow not saved.,
+Error saving workflow:\n,
+Choose A Workflow To Edit,
+There are no workflows that need attention.,
+All Built-In Menu Commands,
+All Built-In Tools,
+Select Menu Commands To Hide,
+Hide Commands?\n,
+Confirm Commands To Hide,
+Total commands hidden:,
+There are no commands to hide.,
+Select Hidden Menu Commands To Reveal,
+Reveal Hidden Commands?\n,
+Confirm Commands To Reveal,
+Total hidden commands revealed:\n,
+There are no hidden commands to reveal.,
+Select Menu Commands To Delete,
+Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n,
+Confirm Commands To Delete,
+Command couldn't be deleted.,
+Total commands deleted:\n,
+There are no commands to delete.,
 "Search for commands, actions, and loaded scripts.",""
-"Cancel",""
-"Workflow:",""
-"Search For Commands",""
-"Double-click a command to add it as a workflow step below.",""
-"Workflow Steps",""
-"Workflows will run in order from top to bottom.",""
-"Move Up",""
-"Move Down",""
-"Delete",""
-"Save Workflow As",""
-"Action:",""
-"Error loading script:\n",""
-"Error loading file:\n",""
-"Error writing file:\n",""
-"File > New...",""
-"File > New from Template...",""
-"File > Open...",""
-"File > Browse in Bridge...",""
-"File > Close",""
-"File > Save",""
-"File > Save As...",""
-"File > Save a Copy...",""
-"File > Save as Template...",""
-"File > Save Selected Slices...",""
-"File > Revert",""
-"File > Search Adobe Stock",""
-"File > Place...",""
-"File > Export > Export For Screens...",""
-"File > Export > Export As...",""
-"File > Export > Save for Web (Legacy)...",""
-"File > Export Selection...",""
-"File > Package",""
-"File > Scripts > Other Script...",""
-"File > Document Setup...",""
-"File > Document Color Mode > CMYK Color",""
-"File > Document Color Mode > RGB Color",""
-"File > File Info...",""
-"File > Print...",""
-"File > Exit",""
-"Edit > Undo",""
-"Edit > Redo",""
-"Edit > Cut",""
-"Edit > Copy",""
-"Edit > Paste",""
-"Edit > Paste in Front",""
-"Edit > Paste in Back",""
-"Edit > Paste in Place",""
-"Edit > Paste on All Artboards",""
-"Edit > Paste without Formatting",""
-"Edit > Clear",""
-"Edit > Find & Replace...",""
-"Edit > Find Next",""
-"Edit > Spelling > Auto Spell Check",""
-"Edit > Spelling > Check Spelling...",""
-"Edit > Edit Custom Dictionary...",""
-"Edit > Edit Colors > Recolor Artwork...",""
-"Edit > Edit Colors > Adjust Color Balance...",""
-"Edit > Edit Colors > Blend Front to Back",""
-"Edit > Edit Colors > Blend Horizontally",""
-"Edit > Edit Colors > Blend Vertically",""
-"Edit > Edit Colors > Convert to CMYK",""
-"Edit > Edit Colors > Convert to Grayscale",""
-"Edit > Edit Colors > Convert to RGB",""
-"Edit > Edit Colors > Invert Colors",""
-"Edit > Edit Colors > Overprint Black...",""
-"Edit > Edit Colors > Saturate...",""
-"Edit > Edit Original",""
-"Edit > Transparency Flattener Presets...",""
-"Edit > Print Presets...",""
-"Edit > Adobe PDF Presets...",""
-"Edit > Perspective Grid Presets...",""
-"Edit > Color Settings...",""
-"Edit > Assign Profile...",""
-"Edit > Keyboard Shortcuts...",""
-"Object > Transform > Transform Again",""
-"Object > Transform > Move...",""
-"Object > Transform > Rotate...",""
-"Object > Transform > Reflect...",""
-"Object > Transform > Scale...",""
-"Object > Transform > Shear...",""
-"Object > Transform Each...",""
-"Object > Transform > Reset Bounding Box",""
-"Object > Arrange > Bring to Front",""
-"Object > Arrange > Bring Forward",""
-"Object > Arrange > Send Backward",""
-"Object > Arrange > Send to Back",""
-"Object > Arrange > Send to Current Layer",""
-"Object > Align > Horizontal Align Left",""
-"Object > Align > Horizontal Align Center",""
-"Object > Align > Horizontal Align Right",""
-"Object > Align > Vertical Align Top",""
-"Object > Align > Vertical Align Center",""
-"Object > Align > Vertical Align Bottom",""
-"Object > Group",""
-"Object > Ungroup",""
-"Object > Lock > Selection",""
-"Object > Lock > All Artwork Above",""
-"Object > Lock > Other Layers",""
-"Object > Unlock All",""
-"Object > Hide > Selection",""
-"Object > Hide > All Artwork Above",""
-"Object > Hide > Other Layers",""
-"Object > Show All",""
-"Object > Crop Image",""
-"Object > Rasterize...",""
-"Object > Create Gradient Mesh...",""
-"Object > Create Object Mosaic...",""
-"Object > Create Trim Marks...",""
-"Object > Flatten Transparency...",""
-"Object > Make Pixel Perfect",""
-"Object > Slice > Make",""
-"Object > Slice > Release",""
-"Object > Slice > Create from Guides",""
-"Object > Slice > Create from Selection",""
-"Object > Slice > Duplicate Slice",""
-"Object > Slice > Combine Slices",""
-"Object > Slice > Divide Slices...",""
-"Object > Slice > Delete All",""
-"Object > Slice > Slice Options...",""
-"Object > Slice > Clip to Artboard",""
-"Object > Expand...",""
-"Object > Expand Appearance",""
-"Object > Path > Join",""
-"Object > Path > Average...",""
-"Object > Path > Outline Stroke",""
-"Object > Path > Offset Path...",""
-"Object > Path > Reverse Path Direction",""
-"Object > Path > Simplify...",""
-"Object > Path > Add Anchor Points",""
-"Object > Path > Remove Anchor Points",""
-"Object > Path > Divide Objects Below",""
-"Object > Path > Split Into Grid...",""
-"Object > Path > Clean Up...",""
-"Object > Shape > Convert to Shapes",""
-"Object > Shape > Expand Shapes",""
-"Object > Pattern > Make",""
-"Object > Pattern > Edit Pattern",""
-"Object > Pattern > Tile Edge Color...",""
-"Object > Repeat > Make Radial",""
-"Object > Repeat > Make Grid",""
-"Object > Repeat > Make Symmetry",""
-"Object > Repeat > Release",""
-"Object > Repeat > Repeat Art Options...",""
-"Object > Blend > Make",""
-"Object > Blend > Release",""
-"Object > Blend > Blend Options...",""
-"Object > Blend > Expand",""
-"Object > Blend > Replace Spine",""
-"Object > Blend > Reverse Spine",""
-"Object > Blend > Reverse Front to Back",""
-"Object > Envelope Distort > Make with Warp...",""
-"Object > Envelope Distort > Make with Mesh...",""
-"Object > Envelope Distort > Make with Top Object",""
-"Object > Envelope Distort > Release",""
-"Object > Envelope Distort > Envelope Options...",""
-"Object > Envelope Distort > Expand",""
-"Object > Envelope Distort > Edit Contents",""
-"Object > Perspective > Attach to Active Plane",""
-"Object > Perspective > Release with Perspective",""
-"Object > Perspective > Move Plane to Match Object",""
-"Object > Perspective > Edit Text",""
-"Object > Live Paint > Make",""
-"Object > Live Paint > Merge",""
-"Object > Live Paint > Release",""
-"Object > Live Paint > Gap Options...",""
-"Object > Live Paint > Expand",""
-"Object > Image Trace > Make",""
-"Object > Image Trace > Make and Expand",""
-"Object > Image Trace > Release",""
-"Object > Image Trace > Expand",""
-"Object > Text Wrap > Make",""
-"Object > Text Wrap > Release",""
-"Object > Text Wrap > Text Wrap Options...",""
-"Object > Clipping Mask > Make",""
-"Object > Clipping Mask > Release",""
-"Object > Clipping Mask > Edit Mask",""
-"Object > Compound Path > Make",""
-"Object > Compound Path > Release",""
-"Object > Artboards > Convert to Artboards",""
-"Object > Artboards > Rearrange All Artboards",""
-"Object > Artboards > Fit to Artwork Bounds",""
-"Object > Artboards > Fit to Selected Art",""
-"Object > Graph > Type...",""
-"Object > Graph > Data...",""
-"Object > Graph > Design...",""
-"Object > Graph > Column...",""
-"Object > Graph > Marker...",""
-"Type > More from Adobe Fonts...",""
-"Type > Glyphs",""
-"Type > Area Type Options...",""
-"Type > Type on a Path > Rainbow",""
-"Type > Type on a Path > Skew",""
-"Type > Type on a Path > 3D Ribbon",""
-"Type > Type on a Path > Stair Step",""
-"Type > Type on a Path > Gravity",""
-"Type > Type on a Path > Type on a Path Options...",""
-"Type > Type on a Path > Update Legacy Type on a Path",""
-"Type > Threaded Text > Create",""
-"Type > Threaded Text > Release Selection",""
-"Type > Threaded Text > Remove Threading",""
-"Type > Fit Headline",""
-"Type > Resolve Missing Fonts...",""
-"Type > Find/Replace Font...",""
-"Type > Change Case > UPPERCASE",""
-"Type > Change Case > lowercase",""
-"Type > Change Case > Title Case",""
-"Type > Change Case > Sentence case",""
-"Type > Smart Punctuation...",""
-"Type > Create Outlines",""
-"Type > Optical Margin Alignment",""
-"Type > Show Hidden Characters",""
-"Type > Type Orientation > Horizontal",""
-"Type > Type Orientation > Vertical",""
-"Select > All",""
-"Select > All on Active Artboard",""
-"Select > Deselect",""
-"Select > Reselect",""
-"Select > Inverse",""
-"Select > Next Object Above",""
-"Select > Next Object Below",""
-"Select > Same > Appearance",""
-"Select > Same > Appearance Attribute",""
-"Select > Same > Blending Mode",""
-"Select > Same > Fill & Stroke",""
-"Select > Same > Fill Color",""
-"Select > Same > Opacity",""
-"Select > Same > Stroke Color",""
-"Select > Same > Stroke Weight",""
-"Select > Same > Graphic Style",""
-"Select > Same > Shape",""
-"Select > Same > Symbol Instance",""
-"Select > Same > Link Block Series",""
-"Select > Same > Font Family",""
-"Select > Same > Font Family & Style",""
+Cancel,
+Workflow:,
+Search For Commands,
+Double-click a command to add it as a workflow step below.,
+Workflow Steps,
+Workflows will run in order from top to bottom.,
+Move Up,
+Move Down,
+Delete,
+Save Workflow As,
+Action:,
+Error loading script:\n,
+Error loading file:\n,
+Error writing file:\n,
+File > New...,
+File > New from Template...,
+File > Open...,
+File > Browse in Bridge...,
+File > Close,
+File > Save,
+File > Save As...,
+File > Save a Copy...,
+File > Save as Template...,
+File > Save Selected Slices...,
+File > Revert,
+File > Search Adobe Stock,
+File > Place...,
+File > Export > Export For Screens...,
+File > Export > Export As...,
+File > Export > Save for Web (Legacy)...,
+File > Export Selection...,
+File > Package,
+File > Scripts > Other Script...,
+File > Document Setup...,
+File > Document Color Mode > CMYK Color,
+File > Document Color Mode > RGB Color,
+File > File Info...,
+File > Print...,
+File > Exit,
+Edit > Undo,
+Edit > Redo,
+Edit > Cut,
+Edit > Copy,
+Edit > Paste,
+Edit > Paste in Front,
+Edit > Paste in Back,
+Edit > Paste in Place,
+Edit > Paste on All Artboards,
+Edit > Paste without Formatting,
+Edit > Clear,
+Edit > Find & Replace...,
+Edit > Find Next,
+Edit > Spelling > Auto Spell Check,
+Edit > Spelling > Check Spelling...,
+Edit > Edit Custom Dictionary...,
+Edit > Edit Colors > Recolor Artwork...,
+Edit > Edit Colors > Adjust Color Balance...,
+Edit > Edit Colors > Blend Front to Back,
+Edit > Edit Colors > Blend Horizontally,
+Edit > Edit Colors > Blend Vertically,
+Edit > Edit Colors > Convert to CMYK,
+Edit > Edit Colors > Convert to Grayscale,
+Edit > Edit Colors > Convert to RGB,
+Edit > Edit Colors > Invert Colors,
+Edit > Edit Colors > Overprint Black...,
+Edit > Edit Colors > Saturate...,
+Edit > Edit Original,
+Edit > Transparency Flattener Presets...,
+Edit > Print Presets...,
+Edit > Adobe PDF Presets...,
+Edit > Perspective Grid Presets...,
+Edit > Color Settings...,
+Edit > Assign Profile...,
+Edit > Keyboard Shortcuts...,
+Object > Transform > Transform Again,
+Object > Transform > Move...,
+Object > Transform > Rotate...,
+Object > Transform > Reflect...,
+Object > Transform > Scale...,
+Object > Transform > Shear...,
+Object > Transform Each...,
+Object > Transform > Reset Bounding Box,
+Object > Arrange > Bring to Front,
+Object > Arrange > Bring Forward,
+Object > Arrange > Send Backward,
+Object > Arrange > Send to Back,
+Object > Arrange > Send to Current Layer,
+Object > Align > Horizontal Align Left,
+Object > Align > Horizontal Align Center,
+Object > Align > Horizontal Align Right,
+Object > Align > Vertical Align Top,
+Object > Align > Vertical Align Center,
+Object > Align > Vertical Align Bottom,
+Object > Group,
+Object > Ungroup,
+Object > Lock > Selection,
+Object > Lock > All Artwork Above,
+Object > Lock > Other Layers,
+Object > Unlock All,
+Object > Hide > Selection,
+Object > Hide > All Artwork Above,
+Object > Hide > Other Layers,
+Object > Show All,
+Object > Crop Image,
+Object > Rasterize...,
+Object > Create Gradient Mesh...,
+Object > Create Object Mosaic...,
+Object > Create Trim Marks...,
+Object > Flatten Transparency...,
+Object > Make Pixel Perfect,
+Object > Slice > Make,
+Object > Slice > Release,
+Object > Slice > Create from Guides,
+Object > Slice > Create from Selection,
+Object > Slice > Duplicate Slice,
+Object > Slice > Combine Slices,
+Object > Slice > Divide Slices...,
+Object > Slice > Delete All,
+Object > Slice > Slice Options...,
+Object > Slice > Clip to Artboard,
+Object > Expand...,
+Object > Expand Appearance,
+Object > Path > Join,
+Object > Path > Average...,
+Object > Path > Outline Stroke,
+Object > Path > Offset Path...,
+Object > Path > Reverse Path Direction,
+Object > Path > Simplify...,
+Object > Path > Add Anchor Points,
+Object > Path > Remove Anchor Points,
+Object > Path > Divide Objects Below,
+Object > Path > Split Into Grid...,
+Object > Path > Clean Up...,
+Object > Shape > Convert to Shapes,
+Object > Shape > Expand Shapes,
+Object > Pattern > Make,
+Object > Pattern > Edit Pattern,
+Object > Pattern > Tile Edge Color...,
+Object > Repeat > Make Radial,
+Object > Repeat > Make Grid,
+Object > Repeat > Make Symmetry,
+Object > Repeat > Release,
+Object > Repeat > Repeat Art Options...,
+Object > Blend > Make,
+Object > Blend > Release,
+Object > Blend > Blend Options...,
+Object > Blend > Expand,
+Object > Blend > Replace Spine,
+Object > Blend > Reverse Spine,
+Object > Blend > Reverse Front to Back,
+Object > Envelope Distort > Make with Warp...,
+Object > Envelope Distort > Make with Mesh...,
+Object > Envelope Distort > Make with Top Object,
+Object > Envelope Distort > Release,
+Object > Envelope Distort > Envelope Options...,
+Object > Envelope Distort > Expand,
+Object > Envelope Distort > Edit Contents,
+Object > Perspective > Attach to Active Plane,
+Object > Perspective > Release with Perspective,
+Object > Perspective > Move Plane to Match Object,
+Object > Perspective > Edit Text,
+Object > Live Paint > Make,
+Object > Live Paint > Merge,
+Object > Live Paint > Release,
+Object > Live Paint > Gap Options...,
+Object > Live Paint > Expand,
+Object > Image Trace > Make,
+Object > Image Trace > Make and Expand,
+Object > Image Trace > Release,
+Object > Image Trace > Expand,
+Object > Text Wrap > Make,
+Object > Text Wrap > Release,
+Object > Text Wrap > Text Wrap Options...,
+Object > Clipping Mask > Make,
+Object > Clipping Mask > Release,
+Object > Clipping Mask > Edit Mask,
+Object > Compound Path > Make,
+Object > Compound Path > Release,
+Object > Artboards > Convert to Artboards,
+Object > Artboards > Rearrange All Artboards,
+Object > Artboards > Fit to Artwork Bounds,
+Object > Artboards > Fit to Selected Art,
+Object > Graph > Type...,
+Object > Graph > Data...,
+Object > Graph > Design...,
+Object > Graph > Column...,
+Object > Graph > Marker...,
+Type > More from Adobe Fonts...,
+Type > Glyphs,
+Type > Area Type Options...,
+Type > Type on a Path > Rainbow,
+Type > Type on a Path > Skew,
+Type > Type on a Path > 3D Ribbon,
+Type > Type on a Path > Stair Step,
+Type > Type on a Path > Gravity,
+Type > Type on a Path > Type on a Path Options...,
+Type > Type on a Path > Update Legacy Type on a Path,
+Type > Threaded Text > Create,
+Type > Threaded Text > Release Selection,
+Type > Threaded Text > Remove Threading,
+Type > Fit Headline,
+Type > Resolve Missing Fonts...,
+Type > Find/Replace Font...,
+Type > Change Case > UPPERCASE,
+Type > Change Case > lowercase,
+Type > Change Case > Title Case,
+Type > Change Case > Sentence case,
+Type > Smart Punctuation...,
+Type > Create Outlines,
+Type > Optical Margin Alignment,
+Type > Show Hidden Characters,
+Type > Type Orientation > Horizontal,
+Type > Type Orientation > Vertical,
+Select > All,
+Select > All on Active Artboard,
+Select > Deselect,
+Select > Reselect,
+Select > Inverse,
+Select > Next Object Above,
+Select > Next Object Below,
+Select > Same > Appearance,
+Select > Same > Appearance Attribute,
+Select > Same > Blending Mode,
+Select > Same > Fill & Stroke,
+Select > Same > Fill Color,
+Select > Same > Opacity,
+Select > Same > Stroke Color,
+Select > Same > Stroke Weight,
+Select > Same > Graphic Style,
+Select > Same > Shape,
+Select > Same > Symbol Instance,
+Select > Same > Link Block Series,
+Select > Same > Font Family,
+Select > Same > Font Family & Style,
 "Select > Same > Font Family, Style & Size",""
-"Select > Same > Font Size",""
-"Select > Same > Text Fill Color",""
-"Select > Same > Text Stroke Color",""
-"Select > Same > Text Fill & Stroke Color",""
-"Select > Object > All on Same Layers",""
-"Select > Object > Direction Handles",""
-"Select > Object > Bristle Brush Strokes",""
-"Select > Object > Brush Strokes",""
-"Select > Object > Clipping Masks",""
-"Select > Object > Stray Points",""
-"Select > Object > All Text Objects",""
-"Select > Object > Point Text Objects",""
-"Select > Object > Area Text Objects",""
-"Select > Start/Stop Global Edit",""
-"Select > Save Selection...",""
-"Select > Edit Selection...",""
-"Effect > Apply Last Effect",""
-"Effect > Last Effect",""
-"Effect > Document Raster Effects Settings...",""
-"Effect > 3D and Materials > Extrude & Bevel...",""
-"Effect > 3D and Materials > Revolve...",""
-"Effect > 3D and Materials > Inflate...",""
-"Effect > 3D and Materials > Rotate...",""
-"Effect > 3D and Materials > Materials...",""
-"Effect > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...",""
-"Effect > 3D and Materials > 3D (Classic) > Revolve (Classic)...",""
-"Effect > 3D and Materials > 3D (Classic) > Rotate (Classic)...",""
-"Effect > Convert to Shape > Rectangle...",""
-"Effect > Convert to Shape > Rounded Rectangle...",""
-"Effect > Convert to Shape > Ellipse...",""
-"Effect > Crop Marks",""
-"Effect > Distort & Transform > Free Distort...",""
-"Effect > Distort & Transform > Pucker & Bloat...",""
-"Effect > Distort & Transform > Roughen...",""
-"Effect > Distort & Transform > Transform...",""
-"Effect > Distort & Transform > Tweak...",""
-"Effect > Distort & Transform > Twist...",""
-"Effect > Distort & Transform > Zig Zag...",""
-"Effect > Path > Offset Path...",""
-"Effect > Path > Outline Object",""
-"Effect > Path > Outline Stroke",""
-"Effect > Pathfinder > Add",""
-"Effect > Pathfinder > Intersect",""
-"Effect > Pathfinder > Exclude",""
-"Effect > Pathfinder > Subtract",""
-"Effect > Pathfinder > Minus Back",""
-"Effect > Pathfinder > Divide",""
-"Effect > Pathfinder > Trim",""
-"Effect > Pathfinder > Merge",""
-"Effect > Pathfinder > Crop",""
-"Effect > Pathfinder > Outline",""
-"Effect > Pathfinder > Hard Mix",""
-"Effect > Pathfinder > Soft Mix...",""
-"Effect > Pathfinder > Trap...",""
-"Effect > Rasterize...",""
-"Effect > Stylize > Drop Shadow...",""
-"Effect > Stylize > Feather...",""
-"Effect > Stylize > Inner Glow...",""
-"Effect > Stylize > outer Glow...",""
-"Effect > Stylize > Round Corners...",""
-"Effect > Stylize > Scribble...",""
-"Effect > SVG Filters > Apply SVG Filter...",""
-"Effect > SVG Filters > Import SVG Filter...",""
-"Effect > Warp > Arc...",""
-"Effect > Warp > Arc Lower...",""
-"Effect > Warp > Arc Upper...",""
-"Effect > Warp > Arch...",""
-"Effect > Warp > Bulge...",""
-"Effect > Warp > Shell Lower...",""
-"Effect > Warp > Shell Upper...",""
-"Effect > Warp > Flag...",""
-"Effect > Warp > Wave...",""
-"Effect > Warp > Fish...",""
-"Effect > Warp > Rise...",""
-"Effect > Warp > Fisheye...",""
-"Effect > Warp > Inflate...",""
-"Effect > Warp > Squeeze...",""
-"Effect > Warp > Twist...",""
-"Effect > Effect Gallery...",""
-"Effect > Artistic > Colored Pencil...",""
-"Effect > Artistic > Cutout...",""
-"Effect > Artistic > Dry Brush...",""
-"Effect > Artistic > Film Grain...",""
-"Effect > Artistic > Fresco...",""
-"Effect > Artistic > Neon Glow...",""
-"Effect > Artistic > Paint Daubs...",""
-"Effect > Artistic > Palette Knife...",""
-"Effect > Artistic > Plastic Wrap...",""
-"Effect > Artistic > Poster Edges...",""
-"Effect > Artistic > Rough Pastels...",""
-"Effect > Artistic > Smudge Stick...",""
-"Effect > Artistic > Sponge...",""
-"Effect > Artistic > Underpainting...",""
-"Effect > Artistic > Watercolor...",""
-"Effect > Blur > Gaussian Blur...",""
-"Effect > Blur > Radial Blur...",""
-"Effect > Blur > Smart Blur...",""
-"Effect > Brush Strokes > Accented Edges...",""
-"Effect > Brush Strokes > Angled Strokes...",""
-"Effect > Brush Strokes > Crosshatch...",""
-"Effect > Brush Strokes > Dark Strokes...",""
-"Effect > Brush Strokes > Ink Outlines...",""
-"Effect > Brush Strokes > Spatter...",""
-"Effect > Brush Strokes > Sprayed Strokes...",""
-"Effect > Brush Strokes > Sumi-e...",""
-"Effect > Distort > Diffuse Glow...",""
-"Effect > Distort > Glass...",""
-"Effect > Distort > Ocean Ripple...",""
-"Effect > Pixelate > Color Halftone...",""
-"Effect > Pixelate > Crystallize...",""
-"Effect > Pixelate > Mezzotint...",""
-"Effect > Pixelate > Pointillize...",""
-"Effect > Sketch > Bas Relief...",""
-"Effect > Sketch > Chalk & Charcoal...",""
-"Effect > Sketch > Charcoal...",""
-"Effect > Sketch > Chrome...",""
-"Effect > Sketch > Cont\u00E9 Crayon...",""
-"Effect > Sketch > Graphic Pen...",""
-"Effect > Sketch > Halftone Pattern...",""
-"Effect > Sketch > Note Paper...",""
-"Effect > Sketch > Photocopy...",""
-"Effect > Sketch > Plaster...",""
-"Effect > Sketch > Reticulation...",""
-"Effect > Sketch > Stamp...",""
-"Effect > Sketch > Torn Edges...",""
-"Effect > Sketch > Water Paper...",""
-"Effect > Stylize > Glowing Edges...",""
-"Effect > Texture > Craquelure...",""
-"Effect > Texture > Grain...",""
-"Effect > Texture > Mosaic Tiles...",""
-"Effect > Texture > Patchwork...",""
-"Effect > Texture > Stained Glass...",""
-"Effect > Texture > Texturizer...",""
-"Effect > Video > De-Interlace...",""
-"Effect > Video > NTSC Colors",""
-"View > Outline / Preview",""
-"View > GPU Preview / Preview on CPU",""
-"View > Overprint Preview",""
-"View > Pixel Preview",""
-"View > Proof Setup > Working CMYK",""
-"View > Proof Setup > Legacy Macintosh RGB (Gamma 1.8)",""
-"View > Proof Setup > Internet Standard RGB (sRGB)",""
-"View > Proof Setup > Monitor RGB",""
-"View > Proof Setup > Color blindness - Protanopia-type",""
-"View > Proof Setup > Color blindness - Deuteranopia-type",""
-"View > Proof Setup > Customize...",""
-"View > Proof Colors",""
-"View > Zoom In",""
-"View > Zoom Out",""
-"View > Fit Artboard in Window",""
-"View > Fit All in Window",""
-"View > Show / Hide Slices",""
-"View > Lock Slices",""
-"View > Show / Hide Bounding Box",""
-"View > Show / Hide Transparency Grid",""
-"View > Actual Size",""
-"View > Show / Hide Live Paint Gaps",""
-"View > Show / Hide Gradient Annotator",""
-"View > Show|Hide Corner Widget",""
-"View > Show / Hide Edges",""
-"View > Smart Guides",""
-"View > Perspective Grid > Show / Hide Grid",""
-"View > Perspective Grid > Show / Hide Rulers",""
-"View > Perspective Grid > Snap to Grid",""
-"View > Perspective Grid > Lock Grid",""
-"View > Perspective Grid > Lock Station Point",""
-"View > Perspective Grid > Define Grid",""
-"View > Perspective Grid > Save Grid as Preset",""
-"View > Show / Hide Artboards",""
-"View > Show / Hide Print Tiling",""
-"View > Show / Hide Template",""
-"View > Rulers > Show / Hide Rulers",""
-"View > Rulers > Change to Global Rulers",""
-"View > Rulers > Show / Hide Video Rulers",""
-"View > Show / Hide Text Threads",""
-"View > Guides > Show / Hide Guides",""
-"View > Guides > Lock Guides",""
-"View > Guides > Make Guides",""
-"View > Guides > Release Guides",""
-"View > Guides > Clear Guides",""
-"View > Show / Hide Grid",""
-"View > Snap to Grid",""
-"View > Snap to Point",""
-"View > New View...",""
-"View > Edit Views...",""
-"Window > New Window",""
-"Window > Arrange > Cascade",""
-"Window > Arrange > Tile",""
-"Window > Arrange > Float in Window",""
-"Window > Arrange > Float All in Windows",""
-"Window > Arrange > Consolidate All Windows",""
-"Window > Reset Workspace",""
-"Window > Workspace > New Workspace...",""
-"Window > Workspace > Manage Workspaces...",""
-"Window > Find Extensions on Exchange...",""
-"Window > Control",""
-"Window > Toolbars > Advanced",""
-"Window > Toolbars > Basic",""
-"Window > Toolbars > New Toolbar...",""
-"Window > Toolbars > Manage Toolbar...",""
-"Window > 3D and Materials",""
-"Window > Actions",""
-"Window > Align",""
-"Window > Appearance",""
-"Window > Artboards",""
-"Window > Asset Export",""
-"Window > Attributes",""
-"Window > Brushes",""
-"Window > Color",""
-"Window > Color Guide",""
-"Window > Comments",""
-"Window > CSS Properties",""
-"Window > Document Info",""
-"Window > Flattener Preview",""
-"Window > Gradient",""
-"Window > Graphic Styles",""
-"Window > History",""
-"Window > Info",""
-"Window > Layers",""
-"Window > Libraries",""
-"Window > Links",""
-"Window > Magic Wand",""
-"Window > Navigator",""
-"Window > Pathfinder",""
-"Window > Pattern Options",""
-"Window > Properties",""
-"Window > Separations Preview",""
-"Window > Stroke",""
-"Window > SVG Interactivity",""
-"Window > Swatches",""
-"Window > Symbols",""
-"Window > Transform",""
-"Window > Transparency",""
-"Window > Type > Character",""
-"Window > Type > Character Styles",""
-"Window > Type > Glyphs",""
-"Window > Type > OpenType",""
-"Window > Type > Paragraph",""
-"Window > Type > Paragraph Styles",""
-"Window > Type > Tabs",""
-"Window > Variables",""
-"Window > Version History",""
-"Window > Brush Libraries > Other Library",""
-"Window > Graphic Style Libraries > Other Library...",""
-"Window > Swatch Libraries > Other Library...",""
-"Window > Symbol Libraries > Other Library...",""
-"Help > Illustrator Help...",""
-"Help > Support Community",""
-"Help > Submit Bug/Feature Request...",""
-"Help > System Info...",""
-"Palette > Actions > Batch...",""
-"Palette > Appearance > Add New Fill",""
-"Palette > Appearance > Add New Stroke",""
-"Palette > Graphic Styles > New Graphic Style...",""
-"Palette > Layers > New Layer",""
-"Palette > Layers > New Layer with Dialog...",""
-"Palette > Links > Update Link",""
-"Palette > Swatches > New Swatch...",""
-"Palette > Symbols > New Symbol...",""
-"About Illustrator...",""
-"Preferences > General...",""
-"Preferences > Selection & Anchor Display...",""
-"Preferences > Type...",""
-"Preferences > Units...",""
-"Preferences > Guides & Grid...",""
-"Preferences > Smart Guides...",""
-"Preferences > Slices...",""
-"Preferences > Hyphenation...",""
-"Preferences > Plug-ins & Scratch Disks...",""
-"Preferences > User Interface...",""
-"Preferences > Performance",""
-"Preferences > File Handling...",""
-"Preferences > Clipboard Handling",""
-"Preferences > Appearance of Black...",""
-"Preferences > Devices",""
-"Add Anchor Point Tool",""
-"Anchor Point Tool",""
-"Arc Tool",""
-"Area Graph Tool",""
-"Area Type Tool",""
-"Artboard Tool",""
-"Bar Graph Tool",""
-"Blend Tool",""
-"Bloat Tool",""
-"Blob Brush Tool",""
-"Column Graph Tool",""
-"Crystallize Tool",""
-"Curvature Tool",""
-"Delete Anchor Point Tool",""
-"Direct Selection Tool",""
-"Ellipse Tool",""
-"Eraser Tool",""
-"Eyedropper Tool",""
-"Flare Tool",""
-"Free Transform Tool",""
-"Gradient Tool",""
-"Group Selection Tool",""
-"Hand Tool",""
-"Join Tool",""
-"Knife Tool",""
-"Lasso Tool",""
-"Line Graph Tool",""
-"Line Segment Tool",""
-"Live Paint Bucket Tool",""
-"Live Paint Selection Tool",""
-"Magic Wand Tool",""
-"Measure Tool",""
-"Mesh Tool",""
-"Paintbrush Tool",""
-"Path Eraser Tool",""
-"Pattern Tile Tool",""
-"Pen Tool",""
-"Pencil Tool",""
-"Perspective Grid Tool",""
-"Perspective Selection Tool",""
-"Pie Graph Tool",""
-"Polar Grid Tool",""
-"Polygon Tool",""
-"Print Tiling Tool",""
-"Pucker Tool",""
-"Puppet Warp Tool",""
-"Radar Graph Tool",""
-"Rectangle Tool",""
-"Rectangular Grid Tool",""
-"Reflect Tool",""
-"Reshape Tool",""
-"Rotate Tool",""
-"Rotate View Tool",""
-"Rounded Rectangle Tool",""
-"Scale Tool",""
-"Scallop Tool",""
-"Scatter Graph Tool",""
-"Scissors Tool",""
-"Selection Tool",""
-"Shape Builder Tool",""
-"Shaper Tool",""
-"Shear Tool",""
-"Slice Tool",""
-"Slice Selection Tool",""
-"Smooth Tool",""
-"Spiral Tool",""
-"Stacked Bar Graph Tool",""
-"Stacked Column Graph Tool",""
-"Star Tool",""
-"Symbol Screener Tool",""
-"Symbol Scruncher Tool",""
-"Symbol Shifter Tool",""
-"Symbol Sizer Tool",""
-"Symbol Spinner Tool",""
-"Symbol Sprayer Tool",""
-"Symbol Stainer Tool",""
-"Symbol Styler Tool",""
-"Touch Type Tool",""
-"Twirl Tool",""
-"Type Tool",""
-"Type on a Path Tool",""
-"Vertical Area Type Tool",""
-"Vertical Type Tool",""
-"Vertical Type on a Path Tool",""
-"Warp Tool",""
-"Width Tool",""
-"Wrinkle Tool",""
-"Zoom Tool",""
+Select > Same > Font Size,
+Select > Same > Text Fill Color,
+Select > Same > Text Stroke Color,
+Select > Same > Text Fill & Stroke Color,
+Select > Object > All on Same Layers,
+Select > Object > Direction Handles,
+Select > Object > Bristle Brush Strokes,
+Select > Object > Brush Strokes,
+Select > Object > Clipping Masks,
+Select > Object > Stray Points,
+Select > Object > All Text Objects,
+Select > Object > Point Text Objects,
+Select > Object > Area Text Objects,
+Select > Start/Stop Global Edit,
+Select > Save Selection...,
+Select > Edit Selection...,
+Effect > Apply Last Effect,
+Effect > Last Effect,
+Effect > Document Raster Effects Settings...,
+Effect > 3D and Materials > Extrude & Bevel...,
+Effect > 3D and Materials > Revolve...,
+Effect > 3D and Materials > Inflate...,
+Effect > 3D and Materials > Rotate...,
+Effect > 3D and Materials > Materials...,
+Effect > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...,
+Effect > 3D and Materials > 3D (Classic) > Revolve (Classic)...,
+Effect > 3D and Materials > 3D (Classic) > Rotate (Classic)...,
+Effect > Convert to Shape > Rectangle...,
+Effect > Convert to Shape > Rounded Rectangle...,
+Effect > Convert to Shape > Ellipse...,
+Effect > Crop Marks,
+Effect > Distort & Transform > Free Distort...,
+Effect > Distort & Transform > Pucker & Bloat...,
+Effect > Distort & Transform > Roughen...,
+Effect > Distort & Transform > Transform...,
+Effect > Distort & Transform > Tweak...,
+Effect > Distort & Transform > Twist...,
+Effect > Distort & Transform > Zig Zag...,
+Effect > Path > Offset Path...,
+Effect > Path > Outline Object,
+Effect > Path > Outline Stroke,
+Effect > Pathfinder > Add,
+Effect > Pathfinder > Intersect,
+Effect > Pathfinder > Exclude,
+Effect > Pathfinder > Subtract,
+Effect > Pathfinder > Minus Back,
+Effect > Pathfinder > Divide,
+Effect > Pathfinder > Trim,
+Effect > Pathfinder > Merge,
+Effect > Pathfinder > Crop,
+Effect > Pathfinder > Outline,
+Effect > Pathfinder > Hard Mix,
+Effect > Pathfinder > Soft Mix...,
+Effect > Pathfinder > Trap...,
+Effect > Rasterize...,
+Effect > Stylize > Drop Shadow...,
+Effect > Stylize > Feather...,
+Effect > Stylize > Inner Glow...,
+Effect > Stylize > outer Glow...,
+Effect > Stylize > Round Corners...,
+Effect > Stylize > Scribble...,
+Effect > SVG Filters > Apply SVG Filter...,
+Effect > SVG Filters > Import SVG Filter...,
+Effect > Warp > Arc...,
+Effect > Warp > Arc Lower...,
+Effect > Warp > Arc Upper...,
+Effect > Warp > Arch...,
+Effect > Warp > Bulge...,
+Effect > Warp > Shell Lower...,
+Effect > Warp > Shell Upper...,
+Effect > Warp > Flag...,
+Effect > Warp > Wave...,
+Effect > Warp > Fish...,
+Effect > Warp > Rise...,
+Effect > Warp > Fisheye...,
+Effect > Warp > Inflate...,
+Effect > Warp > Squeeze...,
+Effect > Warp > Twist...,
+Effect > Effect Gallery...,
+Effect > Artistic > Colored Pencil...,
+Effect > Artistic > Cutout...,
+Effect > Artistic > Dry Brush...,
+Effect > Artistic > Film Grain...,
+Effect > Artistic > Fresco...,
+Effect > Artistic > Neon Glow...,
+Effect > Artistic > Paint Daubs...,
+Effect > Artistic > Palette Knife...,
+Effect > Artistic > Plastic Wrap...,
+Effect > Artistic > Poster Edges...,
+Effect > Artistic > Rough Pastels...,
+Effect > Artistic > Smudge Stick...,
+Effect > Artistic > Sponge...,
+Effect > Artistic > Underpainting...,
+Effect > Artistic > Watercolor...,
+Effect > Blur > Gaussian Blur...,
+Effect > Blur > Radial Blur...,
+Effect > Blur > Smart Blur...,
+Effect > Brush Strokes > Accented Edges...,
+Effect > Brush Strokes > Angled Strokes...,
+Effect > Brush Strokes > Crosshatch...,
+Effect > Brush Strokes > Dark Strokes...,
+Effect > Brush Strokes > Ink Outlines...,
+Effect > Brush Strokes > Spatter...,
+Effect > Brush Strokes > Sprayed Strokes...,
+Effect > Brush Strokes > Sumi-e...,
+Effect > Distort > Diffuse Glow...,
+Effect > Distort > Glass...,
+Effect > Distort > Ocean Ripple...,
+Effect > Pixelate > Color Halftone...,
+Effect > Pixelate > Crystallize...,
+Effect > Pixelate > Mezzotint...,
+Effect > Pixelate > Pointillize...,
+Effect > Sketch > Bas Relief...,
+Effect > Sketch > Chalk & Charcoal...,
+Effect > Sketch > Charcoal...,
+Effect > Sketch > Chrome...,
+Effect > Sketch > Cont\u00E9 Crayon...,
+Effect > Sketch > Graphic Pen...,
+Effect > Sketch > Halftone Pattern...,
+Effect > Sketch > Note Paper...,
+Effect > Sketch > Photocopy...,
+Effect > Sketch > Plaster...,
+Effect > Sketch > Reticulation...,
+Effect > Sketch > Stamp...,
+Effect > Sketch > Torn Edges...,
+Effect > Sketch > Water Paper...,
+Effect > Stylize > Glowing Edges...,
+Effect > Texture > Craquelure...,
+Effect > Texture > Grain...,
+Effect > Texture > Mosaic Tiles...,
+Effect > Texture > Patchwork...,
+Effect > Texture > Stained Glass...,
+Effect > Texture > Texturizer...,
+Effect > Video > De-Interlace...,
+Effect > Video > NTSC Colors,
+View > Outline / Preview,
+View > GPU Preview / Preview on CPU,
+View > Overprint Preview,
+View > Pixel Preview,
+View > Proof Setup > Working CMYK,
+View > Proof Setup > Legacy Macintosh RGB (Gamma 1.8),
+View > Proof Setup > Internet Standard RGB (sRGB),
+View > Proof Setup > Monitor RGB,
+View > Proof Setup > Color blindness - Protanopia-type,
+View > Proof Setup > Color blindness - Deuteranopia-type,
+View > Proof Setup > Customize...,
+View > Proof Colors,
+View > Zoom In,
+View > Zoom Out,
+View > Fit Artboard in Window,
+View > Fit All in Window,
+View > Show / Hide Slices,
+View > Lock Slices,
+View > Show / Hide Bounding Box,
+View > Show / Hide Transparency Grid,
+View > Actual Size,
+View > Show / Hide Live Paint Gaps,
+View > Show / Hide Gradient Annotator,
+View > Show|Hide Corner Widget,
+View > Show / Hide Edges,
+View > Smart Guides,
+View > Perspective Grid > Show / Hide Grid,
+View > Perspective Grid > Show / Hide Rulers,
+View > Perspective Grid > Snap to Grid,
+View > Perspective Grid > Lock Grid,
+View > Perspective Grid > Lock Station Point,
+View > Perspective Grid > Define Grid,
+View > Perspective Grid > Save Grid as Preset,
+View > Show / Hide Artboards,
+View > Show / Hide Print Tiling,
+View > Show / Hide Template,
+View > Rulers > Show / Hide Rulers,
+View > Rulers > Change to Global Rulers,
+View > Rulers > Show / Hide Video Rulers,
+View > Show / Hide Text Threads,
+View > Guides > Show / Hide Guides,
+View > Guides > Lock Guides,
+View > Guides > Make Guides,
+View > Guides > Release Guides,
+View > Guides > Clear Guides,
+View > Show / Hide Grid,
+View > Snap to Grid,
+View > Snap to Point,
+View > New View...,
+View > Edit Views...,
+Window > New Window,
+Window > Arrange > Cascade,
+Window > Arrange > Tile,
+Window > Arrange > Float in Window,
+Window > Arrange > Float All in Windows,
+Window > Arrange > Consolidate All Windows,
+Window > Reset Workspace,
+Window > Workspace > New Workspace...,
+Window > Workspace > Manage Workspaces...,
+Window > Find Extensions on Exchange...,
+Window > Control,
+Window > Toolbars > Advanced,
+Window > Toolbars > Basic,
+Window > Toolbars > New Toolbar...,
+Window > Toolbars > Manage Toolbar...,
+Window > 3D and Materials,
+Window > Actions,
+Window > Align,
+Window > Appearance,
+Window > Artboards,
+Window > Asset Export,
+Window > Attributes,
+Window > Brushes,
+Window > Color,
+Window > Color Guide,
+Window > Comments,
+Window > CSS Properties,
+Window > Document Info,
+Window > Flattener Preview,
+Window > Gradient,
+Window > Graphic Styles,
+Window > History,
+Window > Info,
+Window > Layers,
+Window > Libraries,
+Window > Links,
+Window > Magic Wand,
+Window > Navigator,
+Window > Pathfinder,
+Window > Pattern Options,
+Window > Properties,
+Window > Separations Preview,
+Window > Stroke,
+Window > SVG Interactivity,
+Window > Swatches,
+Window > Symbols,
+Window > Transform,
+Window > Transparency,
+Window > Type > Character,
+Window > Type > Character Styles,
+Window > Type > Glyphs,
+Window > Type > OpenType,
+Window > Type > Paragraph,
+Window > Type > Paragraph Styles,
+Window > Type > Tabs,
+Window > Variables,
+Window > Version History,
+Window > Brush Libraries > Other Library,
+Window > Graphic Style Libraries > Other Library...,
+Window > Swatch Libraries > Other Library...,
+Window > Symbol Libraries > Other Library...,
+Help > Illustrator Help...,
+Help > Support Community,
+Help > Submit Bug/Feature Request...,
+Help > System Info...,
+Palette > Actions > Batch...,
+Palette > Appearance > Add New Fill,
+Palette > Appearance > Add New Stroke,
+Palette > Graphic Styles > New Graphic Style...,
+Palette > Layers > New Layer,
+Palette > Layers > New Layer with Dialog...,
+Palette > Links > Update Link,
+Palette > Swatches > New Swatch...,
+Palette > Symbols > New Symbol...,
+About Illustrator...,
+Preferences > General...,
+Preferences > Selection & Anchor Display...,
+Preferences > Type...,
+Preferences > Units...,
+Preferences > Guides & Grid...,
+Preferences > Smart Guides...,
+Preferences > Slices...,
+Preferences > Hyphenation...,
+Preferences > Plug-ins & Scratch Disks...,
+Preferences > User Interface...,
+Preferences > Performance,
+Preferences > File Handling...,
+Preferences > Clipboard Handling,
+Preferences > Appearance of Black...,
+Preferences > Devices,
+Add Anchor Point Tool,
+Anchor Point Tool,
+Arc Tool,
+Area Graph Tool,
+Area Type Tool,
+Artboard Tool,
+Bar Graph Tool,
+Blend Tool,
+Bloat Tool,
+Blob Brush Tool,
+Column Graph Tool,
+Crystallize Tool,
+Curvature Tool,
+Delete Anchor Point Tool,
+Direct Selection Tool,
+Ellipse Tool,
+Eraser Tool,
+Eyedropper Tool,
+Flare Tool,
+Free Transform Tool,
+Gradient Tool,
+Group Selection Tool,
+Hand Tool,
+Join Tool,
+Knife Tool,
+Lasso Tool,
+Line Graph Tool,
+Line Segment Tool,
+Live Paint Bucket Tool,
+Live Paint Selection Tool,
+Magic Wand Tool,
+Measure Tool,
+Mesh Tool,
+Paintbrush Tool,
+Path Eraser Tool,
+Pattern Tile Tool,
+Pen Tool,
+Pencil Tool,
+Perspective Grid Tool,
+Perspective Selection Tool,
+Pie Graph Tool,
+Polar Grid Tool,
+Polygon Tool,
+Print Tiling Tool,
+Pucker Tool,
+Puppet Warp Tool,
+Radar Graph Tool,
+Rectangle Tool,
+Rectangular Grid Tool,
+Reflect Tool,
+Reshape Tool,
+Rotate Tool,
+Rotate View Tool,
+Rounded Rectangle Tool,
+Scale Tool,
+Scallop Tool,
+Scatter Graph Tool,
+Scissors Tool,
+Selection Tool,
+Shape Builder Tool,
+Shaper Tool,
+Shear Tool,
+Slice Tool,
+Slice Selection Tool,
+Smooth Tool,
+Spiral Tool,
+Stacked Bar Graph Tool,
+Stacked Column Graph Tool,
+Star Tool,
+Symbol Screener Tool,
+Symbol Scruncher Tool,
+Symbol Shifter Tool,
+Symbol Sizer Tool,
+Symbol Spinner Tool,
+Symbol Sprayer Tool,
+Symbol Stainer Tool,
+Symbol Styler Tool,
+Touch Type Tool,
+Twirl Tool,
+Type Tool,
+Type on a Path Tool,
+Vertical Area Type Tool,
+Vertical Type Tool,
+Vertical Type on a Path Tool,
+Warp Tool,
+Width Tool,
+Wrinkle Tool,
+Zoom Tool,

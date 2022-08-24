@@ -15,6 +15,9 @@ var _copyright = "Copyright 2022 Josh Duncan";
 var _website = "joshbduncan.com";
 var _github = "https://github.com/joshbduncan";
 
+// get current Ai version to check for function compatibility
+var aiVersion = parseFloat(app.version);
+
 // Load Needed JavaScript Polyfills
 polyfills();
 
@@ -62,6 +65,7 @@ var data = {
         cmdActions: [{ type: "config", value: "showBuiltInMenuCommands" }],
       },
       "Alle\ integrierten\ Werkzeuge\ anzeigen\ …": {
+        minVersion: 24,
         cmdType: "config",
         cmdActions: [{ type: "config", value: "showBuiltInTools" }],
       },
@@ -123,19 +127,12 @@ function processCommandActions(command) {
   if (commandsData.hasOwnProperty(command)) {
     type = commandsData[command].cmdType;
     actions = commandsData[command].cmdActions;
-    // check to make sure any workflow steps haven't been deleted
-    if (type === "workflow" && actions.join(" ").indexOf("\*\*GELÖSCHT\*\*") >= 0) {
-      alert(
-        "Achtung:\ Dieser\ Arbeitsablauf\ beinhaltet\ Aktionsschritte,\ die\ gelöscht\ worden\ sind\.\n\n" +
-          command
-      );
-    } else {
-      for (var i = 0; i < actions.length; i++) {
-        if (type === "workflow") {
-          processCommandActions(actions[i]);
-        } else {
-          executeCommandAction(actions[i]);
-        }
+    if (type === "workflow" && !checkWorkflowActions(actions)) return;
+    for (var i = 0; i < actions.length; i++) {
+      if (type === "workflow") {
+        processCommandActions(actions[i]);
+      } else {
+        executeCommandAction(actions[i]);
       }
     }
   } else {
@@ -336,7 +333,6 @@ function configLoadScript() {
       }
       if (insertScriptIntoUserData(f)) ct++;
     }
-    if (ct > 0) buildCommands(data.commands, true);
     alert("Geladene\ Skripte\ insgesamt:\n" + ct);
   } else {
     alert("Keine\ Skriptdateien\ ausgewählt\.\nEs\ müssen\ JavaScript\-'\.js'\-\ oder\ '\.jsx'\-Dateien\ sein\.");
@@ -914,10 +910,54 @@ function buildCommands() {
   var commandsData = {};
   for (var type in data.commands) {
     for (var command in data.commands[type]) {
+      // check to make sure command meets minimum/maximum Ai version
+      if (
+        data.commands[type][command].hasOwnProperty("minVersion") &&
+        data.commands[type][command].minVersion >= aiVersion
+      ) {
+        delete data.commands[type][command];
+        continue;
+      } else if (
+        data.commands[type][command].hasOwnProperty("maxVersion") &&
+        data.commands[type][command].maxVersion <= aiVersion
+      ) {
+        delete data.commands[type][command];
+        continue;
+      }
       commandsData[command] = data.commands[type][command];
     }
   }
   return commandsData;
+}
+
+/**
+ * Check to make sure a workflow doesn't contain deleted actions
+ * or actions that are not compatible with the current Ai version.
+ * @param {Array} actions  Workflow action steps to check.
+ */
+function checkWorkflowActions(actions) {
+  var deletedActions = [];
+  var incompatibleActions = [];
+  for (var i = 0; i < actions.length; i++) {
+    if (actions[i].indexOf("\*\*GELÖSCHT\*\*") > -1) {
+      var regex = new RegExp("\\s" + "\\*\\*DELETED\\*\\*" + "$");
+      deletedActions.push(actions[i].replace(regex, ""));
+    } else if (!allCommands.includes(actions[i])) {
+      incompatibleActions.push(actions[i]);
+    }
+  }
+  if (deletedActions.length > 0)
+    alert(
+      "Achtung:\ Die\ folgenden\ Aktionen\ in\ Ihrem\ Arbeitsablauf\ sind\ nicht\ mehr\ verfügbar\.\n\n" +
+        deletedActions.join("\n")
+    );
+  if (incompatibleActions.length > 0) {
+    alert(
+      "Achtung:\ Die\ folgenden\ Aktionen\ in\ Ihrem\ Arbeitsablauf\ sind\ mit\ Ihrer\ Illustrator\-Version\ inkompatibel\.\n\n" +
+        incompatibleActions.join("\n")
+    );
+  }
+  return deletedActions.length == 0 && incompatibleActions == 0;
 }
 
 /**
@@ -1123,12 +1163,6 @@ function setupFileObject(path, name) {
 }
 
 /**
- * Read Ai "json-like" data from file `f`.
- * @param   {Object} f File object to read.
- * @returns {Object}   Evaluated JSON data.
- */
-
-/**
  * Read Ai "json-like" data from file.
  * @param   {Object} f File object to read.
  * @returns {Object}   Evaluated JSON data.
@@ -1261,356 +1295,444 @@ function polyfills() {
 function builtinTools() {
   return {
     "Ankerpunkt\-hinzufügen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Add Anchor Point Tool" }],
     },
     "Ankerpunkt\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Anchor Point Tool" }],
     },
     "Bogen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Arc Tool" }],
     },
     "Flächendiagramm": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Area Graph Tool" }],
     },
     "Flächentext\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Area Type Tool" }],
     },
     "Zeichenflächen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Crop Tool" }],
     },
     "Horizontales\ Balkendiagramm": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Bar Graph Tool" }],
     },
     "Angleichen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Blend Tool" }],
     },
     "Aufblasen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Bloat Tool" }],
     },
     "Tropfenpinsel\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Blob Brush Tool" }],
     },
     "Vertikales\ Balkendiagramm": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Column Graph Tool" }],
     },
     "Kristallisieren\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Cyrstallize Tool" }],
     },
     "Kurvenzeichner": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Curvature Tool" }],
     },
     "Ankerpunkt\-löschen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Delete Anchor Point Tool" }],
     },
     "Direktauswahl\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Select Tool" }],
     },
     "Ellipse\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Ellipse Shape Tool" }],
     },
     "Radiergummi\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Eraser Tool" }],
     },
     "Pipette\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Eyedropper Tool" }],
     },
     "Blendenflecke\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Flare Tool" }],
     },
     "Frei\-transformieren\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Free Transform Tool" }],
     },
     "Verlauf\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Gradient Vector Tool" }],
     },
     "Gruppenauswahl\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Object Select Tool" }],
     },
     "Hand\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scroll Tool" }],
     },
     "Zusammenfügen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Corner Join Tool" }],
     },
     "Messer\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Knife Tool" }],
     },
     "Lasso\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Lasso Tool" }],
     },
     "Liniendiagramm": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Line Graph Tool" }],
     },
     "Liniensegment\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Line Tool" }],
     },
     "Interaktiv\-malen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Planar Paintbucket Tool" }],
     },
     "Interaktiv\-malen\-Auswahlwerkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Planar Face Select Tool" }],
     },
     "Zauberstab\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Magic Wand Tool" }],
     },
     "Mess\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Measure Tool" }],
     },
     "Gitter\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Mesh Editing Tool" }],
     },
     "Pinsel\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Brush Tool" }],
     },
     "Löschen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Erase Tool" }],
     },
     "Musterelement\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pattern Tile Tool" }],
     },
     "Zeichenstift\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pen Tool" }],
     },
     "Buntstift\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Tool" }],
     },
     "Perspektivenraster\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Perspektivenraster\-Werkzeug" }],
     },
     "Perspektivenauswahl\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Perspektivenauswahl\-Werkzeug" }],
     },
     "Kreisdiagramm\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pie Graph Tool" }],
     },
     "Radiales\-Raster\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Polar Grid Tool" }],
     },
     "Polygon\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [
         { type: "tool", value: "Adobe Shape Construction Regular Polygon Tool" },
       ],
     },
     "Druckaufteilungs\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Page Tool" }],
     },
     "Zusammenziehen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pucker Tool" }],
     },
     "Formgitter\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Puppet Warp Tool" }],
     },
     "Netzdiagramm": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Radar Graph Tool" }],
     },
     "Rechteck\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rectangle Shape Tool" }],
     },
     "Rechteckiges\-Raster\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rectangular Grid Tool" }],
     },
     "Spiegeln\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Reflect Tool" }],
     },
     "Form\-ändern\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Reshape Tool" }],
     },
     "Drehen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rotate Tool" }],
     },
     "Ansichtdrehung\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rotate Canvas Tool" }],
     },
     "Abgerundetes\-Rechteck\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rounded Rectangle Tool" }],
     },
     "Skalieren\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scale Tool" }],
     },
     "Ausbuchten\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scallop Tool" }],
     },
     "Streudiagramm": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scatter Graph Tool" }],
     },
     "Schere\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scissors Tool" }],
     },
     "Auswahl\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Select Tool" }],
     },
     "Formerstellungs\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Builder Tool" }],
     },
     "Shaper\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shaper Tool" }],
     },
     "Verbiegen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shear Tool" }],
     },
     "Slice\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Slice Tool" }],
     },
     "Slice\-Auswahl\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Slice Select Tool" }],
     },
     "Glätten\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Smooth Tool" }],
     },
     "Spirale\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Construction Spiral Tool" }],
     },
     "Gestapeltes\ horizontales\ Balkendiagramm": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Stacked Bar Graph Tool" }],
     },
     "Gestapeltes\ vertikales\ Balkendiagramm": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Stacked Column Graph Tool" }],
     },
     "Stern\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Construction Star Tool" }],
     },
     "Symbol\-transparent\-gestalten\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Screener Tool" }],
     },
     "Symbol\-stauchen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Scruncher Tool" }],
     },
     "Symbol\-verschieben\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Shifter Tool" }],
     },
     "Symbol\-skalieren\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Sizer Tool" }],
     },
     "Symbol\-drehen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Spinner Tool" }],
     },
     "Symbol\-aufsprühen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Sprayer Tool" }],
     },
     "Symbol\-färben\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Stainer Tool" }],
     },
     "Symbol\-gestalten\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Styler Tool" }],
     },
     "Touch\-Type\-Textwerkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Touch Type Tool" }],
     },
     "Strudel\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe New Twirl Tool" }],
     },
     "Text\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Type Tool" }],
     },
     "Pfadtext\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Path Type Tool" }],
     },
     "Vertikaler\-Flächentext\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Area Type Tool" }],
     },
     "Vertikaler\-Text\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Type Tool" }],
     },
     "Vertikaler\-Pfadtext\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Path Type Tool" }],
     },
     "Verkrümmen\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Warp Tool" }],
     },
     "Breiten\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Width Tool" }],
     },
     "Zerknittern\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Wrinkle Tool" }],
     },
     "Zoom\-Werkzeug": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Zoom Tool" }],
     },
@@ -3345,6 +3467,7 @@ function builtinMenuCommands() {
       cmdActions: [{ type: "menu", value: "Adobe Style Palette" }],
     },
     "Fenster\ >\ Versionsverlauf": {
+      minVersion: 26.4,
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe HistoryPanel Menu Item" }],
     },

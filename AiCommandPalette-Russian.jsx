@@ -15,6 +15,9 @@ var _copyright = "Copyright 2022 Josh Duncan";
 var _website = "joshbduncan.com";
 var _github = "https://github.com/joshbduncan";
 
+// get current Ai version to check for function compatibility
+var aiVersion = parseFloat(app.version);
+
 // Load Needed JavaScript Polyfills
 polyfills();
 
@@ -62,6 +65,7 @@ var data = {
         cmdActions: [{ type: "config", value: "showBuiltInMenuCommands" }],
       },
       "Показать\ стандартные\ инструменты": {
+        minVersion: 24,
         cmdType: "config",
         cmdActions: [{ type: "config", value: "showBuiltInTools" }],
       },
@@ -123,19 +127,12 @@ function processCommandActions(command) {
   if (commandsData.hasOwnProperty(command)) {
     type = commandsData[command].cmdType;
     actions = commandsData[command].cmdActions;
-    // check to make sure any workflow steps haven't been deleted
-    if (type === "workflow" && actions.join(" ").indexOf("\*\*УДАЛЕНО\*\*") >= 0) {
-      alert(
-        "Внимание\nЭтот\ набор\ команд\ включает\ шаги,\ которые\ были\ удалены\n\n" +
-          command
-      );
-    } else {
-      for (var i = 0; i < actions.length; i++) {
-        if (type === "workflow") {
-          processCommandActions(actions[i]);
-        } else {
-          executeCommandAction(actions[i]);
-        }
+    if (type === "workflow" && !checkWorkflowActions(actions)) return;
+    for (var i = 0; i < actions.length; i++) {
+      if (type === "workflow") {
+        processCommandActions(actions[i]);
+      } else {
+        executeCommandAction(actions[i]);
       }
     }
   } else {
@@ -336,7 +333,6 @@ function configLoadScript() {
       }
       if (insertScriptIntoUserData(f)) ct++;
     }
-    if (ct > 0) buildCommands(data.commands, true);
     alert("Загружено\ скриптов:\n" + ct);
   } else {
     alert("Не\ выбраны\ скрипты\nФайлы\ JavaScript\ имеют\ расширение\ '\.js'\ или\ '\.jsx'");
@@ -914,10 +910,54 @@ function buildCommands() {
   var commandsData = {};
   for (var type in data.commands) {
     for (var command in data.commands[type]) {
+      // check to make sure command meets minimum/maximum Ai version
+      if (
+        data.commands[type][command].hasOwnProperty("minVersion") &&
+        data.commands[type][command].minVersion >= aiVersion
+      ) {
+        delete data.commands[type][command];
+        continue;
+      } else if (
+        data.commands[type][command].hasOwnProperty("maxVersion") &&
+        data.commands[type][command].maxVersion <= aiVersion
+      ) {
+        delete data.commands[type][command];
+        continue;
+      }
       commandsData[command] = data.commands[type][command];
     }
   }
   return commandsData;
+}
+
+/**
+ * Check to make sure a workflow doesn't contain deleted actions
+ * or actions that are not compatible with the current Ai version.
+ * @param {Array} actions  Workflow action steps to check.
+ */
+function checkWorkflowActions(actions) {
+  var deletedActions = [];
+  var incompatibleActions = [];
+  for (var i = 0; i < actions.length; i++) {
+    if (actions[i].indexOf("\*\*УДАЛЕНО\*\*") > -1) {
+      var regex = new RegExp("\\s" + "\\*\\*DELETED\\*\\*" + "$");
+      deletedActions.push(actions[i].replace(regex, ""));
+    } else if (!allCommands.includes(actions[i])) {
+      incompatibleActions.push(actions[i]);
+    }
+  }
+  if (deletedActions.length > 0)
+    alert(
+      "Внимание\nУказанные\ шаги\ в\ вашем\ наборе\ команд\ больше\ недоступны\n\n" +
+        deletedActions.join("\n")
+    );
+  if (incompatibleActions.length > 0) {
+    alert(
+      "Внимание\nУказанные\ шаги\ в\ вашем\ наборе\ команд\ несовместимы\ с\ этой\ версией\ Illustrator\n\n" +
+        incompatibleActions.join("\n")
+    );
+  }
+  return deletedActions.length == 0 && incompatibleActions == 0;
 }
 
 /**
@@ -1123,12 +1163,6 @@ function setupFileObject(path, name) {
 }
 
 /**
- * Read Ai "json-like" data from file `f`.
- * @param   {Object} f File object to read.
- * @returns {Object}   Evaluated JSON data.
- */
-
-/**
  * Read Ai "json-like" data from file.
  * @param   {Object} f File object to read.
  * @returns {Object}   Evaluated JSON data.
@@ -1261,356 +1295,444 @@ function polyfills() {
 function builtinTools() {
   return {
     "Инструмент:\ Добавить\ опорную\ точку": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Add Anchor Point Tool" }],
     },
     "Инструмент:\ Опорная\ точка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Anchor Point Tool" }],
     },
     "Инструмент:\ Дуга": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Arc Tool" }],
     },
     "Инструмент:\ Диаграмма\ с\ областями": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Area Graph Tool" }],
     },
     "Инструмент:\ Текст\ в\ области": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Area Type Tool" }],
     },
     "Инструмент:\ Монтажная\ область": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Crop Tool" }],
     },
     "Инструмент:\ Диаграмма\ горизонтальные\ полосы": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Bar Graph Tool" }],
     },
     "Инструмент:\ Переход": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Blend Tool" }],
     },
     "Инструмент:\ Раздувание": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Bloat Tool" }],
     },
     "Инструмент:\ Кисть\-клякса": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Blob Brush Tool" }],
     },
     "Инструмент:\ Диаграмма\ вертикальные\ полосы": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Column Graph Tool" }],
     },
     "Инструмент:\ Кристаллизация": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Cyrstallize Tool" }],
     },
     "Инструмент:\ Кривизна": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Curvature Tool" }],
     },
     "Инструмент:\ Удалить\ опорную\ точку": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Delete Anchor Point Tool" }],
     },
     "Инструмент:\ Прямое\ выделение": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Select Tool" }],
     },
     "Инструмент:\ Эллипс": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Ellipse Shape Tool" }],
     },
     "Инструмент:\ Ластик": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Eraser Tool" }],
     },
     "Инструмент:\ Пипетка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Eyedropper Tool" }],
     },
     "Инструмент:\ Блик": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Flare Tool" }],
     },
     "Инструмент:\ Свободное\ трансформирование": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Free Transform Tool" }],
     },
     "Инструмент:\ Градиент": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Gradient Vector Tool" }],
     },
     "Инструмент:\ Групповое\ выделение": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Object Select Tool" }],
     },
     "Инструмент:\ Рука": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scroll Tool" }],
     },
     "Инструмент:\ Соединение": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Corner Join Tool" }],
     },
     "Инструмент:\ Нож": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Knife Tool" }],
     },
     "Инструмент:\ Лассо": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Direct Lasso Tool" }],
     },
     "Инструмент:\ Линейная\ диаграмма": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Line Graph Tool" }],
     },
     "Инструмент:\ Отрезок\ линии": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Line Tool" }],
     },
     "Инструмент:\ Быстрая\ заливка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Planar Paintbucket Tool" }],
     },
     "Инструмент:\ Выделение\ быстрых\ заливок": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Planar Face Select Tool" }],
     },
     "Инструмент:\ Волшебная\ палочка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Magic Wand Tool" }],
     },
     "Инструмент:\ Линейка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Measure Tool" }],
     },
     "Инструмент:\ Сетка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Mesh Editing Tool" }],
     },
     "Инструмент:\ Кисть": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Brush Tool" }],
     },
     "Инструмент:\ Стирание\ контура": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Erase Tool" }],
     },
     "Инструмент:\ Элемент\ узора": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pattern Tile Tool" }],
     },
     "Инструмент:\ Перо": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pen Tool" }],
     },
     "Инструмент:\ Карандаш": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Tool" }],
     },
     "Инструмент:\ Сетка\ перспективы": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Инструмент:\ Сетка\ перспективы" }],
     },
     "Инструмент:\ Выбор\ перспективы": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Инструмент:\ Выбор\ перспективы" }],
     },
     "Инструмент:\ Круговая\ диаграмма": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pie Graph Tool" }],
     },
     "Инструмент:\ Полярная\ сетка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Polar Grid Tool" }],
     },
     "Инструмент:\ Многоугольник": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [
         { type: "tool", value: "Adobe Shape Construction Regular Polygon Tool" },
       ],
     },
     "Инструмент:\ Разбиение\ для\ печати": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Page Tool" }],
     },
     "Инструмент:\ Втягивание": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Pucker Tool" }],
     },
     "Инструмент:\ Марионеточная\ деформация": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Puppet Warp Tool" }],
     },
     "Инструмент:\ Диаграмма\ радар": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Radar Graph Tool" }],
     },
     "Инструмент:\ Прямоугольник": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rectangle Shape Tool" }],
     },
     "Инструмент:\ Прямоугольная\ сетка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rectangular Grid Tool" }],
     },
     "Инструмент:\ Зеркальное\ отражение": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Reflect Tool" }],
     },
     "Инструмент:\ Перерисовка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Reshape Tool" }],
     },
     "Инструмент:\ Поворот": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rotate Tool" }],
     },
     "Инструмент:\ Поворот\ вида": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rotate Canvas Tool" }],
     },
     "Инструмент:\ Прямоугольник\ со\ скругленными\ углами": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Rounded Rectangle Tool" }],
     },
     "Инструмент:\ Масштаб": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scale Tool" }],
     },
     "Инструмент:\ Зубцы": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scallop Tool" }],
     },
     "Инструмент:\ Точечная\ диаграмма": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scatter Graph Tool" }],
     },
     "Инструмент:\ Ножницы": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Scissors Tool" }],
     },
     "Инструмент:\ Выделение": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Select Tool" }],
     },
     "Инструмент:\ Создание\ фигур": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Builder Tool" }],
     },
     "Инструмент:\ Shaper": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shaper Tool" }],
     },
     "Инструмент:\ Наклон": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shear Tool" }],
     },
     "Инструмент:\ Фрагменты": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Slice Tool" }],
     },
     "Инструмент:\ Выделение\ фрагмента": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Slice Select Tool" }],
     },
     "Инструмент:\ Сглаживание": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Freehand Smooth Tool" }],
     },
     "Инструмент:\ Спираль": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Construction Spiral Tool" }],
     },
     "Инструмент:\ Диаграмма\ горизонтальный\ стек": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Stacked Bar Graph Tool" }],
     },
     "Инструмент:\ Диаграмма\ вертикальный\ стек": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Stacked Column Graph Tool" }],
     },
     "Инструмент:\ Звезда": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Shape Construction Star Tool" }],
     },
     "Инструмент:\ Прозрачность\ символов": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Screener Tool" }],
     },
     "Инструмент:\ Уплотнение\ символов": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Scruncher Tool" }],
     },
     "Инструмент:\ Смещение\ символов": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Shifter Tool" }],
     },
     "Инструмент:\ Размер\ символов": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Sizer Tool" }],
     },
     "Инструмент:\ Вращение\ символов": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Spinner Tool" }],
     },
     "Инструмент:\ Распыление\ символов": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Sprayer Tool" }],
     },
     "Инструмент:\ Обесцвечивание\ символов": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Stainer Tool" }],
     },
     "Инструмент:\ Стили\ символов": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Symbol Styler Tool" }],
     },
     "Инструмент:\ Изменение\ текста": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Touch Type Tool" }],
     },
     "Инструмент:\ Воронка": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe New Twirl Tool" }],
     },
     "Инструмент:\ Текст": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Type Tool" }],
     },
     "Инструмент:\ Текст\ по\ контуру": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Path Type Tool" }],
     },
     "Инструмент:\ Вертикальный\ текст\ в\ области": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Area Type Tool" }],
     },
     "Инструмент:\ Вертикальный\ текст": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Type Tool" }],
     },
     "Инструмент:\ Вертикальный\ текст\ по\ контуру": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Vertical Path Type Tool" }],
     },
     "Инструмент:\ Деформация": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Warp Tool" }],
     },
     "Инструмент:\ Ширина": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Width Tool" }],
     },
     "Инструмент:\ Морщины": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Wrinkle Tool" }],
     },
     "Инструмент:\ Масштаб": {
+      minVersion: 24,
       cmdType: "tool",
       cmdActions: [{ type: "tool", value: "Adobe Zoom Tool" }],
     },
@@ -1643,11 +1765,11 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveacopy" }],
     },
-    "Файл\ >\ Журнал\ версий": {
+    "Файл\ >\ Сохранить\ как\ шаблон\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "saveastemplate" }],
     },
-    "Файл\ >\ Сохранить\ как\ шаблон": {
+    "Файл\ >\ Файл\ >\ Сохранить\ выделенные\ фрагменты\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe AI Save Selected Slices" }],
     },
@@ -1818,7 +1940,7 @@ function builtinMenuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "PerspectiveGridPresets" }],
     },
-    "Редактирование\ >\ Настройка\ цветова\.\.\.": {
+    "Редактирование\ >\ Настройка\ цветов\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "color" }],
     },
@@ -3345,6 +3467,7 @@ function builtinMenuCommands() {
       cmdActions: [{ type: "menu", value: "Adobe Style Palette" }],
     },
     "Окно\ >\ История": {
+      minVersion: 26.4,
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Adobe HistoryPanel Menu Item" }],
     },

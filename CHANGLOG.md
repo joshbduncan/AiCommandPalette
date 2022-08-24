@@ -5,12 +5,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Ai Version Functionality Checker
+    - Original idea brought up by [Sergey Osokin](https://github.com/creold) in issue [#6 selectTool](https://github.com/joshbduncan/AiCommandPalette/issues/6)
+    - Ai Command Palette now checks the current Ai version at startup to determine which menu commands and tools are compatible with your version
+        - If you version doesn't meet the minimum version (or maximum version) of a menu command or tool, it will not be available.
+        - Any previous workflows that use a menu command or tool will no longer work. You'll be notified of this when you try to run the workflow. You can edit it to remove that menu command or tool.
+    - This should allow Ai Command Palette to easily update with the ever changing Ai command and tools.
+    - Any commands/tools can now have the potential properties `minVersion` or `maxVersion`
+        - If either are present and you Ai version doesn't meet the requirement Ai Command Palette will remove that functionality at startup
+
 ### Fixed
 - Workflow builder move down function had a type causing it to move the wrong items when multiple items were selected.
 - Type on renamed function for moving steps in Workflow builder. (`sortIndexes`)
 - Incorrect regex when editing workflows
 - Workflow builder name and ok being enabled at wrong times
 - Changed some variables from const back to var after reported issues
+- Russian and German translations
 
 ## [0.2.4] - 2022-08-17
 ### Changed
