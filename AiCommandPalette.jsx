@@ -81,6 +81,10 @@ var data = {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "deleteCommand" }],
       },
+      "Disable/Enable Windows Flicker Fix": {
+        cmdType: "config",
+        cmdActions: [{ type: "config", value: "toggleWinFlicker" }],
+      },
       "Reveal Preferences File": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "revealPrefFile" }],
@@ -89,6 +93,7 @@ var data = {
   },
   settings: {
     hiddenCommands: [],
+    hideWinFlicker: true,
     version: _version,
   },
 };
@@ -266,6 +271,10 @@ function configAction(action) {
       break;
     case "deleteCommand":
       configDeleteCommand();
+      break;
+    case "toggleWinFlicker":
+      data.settings.hideWinFlicker = !data.settings.hideWinFlicker;
+      alert(data.settings.hideWinFlicker);
       break;
     case "revealPrefFile":
       dataFolder.execute();
@@ -623,7 +632,15 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   win.alignChildren = "fill";
   var q = win.add("edittext");
   q.helpTip = "Search for commands, actions, and loaded scripts.";
-  q.active = true;
+
+  // work-around to stop windows from flashing explorer
+  if (/mac/i.test($.os) || !data.settings.hideWinFlicker) {
+    q.active = true;
+  } else {
+    win.addEventListener("mouseover", function () {
+      q.active = true;
+    });
+  }
 
   if (filter.length > 0) {
     filteredArr = filterOutCommands(arr, filter);
@@ -751,7 +768,16 @@ function workflowBuilder(arr, edit) {
   pSearch.margins = 20;
   var q = pSearch.add("edittext");
   q.helpTip = "Search for commands, actions, and loaded scripts.";
-  q.active = true;
+
+  // work-around to stop windows from flashing explorer
+  if (/mac/i.test($.os) || !data.settings.hideWinFlicker) {
+    q.active = true;
+  } else {
+    win.addEventListener("mouseover", function () {
+      q.active = true;
+    });
+  }
+
   var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
     multiselect: false,
   });

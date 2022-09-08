@@ -86,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - All prompts, alerts, and commands can be translated.
     - Starting with German (DE) translation compiled with help of [Kurt Gold](https://community.adobe.com/t5/user/viewprofilepage/user-id/8354168).
     - Works by creating a CSV file "[Language].txt" in the localization folder.
+- Temporary Windows systems flicker fix as documented by in [issue #8](https://github.com/joshbduncan/AiCommandPalette/issues/8)
 
 ### Changed
 - **CUSTOM COMMANDS** are now called **WORKFLOWS**
