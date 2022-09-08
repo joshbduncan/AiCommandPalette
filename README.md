@@ -18,23 +18,19 @@ If you have worked with Alfred app or VS Code you know how great the “command 
 
 ### Menu Commands
 
-With nearly 500 Menu Commands available to Ai Command Palette ([view all here](https://docs.google.com/spreadsheets/d/1_HoC1JbiBwHxAt8vr-O95ZdYCVuW5fPujUV9WPHAXCY/edit#gid=0)), there isn't much you can't access. I have tested all of them on Adobe Illustrator v26.4.1.
+With nearly 500 Menu Commands available to Ai Command Palette ([view all here](ai_menus.csv), there isn't much you can't access. I have tested all of them on Adobe Illustrator v26.4.1.
 
 !["Built-In Menu Commands"](/images/builtin-commands.png)
 
-If you find a Menu Command that doesn't work on any Adobe Illustrator version greater than v26.4.1, please [file an issue](https://github.com/joshbduncan/AiCommandPalette/issues) in this repository ([how-to](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue))
-
 ### Tools
 
-Quickly access over 80 0f Ai's built-in Tools from your Tools Palette.
+Quickly access over almost 80 of Ai's built-in Tools right from your keyboard without having to remember so many keyboard shortcuts.
 
 !["Built-In Tools"](/images/builtin-tools.png)
 
-If you find a Tool that doesn't work on any Adobe Illustrator version greater than v26.4.1, please [file an issue](https://github.com/joshbduncan/AiCommandPalette/issues) in this repository ([how-to](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue))
-
 ### Actions
 
-Access all of your saved Actions using Ai Command Palette. Actions are listed "Action: Action Name [Action Set]" to make searching/accessing easy. If you create a new action you will have to quit Illustrator and reopen before it will be available in Ai Command Palette.
+Access all of your saved Actions using Ai Command Palette. Actions are listed "Action: Action Name [Action Set]" to make searching/accessing easy. If you create a new action you will have to quit Illustrator and reopen before it will become available in Ai Command Palette.
 
 !["Actions"](/images/actions.png)
 
@@ -48,7 +44,7 @@ Load any JavaScript files (.js or .jsx) you want quick access to using the `Load
 
 ### Workflows
 
-Build fully automated automation workflows from multiple Menu Commands, Actions, Scripts, or even other Workflows 🤯!
+Build fully automated automation workflows using Menu Commands, Tools, Actions, Scripts, or even other Workflows 🤯!
 
 Do You...
 - need to combine multiple scripts into one action?
@@ -68,7 +64,7 @@ You can access the settings for Ai Command Palette by selecting the "Command Pal
 
 ### Workflows Needing Attention...
 
-Whenever you delete a command from Ai Command Palette, be it an Action, Script, or Workflow, any workflows that used that command will no longer work.
+Whenever you delete a command from Ai Command Palette, be it an Action, Script, or Workflow, any workflows that used that command will no longer work. This will also happen if a workflow you are using includes a command or tool that doesn't meet the minimum/maximum requirements for your current version of Adobe Illustrator.
 
 The "Workflows Needing Attention..." command allows you to see any workflows that need to be fixed. After selecting a workflow that needs attention, you'll be taken to the Workflow Editor to either delete or replace the offending command(s).
 
@@ -100,9 +96,9 @@ All of your Ai Command Palette settings are saved on your system to a "json-like
 
 ## Localization
 
-With the help of [Kurt Gold](https://community.adobe.com/t5/user/viewprofilepage/user-id/8354168), Ai Command Palette is currently localized for German versions of Illustrator. This includes all dialogs, alerts, menu commands, and tools.
+With the help of [Kurt Gold](https://community.adobe.com/t5/user/viewprofilepage/user-id/8354168) and [Sergey Osokin](https://github.com/creold), Ai Command Palette is currently localized for German and Russian versions of Illustrator. This includes all dialogs, alerts, menu commands, and tools.
 
-To make this easier in the future (for new versions or other languages), I built a [simple translation utility](translate.py) in Python.
+To make this easier in the future (for new versions or other languages), I built a [simple translation utility](/tools/build_translations.py) in Python.
 
 If anyone wants to offer localization for other languages you can [learn more here](/localization/README.md).
 

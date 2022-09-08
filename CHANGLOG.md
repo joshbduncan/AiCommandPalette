@@ -8,16 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Ai Version Functionality Checker
     - Original idea brought up by [Sergey Osokin](https://github.com/creold) in issue [#6 selectTool](https://github.com/joshbduncan/AiCommandPalette/issues/6)
-    - Ai Command Palette now checks the current Ai version at startup to determine which menu commands and tools are compatible with your version
-        - If you version doesn't meet the minimum version (or maximum version) of a menu command or tool, it will not be available.
-        - Any previous workflows that use a menu command or tool will no longer work. You'll be notified of this when you try to run the workflow. You can edit it to remove that menu command or tool.
-    - This should allow Ai Command Palette to easily update with the ever changing Ai command and tools.
-    - Any commands/tools can now have the potential properties `minVersion` or `maxVersion`
-        - If either are present and you Ai version doesn't meet the requirement Ai Command Palette will remove that functionality at startup
+    - Ai Command Palette now checks the current Ai version at startup to determine which menu commands and tools are compatible with your version of Adobe Illustrator.
+        - If your version doesn't meet the minimum version (or maximum version) of a menu command or tool, it will not be available.
+        - Any previous workflows that use a menu command or tool will no longer work. You'll be notified of this when you try to run the workflow. You can edit the workflow to remove that menu command or tool.
+    - This should allow Ai Command Palette to easily update with the ever changing Ai menu commands and tools.
+    - Any commands/tools can now have properties `minVersion` and `maxVersion`.
+        - If either are present and your Ai version doesn't meet the requirement Ai Command Palette will remove that functionality at startup.
+    - All current min/max versions for menu commands were referenced from the [menuCommandString](https://judicious-night-bca.notion.site/3346ecd2789d4a55aa043d3619b97c58?v=30f64aad6d39424a9e4f138fad06a126) list provided by [sttk3](https://community.adobe.com/t5/user/viewprofilepage/user-id/6940356).
+        - Please note that if the min version listed in the list above was below 17 it was ignored and if the max version was listed at 99 it was also ignored. Ai Command Palette doesn't require a min or max version to be listed for menu commands. All menu commands are executed within a try/catch block so it will fail gracefully and let you know why.
+    - Since they `app.selectTool()` method wasn't introduced until Ai version 24, all tools have that as their min version.
+- Ai Tools and Ai Menu Commands CSV files
+    - [ai_menus.csv](ai_menus.csv) is where I will track all available menu commands (for use with `app.executeMenuCommand()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
+    - [ai_tools.csv](ai_tools.csv) will track all available tool commands (for use with `app.selectTool()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
+    - If you have updates to either file or see something that is incorrect, please [file an issue](https://github.com/joshbduncan/AiCommandPalette/issues) and I'll check it out.
+- New Build Tools
+    - [build_menu_commands.py](/tools/build_menu_commands.py) builds the builtinMenuCommands object directly from [ai_menus.csv](ai_menus.csv), so any updates to menu commands or min/max versions are easier to track and implement.
+    - [build_tool_commands.py](/tools/build_tool_commands.py) builds the builtinToolCommands object directly from [ai_tools.csv](ai_tools.csv), so any updates to tool commands or min/max versions are easier to track and implement.
+
+### Changes
+- [translate.py](/tools/build_translations.py) moved to the tools folder.
 
 ### Fixed
-- Workflow builder move down function had a type causing it to move the wrong items when multiple items were selected.
-- Type on renamed function for moving steps in Workflow builder. (`sortIndexes`)
+- Typo in workflow builder move down function caused it to move the wrong items when multiple items were selected.
+- Typo on renamed function for moving steps in Workflow builder. (`sortIndexes`)
 - Incorrect regex when editing workflows
 - Workflow builder name and ok being enabled at wrong times
 - Changed some variables from const back to var after reported issues

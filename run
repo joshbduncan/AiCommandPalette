@@ -1,0 +1,45 @@
+#!/bin/sh
+
+CDIR=$(pwd)
+APP=$(basename $CDIR)
+
+function build_menus {
+    # build menu commands as json object and put on clipboard
+    F="ai_menus.csv"
+    echo "⚙️ Processing $F file..."
+    python3 tools/build_menu_commands.py -f $F | pbcopy  
+}
+
+function build_tools {
+    # build tool commands as json object and put on clipboard
+    F="ai_tools.csv"
+    echo "⚙️ Processing $F file..."
+    python3 tools/build_tool_commands.py -f $F | pbcopy  
+}
+
+function build_translations {
+    # build all localizations
+    EN_FILE="AiCommandPalette.jsx"
+    LOCALIZATIONS="localization/*.csv"
+    for F in $LOCALIZATIONS
+    do
+    FNAME=$(basename "$F" .csv)
+    if [ $FNAME != "sample" ]
+    then
+        echo "⚙️ Processing $F file..."
+        LOCALIZED_NAME="AiCommandPalette-$FNAME.jsx"
+        python3 tools/build_translations.py -f $EN_FILE -t $F -o $LOCALIZED_NAME
+    fi
+    done
+}
+
+function help {
+  printf "%s <task> [args]\n\nTasks:\n" "${0}"
+
+  compgen -A function | grep -v "^_" | cat -n
+
+  printf "\nExtended help:\n  Each task has comments for general usage\n"
+}
+
+TIMEFORMAT=$'\nTask completed in %3lR'
+time "${@:-help}"
