@@ -274,7 +274,6 @@ function configAction(action) {
       break;
     case "toggleWinFlicker":
       data.settings.hideWinFlicker = !data.settings.hideWinFlicker;
-      alert(data.settings.hideWinFlicker);
       break;
     case "revealPrefFile":
       dataFolder.execute();
@@ -634,9 +633,9 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   q.helpTip = "Befehle,\ Aktionen\ und\ geladene\ Skripte\ suchen\.";
 
   // work-around to stop windows from flashing explorer
-  if (/mac/i.test($.os) || !data.settings.hideWinFlicker) {
+  if (/mac/i.test($.os)) {
     q.active = true;
-  } else {
+  } else if (data.settings.hideWinFlicker) {
     win.addEventListener("mouseover", function () {
       q.active = true;
     });
@@ -770,9 +769,9 @@ function workflowBuilder(arr, edit) {
   q.helpTip = "Befehle,\ Aktionen\ und\ geladene\ Skripte\ suchen\.";
 
   // work-around to stop windows from flashing explorer
-  if (/mac/i.test($.os) || !data.settings.hideWinFlicker) {
+  if (/mac/i.test($.os)) {
     q.active = true;
-  } else {
+  } else if (data.settings.hideWinFlicker) {
     win.addEventListener("mouseover", function () {
       q.active = true;
     });
