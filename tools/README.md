@@ -4,7 +4,7 @@
 
 There are almost 500 menu commands available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the builtinMenuCommands object that is included in the script. It loads all available menu commands from the [ai_menus.csv](/ai_menus.csv) CSV file and builds the JSON object needed in the main script.
 
-```json
+```javascript
 {
   "File > New...": {
     cmdType: "menu",
@@ -40,7 +40,7 @@ Copyright 2022 Josh Duncan (joshbduncan.com)
 
 Just like above, there are almost 80 tools available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the builtinToolCommands object that is included in the script. It loads all available tools from the [ai_tools.csv](/ai_tools.csv) CSV file and builds the JSON object needed in the main script.
 
-```json
+```javascript
 {
   "Add Anchor Point Tool": {
     cmdType: "tool",
