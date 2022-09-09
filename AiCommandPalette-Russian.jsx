@@ -32,7 +32,7 @@ var data = {
     workflow: {},
     action: loadAllActions(),
     defaults: {
-      Настройки: {
+      "Настройки": {
         cmdType: "defaults",
         cmdActions: [{ type: "config", value: "paletteSettings" }],
       },
@@ -40,48 +40,52 @@ var data = {
     menu: builtinMenuCommands(),
     tool: builtinTools(),
     config: {
-      "Об Ai Command Palette": {
+      "Об\ Ai\ Command\ Palette": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "about" }],
       },
-      "Создать набор команд": {
+      "Создать\ набор\ команд": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "buildWorkflow" }],
       },
-      "Редактировать набор команд": {
+      "Редактировать\ набор\ команд": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "editWorkflow" }],
       },
-      "Наборы требующие внимания": {
+      "Наборы\ требующие\ внимания": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "workflowsNeedingAttention" }],
       },
-      "Загрузить скрипты": {
+      "Загрузить\ скрипты": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "loadScript" }],
       },
-      "Показать стандартные команды меню": {
+      "Показать\ стандартные\ команды\ меню": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "showBuiltInMenuCommands" }],
       },
-      "Показать стандартные инструменты": {
+      "Показать\ стандартные\ инструменты": {
         minVersion: 24,
         cmdType: "config",
         cmdActions: [{ type: "config", value: "showBuiltInTools" }],
       },
-      "Скрыть команды": {
+      "Скрыть\ команды": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "hideCommand" }],
       },
-      "Показать команды": {
+      "Показать\ команды": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "unhideCommand" }],
       },
-      "Удалить команды": {
+      "Удалить\ команды": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "deleteCommand" }],
       },
-      "Показать файл настроек": {
+      "Disable/Enable Windows Flicker Fix": {
+        cmdType: "config",
+        cmdActions: [{ type: "config", value: "toggleWinFlicker" }],
+      },
+      "Показать\ файл\ настроек": {
         cmdType: "config",
         cmdActions: [{ type: "config", value: "revealPrefFile" }],
       },
@@ -89,6 +93,7 @@ var data = {
   },
   settings: {
     hiddenCommands: [],
+    hideWinFlicker: true,
     version: _version,
   },
 };
@@ -132,14 +137,14 @@ function processCommandActions(command) {
       check = checkWorkflowActions(actions);
       if (check.deletedActions.length > 0) {
         alert(
-          "Внимание\nУказанные шаги в вашем наборе команд больше недоступны\n\n" +
+          "Внимание\nУказанные\ шаги\ в\ вашем\ наборе\ команд\ больше\ недоступны\n\n" +
             check.deletedActions.join("\n")
         );
         return;
       }
       if (check.incompatibleActions.length > 0) {
         alert(
-          "Внимание\nУказанные шаги в вашем наборе команд несовместимы с этой версией Illustrator\n\n" +
+          "Внимание\nУказанные\ шаги\ в\ вашем\ наборе\ команд\ несовместимы\ с\ этой\ версией\ Illustrator\n\n" +
             check.incompatibleActions.join("\n")
         );
         return;
@@ -153,11 +158,8 @@ function processCommandActions(command) {
       }
     }
   } else {
-    alert(
-      "Команда удалена\nОтредактируйте наборы, в которых она использовалась\n\n" +
-        command
-    );
-    if (command.indexOf("**УДАЛЕНО**") < 0) deletedCommandNeedsAttention(command);
+    alert("Команда\ удалена\nОтредактируйте\ наборы,\ в\ которых\ она\ использовалась\n\n" + command);
+    if (command.indexOf("\*\*УДАЛЕНО\*\*") < 0) deletedCommandNeedsAttention(command);
   }
 }
 
@@ -173,47 +175,47 @@ function executeCommandAction(action) {
       try {
         configAction(action.value);
       } catch (e) {
-        alert("Ошибка запуска команды:\n" + action.value + "\n\n" + e);
+        alert("Ошибка\ запуска\ команды:\n" + action.value + "\n\n" + e);
       }
       break;
     case "menu":
       try {
         app.executeMenuCommand(action.value);
       } catch (e) {
-        alert("Ошибка запуска команды:\n" + action.value + "\n\n" + e);
+        alert("Ошибка\ запуска\ команды:\n" + action.value + "\n\n" + e);
       }
       break;
     case "tool":
       try {
         app.selectTool(action.value);
       } catch (e) {
-        alert("Ошибка выбора инструмента:\n" + action.value + "\n\n" + e);
+        alert("Ошибка\ выбора\ инструмента:\n" + action.value + "\n\n" + e);
       }
       break;
     case "action":
       try {
         app.doScript(action.value.actionName, action.value.actionSet);
       } catch (e) {
-        alert("Ошибка запуска операции:\n" + action.value.actionName + "\n\n" + e);
+        alert("Ошибка\ запуска\ операции:\n" + action.value.actionName + "\n\n" + e);
       }
       break;
     case "script":
       f = new File(action.value.scriptPath);
       if (!f.exists) {
-        alert("Скрипт не найден в указанной папке\n" + action.value.scriptPath);
+        alert("Скрипт\ не\ найден\ в\ указанной\ папке\n" + action.value.scriptPath);
         delete data.commands[type]["Скрипт:" + " " + action.value.scriptName];
-        if (action.value.scriptName.indexOf("**УДАЛЕНО**") < 0)
+        if (action.value.scriptName.indexOf("\*\*УДАЛЕНО\*\*") < 0)
           deletedCommandNeedsAttention("Скрипт:" + " " + action.value.scriptName);
       } else {
         try {
           $.evalFile(f);
         } catch (e) {
-          alert("Ошибка запуска скрипта:\n" + action.value.scriptName + "\n\n" + e);
+          alert("Ошибка\ запуска\ скрипта:\n" + action.value.scriptName + "\n\n" + e);
         }
       }
       break;
     default:
-      alert("Неправильный тип:\n" + type);
+      alert("Неправильный\ тип:\n" + type);
   }
   try {
     app.redraw();
@@ -270,12 +272,15 @@ function configAction(action) {
     case "deleteCommand":
       configDeleteCommand();
       break;
+    case "toggleWinFlicker":
+      data.settings.hideWinFlicker = !data.settings.hideWinFlicker;
+      break;
     case "revealPrefFile":
       dataFolder.execute();
       write = false;
       break;
     default:
-      alert("Неправильный параметр конфигурации:\n" + action);
+      alert("Неправильный\ параметр\ конфигурации:\n" + action);
   }
   if (write) writeUserData(dataFile);
 }
@@ -283,15 +288,15 @@ function configAction(action) {
 /** Show Ai Command Palette About Dialog. */
 function aboutDialog() {
   var win = new Window("dialog");
-  win.text = "О скрипте";
+  win.text = "О\ скрипте";
   win.alignChildren = "fill";
 
   // script info
-  var pAbout = win.add("panel", undefined, "Об Ai Command Palette");
+  var pAbout = win.add("panel", undefined, "Об\ Ai\ Command\ Palette");
   pAbout.margins = 20;
   pAbout.alignChildren = "fill";
   var aboutText =
-    "Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность.";
+    "Повысьте\ скорость\ работы\ в\ Adobe\ Illustrator\ благодаря\ быстрому\ доступу\ к\ большинству\ команд\ меню,\ инструментам,\ всем\ операциям\ и\ любым\ загруженным\ скриптам\ прямо\ с\ клавиатуры\.\ А\ пользовательские\ наборы\ позволяют\ комбинировать\ несколько\ команд,\ операций\ и\ скриптов\.\ Замените\ повторяющиеся\ задачи\ наборами\ команд\ и\ повысьте\ свою\ производительность\.";
   pAbout.add("statictext", [0, 0, 500, 100], aboutText, {
     multiline: true,
   });
@@ -302,7 +307,7 @@ function aboutDialog() {
   links.add("statictext", undefined, "Version " + _version);
   links.add("statictext", undefined, _copyright);
   var githubText =
-    "Нажмите, чтобы узнать больше:" +
+    "Нажмите,\ чтобы\ узнать\ больше:" +
     " " +
     "https://github.com/joshbduncan/AiCommandPalette";
   var github = links.add("statictext", undefined, githubText);
@@ -324,7 +329,7 @@ function aboutDialog() {
 function configPaletteSettings() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.config)),
-    (title = "Настройка и конфигурация панели"),
+    (title = "Настройка\ и\ конфигурация\ панели"),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
@@ -336,7 +341,7 @@ function configPaletteSettings() {
 function configLoadScript() {
   var files, f, fname;
   var ct = 0;
-  var files = loadFileTypes("Загрузка файлов скриптов", true, ".jsx$|.js$");
+  var files = loadFileTypes("Загрузка\ файлов\ скриптов", true, ".jsx$|.js$");
   if (files.length > 0) {
     for (var i = 0; i < files.length; i++) {
       f = files[i];
@@ -344,18 +349,18 @@ function configLoadScript() {
       if (data.commands.script.hasOwnProperty("Скрипт:" + " " + fname)) {
         if (
           !Window.confirm(
-            "Скрипт уже загружен\nХотите его заменить?",
+            "Скрипт\ уже\ загружен\nХотите\ его\ заменить\?",
             "noAsDflt",
-            "Проблема загрузки скрипта"
+            "Проблема\ загрузки\ скрипта"
           )
         )
           continue;
       }
       if (insertScriptIntoUserData(f)) ct++;
     }
-    alert("Загружено скриптов:\n" + ct);
+    alert("Загружено\ скриптов:\n" + ct);
   } else {
-    alert("Не выбраны скрипты\nФайлы JavaScript имеют расширение '.js' или '.jsx'");
+    alert("Не\ выбраны\ скрипты\nФайлы\ JavaScript\ имеют\ расширение\ '\.js'\ или\ '\.jsx'");
   }
 }
 
@@ -377,16 +382,20 @@ function configBuildWorkflow(workflow) {
     while (workflows.includes(result.name)) {
       if (
         Window.confirm(
-          "Набор с таким именем уже существует\nХотите перезаписать предыдущий?",
+          "Набор\ с\ таким\ именем\ уже\ существует\nХотите\ перезаписать\ предыдущий\?",
           "noAsDflt",
-          "Проблема сохранения набора"
+          "Проблема\ сохранения\ набора"
         )
       ) {
         break;
       } else {
-        newName = Window.prompt("Введите новое имя набора", "", "Имя нового набора");
+        newName = Window.prompt(
+          "Введите\ новое\ имя\ набора",
+          "",
+          "Имя\ нового\ набора"
+        );
         if (newName == undefined || newName == null || newName === "") {
-          alert("Набор не сохранен");
+          alert("Набор\ не\ сохранен");
           return false;
         } else {
           result.name = "Набор:" + " " + newName;
@@ -406,7 +415,7 @@ function configBuildWorkflow(workflow) {
         cmdActions: cmdActions,
       };
     } catch (e) {
-      alert("Ошибка сохранения набора:\n" + result.name);
+      alert("Ошибка\ сохранения\ набора:\n" + result.name);
     }
   }
 }
@@ -415,7 +424,7 @@ function configBuildWorkflow(workflow) {
 function configEditWorkflow() {
   var result = commandPalette(
     (arr = Object.keys(data.commands.workflow)),
-    (title = "Выберите набор для редактирования"),
+    (title = "Выберите\ набор\ для\ редактирования"),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
@@ -437,14 +446,14 @@ function configWorkflowsNeedingAttention() {
   if (commands.length > 0) {
     var result = commandPalette(
       (arr = commands),
-      (title = "Выберите набор для редактирования"),
+      (title = "Выберите\ набор\ для\ редактирования"),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = false),
       (filter = [])
     );
     if (result) configBuildWorkflow(result);
   } else {
-    alert("Нет наборов требующих внимания");
+    alert("Нет\ наборов\ требующих\ внимания");
   }
 }
 
@@ -452,7 +461,7 @@ function configWorkflowsNeedingAttention() {
 function showBuiltInMenuCommands() {
   result = commandPalette(
     (arr = Object.keys(data.commands.menu)),
-    (title = "Стандартные команды меню"),
+    (title = "Стандартные\ команды\ меню"),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
@@ -464,7 +473,7 @@ function showBuiltInMenuCommands() {
 function showBuiltInTools() {
   result = commandPalette(
     (arr = Object.keys(data.commands.tool)),
-    (title = "Стандартные инструменты"),
+    (title = "Стандартные\ инструменты"),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false),
     (filter = [])
@@ -484,7 +493,7 @@ function configHideCommand() {
   if (commands.length > 0) {
     result = commandPalette(
       (arr = commands),
-      (title = "Выбрать команды меню для скрытия"),
+      (title = "Выбрать\ команды\ меню\ для\ скрытия"),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
@@ -492,9 +501,9 @@ function configHideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Скрыть команды?\n" + result.join("\n"),
+          "Скрыть\ команды\?\n" + result.join("\n"),
           "noAsDflt",
-          "Подтвердить скрытие команд"
+          "Подтвердить\ скрытие\ команд"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -504,10 +513,10 @@ function configHideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Скрыто команд:" + " " + ct);
+      alert("Скрыто\ команд:" + " " + ct);
     }
   } else {
-    alert("Нет команд для скрытия");
+    alert("Нет\ команд\ для\ скрытия");
   }
 }
 
@@ -519,7 +528,7 @@ function configUnhideCommand() {
   if (data.settings.hiddenCommands.length > 0) {
     result = commandPalette(
       (arr = data.settings.hiddenCommands),
-      (title = "Выберите скрытые команды для показа"),
+      (title = "Выберите\ скрытые\ команды\ для\ показа"),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
@@ -527,9 +536,9 @@ function configUnhideCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Показать скрытые команды?\n" + result.join("\n"),
+          "Показать\ скрытые\ команды\?\n" + result.join("\n"),
           "noAsDflt",
-          "Подтвердить показ команд"
+          "Подтвердить\ показ\ команд"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -543,10 +552,10 @@ function configUnhideCommand() {
       }
     }
     if (ct > 0) {
-      alert("Показано скрытых команд:\n" + ct);
+      alert("Показано\ скрытых\ команд:\n" + ct);
     }
   } else {
-    alert("Нет скрытых команд");
+    alert("Нет\ скрытых\ команд");
   }
 }
 
@@ -564,7 +573,7 @@ function configDeleteCommand() {
   if (commands.length > 0) {
     result = commandPalette(
       (arr = commands),
-      (title = "Выбрать команды меню для удаления"),
+      (title = "Выбрать\ команды\ меню\ для\ удаления"),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = true),
       (filter = [])
@@ -572,10 +581,10 @@ function configDeleteCommand() {
     if (result) {
       if (
         Window.confirm(
-          "Удалить команду?\nУдаленные команды больше не будут работать в любых созданных наборах, где они использовались\n\n" +
+          "Удалить\ команду\?\nУдаленные\ команды\ больше\ не\ будут\ работать\ в\ любых\ созданных\ наборах,\ где\ они\ использовались\n\n" +
             result.join("\n"),
           "noAsDflt",
-          "Подтвердить удаление команд"
+          "Подтвердить\ удаление\ команд"
         )
       ) {
         for (var i = 0; i < result.length; i++) {
@@ -592,10 +601,10 @@ function configDeleteCommand() {
       }
     }
     if (ct > 0) {
-      alert("Удалено команд:" + ct);
+      alert("Удалено\ команд:" + ct);
     }
   } else {
-    alert("Нет команд для удаления");
+    alert("Нет\ команд\ для\ удаления");
   }
 }
 
@@ -621,8 +630,16 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   win.text = title;
   win.alignChildren = "fill";
   var q = win.add("edittext");
-  q.helpTip = "Поиск команд, операций и загруженных скриптов";
-  q.active = true;
+  q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
+
+  // work-around to stop windows from flashing explorer
+  if (/mac/i.test($.os)) {
+    q.active = true;
+  } else if (data.settings.hideWinFlicker) {
+    win.addEventListener("mouseover", function () {
+      q.active = true;
+    });
+  }
 
   if (filter.length > 0) {
     filteredArr = filterOutCommands(arr, filter);
@@ -732,7 +749,7 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
  */
 function workflowBuilder(arr, edit) {
   var win = new Window("dialog");
-  win.text = "Редактор наборов команд";
+  win.text = "Редактор\ наборов\ команд";
   win.alignChildren = "fill";
 
   // if editing a command, pull in variables to prefill dialog with
@@ -745,26 +762,35 @@ function workflowBuilder(arr, edit) {
   }
 
   // command search
-  var pSearch = win.add("panel", undefined, "Поиск команд");
+  var pSearch = win.add("panel", undefined, "Поиск\ команд");
   pSearch.alignChildren = ["fill", "center"];
   pSearch.margins = 20;
   var q = pSearch.add("edittext");
-  q.helpTip = "Поиск команд, операций и загруженных скриптов";
-  q.active = true;
+  q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
+
+  // work-around to stop windows from flashing explorer
+  if (/mac/i.test($.os)) {
+    q.active = true;
+  } else if (data.settings.hideWinFlicker) {
+    win.addEventListener("mouseover", function () {
+      q.active = true;
+    });
+  }
+
   var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
     multiselect: false,
   });
-  commands.helpTip = "Нажмите дважды на команду, чтобы добавить ее как шаг набора";
+  commands.helpTip = "Нажмите\ дважды\ на\ команду,\ чтобы\ добавить\ ее\ как\ шаг\ набора";
   commands.selection = 0;
 
   // workflow steps
-  var pSteps = win.add("panel", undefined, "Шаги набора");
+  var pSteps = win.add("panel", undefined, "Шаги\ набора");
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
   var steps = pSteps.add("listbox", [0, 0, paletteWidth + 40, 182], actions, {
     multiselect: true,
   });
-  steps.helpTip = "Набор выполняется сверху вниз";
+  steps.helpTip = "Набор\ выполняется\ сверху\ вниз";
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
   var up = stepButtons.add("button", undefined, "Наверх");
@@ -775,7 +801,7 @@ function workflowBuilder(arr, edit) {
   del.preferredSize.width = 100;
 
   // command name
-  var pName = win.add("panel", undefined, "Сохранить набор как");
+  var pName = win.add("panel", undefined, "Сохранить\ набор\ как");
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;
   var name = pName.add("edittext", undefined, command);
@@ -959,7 +985,7 @@ function checkWorkflowActions(actions) {
   var deletedActions = [];
   var incompatibleActions = [];
   for (var i = 0; i < actions.length; i++) {
-    if (actions[i].indexOf("**УДАЛЕНО**") > -1) {
+    if (actions[i].indexOf("\*\*УДАЛЕНО\*\*") > -1) {
       var regex = new RegExp("\\s" + "\\*\\*DELETED\\*\\*" + "$");
       deletedActions.push(actions[i].replace(regex, ""));
     } else if (!allCommands.includes(actions[i])) {
@@ -985,7 +1011,7 @@ function deletedCommandNeedsAttention(action) {
     for (var n = 0; n < actions.length; n++) {
       curAction = actions[n];
       if (curAction === action) {
-        data.commands.workflow[command].cmdActions[n] = curAction + " " + "**УДАЛЕНО**";
+        data.commands.workflow[command].cmdActions[n] = curAction + " " + "\*\*УДАЛЕНО\*\*";
       }
     }
   }
@@ -1097,7 +1123,7 @@ function insertScriptIntoUserData(f) {
     };
     return true;
   } catch (e) {
-    alert("Ошибка загрузки скрипта:\n" + f.fsName);
+    alert("Ошибка\ загрузки\ скрипта:\n" + f.fsName);
     return false;
   }
 }
@@ -1187,7 +1213,7 @@ function readJSONData(f) {
     json = f.read();
     f.close();
   } catch (e) {
-    alert("Ошибка загрузки файла:\n" + f);
+    alert("Ошибка\ загрузки\ файла:\n" + f);
   }
   obj = eval(json);
   return obj;
@@ -1206,7 +1232,7 @@ function writeJSONData(obj, f) {
     f.write(data);
     f.close();
   } catch (e) {
-    alert("Ошибка записи файла:\n" + f);
+    alert("Ошибка\ записи\ файла:\n" + f);
   }
 }
 
@@ -1306,7 +1332,7 @@ function polyfills() {
 /** Default Ai Tools */
 function builtinTools() {
   return {
-    "Инструмент: Добавить опорную точку": {
+    "Инструмент:\ Добавить\ опорную\ точку": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1316,7 +1342,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Опорная точка": {
+    "Инструмент:\ Опорная\ точка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1326,7 +1352,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Дуга": {
+    "Инструмент:\ Дуга": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1336,7 +1362,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Диаграмма с областями": {
+    "Инструмент:\ Диаграмма\ с\ областями": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1346,7 +1372,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Текст в области": {
+    "Инструмент:\ Текст\ в\ области": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1356,7 +1382,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Монтажная область": {
+    "Инструмент:\ Монтажная\ область": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1366,7 +1392,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Диаграмма горизонтальные полосы": {
+    "Инструмент:\ Диаграмма\ горизонтальные\ полосы": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1376,7 +1402,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Переход": {
+    "Инструмент:\ Переход": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1386,7 +1412,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Раздувание": {
+    "Инструмент:\ Раздувание": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1396,7 +1422,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Кисть-клякса": {
+    "Инструмент:\ Кисть\-клякса": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1406,7 +1432,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Диаграмма вертикальные полосы": {
+    "Инструмент:\ Диаграмма\ вертикальные\ полосы": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1416,7 +1442,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Кристаллизация": {
+    "Инструмент:\ Кристаллизация": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1426,7 +1452,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Кривизна": {
+    "Инструмент:\ Кривизна": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1436,7 +1462,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Удалить опорную точку": {
+    "Инструмент:\ Удалить\ опорную\ точку": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1446,7 +1472,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Прямое выделение": {
+    "Инструмент:\ Прямое\ выделение": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1456,7 +1482,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Эллипс": {
+    "Инструмент:\ Эллипс": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1466,7 +1492,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Ластик": {
+    "Инструмент:\ Ластик": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1476,7 +1502,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Пипетка": {
+    "Инструмент:\ Пипетка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1486,7 +1512,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Блик": {
+    "Инструмент:\ Блик": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1496,7 +1522,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Свободное трансформирование": {
+    "Инструмент:\ Свободное\ трансформирование": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1506,7 +1532,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Градиент": {
+    "Инструмент:\ Градиент": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1516,7 +1542,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Групповое выделение": {
+    "Инструмент:\ Групповое\ выделение": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1526,7 +1552,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Рука": {
+    "Инструмент:\ Рука": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1536,7 +1562,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Соединение": {
+    "Инструмент:\ Соединение": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1546,7 +1572,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Нож": {
+    "Инструмент:\ Нож": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1556,7 +1582,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Лассо": {
+    "Инструмент:\ Лассо": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1566,7 +1592,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Линейная диаграмма": {
+    "Инструмент:\ Линейная\ диаграмма": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1576,7 +1602,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Отрезок линии": {
+    "Инструмент:\ Отрезок\ линии": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1586,7 +1612,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Быстрая заливка": {
+    "Инструмент:\ Быстрая\ заливка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1596,7 +1622,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Выделение быстрых заливок": {
+    "Инструмент:\ Выделение\ быстрых\ заливок": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1606,7 +1632,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Волшебная палочка": {
+    "Инструмент:\ Волшебная\ палочка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1616,7 +1642,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Линейка": {
+    "Инструмент:\ Линейка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1626,7 +1652,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Сетка": {
+    "Инструмент:\ Сетка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1636,7 +1662,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Кисть": {
+    "Инструмент:\ Кисть": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1646,7 +1672,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Стирание контура": {
+    "Инструмент:\ Стирание\ контура": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1656,7 +1682,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Элемент узора": {
+    "Инструмент:\ Элемент\ узора": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1666,7 +1692,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Перо": {
+    "Инструмент:\ Перо": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1676,7 +1702,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Карандаш": {
+    "Инструмент:\ Карандаш": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1686,27 +1712,27 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Сетка перспективы": {
+    "Инструмент:\ Сетка\ перспективы": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
         {
           type: "tool",
-          value: "Инструмент: Сетка перспективы",
+          value: "Инструмент:\ Сетка\ перспективы",
         },
       ],
     },
-    "Инструмент: Выбор перспективы": {
+    "Инструмент:\ Выбор\ перспективы": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
         {
           type: "tool",
-          value: "Инструмент: Выбор перспективы",
+          value: "Инструмент:\ Выбор\ перспективы",
         },
       ],
     },
-    "Инструмент: Круговая диаграмма": {
+    "Инструмент:\ Круговая\ диаграмма": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1716,7 +1742,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Полярная сетка": {
+    "Инструмент:\ Полярная\ сетка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1726,7 +1752,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Многоугольник": {
+    "Инструмент:\ Многоугольник": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1736,7 +1762,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Разбиение для печати": {
+    "Инструмент:\ Разбиение\ для\ печати": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1746,7 +1772,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Втягивание": {
+    "Инструмент:\ Втягивание": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1756,7 +1782,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Марионеточная деформация": {
+    "Инструмент:\ Марионеточная\ деформация": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1766,7 +1792,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Диаграмма радар": {
+    "Инструмент:\ Диаграмма\ радар": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1776,7 +1802,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Прямоугольник": {
+    "Инструмент:\ Прямоугольник": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1786,7 +1812,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Прямоугольная сетка": {
+    "Инструмент:\ Прямоугольная\ сетка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1796,7 +1822,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Зеркальное отражение": {
+    "Инструмент:\ Зеркальное\ отражение": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1806,7 +1832,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Перерисовка": {
+    "Инструмент:\ Перерисовка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1816,7 +1842,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Поворот": {
+    "Инструмент:\ Поворот": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1826,7 +1852,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Поворот вида": {
+    "Инструмент:\ Поворот\ вида": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1836,7 +1862,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Прямоугольник со скругленными углами": {
+    "Инструмент:\ Прямоугольник\ со\ скругленными\ углами": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1846,7 +1872,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Масштаб": {
+    "Инструмент:\ Масштаб": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1856,7 +1882,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Зубцы": {
+    "Инструмент:\ Зубцы": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1866,7 +1892,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Точечная диаграмма": {
+    "Инструмент:\ Точечная\ диаграмма": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1876,7 +1902,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Ножницы": {
+    "Инструмент:\ Ножницы": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1886,7 +1912,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Выделение": {
+    "Инструмент:\ Выделение": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1896,7 +1922,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Создание фигур": {
+    "Инструмент:\ Создание\ фигур": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1906,7 +1932,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Shaper": {
+    "Инструмент:\ Shaper": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1916,7 +1942,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Наклон": {
+    "Инструмент:\ Наклон": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1926,7 +1952,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Фрагменты": {
+    "Инструмент:\ Фрагменты": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1936,7 +1962,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Выделение фрагмента": {
+    "Инструмент:\ Выделение\ фрагмента": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1946,7 +1972,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Сглаживание": {
+    "Инструмент:\ Сглаживание": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1956,7 +1982,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Спираль": {
+    "Инструмент:\ Спираль": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1966,7 +1992,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Диаграмма горизонтальный стек": {
+    "Инструмент:\ Диаграмма\ горизонтальный\ стек": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1976,7 +2002,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Диаграмма вертикальный стек": {
+    "Инструмент:\ Диаграмма\ вертикальный\ стек": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1986,7 +2012,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Звезда": {
+    "Инструмент:\ Звезда": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -1996,7 +2022,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Прозрачность символов": {
+    "Инструмент:\ Прозрачность\ символов": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2006,7 +2032,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Уплотнение символов": {
+    "Инструмент:\ Уплотнение\ символов": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2016,7 +2042,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Смещение символов": {
+    "Инструмент:\ Смещение\ символов": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2026,7 +2052,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Размер символов": {
+    "Инструмент:\ Размер\ символов": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2036,7 +2062,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Вращение символов": {
+    "Инструмент:\ Вращение\ символов": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2046,7 +2072,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Распыление символов": {
+    "Инструмент:\ Распыление\ символов": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2056,7 +2082,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Обесцвечивание символов": {
+    "Инструмент:\ Обесцвечивание\ символов": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2066,7 +2092,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Стили символов": {
+    "Инструмент:\ Стили\ символов": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2076,7 +2102,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Изменение текста": {
+    "Инструмент:\ Изменение\ текста": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2086,7 +2112,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Воронка": {
+    "Инструмент:\ Воронка": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2096,7 +2122,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Текст": {
+    "Инструмент:\ Текст": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2106,7 +2132,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Текст по контуру": {
+    "Инструмент:\ Текст\ по\ контуру": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2116,7 +2142,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Вертикальный текст в области": {
+    "Инструмент:\ Вертикальный\ текст\ в\ области": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2126,7 +2152,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Вертикальный текст": {
+    "Инструмент:\ Вертикальный\ текст": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2136,7 +2162,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Вертикальный текст по контуру": {
+    "Инструмент:\ Вертикальный\ текст\ по\ контуру": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2146,7 +2172,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Деформация": {
+    "Инструмент:\ Деформация": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2156,7 +2182,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Ширина": {
+    "Инструмент:\ Ширина": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2166,7 +2192,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Морщины": {
+    "Инструмент:\ Морщины": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2176,7 +2202,7 @@ function builtinTools() {
         },
       ],
     },
-    "Инструмент: Масштаб": {
+    "Инструмент:\ Масштаб": {
       cmdType: "tool",
       minVersion: 24,
       cmdActions: [
@@ -2192,7 +2218,7 @@ function builtinTools() {
 /** Default Ai Menu Commands */
 function builtinMenuCommands() {
   return {
-    "Файл > Новый...": {
+    "Файл\ >\ Новый\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2201,7 +2227,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Новый из шаблона...": {
+    "Файл\ >\ Новый\ из\ шаблона\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2210,7 +2236,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Открыть...": {
+    "Файл\ >\ Открыть\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2219,7 +2245,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Обзор в Bridge...": {
+    "Файл\ >\ Обзор\ в\ Bridge\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2228,7 +2254,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Закрыть": {
+    "Файл\ >\ Закрыть": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2237,7 +2263,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Сохранить": {
+    "Файл\ >\ Сохранить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2246,7 +2272,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Сохранить как...": {
+    "Файл\ >\ Сохранить\ как\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2255,7 +2281,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Сохранить копию...": {
+    "Файл\ >\ Сохранить\ копию\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2264,7 +2290,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Сохранить как шаблон...": {
+    "Файл\ >\ Сохранить\ как\ шаблон\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2273,7 +2299,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Файл > Сохранить выделенные фрагменты...": {
+    "Файл\ >\ Файл\ >\ Сохранить\ выделенные\ фрагменты\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2282,7 +2308,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Восстановить": {
+    "Файл\ >\ Восстановить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2291,7 +2317,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Поиск в Adobe Stock...": {
+    "Файл\ >\ Поиск\ в\ Adobe\ Stock\.\.\.": {
       cmdType: "menu",
       minVersion: 19,
       cmdActions: [
@@ -2301,7 +2327,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Поместить...": {
+    "Файл\ >\ Поместить\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2310,7 +2336,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Экспорт для экранов...": {
+    "Файл\ >\ Экспорт\ для\ экранов\.\.\.": {
       cmdType: "menu",
       minVersion: 20,
       cmdActions: [
@@ -2320,7 +2346,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Экспортировать как...": {
+    "Файл\ >\ Экспортировать\ как\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2329,7 +2355,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Сохранить для браузеров...": {
+    "Файл\ >\ Сохранить\ для\ браузеров\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2338,7 +2364,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Экспортировать выделенные элементы...": {
+    "Файл\ >\ Экспортировать\ выделенные\ элементы\.\.\.": {
       cmdType: "menu",
       minVersion: 20,
       cmdActions: [
@@ -2348,7 +2374,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Упаковать...": {
+    "Файл\ >\ Упаковать\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2357,7 +2383,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Сценарии > Другой сценарий...": {
+    "Файл\ >\ Сценарии\ >\ Другой\ сценарий\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2366,7 +2392,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Параметры документа...": {
+    "Файл\ >\ Параметры\ документа\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2375,7 +2401,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Цветовой режим документа > CMYK": {
+    "Файл\ >\ Цветовой\ режим\ документа\ >\ CMYK": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2384,7 +2410,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Цветовой режим документа > RGB": {
+    "Файл\ >\ Цветовой\ режим\ документа\ >\ RGB": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2393,7 +2419,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Сведения о файле...": {
+    "Файл\ >\ Сведения\ о\ файле\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2402,7 +2428,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Печать...": {
+    "Файл\ >\ Печать\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2411,7 +2437,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Файл > Выход": {
+    "Файл\ >\ Выход": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2420,7 +2446,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Отменить": {
+    "Редактирование\ >\ Отменить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2429,7 +2455,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Повторить": {
+    "Редактирование\ >\ Повторить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2438,7 +2464,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Вырезать": {
+    "Редактирование\ >\ Вырезать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2447,7 +2473,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Копировать": {
+    "Редактирование\ >\ Копировать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2456,7 +2482,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Вставить": {
+    "Редактирование\ >\ Вставить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2465,7 +2491,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Вставить на передний план": {
+    "Редактирование\ >\ Вставить\ на\ передний\ план": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2474,7 +2500,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Вставить на задний план": {
+    "Редактирование\ >\ Вставить\ на\ задний\ план": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2483,7 +2509,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Вставить на то же место": {
+    "Редактирование\ >\ Вставить\ на\ то\ же\ место": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2492,7 +2518,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Вставить на все монтажные области": {
+    "Редактирование\ >\ Вставить\ на\ все\ монтажные\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2501,7 +2527,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Вставить без форматирования": {
+    "Редактирование\ >\ Вставить\ без\ форматирования": {
       cmdType: "menu",
       minVersion: 25.3,
       cmdActions: [
@@ -2511,7 +2537,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Очистить": {
+    "Редактирование\ >\ Очистить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2520,7 +2546,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Найти и заменить...": {
+    "Редактирование\ >\ Найти\ и\ заменить\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2529,7 +2555,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Найти следующий": {
+    "Редактирование\ >\ Найти\ следующий": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2538,7 +2564,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Орфография > Автоматическая проверка орфографии": {
+    "Редактирование\ >\ Орфография\ >\ Автоматическая\ проверка\ орфографии": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
@@ -2548,7 +2574,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Орфография > Проверка орфографии…": {
+    "Редактирование\ >\ Орфография\ >\ Проверка\ орфографии…": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
@@ -2558,7 +2584,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать заказной словарь...": {
+    "Редактирование\ >\ Редактировать\ заказной\ словарь\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2567,7 +2593,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Перекрасить графический объект...": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Перекрасить\ графический\ объект\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2576,7 +2602,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Коррекция цветового баланса...": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Коррекция\ цветового\ баланса\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2585,7 +2611,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Переход от верхнего к нижнему": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Переход\ от\ верхнего\ к\ нижнему": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2594,7 +2620,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Переход по горизонтали": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Переход\ по\ горизонтали": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2603,7 +2629,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Переход по вертикали": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Переход\ по\ вертикали": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2612,7 +2638,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Преобразовать в CMYK": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Преобразовать\ в\ CMYK": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2621,7 +2647,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Преобразовать в градации серого": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Преобразовать\ в\ градации\ серого": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2630,7 +2656,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Преобразовать в RGB": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Преобразовать\ в\ RGB": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2639,7 +2665,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Негатив": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Негатив": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2648,7 +2674,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Наложение черного цвета...": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Наложение\ черного\ цвета\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2657,7 +2683,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать цвета > Изменить насыщенность...": {
+    "Редактирование\ >\ Редактировать\ цвета\ >\ Изменить\ насыщенность\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2666,7 +2692,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Редактировать оригинал": {
+    "Редактирование\ >\ Редактировать\ оригинал": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2675,7 +2701,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Стили обработки прозрачности...": {
+    "Редактирование\ >\ Стили\ обработки\ прозрачности\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2684,7 +2710,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Стили печати...": {
+    "Редактирование\ >\ Стили\ печати\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2693,7 +2719,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Стили преобразования в Adobe PDF...": {
+    "Редактирование\ >\ Стили\ преобразования\ в\ Adobe\ PDF\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2702,7 +2728,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Стили сетки перспективы...": {
+    "Редактирование\ >\ Стили\ сетки\ перспективы\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2711,7 +2737,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Настройка цветов...": {
+    "Редактирование\ >\ Настройка\ цветов\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2720,7 +2746,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Назначить профиль...": {
+    "Редактирование\ >\ Назначить\ профиль\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2729,7 +2755,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Редактирование > Комбинации клавиш...": {
+    "Редактирование\ >\ Комбинации\ клавиш\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2738,7 +2764,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трансформировать > Повторить трансформирование": {
+    "Объект\ >\ Трансформировать\ >\ Повторить\ трансформирование": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2747,7 +2773,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трансформировать > Перемещение...": {
+    "Объект\ >\ Трансформировать\ >\ Перемещение\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2756,7 +2782,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трансформировать > Поворот...": {
+    "Объект\ >\ Трансформировать\ >\ Поворот\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2765,7 +2791,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трансформировать > Зеркальное отражение...": {
+    "Объект\ >\ Трансформировать\ >\ Зеркальное\ отражение\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2774,7 +2800,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трансформировать > Масштабирование...": {
+    "Объект\ >\ Трансформировать\ >\ Масштабирование\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2783,7 +2809,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трансформировать > Наклон...": {
+    "Объект\ >\ Трансформировать\ >\ Наклон\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2792,7 +2818,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трансформировать > Трансформировать каждый...": {
+    "Объект\ >\ Трансформировать\ >\ Трансформировать\ каждый\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2801,17 +2827,16 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трансформировать > Восстановить настройки по умолчанию ограничительной рамки":
-      {
-        cmdType: "menu",
-        cmdActions: [
-          {
-            type: "menu",
-            value: "AI Reset Bounding Box",
-          },
-        ],
-      },
-    "Объект > Монтаж > На передний план": {
+    "Объект\ >\ Трансформировать\ >\ Восстановить\ настройки\ по\ умолчанию\ ограничительной\ рамки": {
+      cmdType: "menu",
+      cmdActions: [
+        {
+          type: "menu",
+          value: "AI Reset Bounding Box",
+        },
+      ],
+    },
+    "Объект\ >\ Монтаж\ >\ На\ передний\ план": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2820,7 +2845,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Монтаж > На задний план": {
+    "Объект\ >\ Монтаж\ >\ На\ задний\ план": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2829,7 +2854,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Монтаж > Переложить вперед": {
+    "Объект\ >\ Монтаж\ >\ Переложить\ вперед": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2838,7 +2863,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Монтаж > Переложить назад": {
+    "Объект\ >\ Монтаж\ >\ Переложить\ назад": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2847,7 +2872,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Монтаж > Отправить на текущий слой": {
+    "Объект\ >\ Монтаж\ >\ Отправить\ на\ текущий\ слой": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2856,7 +2881,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Выравнивание > Горизонтальное выравнивание, влево": {
+    "Объект\ >\ Выравнивание\ >\ Горизонтальное\ выравнивание,\ влево": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
@@ -2866,7 +2891,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Выравнивание > Горизонтальное выравнивание, центр": {
+    "Объект\ >\ Выравнивание\ >\ Горизонтальное\ выравнивание,\ центр": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
@@ -2876,7 +2901,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Выравнивание > Горизонтальное выравнивание, вправо": {
+    "Объект\ >\ Выравнивание\ >\ Горизонтальное\ выравнивание,\ вправо": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
@@ -2886,7 +2911,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Выравнивание > Вертикальное выравнивание, вверх": {
+    "Объект\ >\ Выравнивание\ >\ Вертикальное\ выравнивание,\ вверх": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
@@ -2896,7 +2921,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Выравнивание > Вертикальное выравнивание, центр": {
+    "Объект\ >\ Выравнивание\ >\ Вертикальное\ выравнивание,\ центр": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
@@ -2906,7 +2931,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Выравнивание > Вертикальное выравнивание, вниз": {
+    "Объект\ >\ Выравнивание\ >\ Вертикальное\ выравнивание,\ вниз": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
@@ -2916,7 +2941,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Сгруппировать": {
+    "Объект\ >\ Сгруппировать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2925,7 +2950,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Разгруппировать": {
+    "Объект\ >\ Разгруппировать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2934,7 +2959,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Закрепить > Выделенное": {
+    "Объект\ >\ Закрепить\ >\ Выделенное": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2943,7 +2968,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Закрепить > Все объекты выше": {
+    "Объект\ >\ Закрепить\ >\ Все\ объекты\ выше": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2952,7 +2977,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Закрепить > Остальные слои": {
+    "Объект\ >\ Закрепить\ >\ Остальные\ слои": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2961,7 +2986,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Освободить все": {
+    "Объект\ >\ Освободить\ все": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2970,7 +2995,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Скрыть > Выделенное": {
+    "Объект\ >\ Скрыть\ >\ Выделенное": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2979,7 +3004,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Скрыть > Все объекты выше": {
+    "Объект\ >\ Скрыть\ >\ Все\ объекты\ выше": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2988,7 +3013,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Скрыть > Остальные слои": {
+    "Объект\ >\ Скрыть\ >\ Остальные\ слои": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -2997,7 +3022,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Показать все": {
+    "Объект\ >\ Показать\ все": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3006,7 +3031,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Обрезать изображение": {
+    "Объект\ >\ Обрезать\ изображение": {
       cmdType: "menu",
       minVersion: 23,
       cmdActions: [
@@ -3016,7 +3041,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Растрировать...": {
+    "Объект\ >\ Растрировать\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3025,7 +3050,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Создать сетчатый градиент...": {
+    "Объект\ >\ Создать\ сетчатый\ градиент\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3034,7 +3059,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Создать фрагментацию...": {
+    "Объект\ >\ Создать\ фрагментацию\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3043,7 +3068,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Создать метки обреза": {
+    "Объект\ >\ Создать\ метки\ обреза": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3052,7 +3077,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Обработка прозрачности...": {
+    "Объект\ >\ Обработка\ прозрачности\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3061,7 +3086,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Коррекция на уровне пикселов": {
+    "Объект\ >\ Коррекция\ на\ уровне\ пикселов": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3070,7 +3095,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Создать": {
+    "Объект\ >\ Фрагменты\ >\ Создать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3079,7 +3104,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Расформировать": {
+    "Объект\ >\ Фрагменты\ >\ Расформировать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3088,7 +3113,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Создать по направляющим": {
+    "Объект\ >\ Фрагменты\ >\ Создать\ по\ направляющим": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3097,7 +3122,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Создать по выделенной области": {
+    "Объект\ >\ Фрагменты\ >\ Создать\ по\ выделенной\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3106,7 +3131,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Создать дубликат фрагмента": {
+    "Объект\ >\ Фрагменты\ >\ Создать\ дубликат\ фрагмента": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3115,7 +3140,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Объединить фрагменты": {
+    "Объект\ >\ Фрагменты\ >\ Объединить\ фрагменты": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3124,7 +3149,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Разделить фрагменты...": {
+    "Объект\ >\ Фрагменты\ >\ Разделить\ фрагменты\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3133,7 +3158,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Удалить все": {
+    "Объект\ >\ Фрагменты\ >\ Удалить\ все": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3142,7 +3167,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Параметры фрагмента...": {
+    "Объект\ >\ Фрагменты\ >\ Параметры\ фрагмента\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3151,7 +3176,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фрагменты > Обрезать по монтажной области": {
+    "Объект\ >\ Фрагменты\ >\ Обрезать\ по\ монтажной\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3160,7 +3185,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Разобрать…": {
+    "Объект\ >\ Разобрать…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3169,7 +3194,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Разобрать оформление": {
+    "Объект\ >\ Разобрать\ оформление": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3178,7 +3203,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Соединить": {
+    "Объект\ >\ Контур\ >\ Соединить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3187,7 +3212,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Усреднить…": {
+    "Объект\ >\ Контур\ >\ Усреднить…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3196,7 +3221,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Преобразовать обводку в кривые": {
+    "Объект\ >\ Контур\ >\ Преобразовать\ обводку\ в\ кривые": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3205,7 +3230,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Создать параллельный контур…": {
+    "Объект\ >\ Контур\ >\ Создать\ параллельный\ контур…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3214,7 +3239,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Изменение направления контура": {
+    "Объект\ >\ Контур\ >\ Изменение\ направления\ контура": {
       cmdType: "menu",
       minVersion: 21,
       cmdActions: [
@@ -3224,7 +3249,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Упростить…": {
+    "Объект\ >\ Контур\ >\ Упростить…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3233,7 +3258,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Добавить опорные точки": {
+    "Объект\ >\ Контур\ >\ Добавить\ опорные\ точки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3242,7 +3267,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Удалить опорные точки": {
+    "Объект\ >\ Контур\ >\ Удалить\ опорные\ точки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3251,7 +3276,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Разделить нижние объекты": {
+    "Объект\ >\ Контур\ >\ Разделить\ нижние\ объекты": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3260,7 +3285,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Создать сетку...": {
+    "Объект\ >\ Контур\ >\ Создать\ сетку\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3269,7 +3294,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Контур > Вычистить…": {
+    "Объект\ >\ Контур\ >\ Вычистить…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3278,7 +3303,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фигура > Преобразовать в фигуры": {
+    "Объект\ >\ Фигура\ >\ Преобразовать\ в\ фигуры": {
       cmdType: "menu",
       minVersion: 18,
       cmdActions: [
@@ -3288,7 +3313,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Фигура > Разобрать фигуру": {
+    "Объект\ >\ Фигура\ >\ Разобрать\ фигуру": {
       cmdType: "menu",
       minVersion: 18,
       cmdActions: [
@@ -3298,7 +3323,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Узор > Создать": {
+    "Объект\ >\ Узор\ >\ Создать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3307,7 +3332,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Узор > Редактировать узор": {
+    "Объект\ >\ Узор\ >\ Редактировать\ узор": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3316,7 +3341,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Узор > Цвет края элемента...": {
+    "Объект\ >\ Узор\ >\ Цвет\ края\ элемента\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3325,7 +3350,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Повторить > Радиальный": {
+    "Объект\ >\ Повторить\ >\ Радиальный": {
       cmdType: "menu",
       minVersion: 25.1,
       cmdActions: [
@@ -3335,7 +3360,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Повторить > Сетка": {
+    "Объект\ >\ Повторить\ >\ Сетка": {
       cmdType: "menu",
       minVersion: 25.1,
       cmdActions: [
@@ -3345,7 +3370,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Повторить > Зеркально": {
+    "Объект\ >\ Повторить\ >\ Зеркально": {
       cmdType: "menu",
       minVersion: 25.1,
       cmdActions: [
@@ -3355,7 +3380,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Повторить > Освободить": {
+    "Объект\ >\ Повторить\ >\ Освободить": {
       cmdType: "menu",
       minVersion: 25.1,
       cmdActions: [
@@ -3365,7 +3390,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Повторить > Параметры…": {
+    "Объект\ >\ Повторить\ >\ Параметры…": {
       cmdType: "menu",
       minVersion: 25.1,
       cmdActions: [
@@ -3375,7 +3400,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Переход > Создать": {
+    "Объект\ >\ Переход\ >\ Создать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3384,7 +3409,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Переход > Отменить": {
+    "Объект\ >\ Переход\ >\ Отменить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3393,7 +3418,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Переход > Параметры перехода…": {
+    "Объект\ >\ Переход\ >\ Параметры\ перехода…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3402,7 +3427,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Переход > Разобрать": {
+    "Объект\ >\ Переход\ >\ Разобрать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3411,7 +3436,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Переход > Заменить траекторию": {
+    "Объект\ >\ Переход\ >\ Заменить\ траекторию": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3420,7 +3445,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Переход > Изменить направление": {
+    "Объект\ >\ Переход\ >\ Изменить\ направление": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3429,7 +3454,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Переход > Изменить порядок": {
+    "Объект\ >\ Переход\ >\ Изменить\ порядок": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3438,7 +3463,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Искажение с помощью оболочки > Деформация...": {
+    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Деформация\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3447,7 +3472,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Искажение с помощью оболочки > По сетке...": {
+    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ По\ сетке\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3456,7 +3481,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Искажение с помощью оболочки > По форме верхнего объекта": {
+    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ По\ форме\ верхнего\ объекта": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3465,7 +3490,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Искажение с помощью оболочки > Отделить": {
+    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Отделить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3474,7 +3499,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Искажение с помощью оболочки > Параметры оболочки...": {
+    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Параметры\ оболочки\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3483,7 +3508,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Искажение с помощью оболочки > Разобрать": {
+    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Разобрать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3492,7 +3517,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Искажение с помощью оболочки > Редактировать содержимое": {
+    "Объект\ >\ Искажение\ с\ помощью\ оболочки\ >\ Редактировать\ содержимое": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3501,7 +3526,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Перспектива > Прикрепить к активной плоскости": {
+    "Объект\ >\ Перспектива\ >\ Прикрепить\ к\ активной\ плоскости": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3510,7 +3535,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Перспектива > Открепить с сохранением перспективы": {
+    "Объект\ >\ Перспектива\ >\ Открепить\ с\ сохранением\ перспективы": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3519,7 +3544,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Перспектива > Переместить плоскость для подгонки по объекту": {
+    "Объект\ >\ Перспектива\ >\ Переместить\ плоскость\ для\ подгонки\ по\ объекту": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3528,7 +3553,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Перспектива > Редактировать текст": {
+    "Объект\ >\ Перспектива\ >\ Редактировать\ текст": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3537,7 +3562,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Быстрая заливка > Создать": {
+    "Объект\ >\ Быстрая\ заливка\ >\ Создать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3546,7 +3571,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Быстрая заливка > Объединить": {
+    "Объект\ >\ Быстрая\ заливка\ >\ Объединить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3555,7 +3580,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Быстрая заливка > Расформировать": {
+    "Объект\ >\ Быстрая\ заливка\ >\ Расформировать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3564,7 +3589,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Быстрая заливка > Параметры зазоров…": {
+    "Объект\ >\ Быстрая\ заливка\ >\ Параметры\ зазоров…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3573,7 +3598,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Быстрая заливка > Разобрать": {
+    "Объект\ >\ Быстрая\ заливка\ >\ Разобрать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3582,7 +3607,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трассировка изображения > Создать": {
+    "Объект\ >\ Трассировка\ изображения\ >\ Создать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3591,7 +3616,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трассировка изображения > Создать и разобрать": {
+    "Объект\ >\ Трассировка\ изображения\ >\ Создать\ и\ разобрать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3600,7 +3625,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трассировка изображения > Расформировать": {
+    "Объект\ >\ Трассировка\ изображения\ >\ Расформировать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3609,7 +3634,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Трассировка изображения > Разобрать": {
+    "Объект\ >\ Трассировка\ изображения\ >\ Разобрать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3618,7 +3643,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Обтекание текстом > Создать": {
+    "Объект\ >\ Обтекание\ текстом\ >\ Создать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3627,7 +3652,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Обтекание текстом > Освободить": {
+    "Объект\ >\ Обтекание\ текстом\ >\ Освободить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3636,7 +3661,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Обтекание текстом > Параметры обтекания текстом...": {
+    "Объект\ >\ Обтекание\ текстом\ >\ Параметры\ обтекания\ текстом\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3645,7 +3670,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Обтравочная маска > Создать": {
+    "Объект\ >\ Обтравочная\ маска\ >\ Создать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3654,7 +3679,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Обтравочная маска > Отменить": {
+    "Объект\ >\ Обтравочная\ маска\ >\ Отменить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3663,7 +3688,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Обтравочная маска > Редактировать маску": {
+    "Объект\ >\ Обтравочная\ маска\ >\ Редактировать\ маску": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3672,7 +3697,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Составной контур > Создать": {
+    "Объект\ >\ Составной\ контур\ >\ Создать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3681,7 +3706,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Составной контур > Отменить": {
+    "Объект\ >\ Составной\ контур\ >\ Отменить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3690,7 +3715,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Монтажные области > Преобразовать в монтажные области": {
+    "Объект\ >\ Монтажные\ области\ >\ Преобразовать\ в\ монтажные\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3699,7 +3724,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Монтажные области > Переупорядочить все монт. обл.": {
+    "Объект\ >\ Монтажные\ области\ >\ Переупорядочить\ все\ монт\.\ обл\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3708,7 +3733,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Монтажные области > Подогнать по границам иллюстрации": {
+    "Объект\ >\ Монтажные\ области\ >\ Подогнать\ по\ границам\ иллюстрации": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3717,7 +3742,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Монтажные области > Подогнать по границам выделенной иллюстрации": {
+    "Объект\ >\ Монтажные\ области\ >\ Подогнать\ по\ границам\ выделенной\ иллюстрации": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3726,7 +3751,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Диаграмма > Тип…": {
+    "Объект\ >\ Диаграмма\ >\ Тип…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3735,7 +3760,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Диаграмма > Данные…": {
+    "Объект\ >\ Диаграмма\ >\ Данные…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3744,7 +3769,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Диаграмма > Оформление…": {
+    "Объект\ >\ Диаграмма\ >\ Оформление…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3753,7 +3778,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Диаграмма > Столбец…": {
+    "Объект\ >\ Диаграмма\ >\ Столбец…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3762,7 +3787,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Объект > Диаграмма > Маркер…": {
+    "Объект\ >\ Диаграмма\ >\ Маркер…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3771,7 +3796,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Найти больше в Adobe Fonts...": {
+    "Текст\ >\ Найти\ больше\ в\ Adobe\ Fonts\.\.\.": {
       cmdType: "menu",
       minVersion: 17.1,
       cmdActions: [
@@ -3781,7 +3806,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Глифы": {
+    "Текст\ >\ Глифы": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3790,7 +3815,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Параметры текста в области…": {
+    "Текст\ >\ Параметры\ текста\ в\ области…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3799,7 +3824,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Текст по контуру > Радуга": {
+    "Текст\ >\ Текст\ по\ контуру\ >\ Радуга": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3808,7 +3833,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Текст по контуру > Наклон": {
+    "Текст\ >\ Текст\ по\ контуру\ >\ Наклон": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3817,7 +3842,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Текст по контуру > Каскад": {
+    "Текст\ >\ Текст\ по\ контуру\ >\ Каскад": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3826,7 +3851,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Текст по контуру > Лесенка": {
+    "Текст\ >\ Текст\ по\ контуру\ >\ Лесенка": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3835,7 +3860,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Текст по контуру > Гравитация": {
+    "Текст\ >\ Текст\ по\ контуру\ >\ Гравитация": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3844,7 +3869,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Текст по контуру > Параметры текста по контуру...": {
+    "Текст\ >\ Текст\ по\ контуру\ >\ Параметры\ текста\ по\ контуру\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3853,7 +3878,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Текст по контуру > Обновить прежнюю версию текста по контуру": {
+    "Текст\ >\ Текст\ по\ контуру\ >\ Обновить\ прежнюю\ версию\ текста\ по\ контуру": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3862,7 +3887,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Связанные текстовые блоки > Связать": {
+    "Текст\ >\ Связанные\ текстовые\ блоки\ >\ Связать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3871,7 +3896,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Связанные текстовые блоки > Исключить выделенные": {
+    "Текст\ >\ Связанные\ текстовые\ блоки\ >\ Исключить\ выделенные": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3880,7 +3905,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Связанные текстовые блоки > Удалить связь текстовых блоков": {
+    "Текст\ >\ Связанные\ текстовые\ блоки\ >\ Удалить\ связь\ текстовых\ блоков": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3889,7 +3914,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Разогнать заголовок": {
+    "Текст\ >\ Разогнать\ заголовок": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3898,7 +3923,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Сопоставить отсутствующие шрифты...": {
+    "Текст\ >\ Сопоставить\ отсутствующие\ шрифты\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3907,7 +3932,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Найти/заменить шрифт...": {
+    "Текст\ >\ Найти/заменить\ шрифт\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3916,7 +3941,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Изменить регистр > ВСЕ ПРОПИСНЫЕ": {
+    "Текст\ >\ Изменить\ регистр\ >\ ВСЕ\ ПРОПИСНЫЕ": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3925,7 +3950,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Изменить регистр > все строчные": {
+    "Текст\ >\ Изменить\ регистр\ >\ все\ строчные": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3934,7 +3959,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Изменить регистр > Прописная В Начале Каждого Слова": {
+    "Текст\ >\ Изменить\ регистр\ >\ Прописная\ В\ Начале\ Каждого\ Слова": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3943,7 +3968,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Изменить регистр > Прописная в начале предложения": {
+    "Текст\ >\ Изменить\ регистр\ >\ Прописная\ в\ начале\ предложения": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3952,7 +3977,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Типографская пунктуация...": {
+    "Текст\ >\ Типографская\ пунктуация\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3961,7 +3986,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Преобразовать в кривые": {
+    "Текст\ >\ Преобразовать\ в\ кривые": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3970,7 +3995,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Визуальное выравнивание полей": {
+    "Текст\ >\ Визуальное\ выравнивание\ полей": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3979,7 +4004,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Показать скрытые символы": {
+    "Текст\ >\ Показать\ скрытые\ символы": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3988,7 +4013,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Ориентация текста > Горизонтальная": {
+    "Текст\ >\ Ориентация\ текста\ >\ Горизонтальная": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -3997,7 +4022,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Текст > Ориентация текста > Вертикальная": {
+    "Текст\ >\ Ориентация\ текста\ >\ Вертикальная": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4006,7 +4031,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Все": {
+    "Выделение\ >\ Все": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4015,7 +4040,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Все объекты в активной монтажной области": {
+    "Выделение\ >\ Все\ объекты\ в\ активной\ монтажной\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4024,7 +4049,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Отменить выделение": {
+    "Выделение\ >\ Отменить\ выделение": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4033,7 +4058,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Выделить снова": {
+    "Выделение\ >\ Выделить\ снова": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4042,7 +4067,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Инверсия": {
+    "Выделение\ >\ Инверсия": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4051,7 +4076,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Следующий объект сверху": {
+    "Выделение\ >\ Следующий\ объект\ сверху": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4060,7 +4085,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Следующий объект снизу": {
+    "Выделение\ >\ Следующий\ объект\ снизу": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4069,7 +4094,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Оформление": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Оформление": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4079,7 +4104,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Атрибуты оформления": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Атрибуты\ оформления": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4089,7 +4114,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > С одинаковым режимом наложения": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковым\ режимом\ наложения": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4099,7 +4124,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > С одинаковыми заливкой и обводкой": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковыми\ заливкой\ и\ обводкой": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4109,7 +4134,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > С одинаковым цветом заливки": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковым\ цветом\ заливки": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4119,7 +4144,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > С одинаковой непрозрачностью": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковой\ непрозрачностью": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4129,7 +4154,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > С одинаковым цветом обводки": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковым\ цветом\ обводки": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4139,7 +4164,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > С одинаковой толщиной обводки": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ С\ одинаковой\ толщиной\ обводки": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4149,7 +4174,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Стиль графики": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Стиль\ графики": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4159,7 +4184,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Фигура": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Фигура": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4169,7 +4194,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Одинаковые образцы символа": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Одинаковые\ образцы\ символа": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4179,7 +4204,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Последовательность связанных блоков": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Последовательность\ связанных\ блоков": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4189,7 +4214,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Семейство шрифтов": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Семейство\ шрифтов": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4199,7 +4224,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Семейство и стиль шрифтов": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Семейство\ и\ стиль\ шрифтов": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4209,7 +4234,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Семейство, стиль и размер шрифтов": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Семейство,\ стиль\ и\ размер\ шрифтов": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4219,7 +4244,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Размер шрифта": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Размер\ шрифта": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4229,7 +4254,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Цвет заливки текста": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Цвет\ заливки\ текста": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4239,7 +4264,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Цвет обводки текста": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Цвет\ обводки\ текста": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4249,7 +4274,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По общему признаку > Цвет заливки и обводки текста": {
+    "Выделение\ >\ По\ общему\ признаку\ >\ Цвет\ заливки\ и\ обводки\ текста": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4259,7 +4284,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Все на этом же слое": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Все\ на\ этом\ же\ слое": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4268,7 +4293,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Управляющие манипуляторы": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Управляющие\ манипуляторы": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4277,7 +4302,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Мазки для кисти из щетины": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Мазки\ для\ кисти\ из\ щетины": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4286,7 +4311,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Мазки кисти": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Мазки\ кисти": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4295,7 +4320,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Обтравочные маски": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Обтравочные\ маски": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4304,7 +4329,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Изолированные точки": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Изолированные\ точки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4313,7 +4338,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Все объекты текста": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Все\ объекты\ текста": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4322,7 +4347,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Объекты текста из точки": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Объекты\ текста\ из\ точки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4331,7 +4356,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > По типу объектов > Объекты текста в области": {
+    "Выделение\ >\ По\ типу\ объектов\ >\ Объекты\ текста\ в\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4340,7 +4365,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Начать глобальное изменение": {
+    "Выделение\ >\ Начать\ глобальное\ изменение": {
       cmdType: "menu",
       minVersion: 23,
       cmdActions: [
@@ -4350,7 +4375,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Сохранить выделенную область…": {
+    "Выделение\ >\ Сохранить\ выделенную\ область…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4359,7 +4384,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Выделение > Редактировать выделенную область…": {
+    "Выделение\ >\ Редактировать\ выделенную\ область…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4368,7 +4393,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Применить последний эффект": {
+    "Эффект\ >\ Применить\ последний\ эффект": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4377,7 +4402,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Последний эффект": {
+    "Эффект\ >\ Последний\ эффект": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4386,7 +4411,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Параметры растровых эффектов в документе...": {
+    "Эффект\ >\ Параметры\ растровых\ эффектов\ в\ документе\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4395,7 +4420,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > 3D и материалы > Вытягивание и фаска...": {
+    "Эффект\ >\ 3D\ и\ материалы\ >\ Вытягивание\ и\ фаска\.\.\.": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4405,7 +4430,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > 3D и материалы > Вращение…": {
+    "Эффект\ >\ 3D\ и\ материалы\ >\ Вращение…": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4415,7 +4440,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > 3D и материалы > Раздувание…": {
+    "Эффект\ >\ 3D\ и\ материалы\ >\ Раздувание…": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4425,7 +4450,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > 3D и материалы > Поворот…": {
+    "Эффект\ >\ 3D\ и\ материалы\ >\ Поворот…": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4435,7 +4460,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > 3D и материалы > Материалы…": {
+    "Эффект\ >\ 3D\ и\ материалы\ >\ Материалы…": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4445,7 +4470,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > 3D (классическое) > Вытягивание и фаска (классический)…": {
+    "Эффект\ >\ 3D\ \(классическое\)\ >\ Вытягивание\ и\ фаска\ \(классический\)…": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4455,7 +4480,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > 3D (классическое) > Вращение (классическое)…": {
+    "Эффект\ >\ 3D\ \(классическое\)\ >\ Вращение\ \(классическое\)…": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4465,7 +4490,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > 3D (классическое) > Поворот (классический)…": {
+    "Эффект\ >\ 3D\ \(классическое\)\ >\ Поворот\ \(классический\)…": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -4475,7 +4500,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Преобразовать в фигуру> Прямоугольник…": {
+    "Эффект\ >\ Преобразовать\ в\ фигуру>\ Прямоугольник…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4484,7 +4509,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Преобразовать в фигуру> Прямоугольник со скругленными углами…": {
+    "Эффект\ >\ Преобразовать\ в\ фигуру>\ Прямоугольник\ со\ скругленными\ углами…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4493,7 +4518,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Преобразовать в фигуру> Эллипс…": {
+    "Эффект\ >\ Преобразовать\ в\ фигуру>\ Эллипс…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4502,7 +4527,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Метки обрезки": {
+    "Эффект\ >\ Метки\ обрезки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4511,7 +4536,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Исказить и трансформировать > Произвольное искажение...": {
+    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Произвольное\ искажение\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4520,7 +4545,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Исказить и трансформировать > Втягивание и раздувание...": {
+    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Втягивание\ и\ раздувание\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4529,7 +4554,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Исказить и трансформировать > Огрубление...": {
+    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Огрубление\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4538,7 +4563,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Исказить и трансформировать > Трансформировать...": {
+    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Трансформировать\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4547,7 +4572,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Исказить и трансформировать > Помарки...": {
+    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Помарки\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4556,7 +4581,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Исказить и трансформировать > Скручивание...": {
+    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Скручивание\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4565,7 +4590,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Исказить и трансформировать > Зигзаг...": {
+    "Эффект\ >\ Исказить\ и\ трансформировать\ >\ Зигзаг\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4574,7 +4599,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Контур > Создать параллельный контур...": {
+    "Эффект\ >\ Контур\ >\ Создать\ параллельный\ контур\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4583,7 +4608,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Контур > Контурный объект": {
+    "Эффект\ >\ Контур\ >\ Контурный\ объект": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4592,7 +4617,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Контур > Преобразовать обводку в кривые": {
+    "Эффект\ >\ Контур\ >\ Преобразовать\ обводку\ в\ кривые": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4601,7 +4626,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Добавить": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Добавить": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4610,7 +4635,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Пересечение": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Пересечение": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4619,7 +4644,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Исключение": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Исключение": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4628,7 +4653,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Вычитание": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Вычитание": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4637,7 +4662,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Минус нижний": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Минус\ нижний": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4646,7 +4671,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Разделение": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Разделение": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4655,7 +4680,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Обрезка": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Обрезка": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4664,7 +4689,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Объединение": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Объединение": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4673,7 +4698,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Кадрировать": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Кадрировать": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4682,7 +4707,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Контур": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Контур": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4691,7 +4716,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Жесткое смешивание": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Жесткое\ смешивание": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4700,7 +4725,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Нежесткое смешивание...": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Нежесткое\ смешивание\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4709,7 +4734,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Обработка контуров > Треппинг…": {
+    "Эффект\ >\ Обработка\ контуров\ >\ Треппинг…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4718,7 +4743,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Растрировать...": {
+    "Эффект\ >\ Растрировать\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4727,7 +4752,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Стилизация > Тень...": {
+    "Эффект\ >\ Стилизация\ >\ Тень\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4736,7 +4761,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Стилизация > Растушевка...": {
+    "Эффект\ >\ Стилизация\ >\ Растушевка\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4745,7 +4770,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Стилизация > Внутреннее свечение...": {
+    "Эффект\ >\ Стилизация\ >\ Внутреннее\ свечение\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4754,7 +4779,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Стилизация > Внешнее свечение...": {
+    "Эффект\ >\ Стилизация\ >\ Внешнее\ свечение\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4763,7 +4788,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Стилизация > Скругленные углы...": {
+    "Эффект\ >\ Стилизация\ >\ Скругленные\ углы\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4772,7 +4797,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Стилизация > Каракули…": {
+    "Эффект\ >\ Стилизация\ >\ Каракули…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4781,7 +4806,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Фильтры SVG > Применить SVG-фильтр...": {
+    "Эффект\ >\ Фильтры\ SVG\ >\ Применить\ SVG\-фильтр\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4790,7 +4815,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Фильтры SVG > Импортировать фильтр SVG...": {
+    "Эффект\ >\ Фильтры\ SVG\ >\ Импортировать\ фильтр\ SVG\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4799,7 +4824,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Дуга…": {
+    "Эффект\ >\ Деформация\ >\ Дуга…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4808,7 +4833,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Дуга вниз…": {
+    "Эффект\ >\ Деформация\ >\ Дуга\ вниз…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4817,7 +4842,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Дуга вверх…": {
+    "Эффект\ >\ Деформация\ >\ Дуга\ вверх…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4826,7 +4851,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Арка…": {
+    "Эффект\ >\ Деформация\ >\ Арка…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4835,7 +4860,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Выпуклость…": {
+    "Эффект\ >\ Деформация\ >\ Выпуклость…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4844,7 +4869,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Панцирь вниз…": {
+    "Эффект\ >\ Деформация\ >\ Панцирь\ вниз…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4853,7 +4878,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Панцирь вверх…": {
+    "Эффект\ >\ Деформация\ >\ Панцирь\ вверх…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4862,7 +4887,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Флаг…": {
+    "Эффект\ >\ Деформация\ >\ Флаг…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4871,7 +4896,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Волна…": {
+    "Эффект\ >\ Деформация\ >\ Волна…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4880,7 +4905,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Рыба…": {
+    "Эффект\ >\ Деформация\ >\ Рыба…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4889,7 +4914,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Подъем…": {
+    "Эффект\ >\ Деформация\ >\ Подъем…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4898,7 +4923,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Рыбий глаз…": {
+    "Эффект\ >\ Деформация\ >\ Рыбий\ глаз…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4907,7 +4932,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Раздувание…": {
+    "Эффект\ >\ Деформация\ >\ Раздувание…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4916,7 +4941,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Сжатие…": {
+    "Эффект\ >\ Деформация\ >\ Сжатие…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4925,7 +4950,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Деформация > Скручивание…": {
+    "Эффект\ >\ Деформация\ >\ Скручивание…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4934,7 +4959,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Галерея эффектов…": {
+    "Эффект\ >\ Галерея\ эффектов…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4943,7 +4968,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Цветные карандаши…": {
+    "Эффект\ >\ Имитация\ >\ Цветные\ карандаши…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4952,7 +4977,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Аппликация…": {
+    "Эффект\ >\ Имитация\ >\ Аппликация…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4961,7 +4986,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Сухая кисть…": {
+    "Эффект\ >\ Имитация\ >\ Сухая\ кисть…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4970,7 +4995,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Зернистость пленки…": {
+    "Эффект\ >\ Имитация\ >\ Зернистость\ пленки…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4979,7 +5004,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Фреска…": {
+    "Эффект\ >\ Имитация\ >\ Фреска…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4988,7 +5013,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Неоновый свет…": {
+    "Эффект\ >\ Имитация\ >\ Неоновый\ свет…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -4997,7 +5022,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Масляная живопись…": {
+    "Эффект\ >\ Имитация\ >\ Масляная\ живопись…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5006,7 +5031,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Шпатель…": {
+    "Эффект\ >\ Имитация\ >\ Шпатель…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5015,7 +5040,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Целлофановая упаковка…": {
+    "Эффект\ >\ Имитация\ >\ Целлофановая\ упаковка…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5024,7 +5049,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Очерченные края…": {
+    "Эффект\ >\ Имитация\ >\ Очерченные\ края…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5033,7 +5058,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Пастель…": {
+    "Эффект\ >\ Имитация\ >\ Пастель…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5042,7 +5067,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Растушевка…": {
+    "Эффект\ >\ Имитация\ >\ Растушевка…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5051,7 +5076,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Губка…": {
+    "Эффект\ >\ Имитация\ >\ Губка…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5060,7 +5085,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Рисование на обороте…": {
+    "Эффект\ >\ Имитация\ >\ Рисование\ на\ обороте…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5069,7 +5094,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Имитация > Акварель…": {
+    "Эффект\ >\ Имитация\ >\ Акварель…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5078,7 +5103,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Размытие > Размытие по Гауссу...": {
+    "Эффект\ >\ Размытие\ >\ Размытие\ по\ Гауссу\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5087,7 +5112,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Размытие > Радиальное размытие...": {
+    "Эффект\ >\ Размытие\ >\ Радиальное\ размытие\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5096,7 +5121,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Размытие > Умное размытие...": {
+    "Эффект\ >\ Размытие\ >\ Умное\ размытие\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5105,7 +5130,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Штрихи > Акцент на краях…": {
+    "Эффект\ >\ Штрихи\ >\ Акцент\ на\ краях…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5114,7 +5139,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Штрихи > Наклонные штрихи…": {
+    "Эффект\ >\ Штрихи\ >\ Наклонные\ штрихи…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5123,7 +5148,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Штрихи > Перекрестные штрихи…": {
+    "Эффект\ >\ Штрихи\ >\ Перекрестные\ штрихи…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5132,7 +5157,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Штрихи > Темные штрихи…": {
+    "Эффект\ >\ Штрихи\ >\ Темные\ штрихи…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5141,7 +5166,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Штрихи > Обводка…": {
+    "Эффект\ >\ Штрихи\ >\ Обводка…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5150,7 +5175,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Штрихи > Разбрызгивание…": {
+    "Эффект\ >\ Штрихи\ >\ Разбрызгивание…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5159,7 +5184,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Штрихи > Аэрограф…": {
+    "Эффект\ >\ Штрихи\ >\ Аэрограф…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5168,7 +5193,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Штрихи > Суми-э…": {
+    "Эффект\ >\ Штрихи\ >\ Суми\-э…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5177,7 +5202,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Искажение > Рассеянное свечение…": {
+    "Эффект\ >\ Искажение\ >\ Рассеянное\ свечение…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5186,7 +5211,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Искажение > Стекло…": {
+    "Эффект\ >\ Искажение\ >\ Стекло…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5195,7 +5220,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Искажение > Океанские волны…": {
+    "Эффект\ >\ Искажение\ >\ Океанские\ волны…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5204,7 +5229,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Оформление > Цветные полутона…": {
+    "Эффект\ >\ Оформление\ >\ Цветные\ полутона…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5213,7 +5238,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Оформление > Кристаллизация…": {
+    "Эффект\ >\ Оформление\ >\ Кристаллизация…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5222,7 +5247,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Оформление > Меццо-тинто…": {
+    "Эффект\ >\ Оформление\ >\ Меццо\-тинто…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5231,7 +5256,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Оформление > Пуантилизм…": {
+    "Эффект\ >\ Оформление\ >\ Пуантилизм…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5240,7 +5265,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Рельеф…": {
+    "Эффект\ >\ Эскиз\ >\ Рельеф…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5249,7 +5274,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Мел и уголь…": {
+    "Эффект\ >\ Эскиз\ >\ Мел\ и\ уголь…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5258,7 +5283,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Уголь…": {
+    "Эффект\ >\ Эскиз\ >\ Уголь…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5267,7 +5292,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Хром…": {
+    "Эффект\ >\ Эскиз\ >\ Хром…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5285,7 +5310,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Тушь…": {
+    "Эффект\ >\ Эскиз\ >\ Тушь…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5294,7 +5319,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Полутоновый узор…": {
+    "Эффект\ >\ Эскиз\ >\ Полутоновый\ узор…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5303,7 +5328,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Почтовая бумага…": {
+    "Эффект\ >\ Эскиз\ >\ Почтовая\ бумага…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5312,7 +5337,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Ксерокопия…": {
+    "Эффект\ >\ Эскиз\ >\ Ксерокопия…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5321,7 +5346,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Гипс…": {
+    "Эффект\ >\ Эскиз\ >\ Гипс…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5330,7 +5355,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Ретикуляция…": {
+    "Эффект\ >\ Эскиз\ >\ Ретикуляция…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5339,7 +5364,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Линогравюра…": {
+    "Эффект\ >\ Эскиз\ >\ Линогравюра…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5348,7 +5373,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Рваные края…": {
+    "Эффект\ >\ Эскиз\ >\ Рваные\ края…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5357,7 +5382,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Эскиз > Мокрая бумага…": {
+    "Эффект\ >\ Эскиз\ >\ Мокрая\ бумага…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5366,7 +5391,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Стилизация > Свечение краев…": {
+    "Эффект\ >\ Стилизация\ >\ Свечение\ краев…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5375,7 +5400,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Текстура > Кракелюры…": {
+    "Эффект\ >\ Текстура\ >\ Кракелюры…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5384,7 +5409,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Текстура > Зерно…": {
+    "Эффект\ >\ Текстура\ >\ Зерно…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5393,7 +5418,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Текстура > Мозаичные фрагменты…": {
+    "Эффект\ >\ Текстура\ >\ Мозаичные\ фрагменты…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5402,7 +5427,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Текстура > Цветная плитка…": {
+    "Эффект\ >\ Текстура\ >\ Цветная\ плитка…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5411,7 +5436,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Текстура > Витраж…": {
+    "Эффект\ >\ Текстура\ >\ Витраж…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5420,7 +5445,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Текстура > Текстуризатор…": {
+    "Эффект\ >\ Текстура\ >\ Текстуризатор…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5429,7 +5454,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Видео > Устранение чересстрочной развертки...": {
+    "Эффект\ >\ Видео\ >\ Устранение\ чересстрочной\ развертки\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5438,7 +5463,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Эффект > Видео > Цвета NTSC": {
+    "Эффект\ >\ Видео\ >\ Цвета\ NTSC": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5447,7 +5472,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Контуры / Иллюстрация": {
+    "Просмотр\ >\ Контуры\ /\ Иллюстрация": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5456,7 +5481,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Просмотр с использованием ЦП / ГП": {
+    "Просмотр\ >\ Просмотр\ с\ использованием\ ЦП\ /\ ГП": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5465,7 +5490,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Просмотр наложения цветов": {
+    "Просмотр\ >\ Просмотр\ наложения\ цветов": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5474,7 +5499,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Просмотр в виде пикселов": {
+    "Просмотр\ >\ Просмотр\ в\ виде\ пикселов": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5483,7 +5508,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Параметры цветопробы > Рабочее пространство CMYK": {
+    "Просмотр\ >\ Параметры\ цветопробы\ >\ Рабочее\ пространство\ CMYK": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5492,7 +5517,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Параметры цветопробы > Ранняя версия Macintosh RGB (Gamma 1.8)": {
+    "Просмотр\ >\ Параметры\ цветопробы\ >\ Ранняя\ версия\ Macintosh\ RGB\ \(Gamma\ 1\.8\)": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5501,17 +5526,16 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Параметры цветопробы > Стандартная палитра RGB (sRGB) для сети Интернет":
-      {
-        cmdType: "menu",
-        cmdActions: [
-          {
-            type: "menu",
-            value: "proof-win-rgb",
-          },
-        ],
-      },
-    "Просмотр > Параметры цветопробы > Палитра RGB монитора": {
+    "Просмотр\ >\ Параметры\ цветопробы\ >\ Стандартная\ палитра\ RGB\ \(sRGB\)\ для\ сети\ Интернет": {
+      cmdType: "menu",
+      cmdActions: [
+        {
+          type: "menu",
+          value: "proof-win-rgb",
+        },
+      ],
+    },
+    "Просмотр\ >\ Параметры\ цветопробы\ >\ Палитра\ RGB\ монитора": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5520,7 +5544,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Параметры цветопробы > Дальтонизм - протанопия": {
+    "Просмотр\ >\ Параметры\ цветопробы\ >\ Дальтонизм\ \-\ протанопия": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5529,7 +5553,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Параметры цветопробы > Дальтонизм - дейтеранопия": {
+    "Просмотр\ >\ Параметры\ цветопробы\ >\ Дальтонизм\ \-\ дейтеранопия": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5538,7 +5562,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Параметры цветопробы > Заказные параметры…": {
+    "Просмотр\ >\ Параметры\ цветопробы\ >\ Заказные\ параметры…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5547,7 +5571,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Цветопроба": {
+    "Просмотр\ >\ Цветопроба": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5556,7 +5580,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Увеличение": {
+    "Просмотр\ >\ Увеличение": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5565,7 +5589,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Уменьшение": {
+    "Просмотр\ >\ Уменьшение": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5574,7 +5598,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Подогнать монтажную область по размеру окна": {
+    "Просмотр\ >\ Подогнать\ монтажную\ область\ по\ размеру\ окна": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5583,7 +5607,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Подогнать все по размеру окна": {
+    "Просмотр\ >\ Подогнать\ все\ по\ размеру\ окна": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5592,7 +5616,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать фрагменты": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ фрагменты": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5601,7 +5625,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Закрепить фрагменты": {
+    "Просмотр\ >\ Закрепить\ фрагменты": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5610,7 +5634,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать ограничительную рамку": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ ограничительную\ рамку": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5619,7 +5643,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать сетку прозрачности": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ сетку\ прозрачности": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5628,7 +5652,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Реальный размер": {
+    "Просмотр\ >\ Реальный\ размер": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5637,7 +5661,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать зазоры быстрых заливок": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ зазоры\ быстрых\ заливок": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5646,7 +5670,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать градиентный аннотатор": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ градиентный\ аннотатор": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5665,7 +5689,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать границы": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ границы": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5674,7 +5698,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Быстрые направляющие": {
+    "Просмотр\ >\ Быстрые\ направляющие": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5683,7 +5707,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Сетка перспективы > Показать / скрыть сетку": {
+    "Просмотр\ >\ Сетка\ перспективы\ >\ Показать\ /\ скрыть\ сетку": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5692,7 +5716,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Сетка перспективы > Показать / скрыть линейки": {
+    "Просмотр\ >\ Сетка\ перспективы\ >\ Показать\ /\ скрыть\ линейки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5701,7 +5725,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Сетка перспективы > Привязать к сетке": {
+    "Просмотр\ >\ Сетка\ перспективы\ >\ Привязать\ к\ сетке": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5710,7 +5734,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Сетка перспективы > Закрепить сетку": {
+    "Просмотр\ >\ Сетка\ перспективы\ >\ Закрепить\ сетку": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5719,7 +5743,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Сетка перспективы > Закрепить точку наблюдения": {
+    "Просмотр\ >\ Сетка\ перспективы\ >\ Закрепить\ точку\ наблюдения": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5728,7 +5752,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Сетка перспективы > Определить сетку...": {
+    "Просмотр\ >\ Сетка\ перспективы\ >\ Определить\ сетку\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5737,7 +5761,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Сетка перспективы > Сохранить сетку как стиль...": {
+    "Просмотр\ >\ Сетка\ перспективы\ >\ Сохранить\ сетку\ как\ стиль\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5746,7 +5770,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / скрыть монтажные области": {
+    "Просмотр\ >\ Показать\ /\ скрыть\ монтажные\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5755,7 +5779,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать разбиение для печати": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ разбиение\ для\ печати": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5764,7 +5788,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Спрятать шаблон": {
+    "Просмотр\ >\ Спрятать\ шаблон": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5773,7 +5797,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / скрыть линейки": {
+    "Просмотр\ >\ Показать\ /\ скрыть\ линейки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5782,7 +5806,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Линейки > Сменить на общие линейки / монтажной области": {
+    "Просмотр\ >\ Линейки\ >\ Сменить\ на\ общие\ линейки\ /\ монтажной\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5791,7 +5815,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / скрыть линейки видео": {
+    "Просмотр\ >\ Показать\ /\ скрыть\ линейки\ видео": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5800,7 +5824,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать связи текстовых блоков": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ связи\ текстовых\ блоков": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5809,7 +5833,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Направляющие > Показать / спрятать направляющие": {
+    "Просмотр\ >\ Направляющие\ >\ Показать\ /\ спрятать\ направляющие": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5818,7 +5842,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Направляющие > Закрепить направляющие": {
+    "Просмотр\ >\ Направляющие\ >\ Закрепить\ направляющие": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5827,7 +5851,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Направляющие > Создать направляющие": {
+    "Просмотр\ >\ Направляющие\ >\ Создать\ направляющие": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5836,7 +5860,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Направляющие > Освободить направляющие": {
+    "Просмотр\ >\ Направляющие\ >\ Освободить\ направляющие": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5845,7 +5869,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Направляющие > Удалить направляющие": {
+    "Просмотр\ >\ Направляющие\ >\ Удалить\ направляющие": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5854,7 +5878,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Показать / спрятать сетку": {
+    "Просмотр\ >\ Показать\ /\ спрятать\ сетку": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5863,7 +5887,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Выравнивать по сетке": {
+    "Просмотр\ >\ Выравнивать\ по\ сетке": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5872,7 +5896,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Выравнивать по точкам": {
+    "Просмотр\ >\ Выравнивать\ по\ точкам": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5881,7 +5905,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Новый вид…": {
+    "Просмотр\ >\ Новый\ вид…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5890,7 +5914,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Просмотр > Редактировать виды…": {
+    "Просмотр\ >\ Редактировать\ виды…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5899,7 +5923,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Новое окно": {
+    "Окно\ >\ Новое\ окно": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5908,7 +5932,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Упорядить > Каскадом": {
+    "Окно\ >\ Упорядить\ >\ Каскадом": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5917,7 +5941,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Упорядить > Мозаикой": {
+    "Окно\ >\ Упорядить\ >\ Мозаикой": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5926,7 +5950,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Упорядить > Плавающее в окне": {
+    "Окно\ >\ Упорядить\ >\ Плавающее\ в\ окне": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5935,7 +5959,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Упорядить > Все плавающие в окнах": {
+    "Окно\ >\ Упорядить\ >\ Все\ плавающие\ в\ окнах": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5944,7 +5968,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Упорядить > Объединить все окна": {
+    "Окно\ >\ Упорядить\ >\ Объединить\ все\ окна": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5953,7 +5977,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Восстановить рабочую среду": {
+    "Окно\ >\ Восстановить\ рабочую\ среду": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5962,7 +5986,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Рабочая среда > Создать рабочую среду...": {
+    "Окно\ >\ Рабочая\ среда\ >\ Создать\ рабочую\ среду\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5971,7 +5995,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Рабочая среда > Управление рабочими средами...": {
+    "Окно\ >\ Рабочая\ среда\ >\ Управление\ рабочими\ средами\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5980,7 +6004,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Поиск расширений на Exchange...": {
+    "Окно\ >\ Поиск\ расширений\ на\ Exchange\.\.\.": {
       cmdType: "menu",
       minVersion: 19,
       cmdActions: [
@@ -5990,7 +6014,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Панель управления": {
+    "Окно\ >\ Панель\ управления": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -5999,7 +6023,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Панели инструментов > Дополнительные": {
+    "Окно\ >\ Панели\ инструментов\ >\ Дополнительные": {
       cmdType: "menu",
       minVersion: 23,
       cmdActions: [
@@ -6009,7 +6033,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Панели инструментов > Основные": {
+    "Окно\ >\ Панели\ инструментов\ >\ Основные": {
       cmdType: "menu",
       minVersion: 23,
       cmdActions: [
@@ -6019,7 +6043,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Панели инструментов > Новая панель инструментов...": {
+    "Окно\ >\ Панели\ инструментов\ >\ Новая\ панель\ инструментов\.\.\.": {
       cmdType: "menu",
       minVersion: 17,
       cmdActions: [
@@ -6029,7 +6053,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Панели инструментов > Управление панелями инструментов...": {
+    "Окно\ >\ Панели\ инструментов\ >\ Управление\ панелями\ инструментов\.\.\.": {
       cmdType: "menu",
       minVersion: 17,
       cmdActions: [
@@ -6039,7 +6063,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > 3D и материалы": {
+    "Окно\ >\ 3D\ и\ материалы": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -6049,7 +6073,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Операции": {
+    "Окно\ >\ Операции": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6058,7 +6082,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Выравнивание": {
+    "Окно\ >\ Выравнивание": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6067,7 +6091,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Оформление": {
+    "Окно\ >\ Оформление": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6076,7 +6100,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Монтажные области": {
+    "Окно\ >\ Монтажные\ области": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6085,7 +6109,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Экспорт ресурсов": {
+    "Окно\ >\ Экспорт\ ресурсов": {
       cmdType: "menu",
       minVersion: 20,
       cmdActions: [
@@ -6095,7 +6119,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Атрибуты": {
+    "Окно\ >\ Атрибуты": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6104,7 +6128,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Кисти": {
+    "Окно\ >\ Кисти": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6113,7 +6137,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Цвет": {
+    "Окно\ >\ Цвет": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6122,7 +6146,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Каталог цветов": {
+    "Окно\ >\ Каталог\ цветов": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6131,7 +6155,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Комментарии": {
+    "Окно\ >\ Комментарии": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -6141,7 +6165,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Свойства CSS": {
+    "Окно\ >\ Свойства\ CSS": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6150,7 +6174,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Информация о документе": {
+    "Окно\ >\ Информация\ о\ документе": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6159,7 +6183,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Просмотр результатов сведения": {
+    "Окно\ >\ Просмотр\ результатов\ сведения": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6168,7 +6192,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Градиент": {
+    "Окно\ >\ Градиент": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6177,7 +6201,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Стили графики": {
+    "Окно\ >\ Стили\ графики": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6186,7 +6210,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > История": {
+    "Окно\ >\ История": {
       cmdType: "menu",
       minVersion: 26.4,
       cmdActions: [
@@ -6196,7 +6220,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Информация": {
+    "Окно\ >\ Информация": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6205,7 +6229,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Слои": {
+    "Окно\ >\ Слои": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6214,7 +6238,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Библиотеки": {
+    "Окно\ >\ Библиотеки": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6223,7 +6247,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Связи": {
+    "Окно\ >\ Связи": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6232,7 +6256,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Волшебная палочка": {
+    "Окно\ >\ Волшебная\ палочка": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6241,7 +6265,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Навигатор": {
+    "Окно\ >\ Навигатор": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6250,7 +6274,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Обработка контуров": {
+    "Окно\ >\ Обработка\ контуров": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6259,7 +6283,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Параметры узора": {
+    "Окно\ >\ Параметры\ узора": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6268,7 +6292,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Свойства": {
+    "Окно\ >\ Свойства": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -6278,7 +6302,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Просмотр цветоделений": {
+    "Окно\ >\ Просмотр\ цветоделений": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6287,7 +6311,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Обводка": {
+    "Окно\ >\ Обводка": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6296,7 +6320,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Интерактивность SVG": {
+    "Окно\ >\ Интерактивность\ SVG": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6305,7 +6329,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Образцы": {
+    "Окно\ >\ Образцы": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6314,7 +6338,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Символы": {
+    "Окно\ >\ Символы": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6323,7 +6347,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Трансформирование": {
+    "Окно\ >\ Трансформирование": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6332,7 +6356,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Прозрачность": {
+    "Окно\ >\ Прозрачность": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6341,7 +6365,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Текст > Символ": {
+    "Окно\ >\ Текст\ >\ Символ": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6350,7 +6374,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Текст > Стили символов": {
+    "Окно\ >\ Текст\ >\ Стили\ символов": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6359,7 +6383,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Текст > Глифы": {
+    "Окно\ >\ Текст\ >\ Глифы": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6368,7 +6392,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Текст > OpenType": {
+    "Окно\ >\ Текст\ >\ OpenType": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6377,7 +6401,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Текст > Абзац": {
+    "Окно\ >\ Текст\ >\ Абзац": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6386,7 +6410,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Текст > Стили абзацев": {
+    "Окно\ >\ Текст\ >\ Стили\ абзацев": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6395,7 +6419,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Текст > Табуляция": {
+    "Окно\ >\ Текст\ >\ Табуляция": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6404,7 +6428,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Переменные": {
+    "Окно\ >\ Переменные": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6413,7 +6437,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Журнал версий": {
+    "Окно\ >\ Журнал\ версий": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -6423,7 +6447,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Библиотеки кистей > Другая библиотека...": {
+    "Окно\ >\ Библиотеки\ кистей\ >\ Другая\ библиотека\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6432,7 +6456,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Библиотеки стилей графики > Другая библиотека...": {
+    "Окно\ >\ Библиотеки\ стилей\ графики\ >\ Другая\ библиотека\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6441,7 +6465,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Библиотеки образцов > Другая библиотека...": {
+    "Окно\ >\ Библиотеки\ образцов\ >\ Другая\ библиотека\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6450,7 +6474,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Окно > Библиотеки символов > Другая библиотека...": {
+    "Окно\ >\ Библиотеки\ символов\ >\ Другая\ библиотека\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6459,7 +6483,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Справка > Справка программы Illustrator...": {
+    "Справка\ >\ Справка\ программы\ Illustrator\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6468,7 +6492,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Справка > Сообщество службы поддержки": {
+    "Справка\ >\ Сообщество\ службы\ поддержки": {
       cmdType: "menu",
       minVersion: 26,
       cmdActions: [
@@ -6478,7 +6502,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Справка > Сообщение об ошибке/запрос на добавление новых функций...": {
+    "Справка\ >\ Сообщение\ об\ ошибке/запрос\ на\ добавление\ новых\ функций\.\.\.": {
       cmdType: "menu",
       minVersion: 25,
       cmdActions: [
@@ -6488,7 +6512,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Справка > Информация о системе…": {
+    "Справка\ >\ Информация\ о\ системе…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6497,7 +6521,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Операции > Пакетная обработка…": {
+    "Палитра\ >\ Операции\ >\ Пакетная\ обработка…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6506,7 +6530,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Оформление > Добавить новую заливку": {
+    "Палитра\ >\ Оформление\ >\ Добавить\ новую\ заливку": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6515,7 +6539,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Оформление > Добавить новую обводку": {
+    "Палитра\ >\ Оформление\ >\ Добавить\ новую\ обводку": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6524,7 +6548,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Стили графики > Новый стиль графики": {
+    "Палитра\ >\ Стили\ графики\ >\ Новый\ стиль\ графики": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6533,7 +6557,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Слои > Создать новый слой": {
+    "Палитра\ >\ Слои\ >\ Создать\ новый\ слой": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6542,7 +6566,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Слои > Создать новый с параметрами...": {
+    "Палитра\ >\ Слои\ >\ Создать\ новый\ с\ параметрами\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6551,7 +6575,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Связи > Обновить связь": {
+    "Палитра\ >\ Связи\ >\ Обновить\ связь": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6560,7 +6584,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Образцы > Новый образец": {
+    "Палитра\ >\ Образцы\ >\ Новый\ образец": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6569,7 +6593,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Палитра > Символы > Новый символ": {
+    "Палитра\ >\ Символы\ >\ Новый\ символ": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6578,7 +6602,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "О программе Illustrator…": {
+    "О\ программе\ Illustrator…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6587,7 +6611,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Основные…": {
+    "Установки\ >\ Основные…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6596,7 +6620,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Отображение выделения и опорных точек…": {
+    "Установки\ >\ Отображение\ выделения\ и\ опорных\ точек…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6605,7 +6629,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Текст…": {
+    "Установки\ >\ Текст…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6614,7 +6638,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Единицы измерения…": {
+    "Установки\ >\ Единицы\ измерения…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6623,7 +6647,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Направляющие и сетка…": {
+    "Установки\ >\ Направляющие\ и\ сетка…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6632,7 +6656,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Быстрые направляющие…": {
+    "Установки\ >\ Быстрые\ направляющие…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6641,7 +6665,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Фрагменты…": {
+    "Установки\ >\ Фрагменты…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6650,7 +6674,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Расстановка переносов…": {
+    "Установки\ >\ Расстановка\ переносов…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6659,7 +6683,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Внешние модули и рабочие диски…": {
+    "Установки\ >\ Внешние\ модули\ и\ рабочие\ диски…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6668,7 +6692,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Интерфейс пользователя…": {
+    "Установки\ >\ Интерфейс\ пользователя…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6677,7 +6701,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Производительность…": {
+    "Установки\ >\ Производительность…": {
       cmdType: "menu",
       minVersion: 19,
       cmdActions: [
@@ -6687,7 +6711,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Обработка файлов…": {
+    "Установки\ >\ Обработка\ файлов…": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6696,7 +6720,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Обработка буфера…": {
+    "Установки\ >\ Обработка\ буфера…": {
       cmdType: "menu",
       minVersion: 25,
       cmdActions: [
@@ -6706,7 +6730,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Воспроизведение черного цвета...": {
+    "Установки\ >\ Воспроизведение\ черного\ цвета\.\.\.": {
       cmdType: "menu",
       cmdActions: [
         {
@@ -6715,7 +6739,7 @@ function builtinMenuCommands() {
         },
       ],
     },
-    "Установки > Устройства…": {
+    "Установки\ >\ Устройства…": {
       cmdType: "menu",
       minVersion: 24,
       cmdActions: [
