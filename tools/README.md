@@ -1,8 +1,8 @@
 # Ai Command Palette - Build Tools
 
-## Build Menu Commands
+## Build Commands
 
-There are almost 500 menu commands available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the builtinMenuCommands object that is included in the script. It loads all available menu commands from the [ai_menus.csv](/ai_menus.csv) CSV file and builds the JSON object needed in the main script.
+There are almost 500 menu commands and 80 tools available in Ai Command Palette and since they get updated often, this script helps me build/rebuild these two objects used in the script.
 
 ```javascript
 {
@@ -21,61 +21,35 @@ There are almost 500 menu commands available in Ai Command Palette and since the
 
 ### How It Works
 
+Supply a CSV file of commands and specify the commands type ('menu', 'tool') and the script will build the proper JSON object to be manually inserted at the bottom of [AiCommandPalette.jsx](/AiCommandPalette.jsx).
 ```bash
-python3 build_menu_commands_json.py -h                                                           
-usage: build_menu_commands_json.py [-h] -f FILE [-o OUTPUT]
+python3 build_commands.py -h                                           
+usage: build_commands.py [-h] -f FILE [-t {menu,tool}]
 
-Build Ai Menu Comands JSON Object.
+Build Ai Command Palette Commands JSON Object.
 
 options:
   -h, --help            show this help message and exit
-  -f FILE, --file FILE  Path of CSV file with Ai menu commands.
-  -o OUTPUT, --output OUTPUT
-                        Output path for JSON file.
+  -f FILE, --file FILE  Path of CSV file with Ai commands.
+  -t {menu,tool}, --type {menu,tool}
+                        Type of commands to build.
 
 Copyright 2022 Josh Duncan (joshbduncan.com)
 ```
 
-## Build Tool Commands 
-
-Just like above, there are almost 80 tools available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the builtinToolCommands object that is included in the script. It loads all available tools from the [ai_tools.csv](/ai_tools.csv) CSV file and builds the JSON object needed in the main script.
-
-```javascript
-{
-  "Add Anchor Point Tool": {
-    cmdType: "tool",
-    minVersion: 24,
-    cmdActions: [
-      {
-        type: "tool",
-        value: "Adobe Add Anchor Point Tool",
-      },
-    ],
-  },
-  // ...
-}
-```
-
-### How It Works
+The script simply writes the JSON to stdout but you can redirect that to the clipboard or a file for further inspection.
 
 ```bash
-python3 build_tool_commands_json.py -h 
-usage: build_tool_commands_json.py [-h] -f FILE [-o OUTPUT]
+# redirect JSON to a file
+python3 build_commands.py -f commands.csv -t menu > object.json
 
-Build Ai Tool Comands JSON Object.
-
-options:
-  -h, --help            show this help message and exit
-  -f FILE, --file FILE  Path of CSV file with Ai tool commands.
-  -o OUTPUT, --output OUTPUT
-                        Output path for JSON file.
-
-Copyright 2022 Josh Duncan (joshbduncan.com)
+# place JSON on you clipboard
+python3 build_commands.py -f commands.csv -t menu | pbcopy
 ```
 
 ## Build Translations
 
-Building translations using a brute force approach that utilizes [regular expressions (regex)](https://en.wikipedia.org/wiki/Regular_expression) and a language translation [Comma-separated values (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values) file.
+Build translations using a brute force approach that utilizes [regular expressions (regex)](https://en.wikipedia.org/wiki/Regular_expression) and a language translation [Comma-separated values (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values) file.
 
 ### How It Works
 

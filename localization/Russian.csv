@@ -44,9 +44,11 @@ New Workflow Name,Имя нового набора
 Workflow not saved.,Набор не сохранен
 Error saving workflow:\n,Ошибка сохранения набора:\n
 Choose A Workflow To Edit,Выберите набор для редактирования
+There are no workflows to edit.,
 There are no workflows that need attention.,Нет наборов требующих внимания
 All Built-In Menu Commands,Стандартные команды меню
 All Built-In Tools,Стандартные инструменты
+No tools are currently available.,
 Select Menu Commands To Hide,Выбрать команды меню для скрытия
 Hide Commands?\n,Скрыть команды?\n
 Confirm Commands To Hide,Подтвердить скрытие команд

@@ -18,12 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Please note that if the min version listed in the list above was below 17 it was ignored and if the max version was listed at 99 it was also ignored. Ai Command Palette doesn't require a min or max version to be listed for menu commands. All menu commands are executed within a try/catch block so it will fail gracefully and let you know why.
     - Since they `app.selectTool()` method wasn't introduced until Ai version 24, all tools have that as their min version.
 - Ai Tools and Ai Menu Commands CSV files
-    - [ai_menus.csv](ai_menus.csv) is where I will track all available menu commands (for use with `app.executeMenuCommand()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
-    - [ai_tools.csv](ai_tools.csv) will track all available tool commands (for use with `app.selectTool()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
+    - [ai_menu_commands.csv](ai_menu_commands.csv) is where I will track all available menu commands (for use with `app.executeMenuCommand()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
+    - [ai_tool_commands.csv](ai_tool_commands.csv) will track all available tool commands (for use with `app.selectTool()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
     - If you have updates to either file or see something that is incorrect, please [file an issue](https://github.com/joshbduncan/AiCommandPalette/issues) and I'll check it out.
 - New Build Tools
-    - [build_menu_commands.py](/tools/build_menu_commands.py) builds the builtinMenuCommands object directly from [ai_menus.csv](ai_menus.csv), so any updates to menu commands or min/max versions are easier to track and implement.
-    - [build_tool_commands.py](/tools/build_tool_commands.py) builds the builtinToolCommands object directly from [ai_tools.csv](ai_tools.csv), so any updates to tool commands or min/max versions are easier to track and implement.
+    - [build_menu_commands.py](/tools/build_menu_commands.py) builds the builtinMenuCommands object directly from [ai_menu_commands.csv](ai_menu_commands.csv), so any updates to menu commands or min/max versions are easier to track and implement.
+    - [build_tool_commands.py](/tools/build_tool_commands.py) builds the builtinToolCommands object directly from [ai_tool_commands.csv](ai_tool_commands.csv), so any updates to tool commands or min/max versions are easier to track and implement.
 
 ### Changes
 - [translate.py](/tools/build_translations.py) moved to the tools folder.

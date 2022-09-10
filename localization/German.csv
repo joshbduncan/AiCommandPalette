@@ -44,9 +44,11 @@ New Workflow Name,Name des neuen Arbeitsablaufs
 Workflow not saved.,Arbeitsablauf nicht gespeichert
 Error saving workflow:\n,Fehler beim Speichern des Arbeitsablaufs:\n
 Choose A Workflow To Edit,Wählen Sie einen Arbeitsablauf zum Bearbeiten aus.
+There are no workflows to edit.,
 There are no workflows that need attention.,"Es gibt keine Arbeitsabläufe, die beachtet werden müssen."
 All Built-In Menu Commands,Alle integrierten Menübefehle
 All Built-In Tools,Alle integrierten Werkzeuge
+No tools are currently available.,
 Select Menu Commands To Hide,Wählen Sie die auszublendenden Menübefehle aus.
 Hide Commands?\n,Befehle ausblenden?\n
 Confirm Commands To Hide,Auszublendende Befehle bestätigen

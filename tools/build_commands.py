@@ -2,6 +2,7 @@ import argparse
 import csv
 import json
 import sys
+from io import StringIO
 from pathlib import Path
 
 
@@ -15,22 +16,23 @@ def convert_to_num(n):
 def main():
     # setup parser and arguments
     parser = argparse.ArgumentParser(
-        description="Build Ai Menu Comands JSON Object.",
+        description="Build Ai Command Palette Commands JSON Object.",
         epilog="Copyright 2022 Josh Duncan (joshbduncan.com)",
-        prog="build_menu_commands_json.py",
+        prog="build_commands_json.py",
     )
     parser.add_argument(
         "-f",
         "--file",
         type=Path,
         required=True,
-        help="Path of CSV file with Ai menu commands.",
+        help="Path of CSV file with Ai commands.",
     )
     parser.add_argument(
-        "-o",
-        "--output",
-        type=Path,
-        help="Output path for JSON file.",
+        "-t",
+        "--type",
+        type=str,
+        choices=["menu", "tool"],
+        help="Type of commands to build.",
     )
 
     # capture all cli arguments
@@ -50,23 +52,15 @@ def main():
             en = row[1]
             minVersion = row[2]
             maxVersion = row[3]
-            d[en] = {"cmdType": "menu"}
+            d[en] = {"cmdType": args.type.lower()}
             if minVersion:
                 d[en]["minVersion"] = convert_to_num(minVersion)
             if maxVersion:
                 d[en]["maxVersion"] = convert_to_num(maxVersion)
-            d[en]["cmdActions"] = [{"type": "menu", "value": value}]
+            d[en]["cmdActions"] = [{"type": args.type.lower(), "value": value}]
 
-    # convert dictionary to JSON object
-    json_object = json.dumps(d, indent=2)
-
-    # write json object to file or clipboard
-    if args.output:
-        output_file = args.output
-        with open(output_file, "w") as o:
-            o.write(json_object)
-    else:
-        sys.stdout.write(json_object)
+    # write json to stdout
+    print(json.dumps(d))
 
     return 0
 
