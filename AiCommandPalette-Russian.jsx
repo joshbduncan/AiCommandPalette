@@ -104,6 +104,9 @@ var dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
 loadUserData(dataFile);
 
 // Setup commands for Ai Command Palette
+buildConfigCommands();
+buildToolCommands();
+buildMenuCommands();
 var commandsData = buildCommands();
 var allCommands = Object.keys(commandsData);
 var filteredCommands = filterHiddenCommands();
@@ -422,14 +425,19 @@ function configBuildWorkflow(workflow) {
 
 /** Choose a workflow to edit. */
 function configEditWorkflow() {
-  var result = commandPalette(
-    (arr = Object.keys(data.commands.workflow)),
-    (title = "Выберите\ набор\ для\ редактирования"),
-    (bounds = [0, 0, paletteWidth, 182]),
-    (multiselect = false),
-    (filter = [])
-  );
-  if (result) configBuildWorkflow(result);
+  var commands = Object.keys(data.commands.workflow);
+  if (commands.length > 0) {
+    var result = commandPalette(
+      (arr = commands),
+      (title = "Выберите\ набор\ для\ редактирования"),
+      (bounds = [0, 0, paletteWidth, 182]),
+      (multiselect = false),
+      (filter = [])
+    );
+    if (result) configBuildWorkflow(result);
+  } else {
+    alert("There are no workflows to edit.");
+  }
 }
 
 /** Show workflows that need attention. */
@@ -471,14 +479,19 @@ function showBuiltInMenuCommands() {
 
 /** Show all built-in Ai tools. */
 function showBuiltInTools() {
-  result = commandPalette(
-    (arr = Object.keys(data.commands.tool)),
-    (title = "Стандартные\ инструменты"),
-    (bounds = [0, 0, paletteWidth, 182]),
-    (multiselect = false),
-    (filter = [])
-  );
-  if (result) processCommandActions(result);
+  var commands = Object.keys(data.commands.tool);
+  if (commands.length > 0) {
+    result = commandPalette(
+      (arr = commands),
+      (title = "Стандартные\ инструменты"),
+      (bounds = [0, 0, paletteWidth, 182]),
+      (multiselect = false),
+      (filter = [])
+    );
+    if (result) processCommandActions(result);
+  } else {
+    alert("No tools are currently available.");
+  }
 }
 
 /** Hide commands from Ai Command Palette. */
