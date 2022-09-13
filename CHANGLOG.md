@@ -18,11 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Please note that if the min version listed in the list above was below 17 it was ignored and if the max version was listed at 99 it was also ignored. Ai Command Palette doesn't require a min or max version to be listed for menu commands. All menu commands are executed within a try/catch block so it will fail gracefully and let you know why.
     - Since they `app.selectTool()` method wasn't introduced until Ai version 24, all tools have that as their min version.
 - Ai Tools and Ai Menu Commands CSV files
-    - [ai_menu_commands.csv](ai_menu_commands.csv) is where I will track all available menu commands (for use with `app.executeMenuCommand()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
-    - [ai_tool_commands.csv](ai_tool_commands.csv) will track all available tool commands (for use with `app.selectTool()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
+    - [menu_commands.csv](/commands/menu_commands.csv) is where I will track all available menu commands (for use with `app.executeMenuCommand()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
+    - [tool_commands.csv](/commands/tool_commands.csv) will track all available tool commands (for use with `app.selectTool()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
     - If you have updates to either file or see something that is incorrect, please [file an issue](https://github.com/joshbduncan/AiCommandPalette/issues) and I'll check it out.
 - New Build Tools
-    - [build__menu__commands.py](/tools/build_commands.py) builds the builtinMenuCommands and builtinToolCommands objects directly from [ai_menu_commands.csv](ai_menu_commands.csv) and [ai_tool_commands.csv](ai_tool_commands.csv), so any updates are easier to track and implement.
+    - [build__menu__commands.py](/tools/build_commands.py) builds the builtinMenuCommands and builtinToolCommands objects directly from [menu_commands.csv](/commands/menu_commands.csv) and [tool_commands.csv](/commands/tool_commands.csv), so any updates are easier to track and implement.
 - Temporary Windows systems flicker fix as documented by in [issue #8](https://github.com/joshbduncan/AiCommandPalette/issues/8)
     - Only effects Windows users
     - You can opt out of the fix by using the "Disable Windows Flicker Fix" config menu command

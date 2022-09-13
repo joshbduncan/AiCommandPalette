@@ -15,8 +15,10 @@ var _copyright = "Copyright 2022 Josh Duncan";
 var _website = "joshbduncan.com";
 var _github = "https://github.com/joshbduncan";
 
-// get current Ai version to check for function compatibility
+// Get current Ai version to check for function compatibility
 var aiVersion = parseFloat(app.version);
+// Get the current system operating system type
+var sysOS = /mac/i.test($.os) ? "mac" : "win";
 
 // Load Needed JavaScript Polyfills
 polyfills();
@@ -37,13 +39,12 @@ var data = {
         cmdActions: [{ type: "config", value: "paletteSettings" }],
       },
     },
-    menu: {},
-    tool: {},
-    config: {},
+    menu: menuCommands(),
+    tool: toolCommands(),
+    config: configCommands(),
   },
   settings: {
     hiddenCommands: [],
-    hideWinFlicker: true,
     version: _version,
   },
 };
@@ -54,9 +55,6 @@ var dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
 loadUserData(dataFile);
 
 // Setup commands for Ai Command Palette
-buildConfigCommands();
-buildToolCommands();
-buildMenuCommands();
 var commandsData = buildCommands();
 var allCommands = Object.keys(commandsData);
 var filteredCommands = filterHiddenCommands();
@@ -225,9 +223,6 @@ function configAction(action) {
     case "deleteCommand":
       configDeleteCommand();
       break;
-    case "toggleWinFlicker":
-      data.settings.hideWinFlicker = !data.settings.hideWinFlicker;
-      break;
     case "revealPrefFile":
       dataFolder.execute();
       write = false;
@@ -386,7 +381,7 @@ function configEditWorkflow() {
     );
     if (result) configBuildWorkflow(result);
   } else {
-    alert("There are no workflows to edit.");
+    alert("Нет\ наборов\ для\ редактирования");
   }
 }
 
@@ -440,7 +435,7 @@ function showBuiltInTools() {
     );
     if (result) processCommandActions(result);
   } else {
-    alert("No tools are currently available.");
+    alert("Инструменты\ в\ данный\ момент\ недоступны");
   }
 }
 
@@ -596,9 +591,9 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
 
   // work-around to stop windows from flashing explorer
-  if (/mac/i.test($.os)) {
+  if (sysOS === "mac") {
     q.active = true;
-  } else if (data.settings.hideWinFlicker) {
+  } else {
     win.addEventListener("mouseover", function () {
       q.active = true;
     });
@@ -732,9 +727,9 @@ function workflowBuilder(arr, edit) {
   q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
 
   // work-around to stop windows from flashing explorer
-  if (/mac/i.test($.os)) {
+  if (sysOS === "mac") {
     q.active = true;
-  } else if (data.settings.hideWinFlicker) {
+  } else {
     win.addEventListener("mouseover", function () {
       q.active = true;
     });
@@ -1292,43 +1287,59 @@ function polyfills() {
   }
 }
 
-/** Build Config Menu */
-function buildConfigCommands() {
-  var winFlickerMenuName = data.settings.hideWinFlicker
-    ? "Disable Windows Flicker Fix"
-    : "Enable Windows Flicker Fix";
-  var menuItems = [
-    { value: "about", title: "Об\ Ai\ Command\ Palette" },
-    { value: "buildWorkflow", title: "Создать\ набор\ команд" },
-    { value: "editWorkflow", title: "Редактировать\ набор\ команд" },
-    { value: "workflowsNeedingAttention", title: "Наборы\ требующие\ внимания" },
-    { value: "loadScript", title: "Загрузить\ скрипты" },
-    { value: "showBuiltInMenuCommands", title: "Показать\ стандартные\ команды\ меню" },
-    { value: "showBuiltInTools", title: "Показать\ стандартные\ инструменты" },
-    { value: "hideCommand", title: "Скрыть\ команды" },
-    { value: "unhideCommand", title: "Показать\ команды" },
-    { value: "deleteCommand", title: "Удалить\ команды" },
-    { value: "toggleWinFlicker", title: winFlickerMenuName },
-    { value: "revealPrefFile", title: "Показать\ файл\ настроек" },
-  ];
-
-  for (var i = 0; i < menuItems.length; i++) {
-    if (menuItems[i].value == "toggleWinFlicker" && /mac/i.test($.os)) continue;
-    data.commands.config[menuItems[i].title] = {
+/** Config Menu */
+function configCommands() {
+  return {
+    "Об\ Ai\ Command\ Palette": {
       cmdType: "config",
-      cmdActions: [
-        {
-          type: "config",
-          value: menuItems[i].value,
-        },
-      ],
-    };
-  }
+      cmdActions: [{ type: "config", value: "about" }],
+    },
+    "Создать\ набор\ команд": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "buildWorkflow" }],
+    },
+    "Редактировать\ набор\ команд": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "editWorkflow" }],
+    },
+    "Наборы\ требующие\ внимания": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "workflowsNeedingAttention" }],
+    },
+    "Загрузить\ скрипты": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "loadScript" }],
+    },
+    "Показать\ стандартные\ команды\ меню": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "showBuiltInMenuCommands" }],
+    },
+    "Показать\ стандартные\ инструменты": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "showBuiltInTools" }],
+    },
+    "Скрыть\ команды": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "hideCommand" }],
+    },
+    "Показать\ команды": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "unhideCommand" }],
+    },
+    "Удалить\ команды": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "deleteCommand" }],
+    },
+    "Показать\ файл\ настроек": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "revealPrefFile" }],
+    },
+  };
 }
 
 /** Default Ai Tools */
-function buildToolCommands() {
-  data.commands.tool = {
+function toolCommands() {
+  return {
     "Инструмент:\ Добавить\ опорную\ точку": {
       cmdType: "tool",
       minVersion: 24,
@@ -1775,8 +1786,8 @@ function buildToolCommands() {
 }
 
 /** Default Ai Menu Commands */
-function buildMenuCommands() {
-  data.commands.menu = {
+function menuCommands() {
+  return {
     "Файл\ >\ Новый\.\.\.": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "new" }],

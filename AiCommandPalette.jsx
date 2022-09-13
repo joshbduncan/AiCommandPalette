@@ -18,7 +18,7 @@ var _github = "https://github.com/joshbduncan";
 // Get current Ai version to check for function compatibility
 var aiVersion = parseFloat(app.version);
 // Get the current system operating system type
-var sysOS = /mac/i.test($.os) ? "MAC" : "WIN";
+var sysOS = /mac/i.test($.os) ? "mac" : "win";
 
 // Load Needed JavaScript Polyfills
 polyfills();
@@ -39,13 +39,12 @@ var data = {
         cmdActions: [{ type: "config", value: "paletteSettings" }],
       },
     },
-    menu: {},
-    tool: {},
-    config: {},
+    menu: menuCommands(),
+    tool: toolCommands(),
+    config: configCommands(),
   },
   settings: {
     hiddenCommands: [],
-    hideWinFlicker: true,
     version: _version,
   },
 };
@@ -55,19 +54,7 @@ var dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
 var dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
 loadUserData(dataFile);
 
-// Fix for Windows screen flicker issue
-// https://github.com/joshbduncan/AiCommandPalette/issues/8
-var winFlickerFixedVersions = ["26.4.1", "26.5"];
-var hideWinFlicker =
-  sysOS == "MAC" ||
-  (sysOS == "WIN" && winFlickerFixedVersions.includes(aiVersion.toString()))
-    ? false
-    : data.settings.hideWinFlicker;
-
 // Setup commands for Ai Command Palette
-buildConfigCommands();
-buildToolCommands();
-buildMenuCommands();
 var commandsData = buildCommands();
 var allCommands = Object.keys(commandsData);
 var filteredCommands = filterHiddenCommands();
@@ -235,9 +222,6 @@ function configAction(action) {
       break;
     case "deleteCommand":
       configDeleteCommand();
-      break;
-    case "toggleWinFlicker":
-      data.settings.hideWinFlicker = !data.settings.hideWinFlicker;
       break;
     case "revealPrefFile":
       dataFolder.execute();
@@ -607,12 +591,12 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   q.helpTip = "Search for commands, actions, and loaded scripts.";
 
   // work-around to stop windows from flashing explorer
-  if (hideWinFlicker) {
+  if (sysOS === "mac") {
+    q.active = true;
+  } else {
     win.addEventListener("mouseover", function () {
       q.active = true;
     });
-  } else {
-    q.active = true;
   }
 
   if (filter.length > 0) {
@@ -743,12 +727,12 @@ function workflowBuilder(arr, edit) {
   q.helpTip = "Search for commands, actions, and loaded scripts.";
 
   // work-around to stop windows from flashing explorer
-  if (hideWinFlicker) {
+  if (sysOS === "mac") {
+    q.active = true;
+  } else {
     win.addEventListener("mouseover", function () {
       q.active = true;
     });
-  } else {
-    q.active = true;
   }
 
   var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
@@ -1303,49 +1287,59 @@ function polyfills() {
   }
 }
 
-/** Build Config Menu */
-function buildConfigCommands() {
-  var winFlickerMenuName = data.settings.hideWinFlicker
-    ? "Disable Windows Flicker Fix"
-    : "Enable Windows Flicker Fix";
-  var menuItems = [
-    { value: "about", title: "About Ai Command Palette..." },
-    { value: "buildWorkflow", title: "Build Workflow..." },
-    { value: "editWorkflow", title: "Edit Workflow..." },
-    { value: "workflowsNeedingAttention", title: "Workflows Needing Attention..." },
-    { value: "loadScript", title: "Load Scripts..." },
-    { value: "showBuiltInMenuCommands", title: "Show All Built-In Menu Commands..." },
-    { value: "showBuiltInTools", title: "Show All Built-In Tools..." },
-    { value: "hideCommand", title: "Hide Commands..." },
-    { value: "unhideCommand", title: "Reveal Commands..." },
-    { value: "deleteCommand", title: "Delete Commands..." },
-    { value: "toggleWinFlicker", title: winFlickerMenuName },
-    { value: "revealPrefFile", title: "Reveal Preferences File" },
-  ];
-
-  for (var i = 0; i < menuItems.length; i++) {
-    if (
-      (menuItems[i].value == "toggleWinFlicker" && sysOS == "MAC") ||
-      (menuItems[i].value == "toggleWinFlicker" &&
-        sysOS == "WIN" &&
-        winFlickerFixedVersions.includes(aiVersion.toString()))
-    )
-      continue;
-    data.commands.config[menuItems[i].title] = {
+/** Config Menu */
+function configCommands() {
+  return {
+    "About Ai Command Palette...": {
       cmdType: "config",
-      cmdActions: [
-        {
-          type: "config",
-          value: menuItems[i].value,
-        },
-      ],
-    };
-  }
+      cmdActions: [{ type: "config", value: "about" }],
+    },
+    "Build Workflow...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "buildWorkflow" }],
+    },
+    "Edit Workflow...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "editWorkflow" }],
+    },
+    "Workflows Needing Attention...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "workflowsNeedingAttention" }],
+    },
+    "Load Scripts...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "loadScript" }],
+    },
+    "Show All Built-In Menu Commands...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "showBuiltInMenuCommands" }],
+    },
+    "Show All Built-In Tools...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "showBuiltInTools" }],
+    },
+    "Hide Commands...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "hideCommand" }],
+    },
+    "Reveal Commands...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "unhideCommand" }],
+    },
+    "Delete Commands...": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "deleteCommand" }],
+    },
+    "Reveal Preferences File": {
+      cmdType: "config",
+      cmdActions: [{ type: "config", value: "revealPrefFile" }],
+    },
+  };
 }
 
 /** Default Ai Tools */
-function buildToolCommands() {
-  data.commands.tool = {
+function toolCommands() {
+  return {
     "Add Anchor Point Tool": {
       cmdType: "tool",
       minVersion: 24,
@@ -1792,8 +1786,8 @@ function buildToolCommands() {
 }
 
 /** Default Ai Menu Commands */
-function buildMenuCommands() {
-  data.commands.menu = {
+function menuCommands() {
+  return {
     "File > New...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "new" }],
