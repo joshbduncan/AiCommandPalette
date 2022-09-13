@@ -15,8 +15,10 @@ var _copyright = "Copyright 2022 Josh Duncan";
 var _website = "joshbduncan.com";
 var _github = "https://github.com/joshbduncan";
 
-// get current Ai version to check for function compatibility
+// Get current Ai version to check for function compatibility
 var aiVersion = parseFloat(app.version);
+// Get the current system operating system type
+var sysOS = /mac/i.test($.os) ? "MAC" : "WIN";
 
 // Load Needed JavaScript Polyfills
 polyfills();
@@ -52,6 +54,15 @@ var data = {
 var dataFolder = setupFolderObject(Folder.userData + "/" + "JBD");
 var dataFile = setupFileObject(dataFolder, "AiCommandPalette.json");
 loadUserData(dataFile);
+
+// Fix for Windows screen flicker issue
+// https://github.com/joshbduncan/AiCommandPalette/issues/8
+var winFlickerFixedVersions = ["26.4.1", "26.5"];
+var hideWinFlicker =
+  sysOS == "MAC" ||
+  (sysOS == "WIN" && winFlickerFixedVersions.includes(aiVersion.toString()))
+    ? false
+    : data.settings.hideWinFlicker;
 
 // Setup commands for Ai Command Palette
 buildConfigCommands();
@@ -596,12 +607,12 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   q.helpTip = "Search for commands, actions, and loaded scripts.";
 
   // work-around to stop windows from flashing explorer
-  if (/mac/i.test($.os)) {
-    q.active = true;
-  } else if (data.settings.hideWinFlicker) {
+  if (hideWinFlicker) {
     win.addEventListener("mouseover", function () {
       q.active = true;
     });
+  } else {
+    q.active = true;
   }
 
   if (filter.length > 0) {
@@ -732,12 +743,12 @@ function workflowBuilder(arr, edit) {
   q.helpTip = "Search for commands, actions, and loaded scripts.";
 
   // work-around to stop windows from flashing explorer
-  if (/mac/i.test($.os)) {
-    q.active = true;
-  } else if (data.settings.hideWinFlicker) {
+  if (hideWinFlicker) {
     win.addEventListener("mouseover", function () {
       q.active = true;
     });
+  } else {
+    q.active = true;
   }
 
   var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
@@ -1313,7 +1324,13 @@ function buildConfigCommands() {
   ];
 
   for (var i = 0; i < menuItems.length; i++) {
-    if (menuItems[i].value == "toggleWinFlicker" && /mac/i.test($.os)) continue;
+    if (
+      (menuItems[i].value == "toggleWinFlicker" && sysOS == "MAC") ||
+      (menuItems[i].value == "toggleWinFlicker" &&
+        sysOS == "WIN" &&
+        winFlickerFixedVersions.includes(aiVersion.toString()))
+    )
+      continue;
     data.commands.config[menuItems[i].title] = {
       cmdType: "config",
       cmdActions: [
