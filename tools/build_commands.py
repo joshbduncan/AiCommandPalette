@@ -31,7 +31,7 @@ def main():
         "-t",
         "--type",
         type=str,
-        choices=["menu", "tool"],
+        choices=["config", "menu", "tool"],
         help="Type of commands to build.",
     )
 

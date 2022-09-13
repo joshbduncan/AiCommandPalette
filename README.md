@@ -18,7 +18,7 @@ If you have worked with Alfred app or VS Code you know how great the “command 
 
 ### Menu Commands
 
-With nearly 500 Menu Commands available to Ai Command Palette ([view all here](ai_menu_commands.csv), there isn't much you can't access. I have tested all of them on Adobe Illustrator v26.4.1.
+With nearly 500 Menu Commands available to Ai Command Palette ([view all here](/commands/menu_commands.csv), there isn't much you can't access. I have tested all of them on Adobe Illustrator v26.4.1.
 
 !["Built-In Menu Commands"](/images/builtin-commands.png)
 

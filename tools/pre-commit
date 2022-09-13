@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# test to make sure localization have been built
+CHECK=0
+for FILE in $(git diff --name-only --cached)
+do
+    if [[ $FILE == "AiCommandPalette-"* ]]
+    then
+        CHECK=$((CHECK+1))
+    fi
+done
+
+if [ $CHECK -lt 2 ]
+then
+	echo "🚨 Whoops! Did you forget to build the translations?"
+    exit 1
+fi
+
+# old version doesn't work when files have been staged
+# for FILE in ./AiCommandPalette-*.jsx
+# do
+# 	git diff --exit-code $FILE > /dev/null 2>&1
+# 	if [ $? -eq 0 ] 
+# 	then
+# 		echo "🚨 Whoops! Did you forget to build the translations?"
+#   		exit 1 
+# 	fi
+# done
