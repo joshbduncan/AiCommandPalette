@@ -22,11 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - [tool_commands.csv](/commands/tool_commands.csv) will track all available tool commands (for use with `app.selectTool()`) going forward along with their min and max versions. If you see anything that needs to be changed to updated please submit a PR.
     - If you have updates to either file or see something that is incorrect, please [file an issue](https://github.com/joshbduncan/AiCommandPalette/issues) and I'll check it out.
 - New Build Tools
-    - [build__menu__commands.py](/tools/build_commands.py) builds the builtinMenuCommands and builtinToolCommands objects directly from [menu_commands.csv](/commands/menu_commands.csv) and [tool_commands.csv](/commands/tool_commands.csv), so any updates are easier to track and implement.
-- Temporary Windows systems flicker fix as documented by in [issue #8](https://github.com/joshbduncan/AiCommandPalette/issues/8)
-    - Only effects Windows users
-    - You can opt out of the fix by using the "Disable Windows Flicker Fix" config menu command
+    - [build_commands.py](/tools/build_commands.py) builds the built-in menu commands, the built-in tool commands, and the config commands objects directly from [menu_commands.csv](/commands/menu_commands.csv), [config_commands.csv](/commands/config_commands.csv), and [tool_commands.csv](/commands/tool_commands.csv), so any updates are easier to track and implement.
 - New way to build config menu
+
+### Fixed
+- Windows OS Flicker Bug [issue #8](https://github.com/joshbduncan/AiCommandPalette/issues/8)
+    - Very clever solution provided by [Sergey Osokin](https://github.com/creold)
+    - Found that simulating a `<TAB>` key press via VBScript was the best solution for keeping the user experience the same on Windows and Mac.
+    - Only effects Windows users.
 
 
 ### Changes

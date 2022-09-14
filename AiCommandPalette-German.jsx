@@ -20,6 +20,9 @@ var aiVersion = parseFloat(app.version);
 // Get the current system operating system type
 var sysOS = /mac/i.test($.os) ? "mac" : "win";
 
+// Enable Windows Screen Flicker Bug Fix on older Windows Ai versions
+var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
+
 // Load Needed JavaScript Polyfills
 polyfills();
 
@@ -590,13 +593,11 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   var q = win.add("edittext");
   q.helpTip = "Befehle,\ Aktionen\ und\ geladene\ Skripte\ suchen\.";
 
-  // work-around to stop windows from flashing explorer
-  if (sysOS === "mac") {
-    q.active = true;
+  // work-around to stop windows from flickering/flashing explorer
+  if (windowsFlickerFix) {
+    simulateKeypress("TAB", 1);
   } else {
-    win.addEventListener("mouseover", function () {
-      q.active = true;
-    });
+    q.active = true;
   }
 
   if (filter.length > 0) {
@@ -726,13 +727,11 @@ function workflowBuilder(arr, edit) {
   var q = pSearch.add("edittext");
   q.helpTip = "Befehle,\ Aktionen\ und\ geladene\ Skripte\ suchen\.";
 
-  // work-around to stop windows from flashing explorer
-  if (sysOS === "mac") {
-    q.active = true;
+  // work-around to stop windows from flickering/flashing explorer
+  if (windowsFlickerFix) {
+    simulateKeypress("TAB", 1);
   } else {
-    win.addEventListener("mouseover", function () {
-      q.active = true;
-    });
+    q.active = true;
   }
 
   var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
@@ -1083,6 +1082,49 @@ function insertScriptIntoUserData(f) {
   } catch (e) {
     alert("Fehler\ beim\ Laden\ des\ Skripts:\n" + f.fsName);
     return false;
+  }
+}
+
+/**
+ *
+ *
+ */
+
+/**
+ * Simulate a key press for Windows users.
+ *
+ * This function is in response to a known ScriptUI bug on Windows.
+ * You can read more about it in the GitHub issue linked below.
+ * https://github.com/joshbduncan/AiCommandPalette/issues/8
+ *
+ * Basically, on some Windows Ai versions, when a ScriptUI dialog is
+ * presented and the active attribute is set to true on a field, Windows
+ * will flash the Windows Explorer app quickly and then bring Ai back
+ * in focus with the dialog front and center. This is a terrible user
+ * experience so Sergey and I attempted to fix it the best we could.
+ *
+ * This clever solution was created by Sergey Osokin (https://github.com/creold)
+ *
+ * @param {String} k Key to simulate.
+ * @param {Number} n Number of times to simulate the keypress.
+ */
+function simulateKeypress(k, n) {
+  if (!n) n = 1;
+  try {
+    var f = setupFileObject(dataFolder, "SimulateKeypress.vbs");
+    if (!f.exists) {
+      var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
+      while (n--) {
+        data += 'WshShell.SendKeys "{' + k + '}"\n';
+      }
+      f.encoding = "UTF-8";
+      f.open("w");
+      f.write(data);
+      f.close();
+    }
+    f.execute();
+  } catch (e) {
+    $.writeln(e);
   }
 }
 
