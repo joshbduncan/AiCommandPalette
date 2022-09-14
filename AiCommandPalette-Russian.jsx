@@ -20,6 +20,9 @@ var aiVersion = parseFloat(app.version);
 // Get the current system operating system type
 var sysOS = /mac/i.test($.os) ? "mac" : "win";
 
+// Disable Windows Screen Flicker Bug Fix on newer versions
+var disableWinFlickerFix = sysOS === "win" && aiVersion > 26.4 ? true : false;
+
 // Load Needed JavaScript Polyfills
 polyfills();
 
@@ -591,10 +594,10 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
 
   // work-around to stop windows from flickering/flashing explorer
-  if (sysOS === "mac") {
+  if (sysOS === "mac" || disableWinFlickerFix) {
     q.active = true;
   } else {
-    simulateKeypress("{TAB}", 1);
+    simulateKeypress("TAB", 1);
   }
 
   if (filter.length > 0) {
@@ -725,10 +728,10 @@ function workflowBuilder(arr, edit) {
   q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
 
   // work-around to stop windows from flickering/flashing explorer
-  if (sysOS === "mac") {
+  if (sysOS === "mac" || disableWinFlickerFix) {
     q.active = true;
   } else {
-    simulateKeypress("{TAB}", 1);
+    simulateKeypress("TAB", 1);
   }
 
   var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
@@ -1112,7 +1115,7 @@ function simulateKeypress(k, n) {
     if (!f.exists) {
       var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
       while (n--) {
-        data += 'WshShell.SendKeys "' + k + '"\n';
+        data += 'WshShell.SendKeys "{' + k + '}"\n';
       }
       f.encoding = "UTF-8";
       f.open("w");
