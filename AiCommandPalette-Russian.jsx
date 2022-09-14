@@ -20,8 +20,8 @@ var aiVersion = parseFloat(app.version);
 // Get the current system operating system type
 var sysOS = /mac/i.test($.os) ? "mac" : "win";
 
-// Disable Windows Screen Flicker Bug Fix on newer versions
-var disableWinFlickerFix = sysOS === "win" && aiVersion > 26.4 ? true : false;
+// Enable Windows Screen Flicker Bug Fix on older Windows Ai versions
+var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 
 // Load Needed JavaScript Polyfills
 polyfills();
@@ -594,10 +594,10 @@ function commandPalette(arr, title, bounds, multiselect, filter) {
   q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
 
   // work-around to stop windows from flickering/flashing explorer
-  if (sysOS === "mac" || disableWinFlickerFix) {
-    q.active = true;
-  } else {
+  if (windowsFlickerFix) {
     simulateKeypress("TAB", 1);
+  } else {
+    q.active = true;
   }
 
   if (filter.length > 0) {
@@ -728,10 +728,10 @@ function workflowBuilder(arr, edit) {
   q.helpTip = "Поиск\ команд,\ операций\ и\ загруженных\ скриптов";
 
   // work-around to stop windows from flickering/flashing explorer
-  if (sysOS === "mac" || disableWinFlickerFix) {
-    q.active = true;
-  } else {
+  if (windowsFlickerFix) {
     simulateKeypress("TAB", 1);
+  } else {
+    q.active = true;
   }
 
   var commands = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], arr, {
