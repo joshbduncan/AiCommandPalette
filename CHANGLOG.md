@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.2.5] 2022-09-15
 ### Added
 - Ai Version Functionality Checker
     - Original idea brought up by [Sergey Osokin](https://github.com/creold) in issue [#6 selectTool](https://github.com/joshbduncan/AiCommandPalette/issues/6)
@@ -25,13 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - [build_commands.py](/tools/build_commands.py) builds the built-in menu commands, the built-in tool commands, and the config commands objects directly from [menu_commands.csv](/commands/menu_commands.csv), [config_commands.csv](/commands/config_commands.csv), and [tool_commands.csv](/commands/tool_commands.csv), so any updates are easier to track and implement.
 - New way to build config menu
 
-### Fixed
-- Windows OS Flicker Bug [issue #8](https://github.com/joshbduncan/AiCommandPalette/issues/8)
-    - Very clever solution provided by [Sergey Osokin](https://github.com/creold)
-    - Found that simulating a `<TAB>` key press via VBScript was the best solution for keeping the user experience the same on Windows and Mac.
-    - Only effects Windows users.
-
-
 ### Changes
 - [translate.py](/tools/build_translations.py) moved to the tools folder.
 
@@ -44,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Russian and German translations
 - ShowBuiltinTools command now checks to make sure there are tools to display before showing the command palette
 - EditWorkflows command now checks to make sure there any workflows before showing the command palette
+- Windows OS Flicker Bug [issue #8](https://github.com/joshbduncan/AiCommandPalette/issues/8)
+    - Very clever solution provided by [Sergey Osokin](https://github.com/creold)
+    - Found that simulating a `<TAB>` key press via VBScript was the best solution for keeping the user experience the same on Windows and Mac.
+    - Only effects Windows users.
 
 ## [0.2.4] - 2022-08-17
 ### Changed

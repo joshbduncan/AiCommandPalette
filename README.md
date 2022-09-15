@@ -131,5 +131,7 @@ Using Ai Command Palette requires some basic knowledge of Illustrator. The scrip
 
 ### Other
 - Peter Kahrel for the amazing book [ScriptUI for Dummies](https://adobeindd.com/view/publications/a0207571-ff5b-4bbf-a540-07079bd21d75/92ra/publication-web-resources/pdf/scriptui-2-16-j.pdf).
-- [Sergey Osokin](https://github.com/creold) for the clever `openURL()` function.
+- [Sergey Osokin](https://github.com/creold)
+    - For his clever `openURL()` function
+    - For his help fixing the [Windows OS bug · Issue #8](https://github.com/joshbduncan/AiCommandPalette/issues/8)
 - [sttk3](https://community.adobe.com/t5/illustrator-discussions/get-names-of-actions-in-some-set/td-p/10365284) for the awesome bit of code that extracts current actions.
