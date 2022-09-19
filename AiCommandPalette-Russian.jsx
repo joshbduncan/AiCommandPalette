@@ -3232,7 +3232,7 @@ function menuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Chrm" }],
     },
-    "Effect > Sketch > Conté Crayon...": {
+    "Effect > Sketch > Cont\u00E9 Crayon...": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_CntC" }],
     },
