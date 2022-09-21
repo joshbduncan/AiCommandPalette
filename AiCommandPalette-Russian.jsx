@@ -3232,7 +3232,7 @@ function menuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Chrm" }],
     },
-    "Effect > Sketch > Cont\u00E9 Crayon...": {
+    "Эффект > Эскиз > Волшебный карандаш…": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_CntC" }],
     },
@@ -3401,7 +3401,7 @@ function menuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Gradient Feedback" }],
     },
-    "View > Show / Hide Corner Widget": {
+    "Просмотр > Показать / скрыть виджет углов": {
       cmdType: "menu",
       minVersion: 17.1,
       cmdActions: [{ type: "menu", value: "Live Corner Annotator" }],

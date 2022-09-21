@@ -3252,7 +3252,7 @@ function menuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_Chrm" }],
     },
-    "Effect > Sketch > Cont\u00E9 Crayon...": {
+    "Effekt > Zeichenfilter > Cont\u00E9-Stifte …": {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Live PSAdapter_plugin_CntC" }],
     },
@@ -3420,7 +3420,7 @@ function menuCommands() {
       cmdType: "menu",
       cmdActions: [{ type: "menu", value: "Gradient Feedback" }],
     },
-    "View > Show / Hide Corner Widget": {
+    "Ansicht > Ecken-Widget einblenden / ausblenden": {
       cmdType: "menu",
       minVersion: 17.1,
       cmdActions: [{ type: "menu", value: "Live Corner Annotator" }],
