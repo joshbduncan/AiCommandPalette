@@ -6,26 +6,10 @@ APP=$(basename $CDIR)
 function build_commands {
     if [ $# -lt 1 ]
     then
-        echo "🚨 Specify which commands to build ('config', 'menu', 'tool')..."
+        echo "🚨 Specify which CSV file to build commands from."
     else
-        python3 tools/build_commands.py -f "commands/$1_commands.csv" -t $1
+        python3 tools/build_data.py -f $1 | sed 's/\\\\/\\/g'
     fi
-}
-
-function build_translations {
-    # build all localizations
-    EN_FILE="AiCommandPalette.jsx"
-    LOCALIZATIONS="localization/*.csv"
-    for F in $LOCALIZATIONS
-    do
-        FNAME=$(basename "$F" .csv)
-        if [ $FNAME != "sample" ]
-        then
-            echo "⚙️ Processing $F file..."
-            LOCALIZED_NAME="AiCommandPalette-$FNAME.jsx"
-            python3 tools/build_translations.py -f $EN_FILE -t $F -o $LOCALIZED_NAME
-        fi
-    done
 }
 
 function help {

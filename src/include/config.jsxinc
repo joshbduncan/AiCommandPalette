@@ -1,0 +1,70 @@
+// ENVIRONMENT VARIABLES
+
+var aiVersion = parseFloat(app.version);
+var locale = $.locale;
+var os = $.os;
+var sysOS = /mac/i.test(os) ? "mac" : "win";
+var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
+
+// DEVELOPMENT SETTINGS
+
+// localization testing
+// $.locale = false;
+// $.locale = "de";
+// $.locale = "ru";
+
+// DIALOG SETTINGS
+
+var paletteWidth = 600;
+var visibleListItems = 9;
+
+//USER SETTINGS
+
+var settingsFolderName = "JBD";
+var settingsFileName = "AiCommandPaletteSettings.json";
+
+var settings = {};
+settings.folder = function () {
+  var folder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
+  return folder;
+};
+settings.file = function () {
+  var folder = this.folder();
+  var file = setupFileObject(folder, settingsFileName);
+  return file;
+};
+settings.load = function () {
+  var file = this.file();
+  if (file.exists) {
+    var settings = readJSONData(file);
+    if (settings != {}) {
+      for (var prop in settings) {
+        for (var subProp in settings[prop]) {
+          data[prop][subProp] = settings[prop][subProp];
+        }
+      }
+    }
+  }
+};
+settings.save = function () {
+  var file = this.file();
+  var obj = {
+    commands: {
+      script: data.commands.script,
+      workflow: data.commands.workflow,
+    },
+    settings: {
+      hidden: data.settings.hidden,
+      name: _title,
+      version: _version,
+      os: os,
+      locale: locale,
+      aiVersion: aiVersion,
+    },
+  };
+  writeJSONData(obj, file);
+};
+settings.reveal = function () {
+  folder = this.folder();
+  folder.execute();
+};

@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "checkJs": false,
     "module": "none",
-    "target": "ES3",
-    "noLib": true
-    // "checkJs": true
+    "noLib": true,
+    "target": "es3",
+    "types": ["./types/"]
   }
 }

@@ -2,76 +2,57 @@
 
 ## Build Commands
 
-There are almost 500 menu commands and 80 tools and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the objects used in the script.
+There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the objects used in the script.
 
 ```javascript
+// generated localized commands data object
 {
-  "File > New...": {
-    cmdType: "menu",
-    cmdActions: [
-      {
-        type: "menu",
-        value: "new",
+  tool: {
+    "tool_Adobe Add Anchor Point Tool": {
+      action: "Adobe Add Anchor Point Tool",
+      type: "tool",
+      minVersion: 24,
+      loc: {
+        en: "Add Anchor Point Tool",
+        de: "Ankerpunkt-hinzufügen-Werkzeug",
+        ru: "Добавить опорную точку Инструмент",
       },
-    ],
+    },
   },
   // ...
 }
 ```
 
+It also builds the localized strings used in all dialogs and alerts.
+
+```javascript
+// generated localized strings data object
+var locStrings = {
+  about: { en: "About", de: "Über Kurzbefehle …", ru: "О скрипте" },
+}
+```
+
 ### How It Works
 
-Supply a CSV file of commands and specify the commands type ('config', 'menu', 'tool') and the script will build the proper JSON object to be manually inserted at the bottom of [AiCommandPalette.jsx](/AiCommandPalette.jsx).
+Supply a CSV file of commands and specify the commands and the script will build the text for [data.jsxinc](/src/include/data.jsxinc).
+
 ```bash
 python3 build_commands.py -h                                           
-usage: build_commands_json.py [-h] -f FILE [-t {config,menu,tool}]
+usage: build_commands_json.py [-h] -f FILE
 
-Build Ai Command Palette Commands JSON Object.
+Build Ai Command Palette JSON Objects.
 
 options:
   -h, --help            show this help message and exit
-  -f FILE, --file FILE  Path of CSV file with Ai commands.
-  -t {config,menu,tool}, --type {config,menu,tool}
-                        Type of commands to build.
+  -f FILE, --file FILE  Path of CSV file with command build data.
 
 Copyright 2022 Josh Duncan (joshbduncan.com)
 ```
 
-The script simply writes the JSON to stdout but you can redirect that to the clipboard or a file for further inspection.
+The script simply writes the JSON objects to stdout.
+
+⚠️ PLEASE NOTE: Then exported JSON objects have all `\` (backslashes) escaped, so for everything to display correctly using the ExtendScript `localize()` the output must be piped through [sed](https://www.gnu.org/software/sed/manual/sed.html) first to remove the offending escape characters.
 
 ```bash
-# redirect JSON to a file
-python3 build_commands.py -f menu_commands.csv -t menu > output.json
-
-# place JSON on you clipboard
-python3 build_commands.py -f config_commands.csv -t config | pbcopy
-```
-
-## Build Translations
-
-Build translations using a brute force approach that utilizes [regular expressions (regex)](https://en.wikipedia.org/wiki/Regular_expression) and a language translation [Comma-separated values (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values) file.
-
-### How It Works
-
-```bash
-$ python3 build_translations.py -h
-usage: build_translations.py [-h] -f FILE -t TRANSLATIONS [-o OUTPUT]
-
-Translate text files using RegEx.
-
-options:
-  -h, --help            show this help message and exit
-  -f FILE, --file FILE  Path of file to translate.
-  -t TRANSLATIONS, --translations TRANSLATIONS
-                        Path of CSV file with translations.
-  -o OUTPUT, --output OUTPUT
-                        Output path for translated file.
-
-Copyright 2022 Josh Duncan (joshbduncan.com)
-```
-
-Simply provide the script the file to translate "AiCommandPalette.jsx", a translation .csv file, and an output file and it will search for any occurrences of the English strings and replace them the the translated strings.
-
-```bash
-$ python3 tools/translate.py -f AiCommandPalette.jsx -t localization/German.csv -o AiCommandPalette-German.jsx
+python3 tools/build_data.py -f $1 | sed 's/\\\\/\\/g' > src/include/data.jsxinc 
 ```
