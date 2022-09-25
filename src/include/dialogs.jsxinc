@@ -420,7 +420,7 @@ function sortKeysByValue(obj) {
 function simulateKeypress(k, n) {
   if (!n) n = 1;
   try {
-    var f = setupFileObject(dataFolder, "SimulateKeypress.vbs");
+    var f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
     if (!f.exists) {
       var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
       while (n--) {

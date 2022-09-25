@@ -21,12 +21,12 @@ var visibleListItems = 9;
 //USER SETTINGS
 
 var settingsFolderName = "JBD";
+var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
 var settingsFileName = "AiCommandPaletteSettings.json";
 
 var settings = {};
 settings.folder = function () {
-  var folder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
-  return folder;
+  return settingsFolder;
 };
 settings.file = function () {
   var folder = this.folder();
