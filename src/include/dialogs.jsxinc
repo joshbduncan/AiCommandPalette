@@ -398,3 +398,57 @@ function sortKeysByValue(obj) {
   }
   return sorted;
 }
+
+/**
+ * Simulate a key press for Windows users.
+ *
+ * This function is in response to a known ScriptUI bug on Windows.
+ * You can read more about it in the GitHub issue linked below.
+ * https://github.com/joshbduncan/AiCommandPalette/issues/8
+ *
+ * Basically, on some Windows Ai versions, when a ScriptUI dialog is
+ * presented and the active attribute is set to true on a field, Windows
+ * will flash the Windows Explorer app quickly and then bring Ai back
+ * in focus with the dialog front and center. This is a terrible user
+ * experience so Sergey and I attempted to fix it the best we could.
+ *
+ * This clever solution was created by Sergey Osokin (https://github.com/creold)
+ *
+ * @param {String} k Key to simulate.
+ * @param {Number} n Number of times to simulate the keypress.
+ */
+function simulateKeypress(k, n) {
+  if (!n) n = 1;
+  try {
+    var f = setupFileObject(dataFolder, "SimulateKeypress.vbs");
+    if (!f.exists) {
+      var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
+      while (n--) {
+        data += 'WshShell.SendKeys "{' + k + '}"\n';
+      }
+      f.encoding = "UTF-8";
+      f.open("w");
+      f.write(data);
+      f.close();
+    }
+    f.execute();
+  } catch (e) {
+    $.writeln(e);
+  }
+}
+
+/**
+ * Open a url in the system browser.
+ * @param {String} url URL to open.
+ */
+function openURL(url) {
+  var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
+  html.open("w");
+  var htmlBody =
+    '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' +
+    url +
+    '"></head><body> <p></body></html>';
+  html.write(htmlBody);
+  html.close();
+  html.execute();
+}
