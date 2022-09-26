@@ -1,4 +1,4 @@
-// ALL BUILT DATA FROM PYTHON SCRIPT
+// LOCALIZED STRINGS
 
 var locStrings = {
   about: { en: "About", de: "Über Kurzbefehle …", ru: "О скрипте" },
@@ -269,6 +269,7 @@ var locStrings = {
   workflow: { en: "workflow", de: "Arbeitsablauf", ru: "Наборы" },
 };
 
+// BUILT-IN COMMAND DATA
 var builtCommands = {
   string: {},
   defaults: {

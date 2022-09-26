@@ -18,236 +18,7 @@ See the LICENSE file for details.
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
 
-  // COMMANDS SETUP
-
-  function buildCommands(commands, filter) {
-    for (var type in commands) {
-      if (!filter.includes(type)) {
-        var commandData;
-        for (var command in commands[type]) {
-          commandData = commands[type][command];
-          // hide `Edit Workflow...` setting command if no workflows
-          if (
-            command == "config_editWorkflow" &&
-            Object.keys(data.commands.workflow).length < 1
-          )
-            continue;
-          // hide `Unhide Commands...` setting command if no hidden commands
-          if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
-            continue;
-          // make sure commands has localized strings
-          if (commandData.hasOwnProperty("loc"))
-            commandsData[localize(commandData.loc)] = commandData;
-          else {
-            commandsData[command] = commandData;
-          }
-        }
-      }
-    }
-  }
-
-  function loadActions() {
-    var currentPath, set, actionCount, name;
-    var pref = app.preferences;
-    var path = "plugin/Action/SavedSets/set-";
-
-    for (var i = 1; i <= 100; i++) {
-      currentPath = path + i.toString() + "/";
-      // get action sets
-      set = pref.getStringPreference(currentPath + "name");
-      if (!set) {
-        break;
-      }
-      // get actions in set
-      actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
-      var name, key;
-      for (var j = 1; j <= actionCount; j++) {
-        name = pref.getStringPreference(
-          currentPath + "action-" + j.toString() + "/name"
-        );
-        key = "Action: " + name + " [" + set + "]";
-        data.commands.action[key] = { name: name, type: "action", set: set };
-      }
-    }
-  }
-
-  // COMMAND EXECUTION
-
-  /**
-   * Iterate over each action for chosen command.
-   * @param {String} command Command to execute.
-   */
-  function processCommand(command) {
-    var commandData = commandsData[command];
-    var type = commandData.type;
-    if (type == "workflow") {
-      var actions = commandData.actions;
-      // check to make sure all workflow commands are valid
-      check = checkWorkflowActions(actions);
-      if (check.deletedActions.length + check.incompatibleActions.length > 0) {
-        alert(
-          localize(
-            locStrings.wf_needs_attention,
-            check.deletedActions,
-            check.incompatibleActions
-          )
-        );
-        return;
-      }
-      // run each command in the workflow
-      commands = commandsData[command].actions;
-      for (var i = 0; i < commands.length; i++) processCommand(commands[i]);
-    } else {
-      executeCommand(command);
-    }
-  }
-
-  /**
-   * Execute command action.
-   * @param {Object} command Action to execute.
-   */
-  function executeCommand(command) {
-    var commandData = commandsData[command];
-    switch (commandData.type.toLowerCase()) {
-      case "defaults":
-      case "config":
-        try {
-          configAction(commandData.action);
-        } catch (e) {
-          alert(localize(locStrings.cd_error_executing, command, e));
-        }
-        break;
-      case "menu":
-        try {
-          app.executeMenuCommand(commandData.action);
-        } catch (e) {
-          alert(localize(locStrings.cd_error_executing, command, e));
-        }
-        break;
-      case "tool":
-        try {
-          app.selectTool(commandData.action);
-        } catch (e) {
-          alert(localize(locStrings.tl_error_selecting, command, e));
-        }
-        break;
-      case "action":
-        try {
-          app.doScript(commandData.name, commandData.set);
-        } catch (e) {
-          alert(localize(locStrings.ac_error_execution, command, e));
-        }
-        break;
-      case "script":
-        f = new File(commandData.path);
-        if (!f.exists) {
-          alert(localize(locStrings.sc_error_exists, commandData.path));
-          delete data.commands.script[command];
-          settings.save();
-        } else {
-          try {
-            $.evalFile(f);
-          } catch (e) {
-            alert(localize(locStrings.sc_error_execution, commandData.name, e));
-          }
-        }
-        break;
-      default:
-        alert(localize(locStrings.cd_invalid, commandData.type));
-    }
-    try {
-      app.redraw();
-    } catch (e) {
-      $.writeln(e);
-    }
-  }
-
-  /**************************************************
-SUPPLEMENTAL COMMAND FUNCTIONS
-**************************************************/
-
-  function versionCheck(command) {
-    var commandData = commandsData[command];
-    if (
-      (commandData.minVersion && commandData.minVersion >= aiVersion) ||
-      (commandData.maxVersion && maxVersion <= aiVersion)
-    )
-      return false;
-    return true;
-  }
-  // CONFIGURATION
-
-  // ENVIRONMENT VARIABLES
-
-  var aiVersion = parseFloat(app.version);
-  var locale = $.locale;
-  var os = $.os;
-  var sysOS = /mac/i.test(os) ? "mac" : "win";
-  var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
-
-  // DEVELOPMENT SETTINGS
-
-  // localization testing
-  // $.locale = false;
-  // $.locale = "de";
-  // $.locale = "ru";
-
-  // DIALOG SETTINGS
-
-  var paletteWidth = 600;
-  var visibleListItems = 9;
-
-  //USER SETTINGS
-
-  var settingsFolderName = "JBD";
-  var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
-  var settingsFileName = "AiCommandPaletteSettings.json";
-
-  var settings = {};
-  settings.folder = function () {
-    return settingsFolder;
-  };
-  settings.file = function () {
-    var folder = this.folder();
-    var file = setupFileObject(folder, settingsFileName);
-    return file;
-  };
-  settings.load = function () {
-    var file = this.file();
-    if (file.exists) {
-      var settings = readJSONData(file);
-      if (settings != {}) {
-        for (var prop in settings) {
-          for (var subProp in settings[prop]) {
-            data[prop][subProp] = settings[prop][subProp];
-          }
-        }
-      }
-    }
-  };
-  settings.save = function () {
-    var file = this.file();
-    var obj = {
-      commands: {
-        script: data.commands.script,
-        workflow: data.commands.workflow,
-      },
-      settings: {
-        hidden: data.settings.hidden,
-        name: _title,
-        version: _version,
-        os: os,
-        locale: locale,
-        aiVersion: aiVersion,
-      },
-    };
-    writeJSONData(obj, file);
-  };
-  settings.reveal = function () {
-    folder = this.folder();
-    folder.execute();
-  };
-  // ALL BUILT DATA FROM PYTHON SCRIPT
+  // LOCALIZED STRINGS
 
   var locStrings = {
     about: { en: "About", de: "Über Kurzbefehle …", ru: "О скрипте" },
@@ -518,6 +289,7 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     workflow: { en: "workflow", de: "Arbeitsablauf", ru: "Наборы" },
   };
 
+  // BUILT-IN COMMAND DATA
   var builtCommands = {
     string: {},
     defaults: {
@@ -5857,6 +5629,235 @@ SUPPLEMENTAL COMMAND FUNCTIONS
       },
     },
   };
+  // CONFIGURATION
+
+  // ENVIRONMENT VARIABLES
+
+  var aiVersion = parseFloat(app.version);
+  var locale = $.locale;
+  var os = $.os;
+  var sysOS = /mac/i.test(os) ? "mac" : "win";
+  var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
+
+  // DEVELOPMENT SETTINGS
+
+  // localization testing
+  // $.locale = false;
+  // $.locale = "de";
+  // $.locale = "ru";
+
+  // DIALOG SETTINGS
+
+  var paletteWidth = 600;
+  var visibleListItems = 9;
+
+  //USER SETTINGS
+
+  var settingsFolderName = "JBD";
+  var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
+  var settingsFileName = "AiCommandPaletteSettings.json";
+
+  var settings = {};
+  settings.folder = function () {
+    return settingsFolder;
+  };
+  settings.file = function () {
+    var folder = this.folder();
+    var file = setupFileObject(folder, settingsFileName);
+    return file;
+  };
+  settings.load = function () {
+    var file = this.file();
+    if (file.exists) {
+      var settings = readJSONData(file);
+      if (settings != {}) {
+        for (var prop in settings) {
+          for (var subProp in settings[prop]) {
+            data[prop][subProp] = settings[prop][subProp];
+          }
+        }
+      }
+    }
+  };
+  settings.save = function () {
+    var file = this.file();
+    var obj = {
+      commands: {
+        script: data.commands.script,
+        workflow: data.commands.workflow,
+      },
+      settings: {
+        hidden: data.settings.hidden,
+        name: _title,
+        version: _version,
+        os: os,
+        locale: locale,
+        aiVersion: aiVersion,
+      },
+    };
+    writeJSONData(obj, file);
+  };
+  settings.reveal = function () {
+    folder = this.folder();
+    folder.execute();
+  };
+  // COMMANDS SETUP
+
+  function buildCommands(commands, filter) {
+    for (var type in commands) {
+      if (!filter.includes(type)) {
+        var commandData;
+        for (var command in commands[type]) {
+          commandData = commands[type][command];
+          // hide `Edit Workflow...` setting command if no workflows
+          if (
+            command == "config_editWorkflow" &&
+            Object.keys(data.commands.workflow).length < 1
+          )
+            continue;
+          // hide `Unhide Commands...` setting command if no hidden commands
+          if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
+            continue;
+          // make sure commands has localized strings
+          if (commandData.hasOwnProperty("loc"))
+            commandsData[localize(commandData.loc)] = commandData;
+          else {
+            commandsData[command] = commandData;
+          }
+        }
+      }
+    }
+  }
+
+  function loadActions() {
+    var currentPath, set, actionCount, name;
+    var pref = app.preferences;
+    var path = "plugin/Action/SavedSets/set-";
+
+    for (var i = 1; i <= 100; i++) {
+      currentPath = path + i.toString() + "/";
+      // get action sets
+      set = pref.getStringPreference(currentPath + "name");
+      if (!set) {
+        break;
+      }
+      // get actions in set
+      actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
+      var name, key;
+      for (var j = 1; j <= actionCount; j++) {
+        name = pref.getStringPreference(
+          currentPath + "action-" + j.toString() + "/name"
+        );
+        key = "Action: " + name + " [" + set + "]";
+        data.commands.action[key] = { name: name, type: "action", set: set };
+      }
+    }
+  }
+
+  // COMMAND EXECUTION
+
+  /**
+   * Iterate over each action for chosen command.
+   * @param {String} command Command to execute.
+   */
+  function processCommand(command) {
+    var commandData = commandsData[command];
+    var type = commandData.type;
+    if (type == "workflow") {
+      var actions = commandData.actions;
+      // check to make sure all workflow commands are valid
+      check = checkWorkflowActions(actions);
+      if (check.deletedActions.length + check.incompatibleActions.length > 0) {
+        alert(
+          localize(
+            locStrings.wf_needs_attention,
+            check.deletedActions,
+            check.incompatibleActions
+          )
+        );
+        return;
+      }
+      // run each command in the workflow
+      commands = commandsData[command].actions;
+      for (var i = 0; i < commands.length; i++) processCommand(commands[i]);
+    } else {
+      executeCommand(command);
+    }
+  }
+
+  /**
+   * Execute command action.
+   * @param {Object} command Action to execute.
+   */
+  function executeCommand(command) {
+    var commandData = commandsData[command];
+    switch (commandData.type.toLowerCase()) {
+      case "defaults":
+      case "config":
+        try {
+          configAction(commandData.action);
+        } catch (e) {
+          alert(localize(locStrings.cd_error_executing, command, e));
+        }
+        break;
+      case "menu":
+        try {
+          app.executeMenuCommand(commandData.action);
+        } catch (e) {
+          alert(localize(locStrings.cd_error_executing, command, e));
+        }
+        break;
+      case "tool":
+        try {
+          app.selectTool(commandData.action);
+        } catch (e) {
+          alert(localize(locStrings.tl_error_selecting, command, e));
+        }
+        break;
+      case "action":
+        try {
+          app.doScript(commandData.name, commandData.set);
+        } catch (e) {
+          alert(localize(locStrings.ac_error_execution, command, e));
+        }
+        break;
+      case "script":
+        f = new File(commandData.path);
+        if (!f.exists) {
+          alert(localize(locStrings.sc_error_exists, commandData.path));
+          delete data.commands.script[command];
+          settings.save();
+        } else {
+          try {
+            $.evalFile(f);
+          } catch (e) {
+            alert(localize(locStrings.sc_error_execution, commandData.name, e));
+          }
+        }
+        break;
+      default:
+        alert(localize(locStrings.cd_invalid, commandData.type));
+    }
+    try {
+      app.redraw();
+    } catch (e) {
+      $.writeln(e);
+    }
+  }
+
+  /**************************************************
+SUPPLEMENTAL COMMAND FUNCTIONS
+**************************************************/
+
+  function versionCheck(command) {
+    var commandData = commandsData[command];
+    if (
+      (commandData.minVersion && commandData.minVersion >= aiVersion) ||
+      (commandData.maxVersion && maxVersion <= aiVersion)
+    )
+      return false;
+    return true;
+  }
   // USER DIALOGS
 
   function commandPalette(
