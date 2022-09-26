@@ -39,7 +39,7 @@ while IFS= read -r LINE
             FILE=`expr "$LINE" : '.*"\(.*\)"'`
 
             # if an absolute path was specified
-            if [[ $FILE =~ ^/ ]]; then
+            if [[ $FILE =~ ^/ ]] && [ -f $FILE ]; then
                 FP=$FILE
 
             else
