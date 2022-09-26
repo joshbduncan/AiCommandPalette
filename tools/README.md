@@ -1,5 +1,17 @@
 # Ai Command Palette - Build Tools
 
+## Compile Script
+
+To keep development easier I have split the project into multiple files/modules which you can find in the [src](/src) directory. This means the [index.jsx](/src/index.jsx) file has a lot of `//@include` statements.
+
+To make installation as easy as possible I needed an automated way to get everything compiled into a single readable '.jsx' script file.
+
+The compile script reads through the [index.jsx](/src/index.jsx) and whenever it encounters an `//@include` statement, it inserts the text from that file. The script prints the result out to stdout.
+
+```bash
+./tools/compile.sh src/index.jsx > AiCommandPalette.jsx > AiCommandPalette.jsx
+```
+
 ## Build Commands
 
 There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the objects used in the script.
@@ -38,13 +50,15 @@ Supply a CSV file of commands and specify the commands and the script will build
 
 ```bash
 python3 build_commands.py -h                                           
-usage: build_commands_json.py [-h] -f FILE
+usage: build_commands_json.py [-h] file
 
 Build Ai Command Palette JSON Objects.
 
+positional arguments:
+  file        Path of CSV file with command build data.
+
 options:
-  -h, --help            show this help message and exit
-  -f FILE, --file FILE  Path of CSV file with command build data.
+  -h, --help  show this help message and exit
 
 Copyright 2022 Josh Duncan (joshbduncan.com)
 ```

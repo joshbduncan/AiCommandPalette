@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 CDIR=$(pwd)
 APP=$(basename $CDIR)
@@ -10,6 +10,10 @@ function build_commands {
     else
         python3 tools/build_data.py -f $1 | sed 's/\\\\/\\/g'
     fi
+}
+
+function compile {
+    tools/compile.sh $1
 }
 
 function help {

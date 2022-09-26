@@ -20,10 +20,8 @@ def main():
         prog="build_commands_json.py",
     )
     parser.add_argument(
-        "-f",
-        "--file",
+        "file",
         type=Path,
-        required=True,
         help="Path of CSV file with command build data.",
     )
 

@@ -1,3 +1,5 @@
+// CONFIGURATION
+
 // ENVIRONMENT VARIABLES
 
 var aiVersion = parseFloat(app.version);

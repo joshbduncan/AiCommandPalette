@@ -1,6 +1,6 @@
-/**************************************************
-ARRAY POLYFILLS
-**************************************************/
+// JAVASCRIPT POLYFILLS
+
+//ARRAY POLYFILLS
 
 /**
  * Array.prototype.indexOf() polyfill
@@ -35,9 +35,7 @@ if (!Array.prototype.includes) {
   };
 }
 
-/**************************************************
-OBJECT POLYFILLS
-**************************************************/
+// OBJECT POLYFILLS
 
 /**
  * Object.keys() polyfill
@@ -86,9 +84,7 @@ if (!Object.keys) {
   })();
 }
 
-/**************************************************
-STRING POLYFILLS
-**************************************************/
+// STRING POLYFILLS
 
 /**
  * String.prototype.trim() polyfill

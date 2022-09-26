@@ -10,6 +10,14 @@ See the LICENSE file for details.
 (function () {
   //@target illustrator
 
+  // SCRIPT INFORMATION
+
+  var _title = "Ai Command Palette";
+  var _version = "0.3.0";
+  var _copyright = "Copyright 2022 Josh Duncan";
+  var _website = "joshbduncan.com";
+  var _github = "https://github.com/joshbduncan";
+
   //@includepath "include"
   //@include "commands.jsxinc"
   //@include "config.jsxinc"
@@ -19,14 +27,6 @@ See the LICENSE file for details.
   //@include "polyfills.jsxinc"
   //@include "settings.jsxinc"
   //@include "workflows.jsxinc"
-
-  // SCRIPT INFORMATION
-
-  var _title = "Ai Command Palette";
-  var _version = "0.3.0";
-  var _copyright = "Copyright 2022 Josh Duncan";
-  var _website = "joshbduncan.com";
-  var _github = "https://github.com/joshbduncan";
 
   // SETUP COMMANDS DATA
 
