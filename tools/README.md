@@ -1,77 +1,53 @@
 # Ai Command Palette - Build Tools
 
+## ExtendScript Compiler
+
+To keep development easier to handle I split the project into multiple files/modules which you will find in the `src` directory. This works great for me but is a pain for users to install.
+
+So, to make script installation as easy as possible I use a little utility I wrote called [ExtendScript Compiler](https://github.com/joshbduncan/extendscript-compiler) to get everything compiled into a single readable '.jsx' script file.
+
+```bash
+./escompile.sh src/script.jsx > compiledScript.jsx
+```
+
 ## Build Commands
 
-There are almost 500 menu commands and 80 tools and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the objects used in the script.
+There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the objects used in the script.
 
 ```javascript
+// generated localized commands data object
 {
-  "File > New...": {
-    cmdType: "menu",
-    cmdActions: [
-      {
-        type: "menu",
-        value: "new",
+  tool: {
+    "tool_Adobe Add Anchor Point Tool": {
+      action: "Adobe Add Anchor Point Tool",
+      type: "tool",
+      minVersion: 24,
+      loc: {
+        en: "Add Anchor Point Tool",
+        de: "Ankerpunkt-hinzufügen-Werkzeug",
+        ru: "Добавить опорную точку Инструмент",
       },
-    ],
+    },
   },
   // ...
 }
 ```
 
-### How It Works
+It also builds the localized strings used in all dialogs and alerts.
 
-Supply a CSV file of commands and specify the commands type ('config', 'menu', 'tool') and the script will build the proper JSON object to be manually inserted at the bottom of [AiCommandPalette.jsx](/AiCommandPalette.jsx).
-```bash
-python3 build_commands.py -h                                           
-usage: build_commands_json.py [-h] -f FILE [-t {config,menu,tool}]
-
-Build Ai Command Palette Commands JSON Object.
-
-options:
-  -h, --help            show this help message and exit
-  -f FILE, --file FILE  Path of CSV file with Ai commands.
-  -t {config,menu,tool}, --type {config,menu,tool}
-                        Type of commands to build.
-
-Copyright 2022 Josh Duncan (joshbduncan.com)
+```javascript
+// generated localized strings data object
+var locStrings = {
+  about: { en: "About", de: "Über Kurzbefehle …", ru: "О скрипте" },
+}
 ```
-
-The script simply writes the JSON to stdout but you can redirect that to the clipboard or a file for further inspection.
-
-```bash
-# redirect JSON to a file
-python3 build_commands.py -f menu_commands.csv -t menu > output.json
-
-# place JSON on you clipboard
-python3 build_commands.py -f config_commands.csv -t config | pbcopy
-```
-
-## Build Translations
-
-Build translations using a brute force approach that utilizes [regular expressions (regex)](https://en.wikipedia.org/wiki/Regular_expression) and a language translation [Comma-separated values (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values) file.
 
 ### How It Works
 
-```bash
-$ python3 build_translations.py -h
-usage: build_translations.py [-h] -f FILE -t TRANSLATIONS [-o OUTPUT]
-
-Translate text files using RegEx.
-
-options:
-  -h, --help            show this help message and exit
-  -f FILE, --file FILE  Path of file to translate.
-  -t TRANSLATIONS, --translations TRANSLATIONS
-                        Path of CSV file with translations.
-  -o OUTPUT, --output OUTPUT
-                        Output path for translated file.
-
-Copyright 2022 Josh Duncan (joshbduncan.com)
-```
-
-Simply provide the script the file to translate "AiCommandPalette.jsx", a translation .csv file, and an output file and it will search for any occurrences of the English strings and replace them the the translated strings.
+Supply a CSV file of commands and the script will build JSON object for [data.jsxinc](/src/include/data.jsxinc) and output them to stdout.
 
 ```bash
-$ python3 tools/translate.py -f AiCommandPalette.jsx -t localization/German.csv -o AiCommandPalette-German.jsx
+python3 tools/build_data.py raw_data/build_data.csv | sed 's/\\\\/\\/g' > src/include/data.jsxinc 
 ```
+
+⚠️ PLEASE NOTE: Then exported JSON objects have all `\` (backslashes) escaped, so for everything to display correctly using the ExtendScript `localize()` the output must be piped through [sed](https://www.gnu.org/software/sed/manual/sed.html) first to remove the offending escape characters.

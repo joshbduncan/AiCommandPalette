@@ -1,0 +1,206 @@
+// SETTINGS OPERATIONS
+
+/**
+ * Execute configuration actions.
+ * @param {Object} action Configuration action to execute.
+ */
+function configAction(action) {
+  var write = true;
+  switch (action) {
+    case "settings":
+      paletteSettings();
+      write = false;
+      break;
+    case "about":
+      about();
+      write = false;
+      break;
+    case "buildWorkflow":
+      buildWorkflow();
+      break;
+    case "editWorkflow":
+      editWorkflow();
+      break;
+    case "loadScript":
+      loadScripts();
+      break;
+    case "runAction":
+      runAction();
+      break;
+    case "hideCommand":
+      hideCommand();
+      break;
+    case "unhideCommand":
+      unhideCommand();
+      break;
+    case "deleteCommand":
+      deleteCommand();
+      break;
+    case "revealPrefFile":
+      settings.reveal();
+      write = false;
+      break;
+    default:
+      alert(localize(locStrings.cd_invalid, action));
+  }
+  if (write) settings.save();
+}
+
+/** Ai Command Palette configuration commands. */
+function paletteSettings() {
+  var result = commandPalette(
+    (commands = allCommands),
+    (showHidden = false),
+    (queryFilter = ["script", "workflow", "defaults", "action", "menu", "tool"]),
+    (visibleFilter = []),
+    (title = localize(locStrings.cp_config)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(result);
+}
+
+/** Ai Command Palette About Dialog. */
+function about() {
+  var win = new Window("dialog");
+  win.text = localize(locStrings.about);
+  win.alignChildren = "fill";
+
+  // script info
+  var pAbout = win.add("panel");
+  pAbout.margins = 20;
+  pAbout.alignChildren = "fill";
+  pAbout.add("statictext", [0, 0, 500, 100], localize(locStrings.description), {
+    multiline: true,
+  });
+
+  var links = pAbout.add("group");
+  links.orientation = "column";
+  links.alignChildren = ["center", "center"];
+  links.add("statictext", undefined, localize(locStrings.version, _version));
+  links.add("statictext", undefined, localize(locStrings.copyright));
+  var githubText =
+    localize(locStrings.github) + ": https://github.com/joshbduncan/AiCommandPalette";
+  var github = links.add("statictext", undefined, githubText);
+  // window buttons
+  var winButtons = win.add("group");
+  winButtons.orientation = "row";
+  winButtons.alignChildren = ["center", "center"];
+  var ok = winButtons.add("button", undefined, "OK");
+  ok.preferredSize.width = 100;
+
+  github.addEventListener("mousedown", function () {
+    openURL("https://github.com/joshbduncan/AiCommandPalette");
+  });
+
+  win.show();
+}
+
+/** Load external scripts into Ai Command Palette. */
+function loadScripts() {
+  var files = loadFileTypes(
+    localize(locStrings.cp_config_load_scripts),
+    true,
+    ".jsx$|.js$"
+  );
+  if (files.length > 0) {
+    var f, key, fname;
+    for (var i = 0; i < files.length; i++) {
+      f = files[i];
+      fname = decodeURI(f.name);
+      key = localize(locStrings.script) + ": " + fname;
+      if (data.commands.script.hasOwnProperty(key)) {
+        if (
+          !Window.confirm(
+            localize(locStrings.sc_already_loaded),
+            "noAsDflt",
+            localize(locStrings.sc_already_loaded_title)
+          )
+        )
+          continue;
+      }
+      try {
+        data.commands.script[key] = { name: fname, type: "script", path: f.fsName };
+      } catch (e) {
+        alert(localize(locStrings.sc_error_loading, f.fsName));
+      }
+    }
+  } else {
+    alert(localize(locStrings.sc_none_selected));
+  }
+}
+
+/** Hide commands from Ai Command Palette. */
+function hideCommand() {
+  var result = commandPalette(
+    (commands = allCommands),
+    (showHidden = false),
+    (queryFilter = ["config", "defaults"]),
+    (visibleFilter = []),
+    (title = localize(locStrings.cd_hide_select)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = true)
+  );
+  if (result) {
+    for (var i = 0; i < result.length; i++) data.settings.hidden.push(result[i].text);
+  }
+}
+
+/** Unhide hidden commands. */
+function unhideCommand() {
+  if (data.settings.hidden.length > 0) {
+    var result = commandPalette(
+      (commands = data.settings.hidden),
+      (showHidden = true),
+      (queryFilter = []),
+      (visibleFilter = []),
+      (title = localize(locStrings.cd_reveal_menu_select)),
+      (bounds = [0, 0, paletteWidth, 182]),
+      (multiselect = true)
+    );
+    if (result) {
+      for (var i = 0; i < result.length; i++) {
+        for (var n = 0; n < data.settings.hidden.length; n++) {
+          if (result[i].text == data.settings.hidden[n]) {
+            data.settings.hidden.splice(n, 1);
+          }
+        }
+      }
+    }
+  } else {
+    alert(localize(logStrings.cd_none_reveal));
+  }
+}
+
+/** Delete commands from Ai Command Palette. */
+function deleteCommand() {
+  var result = commandPalette(
+    (commands = allCommands),
+    (showHidden = true),
+    (queryFilter = ["action", "config", "defaults", "menu", "tool"]),
+    (visibleFilter = []),
+    (title = localize(locStrings.cd_delete_select)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = true)
+  );
+  if (result) {
+    if (
+      Window.confirm(
+        localize(locStrings.cd_delete_confirm, result.join("\n")),
+        "noAsDflt",
+        localize(locStrings.cd_delete_confirm_title)
+      )
+    ) {
+      var command, type;
+      for (var i = 0; i < result.length; i++) {
+        command = result[i].text;
+        type = commandsData[command].type;
+        try {
+          delete data.commands[type][command];
+        } catch (e) {
+          alert(localize(locStrings.cd_error_delete, command));
+        }
+      }
+    }
+  }
+}

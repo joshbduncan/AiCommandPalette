@@ -1,0 +1,96 @@
+// WORKFLOW AUTOMATION
+
+/**
+ * Build or Edit workflows.
+ * @param {String} workflow Workflow to edit.
+ */
+function buildWorkflow(workflow) {
+  // show the workflow builder dialog
+  var result = workflowBuilder(
+    (commands = allCommands),
+    (showHidden = true),
+    (queryFilter = ["config", "defaults"]),
+    (visibleFilter = []),
+    (edit = workflow)
+  );
+
+  if (result) {
+    // check to make sure there isn't a workflow already saved with the same name
+    var newName;
+    while (allCommands.includes(result.key)) {
+      if (
+        Window.confirm(
+          localize(locStrings.wf_already_exists),
+          "noAsDflt",
+          localize(locStrings.wf_already_exists_title)
+        )
+      ) {
+        break;
+      } else {
+        newName = Window.prompt(
+          localize(locStrings.wf_name),
+          "",
+          localize(locStrings.wf_name)
+        );
+        if (newName == undefined || newName == null || newName === "") {
+          alert(localize(locStrings.wf_not_saved));
+          return false;
+        } else {
+          result.key = localize(locStrings.workflow) + ": " + newName;
+          result.name = newName;
+        }
+      }
+    }
+
+    var workflowActions = [];
+    try {
+      for (var i = 0; i < result.actions.length; i++)
+        workflowActions.push(result.actions[i].text);
+      data.commands.workflow[result.key] = {
+        name: result.name,
+        type: "workflow",
+        actions: workflowActions,
+      };
+    } catch (e) {
+      alert(localize(locStrings.wf_error_saving, result.name));
+    }
+  }
+}
+
+/** Choose a workflow to edit. */
+function editWorkflow() {
+  var result = commandPalette(
+    (commands = allCommands),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = ["action", "config", "defaults", "menu", "script", "tool"]),
+    (title = localize(locStrings.wf_edit)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) buildWorkflow(result);
+}
+
+/**
+ * Check to make sure a workflow doesn't contain deleted actions
+ * or actions that are not compatible with the current Ai version.
+ * @param   {Array} actions Workflow action steps to check.
+ * @returns {Object}        Any deleted or incompatible action.
+ */
+function checkWorkflowActions(actions) {
+  var deletedActions = [];
+  var incompatibleActions = [];
+  var command;
+  for (var i = 0; i < actions.length; i++) {
+    command = actions[i];
+    if (!allCommands.includes(command)) {
+      deletedActions.push(command);
+    } else if (!versionCheck(command)) {
+      incompatibleActions.push(command);
+    }
+  }
+  return {
+    deletedActions: deletedActions,
+    incompatibleActions: incompatibleActions,
+  };
+}

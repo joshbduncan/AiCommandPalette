@@ -1,0 +1,454 @@
+// USER DIALOGS
+
+function commandPalette(
+  commands,
+  showHidden,
+  queryFilter,
+  visibleFilter,
+  title,
+  bounds,
+  multiselect
+) {
+  // filter the commands based on supplied args
+  // make it so you don't have to specify the same array
+  // for both filters if they should be the same
+  if (visibleFilter.length == 0) visibleFilter = queryFilter;
+  commands = filterCommands(commands, queryFilter, visibleFilter, showHidden, []);
+
+  // create the dialog
+  var win = new Window("dialog");
+  win.text = title;
+  win.alignChildren = "fill";
+  var q = win.add("edittext");
+  q.helpTip = "Search for commands, actions, and loaded scripts.";
+
+  // work-around to stop windows from flickering/flashing explorer
+  if (windowsFlickerFix) {
+    simulateKeypress("TAB", 1);
+  } else {
+    q.active = true;
+  }
+
+  // setup the commands listbox
+  var list = win.add("listbox", bounds, commands.visible, {
+    multiselect: multiselect,
+  });
+  list.selection = 0;
+
+  // window buttons
+  var winButtons = win.add("group");
+  winButtons.orientation = "row";
+  winButtons.alignChildren = ["center", "center"];
+  var ok = winButtons.add("button", undefined, "OK");
+  ok.preferredSize.width = 100;
+  var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
+    name: "cancel",
+  });
+  cancel.preferredSize.width = 100;
+
+  // as a query is typed update the list box
+  var frameStart = 0;
+  q.onChanging = function () {
+    frameStart = 0;
+    q = this.text;
+    matches = q === "" ? commands.visible : scoreMatches(q, commands.query);
+    if (matches.length > 0) {
+      temp = win.add("listbox", list.bounds, matches, {
+        multiselect: list.properties.multiselect,
+      });
+      // close window when double-clicking a selection
+      temp.onDoubleClick = function () {
+        if (list.selection) win.close(1);
+      };
+      win.remove(list);
+      list = temp;
+      list.selection = 0;
+    }
+  };
+
+  if (!multiselect && list.items.length > 0) {
+    /*
+    Move the listbox frame of visible items when using the
+    up and down arrow keys while in the `q` edittext.
+
+    One problem with this functionality is that when a listbox listitem
+    is selected via a script the API moves the visible "frame" of items
+    so that the new selection is at the top. This is not standard behavior,
+    and not even how the listbox behaves when you use the up and down keys inside
+    of the actual listbox.
+
+    Only works if multiselect if set to false.
+    */
+    q.addEventListener("keydown", function (k) {
+      if (k.keyName == "Up") {
+        k.preventDefault();
+        if (list.selection.index > 0) {
+          list.selection = list.selection.index - 1;
+          if (list.selection.index < frameStart) frameStart--;
+        }
+      } else if (k.keyName == "Down") {
+        k.preventDefault();
+        if (list.selection.index < list.items.length) {
+          list.selection = list.selection.index + 1;
+          if (list.selection.index > frameStart + visibleListItems - 1) {
+            if (frameStart < list.items.length - visibleListItems) {
+              frameStart++;
+            } else {
+              frameStart = frameStart;
+            }
+          }
+        }
+      }
+      /*
+      If a selection is made inside of the actual listbox frame by the user,
+      the API doesn't offer any way to know which part of the list is currently
+      visible in the listbox "frame". If the user was to re-enter the `q` edittext
+      and then hit an arrow key the above event listener will not work correctly so
+      I just move the next selection (be it up or down) to the middle of the "frame".
+      */
+      if (
+        list.selection.index < frameStart ||
+        list.selection.index > frameStart + visibleListItems - 1
+      )
+        frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+      // move the frame by revealing the calculated `frameStart`
+      list.revealItem(frameStart);
+    });
+  }
+
+  // close window when double-clicking a selection
+  list.onDoubleClick = function () {
+    if (list.selection) win.close(1);
+  };
+
+  if (win.show() == 1) {
+    if (list.selection) {
+      return multiselect ? list.selection : [list.selection];
+    }
+  }
+  return false;
+}
+
+function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit) {
+  // if editing a command, pull in variables to prefill dialog with
+  var command;
+  var actions = [];
+  var hideCommands = [];
+  if (edit != undefined) {
+    command = commandsData[edit[0].text];
+    actions = command.actions;
+    // make sure workflows can't include themselves
+    hideCommands.push(edit[0].text);
+  }
+
+  // filter the commands based on supplied args
+  // make it so you don't have to specify the same array
+  // for both filters if they should be the same
+  if (visibleFilter.length == 0) visibleFilter = queryFilter;
+  commands = filterCommands(
+    commands,
+    queryFilter,
+    visibleFilter,
+    showHidden,
+    hideCommands
+  );
+
+  // create the dialog
+  var win = new Window("dialog");
+  win.text = localize(locStrings.wf_builder);
+  win.alignChildren = "fill";
+
+  // command search
+  var pSearch = win.add("panel", undefined, localize(locStrings.cd_search_for));
+  pSearch.alignChildren = ["fill", "center"];
+  pSearch.margins = 20;
+  var q = pSearch.add("edittext");
+  q.helpTip = localize(locStrings.cd_q_helptip);
+
+  // work-around to stop windows from flickering/flashing explorer
+  if (windowsFlickerFix) {
+    simulateKeypress("TAB", 1);
+  } else {
+    q.active = true;
+  }
+
+  var list = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], commands.visible, {
+    multiselect: false,
+  });
+  list.helpTip = localize(locStrings.cd_helptip);
+  list.selection = 0;
+
+  // workflow steps
+  var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
+  pSteps.alignChildren = ["fill", "center"];
+  pSteps.margins = 20;
+  var steps = pSteps.add("listbox", [0, 0, paletteWidth + 40, 182], actions, {
+    multiselect: true,
+  });
+  steps.helpTip = localize(locStrings.wf_steps_helptip);
+  var stepButtons = pSteps.add("group");
+  stepButtons.alignment = "center";
+  var up = stepButtons.add("button", undefined, localize(locStrings.step_up));
+  up.preferredSize.width = 100;
+  var down = stepButtons.add("button", undefined, localize(locStrings.step_down));
+  down.preferredSize.width = 100;
+  var del = stepButtons.add("button", undefined, localize(locStrings.step_delete));
+  del.preferredSize.width = 100;
+
+  // command name
+  var pName = win.add("panel", undefined, localize(locStrings.wf_save_as));
+  pName.alignChildren = ["fill", "center"];
+  pName.margins = 20;
+  var workflowNameText = edit == undefined ? "" : command.name;
+  var workflowName = pName.add("edittext", undefined, workflowNameText);
+  workflowName.enabled = edit == undefined ? false : true;
+
+  // window buttons
+  var winButtons = win.add("group");
+  winButtons.orientation = "row";
+  winButtons.alignChildren = ["center", "center"];
+  var ok = winButtons.add("button", undefined, "OK");
+  ok.preferredSize.width = 100;
+  ok.enabled = edit == undefined ? false : true;
+  var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
+    name: "cancel",
+  });
+  cancel.preferredSize.width = 100;
+
+  // as a query is typed update the list box
+  var matches, temp;
+  q.onChanging = function () {
+    q = this.text;
+    matches = q === "" ? commands.visible : scoreMatches(q, commands.visible);
+    if (matches.length > 0) {
+      temp = pSearch.add("listbox", list.bounds, matches, {
+        multiselect: list.properties.multiselect,
+      });
+      // add command when double-clicking
+      temp.onDoubleClick = list.onDoubleClick;
+      pSearch.remove(list);
+      list = temp;
+      list.selection = 0;
+      cur = 0;
+    }
+  };
+
+  workflowName.onChanging = function () {
+    ok.enabled = workflowName.text.length > 0 ? true : false;
+  };
+
+  up.onClick = function () {
+    var selected = sortIndexes(steps.selection);
+    if (selected[i] == 0 || !contiguous(selected)) return;
+    for (var i = 0; i < selected.length; i++)
+      swap(steps.items[selected[i] - 1], steps.items[selected[i]]);
+    steps.selection = null;
+    for (var n = 0; n < selected.length; n++) steps.selection = selected[n] - 1;
+  };
+
+  down.onClick = function () {
+    var selected = sortIndexes(steps.selection);
+    if (
+      selected[selected.length - 1] == steps.items.length - 1 ||
+      !contiguous(selected)
+    )
+      return;
+    for (var i = steps.selection.length - 1; i > -1; i--)
+      swap(steps.items[selected[i]], steps.items[selected[i] + 1]);
+    steps.selection = null;
+    for (var n = 0; n < selected.length; n++) steps.selection = selected[n] + 1;
+  };
+
+  // the api returns the selected items in the order they were
+  // selected/clicked by the user when you call `list.selection`
+  // so their actual listbox indexes need to be sorted for the
+  // up, down, and delete buttons to work when multiple items are selected
+  function sortIndexes(sel) {
+    var indexes = [];
+    for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
+    return indexes.sort();
+  }
+
+  // check to make sure selection is contiguous
+  function contiguous(sel) {
+    return sel.length == sel[sel.length - 1] - sel[0] + 1;
+  }
+
+  /** swap listbox items in place */
+  function swap(x, y) {
+    var t = x.text;
+    x.text = y.text;
+    y.text = t;
+  }
+
+  del.onClick = function () {
+    var selected = sortIndexes(steps.selection);
+    for (var i = steps.selection.length - 1; i > -1; i--) {
+      steps.remove(selected[i]);
+    }
+    steps.selection == null;
+    workflowName.enabled = steps.items.length > 0 ? true : false;
+    ok.enabled = workflowName.text.length > 0 ? true : false;
+  };
+
+  list.onDoubleClick = function () {
+    if (list.selection) {
+      steps.add("item", list.selection);
+      workflowName.enabled = steps.items.length > 0 ? true : false;
+      ok.enabled = workflowName.text.length > 0 ? true : false;
+    }
+  };
+
+  if (win.show() == 1) {
+    var key = localize(locStrings.wf_titlecase) + ": " + workflowName.text.trim();
+    return { key: key, name: workflowName.text, actions: steps.items };
+  }
+  return false;
+}
+
+/**
+ * Present File.openDialog() for user to select files to load.
+ * @param   {String}  prompt        Prompt for dialog.
+ * @param   {Boolean} multiselect   Can multiple files be selected.
+ * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
+ * @returns {Array}                 Selected file(s).
+ */
+function loadFileTypes(prompt, multiselect, fileTypeRegex) {
+  var results = [];
+  var files = File.openDialog(prompt, "", multiselect);
+  if (files) {
+    for (var i = 0; i < files.length; i++) {
+      f = files[i];
+      fname = decodeURI(f.name);
+      if (f.name.search(fileTypeRegex) >= 0) {
+        results.push(f);
+      }
+    }
+  }
+  return results;
+}
+
+/**************************************************
+DIALOG HELPER FUNCTIONS
+**************************************************/
+
+function filterCommands(
+  commands,
+  queryFilter,
+  visibleFilter,
+  showHidden,
+  hideCommands
+) {
+  var query = [];
+  var visible = [];
+  var command;
+  for (var i = 0; i < commands.length; i++) {
+    command = commands[i];
+    commandData = commandsData[command];
+    // make sure Ai version meets command requirements
+    if (!versionCheck(command)) continue;
+    // skip any hidden commands
+    if (!showHidden && data.settings.hidden.includes(command)) continue;
+    // skip any specific commands name in hideSpecificCommands
+    if (hideCommands.includes(command)) continue;
+    // then check to see if the command should be filtered out
+    if (!queryFilter.includes(commandsData[command].type)) query.push(command);
+    if (!visibleFilter.includes(commandsData[command].type)) visible.push(command);
+  }
+  return {
+    query: query,
+    visible: visible,
+  };
+}
+
+/**
+ * Score array items based on regex string match.
+ * @param   {String} q   String to search for.
+ * @param   {Array}  arr String items to search for.
+ * @returns {Array}      Matching items sorted by score.
+ */
+function scoreMatches(q, arr) {
+  var word;
+  var words = [];
+  var scores = {};
+  var words = q.split(" ");
+  for (var i = 0; i < arr.length; i++) {
+    var score = 0;
+    for (var n = 0; n < words.length; n++) {
+      word = words[n];
+      if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null) score++;
+    }
+    if (score > 0) scores[arr[i]] = score;
+  }
+  return sortKeysByValue(scores, "score", "name");
+}
+
+/**
+ * Sort object keys by their value.
+ * @param   {Object} obj Simple object with `key`: `value` pairs.
+ * @returns {Array}      Array of keys sorted by value.
+ */
+function sortKeysByValue(obj) {
+  var sorted = [];
+  for (var key in obj) {
+    for (var i = 0; i < sorted.length; i++) {
+      if (obj[key] > obj[sorted[i]]) break;
+    }
+    sorted.splice(i, 0, key);
+  }
+  return sorted;
+}
+
+/**
+ * Simulate a key press for Windows users.
+ *
+ * This function is in response to a known ScriptUI bug on Windows.
+ * You can read more about it in the GitHub issue linked below.
+ * https://github.com/joshbduncan/AiCommandPalette/issues/8
+ *
+ * Basically, on some Windows Ai versions, when a ScriptUI dialog is
+ * presented and the active attribute is set to true on a field, Windows
+ * will flash the Windows Explorer app quickly and then bring Ai back
+ * in focus with the dialog front and center. This is a terrible user
+ * experience so Sergey and I attempted to fix it the best we could.
+ *
+ * This clever solution was created by Sergey Osokin (https://github.com/creold)
+ *
+ * @param {String} k Key to simulate.
+ * @param {Number} n Number of times to simulate the keypress.
+ */
+function simulateKeypress(k, n) {
+  if (!n) n = 1;
+  try {
+    var f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
+    if (!f.exists) {
+      var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
+      while (n--) {
+        data += 'WshShell.SendKeys "{' + k + '}"\n';
+      }
+      f.encoding = "UTF-8";
+      f.open("w");
+      f.write(data);
+      f.close();
+    }
+    f.execute();
+  } catch (e) {
+    $.writeln(e);
+  }
+}
+
+/**
+ * Open a url in the system browser.
+ * @param {String} url URL to open.
+ */
+function openURL(url) {
+  var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
+  html.open("w");
+  var htmlBody =
+    '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' +
+    url +
+    '"></head><body> <p></body></html>';
+  html.write(htmlBody);
+  html.close();
+  html.execute();
+}

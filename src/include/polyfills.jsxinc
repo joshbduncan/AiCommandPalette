@@ -1,0 +1,97 @@
+// JAVASCRIPT POLYFILLS
+
+//ARRAY POLYFILLS
+
+/**
+ * Array.prototype.indexOf() polyfill
+ * https://stackoverflow.com/questions/1744310/how-to-fix-array-indexof-in-javascript-for-internet-explorer-browsers
+ */
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (obj, start) {
+    for (var i = start || 0, j = this.length; i < j; i++) {
+      if (this[i] === obj) {
+        return i;
+      }
+    }
+    return -1;
+  };
+}
+
+/**
+ * Array.prototype.includes() polyfill
+ * @author Chris Ferdinandi
+ * @license MIT
+ */
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function (search, start) {
+    "use strict";
+    if (search instanceof RegExp) {
+      throw TypeError("first argument must not be a RegExp");
+    }
+    if (start === undefined) {
+      start = 0;
+    }
+    return this.indexOf(search, start) !== -1;
+  };
+}
+
+// OBJECT POLYFILLS
+
+/**
+ * Object.keys() polyfill
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+ */
+if (!Object.keys) {
+  Object.keys = (function () {
+    "use strict";
+    var hasOwnProperty = Object.prototype.hasOwnProperty,
+      hasDontEnumBug = !{ toString: null }.propertyIsEnumerable("toString"),
+      dontEnums = [
+        "toString",
+        "toLocaleString",
+        "valueOf",
+        "hasOwnProperty",
+        "isPrototypeOf",
+        "propertyIsEnumerable",
+        "constructor",
+      ],
+      dontEnumsLength = dontEnums.length;
+
+    return function (obj) {
+      if (typeof obj !== "function" && (typeof obj !== "object" || obj === null)) {
+        throw new TypeError("Object.keys called on non-object");
+      }
+
+      var result = [],
+        prop,
+        i;
+
+      for (prop in obj) {
+        if (hasOwnProperty.call(obj, prop)) {
+          result.push(prop);
+        }
+      }
+
+      if (hasDontEnumBug) {
+        for (i = 0; i < dontEnumsLength; i++) {
+          if (hasOwnProperty.call(obj, dontEnums[i])) {
+            result.push(dontEnums[i]);
+          }
+        }
+      }
+      return result;
+    };
+  })();
+}
+
+// STRING POLYFILLS
+
+/**
+ * String.prototype.trim() polyfill
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill
+ */
+if (!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+  };
+}

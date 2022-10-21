@@ -1,28 +1,16 @@
 #!/bin/sh
 
-# test to make sure localization have been built
-CHECK=0
-for FILE in $(git diff --name-only --cached)
-do
-    if [[ $FILE == "AiCommandPalette-"* ]]
-    then
-        CHECK=$((CHECK+1))
-    fi
-done
+# CHECK TO MAKE SURE `//` ISN'T PRESENT IN DATA FILE
 
-if [ $CHECK -lt 2 ]
+# Redirect output to stderr.
+exec 1>&2
+
+# Check all staged files
+regex='\\\\'
+if test $(git diff --cached | egrep $regex | wc -l) != 0
 then
-	echo "🚨 Whoops! Did you forget to build the translations?"
+    echo "🚨 Whoops! You forgot to remove the `\\` from the data file..."
     exit 1
+else 
+    exit 0
 fi
-
-# old version doesn't work when files have been staged
-# for FILE in ./AiCommandPalette-*.jsx
-# do
-# 	git diff --exit-code $FILE > /dev/null 2>&1
-# 	if [ $? -eq 0 ] 
-# 	then
-# 		echo "🚨 Whoops! Did you forget to build the translations?"
-#   		exit 1 
-# 	fi
-# done
