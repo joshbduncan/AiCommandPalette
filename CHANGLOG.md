@@ -4,14 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.4.0] 2022-10-21
 ### Added
 - Real-Time Localization
     - Handled within the main script file via the ExtendScript `localize()` function.
     - Commands are built at run-time for the current system locale
 - New project folder structure
     - Common functionality split into separate files/modules for easier development
-    - Final script is built into a JSXBIN [AiCommandPalette.jsx](AiCommandPalette.jsx)
+    - Final script is compiled into the single jsx file [AiCommandPalette.jsx](AiCommandPalette.jsx)
 - Settings menu only shows certain commands when applicable
 
 ### Changed

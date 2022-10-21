@@ -1,4 +1,4 @@
-value,type,minVersion,maxVersion,en,de,ru
+key,type,,maxVersion,en,de,ru
 about,string,,,About,Über Kurzbefehle …,О скрипте
 ac_error_execution,string,,,Error executing action:\n%1\n\n%2,Fehler beim Ausführen der Aktion:\n%1\n\n%2,Ошибка запуска операции:\n%1\n\n%2
 cancel,string,,,Cancel,Abbrechen,Отмена
@@ -6,7 +6,6 @@ cd_all,string,,,All Built-In Menu Commands,Alle integrierten Menübefehle,Ста
 cd_delete_confirm,string,,,Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n%1,Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n%1,"Удалить команду?\nУдаленные команды больше не будут работать в любых созданных наборах, где они использовались\n\n%1"
 cd_delete_confirm_title,string,,,Confirm Commands To Delete,Bestätigen Sie die zu löschenden Befehle.,Подтвердить удаление команд
 cd_delete_select,string,,,Select Menu Commands To Delete,Wählen Sie die zu löschenden Menübefehle aus.,Выбрать команды меню для удаления
-cd_deleted,string,,,Command was deleted.\nEdit any workflows where it was used.\n\n%1,"Der Befehl wurde gelöscht.\nBearbeiten Sie die Arbeitsabläufe, in denen er benutzt wurde.\n\n%1","Команда удалена\nОтредактируйте наборы, в которых она использовалась\n\n%1"
 cd_error_delete,string,,,Command couldn't be deleted.\n%1,Befehl konnte nicht gelöscht werden.\n%1,Команда не может быть удалена\n%1
 cd_error_executing,string,,,Error executing command:\n%1\n\n%2,Fehler beim Ausführen des Befehls:\n%1\n\n%2,Ошибка запуска команды:\n%1\n\n%2
 cd_helptip,string,,,Double-click a command to add it as a workflow step below.,"Doppelklicken Sie auf einen Befehl, um ihn unten als benutzerdefinierten Schritt hinzuzufügen.","Нажмите дважды на команду, чтобы добавить ее как шаг набора"
@@ -25,7 +24,6 @@ cd_search_for,string,,,"Search for commands, actions, and loaded scripts.","Befe
 copyright,string,,,Copyright 2022 Josh Duncan,,
 cp_config,string,,,Palette Settings and Configuration,Paletteneinstellungen und -konfiguration,Настройка и конфигурация панели
 cp_q_helptip,string,,,"Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen.","Поиск команд, операций и загруженных скриптов"
-deleted,string,,,DELETED,GELÖSCHT,УДАЛЕНО
 description,string,,,"Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.","Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität.","Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность."
 fl_error_loading,string,,,Error loading file:\n%1,Fehler beim Laden der Datei:\n%1,Ошибка загрузки файла:\n%1
 fl_error_writing,string,,,Error writing file:\n%1,Fehler beim Schreiben der Datei:\n%1,Ошибка записи файла:\n%1
@@ -51,8 +49,7 @@ wf_already_exists_title,string,,,Save Workflow Conflict,Arbeitsablauf-Konflikt s
 wf_builder,string,,,Workflow Builder,Arbeitsabläufe erstellen,Редактор наборов команд
 wf_choose,string,,,Choose A Workflow To Edit,Wählen Sie einen Arbeitsablauf zum Bearbeiten aus.,Выберите набор для редактирования
 wf_error_saving,string,,,Error saving workflow:\n%1,Fehler beim Speichern des Arbeitsablaufs:\n%1,Ошибка сохранения набора:\n%1
-wf_needs_attention,string,,,Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2,,
-wf_missing,string,,,Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\n%1,Achtung: Die folgenden Aktionen in Ihrem Arbeitsablauf sind nicht mehr verfügbar.\n\n%1,Внимание\nУказанные шаги в вашем наборе команд больше недоступны\n\n%1
+wf_needs_attention,string,,,Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2,,Набор требует внимания\nУказанные шаги в вашем наборе команд больше недоступны.\n\nУдаленные команды:\n%1\n\nНесовместимые команды:\n%2
 wf_name,string,,,Enter a new name for your workflow.,Geben Sie einen neuen Namen für den Arbeitsablauf an.,Введите новое имя набора
 wf_name_title,string,,,New Workflow Name,Name des neuen Arbeitsablaufs,Имя нового набора
 wf_none_attention,string,,,There are no workflows that need attention.,"Es gibt keine Arbeitsabläufe, die beachtet werden müssen.",Нет наборов требующих внимания
@@ -72,94 +69,94 @@ hideCommand,config,,,Hide Commands...,Befehle ausblenden …,Скрыть ком
 unhideCommand,config,,,Unhide Commands...,Befehle einblenden …,Показать команды
 deleteCommand,config,,,Delete Commands...,Befehle löschen …,Удалить команды
 revealPrefFile,config,,,Reveal Preferences File,Einstellungen-Datei anzeigen,Показать файл настроек
-Adobe Add Anchor Point Tool,tool,24,,Add Anchor Point Tool,Ankerpunkt-hinzufügen-Werkzeug,Добавить опорную точку Инструмент
-Adobe Anchor Point Tool,tool,24,,Anchor Point Tool,Ankerpunkt-Werkzeug,Опорная точка Инструмент
-Adobe Arc Tool,tool,24,,Arc Tool,Bogen-Werkzeug,Дуга Инструмент
-Adobe Area Graph Tool,tool,24,,Area Graph Tool,Flächendiagramm,Диаграмма с областями Инструмент
-Adobe Area Type Tool,tool,24,,Area Type Tool,Flächentext-Werkzeug,Текст в области Инструмент
-Adobe Crop Tool,tool,24,,Artboard Tool,Zeichenflächen-Werkzeug,Монтажная область Инструмент
-Adobe Bar Graph Tool,tool,24,,Bar Graph Tool,Horizontales Balkendiagramm,Диаграмма горизонтальные полосы Инструмент
-Adobe Blend Tool,tool,24,,Blend Tool,Angleichen-Werkzeug,Переход Инструмент
-Adobe Bloat Tool,tool,24,,Bloat Tool,Aufblasen-Werkzeug,Раздувание Инструмент
-Adobe Blob Brush Tool,tool,24,,Blob Brush Tool,Tropfenpinsel-Werkzeug,Кисть-клякса Инструмент
-Adobe Column Graph Tool,tool,24,,Column Graph Tool,Vertikales Balkendiagramm,Диаграмма вертикальные полосы Инструмент
-Adobe Cyrstallize Tool,tool,24,,Crystallize Tool,Kristallisieren-Werkzeug,Кристаллизация Инструмент
-Adobe Curvature Tool,tool,24,,Curvature Tool,Kurvenzeichner,Кривизна Инструмент
-Adobe Delete Anchor Point Tool,tool,24,,Delete Anchor Point Tool,Ankerpunkt-löschen-Werkzeug,Удалить опорную точку Инструмент
-Adobe Direct Select Tool,tool,24,,Direct Selection Tool,Direktauswahl-Werkzeug,Прямое выделение Инструмент
-Adobe Ellipse Shape Tool,tool,24,,Ellipse Tool,Ellipse-Werkzeug,Эллипс Инструмент
-Adobe Eraser Tool,tool,24,,Eraser Tool,Radiergummi-Werkzeug,Ластик Инструмент
-Adobe Eyedropper Tool,tool,24,,Eyedropper Tool,Pipette-Werkzeug,Пипетка Инструмент
-Adobe Flare Tool,tool,24,,Flare Tool,Blendenflecke-Werkzeug,Блик Инструмент
-Adobe Free Transform Tool,tool,24,,Free Transform Tool,Frei-transformieren-Werkzeug,Свободное трансформирование Инструмент
-Adobe Gradient Vector Tool,tool,24,,Gradient Tool,Verlauf-Werkzeug,Градиент Инструмент
-Adobe Direct Object Select Tool,tool,24,,Group Selection Tool,Gruppenauswahl-Werkzeug,Групповое выделение Инструмент
-Adobe Scroll Tool,tool,24,,Hand Tool,Hand-Werkzeug,Рука Инструмент
-Adobe Corner Join Tool,tool,24,,Join Tool,Zusammenfügen-Werkzeug,Соединение Инструмент
-Adobe Knife Tool,tool,24,,Knife Tool,Messer-Werkzeug,Нож Инструмент
-Adobe Direct Lasso Tool,tool,24,,Lasso Tool,Lasso-Werkzeug,Лассо Инструмент
-Adobe Line Graph Tool,tool,24,,Line Graph Tool,Liniendiagramm,Линейная диаграмма Инструмент
-Adobe Line Tool,tool,24,,Line Segment Tool,Liniensegment-Werkzeug,Отрезок линии Инструмент
-Adobe Planar Paintbucket Tool,tool,24,,Live Paint Bucket Tool,Interaktiv-malen-Werkzeug,Быстрая заливка Инструмент
-Adobe Planar Face Select Tool,tool,24,,Live Paint Selection Tool,Interaktiv-malen-Auswahlwerkzeug,Выделение быстрых заливок Инструмент
-Adobe Magic Wand Tool,tool,24,,Magic Wand Tool,Zauberstab-Werkzeug,Волшебная палочка Инструмент
-Adobe Measure Tool,tool,24,,Measure Tool,Mess-Werkzeug,Линейка Инструмент
-Adobe Mesh Editing Tool,tool,24,,Mesh Tool,Gitter-Werkzeug,Сетка Инструмент
-Adobe Brush Tool,tool,24,,Paintbrush Tool,Pinsel-Werkzeug,Кисть Инструмент
-Adobe Freehand Erase Tool,tool,24,,Path Eraser Tool,Löschen-Werkzeug,Стирание контура Инструмент
-Adobe Pattern Tile Tool,tool,24,,Pattern Tile Tool,Musterelement-Werkzeug,Элемент узора Инструмент
-Adobe Pen Tool,tool,24,,Pen Tool,Zeichenstift-Werkzeug,Перо Инструмент
-Adobe Freehand Tool,tool,24,,Pencil Tool,Buntstift-Werkzeug,Карандаш Инструмент
-Perspective Grid Tool,tool,24,,Perspective Grid Tool,Perspektivenraster-Werkzeug,Сетка перспективы Инструмент
-Perspective Selection Tool,tool,24,,Perspective Selection Tool,Perspektivenauswahl-Werkzeug,Выбор перспективы Инструмент
-Adobe Pie Graph Tool,tool,24,,Pie Graph Tool,Kreisdiagramm-Werkzeug,Круговая диаграмма Инструмент
-Adobe Polar Grid Tool,tool,24,,Polar Grid Tool,Radiales-Raster-Werkzeug,Полярная сетка Инструмент
-Adobe Shape Construction Regular Polygon Tool,tool,24,,Polygon Tool,Polygon-Werkzeug,Многоугольник Инструмент
-Adobe Page Tool,tool,24,,Print Tiling Tool,Druckaufteilungs-Werkzeug,Разбиение для печати Инструмент
-Adobe Pucker Tool,tool,24,,Pucker Tool,Zusammenziehen-Werkzeug,Втягивание Инструмент
-Adobe Puppet Warp Tool,tool,24,,Puppet Warp Tool,Formgitter-Werkzeug,Марионеточная деформация Инструмент
-Adobe Radar Graph Tool,tool,24,,Radar Graph Tool,Netzdiagramm,Диаграмма радар Инструмент
-Adobe Rectangle Shape Tool,tool,24,,Rectangle Tool,Rechteck-Werkzeug,Прямоугольник Инструмент
-Adobe Rectangular Grid Tool,tool,24,,Rectangular Grid Tool,Rechteckiges-Raster-Werkzeug,Прямоугольная сетка Инструмент
-Adobe Reflect Tool,tool,24,,Reflect Tool,Spiegeln-Werkzeug,Зеркальное отражение Инструмент
-Adobe Reshape Tool,tool,24,,Reshape Tool,Form-ändern-Werkzeug,Перерисовка Инструмент
-Adobe Rotate Tool,tool,24,,Rotate Tool,Drehen-Werkzeug,Поворот Инструмент
-Adobe Rotate Canvas Tool,tool,24,,Rotate View Tool,Ansichtdrehung-Werkzeug,Поворот вида Инструмент
-Adobe Rounded Rectangle Tool,tool,24,,Rounded Rectangle Tool,Abgerundetes-Rechteck-Werkzeug,Прямоугольник со скругленными углами Инструмент
-Adobe Scale Tool,tool,24,,Scale Tool,Skalieren-Werkzeug,Масштаб Инструмент
-Adobe Scallop Tool,tool,24,,Scallop Tool,Ausbuchten-Werkzeug,Зубцы Инструмент
-Adobe Scatter Graph Tool,tool,24,,Scatter Graph Tool,Streudiagramm,Точечная диаграмма Инструмент
-Adobe Scissors Tool,tool,24,,Scissors Tool,Schere-Werkzeug,Ножницы Инструмент
-Adobe Select Tool,tool,24,,Selection Tool,Auswahl-Werkzeug,Выделение Инструмент
-Adobe Shape Builder Tool,tool,24,,Shape Builder Tool,Formerstellungs-Werkzeug,Создание фигур Инструмент
-Adobe Shaper Tool,tool,24,,Shaper Tool,Shaper-Werkzeug,Shaper Инструмент
-Adobe Shear Tool,tool,24,,Shear Tool,Verbiegen-Werkzeug,Наклон Инструмент
-Adobe Slice Tool,tool,24,,Slice Tool,Slice-Werkzeug,Фрагменты Инструмент
-Adobe Slice Select Tool,tool,24,,Slice Selection Tool,Slice-Auswahl-Werkzeug,Выделение фрагмента Инструмент
-Adobe Freehand Smooth Tool,tool,24,,Smooth Tool,Glätten-Werkzeug,Сглаживание Инструмент
-Adobe Shape Construction Spiral Tool,tool,24,,Spiral Tool,Spirale-Werkzeug,Спираль Инструмент
-Adobe Stacked Bar Graph Tool,tool,24,,Stacked Bar Graph Tool,Gestapeltes horizontales Balkendiagramm,Диаграмма горизонтальный стек Инструмент
-Adobe Stacked Column Graph Tool,tool,24,,Stacked Column Graph Tool,Gestapeltes vertikales Balkendiagramm,Диаграмма вертикальный стек Инструмент
-Adobe Shape Construction Star Tool,tool,24,,Star Tool,Stern-Werkzeug,Звезда Инструмент
-Adobe Symbol Screener Tool,tool,24,,Symbol Screener Tool,Symbol-transparent-gestalten-Werkzeug,Прозрачность символов Инструмент
-Adobe Symbol Scruncher Tool,tool,24,,Symbol Scruncher Tool,Symbol-stauchen-Werkzeug,Уплотнение символов Инструмент
-Adobe Symbol Shifter Tool,tool,24,,Symbol Shifter Tool,Symbol-verschieben-Werkzeug,Смещение символов Инструмент
-Adobe Symbol Sizer Tool,tool,24,,Symbol Sizer Tool,Symbol-skalieren-Werkzeug,Размер символов Инструмент
-Adobe Symbol Spinner Tool,tool,24,,Symbol Spinner Tool,Symbol-drehen-Werkzeug,Вращение символов Инструмент
-Adobe Symbol Sprayer Tool,tool,24,,Symbol Sprayer Tool,Symbol-aufsprühen-Werkzeug,Распыление символов Инструмент
-Adobe Symbol Stainer Tool,tool,24,,Symbol Stainer Tool,Symbol-färben-Werkzeug,Обесцвечивание символов Инструмент
-Adobe Symbol Styler Tool,tool,24,,Symbol Styler Tool,Symbol-gestalten-Werkzeug,Стили символов Инструмент
-Adobe Touch Type Tool,tool,24,,Touch Type Tool,Touch-Type-Textwerkzeug,Изменение текста Инструмент
-Adobe New Twirl Tool,tool,24,,Twirl Tool,Strudel-Werkzeug,Воронка Инструмент
-Adobe Type Tool,tool,24,,Type Tool,Text-Werkzeug,Текст Инструмент
-Adobe Path Type Tool,tool,24,,Type on a Path Tool,Pfadtext-Werkzeug,Текст по контуру Инструмент
-Adobe Vertical Area Type Tool,tool,24,,Vertical Area Type Tool,Vertikaler-Flächentext-Werkzeug,Вертикальный текст в области Инструмент
-Adobe Vertical Type Tool,tool,24,,Vertical Type Tool,Vertikaler-Text-Werkzeug,Вертикальный текст Инструмент
-Adobe Vertical Path Type Tool,tool,24,,Vertical Type on a Path Tool,Vertikaler-Pfadtext-Werkzeug,Вертикальный текст по контуру Инструмент
-Adobe Warp Tool,tool,24,,Warp Tool,Verkrümmen-Werkzeug,Деформация Инструмент
-Adobe Width Tool,tool,24,,Width Tool,Breiten-Werkzeug,Ширина Инструмент
-Adobe Wrinkle Tool,tool,24,,Wrinkle Tool,Zerknittern-Werkzeug,Морщины Инструмент
-Adobe Zoom Tool,tool,24,,Zoom Tool,Zoom-Werkzeug,Масштаб Инструмент
+Adobe Add Anchor Point Tool,tool,24,,Add Anchor Point Tool,Ankerpunkt-hinzufügen-Werkzeug,Инструмент: Добавить опорную точку
+Adobe Anchor Point Tool,tool,24,,Anchor Point Tool,Ankerpunkt-Werkzeug,Инструмент: Опорная точка
+Adobe Arc Tool,tool,24,,Arc Tool,Bogen-Werkzeug,Инструмент: Дуга
+Adobe Area Graph Tool,tool,24,,Area Graph Tool,Flächendiagramm,Инструмент: Диаграмма с областями
+Adobe Area Type Tool,tool,24,,Area Type Tool,Flächentext-Werkzeug,Инструмент: Текст в области
+Adobe Crop Tool,tool,24,,Artboard Tool,Zeichenflächen-Werkzeug,Инструмент: Монтажная область
+Adobe Bar Graph Tool,tool,24,,Bar Graph Tool,Horizontales Balkendiagramm,Инструмент: Диаграмма горизонтальные полосы
+Adobe Blend Tool,tool,24,,Blend Tool,Angleichen-Werkzeug,Инструмент: Переход
+Adobe Bloat Tool,tool,24,,Bloat Tool,Aufblasen-Werkzeug,Инструмент: Раздувание
+Adobe Blob Brush Tool,tool,24,,Blob Brush Tool,Tropfenpinsel-Werkzeug,Инструмент: Кисть-клякса
+Adobe Column Graph Tool,tool,24,,Column Graph Tool,Vertikales Balkendiagramm,Инструмент: Диаграмма вертикальные полосы
+Adobe Cyrstallize Tool,tool,24,,Crystallize Tool,Kristallisieren-Werkzeug,Инструмент: Кристаллизация
+Adobe Curvature Tool,tool,24,,Curvature Tool,Kurvenzeichner,Инструмент: Кривизна
+Adobe Delete Anchor Point Tool,tool,24,,Delete Anchor Point Tool,Ankerpunkt-löschen-Werkzeug,Инструмент: Удалить опорную точку
+Adobe Direct Select Tool,tool,24,,Direct Selection Tool,Direktauswahl-Werkzeug,Инструмент: Прямое выделение
+Adobe Ellipse Shape Tool,tool,24,,Ellipse Tool,Ellipse-Werkzeug,Инструмент: Эллипс
+Adobe Eraser Tool,tool,24,,Eraser Tool,Radiergummi-Werkzeug,Инструмент: Ластик
+Adobe Eyedropper Tool,tool,24,,Eyedropper Tool,Pipette-Werkzeug,Инструмент: Пипетка
+Adobe Flare Tool,tool,24,,Flare Tool,Blendenflecke-Werkzeug,Инструмент: Блик
+Adobe Free Transform Tool,tool,24,,Free Transform Tool,Frei-transformieren-Werkzeug,Инструмент: Свободное трансформирование
+Adobe Gradient Vector Tool,tool,24,,Gradient Tool,Verlauf-Werkzeug,Инструмент: Градиент
+Adobe Direct Object Select Tool,tool,24,,Group Selection Tool,Gruppenauswahl-Werkzeug,Инструмент: Групповое выделение
+Adobe Scroll Tool,tool,24,,Hand Tool,Hand-Werkzeug,Инструмент: Рука
+Adobe Corner Join Tool,tool,24,,Join Tool,Zusammenfügen-Werkzeug,Инструмент: Соединение
+Adobe Knife Tool,tool,24,,Knife Tool,Messer-Werkzeug,Инструмент: Нож
+Adobe Direct Lasso Tool,tool,24,,Lasso Tool,Lasso-Werkzeug,Инструмент: Лассо
+Adobe Line Graph Tool,tool,24,,Line Graph Tool,Liniendiagramm,Инструмент: Линейная диаграмма
+Adobe Line Tool,tool,24,,Line Segment Tool,Liniensegment-Werkzeug,Инструмент: Отрезок линии
+Adobe Planar Paintbucket Tool,tool,24,,Live Paint Bucket Tool,Interaktiv-malen-Werkzeug,Инструмент: Быстрая заливка
+Adobe Planar Face Select Tool,tool,24,,Live Paint Selection Tool,Interaktiv-malen-Auswahlwerkzeug,Инструмент: Выделение быстрых заливок
+Adobe Magic Wand Tool,tool,24,,Magic Wand Tool,Zauberstab-Werkzeug,Инструмент: Волшебная палочка
+Adobe Measure Tool,tool,24,,Measure Tool,Mess-Werkzeug,Инструмент: Линейка
+Adobe Mesh Editing Tool,tool,24,,Mesh Tool,Gitter-Werkzeug,Инструмент: Сетка
+Adobe Brush Tool,tool,24,,Paintbrush Tool,Pinsel-Werkzeug,Инструмент: Кисть
+Adobe Freehand Erase Tool,tool,24,,Path Eraser Tool,Löschen-Werkzeug,Инструмент: Стирание контура
+Adobe Pattern Tile Tool,tool,24,,Pattern Tile Tool,Musterelement-Werkzeug,Инструмент: Элемент узора
+Adobe Pen Tool,tool,24,,Pen Tool,Zeichenstift-Werkzeug,Инструмент: Перо
+Adobe Freehand Tool,tool,24,,Pencil Tool,Buntstift-Werkzeug,Инструмент: Карандаш
+Perspective Grid Tool,tool,24,,Perspective Grid Tool,Perspektivenraster-Werkzeug,Инструмент: Сетка перспективы
+Perspective Selection Tool,tool,24,,Perspective Selection Tool,Perspektivenauswahl-Werkzeug,Инструмент: Выбор перспективы
+Adobe Pie Graph Tool,tool,24,,Pie Graph Tool,Kreisdiagramm-Werkzeug,Инструмент: Круговая диаграмма
+Adobe Polar Grid Tool,tool,24,,Polar Grid Tool,Radiales-Raster-Werkzeug,Инструмент: Полярная сетка
+Adobe Shape Construction Regular Polygon Tool,tool,24,,Polygon Tool,Polygon-Werkzeug,Инструмент: Многоугольник
+Adobe Page Tool,tool,24,,Print Tiling Tool,Druckaufteilungs-Werkzeug,Инструмент: Разбиение для печати
+Adobe Pucker Tool,tool,24,,Pucker Tool,Zusammenziehen-Werkzeug,Инструмент: Втягивание
+Adobe Puppet Warp Tool,tool,24,,Puppet Warp Tool,Formgitter-Werkzeug,Инструмент: Марионеточная деформация
+Adobe Radar Graph Tool,tool,24,,Radar Graph Tool,Netzdiagramm,Инструмент: Диаграмма радар
+Adobe Rectangle Shape Tool,tool,24,,Rectangle Tool,Rechteck-Werkzeug,Инструмент: Прямоугольник
+Adobe Rectangular Grid Tool,tool,24,,Rectangular Grid Tool,Rechteckiges-Raster-Werkzeug,Инструмент: Прямоугольная сетка
+Adobe Reflect Tool,tool,24,,Reflect Tool,Spiegeln-Werkzeug,Инструмент: Зеркальное отражение
+Adobe Reshape Tool,tool,24,,Reshape Tool,Form-ändern-Werkzeug,Инструмент: Перерисовка
+Adobe Rotate Tool,tool,24,,Rotate Tool,Drehen-Werkzeug,Инструмент: Поворот
+Adobe Rotate Canvas Tool,tool,24,,Rotate View Tool,Ansichtdrehung-Werkzeug,Инструмент: Поворот вида
+Adobe Rounded Rectangle Tool,tool,24,,Rounded Rectangle Tool,Abgerundetes-Rechteck-Werkzeug,Инструмент: Прямоугольник со скругленными углами
+Adobe Scale Tool,tool,24,,Scale Tool,Skalieren-Werkzeug,Инструмент: Масштаб
+Adobe Scallop Tool,tool,24,,Scallop Tool,Ausbuchten-Werkzeug,Инструмент: Зубцы
+Adobe Scatter Graph Tool,tool,24,,Scatter Graph Tool,Streudiagramm,Инструмент: Точечная диаграмма
+Adobe Scissors Tool,tool,24,,Scissors Tool,Schere-Werkzeug,Инструмент: Ножницы
+Adobe Select Tool,tool,24,,Selection Tool,Auswahl-Werkzeug,Инструмент: Выделение
+Adobe Shape Builder Tool,tool,24,,Shape Builder Tool,Formerstellungs-Werkzeug,Инструмент: Создание фигур
+Adobe Shaper Tool,tool,24,,Shaper Tool,Shaper-Werkzeug,Инструмент: Произвольная кривая
+Adobe Shear Tool,tool,24,,Shear Tool,Verbiegen-Werkzeug,Инструмент: Наклон
+Adobe Slice Tool,tool,24,,Slice Tool,Slice-Werkzeug,Инструмент: Фрагменты
+Adobe Slice Select Tool,tool,24,,Slice Selection Tool,Slice-Auswahl-Werkzeug,Инструмент: Выделение фрагмента
+Adobe Freehand Smooth Tool,tool,24,,Smooth Tool,Glätten-Werkzeug,Инструмент: Сглаживание
+Adobe Shape Construction Spiral Tool,tool,24,,Spiral Tool,Spirale-Werkzeug,Инструмент: Спираль
+Adobe Stacked Bar Graph Tool,tool,24,,Stacked Bar Graph Tool,Gestapeltes horizontales Balkendiagramm,Инструмент: Диаграмма горизонтальный стек
+Adobe Stacked Column Graph Tool,tool,24,,Stacked Column Graph Tool,Gestapeltes vertikales Balkendiagramm,Инструмент: Диаграмма вертикальный стек
+Adobe Shape Construction Star Tool,tool,24,,Star Tool,Stern-Werkzeug,Инструмент: Звезда
+Adobe Symbol Screener Tool,tool,24,,Symbol Screener Tool,Symbol-transparent-gestalten-Werkzeug,Инструмент: Прозрачность символов
+Adobe Symbol Scruncher Tool,tool,24,,Symbol Scruncher Tool,Symbol-stauchen-Werkzeug,Инструмент: Уплотнение символов
+Adobe Symbol Shifter Tool,tool,24,,Symbol Shifter Tool,Symbol-verschieben-Werkzeug,Инструмент: Смещение символов
+Adobe Symbol Sizer Tool,tool,24,,Symbol Sizer Tool,Symbol-skalieren-Werkzeug,Инструмент: Размер символов
+Adobe Symbol Spinner Tool,tool,24,,Symbol Spinner Tool,Symbol-drehen-Werkzeug,Инструмент: Вращение символов
+Adobe Symbol Sprayer Tool,tool,24,,Symbol Sprayer Tool,Symbol-aufsprühen-Werkzeug,Инструмент: Распыление символов
+Adobe Symbol Stainer Tool,tool,24,,Symbol Stainer Tool,Symbol-färben-Werkzeug,Инструмент: Обесцвечивание символов
+Adobe Symbol Styler Tool,tool,24,,Symbol Styler Tool,Symbol-gestalten-Werkzeug,Инструмент: Стили символов
+Adobe Touch Type Tool,tool,24,,Touch Type Tool,Touch-Type-Textwerkzeug,Инструмент: Изменение текста
+Adobe New Twirl Tool,tool,24,,Twirl Tool,Strudel-Werkzeug,Инструмент: Воронка
+Adobe Type Tool,tool,24,,Type Tool,Text-Werkzeug,Инструмент: Текст
+Adobe Path Type Tool,tool,24,,Type on a Path Tool,Pfadtext-Werkzeug,Инструмент: Текст по контуру
+Adobe Vertical Area Type Tool,tool,24,,Vertical Area Type Tool,Vertikaler-Flächentext-Werkzeug,Инструмент: Вертикальный текст в области
+Adobe Vertical Type Tool,tool,24,,Vertical Type Tool,Vertikaler-Text-Werkzeug,Инструмент: Вертикальный текст
+Adobe Vertical Path Type Tool,tool,24,,Vertical Type on a Path Tool,Vertikaler-Pfadtext-Werkzeug,Инструмент: Вертикальный текст по контуру
+Adobe Warp Tool,tool,24,,Warp Tool,Verkrümmen-Werkzeug,Инструмент: Деформация
+Adobe Width Tool,tool,24,,Width Tool,Breiten-Werkzeug,Инструмент: Ширина
+Adobe Wrinkle Tool,tool,24,,Wrinkle Tool,Zerknittern-Werkzeug,Инструмент: Морщины
+Adobe Zoom Tool,tool,24,,Zoom Tool,Zoom-Werkzeug,Инструмент: Масштаб
 new,menu,,,File > New...,Datei > Neu …,Файл > Новый...
 newFromTemplate,menu,,,File > New from Template...,Datei > Neu aus Vorlage …,Файл > Новый из шаблона...
 open,menu,,,File > Open...,Datei > Öffnen …,Файл > Открыть...
@@ -439,7 +436,7 @@ Live Rasterize,menu,,,Effect > Rasterize...,Effekt > In Pixelbild umwandeln …,
 Live Adobe Drop Shadow,menu,,,Effect > Stylize > Drop Shadow...,Effekt > Stilisierungsfilter > Schlagschatten …,Эффект > Стилизация > Тень...
 Live Feather,menu,,,Effect > Stylize > Feather...,Effekt > Stilisierungsfilter > Weiche Kante …,Эффект > Стилизация > Растушевка...
 Live Inner Glow,menu,,,Effect > Stylize > Inner Glow...,Effekt > Stilisierungsfilter > Schein nach innen …,Эффект > Стилизация > Внутреннее свечение...
-Live Outer Glow,menu,,,Effect > Stylize > outer Glow...,Effekt > Stilisierungsfilter > Schein nach außen …,Эффект > Стилизация > Внешнее свечение...
+Live Outer Glow,menu,,,Effect > Stylize > Outer Glow...,Effekt > Stilisierungsfilter > Schein nach außen …,Эффект > Стилизация > Внешнее свечение...
 Live Adobe Round Corners,menu,,,Effect > Stylize > Round Corners...,Effekt > Stilisierungsfilter > Ecken abrunden …,Эффект > Стилизация > Скругленные углы...
 Live Scribble Fill,menu,,,Effect > Stylize > Scribble...,Effekt > Stilisierungsfilter > Scribble …,Эффект > Стилизация > Каракули…
 Live SVG Filters,menu,,,Effect > SVG Filters > Apply SVG Filter...,Effekt > SVG-Filter > SVG-Filter anwenden …,Эффект > Фильтры SVG > Применить SVG-фильтр...
@@ -497,7 +494,7 @@ Live PSAdapter_plugin_BsRl,menu,,,Effect > Sketch > Bas Relief...,Effekt > Zeich
 Live PSAdapter_plugin_ChlC,menu,,,Effect > Sketch > Chalk & Charcoal...,Effekt > Zeichenfilter > Chalk & Charcoal …,Эффект > Эскиз > Мел и уголь…
 Live PSAdapter_plugin_Chrc,menu,,,Effect > Sketch > Charcoal...,Effekt > Zeichenfilter > Kohleumsetzung …,Эффект > Эскиз > Уголь…
 Live PSAdapter_plugin_Chrm,menu,,,Effect > Sketch > Chrome...,Effekt > Zeichenfilter > Chrom …,Эффект > Эскиз > Хром…
-Live PSAdapter_plugin_CntC,menu,,,Effect > Sketch > Cont\u00E9 Crayon...,Effekt > Zeichenfilter > Conté-Stifte …,Эффект > Эскиз > Волшебный карандаш…
+Live PSAdapter_plugin_CntC,menu,,,Effect > Sketch > Cont\u00E9 Crayon...,Effekt > Zeichenfilter > Cont\u00E9-Stifte …,Эффект > Эскиз > Волшебный карандаш…
 Live PSAdapter_plugin_GraP,menu,,,Effect > Sketch > Graphic Pen...,Effekt > Zeichenfilter > Strichumsetzung …,Эффект > Эскиз > Тушь…
 Live PSAdapter_plugin_HlfS,menu,,,Effect > Sketch > Halftone Pattern...,Effekt > Zeichenfilter > Rasterungseffekt …,Эффект > Эскиз > Полутоновый узор…
 Live PSAdapter_plugin_NtPr,menu,,,Effect > Sketch > Note Paper...,Effekt > Zeichenfilter > Prägepapier …,Эффект > Эскиз > Почтовая бумага…

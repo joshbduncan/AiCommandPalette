@@ -1,4 +1,4 @@
-// LOCALIZED STRINGS
+// ALL BUILT DATA FROM PYTHON SCRIPT
 
 var locStrings = {
   about: { en: "About", de: "Über Kurzbefehle …", ru: "О скрипте" },
@@ -27,11 +27,6 @@ var locStrings = {
     en: "Select Menu Commands To Delete",
     de: "Wählen Sie die zu löschenden Menübefehle aus.",
     ru: "Выбрать команды меню для удаления",
-  },
-  cd_deleted: {
-    en: "Command was deleted.\nEdit any workflows where it was used.\n\n%1",
-    de: "Der Befehl wurde gelöscht.\nBearbeiten Sie die Arbeitsabläufe, in denen er benutzt wurde.\n\n%1",
-    ru: "Команда удалена\nОтредактируйте наборы, в которых она использовалась\n\n%1",
   },
   cd_error_delete: {
     en: "Command couldn't be deleted.\n%1",
@@ -119,7 +114,6 @@ var locStrings = {
     de: "Befehle, Aktionen und geladene Skripte suchen.",
     ru: "Поиск команд, операций и загруженных скриптов",
   },
-  deleted: { en: "DELETED", de: "GELÖSCHT", ru: "УДАЛЕНО" },
   description: {
     en: "Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.",
     de: "Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität.",
@@ -222,12 +216,8 @@ var locStrings = {
     ru: "Ошибка сохранения набора:\n%1",
   },
   wf_needs_attention: {
-    en: "Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
-  },
-  wf_missing: {
-    en: "Workflow needs attention.\nThe following action steps from your workflow are are no longer available.\n\n%1",
-    de: "Achtung: Die folgenden Aktionen in Ihrem Arbeitsablauf sind nicht mehr verfügbar.\n\n%1",
-    ru: "Внимание\nУказанные шаги в вашем наборе команд больше недоступны\n\n%1",
+    en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
+    ru: "Набор требует внимания\nУказанные шаги в вашем наборе команд больше недоступны.\n\nУдаленные команды:\n%1\n\nНесовместимые команды:\n%2",
   },
   wf_name: {
     en: "Enter a new name for your workflow.",
@@ -269,7 +259,6 @@ var locStrings = {
   workflow: { en: "workflow", de: "Arbeitsablauf", ru: "Наборы" },
 };
 
-// BUILT-IN COMMAND DATA
 var builtCommands = {
   string: {},
   defaults: {
@@ -353,7 +342,7 @@ var builtCommands = {
       loc: {
         en: "Add Anchor Point Tool",
         de: "Ankerpunkt-hinzufügen-Werkzeug",
-        ru: "Добавить опорную точку Инструмент",
+        ru: "Инструмент: Добавить опорную точку",
       },
     },
     "tool_Adobe Anchor Point Tool": {
@@ -363,14 +352,14 @@ var builtCommands = {
       loc: {
         en: "Anchor Point Tool",
         de: "Ankerpunkt-Werkzeug",
-        ru: "Опорная точка Инструмент",
+        ru: "Инструмент: Опорная точка",
       },
     },
     "tool_Adobe Arc Tool": {
       action: "Adobe Arc Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Arc Tool", de: "Bogen-Werkzeug", ru: "Дуга Инструмент" },
+      loc: { en: "Arc Tool", de: "Bogen-Werkzeug", ru: "Инструмент: Дуга" },
     },
     "tool_Adobe Area Graph Tool": {
       action: "Adobe Area Graph Tool",
@@ -379,7 +368,7 @@ var builtCommands = {
       loc: {
         en: "Area Graph Tool",
         de: "Flächendiagramm",
-        ru: "Диаграмма с областями Инструмент",
+        ru: "Инструмент: Диаграмма с областями",
       },
     },
     "tool_Adobe Area Type Tool": {
@@ -389,7 +378,7 @@ var builtCommands = {
       loc: {
         en: "Area Type Tool",
         de: "Flächentext-Werkzeug",
-        ru: "Текст в области Инструмент",
+        ru: "Инструмент: Текст в области",
       },
     },
     "tool_Adobe Crop Tool": {
@@ -399,7 +388,7 @@ var builtCommands = {
       loc: {
         en: "Artboard Tool",
         de: "Zeichenflächen-Werkzeug",
-        ru: "Монтажная область Инструмент",
+        ru: "Инструмент: Монтажная область",
       },
     },
     "tool_Adobe Bar Graph Tool": {
@@ -409,20 +398,20 @@ var builtCommands = {
       loc: {
         en: "Bar Graph Tool",
         de: "Horizontales Balkendiagramm",
-        ru: "Диаграмма горизонтальные полосы Инструмент",
+        ru: "Инструмент: Диаграмма горизонтальные полосы",
       },
     },
     "tool_Adobe Blend Tool": {
       action: "Adobe Blend Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Blend Tool", de: "Angleichen-Werkzeug", ru: "Переход Инструмент" },
+      loc: { en: "Blend Tool", de: "Angleichen-Werkzeug", ru: "Инструмент: Переход" },
     },
     "tool_Adobe Bloat Tool": {
       action: "Adobe Bloat Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Bloat Tool", de: "Aufblasen-Werkzeug", ru: "Раздувание Инструмент" },
+      loc: { en: "Bloat Tool", de: "Aufblasen-Werkzeug", ru: "Инструмент: Раздувание" },
     },
     "tool_Adobe Blob Brush Tool": {
       action: "Adobe Blob Brush Tool",
@@ -431,7 +420,7 @@ var builtCommands = {
       loc: {
         en: "Blob Brush Tool",
         de: "Tropfenpinsel-Werkzeug",
-        ru: "Кисть-клякса Инструмент",
+        ru: "Инструмент: Кисть-клякса",
       },
     },
     "tool_Adobe Column Graph Tool": {
@@ -441,7 +430,7 @@ var builtCommands = {
       loc: {
         en: "Column Graph Tool",
         de: "Vertikales Balkendiagramm",
-        ru: "Диаграмма вертикальные полосы Инструмент",
+        ru: "Инструмент: Диаграмма вертикальные полосы",
       },
     },
     "tool_Adobe Cyrstallize Tool": {
@@ -451,14 +440,14 @@ var builtCommands = {
       loc: {
         en: "Crystallize Tool",
         de: "Kristallisieren-Werkzeug",
-        ru: "Кристаллизация Инструмент",
+        ru: "Инструмент: Кристаллизация",
       },
     },
     "tool_Adobe Curvature Tool": {
       action: "Adobe Curvature Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Curvature Tool", de: "Kurvenzeichner", ru: "Кривизна Инструмент" },
+      loc: { en: "Curvature Tool", de: "Kurvenzeichner", ru: "Инструмент: Кривизна" },
     },
     "tool_Adobe Delete Anchor Point Tool": {
       action: "Adobe Delete Anchor Point Tool",
@@ -467,7 +456,7 @@ var builtCommands = {
       loc: {
         en: "Delete Anchor Point Tool",
         de: "Ankerpunkt-löschen-Werkzeug",
-        ru: "Удалить опорную точку Инструмент",
+        ru: "Инструмент: Удалить опорную точку",
       },
     },
     "tool_Adobe Direct Select Tool": {
@@ -477,32 +466,32 @@ var builtCommands = {
       loc: {
         en: "Direct Selection Tool",
         de: "Direktauswahl-Werkzeug",
-        ru: "Прямое выделение Инструмент",
+        ru: "Инструмент: Прямое выделение",
       },
     },
     "tool_Adobe Ellipse Shape Tool": {
       action: "Adobe Ellipse Shape Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Ellipse Tool", de: "Ellipse-Werkzeug", ru: "Эллипс Инструмент" },
+      loc: { en: "Ellipse Tool", de: "Ellipse-Werkzeug", ru: "Инструмент: Эллипс" },
     },
     "tool_Adobe Eraser Tool": {
       action: "Adobe Eraser Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Eraser Tool", de: "Radiergummi-Werkzeug", ru: "Ластик Инструмент" },
+      loc: { en: "Eraser Tool", de: "Radiergummi-Werkzeug", ru: "Инструмент: Ластик" },
     },
     "tool_Adobe Eyedropper Tool": {
       action: "Adobe Eyedropper Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Eyedropper Tool", de: "Pipette-Werkzeug", ru: "Пипетка Инструмент" },
+      loc: { en: "Eyedropper Tool", de: "Pipette-Werkzeug", ru: "Инструмент: Пипетка" },
     },
     "tool_Adobe Flare Tool": {
       action: "Adobe Flare Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Flare Tool", de: "Blendenflecke-Werkzeug", ru: "Блик Инструмент" },
+      loc: { en: "Flare Tool", de: "Blendenflecke-Werkzeug", ru: "Инструмент: Блик" },
     },
     "tool_Adobe Free Transform Tool": {
       action: "Adobe Free Transform Tool",
@@ -511,14 +500,14 @@ var builtCommands = {
       loc: {
         en: "Free Transform Tool",
         de: "Frei-transformieren-Werkzeug",
-        ru: "Свободное трансформирование Инструмент",
+        ru: "Инструмент: Свободное трансформирование",
       },
     },
     "tool_Adobe Gradient Vector Tool": {
       action: "Adobe Gradient Vector Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Gradient Tool", de: "Verlauf-Werkzeug", ru: "Градиент Инструмент" },
+      loc: { en: "Gradient Tool", de: "Verlauf-Werkzeug", ru: "Инструмент: Градиент" },
     },
     "tool_Adobe Direct Object Select Tool": {
       action: "Adobe Direct Object Select Tool",
@@ -527,14 +516,14 @@ var builtCommands = {
       loc: {
         en: "Group Selection Tool",
         de: "Gruppenauswahl-Werkzeug",
-        ru: "Групповое выделение Инструмент",
+        ru: "Инструмент: Групповое выделение",
       },
     },
     "tool_Adobe Scroll Tool": {
       action: "Adobe Scroll Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Hand Tool", de: "Hand-Werkzeug", ru: "Рука Инструмент" },
+      loc: { en: "Hand Tool", de: "Hand-Werkzeug", ru: "Инструмент: Рука" },
     },
     "tool_Adobe Corner Join Tool": {
       action: "Adobe Corner Join Tool",
@@ -543,20 +532,20 @@ var builtCommands = {
       loc: {
         en: "Join Tool",
         de: "Zusammenfügen-Werkzeug",
-        ru: "Соединение Инструмент",
+        ru: "Инструмент: Соединение",
       },
     },
     "tool_Adobe Knife Tool": {
       action: "Adobe Knife Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Knife Tool", de: "Messer-Werkzeug", ru: "Нож Инструмент" },
+      loc: { en: "Knife Tool", de: "Messer-Werkzeug", ru: "Инструмент: Нож" },
     },
     "tool_Adobe Direct Lasso Tool": {
       action: "Adobe Direct Lasso Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Lasso Tool", de: "Lasso-Werkzeug", ru: "Лассо Инструмент" },
+      loc: { en: "Lasso Tool", de: "Lasso-Werkzeug", ru: "Инструмент: Лассо" },
     },
     "tool_Adobe Line Graph Tool": {
       action: "Adobe Line Graph Tool",
@@ -565,7 +554,7 @@ var builtCommands = {
       loc: {
         en: "Line Graph Tool",
         de: "Liniendiagramm",
-        ru: "Линейная диаграмма Инструмент",
+        ru: "Инструмент: Линейная диаграмма",
       },
     },
     "tool_Adobe Line Tool": {
@@ -575,7 +564,7 @@ var builtCommands = {
       loc: {
         en: "Line Segment Tool",
         de: "Liniensegment-Werkzeug",
-        ru: "Отрезок линии Инструмент",
+        ru: "Инструмент: Отрезок линии",
       },
     },
     "tool_Adobe Planar Paintbucket Tool": {
@@ -585,7 +574,7 @@ var builtCommands = {
       loc: {
         en: "Live Paint Bucket Tool",
         de: "Interaktiv-malen-Werkzeug",
-        ru: "Быстрая заливка Инструмент",
+        ru: "Инструмент: Быстрая заливка",
       },
     },
     "tool_Adobe Planar Face Select Tool": {
@@ -595,7 +584,7 @@ var builtCommands = {
       loc: {
         en: "Live Paint Selection Tool",
         de: "Interaktiv-malen-Auswahlwerkzeug",
-        ru: "Выделение быстрых заливок Инструмент",
+        ru: "Инструмент: Выделение быстрых заливок",
       },
     },
     "tool_Adobe Magic Wand Tool": {
@@ -605,26 +594,26 @@ var builtCommands = {
       loc: {
         en: "Magic Wand Tool",
         de: "Zauberstab-Werkzeug",
-        ru: "Волшебная палочка Инструмент",
+        ru: "Инструмент: Волшебная палочка",
       },
     },
     "tool_Adobe Measure Tool": {
       action: "Adobe Measure Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Measure Tool", de: "Mess-Werkzeug", ru: "Линейка Инструмент" },
+      loc: { en: "Measure Tool", de: "Mess-Werkzeug", ru: "Инструмент: Линейка" },
     },
     "tool_Adobe Mesh Editing Tool": {
       action: "Adobe Mesh Editing Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Mesh Tool", de: "Gitter-Werkzeug", ru: "Сетка Инструмент" },
+      loc: { en: "Mesh Tool", de: "Gitter-Werkzeug", ru: "Инструмент: Сетка" },
     },
     "tool_Adobe Brush Tool": {
       action: "Adobe Brush Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Paintbrush Tool", de: "Pinsel-Werkzeug", ru: "Кисть Инструмент" },
+      loc: { en: "Paintbrush Tool", de: "Pinsel-Werkzeug", ru: "Инструмент: Кисть" },
     },
     "tool_Adobe Freehand Erase Tool": {
       action: "Adobe Freehand Erase Tool",
@@ -633,7 +622,7 @@ var builtCommands = {
       loc: {
         en: "Path Eraser Tool",
         de: "Löschen-Werkzeug",
-        ru: "Стирание контура Инструмент",
+        ru: "Инструмент: Стирание контура",
       },
     },
     "tool_Adobe Pattern Tile Tool": {
@@ -643,20 +632,20 @@ var builtCommands = {
       loc: {
         en: "Pattern Tile Tool",
         de: "Musterelement-Werkzeug",
-        ru: "Элемент узора Инструмент",
+        ru: "Инструмент: Элемент узора",
       },
     },
     "tool_Adobe Pen Tool": {
       action: "Adobe Pen Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Pen Tool", de: "Zeichenstift-Werkzeug", ru: "Перо Инструмент" },
+      loc: { en: "Pen Tool", de: "Zeichenstift-Werkzeug", ru: "Инструмент: Перо" },
     },
     "tool_Adobe Freehand Tool": {
       action: "Adobe Freehand Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Pencil Tool", de: "Buntstift-Werkzeug", ru: "Карандаш Инструмент" },
+      loc: { en: "Pencil Tool", de: "Buntstift-Werkzeug", ru: "Инструмент: Карандаш" },
     },
     "tool_Perspective Grid Tool": {
       action: "Perspective Grid Tool",
@@ -665,7 +654,7 @@ var builtCommands = {
       loc: {
         en: "Perspective Grid Tool",
         de: "Perspektivenraster-Werkzeug",
-        ru: "Сетка перспективы Инструмент",
+        ru: "Инструмент: Сетка перспективы",
       },
     },
     "tool_Perspective Selection Tool": {
@@ -675,7 +664,7 @@ var builtCommands = {
       loc: {
         en: "Perspective Selection Tool",
         de: "Perspektivenauswahl-Werkzeug",
-        ru: "Выбор перспективы Инструмент",
+        ru: "Инструмент: Выбор перспективы",
       },
     },
     "tool_Adobe Pie Graph Tool": {
@@ -685,7 +674,7 @@ var builtCommands = {
       loc: {
         en: "Pie Graph Tool",
         de: "Kreisdiagramm-Werkzeug",
-        ru: "Круговая диаграмма Инструмент",
+        ru: "Инструмент: Круговая диаграмма",
       },
     },
     "tool_Adobe Polar Grid Tool": {
@@ -695,7 +684,7 @@ var builtCommands = {
       loc: {
         en: "Polar Grid Tool",
         de: "Radiales-Raster-Werkzeug",
-        ru: "Полярная сетка Инструмент",
+        ru: "Инструмент: Полярная сетка",
       },
     },
     "tool_Adobe Shape Construction Regular Polygon Tool": {
@@ -705,7 +694,7 @@ var builtCommands = {
       loc: {
         en: "Polygon Tool",
         de: "Polygon-Werkzeug",
-        ru: "Многоугольник Инструмент",
+        ru: "Инструмент: Многоугольник",
       },
     },
     "tool_Adobe Page Tool": {
@@ -715,7 +704,7 @@ var builtCommands = {
       loc: {
         en: "Print Tiling Tool",
         de: "Druckaufteilungs-Werkzeug",
-        ru: "Разбиение для печати Инструмент",
+        ru: "Инструмент: Разбиение для печати",
       },
     },
     "tool_Adobe Pucker Tool": {
@@ -725,7 +714,7 @@ var builtCommands = {
       loc: {
         en: "Pucker Tool",
         de: "Zusammenziehen-Werkzeug",
-        ru: "Втягивание Инструмент",
+        ru: "Инструмент: Втягивание",
       },
     },
     "tool_Adobe Puppet Warp Tool": {
@@ -735,7 +724,7 @@ var builtCommands = {
       loc: {
         en: "Puppet Warp Tool",
         de: "Formgitter-Werkzeug",
-        ru: "Марионеточная деформация Инструмент",
+        ru: "Инструмент: Марионеточная деформация",
       },
     },
     "tool_Adobe Radar Graph Tool": {
@@ -745,7 +734,7 @@ var builtCommands = {
       loc: {
         en: "Radar Graph Tool",
         de: "Netzdiagramm",
-        ru: "Диаграмма радар Инструмент",
+        ru: "Инструмент: Диаграмма радар",
       },
     },
     "tool_Adobe Rectangle Shape Tool": {
@@ -755,7 +744,7 @@ var builtCommands = {
       loc: {
         en: "Rectangle Tool",
         de: "Rechteck-Werkzeug",
-        ru: "Прямоугольник Инструмент",
+        ru: "Инструмент: Прямоугольник",
       },
     },
     "tool_Adobe Rectangular Grid Tool": {
@@ -765,7 +754,7 @@ var builtCommands = {
       loc: {
         en: "Rectangular Grid Tool",
         de: "Rechteckiges-Raster-Werkzeug",
-        ru: "Прямоугольная сетка Инструмент",
+        ru: "Инструмент: Прямоугольная сетка",
       },
     },
     "tool_Adobe Reflect Tool": {
@@ -775,7 +764,7 @@ var builtCommands = {
       loc: {
         en: "Reflect Tool",
         de: "Spiegeln-Werkzeug",
-        ru: "Зеркальное отражение Инструмент",
+        ru: "Инструмент: Зеркальное отражение",
       },
     },
     "tool_Adobe Reshape Tool": {
@@ -785,14 +774,14 @@ var builtCommands = {
       loc: {
         en: "Reshape Tool",
         de: "Form-ändern-Werkzeug",
-        ru: "Перерисовка Инструмент",
+        ru: "Инструмент: Перерисовка",
       },
     },
     "tool_Adobe Rotate Tool": {
       action: "Adobe Rotate Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Rotate Tool", de: "Drehen-Werkzeug", ru: "Поворот Инструмент" },
+      loc: { en: "Rotate Tool", de: "Drehen-Werkzeug", ru: "Инструмент: Поворот" },
     },
     "tool_Adobe Rotate Canvas Tool": {
       action: "Adobe Rotate Canvas Tool",
@@ -801,7 +790,7 @@ var builtCommands = {
       loc: {
         en: "Rotate View Tool",
         de: "Ansichtdrehung-Werkzeug",
-        ru: "Поворот вида Инструмент",
+        ru: "Инструмент: Поворот вида",
       },
     },
     "tool_Adobe Rounded Rectangle Tool": {
@@ -811,20 +800,20 @@ var builtCommands = {
       loc: {
         en: "Rounded Rectangle Tool",
         de: "Abgerundetes-Rechteck-Werkzeug",
-        ru: "Прямоугольник со скругленными углами Инструмент",
+        ru: "Инструмент: Прямоугольник со скругленными углами",
       },
     },
     "tool_Adobe Scale Tool": {
       action: "Adobe Scale Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Scale Tool", de: "Skalieren-Werkzeug", ru: "Масштаб Инструмент" },
+      loc: { en: "Scale Tool", de: "Skalieren-Werkzeug", ru: "Инструмент: Масштаб" },
     },
     "tool_Adobe Scallop Tool": {
       action: "Adobe Scallop Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Scallop Tool", de: "Ausbuchten-Werkzeug", ru: "Зубцы Инструмент" },
+      loc: { en: "Scallop Tool", de: "Ausbuchten-Werkzeug", ru: "Инструмент: Зубцы" },
     },
     "tool_Adobe Scatter Graph Tool": {
       action: "Adobe Scatter Graph Tool",
@@ -833,20 +822,24 @@ var builtCommands = {
       loc: {
         en: "Scatter Graph Tool",
         de: "Streudiagramm",
-        ru: "Точечная диаграмма Инструмент",
+        ru: "Инструмент: Точечная диаграмма",
       },
     },
     "tool_Adobe Scissors Tool": {
       action: "Adobe Scissors Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Scissors Tool", de: "Schere-Werkzeug", ru: "Ножницы Инструмент" },
+      loc: { en: "Scissors Tool", de: "Schere-Werkzeug", ru: "Инструмент: Ножницы" },
     },
     "tool_Adobe Select Tool": {
       action: "Adobe Select Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Selection Tool", de: "Auswahl-Werkzeug", ru: "Выделение Инструмент" },
+      loc: {
+        en: "Selection Tool",
+        de: "Auswahl-Werkzeug",
+        ru: "Инструмент: Выделение",
+      },
     },
     "tool_Adobe Shape Builder Tool": {
       action: "Adobe Shape Builder Tool",
@@ -855,26 +848,30 @@ var builtCommands = {
       loc: {
         en: "Shape Builder Tool",
         de: "Formerstellungs-Werkzeug",
-        ru: "Создание фигур Инструмент",
+        ru: "Инструмент: Создание фигур",
       },
     },
     "tool_Adobe Shaper Tool": {
       action: "Adobe Shaper Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Shaper Tool", de: "Shaper-Werkzeug", ru: "Shaper Инструмент" },
+      loc: {
+        en: "Shaper Tool",
+        de: "Shaper-Werkzeug",
+        ru: "Инструмент: Произвольная кривая",
+      },
     },
     "tool_Adobe Shear Tool": {
       action: "Adobe Shear Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Shear Tool", de: "Verbiegen-Werkzeug", ru: "Наклон Инструмент" },
+      loc: { en: "Shear Tool", de: "Verbiegen-Werkzeug", ru: "Инструмент: Наклон" },
     },
     "tool_Adobe Slice Tool": {
       action: "Adobe Slice Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Slice Tool", de: "Slice-Werkzeug", ru: "Фрагменты Инструмент" },
+      loc: { en: "Slice Tool", de: "Slice-Werkzeug", ru: "Инструмент: Фрагменты" },
     },
     "tool_Adobe Slice Select Tool": {
       action: "Adobe Slice Select Tool",
@@ -883,20 +880,20 @@ var builtCommands = {
       loc: {
         en: "Slice Selection Tool",
         de: "Slice-Auswahl-Werkzeug",
-        ru: "Выделение фрагмента Инструмент",
+        ru: "Инструмент: Выделение фрагмента",
       },
     },
     "tool_Adobe Freehand Smooth Tool": {
       action: "Adobe Freehand Smooth Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Smooth Tool", de: "Glätten-Werkzeug", ru: "Сглаживание Инструмент" },
+      loc: { en: "Smooth Tool", de: "Glätten-Werkzeug", ru: "Инструмент: Сглаживание" },
     },
     "tool_Adobe Shape Construction Spiral Tool": {
       action: "Adobe Shape Construction Spiral Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Spiral Tool", de: "Spirale-Werkzeug", ru: "Спираль Инструмент" },
+      loc: { en: "Spiral Tool", de: "Spirale-Werkzeug", ru: "Инструмент: Спираль" },
     },
     "tool_Adobe Stacked Bar Graph Tool": {
       action: "Adobe Stacked Bar Graph Tool",
@@ -905,7 +902,7 @@ var builtCommands = {
       loc: {
         en: "Stacked Bar Graph Tool",
         de: "Gestapeltes horizontales Balkendiagramm",
-        ru: "Диаграмма горизонтальный стек Инструмент",
+        ru: "Инструмент: Диаграмма горизонтальный стек",
       },
     },
     "tool_Adobe Stacked Column Graph Tool": {
@@ -915,14 +912,14 @@ var builtCommands = {
       loc: {
         en: "Stacked Column Graph Tool",
         de: "Gestapeltes vertikales Balkendiagramm",
-        ru: "Диаграмма вертикальный стек Инструмент",
+        ru: "Инструмент: Диаграмма вертикальный стек",
       },
     },
     "tool_Adobe Shape Construction Star Tool": {
       action: "Adobe Shape Construction Star Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Star Tool", de: "Stern-Werkzeug", ru: "Звезда Инструмент" },
+      loc: { en: "Star Tool", de: "Stern-Werkzeug", ru: "Инструмент: Звезда" },
     },
     "tool_Adobe Symbol Screener Tool": {
       action: "Adobe Symbol Screener Tool",
@@ -931,7 +928,7 @@ var builtCommands = {
       loc: {
         en: "Symbol Screener Tool",
         de: "Symbol-transparent-gestalten-Werkzeug",
-        ru: "Прозрачность символов Инструмент",
+        ru: "Инструмент: Прозрачность символов",
       },
     },
     "tool_Adobe Symbol Scruncher Tool": {
@@ -941,7 +938,7 @@ var builtCommands = {
       loc: {
         en: "Symbol Scruncher Tool",
         de: "Symbol-stauchen-Werkzeug",
-        ru: "Уплотнение символов Инструмент",
+        ru: "Инструмент: Уплотнение символов",
       },
     },
     "tool_Adobe Symbol Shifter Tool": {
@@ -951,7 +948,7 @@ var builtCommands = {
       loc: {
         en: "Symbol Shifter Tool",
         de: "Symbol-verschieben-Werkzeug",
-        ru: "Смещение символов Инструмент",
+        ru: "Инструмент: Смещение символов",
       },
     },
     "tool_Adobe Symbol Sizer Tool": {
@@ -961,7 +958,7 @@ var builtCommands = {
       loc: {
         en: "Symbol Sizer Tool",
         de: "Symbol-skalieren-Werkzeug",
-        ru: "Размер символов Инструмент",
+        ru: "Инструмент: Размер символов",
       },
     },
     "tool_Adobe Symbol Spinner Tool": {
@@ -971,7 +968,7 @@ var builtCommands = {
       loc: {
         en: "Symbol Spinner Tool",
         de: "Symbol-drehen-Werkzeug",
-        ru: "Вращение символов Инструмент",
+        ru: "Инструмент: Вращение символов",
       },
     },
     "tool_Adobe Symbol Sprayer Tool": {
@@ -981,7 +978,7 @@ var builtCommands = {
       loc: {
         en: "Symbol Sprayer Tool",
         de: "Symbol-aufsprühen-Werkzeug",
-        ru: "Распыление символов Инструмент",
+        ru: "Инструмент: Распыление символов",
       },
     },
     "tool_Adobe Symbol Stainer Tool": {
@@ -991,7 +988,7 @@ var builtCommands = {
       loc: {
         en: "Symbol Stainer Tool",
         de: "Symbol-färben-Werkzeug",
-        ru: "Обесцвечивание символов Инструмент",
+        ru: "Инструмент: Обесцвечивание символов",
       },
     },
     "tool_Adobe Symbol Styler Tool": {
@@ -1001,7 +998,7 @@ var builtCommands = {
       loc: {
         en: "Symbol Styler Tool",
         de: "Symbol-gestalten-Werkzeug",
-        ru: "Стили символов Инструмент",
+        ru: "Инструмент: Стили символов",
       },
     },
     "tool_Adobe Touch Type Tool": {
@@ -1011,20 +1008,20 @@ var builtCommands = {
       loc: {
         en: "Touch Type Tool",
         de: "Touch-Type-Textwerkzeug",
-        ru: "Изменение текста Инструмент",
+        ru: "Инструмент: Изменение текста",
       },
     },
     "tool_Adobe New Twirl Tool": {
       action: "Adobe New Twirl Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Twirl Tool", de: "Strudel-Werkzeug", ru: "Воронка Инструмент" },
+      loc: { en: "Twirl Tool", de: "Strudel-Werkzeug", ru: "Инструмент: Воронка" },
     },
     "tool_Adobe Type Tool": {
       action: "Adobe Type Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Type Tool", de: "Text-Werkzeug", ru: "Текст Инструмент" },
+      loc: { en: "Type Tool", de: "Text-Werkzeug", ru: "Инструмент: Текст" },
     },
     "tool_Adobe Path Type Tool": {
       action: "Adobe Path Type Tool",
@@ -1033,7 +1030,7 @@ var builtCommands = {
       loc: {
         en: "Type on a Path Tool",
         de: "Pfadtext-Werkzeug",
-        ru: "Текст по контуру Инструмент",
+        ru: "Инструмент: Текст по контуру",
       },
     },
     "tool_Adobe Vertical Area Type Tool": {
@@ -1043,7 +1040,7 @@ var builtCommands = {
       loc: {
         en: "Vertical Area Type Tool",
         de: "Vertikaler-Flächentext-Werkzeug",
-        ru: "Вертикальный текст в области Инструмент",
+        ru: "Инструмент: Вертикальный текст в области",
       },
     },
     "tool_Adobe Vertical Type Tool": {
@@ -1053,7 +1050,7 @@ var builtCommands = {
       loc: {
         en: "Vertical Type Tool",
         de: "Vertikaler-Text-Werkzeug",
-        ru: "Вертикальный текст Инструмент",
+        ru: "Инструмент: Вертикальный текст",
       },
     },
     "tool_Adobe Vertical Path Type Tool": {
@@ -1063,32 +1060,36 @@ var builtCommands = {
       loc: {
         en: "Vertical Type on a Path Tool",
         de: "Vertikaler-Pfadtext-Werkzeug",
-        ru: "Вертикальный текст по контуру Инструмент",
+        ru: "Инструмент: Вертикальный текст по контуру",
       },
     },
     "tool_Adobe Warp Tool": {
       action: "Adobe Warp Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Warp Tool", de: "Verkrümmen-Werkzeug", ru: "Деформация Инструмент" },
+      loc: { en: "Warp Tool", de: "Verkrümmen-Werkzeug", ru: "Инструмент: Деформация" },
     },
     "tool_Adobe Width Tool": {
       action: "Adobe Width Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Width Tool", de: "Breiten-Werkzeug", ru: "Ширина Инструмент" },
+      loc: { en: "Width Tool", de: "Breiten-Werkzeug", ru: "Инструмент: Ширина" },
     },
     "tool_Adobe Wrinkle Tool": {
       action: "Adobe Wrinkle Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Wrinkle Tool", de: "Zerknittern-Werkzeug", ru: "Морщины Инструмент" },
+      loc: {
+        en: "Wrinkle Tool",
+        de: "Zerknittern-Werkzeug",
+        ru: "Инструмент: Морщины",
+      },
     },
     "tool_Adobe Zoom Tool": {
       action: "Adobe Zoom Tool",
       type: "tool",
       minVersion: 24,
-      loc: { en: "Zoom Tool", de: "Zoom-Werkzeug", ru: "Масштаб Инструмент" },
+      loc: { en: "Zoom Tool", de: "Zoom-Werkzeug", ru: "Инструмент: Масштаб" },
     },
   },
   menu: {
@@ -4152,7 +4153,7 @@ var builtCommands = {
       type: "menu",
       loc: {
         en: "Effect > Sketch > Cont\u00E9 Crayon...",
-        de: "Effekt > Zeichenfilter > Conté-Stifte …",
+        de: "Effekt > Zeichenfilter > Cont\u00E9-Stifte …",
         ru: "Эффект > Эскиз > Волшебный карандаш…",
       },
     },
