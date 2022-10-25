@@ -148,7 +148,7 @@ function versionCheck(command) {
   var commandData = commandsData[command];
   if (
     (commandData.minVersion && commandData.minVersion >= aiVersion) ||
-    (commandData.maxVersion && maxVersion <= aiVersion)
+    (commandData.maxVersion && commandData.maxVersion <= aiVersion)
   )
     return false;
   return true;

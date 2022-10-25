@@ -123,7 +123,7 @@ See the LICENSE file for details.
       de: "Befehle, Aktionen und geladene Skripte suchen.",
       ru: "Поиск команд, операций и загруженных скриптов",
     },
-    copyright: { en: "Copyright 2022 Josh Duncan" },
+    copyright: { en: "Copyright 2022 Josh Duncan", de: "", ru: "" },
     cp_config: {
       en: "Palette Settings and Configuration",
       de: "Paletteneinstellungen und -konfiguration",
@@ -193,7 +193,7 @@ See the LICENSE file for details.
     step_delete: { en: "Delete", de: "Löschen", ru: "Удалить" },
     step_down: { en: "Move Down", de: "Nach unten", ru: "Вниз" },
     step_up: { en: "Move Up", de: "Nach oben", ru: "Наверх" },
-    title: { en: "Ai Command Palette", de: "Kurzbefehle" },
+    title: { en: "Ai Command Palette", de: "Kurzbefehle", ru: "" },
     tl_all: {
       en: "All Built-In Tools",
       de: "Alle integrierten Werkzeuge",
@@ -237,6 +237,7 @@ See the LICENSE file for details.
     },
     wf_needs_attention: {
       en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
+      de: "",
       ru: "Набор требует внимания\nУказанные шаги в вашем наборе команд больше недоступны.\n\nУдаленные команды:\n%1\n\nНесовместимые команды:\n%2",
     },
     wf_name: {
@@ -367,12 +368,12 @@ See the LICENSE file for details.
       "menu_Search Adobe Stock": {
         action: "Search Adobe Stock",
         type: "menu",
-        minVersion: 19,
         loc: {
           en: "File > Search Adobe Stock",
           de: "Datei > Adobe Stock durchsuchen …",
           ru: "Файл > Поиск в Adobe Stock...",
         },
+        minVersion: 19,
       },
       "menu_AI Place": {
         action: "AI Place",
@@ -386,12 +387,12 @@ See the LICENSE file for details.
       menu_exportForScreens: {
         action: "exportForScreens",
         type: "menu",
-        minVersion: 20,
         loc: {
           en: "File > Export > Export For Screens...",
           de: "Datei > Exportieren > Für Bildschirme exportieren …",
           ru: "Файл > Экспорт для экранов...",
         },
+        minVersion: 20,
       },
       menu_export: {
         action: "export",
@@ -414,12 +415,12 @@ See the LICENSE file for details.
       menu_exportSelection: {
         action: "exportSelection",
         type: "menu",
-        minVersion: 20,
         loc: {
           en: "File > Export Selection...",
           de: "Datei > Auswahl exportieren …",
           ru: "Файл > Экспортировать выделенные элементы...",
         },
+        minVersion: 20,
       },
       "menu_Package Menu Item": {
         action: "Package Menu Item",
@@ -573,12 +574,12 @@ See the LICENSE file for details.
       menu_pasteWithoutFormatting: {
         action: "pasteWithoutFormatting",
         type: "menu",
-        minVersion: 25.3,
         loc: {
           en: "Edit > Paste without Formatting",
           de: "Bearbeiten > Ohne Formatierung einfügen",
           ru: "Редактирование > Вставить без форматирования",
         },
+        minVersion: 25.3,
       },
       menu_clear: {
         action: "clear",
@@ -610,22 +611,22 @@ See the LICENSE file for details.
       "menu_Auto Spell Check": {
         action: "Auto Spell Check",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Edit > Spelling > Auto Spell Check",
           de: "Bearbeiten > Rechtschreibung > Automatische Rechtschreibprüfung",
           ru: "Редактирование > Орфография > Автоматическая проверка орфографии",
         },
+        minVersion: 24,
       },
       "menu_Check Spelling": {
         action: "Check Spelling",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Edit > Spelling > Check Spelling...",
           de: "Bearbeiten > Rechtschreibung > Rechtschreibprüfung …",
           ru: "Редактирование > Орфография > Проверка орфографии…",
         },
+        minVersion: 24,
       },
       "menu_Edit Custom Dictionary...": {
         action: "Edit Custom Dictionary...",
@@ -810,9 +811,9 @@ See the LICENSE file for details.
       menu_SWFPresets: {
         action: "SWFPresets",
         type: "menu",
+        loc: { en: "Edit > SWF Presets...", de: "", ru: "" },
         minVersion: 22,
         maxVersion: 25.9,
-        loc: { en: "Edit > SWF Presets..." },
       },
       menu_transformagain: {
         action: "transformagain",
@@ -934,98 +935,106 @@ See the LICENSE file for details.
       "menu_Horizontal Align Left": {
         action: "Horizontal Align Left",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Object > Align > Horizontal Align Left",
           de: "Objekt > Ausrichten > Horizontal links ausrichten",
           ru: "Объект > Выравнивание > Горизонтальное выравнивание, влево",
         },
+        minVersion: 24,
       },
       "menu_Horizontal Align Center": {
         action: "Horizontal Align Center",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Object > Align > Horizontal Align Center",
           de: "Objekt > Ausrichten > Horizontal zentriert ausrichten",
           ru: "Объект > Выравнивание > Горизонтальное выравнивание, центр",
         },
+        minVersion: 24,
       },
       "menu_Horizontal Align Right": {
         action: "Horizontal Align Right",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Object > Align > Horizontal Align Right",
           de: "Objekt > Ausrichten > Horizontal rechts ausrichten",
           ru: "Объект > Выравнивание > Горизонтальное выравнивание, вправо",
         },
+        minVersion: 24,
       },
       "menu_Vertical Align Top": {
         action: "Vertical Align Top",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Object > Align > Vertical Align Top",
           de: "Objekt > Ausrichten > Vertikal oben ausrichten",
           ru: "Объект > Выравнивание > Вертикальное выравнивание, вверх",
         },
+        minVersion: 24,
       },
       "menu_Vertical Align Center": {
         action: "Vertical Align Center",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Object > Align > Vertical Align Center",
           de: "Objekt > Ausrichten > Vertikal zentriert ausrichten",
           ru: "Объект > Выравнивание > Вертикальное выравнивание, центр",
         },
+        minVersion: 24,
       },
       "menu_Vertical Align Bottom": {
         action: "Vertical Align Bottom",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Object > Align > Vertical Align Bottom",
           de: "Objekt > Ausrichten > Vertikal unten ausrichten",
           ru: "Объект > Выравнивание > Вертикальное выравнивание, вниз",
         },
+        minVersion: 24,
       },
       "menu_Vertical Distribute Top": {
         action: "Vertical Distribute Top",
         type: "menu",
+        loc: { en: "Object > Distribute > Vertical Distribute Top", de: "", ru: "" },
         minVersion: 27,
-        loc: { en: "Object > Distribute > Vertical Distribute Top" },
       },
       "menu_Vertical Distribute Center": {
         action: "Vertical Distribute Center",
         type: "menu",
+        loc: { en: "Object > Distribute > Vertical Distribute Center", de: "", ru: "" },
         minVersion: 27,
-        loc: { en: "Object > Distribute > Vertical Distribute Center" },
       },
       "menu_Vertical Distribute Bottom": {
         action: "Vertical Distribute Bottom",
         type: "menu",
+        loc: { en: "Object > Distribute > Vertical Distribute Bottom", de: "", ru: "" },
         minVersion: 27,
-        loc: { en: "Object > Distribute > Vertical Distribute Bottom" },
       },
       "menu_Horizontal Distribute Left": {
         action: "Horizontal Distribute Left",
         type: "menu",
+        loc: { en: "Object > Distribute > Horizontal Distribute Left", de: "", ru: "" },
         minVersion: 27,
-        loc: { en: "Object > Distribute > Horizontal Distribute Left" },
       },
       "menu_Horizontal Distribute Center": {
         action: "Horizontal Distribute Center",
         type: "menu",
+        loc: {
+          en: "Object > Distribute > Horizontal Distribute Center",
+          de: "",
+          ru: "",
+        },
         minVersion: 27,
-        loc: { en: "Object > Distribute > Horizontal Distribute Center" },
       },
       "menu_Horizontal Distribute Right": {
         action: "Horizontal Distribute Right",
         type: "menu",
+        loc: {
+          en: "Object > Distribute > Horizontal Distribute Right",
+          de: "",
+          ru: "",
+        },
         minVersion: 27,
-        loc: { en: "Object > Distribute > Horizontal Distribute Right" },
       },
       menu_group: {
         action: "group",
@@ -1120,12 +1129,12 @@ See the LICENSE file for details.
       "menu_Crop Image": {
         action: "Crop Image",
         type: "menu",
-        minVersion: 23,
         loc: {
           en: "Object > Crop Image",
           de: "Objekt > Bild zuschneiden",
           ru: "Объект > Обрезать изображение",
         },
+        minVersion: 23,
       },
       "menu_Rasterize 8 menu item": {
         action: "Rasterize 8 menu item",
@@ -1328,12 +1337,12 @@ See the LICENSE file for details.
       "menu_Reverse Path Direction": {
         action: "Reverse Path Direction",
         type: "menu",
-        minVersion: 21,
         loc: {
           en: "Object > Path > Reverse Path Direction",
           de: "Objekt > Pfad > Pfadrichtung umkehren",
           ru: "Объект > Контур > Изменение направления контура",
         },
+        minVersion: 21,
       },
       "menu_simplify menu item": {
         action: "simplify menu item",
@@ -1392,22 +1401,22 @@ See the LICENSE file for details.
       "menu_Convert to Shape": {
         action: "Convert to Shape",
         type: "menu",
-        minVersion: 18,
         loc: {
           en: "Object > Shape > Convert to Shapes",
           de: "Objekt > Form > In Form umwandeln",
           ru: "Объект > Фигура > Преобразовать в фигуры",
         },
+        minVersion: 18,
       },
       "menu_Expand Shape": {
         action: "Expand Shape",
         type: "menu",
-        minVersion: 18,
         loc: {
           en: "Object > Shape > Expand Shapes",
           de: "Objekt > Form > Form umwandeln",
           ru: "Объект > Фигура > Разобрать фигуру",
         },
+        minVersion: 18,
       },
       "menu_Adobe Make Pattern": {
         action: "Adobe Make Pattern",
@@ -1439,70 +1448,70 @@ See the LICENSE file for details.
       "menu_Partial Rearrange Make": {
         action: "Partial Rearrange Make",
         type: "menu",
+        loc: { en: "Object > Intertwine > Make", de: "", ru: "" },
         minVersion: 27,
-        loc: { en: "Object > Intertwine > Make" },
       },
       "menu_Partial Rearrange Release": {
         action: "Partial Rearrange Release",
         type: "menu",
+        loc: { en: "Object > Intertwine > Release", de: "", ru: "" },
         minVersion: 27,
-        loc: { en: "Object > Intertwine > Release" },
       },
       "menu_Partial Rearrange Edit": {
         action: "Partial Rearrange Edit",
         type: "menu",
+        loc: { en: "Object > Intertwine > Edit", de: "", ru: "" },
         minVersion: 27,
-        loc: { en: "Object > Intertwine > Edit" },
       },
       "menu_Make Radial Repeat": {
         action: "Make Radial Repeat",
         type: "menu",
-        minVersion: 25.1,
         loc: {
           en: "Object > Repeat > Make Radial",
           de: "Objekt > Wiederholen > Radial",
           ru: "Объект > Повторить > Радиальный",
         },
+        minVersion: 25.1,
       },
       "menu_Make Grid Repeat": {
         action: "Make Grid Repeat",
         type: "menu",
-        minVersion: 25.1,
         loc: {
           en: "Object > Repeat > Make Grid",
           de: "Objekt > Wiederholen > Raster",
           ru: "Объект > Повторить > Сетка",
         },
+        minVersion: 25.1,
       },
       "menu_Make Symmetry Repeat": {
         action: "Make Symmetry Repeat",
         type: "menu",
-        minVersion: 25.1,
         loc: {
           en: "Object > Repeat > Make Symmetry",
           de: "Objekt > Wiederholen > Spiegeln",
           ru: "Объект > Повторить > Зеркально",
         },
+        minVersion: 25.1,
       },
       "menu_Release Repeat Art": {
         action: "Release Repeat Art",
         type: "menu",
-        minVersion: 25.1,
         loc: {
           en: "Object > Repeat > Release",
           de: "Objekt > Wiederholen > Zurückwandeln",
           ru: "Объект > Повторить > Освободить",
         },
+        minVersion: 25.1,
       },
       "menu_Repeat Art Options": {
         action: "Repeat Art Options",
         type: "menu",
-        minVersion: 25.1,
         loc: {
           en: "Object > Repeat > Repeat Art Options...",
           de: "Objekt > Wiederholen > Optionen …",
           ru: "Объект > Повторить > Параметры…",
         },
+        minVersion: 25.1,
       },
       "menu_Path Blend Make": {
         action: "Path Blend Make",
@@ -1903,12 +1912,12 @@ See the LICENSE file for details.
       "menu_Browse Typekit Fonts Menu IllustratorUI": {
         action: "Browse Typekit Fonts Menu IllustratorUI",
         type: "menu",
-        minVersion: 17.1,
         loc: {
           en: "Type > More from Adobe Fonts...",
           de: "Schrift > Mehr bei Adobe Fonts …",
           ru: "Текст > Найти больше в Adobe Fonts...",
         },
+        minVersion: 17.1,
       },
       "menu_alternate glyph palette plugin": {
         action: "alternate glyph palette plugin",
@@ -2197,192 +2206,192 @@ See the LICENSE file for details.
       "menu_Find Appearance menu item": {
         action: "Find Appearance menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Appearance",
           de: "Auswahl > Gleich > Aussehen",
           ru: "Выделение > По общему признаку > Оформление",
         },
+        minVersion: 26,
       },
       "menu_Find Appearance Attributes menu item": {
         action: "Find Appearance Attributes menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Appearance Attribute",
           de: "Auswahl > Gleich > Aussehensattribute",
           ru: "Выделение > По общему признаку > Атрибуты оформления",
         },
+        minVersion: 26,
       },
       "menu_Find Blending Mode menu item": {
         action: "Find Blending Mode menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Blending Mode",
           de: "Auswahl > Gleich > Füllmethode",
           ru: "Выделение > По общему признаку > С одинаковым режимом наложения",
         },
+        minVersion: 26,
       },
       "menu_Find Fill & Stroke menu item": {
         action: "Find Fill & Stroke menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Fill & Stroke",
           de: "Auswahl > Gleich > Fläche und Kontur",
           ru: "Выделение > По общему признаку > С одинаковыми заливкой и обводкой",
         },
+        minVersion: 26,
       },
       "menu_Find Fill Color menu item": {
         action: "Find Fill Color menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Fill Color",
           de: "Auswahl > Gleich > Flächenfarbe",
           ru: "Выделение > По общему признаку > С одинаковым цветом заливки",
         },
+        minVersion: 26,
       },
       "menu_Find Opacity menu item": {
         action: "Find Opacity menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Opacity",
           de: "Auswahl > Gleich > Deckkraft",
           ru: "Выделение > По общему признаку > С одинаковой непрозрачностью",
         },
+        minVersion: 26,
       },
       "menu_Find Stroke Color menu item": {
         action: "Find Stroke Color menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Stroke Color",
           de: "Auswahl > Gleich > Konturfarbe",
           ru: "Выделение > По общему признаку > С одинаковым цветом обводки",
         },
+        minVersion: 26,
       },
       "menu_Find Stroke Weight menu item": {
         action: "Find Stroke Weight menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Stroke Weight",
           de: "Auswahl > Gleich > Konturstärke",
           ru: "Выделение > По общему признаку > С одинаковой толщиной обводки",
         },
+        minVersion: 26,
       },
       "menu_Find Style menu item": {
         action: "Find Style menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Graphic Style",
           de: "Auswahl > Gleich > Grafikstil",
           ru: "Выделение > По общему признаку > Стиль графики",
         },
+        minVersion: 26,
       },
       "menu_Find Live Shape menu item": {
         action: "Find Live Shape menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Shape",
           de: "Auswahl > Gleich > Form",
           ru: "Выделение > По общему признаку > Фигура",
         },
+        minVersion: 26,
       },
       "menu_Find Symbol Instance menu item": {
         action: "Find Symbol Instance menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Symbol Instance",
           de: "Auswahl > Gleich > Symbolinstanz",
           ru: "Выделение > По общему признаку > Одинаковые образцы символа",
         },
+        minVersion: 26,
       },
       "menu_Find Link Block Series menu item": {
         action: "Find Link Block Series menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Link Block Series",
           de: "Auswahl > Gleich > Verknüpfungsblockreihen",
           ru: "Выделение > По общему признаку > Последовательность связанных блоков",
         },
+        minVersion: 26,
       },
       "menu_Find Text Font Family menu item": {
         action: "Find Text Font Family menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Font Family",
           de: "Auswahl > Gleich > Schriftfamilie",
           ru: "Выделение > По общему признаку > Семейство шрифтов",
         },
+        minVersion: 26,
       },
       "menu_Find Text Font Family Style menu item": {
         action: "Find Text Font Family Style menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Font Family & Style",
           de: "Auswahl > Gleich > Schriftfamilie und -schnitt",
           ru: "Выделение > По общему признаку > Семейство и стиль шрифтов",
         },
+        minVersion: 26,
       },
       "menu_Find Text Font Family Style Size menu item": {
         action: "Find Text Font Family Style Size menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Font Family, Style & Size",
           de: "Auswahl > Gleich > Schriftfamilie, -schnitt und -grad",
           ru: "Выделение > По общему признаку > Семейство, стиль и размер шрифтов",
         },
+        minVersion: 26,
       },
       "menu_Find Text Font Size menu item": {
         action: "Find Text Font Size menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Font Size",
           de: "Auswahl > Gleich > Schriftgrad",
           ru: "Выделение > По общему признаку > Размер шрифта",
         },
+        minVersion: 26,
       },
       "menu_Find Text Fill Color menu item": {
         action: "Find Text Fill Color menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Text Fill Color",
           de: "Auswahl > Gleich > Textflächenfarbe",
           ru: "Выделение > По общему признаку > Цвет заливки текста",
         },
+        minVersion: 26,
       },
       "menu_Find Text Stroke Color menu item": {
         action: "Find Text Stroke Color menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Text Stroke Color",
           de: "Auswahl > Gleich > Textkonturfarbe",
           ru: "Выделение > По общему признаку > Цвет обводки текста",
         },
+        minVersion: 26,
       },
       "menu_Find Text Fill Stroke Color menu item": {
         action: "Find Text Fill Stroke Color menu item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Select > Same > Text Fill & Stroke Color",
           de: "Auswahl > Gleich > Textflächen- und -konturfarbe",
           ru: "Выделение > По общему признаку > Цвет заливки и обводки текста",
         },
+        minVersion: 26,
       },
       "menu_Selection Hat 3": {
         action: "Selection Hat 3",
@@ -2468,12 +2477,12 @@ See the LICENSE file for details.
       "menu_SmartEdit Menu Item": {
         action: "SmartEdit Menu Item",
         type: "menu",
-        minVersion: 23,
         loc: {
           en: "Select > Start/Stop Global Edit",
           de: "Auswahl > Globale Bearbeitung starten/anhalten",
           ru: "Выделение > Начать глобальное изменение",
         },
+        minVersion: 23,
       },
       "menu_Selection Hat 10": {
         action: "Selection Hat 10",
@@ -2523,82 +2532,82 @@ See the LICENSE file for details.
       "menu_Live Adobe Geometry3D Extrude": {
         action: "Live Adobe Geometry3D Extrude",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Effect > 3D and Materials > Extrude & Bevel...",
           de: "Effekt > 3D und Materialien > Extrudieren und abgeflachte Kante …",
           ru: "Эффект > 3D и материалы > Вытягивание и фаска...",
         },
+        minVersion: 26,
       },
       "menu_Live Adobe Geometry3D Revolve": {
         action: "Live Adobe Geometry3D Revolve",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Effect > 3D and Materials > Revolve...",
           de: "Effekt > 3D und Materialien > Kreiseln …",
           ru: "Эффект > 3D и материалы > Вращение…",
         },
+        minVersion: 26,
       },
       "menu_Live Adobe Geometry3D Inflate": {
         action: "Live Adobe Geometry3D Inflate",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Effect > 3D and Materials > Inflate...",
           de: "Effekt > 3D und Materialien > Aufblasen …",
           ru: "Эффект > 3D и материалы > Раздувание…",
         },
+        minVersion: 26,
       },
       "menu_Live Adobe Geometry3D Rotate": {
         action: "Live Adobe Geometry3D Rotate",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Effect > 3D and Materials > Rotate...",
           de: "Effekt > 3D und Materialien > Drehen …",
           ru: "Эффект > 3D и материалы > Поворот…",
         },
+        minVersion: 26,
       },
       "menu_Live Adobe Geometry3D Materials": {
         action: "Live Adobe Geometry3D Materials",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Effect > 3D and Materials > Materials...",
           de: "Effekt > 3D und Materialien > Materialien …",
           ru: "Эффект > 3D и материалы > Материалы…",
         },
+        minVersion: 26,
       },
       "menu_Live 3DExtrude": {
         action: "Live 3DExtrude",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Effect > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...",
           de: "Effekt > 3D (klassisch) > Extrudieren und abgeflachte Kante (klassisch) …",
           ru: "Эффект > 3D (классическое) > Вытягивание и фаска (классический)…",
         },
+        minVersion: 26,
       },
       "menu_Live 3DRevolve": {
         action: "Live 3DRevolve",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Effect > 3D and Materials > 3D (Classic) > Revolve (Classic)...",
           de: "Effekt > 3D (klassisch) > Kreiseln (klassisch) …",
           ru: "Эффект > 3D (классическое) > Вращение (классическое)…",
         },
+        minVersion: 26,
       },
       "menu_Live 3DRotate": {
         action: "Live 3DRotate",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Effect > 3D and Materials > 3D (Classic) > Rotate (Classic)...",
           de: "Effekt > 3D (klassisch) > Drehen (klassisch) …",
           ru: "Эффект > 3D (классическое) > Поворот (классический)…",
         },
+        minVersion: 26,
       },
       "menu_Live Rectangle": {
         action: "Live Rectangle",
@@ -3782,12 +3791,12 @@ See the LICENSE file for details.
       "menu_Live Corner Annotator": {
         action: "Live Corner Annotator",
         type: "menu",
-        minVersion: 17.1,
         loc: {
           en: "View > Show / Hide Corner Widget",
           de: "Ansicht > Ecken-Widget einblenden / ausblenden",
           ru: "Просмотр > Показать / скрыть виджет углов",
         },
+        minVersion: 17.1,
       },
       menu_edge: {
         action: "edge",
@@ -4107,12 +4116,12 @@ See the LICENSE file for details.
       "menu_Browse Add-Ons Menu": {
         action: "Browse Add-Ons Menu",
         type: "menu",
-        minVersion: 19,
         loc: {
           en: "Window > Find Extensions on Exchange...",
           de: "Fenster > Erweiterungen auf Exchange suchen …",
           ru: "Окно > Поиск расширений на Exchange...",
         },
+        minVersion: 19,
       },
       "menu_drover control palette plugin": {
         action: "drover control palette plugin",
@@ -4126,52 +4135,52 @@ See the LICENSE file for details.
       "menu_Adobe Advanced Toolbar Menu": {
         action: "Adobe Advanced Toolbar Menu",
         type: "menu",
-        minVersion: 23,
         loc: {
           en: "Window > Toolbars > Advanced",
           de: "Fenster > Werkzeugleisten > Erweitert",
           ru: "Окно > Панели инструментов > Дополнительные",
         },
+        minVersion: 23,
       },
       "menu_Adobe Basic Toolbar Menu": {
         action: "Adobe Basic Toolbar Menu",
         type: "menu",
-        minVersion: 23,
         loc: {
           en: "Window > Toolbars > Basic",
           de: "Fenster > Werkzeugleisten > Einfach",
           ru: "Окно > Панели инструментов > Основные",
         },
+        minVersion: 23,
       },
       "menu_New Tools Panel": {
         action: "New Tools Panel",
         type: "menu",
-        minVersion: 17,
         loc: {
           en: "Window > Toolbars > New Toolbar...",
           de: "Fenster > Werkzeugleisten > Neue Werkzeugleiste …",
           ru: "Окно > Панели инструментов > Новая панель инструментов...",
         },
+        minVersion: 17,
       },
       "menu_Manage Tools Panel": {
         action: "Manage Tools Panel",
         type: "menu",
-        minVersion: 17,
         loc: {
           en: "Window > Toolbars > Manage Toolbar...",
           de: "Fenster > Werkzeugleisten > Werkzeugleisten verwalten …",
           ru: "Окно > Панели инструментов > Управление панелями инструментов...",
         },
+        minVersion: 17,
       },
       "menu_Adobe 3D Panel": {
         action: "Adobe 3D Panel",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Window > 3D and Materials",
           de: "Fenster > 3D und Materialien",
           ru: "Окно > 3D и материалы",
         },
+        minVersion: 26,
       },
       "menu_Adobe Action Palette": {
         action: "Adobe Action Palette",
@@ -4212,12 +4221,12 @@ See the LICENSE file for details.
       "menu_Adobe SmartExport Panel Menu Item": {
         action: "Adobe SmartExport Panel Menu Item",
         type: "menu",
-        minVersion: 20,
         loc: {
           en: "Window > Asset Export",
           de: "Fenster > Export von Element",
           ru: "Окно > Экспорт ресурсов",
         },
+        minVersion: 20,
       },
       "menu_internal palettes posing as plug-in menus-attributes": {
         action: "internal palettes posing as plug-in menus-attributes",
@@ -4250,19 +4259,19 @@ See the LICENSE file for details.
       "menu_Adobe Illustrator Kuler Panel": {
         action: "Adobe Illustrator Kuler Panel",
         type: "menu",
+        loc: { en: "Window > Color Themes", de: "", ru: "" },
         minVersion: 22,
         maxVersion: 25.9,
-        loc: { en: "Window > Color Themes" },
       },
       "menu_Adobe Commenting Palette": {
         action: "Adobe Commenting Palette",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Window > Comments",
           de: "Fenster > Kommentare",
           ru: "Окно > Комментарии",
         },
+        minVersion: 26,
       },
       "menu_CSS Menu Item": {
         action: "CSS Menu Item",
@@ -4312,28 +4321,28 @@ See the LICENSE file for details.
       "menu_Adobe HistoryPanel Menu Item": {
         action: "Adobe HistoryPanel Menu Item",
         type: "menu",
-        minVersion: 26.4,
-        maxVersion: 26.9,
         loc: {
           en: "Window > History",
           de: "Fenster > Versionsverlauf",
           ru: "Окно > История",
         },
+        minVersion: 26.4,
+        maxVersion: 26.9,
       },
       "menu_Adobe History Panel Menu Item": {
         action: "Adobe History Panel Menu Item",
         type: "menu",
-        minVersion: 27,
         loc: {
           en: "Window > History",
           de: "Fenster > Versionsverlauf",
           ru: "Окно > История",
         },
+        minVersion: 27,
       },
       "menu_Adobe Vectorize Panel": {
         action: "Adobe Vectorize Panel",
         type: "menu",
-        loc: { en: "Window > Image Trace" },
+        loc: { en: "Window > Image Trace", de: "", ru: "" },
       },
       "menu_internal palettes posing as plug-in menus-info": {
         action: "internal palettes posing as plug-in menus-info",
@@ -4348,9 +4357,9 @@ See the LICENSE file for details.
       "menu_Adobe Learn Panel Menu Item": {
         action: "Adobe Learn Panel Menu Item",
         type: "menu",
+        loc: { en: "Window > Learn", de: "", ru: "" },
         minVersion: 22,
         maxVersion: 25.9,
-        loc: { en: "Window > Learn" },
       },
       "menu_Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries": {
         action: "Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries",
@@ -4409,12 +4418,12 @@ See the LICENSE file for details.
       "menu_Adobe Property Palette": {
         action: "Adobe Property Palette",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Window > Properties",
           de: "Fenster > Eigenschaften",
           ru: "Окно > Свойства",
         },
+        minVersion: 26,
       },
       "menu_Adobe Separation Preview Panel": {
         action: "Adobe Separation Preview Panel",
@@ -4546,12 +4555,12 @@ See the LICENSE file for details.
       "menu_Adobe Version History File Menu Item": {
         action: "Adobe Version History File Menu Item",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Window > Version History",
           de: "Fenster > Versionsverlauf",
           ru: "Окно > Журнал версий",
         },
+        minVersion: 26,
       },
       "menu_AdobeBrushMgrUI Other libraries menu item": {
         action: "AdobeBrushMgrUI Other libraries menu item",
@@ -4601,22 +4610,22 @@ See the LICENSE file for details.
       menu_supportCommunity: {
         action: "supportCommunity",
         type: "menu",
-        minVersion: 26,
         loc: {
           en: "Help > Support Community",
           de: "Hilfe > Support-Community",
           ru: "Справка > Сообщество службы поддержки",
         },
+        minVersion: 26,
       },
       menu_wishform: {
         action: "wishform",
         type: "menu",
-        minVersion: 25,
         loc: {
           en: "Help > Submit Bug/Feature Request...",
           de: "Hilfe > Fehlermeldung / Funktionswunsch senden …",
           ru: "Справка > Сообщение об ошибке/запрос на добавление новых функций...",
         },
+        minVersion: 25,
       },
       "menu_System Info": {
         action: "System Info",
@@ -4626,6 +4635,21 @@ See the LICENSE file for details.
           de: "Hilfe > Systeminformationen …",
           ru: "Справка > Информация о системе…",
         },
+      },
+      "menu__GenericPluginMenuItem 2": {
+        action: "_GenericPluginMenuItem 2",
+        type: "menu",
+        loc: { en: "Help > Manage My Account...", de: "", ru: "" },
+      },
+      "menu__GenericPluginMenuItem 3": {
+        action: "_GenericPluginMenuItem 3",
+        type: "menu",
+        loc: { en: "Help > Sign In... / Sign Out...", de: "", ru: "" },
+      },
+      "menu__GenericPluginMenuItem 4": {
+        action: "_GenericPluginMenuItem 4",
+        type: "menu",
+        loc: { en: "Help > Updates...", de: "", ru: "" },
       },
       "menu_Adobe Actions Batch": {
         action: "Adobe Actions Batch",
@@ -4810,12 +4834,12 @@ See the LICENSE file for details.
       menu_GPUPerformancePref: {
         action: "GPUPerformancePref",
         type: "menu",
-        minVersion: 19,
         loc: {
           en: "Preferences > Performance",
           de: "Voreinstellungen > Leistung …",
           ru: "Установки > Производительность…",
         },
+        minVersion: 19,
       },
       menu_FilePref: {
         action: "FilePref",
@@ -4829,12 +4853,12 @@ See the LICENSE file for details.
       menu_ClipboardPref: {
         action: "ClipboardPref",
         type: "menu",
-        minVersion: 25,
         loc: {
           en: "Preferences > Clipboard Handling",
           de: "Voreinstellungen > Zwischenablageoptionen …",
           ru: "Установки > Обработка буфера…",
         },
+        minVersion: 25,
       },
       menu_BlackPref: {
         action: "BlackPref",
@@ -4848,809 +4872,809 @@ See the LICENSE file for details.
       menu_DevicesPref: {
         action: "DevicesPref",
         type: "menu",
-        minVersion: 24,
         loc: {
           en: "Preferences > Devices",
           de: "Voreinstellungen > Geräte …",
           ru: "Установки > Устройства…",
         },
+        minVersion: 24,
       },
       "menu_Debug Panel": {
         action: "Debug Panel",
         type: "menu",
-        loc: { en: "Debug Panel" },
+        loc: { en: "Debug Panel", de: "", ru: "" },
       },
     },
     tool: {
       "tool_Adobe Add Anchor Point Tool": {
         action: "Adobe Add Anchor Point Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Add Anchor Point Tool",
           de: "Ankerpunkt-hinzufügen-Werkzeug",
           ru: "Инструмент: Добавить опорную точку",
         },
+        minVersion: 24,
       },
       "tool_Adobe Anchor Point Tool": {
         action: "Adobe Anchor Point Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Anchor Point Tool",
           de: "Ankerpunkt-Werkzeug",
           ru: "Инструмент: Опорная точка",
         },
+        minVersion: 24,
       },
       "tool_Adobe Arc Tool": {
         action: "Adobe Arc Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Arc Tool", de: "Bogen-Werkzeug", ru: "Инструмент: Дуга" },
+        minVersion: 24,
       },
       "tool_Adobe Area Graph Tool": {
         action: "Adobe Area Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Area Graph Tool",
           de: "Flächendiagramm",
           ru: "Инструмент: Диаграмма с областями",
         },
+        minVersion: 24,
       },
       "tool_Adobe Area Type Tool": {
         action: "Adobe Area Type Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Area Type Tool",
           de: "Flächentext-Werkzeug",
           ru: "Инструмент: Текст в области",
         },
+        minVersion: 24,
       },
       "tool_Adobe Crop Tool": {
         action: "Adobe Crop Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Artboard Tool",
           de: "Zeichenflächen-Werkzeug",
           ru: "Инструмент: Монтажная область",
         },
+        minVersion: 24,
       },
       "tool_Adobe Bar Graph Tool": {
         action: "Adobe Bar Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Bar Graph Tool",
           de: "Horizontales Balkendiagramm",
           ru: "Инструмент: Диаграмма горизонтальные полосы",
         },
+        minVersion: 24,
       },
       "tool_Adobe Blend Tool": {
         action: "Adobe Blend Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Blend Tool", de: "Angleichen-Werkzeug", ru: "Инструмент: Переход" },
+        minVersion: 24,
       },
       "tool_Adobe Bloat Tool": {
         action: "Adobe Bloat Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Bloat Tool",
           de: "Aufblasen-Werkzeug",
           ru: "Инструмент: Раздувание",
         },
+        minVersion: 24,
       },
       "tool_Adobe Blob Brush Tool": {
         action: "Adobe Blob Brush Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Blob Brush Tool",
           de: "Tropfenpinsel-Werkzeug",
           ru: "Инструмент: Кисть-клякса",
         },
+        minVersion: 24,
       },
       "tool_Adobe Column Graph Tool": {
         action: "Adobe Column Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Column Graph Tool",
           de: "Vertikales Balkendiagramm",
           ru: "Инструмент: Диаграмма вертикальные полосы",
         },
+        minVersion: 24,
       },
       "tool_Adobe Cyrstallize Tool": {
         action: "Adobe Cyrstallize Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Crystallize Tool",
           de: "Kristallisieren-Werkzeug",
           ru: "Инструмент: Кристаллизация",
         },
+        minVersion: 24,
       },
       "tool_Adobe Curvature Tool": {
         action: "Adobe Curvature Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Curvature Tool", de: "Kurvenzeichner", ru: "Инструмент: Кривизна" },
+        minVersion: 24,
       },
       "tool_Adobe Delete Anchor Point Tool": {
         action: "Adobe Delete Anchor Point Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Delete Anchor Point Tool",
           de: "Ankerpunkt-löschen-Werkzeug",
           ru: "Инструмент: Удалить опорную точку",
         },
+        minVersion: 24,
       },
       "tool_Adobe Direct Select Tool": {
         action: "Adobe Direct Select Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Direct Selection Tool",
           de: "Direktauswahl-Werkzeug",
           ru: "Инструмент: Прямое выделение",
         },
+        minVersion: 24,
       },
       "tool_Adobe Ellipse Shape Tool": {
         action: "Adobe Ellipse Shape Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Ellipse Tool", de: "Ellipse-Werkzeug", ru: "Инструмент: Эллипс" },
+        minVersion: 24,
       },
       "tool_Adobe Eraser Tool": {
         action: "Adobe Eraser Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Eraser Tool",
           de: "Radiergummi-Werkzeug",
           ru: "Инструмент: Ластик",
         },
+        minVersion: 24,
       },
       "tool_Adobe Eyedropper Tool": {
         action: "Adobe Eyedropper Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Eyedropper Tool",
           de: "Pipette-Werkzeug",
           ru: "Инструмент: Пипетка",
         },
+        minVersion: 24,
       },
       "tool_Adobe Flare Tool": {
         action: "Adobe Flare Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Flare Tool", de: "Blendenflecke-Werkzeug", ru: "Инструмент: Блик" },
+        minVersion: 24,
       },
       "tool_Adobe Free Transform Tool": {
         action: "Adobe Free Transform Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Free Transform Tool",
           de: "Frei-transformieren-Werkzeug",
           ru: "Инструмент: Свободное трансформирование",
         },
+        minVersion: 24,
       },
       "tool_Adobe Gradient Vector Tool": {
         action: "Adobe Gradient Vector Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Gradient Tool",
           de: "Verlauf-Werkzeug",
           ru: "Инструмент: Градиент",
         },
+        minVersion: 24,
       },
       "tool_Adobe Direct Object Select Tool": {
         action: "Adobe Direct Object Select Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Group Selection Tool",
           de: "Gruppenauswahl-Werkzeug",
           ru: "Инструмент: Групповое выделение",
         },
+        minVersion: 24,
       },
       "tool_Adobe Scroll Tool": {
         action: "Adobe Scroll Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Hand Tool", de: "Hand-Werkzeug", ru: "Инструмент: Рука" },
+        minVersion: 24,
       },
       "tool_Adobe Intertwine Zone Marker Tool": {
         action: "Adobe Intertwine Zone Marker Tool",
         type: "tool",
+        loc: { en: "Intertwine Tool", de: "", ru: "" },
         minVersion: 27,
-        loc: { en: "Intertwine Tool" },
       },
       "tool_Adobe Corner Join Tool": {
         action: "Adobe Corner Join Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Join Tool",
           de: "Zusammenfügen-Werkzeug",
           ru: "Инструмент: Соединение",
         },
+        minVersion: 24,
       },
       "tool_Adobe Knife Tool": {
         action: "Adobe Knife Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Knife Tool", de: "Messer-Werkzeug", ru: "Инструмент: Нож" },
+        minVersion: 24,
       },
       "tool_Adobe Direct Lasso Tool": {
         action: "Adobe Direct Lasso Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Lasso Tool", de: "Lasso-Werkzeug", ru: "Инструмент: Лассо" },
+        minVersion: 24,
       },
       "tool_Adobe Line Graph Tool": {
         action: "Adobe Line Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Line Graph Tool",
           de: "Liniendiagramm",
           ru: "Инструмент: Линейная диаграмма",
         },
+        minVersion: 24,
       },
       "tool_Adobe Line Tool": {
         action: "Adobe Line Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Line Segment Tool",
           de: "Liniensegment-Werkzeug",
           ru: "Инструмент: Отрезок линии",
         },
+        minVersion: 24,
       },
       "tool_Adobe Planar Paintbucket Tool": {
         action: "Adobe Planar Paintbucket Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Live Paint Bucket Tool",
           de: "Interaktiv-malen-Werkzeug",
           ru: "Инструмент: Быстрая заливка",
         },
+        minVersion: 24,
       },
       "tool_Adobe Planar Face Select Tool": {
         action: "Adobe Planar Face Select Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Live Paint Selection Tool",
           de: "Interaktiv-malen-Auswahlwerkzeug",
           ru: "Инструмент: Выделение быстрых заливок",
         },
+        minVersion: 24,
       },
       "tool_Adobe Magic Wand Tool": {
         action: "Adobe Magic Wand Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Magic Wand Tool",
           de: "Zauberstab-Werkzeug",
           ru: "Инструмент: Волшебная палочка",
         },
+        minVersion: 24,
       },
       "tool_Adobe Measure Tool": {
         action: "Adobe Measure Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Measure Tool", de: "Mess-Werkzeug", ru: "Инструмент: Линейка" },
+        minVersion: 24,
       },
       "tool_Adobe Mesh Editing Tool": {
         action: "Adobe Mesh Editing Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Mesh Tool", de: "Gitter-Werkzeug", ru: "Инструмент: Сетка" },
+        minVersion: 24,
       },
       "tool_Adobe Brush Tool": {
         action: "Adobe Brush Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Paintbrush Tool", de: "Pinsel-Werkzeug", ru: "Инструмент: Кисть" },
+        minVersion: 24,
       },
       "tool_Adobe Freehand Erase Tool": {
         action: "Adobe Freehand Erase Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Path Eraser Tool",
           de: "Löschen-Werkzeug",
           ru: "Инструмент: Стирание контура",
         },
+        minVersion: 24,
       },
       "tool_Adobe Pattern Tile Tool": {
         action: "Adobe Pattern Tile Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Pattern Tile Tool",
           de: "Musterelement-Werkzeug",
           ru: "Инструмент: Элемент узора",
         },
+        minVersion: 24,
       },
       "tool_Adobe Pen Tool": {
         action: "Adobe Pen Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Pen Tool", de: "Zeichenstift-Werkzeug", ru: "Инструмент: Перо" },
+        minVersion: 24,
       },
       "tool_Adobe Freehand Tool": {
         action: "Adobe Freehand Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Pencil Tool",
           de: "Buntstift-Werkzeug",
           ru: "Инструмент: Карандаш",
         },
+        minVersion: 24,
       },
       "tool_Perspective Grid Tool": {
         action: "Perspective Grid Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Perspective Grid Tool",
           de: "Perspektivenraster-Werkzeug",
           ru: "Инструмент: Сетка перспективы",
         },
+        minVersion: 24,
       },
       "tool_Perspective Selection Tool": {
         action: "Perspective Selection Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Perspective Selection Tool",
           de: "Perspektivenauswahl-Werkzeug",
           ru: "Инструмент: Выбор перспективы",
         },
+        minVersion: 24,
       },
       "tool_Adobe Pie Graph Tool": {
         action: "Adobe Pie Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Pie Graph Tool",
           de: "Kreisdiagramm-Werkzeug",
           ru: "Инструмент: Круговая диаграмма",
         },
+        minVersion: 24,
       },
       "tool_Adobe Polar Grid Tool": {
         action: "Adobe Polar Grid Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Polar Grid Tool",
           de: "Radiales-Raster-Werkzeug",
           ru: "Инструмент: Полярная сетка",
         },
+        minVersion: 24,
       },
       "tool_Adobe Shape Construction Regular Polygon Tool": {
         action: "Adobe Shape Construction Regular Polygon Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Polygon Tool",
           de: "Polygon-Werkzeug",
           ru: "Инструмент: Многоугольник",
         },
+        minVersion: 24,
       },
       "tool_Adobe Page Tool": {
         action: "Adobe Page Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Print Tiling Tool",
           de: "Druckaufteilungs-Werkzeug",
           ru: "Инструмент: Разбиение для печати",
         },
+        minVersion: 24,
       },
       "tool_Adobe Pucker Tool": {
         action: "Adobe Pucker Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Pucker Tool",
           de: "Zusammenziehen-Werkzeug",
           ru: "Инструмент: Втягивание",
         },
+        minVersion: 24,
       },
       "tool_Adobe Puppet Warp Tool": {
         action: "Adobe Puppet Warp Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Puppet Warp Tool",
           de: "Formgitter-Werkzeug",
           ru: "Инструмент: Марионеточная деформация",
         },
+        minVersion: 24,
       },
       "tool_Adobe Radar Graph Tool": {
         action: "Adobe Radar Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Radar Graph Tool",
           de: "Netzdiagramm",
           ru: "Инструмент: Диаграмма радар",
         },
+        minVersion: 24,
       },
       "tool_Adobe Rectangle Shape Tool": {
         action: "Adobe Rectangle Shape Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Rectangle Tool",
           de: "Rechteck-Werkzeug",
           ru: "Инструмент: Прямоугольник",
         },
+        minVersion: 24,
       },
       "tool_Adobe Rectangular Grid Tool": {
         action: "Adobe Rectangular Grid Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Rectangular Grid Tool",
           de: "Rechteckiges-Raster-Werkzeug",
           ru: "Инструмент: Прямоугольная сетка",
         },
+        minVersion: 24,
       },
       "tool_Adobe Reflect Tool": {
         action: "Adobe Reflect Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Reflect Tool",
           de: "Spiegeln-Werkzeug",
           ru: "Инструмент: Зеркальное отражение",
         },
+        minVersion: 24,
       },
       "tool_Adobe Reshape Tool": {
         action: "Adobe Reshape Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Reshape Tool",
           de: "Form-ändern-Werkzeug",
           ru: "Инструмент: Перерисовка",
         },
+        minVersion: 24,
       },
       "tool_Adobe Rotate Tool": {
         action: "Adobe Rotate Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Rotate Tool", de: "Drehen-Werkzeug", ru: "Инструмент: Поворот" },
+        minVersion: 24,
       },
       "tool_Adobe Rotate Canvas Tool": {
         action: "Adobe Rotate Canvas Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Rotate View Tool",
           de: "Ansichtdrehung-Werkzeug",
           ru: "Инструмент: Поворот вида",
         },
+        minVersion: 24,
       },
       "tool_Adobe Rounded Rectangle Tool": {
         action: "Adobe Rounded Rectangle Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Rounded Rectangle Tool",
           de: "Abgerundetes-Rechteck-Werkzeug",
           ru: "Инструмент: Прямоугольник со скругленными углами",
         },
+        minVersion: 24,
       },
       "tool_Adobe Scale Tool": {
         action: "Adobe Scale Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Scale Tool", de: "Skalieren-Werkzeug", ru: "Инструмент: Масштаб" },
+        minVersion: 24,
       },
       "tool_Adobe Scallop Tool": {
         action: "Adobe Scallop Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Scallop Tool", de: "Ausbuchten-Werkzeug", ru: "Инструмент: Зубцы" },
+        minVersion: 24,
       },
       "tool_Adobe Scatter Graph Tool": {
         action: "Adobe Scatter Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Scatter Graph Tool",
           de: "Streudiagramm",
           ru: "Инструмент: Точечная диаграмма",
         },
+        minVersion: 24,
       },
       "tool_Adobe Scissors Tool": {
         action: "Adobe Scissors Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Scissors Tool", de: "Schere-Werkzeug", ru: "Инструмент: Ножницы" },
+        minVersion: 24,
       },
       "tool_Adobe Select Tool": {
         action: "Adobe Select Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Selection Tool",
           de: "Auswahl-Werkzeug",
           ru: "Инструмент: Выделение",
         },
+        minVersion: 24,
       },
       "tool_Adobe Shape Builder Tool": {
         action: "Adobe Shape Builder Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Shape Builder Tool",
           de: "Formerstellungs-Werkzeug",
           ru: "Инструмент: Создание фигур",
         },
+        minVersion: 24,
       },
       "tool_Adobe Shaper Tool": {
         action: "Adobe Shaper Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Shaper Tool",
           de: "Shaper-Werkzeug",
           ru: "Инструмент: Произвольная кривая",
         },
+        minVersion: 24,
       },
       "tool_Adobe Shear Tool": {
         action: "Adobe Shear Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Shear Tool", de: "Verbiegen-Werkzeug", ru: "Инструмент: Наклон" },
+        minVersion: 24,
       },
       "tool_Adobe Slice Tool": {
         action: "Adobe Slice Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Slice Tool", de: "Slice-Werkzeug", ru: "Инструмент: Фрагменты" },
+        minVersion: 24,
       },
       "tool_Adobe Slice Select Tool": {
         action: "Adobe Slice Select Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Slice Selection Tool",
           de: "Slice-Auswahl-Werkzeug",
           ru: "Инструмент: Выделение фрагмента",
         },
+        minVersion: 24,
       },
       "tool_Adobe Freehand Smooth Tool": {
         action: "Adobe Freehand Smooth Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Smooth Tool",
           de: "Glätten-Werkzeug",
           ru: "Инструмент: Сглаживание",
         },
+        minVersion: 24,
       },
       "tool_Adobe Shape Construction Spiral Tool": {
         action: "Adobe Shape Construction Spiral Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Spiral Tool", de: "Spirale-Werkzeug", ru: "Инструмент: Спираль" },
+        minVersion: 24,
       },
       "tool_Adobe Stacked Bar Graph Tool": {
         action: "Adobe Stacked Bar Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Stacked Bar Graph Tool",
           de: "Gestapeltes horizontales Balkendiagramm",
           ru: "Инструмент: Диаграмма горизонтальный стек",
         },
+        minVersion: 24,
       },
       "tool_Adobe Stacked Column Graph Tool": {
         action: "Adobe Stacked Column Graph Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Stacked Column Graph Tool",
           de: "Gestapeltes vertikales Balkendiagramm",
           ru: "Инструмент: Диаграмма вертикальный стек",
         },
+        minVersion: 24,
       },
       "tool_Adobe Shape Construction Star Tool": {
         action: "Adobe Shape Construction Star Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Star Tool", de: "Stern-Werkzeug", ru: "Инструмент: Звезда" },
+        minVersion: 24,
       },
       "tool_Adobe Symbol Screener Tool": {
         action: "Adobe Symbol Screener Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Symbol Screener Tool",
           de: "Symbol-transparent-gestalten-Werkzeug",
           ru: "Инструмент: Прозрачность символов",
         },
+        minVersion: 24,
       },
       "tool_Adobe Symbol Scruncher Tool": {
         action: "Adobe Symbol Scruncher Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Symbol Scruncher Tool",
           de: "Symbol-stauchen-Werkzeug",
           ru: "Инструмент: Уплотнение символов",
         },
+        minVersion: 24,
       },
       "tool_Adobe Symbol Shifter Tool": {
         action: "Adobe Symbol Shifter Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Symbol Shifter Tool",
           de: "Symbol-verschieben-Werkzeug",
           ru: "Инструмент: Смещение символов",
         },
+        minVersion: 24,
       },
       "tool_Adobe Symbol Sizer Tool": {
         action: "Adobe Symbol Sizer Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Symbol Sizer Tool",
           de: "Symbol-skalieren-Werkzeug",
           ru: "Инструмент: Размер символов",
         },
+        minVersion: 24,
       },
       "tool_Adobe Symbol Spinner Tool": {
         action: "Adobe Symbol Spinner Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Symbol Spinner Tool",
           de: "Symbol-drehen-Werkzeug",
           ru: "Инструмент: Вращение символов",
         },
+        minVersion: 24,
       },
       "tool_Adobe Symbol Sprayer Tool": {
         action: "Adobe Symbol Sprayer Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Symbol Sprayer Tool",
           de: "Symbol-aufsprühen-Werkzeug",
           ru: "Инструмент: Распыление символов",
         },
+        minVersion: 24,
       },
       "tool_Adobe Symbol Stainer Tool": {
         action: "Adobe Symbol Stainer Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Symbol Stainer Tool",
           de: "Symbol-färben-Werkzeug",
           ru: "Инструмент: Обесцвечивание символов",
         },
+        minVersion: 24,
       },
       "tool_Adobe Symbol Styler Tool": {
         action: "Adobe Symbol Styler Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Symbol Styler Tool",
           de: "Symbol-gestalten-Werkzeug",
           ru: "Инструмент: Стили символов",
         },
+        minVersion: 24,
       },
       "tool_Adobe Touch Type Tool": {
         action: "Adobe Touch Type Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Touch Type Tool",
           de: "Touch-Type-Textwerkzeug",
           ru: "Инструмент: Изменение текста",
         },
+        minVersion: 24,
       },
       "tool_Adobe New Twirl Tool": {
         action: "Adobe New Twirl Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Twirl Tool", de: "Strudel-Werkzeug", ru: "Инструмент: Воронка" },
+        minVersion: 24,
       },
       "tool_Adobe Type Tool": {
         action: "Adobe Type Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Type Tool", de: "Text-Werkzeug", ru: "Инструмент: Текст" },
+        minVersion: 24,
       },
       "tool_Adobe Path Type Tool": {
         action: "Adobe Path Type Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Type on a Path Tool",
           de: "Pfadtext-Werkzeug",
           ru: "Инструмент: Текст по контуру",
         },
+        minVersion: 24,
       },
       "tool_Adobe Vertical Area Type Tool": {
         action: "Adobe Vertical Area Type Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Vertical Area Type Tool",
           de: "Vertikaler-Flächentext-Werkzeug",
           ru: "Инструмент: Вертикальный текст в области",
         },
+        minVersion: 24,
       },
       "tool_Adobe Vertical Type Tool": {
         action: "Adobe Vertical Type Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Vertical Type Tool",
           de: "Vertikaler-Text-Werkzeug",
           ru: "Инструмент: Вертикальный текст",
         },
+        minVersion: 24,
       },
       "tool_Adobe Vertical Path Type Tool": {
         action: "Adobe Vertical Path Type Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Vertical Type on a Path Tool",
           de: "Vertikaler-Pfadtext-Werkzeug",
           ru: "Инструмент: Вертикальный текст по контуру",
         },
+        minVersion: 24,
       },
       "tool_Adobe Warp Tool": {
         action: "Adobe Warp Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Warp Tool",
           de: "Verkrümmen-Werkzeug",
           ru: "Инструмент: Деформация",
         },
+        minVersion: 24,
       },
       "tool_Adobe Width Tool": {
         action: "Adobe Width Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Width Tool", de: "Breiten-Werkzeug", ru: "Инструмент: Ширина" },
+        minVersion: 24,
       },
       "tool_Adobe Wrinkle Tool": {
         action: "Adobe Wrinkle Tool",
         type: "tool",
-        minVersion: 24,
         loc: {
           en: "Wrinkle Tool",
           de: "Zerknittern-Werkzeug",
           ru: "Инструмент: Морщины",
         },
+        minVersion: 24,
       },
       "tool_Adobe Zoom Tool": {
         action: "Adobe Zoom Tool",
         type: "tool",
-        minVersion: 24,
         loc: { en: "Zoom Tool", de: "Zoom-Werkzeug", ru: "Инструмент: Масштаб" },
+        minVersion: 24,
       },
     },
     defaults: {
@@ -5734,7 +5758,6 @@ See the LICENSE file for details.
         },
       },
     },
-    string: {},
   };
   // CONFIGURATION
 

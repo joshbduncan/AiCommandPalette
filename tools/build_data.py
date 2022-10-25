@@ -2,6 +2,7 @@ import argparse
 import csv
 import json
 import sys
+from collections import defaultdict
 from pathlib import Path
 
 
@@ -10,6 +11,15 @@ def convert_to_num(n):
         return int(n)
     except ValueError:
         return float(n)
+
+
+def localized_strings_object(row):
+    loc = {}
+    ignored_cols = ["VALUE", "IGNORE", "TYPE", "MINVERSION", "MAXVERSION"]
+    for k, v in row.items():
+        if k.upper() not in ignored_cols:
+            loc[k] = v
+    return loc
 
 
 def main():
@@ -32,48 +42,35 @@ def main():
     input_file = args.file
 
     # read all menu commands into a dictionary
-    commands = {}
+    commands = defaultdict(dict)
     strings = {}
     with open(input_file, "r") as f:
-        reader = csv.reader(f)
+        reader = csv.DictReader(f)
+        for row in reader:
 
-        # iterate over all commands
-        for i, row in enumerate(reader):
-            if i == 0:
-                headers = row
+            # check to see if command should be ignored
+            if row["ignore"].upper() == "TRUE":
                 continue
 
-            # build the command object
-            value = row[0]
-            _type = row[1]
-            key = f"{_type}_{value}"
+            # a string just for localization
+            if row["type"].upper() == "STRING":
+                strings[row["value"]] = localized_strings_object(row)
+                continue
 
-            if _type not in commands:
-                commands[_type] = {}
-
-            obj = {
-                "action": value,
-                "type": _type,
+            # build a command object
+            command_key = f'{row["type"]}_{row["value"]}'
+            command = {
+                "action": row["value"],
+                "type": row["type"],
+                "loc": localized_strings_object(row),
             }
-
-            # build min/max versions
-            if row[2]:
-                obj["minVersion"] = convert_to_num(row[2])
-            if row[3]:
-                obj["maxVersion"] = convert_to_num(row[3])
-
-            # build localizations
-            loc = {}
-            for n, col in enumerate(row[4:], start=4):
-                if col:
-                    loc[headers[n]] = col
-            obj["loc"] = loc
-
-            # add command to master dict
-            if _type != "string":
-                commands[obj["type"]][key] = obj
-            else:
-                strings[value] = loc
+            # only add min and max version if present
+            if row["minVersion"]:
+                command["minVersion"] = convert_to_num(row["minVersion"])
+            if row["maxVersion"]:
+                command["maxVersion"] = convert_to_num(row["maxVersion"])
+            # add command to commands object
+            commands[row["type"]][command_key] = command
 
     output = f"""// ALL BUILT DATA FROM PYTHON SCRIPT
 
