@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] 2022-10-25
+### Added
+- New tools and menu items for [Ai 2023 v27.0](https://helpx.adobe.com/illustrator/using/whats-new.html)
+    - Still need to update translations
+- [Simple script](/tools/Test%20Ai%20Commands.jsx) for testing Ai menu and tool commands
+
+### Fixed
+- typo for command.maxVersion in version check function
+
 ## [0.4.0] 2022-10-21
 ### Added
 - Real-Time Localization
