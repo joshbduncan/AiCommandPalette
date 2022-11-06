@@ -147,8 +147,8 @@ SUPPLEMENTAL COMMAND FUNCTIONS
 function versionCheck(command) {
   var commandData = commandsData[command];
   if (
-    (commandData.minVersion && commandData.minVersion >= aiVersion) ||
-    (commandData.maxVersion && commandData.maxVersion <= aiVersion)
+    (commandData.minVersion && commandData.minVersion > aiVersion) ||
+    (commandData.maxVersion && commandData.maxVersion < aiVersion)
   )
     return false;
   return true;
