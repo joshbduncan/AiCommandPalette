@@ -20,6 +20,10 @@ var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 var paletteWidth = 600;
 var visibleListItems = 9;
 
+// MISCELLANEOUS SETTINGS
+
+var namedObjectLimit = 2000;
+
 //USER SETTINGS
 
 var settingsFolderName = "JBD";

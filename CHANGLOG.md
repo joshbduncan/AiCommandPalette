@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.4] Unreleased
+### Added
+- Go To Functionality
+    - new commands: "Go To Artboard...", "Go To Named Object" (any named page item)
+        - Go To Artboard - select and artboard from the list, center and zoom view to selection
+        - Go To Named Object - select any named page items from the list, select object then center and zoom view to the selected object
+    - new command palette type `goToPalette` built for these function
+        - works a bit differently than the original command palette in that is works with an array of actual Ai objects and returns the selected object instead of the `selection.text` from the listbox
+
+### Changed
+- build_data.py
+    - can now download data right from live Google Sheet using the `-d/--download` flag
+    - input file now must be specified with the `-i, --input` flag
+        - script can read from stdin using `-i -`
+    - no more need for `sed` command as new lines are now escaped properly within Python
+
 ## [0.4.3] 2022-11-06
 ### Fixed
 - versionCheck function comparisons were incorrect
@@ -16,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - typo for command.maxVersion in version check function of base jsx file 
-
 
 ## [0.4.1] 2022-10-25
 ### Added

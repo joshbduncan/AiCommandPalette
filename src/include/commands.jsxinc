@@ -87,10 +87,17 @@ function processCommand(command) {
 function executeCommand(command) {
   var commandData = commandsData[command];
   switch (commandData.type.toLowerCase()) {
-    case "defaults":
     case "config":
+    case "defaults":
       try {
-        configAction(commandData.action);
+        scriptAction(commandData.action);
+      } catch (e) {
+        alert(localize(locStrings.cd_error_executing, command, e));
+      }
+      break;
+    case "builtin":
+      try {
+        builtinAction(commandData.action);
       } catch (e) {
         alert(localize(locStrings.cd_error_executing, command, e));
       }

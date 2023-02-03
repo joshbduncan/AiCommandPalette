@@ -1,10 +1,10 @@
-// SETTINGS OPERATIONS
+// AI COMMAND PALETTE OPERATIONS
 
 /**
- * Execute configuration actions.
- * @param {Object} action Configuration action to execute.
+ * Execute script actions.
+ * @param {Object} action Script action to execute.
  */
-function configAction(action) {
+function scriptAction(action) {
   var write = true;
   switch (action) {
     case "settings":
@@ -46,12 +46,37 @@ function configAction(action) {
   if (write) settings.save();
 }
 
+/**
+ * Execute built-in actions.
+ * @param {Object} action Built-in action to execute.
+ */
+function builtinAction(action) {
+  switch (action) {
+    case "goToArtboard":
+      goToArtboard();
+      break;
+    case "goToNamedObject":
+      goToNamedObject();
+      break;
+    default:
+      alert(localize(locStrings.cd_invalid, action));
+  }
+}
+
 /** Ai Command Palette configuration commands. */
 function paletteSettings() {
   var result = commandPalette(
     (commands = allCommands),
     (showHidden = false),
-    (queryFilter = ["script", "workflow", "defaults", "action", "menu", "tool"]),
+    (queryFilter = [
+      "builtin",
+      "script",
+      "workflow",
+      "defaults",
+      "action",
+      "menu",
+      "tool",
+    ]),
     (visibleFilter = []),
     (title = localize(locStrings.cp_config)),
     (bounds = [0, 0, paletteWidth, 182]),
@@ -177,7 +202,7 @@ function deleteCommand() {
   var result = commandPalette(
     (commands = allCommands),
     (showHidden = true),
-    (queryFilter = ["action", "config", "defaults", "menu", "tool"]),
+    (queryFilter = ["action", "builtin", "config", "defaults", "menu", "tool"]),
     (visibleFilter = []),
     (title = localize(locStrings.cd_delete_select)),
     (bounds = [0, 0, paletteWidth, 182]),
@@ -202,5 +227,95 @@ function deleteCommand() {
         }
       }
     }
+  }
+}
+
+// BUILT-IN COMMANDS
+
+/** Present a command palette with all artboards then zoom to the chosen artboard. */
+function goToArtboard() {
+  var artboards = [];
+  for (var i = 0; i < app.activeDocument.artboards.length; i++) {
+    artboards.push(app.activeDocument.artboards[i]);
+  }
+
+  var item = goToPalette(
+    (commands = artboards),
+    (title = localize(locStrings["go_to_artboard"])),
+    (bounds = [0, 0, paletteWidth, 182])
+  );
+  if (item) {
+    var ab;
+    for (var i = 0; i < app.activeDocument.artboards.length; i++) {
+      ab = app.activeDocument.artboards[i];
+      if (ab.name == item.name) {
+        app.activeDocument.artboards.setActiveArtboardIndex(i);
+        app.executeMenuCommand("fitin");
+        break;
+      }
+    }
+  }
+}
+
+/** Present a command palette with all named objects zoom to and select the chosen object. */
+function goToNamedObject() {
+  if (app.activeDocument.pageItems.length > namedObjectLimit)
+    alert(
+      localize(locStrings.go_to_named_object_limit, app.activeDocument.pageItems.length)
+    );
+  var namedObjects = [];
+  var item;
+  for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
+    item = app.activeDocument.pageItems[i];
+    if (
+      item.name ||
+      item.name.length ||
+      item.typename == "PlacedItem" ||
+      item.typename == "SymbolItem"
+    )
+      namedObjects.push(item);
+  }
+  if (namedObjects.length) {
+    var selectedObject = goToPalette(
+      (commands = namedObjects),
+      (title = localize(locStrings["goto_named_object"])),
+      (bounds = [0, 0, paletteWidth, 182])
+    );
+    if (selectedObject) {
+      app.activeDocument.selection = null;
+      selectedObject.selected = true;
+
+      // reset zoom for current document
+      app.activeDocument.views[0].zoom = 1;
+
+      // get screen information
+      var screenBounds = app.activeDocument.views[0].bounds;
+      var screenW = screenBounds[2] - screenBounds[0];
+      var screenH = screenBounds[1] - screenBounds[3];
+
+      // get the (true) visible bounds of the returned object
+      var bounds = selectedObject.visibleBounds;
+      var selectedObjectW = bounds[2] - bounds[0];
+      var selectedObjectH = bounds[1] - bounds[3];
+      var selectedObjectCX = bounds[0] + selectedObjectW / 2;
+      var selectedObjectCY = bounds[1] - selectedObjectH / 2;
+
+      // reset the current view to center of selected object
+      doc.views[0].centerPoint = [selectedObjectCX, selectedObjectCY];
+
+      // calculate new zoom ratio to fit view to selected object
+      var zoomRatio;
+      if (selectedObjectW * (screenH / screenW) >= selectedObjectH) {
+        zoomRatio = screenW / selectedObjectW;
+      } else {
+        zoomRatio = screenH / selectedObjectH;
+      }
+
+      // set zoom to fit selected object plus a bit of padding
+      var padding = 0.9;
+      doc.views[0].zoom = zoomRatio * padding;
+    }
+  } else {
+    alert(localize(locStrings.go_to_named_object_no_objects));
   }
 }

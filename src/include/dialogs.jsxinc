@@ -7,20 +7,29 @@ function commandPalette(
   visibleFilter,
   title,
   bounds,
-  multiselect
+  multiselect,
+  simple
 ) {
-  // filter the commands based on supplied args
-  // make it so you don't have to specify the same array
-  // for both filters if they should be the same
-  if (visibleFilter.length == 0) visibleFilter = queryFilter;
-  commands = filterCommands(commands, queryFilter, visibleFilter, showHidden, []);
+  // if a simple dialog is requested all filtering is skipped
+  if (simple) {
+    commands = {
+      visible: commands,
+      query: commands,
+    };
+  } else {
+    // filter the commands based on supplied args
+    // make it so you don't have to specify the same array
+    // for both filters if they should be the same
+    if (visibleFilter.length == 0) visibleFilter = queryFilter;
+    commands = filterCommands(commands, queryFilter, visibleFilter, showHidden, []);
+  }
 
   // create the dialog
   var win = new Window("dialog");
   win.text = title;
   win.alignChildren = "fill";
   var q = win.add("edittext");
-  q.helpTip = "Search for commands, actions, and loaded scripts.";
+  q.helpTip = localize(locStrings.cd_q_helptip);
 
   // work-around to stop windows from flickering/flashing explorer
   if (windowsFlickerFix) {
@@ -50,8 +59,8 @@ function commandPalette(
   var frameStart = 0;
   q.onChanging = function () {
     frameStart = 0;
-    q = this.text;
-    matches = q === "" ? commands.visible : scoreMatches(q, commands.query);
+    matches =
+      this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
     if (matches.length > 0) {
       temp = win.add("listbox", list.bounds, matches, {
         multiselect: list.properties.multiselect,
@@ -124,6 +133,162 @@ function commandPalette(
   if (win.show() == 1) {
     if (list.selection) {
       return multiselect ? list.selection : [list.selection];
+    }
+  }
+  return false;
+}
+
+function goToPalette(commands, title, bounds) {
+  // copy the commands
+  var matches = commands;
+
+  // create the dialog
+  var win = new Window("dialog");
+  win.text = title;
+  win.alignChildren = "fill";
+  var q = win.add("edittext");
+  q.helpTip = localize(locStrings.cd_q_helptip);
+
+  // work-around to stop windows from flickering/flashing explorer
+  if (windowsFlickerFix) {
+    simulateKeypress("TAB", 1);
+  } else {
+    q.active = true;
+  }
+
+  // setup the commands listbox
+  var list = win.add("listbox", bounds, [], {
+    numberOfColumns: 2,
+    showHeaders: true,
+    columnTitles: ["Name", "Type"],
+    columnWidths: [bounds[2] - 200, 195],
+  });
+
+  // add items to list
+  for (var i = 0; i < matches.length; i++) {
+    switch (matches[i].typename) {
+      case "PlacedItem":
+        matches[i]["queryName"] = matches[i].file.name;
+        break;
+      case "SymbolItem":
+        matches[i]["queryName"] =
+          matches[i].name || matches[i].name.length
+            ? matches[i].name
+            : matches[i].symbol.name;
+        break;
+      default:
+        matches[i]["queryName"] = matches[i].name;
+        break;
+    }
+    with (list.add("Item", truncateCommandName(matches[i].queryName, 50))) {
+      subItems[0].text = matches[i].typename;
+    }
+  }
+  list.selection = 0;
+
+  // window buttons
+  var winButtons = win.add("group");
+  winButtons.orientation = "row";
+  winButtons.alignChildren = ["center", "center"];
+  var ok = winButtons.add("button", undefined, "OK");
+  ok.preferredSize.width = 100;
+  var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
+    name: "cancel",
+  });
+  cancel.preferredSize.width = 100;
+
+  // as a query is typed update the list box
+  var frameStart = 0;
+  q.onChanging = function () {
+    frameStart = 0;
+    matches =
+      this.text === "" ? commands : scoreObjectMatches(this.text, matches, "queryName");
+    if (matches.length > 0) {
+      var temp = win.add("listbox", list.bounds, [], {
+        numberOfColumns: list.properties.numberOfColumns,
+        showHeaders: list.properties.showHeaders,
+        columnTitles: list.properties.columnTitles,
+        columnWidths: list.properties.columnWidths,
+      });
+
+      for (var i = 0; i < matches.length; i++) {
+        with (temp.add("Item", truncateCommandName(matches[i].queryName, 50))) {
+          subItems[0].text = matches[i].typename;
+        }
+      }
+      temp.selection = 0;
+
+      // close window when double-clicking a selection
+      temp.onDoubleClick = function () {
+        if (list.selection) win.close(1);
+      };
+      win.remove(list);
+      list = temp;
+    }
+  };
+
+  if (list.items.length > 0) {
+    /*
+    Move the listbox frame of visible items when using the
+    up and down arrow keys while in the `q` edittext.
+
+    One problem with this functionality is that when a listbox listitem
+    is selected via a script the API moves the visible "frame" of items
+    so that the new selection is at the top. This is not standard behavior,
+    and not even how the listbox behaves when you use the up and down keys inside
+    of the actual listbox.
+
+    Only works if multiselect if set to false.
+    */
+    q.addEventListener("keydown", function (k) {
+      if (k.keyName == "Up") {
+        k.preventDefault();
+        if (list.selection.index > 0) {
+          list.selection = list.selection.index - 1;
+          if (list.selection.index < frameStart) frameStart--;
+        }
+      } else if (k.keyName == "Down") {
+        k.preventDefault();
+        if (list.selection.index < list.items.length) {
+          list.selection = list.selection.index + 1;
+          if (list.selection.index > frameStart + visibleListItems - 1) {
+            if (frameStart < list.items.length - visibleListItems) {
+              frameStart++;
+            } else {
+              frameStart = frameStart;
+            }
+          }
+        }
+      }
+      /*
+      If a selection is made inside of the actual listbox frame by the user,
+      the API doesn't offer any way to know which part of the list is currently
+      visible in the listbox "frame". If the user was to re-enter the `q` edittext
+      and then hit an arrow key the above event listener will not work correctly so
+      I just move the next selection (be it up or down) to the middle of the "frame".
+      */
+      if (
+        list.selection.index < frameStart ||
+        list.selection.index > frameStart + visibleListItems - 1
+      )
+        frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+      // move the frame by revealing the calculated `frameStart`
+      list.revealItem(frameStart);
+    });
+  }
+
+  function truncateCommandName(s, n) {
+    return s.length <= n ? s : s.slice(0, n) + "...";
+  }
+
+  // close window when double-clicking a selection
+  list.onDoubleClick = function () {
+    if (list.selection) win.close(1);
+  };
+
+  if (win.show() == 1) {
+    if (list.selection) {
+      return matches[list.selection.index];
     }
   }
   return false;
@@ -218,8 +383,8 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   // as a query is typed update the list box
   var matches, temp;
   q.onChanging = function () {
-    q = this.text;
-    matches = q === "" ? commands.visible : scoreMatches(q, commands.visible);
+    matches =
+      this.text === "" ? commands.visible : scoreMatches(this.text, commands.visible);
     if (matches.length > 0) {
       temp = pSearch.add("listbox", list.bounds, matches, {
         multiselect: list.properties.multiselect,
@@ -381,6 +546,49 @@ function scoreMatches(q, arr) {
     if (score > 0) scores[arr[i]] = score;
   }
   return sortKeysByValue(scores, "score", "name");
+}
+
+/**
+ * Score array items based on regex string match.
+ * @param   {String} q    String to search for.
+ * @param   {Array}  arr  Array of object to search through.
+ * @param   {String} prop Object property to match on.
+ * @returns {Array}       Matching items sorted by score.
+ */
+function scoreObjectMatches(q, arr, prop) {
+  var word;
+  var words = q.split(" ");
+  var matches = [];
+  for (var i = 0; i < arr.length; i++) {
+    var score = 0;
+    for (var n = 0; n < words.length; n++) {
+      word = words[n];
+      if (!arr[i].hasOwnProperty(prop)) continue;
+      if (word != "" && arr[i][prop].match("(?:^|\\s)(" + word + ")", "gi") != null)
+        score++;
+    }
+    if (score > 0) {
+      arr[i].score = score;
+      matches.push(arr[i]);
+    }
+  }
+  // sort all matches by score
+  matches.sort(function (a, b) {
+    return a.score.localeCompare(b.score);
+  });
+  return matches;
+}
+
+function dynamicSort(property) {
+  var sortOrder = 1;
+  if (property[0] === "-") {
+    sortOrder = -1;
+    property = property.substr(1);
+  }
+  return function (a, b) {
+    var result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+    return result * sortOrder;
+  };
 }
 
 /**

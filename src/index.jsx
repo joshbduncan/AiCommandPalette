@@ -19,13 +19,13 @@ See the LICENSE file for details.
   var _github = "https://github.com/joshbduncan";
 
   //@includepath "include"
-  //@include "data.jsxinc"
   //@include "config.jsxinc"
+  //@include "builtin.jsxinc"
+  //@include "data.jsxinc"
   //@include "commands.jsxinc"
   //@include "dialogs.jsxinc"
   //@include "io.jsxinc"
   //@include "polyfills.jsxinc"
-  //@include "settings.jsxinc"
   //@include "workflows.jsxinc"
 
   // SETUP COMMANDS DATA
@@ -38,6 +38,7 @@ See the LICENSE file for details.
       menu: builtCommands.menu,
       tool: builtCommands.tool,
       action: {},
+      builtin: builtCommands.builtin,
       config: builtCommands.config,
     },
     settings: {
@@ -60,7 +61,7 @@ See the LICENSE file for details.
     (commands = allCommands),
     (showHidden = false),
     (queryFilter = []),
-    (visibleFilter = ["action", "config", "menu", "tool"]),
+    (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
     (title = localize(locStrings.title)),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false)
