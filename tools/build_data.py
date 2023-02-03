@@ -3,7 +3,14 @@ import csv
 import json
 import sys
 from collections import defaultdict
-from pathlib import Path
+
+try:
+    import httpx
+except ImportError:
+    print(
+        "Import Error: httpx module required (https://www.python-httpx.org/)",
+        file=sys.stderr,
+    )
 
 
 def convert_to_num(n):
@@ -22,63 +29,89 @@ def localized_strings_object(row):
     return loc
 
 
-def main():
+def get_data():
+    SHEET = "1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA"
+    URL = f"https://docs.google.com/spreadsheets/d/{SHEET}/export?exportFormat=csv"
+    try:
+        response = httpx.get(URL, follow_redirects=True)
+        response.raise_for_status()
+    except httpx.RequestError as e:
+        print(f"An error occurred while requesting {e.request.url!r}.")
+    except httpx.HTTPStatusError as e:
+        print(
+            f"Error response {e.response.status_code} while requesting {e.request.url!r}."
+        )
+    return response.text
+
+
+def main(argv = None):
     # setup parser and arguments
     parser = argparse.ArgumentParser(
-        description="Build Ai Command Palette JSON Objects.",
+        description="Build Ai Command Palette JSX Objects.",
         epilog="Copyright 2022 Josh Duncan (joshbduncan.com)",
         prog="build_commands_json.py",
     )
-    parser.add_argument(
-        "file",
-        type=Path,
-        help="Path of CSV file with command build data.",
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "-i",
+        "--input",
+        type=argparse.FileType("r"),
+        help="csv build data",
+    )
+    group.add_argument(
+        "-d",
+        "--download",
+        action="store_true",
+        help="download latest csv data from google",
     )
 
     # capture all cli arguments
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    # setup file objects
-    input_file = args.file
+    # get data from either stdin, file, or via download
+    if args.download:
+        data = get_data().split("\n")
+    else:
+        data = args.input.readlines()
 
-    # read all menu commands into a dictionary
-    commands = defaultdict(dict)
+    # read build data csv file
+    data_dict = defaultdict(dict)
     strings = {}
-    with open(input_file, "r") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
+    # with open(input_file, "r") as f:
+    reader = csv.DictReader(data)
+    for row in reader:
 
-            # check to see if command should be ignored
-            if row["ignore"].upper() == "TRUE":
-                continue
+        # check to see if command should be ignored
+        if row["ignore"].upper() == "TRUE":
+            continue
 
-            # a string just for localization
-            if row["type"].upper() == "STRING":
-                strings[row["value"]] = localized_strings_object(row)
-                continue
+        # a string just for localization
+        if row["type"].upper() == "STRING":
+            strings[row["value"]] = localized_strings_object(row)
+            continue
 
-            # build a command object
-            command_key = f'{row["type"]}_{row["value"]}'
-            command = {
-                "action": row["value"],
-                "type": row["type"],
-                "loc": localized_strings_object(row),
-            }
-            # only add min and max version if present
-            if row["minVersion"]:
-                command["minVersion"] = convert_to_num(row["minVersion"])
-            if row["maxVersion"]:
-                command["maxVersion"] = convert_to_num(row["maxVersion"])
-            # add command to commands object
-            commands[row["type"]][command_key] = command
+        # build a command object
+        command_key = f'{row["type"]}_{row["value"]}'
+        command = {
+            "action": row["value"],
+            "type": row["type"],
+            "loc": localized_strings_object(row),
+        }
+        # only add min and max version if present
+        if row["minVersion"]:
+            command["minVersion"] = convert_to_num(row["minVersion"])
+        if row["maxVersion"]:
+            command["maxVersion"] = convert_to_num(row["maxVersion"])
+        # add command to commands object
+        data_dict[row["type"]][command_key] = command
 
     output = f"""// ALL BUILT DATA FROM PYTHON SCRIPT
 
 var locStrings = {json.dumps(strings, ensure_ascii=False)}
 
-var builtCommands = {json.dumps(commands, ensure_ascii=False)}"""
+var builtCommands = {json.dumps(data_dict, ensure_ascii=False)}"""
 
-    print(output)
+    print(output.replace("\\\\n", "\\n"))
 
     return 0
 

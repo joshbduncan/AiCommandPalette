@@ -10,9 +10,42 @@ So, to make script installation as easy as possible I use a little utility I wro
 ./escompile.sh src/script.jsx > compiledScript.jsx
 ```
 
-## Build Commands
+## Build Commands (build_data.py)
 
-There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, this script helps me build/rebuild the objects used in the script.
+There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, [this script](/tools/build_data.py) helps me build/rebuild the objects used in the script.
+
+```bash
+$ python3 tools/build_data.py -h                          
+usage: build_commands_json.py [-h] [-i INPUT | -d]
+
+Build Ai Command Palette JSX Objects.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        csv build data
+  -d, --download        download latest csv data from google
+
+Copyright 2023 Josh Duncan (joshbduncan.com)
+```
+
+> Please Note: The script works with a specifically formatted csv file the built from the same [Google Sheet](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=716124557) mentioned in the main project README.
+
+### How It Works
+
+Supply a CSV file of commands and the script will build JSON object for (ex. [data.jsxinc](/src/include/data.jsxinc)) and output them to stdout. You can redirect the output to the appropriate file like I have below.
+
+```bash
+python3 tools/build_data.py -i data.csv > src/include/data.jsxinc
+```
+
+You can also build the data file directly from the live Google Sheet by using the `-d` flag.
+
+```bash
+python3 tools/build_data.py -d > src/include/data.jsxinc
+```
+
+All commands are built into a single JavaScript objects like below.
 
 ```javascript
 // generated localized commands data object
@@ -33,7 +66,7 @@ There are almost 500 menu commands, 80 tools, and a handful of custom configurat
 }
 ```
 
-It also builds the localized strings used in all dialogs and alerts.
+And all localized strings (used for dialogs and alerts) is built into a single object as well.
 
 ```javascript
 // generated localized strings data object
@@ -41,13 +74,3 @@ var locStrings = {
   about: { en: "About", de: "Über Kurzbefehle …", ru: "О скрипте" },
 }
 ```
-
-### How It Works
-
-Supply a CSV file of commands and the script will build JSON object for [data.jsxinc](/src/include/data.jsxinc) and output them to stdout.
-
-```bash
-python3 tools/build_data.py raw_data/build_data.csv | sed 's/\\\\/\\/g' > src/include/data.jsxinc 
-```
-
-⚠️ PLEASE NOTE: Then exported JSON objects have all `\` (backslashes) escaped, so for everything to display correctly using the ExtendScript `localize()` the output must be piped through [sed](https://www.gnu.org/software/sed/manual/sed.html) first to remove the offending escape characters.
