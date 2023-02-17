@@ -52,11 +52,27 @@ function scriptAction(action) {
  */
 function builtinAction(action) {
   switch (action) {
+    case "documentReport":
+      if (activeDocument) documentReport();
+      break;
+    case "redrawWindows":
+      app.redraw();
+      break;
+    case "revealActiveDocument":
+      if (activeDocument) {
+        if (app.activeDocument.path.fsName) {
+          var fp = new Folder(app.activeDocument.path.fsName);
+          fp.execute();
+        } else {
+          alert(localize(locStrings.active_document_not_saved));
+        }
+      }
+      break;
     case "goToArtboard":
-      goToArtboard();
+      if (activeDocument) goToArtboard();
       break;
     case "goToNamedObject":
-      goToNamedObject();
+      if (activeDocument) goToNamedObject();
       break;
     default:
       alert(localize(locStrings.cd_invalid, action));
@@ -118,6 +134,146 @@ function about() {
     openURL("https://github.com/joshbduncan/AiCommandPalette");
   });
 
+  win.show();
+}
+
+/** Document Info Dialog */
+function documentReport() {
+  // setup the basic document info
+  var rulerUnits = app.activeDocument.rulerUnits.toString().split(".").pop();
+  var fileInfo =
+    "File Information:\n-----\nFile: " +
+    app.activeDocument.name +
+    "\nPath: " +
+    (app.activeDocument.path.fsName ? app.activeDocument.path.fsName : "None") +
+    "\nColor Space: " +
+    app.activeDocument.documentColorSpace.toString().split(".").pop() +
+    "\nWidth: " +
+    convertPointsTo(app.activeDocument.width, rulerUnits) +
+    " " +
+    rulerUnits +
+    "\nHeight: " +
+    convertPointsTo(app.activeDocument.height, rulerUnits) +
+    " " +
+    rulerUnits;
+
+  // generate all optional report information (all included by default)
+  var reportOptions = {
+    Artboards: {
+      str: getCollectionObjectNames(app.activeDocument.artboards)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    "Embedded Items": {
+      str: getCollectionObjectNames(app.activeDocument.rasterItems)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    Fonts: {
+      str: getCollectionObjectNames(getDocumentFonts(app.activeDocument))
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    Layers: {
+      str: getCollectionObjectNames(app.activeDocument.layers)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    "Placed Items": {
+      str: getCollectionObjectNames(app.activeDocument.placedItems)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    "Spot Colors": {
+      str: getCollectionObjectNames(app.activeDocument.spots)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+  };
+
+  // build the report from the selected options (active = true)
+  function buildReport() {
+    var infoString = "Ai Document Information\n\n" + fileInfo;
+    for (var p in reportOptions) {
+      if (reportOptions[p].active && reportOptions[p].str) {
+        infoString += "\n\n" + p + "\n-----\n" + reportOptions[p].str;
+      }
+    }
+    infoString += "\n\nFile Created: " + new Date();
+    return infoString;
+  }
+
+  // setup the dialog
+  var win = new Window("dialog");
+  win.text = localize(locStrings.document_report);
+  win.orientation = "column";
+  win.alignChildren = ["center", "top"];
+  win.alignChildren = "fill";
+
+  // panel - options
+  var pOptions = win.add("panel", undefined, "Include?");
+  pOptions.orientation = "row";
+  pOptions.margins = 20;
+
+  // add checkboxes for each report option
+  var cb;
+  for (var p in reportOptions) {
+    cb = pOptions.add("checkbox", undefined, p);
+    if (reportOptions[p].str) {
+      cb.value = true;
+      // add onClick function for each cb to update rebuild report
+      cb.onClick = function () {
+        if (this.value) {
+          reportOptions[this.text].active = true;
+        } else {
+          reportOptions[this.text].active = false;
+        }
+        info.text = buildReport();
+      };
+    } else {
+      cb.value = false;
+      cb.enabled = false;
+    }
+  }
+
+  // script info
+  var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
+    multiline: true,
+    scrollable: true,
+    readonly: true,
+  }); // TODO: localize
+
+  // window buttons
+  var winButtons = win.add("group");
+  winButtons.orientation = "row";
+  winButtons.alignChildren = ["center", "center"];
+  var saveInfo = winButtons.add("button", undefined, "Save Info");
+  saveInfo.preferredSize.width = 100;
+  var close = winButtons.add("button", undefined, "Close", { name: "ok" }); // TODO: localize
+  close.preferredSize.width = 100;
+
+  // save document info to selected file
+  saveInfo.onClick = function () {
+    var f = File.saveDialog();
+    if (f) {
+      try {
+        f.encoding = "UTF-8";
+        f.open("w");
+        f.write(infoString);
+        f.close();
+      } catch (e) {
+        alert(localize(locStrings.fl_error_writing, f));
+      }
+      if (f.exists) alert("File Saved\n" + f.fsName); // TODO: localize
+    }
+  };
+  // show the info dialog
   win.show();
 }
 

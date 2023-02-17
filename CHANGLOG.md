@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added 
+- New Built-In Commands
+    - Redraw Windows
+    - Reveal Active Document On System
+    - Active Document Report
+        - Generate a custom document report that includes basic file info, artboards, embedded items, fonts, layers, placed items, and spot color information.
+        - Customize what is included in the report by selecting checkboxes for the items listed above (all included by default)
+        - Report can be copied right from the window or saved out to a text file.
+
 ## [0.5.0] 2023-02-03
 ### Added
 - Go To Functionality
@@ -21,10 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - no more need for `sed` command as new lines are now escaped properly within Python
 
 ## [0.4.3] 2022-11-06
+
 ### Fixed
 - versionCheck function comparisons were incorrect
 
 ## [0.4.2] 2022-10-25
+
 ### Added
 - Some older tools with maxVersions
     - Still need to update translations
@@ -43,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - typo for command.maxVersion in version check function
 
 ## [0.4.0] 2022-10-21
+
 ### Added
 - Real-Time Localization
     - Handled within the main script file via the ExtendScript `localize()` function.
@@ -65,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unicode errors for Conté Crayon => Cont\u00E9 Crayon
 
 ## [0.3.0] 2022-09-15
+
 ### Added
 - Ai Version Functionality Checker
     - Original idea brought up by [Sergey Osokin](https://github.com/creold) in issue [#6 selectTool](https://github.com/joshbduncan/AiCommandPalette/issues/6)
@@ -103,12 +118,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Only effects Windows users.
 
 ## [0.2.4] - 2022-08-17
+
 ### Changed
 - More language updates
     - Updates to German by Kurt Gold
     - Updates ro Russian by [Sergey Osokin](https://github.com/creold)
 
 ## [0.2.3] - 2022-08-17
+
 ### Changed
 - Increased the palette size to accommodate alternate languages with longer text
 - Workflow steps are now multiselect (you can select more than one at a time)
@@ -116,6 +133,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - You can deleted multiple steps in one-click (not required to be contiguous)
 
 ## [0.2.2] - 2022-08-17
+
 ### Added
 - New localized Russian version from @creold
 
@@ -125,6 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - German translations updates by Kurt Gold
 
 ## [0.2.1] - 2022-08-16
+
 ### Changed
 - FIX to German tool names
 - FIX to translate.py to only replace whole strings
@@ -132,6 +151,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update dialog strings to make it easier to do translation
 
 ## [0.2.0] - 2022-08-16
+
 ### Added
 - Ability to activate 80+ of Ai's built-in tools 
 - Ability to **edit workflows** (previously called custom commands)
@@ -171,5 +191,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed around 100 commands that are no longer active or don't work in Ai version 26.4.1.
 
 ## [0.1.0] - 2022-07-27
+
 ### Added
 - First official release!
