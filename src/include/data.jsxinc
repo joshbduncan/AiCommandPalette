@@ -125,6 +125,7 @@ var locStrings = {
     ru: "Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность.",
   },
   document_report: { en: "Active Document Report", de: "", ru: "" },
+  file_saved: { en: "File Saved:\n%1", de: "", ru: "" },
   fl_error_loading: {
     en: "Error loading file:\n%1",
     de: "Fehler beim Laden der Datei:\n%1",
@@ -157,6 +158,7 @@ var locStrings = {
   },
   go_to_named_object_no_objects: { en: "No named page items found.", de: "", ru: "" },
   no_active_document: { en: "No active documents.", de: "", ru: "" },
+  no_document_variables: { en: "No document variables.", de: "", ru: "" },
   sc_already_loaded: {
     en: "Script already loaded.\nWould you like to replace the previous script with the new one?",
     de: "Skript bereits geladen.\nMöchten Sie es ersetzen?",
@@ -5719,6 +5721,16 @@ var builtCommands = {
       action: "documentReport",
       type: "builtin",
       loc: { en: "Active Document Report", de: "", ru: "" },
+    },
+    builtin_imageCapture: {
+      action: "imageCapture",
+      type: "builtin",
+      loc: { en: "Export Active Artboard As PNG", de: "", ru: "" },
+    },
+    builtin_exportVariables: {
+      action: "exportVariables",
+      type: "builtin",
+      loc: { en: "Export Document Variables", de: "", ru: "" },
     },
   },
 };

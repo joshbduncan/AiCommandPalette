@@ -500,6 +500,18 @@ function builtinAction(action) {
     case "documentReport":
       if (activeDocument) documentReport();
       break;
+    case "exportVariables":
+      if (activeDocument) exportVariables();
+      break;
+    case "goToArtboard":
+      if (activeDocument) goToArtboard();
+      break;
+    case "goToNamedObject":
+      if (activeDocument) goToNamedObject();
+      break;
+    case "imageCapture":
+      imageCapture();
+      break;
     case "redrawWindows":
       app.redraw();
       break;
@@ -512,12 +524,6 @@ function builtinAction(action) {
           alert(localize(locStrings.active_document_not_saved));
         }
       }
-      break;
-    case "goToArtboard":
-      if (activeDocument) goToArtboard();
-      break;
-    case "goToNamedObject":
-      if (activeDocument) goToNamedObject();
       break;
     default:
       alert(localize(locStrings.cd_invalid, action));
@@ -715,11 +721,55 @@ function documentReport() {
       } catch (e) {
         alert(localize(locStrings.fl_error_writing, f));
       }
-      if (f.exists) alert("File Saved\n" + f.fsName); // TODO: localize
+      if (f.exists) alert(localize(locStrings.file_saved, f.fsName)); // TODO: localize
     }
   };
   // show the info dialog
   win.show();
+}
+
+/**
+ * Export the active artboard as a png file using the api `Document.imageCapture()` method.
+ * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html?#document-imagecapture
+ */
+function imageCapture() {
+  if (activeDocument) {
+    var f = File.saveDialog();
+    if (f) {
+      try {
+        app.activeDocument.imageCapture(f);
+      } catch (e) {
+        alert(localize(locStrings.fl_error_writing, f));
+      }
+      // if chosen file name doesn't end in ".png" add the
+      // correct extension so they captured file open correctly
+      if (f.name.indexOf(".png") < f.name.length - 4)
+        f.rename(f.name.toString() + ".png");
+      if (f.exists) alert("File Saved\n" + f.fsName); // TODO: localize
+    }
+  }
+}
+
+/**
+ *
+ * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-exportvariables
+ */
+function exportVariables() {
+  if (app.activeDocument.variables.length > 0) {
+    var dp = new Folder(app.activeDocument.path.fsName);
+    var fp = dp.selectDlg("Choose Save Location");
+    if (fp) {
+      try {
+        var f = new File(fp + "/" + "Variables.xml");
+        app.activeDocument.exportVariables(f);
+      } catch (e) {
+        alert(localize(locStrings.fl_error_writing, f));
+      }
+      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
+    }
+  } else {
+    alert(localize(locStrings.no_document_variables));
+  }
 }
 
 /** Load external scripts into Ai Command Palette. */
@@ -1047,6 +1097,7 @@ var locStrings = {
     ru: "Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность.",
   },
   document_report: { en: "Active Document Report", de: "", ru: "" },
+  file_saved: { en: "File Saved:\n%1", de: "", ru: "" },
   fl_error_loading: {
     en: "Error loading file:\n%1",
     de: "Fehler beim Laden der Datei:\n%1",
@@ -1079,6 +1130,7 @@ var locStrings = {
   },
   go_to_named_object_no_objects: { en: "No named page items found.", de: "", ru: "" },
   no_active_document: { en: "No active documents.", de: "", ru: "" },
+  no_document_variables: { en: "No document variables.", de: "", ru: "" },
   sc_already_loaded: {
     en: "Script already loaded.\nWould you like to replace the previous script with the new one?",
     de: "Skript bereits geladen.\nMöchten Sie es ersetzen?",
@@ -6641,6 +6693,16 @@ var builtCommands = {
       action: "documentReport",
       type: "builtin",
       loc: { en: "Active Document Report", de: "", ru: "" },
+    },
+    builtin_imageCapture: {
+      action: "imageCapture",
+      type: "builtin",
+      loc: { en: "Export Active Artboard As PNG", de: "", ru: "" },
+    },
+    builtin_exportVariables: {
+      action: "exportVariables",
+      type: "builtin",
+      loc: { en: "Export Document Variables", de: "", ru: "" },
     },
   },
 };

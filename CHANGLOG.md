@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Generate a custom document report that includes basic file info, artboards, embedded items, fonts, layers, placed items, and spot color information.
         - Customize what is included in the report by selecting checkboxes for the items listed above (all included by default)
         - Report can be copied right from the window or saved out to a text file.
+    - Export Active Artboard As PNG
+    - Export Document Variables
 
 ## [0.5.0] 2023-02-03
 ### Added
