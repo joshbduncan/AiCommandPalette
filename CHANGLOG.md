@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Report can be copied right from the window or saved out to a text file.
     - Export Active Artboard As PNG
     - Export Document Variables
+    - Go To (another) Open Document
 
 ## [0.5.0] 2023-02-03
 ### Added

@@ -108,6 +108,7 @@ var locStrings = {
     de: "Befehle, Aktionen und geladene Skripte suchen.",
     ru: "Поиск команд, операций и загруженных скриптов",
   },
+  close: { en: "Close", de: "Schließen", ru: "Закрывать" },
   copyright: { en: "Copyright 2022 Josh Duncan", de: "", ru: "" },
   cp_config: {
     en: "Palette Settings and Configuration",
@@ -146,6 +147,7 @@ var locStrings = {
     de: "Gehen Sie zur Zeichenfläche",
     ru: "Перейти к монтажной области",
   },
+  go_to_open_document: { en: "Go To Open Document", de: "", ru: "" },
   go_to_named_object: {
     en: "Go To Named Object",
     de: "Gehen Sie zum benannten Objekt",
@@ -159,6 +161,7 @@ var locStrings = {
   go_to_named_object_no_objects: { en: "No named page items found.", de: "", ru: "" },
   no_active_document: { en: "No active documents.", de: "", ru: "" },
   no_document_variables: { en: "No document variables.", de: "", ru: "" },
+  save: { en: "Save", de: "Speichern", ru: "Сохранять" },
   sc_already_loaded: {
     en: "Script already loaded.\nWould you like to replace the previous script with the new one?",
     de: "Skript bereits geladen.\nMöchten Sie es ersetzen?",
@@ -5697,6 +5700,11 @@ var builtCommands = {
         de: "Gehen Sie zur Zeichenfläche...",
         ru: "Gehen Sie zur Zeichenfläche...",
       },
+    },
+    builtin_goToDocument: {
+      action: "goToDocument",
+      type: "builtin",
+      loc: { en: "Go To Open Document", de: "", ru: "" },
     },
     builtin_goToNamedObject: {
       action: "goToNamedObject",

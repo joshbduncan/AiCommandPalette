@@ -61,6 +61,11 @@ function builtinAction(action) {
     case "goToArtboard":
       if (activeDocument) goToArtboard();
       break;
+    case "goToDocument":
+      if (app.documents.length > 1) {
+        goToOpenDocument();
+      }
+      break;
     case "goToNamedObject":
       if (activeDocument) goToNamedObject();
       break;
@@ -164,6 +169,7 @@ function documentReport() {
     rulerUnits;
 
   // generate all optional report information (all included by default)
+  // TODO: localize options
   var reportOptions = {
     Artboards: {
       str: getCollectionObjectNames(app.activeDocument.artboards)
@@ -259,9 +265,11 @@ function documentReport() {
   var winButtons = win.add("group");
   winButtons.orientation = "row";
   winButtons.alignChildren = ["center", "center"];
-  var saveInfo = winButtons.add("button", undefined, "Save Info");
+  var saveInfo = winButtons.add("button", undefined, localize(locStrings.save));
   saveInfo.preferredSize.width = 100;
-  var close = winButtons.add("button", undefined, "Close", { name: "ok" }); // TODO: localize
+  var close = winButtons.add("button", undefined, localize(locStrings.close), {
+    name: "ok",
+  });
   close.preferredSize.width = 100;
 
   // save document info to selected file
@@ -276,7 +284,7 @@ function documentReport() {
       } catch (e) {
         alert(localize(locStrings.fl_error_writing, f));
       }
-      if (f.exists) alert(localize(locStrings.file_saved, f.fsName)); // TODO: localize
+      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
     }
   };
   // show the info dialog
@@ -300,7 +308,7 @@ function imageCapture() {
       // correct extension so they captured file open correctly
       if (f.name.indexOf(".png") < f.name.length - 4)
         f.rename(f.name.toString() + ".png");
-      if (f.exists) alert("File Saved\n" + f.fsName); // TODO: localize
+      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
     }
   }
 }
@@ -438,18 +446,34 @@ function deleteCommand() {
 
 // BUILT-IN COMMANDS
 
-/** Present a command palette with all artboards then zoom to the chosen artboard. */
+/** Present a command palette with all open documents and open the chosen one. */
+function goToOpenDocument() {
+  var docs = [];
+  for (var i = 0; i < app.documents.length; i++) {
+    if (app.documents[i] != app.activeDocument) docs.push(app.documents[i]);
+  }
+  var item = goToPalette(
+    (commands = docs),
+    (title = localize(locStrings["go_to_open_document"])),
+    (bounds = [0, 0, paletteWidth, 182])
+  );
+  if (item) {
+    item.activate();
+  }
+}
+
+/** Present a command palette with all artboards and zoom to the chosen one. */
 function goToArtboard() {
   var artboards = [];
   for (var i = 0; i < app.activeDocument.artboards.length; i++) {
     artboards.push(app.activeDocument.artboards[i]);
   }
-
   var item = goToPalette(
     (commands = artboards),
     (title = localize(locStrings["go_to_artboard"])),
     (bounds = [0, 0, paletteWidth, 182])
   );
+  // FIXME: if two artboards have the same name it will select the first that matches
   if (item) {
     var ab;
     for (var i = 0; i < app.activeDocument.artboards.length; i++) {
@@ -463,7 +487,7 @@ function goToArtboard() {
   }
 }
 
-/** Present a command palette with all named objects zoom to and select the chosen object. */
+/** Present a command palette with all named objects and zoom to and select the chosen one. */
 function goToNamedObject() {
   if (app.activeDocument.pageItems.length > namedObjectLimit)
     alert(
