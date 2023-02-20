@@ -12,6 +12,22 @@ var locStrings = {
     de: "",
     ru: "",
   },
+  bookmark: { en: "Bookmark", de: "", ru: "" },
+  bm_already_loaded: {
+    en: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
+    de: "",
+    ru: "",
+  },
+  bm_already_loaded_title: { en: "Bookmark Load Conflict", de: "", ru: "" },
+  bm_error_execution: { en: "Error opening bookmark:\n%1\n\n%2", de: "", ru: "" },
+  bm_error_exists: {
+    en: "Bookmark no longer exists at original path. Try reloading.\n%1",
+    de: "",
+    ru: "",
+  },
+  bm_error_loading: { en: "Error loading bookmark:\n%1", de: "", ru: "" },
+  bm_set_bookmark: { en: "Set Bookmark(s)", de: "", ru: "" },
+  bm_total_loaded: { en: "Total bookmarks loaded:\n%1", de: "", ru: "" },
   cancel: { en: "Cancel", de: "Abbrechen", ru: "Отмена" },
   cd_all: {
     en: "All Built-In Menu Commands",
@@ -187,6 +203,7 @@ var locStrings = {
     de: "Fehler beim Laden des Skripts:\n%1",
     ru: "Ошибка загрузки скрипта:\n%1",
   },
+  sc_load_script: { en: "Load Script(s)", de: "", ru: "" },
   sc_none_selected: {
     en: "No script files selected.\nMust be JavaScript '.js' or '.jsx' files.",
     de: "Keine Skriptdateien ausgewählt.\nEs müssen JavaScript-'.js'- oder '.jsx'-Dateien sein.",
@@ -5660,7 +5677,17 @@ var builtCommands = {
     config_loadScript: {
       action: "loadScript",
       type: "config",
-      loc: { en: "Load Scripts...", de: "Skripte laden …", ru: "Загрузить скрипты" },
+      loc: { en: "Load Script(s)...", de: "Skripte laden …", ru: "Загрузить скрипты" },
+    },
+    config_setFileBookmark: {
+      action: "setFileBookmark",
+      type: "config",
+      loc: { en: "Set File Bookmark(s)...", de: "", ru: "" },
+    },
+    config_setFolderBookmark: {
+      action: "setFolderBookmark",
+      type: "config",
+      loc: { en: "Set Folder Bookmark...", de: "", ru: "" },
     },
     config_hideCommand: {
       action: "hideCommand",

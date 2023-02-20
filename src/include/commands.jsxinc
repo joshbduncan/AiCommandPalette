@@ -123,6 +123,27 @@ function executeCommand(command) {
         alert(localize(locStrings.ac_error_execution, command, e));
       }
       break;
+    case "bookmark":
+      f =
+        commandData.bookmarkType == "file"
+          ? new File(commandData.path)
+          : new Folder(commandData.path);
+      if (!f.exists) {
+        alert(localize(locStrings.bm_error_exists, commandData.path));
+        delete data.commands.bookmark[command];
+        settings.save();
+      } else {
+        try {
+          if (commandData.bookmarkType == "file") {
+            app.open(f);
+          } else {
+            f.execute();
+          }
+        } catch (e) {
+          alert(localize(locStrings.sc_error_execution, commandData.name, e));
+        }
+      }
+      break;
     case "script":
       f = new File(commandData.path);
       if (!f.exists) {

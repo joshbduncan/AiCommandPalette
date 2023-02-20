@@ -24,6 +24,14 @@ function scriptAction(action) {
     case "loadScript":
       loadScripts();
       break;
+    case "setFileBookmark":
+      loadFileBookmark();
+      write = true;
+      break;
+    case "setFolderBookmark":
+      loadFolderBookmark();
+      write = true;
+      break;
     case "runAction":
       runAction();
       break;
@@ -333,13 +341,127 @@ function exportVariables() {
   }
 }
 
+/** Set bookmarked file to open in Ai from within Ai Command Palette. */
+function loadFileBookmark() {
+  var acceptedTypes = [
+    ".ai",
+    ".ait",
+    ".pdf",
+    ".dxf",
+    ".avif",
+    ".BMP",
+    ".RLE",
+    ".DIB",
+    ".cgm",
+    ".cdr",
+    ".eps",
+    ".epsf",
+    ".ps",
+    ".emf",
+    ".gif",
+    ".heic",
+    ".heif",
+    ".eps",
+    ".epsf",
+    ".ps",
+    ".jpg",
+    ".jpe",
+    ".jpeg",
+    ".jpf",
+    ".jpx",
+    ".jp2",
+    ".j2k",
+    ".j2c",
+    ".jpc",
+    ".rtf",
+    ".doc",
+    ".docx",
+    ".PCX",
+    ".psd",
+    ".psb",
+    ".pdd",
+    ".PXR",
+    ".png",
+    ".pns",
+    ".svg",
+    ".svgz",
+    ".TGA",
+    ".VDA",
+    ".ICB",
+    ".VST",
+    ".txt",
+    ".tif",
+    ".tiff",
+    ".webp",
+    ".wmf",
+  ]; // file types taken from Ai open dialog
+  re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
+  var files = loadFileTypes(localize(locStrings.bm_set_bookmark), true, re);
+  if (files.length > 0) {
+    var f, key, fname;
+    for (var i = 0; i < files.length; i++) {
+      f = files[i];
+      fname = decodeURI(f.name);
+      key = localize(locStrings.bookmark) + ": " + fname;
+      if (data.commands.bookmark.hasOwnProperty(key)) {
+        if (
+          !Window.confirm(
+            localize(locStrings.bm_already_loaded),
+            "noAsDflt",
+            localize(locStrings.bm_already_loaded_title)
+          )
+        )
+          continue;
+      }
+      try {
+        data.commands.bookmark[key] = {
+          name: fname,
+          type: "bookmark",
+          path: f.fsName,
+          bookmarkType: "file",
+        };
+      } catch (e) {
+        alert(localize(locStrings.bm_error_loading, f.fsName));
+      }
+    }
+  }
+}
+
+/** Set bookmarked folder to open on system from within Ai Command Palette. */
+function loadFolderBookmark() {
+  var f, key, fname;
+  f = Folder.selectDialog(localize(locStrings.bm_set_bookmark));
+  if (f) {
+    fname = decodeURI(f.name);
+    key = localize(locStrings.bookmark) + ": " + fname;
+    if (data.commands.bookmark.hasOwnProperty(key)) {
+      if (
+        !Window.confirm(
+          localize(locStrings.bm_already_loaded),
+          "noAsDflt",
+          localize(locStrings.bm_already_loaded_title)
+        )
+      )
+        return;
+    }
+    try {
+      data.commands.bookmark[key] = {
+        name: fname,
+        type: "bookmark",
+        path: f.fsName,
+        bookmarkType: "folder",
+      };
+    } catch (e) {
+      alert(localize(locStrings.bm_error_loading, f.fsName));
+    }
+  }
+}
+
 /** Load external scripts into Ai Command Palette. */
 function loadScripts() {
-  var files = loadFileTypes(
-    localize(locStrings.cp_config_load_scripts),
-    true,
-    ".jsx$|.js$"
-  );
+  var acceptedTypes = [".jsx", ".js"];
+  re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
+  var files = loadFileTypes(localize(locStrings.sc_load_script), true, ".jsx$|.js$");
   if (files.length > 0) {
     var f, key, fname;
     for (var i = 0; i < files.length; i++) {

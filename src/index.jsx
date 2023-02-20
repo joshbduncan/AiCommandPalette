@@ -33,6 +33,7 @@ See the LICENSE file for details.
 
   var data = {
     commands: {
+      bookmark: {},
       script: {},
       workflow: {},
       defaults: builtCommands.defaults,

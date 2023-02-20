@@ -17,6 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Export Active Artboard As PNG
     - Export Document Variables
     - Go To (another) Open Document
+    - Set File and Folder Bookmarks
+        - File bookmarks open up directly in Ai
+            - Accepted file types (taken from Ai open dialog): "ai", "ait", "pdf", "dxf", "avif", "BMP", "RLE", "DIB", "cgm", "cdr", "eps", "epsf", "ps", "emf", "gif", "heic", "heif", "eps", "epsf", "ps", "jpg", "jpe", "jpeg", "jpf", "jpx", "jp2", "j2k", "j2c", "jpc", "rtf", "doc", "docx", "PCX", "psd", "psb", "pdd", "PXR", "png", "pns", "svg", "svgz", "TGA", "VDA", "ICB", "VST", "txt", "tif", "tiff", "webp", "wmf"
+        - Folder bookmarks open on your system (Mac Finder or Windows Explorer)
+
+### Changed
+- Command "Load Scripts..." -> "Load Script(s)..."
+
+### Fixed
+- Incorrect localized var name for load script window
 
 ## [0.5.0] 2023-02-03
 ### Added
