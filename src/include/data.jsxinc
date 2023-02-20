@@ -5738,7 +5738,7 @@ var builtCommands = {
     builtin_exportVariables: {
       action: "exportVariables",
       type: "builtin",
-      loc: { en: "Export Document Variables", de: "", ru: "" },
+      loc: { en: "Export Document Variables As XML", de: "", ru: "" },
     },
   },
 };

@@ -725,7 +725,7 @@ DIALOG HELPER FUNCTIONS
         try {
           f.encoding = "UTF-8";
           f.open("w");
-          f.write(infoString);
+          f.write(info.text);
           f.close();
         } catch (e) {
           alert(localize(locStrings.fl_error_writing, f));
@@ -765,11 +765,9 @@ DIALOG HELPER FUNCTIONS
    */
   function exportVariables() {
     if (app.activeDocument.variables.length > 0) {
-      var dp = new Folder(app.activeDocument.path.fsName);
-      var fp = dp.selectDlg("Choose Save Location");
-      if (fp) {
+      var f = File.saveDialog();
+      if (f) {
         try {
-          var f = new File(fp + "/" + "Variables.xml");
           app.activeDocument.exportVariables(f);
         } catch (e) {
           alert(localize(locStrings.fl_error_writing, f));
@@ -6798,7 +6796,7 @@ DIALOG HELPER FUNCTIONS
       builtin_exportVariables: {
         action: "exportVariables",
         type: "builtin",
-        loc: { en: "Export Document Variables", de: "", ru: "" },
+        loc: { en: "Export Document Variables As XML", de: "", ru: "" },
       },
     },
   };
