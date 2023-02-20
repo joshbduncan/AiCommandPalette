@@ -52,11 +52,38 @@ function scriptAction(action) {
  */
 function builtinAction(action) {
   switch (action) {
+    case "documentReport":
+      if (activeDocument) documentReport();
+      break;
+    case "exportVariables":
+      if (activeDocument) exportVariables();
+      break;
     case "goToArtboard":
-      goToArtboard();
+      if (activeDocument) goToArtboard();
+      break;
+    case "goToDocument":
+      if (app.documents.length > 1) {
+        goToOpenDocument();
+      }
       break;
     case "goToNamedObject":
-      goToNamedObject();
+      if (activeDocument) goToNamedObject();
+      break;
+    case "imageCapture":
+      imageCapture();
+      break;
+    case "redrawWindows":
+      app.redraw();
+      break;
+    case "revealActiveDocument":
+      if (activeDocument) {
+        if (app.activeDocument.path.fsName) {
+          var fp = new Folder(app.activeDocument.path.fsName);
+          fp.execute();
+        } else {
+          alert(localize(locStrings.active_document_not_saved));
+        }
+      }
       break;
     default:
       alert(localize(locStrings.cd_invalid, action));
@@ -119,6 +146,191 @@ function about() {
   });
 
   win.show();
+}
+
+/** Document Info Dialog */
+function documentReport() {
+  // setup the basic document info
+  var rulerUnits = app.activeDocument.rulerUnits.toString().split(".").pop();
+  var fileInfo =
+    "File Information:\n-----\nFile: " +
+    app.activeDocument.name +
+    "\nPath: " +
+    (app.activeDocument.path.fsName ? app.activeDocument.path.fsName : "None") +
+    "\nColor Space: " +
+    app.activeDocument.documentColorSpace.toString().split(".").pop() +
+    "\nWidth: " +
+    convertPointsTo(app.activeDocument.width, rulerUnits) +
+    " " +
+    rulerUnits +
+    "\nHeight: " +
+    convertPointsTo(app.activeDocument.height, rulerUnits) +
+    " " +
+    rulerUnits;
+
+  // generate all optional report information (all included by default)
+  // TODO: localize options
+  var reportOptions = {
+    Artboards: {
+      str: getCollectionObjectNames(app.activeDocument.artboards)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    "Embedded Items": {
+      str: getCollectionObjectNames(app.activeDocument.rasterItems)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    Fonts: {
+      str: getCollectionObjectNames(getDocumentFonts(app.activeDocument))
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    Layers: {
+      str: getCollectionObjectNames(app.activeDocument.layers)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    "Placed Items": {
+      str: getCollectionObjectNames(app.activeDocument.placedItems)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+    "Spot Colors": {
+      str: getCollectionObjectNames(app.activeDocument.spots)
+        .toString()
+        .replace(/,/g, "\n"),
+      active: true,
+    },
+  };
+
+  // build the report from the selected options (active = true)
+  function buildReport() {
+    var infoString = "Ai Document Information\n\n" + fileInfo;
+    for (var p in reportOptions) {
+      if (reportOptions[p].active && reportOptions[p].str) {
+        infoString += "\n\n" + p + "\n-----\n" + reportOptions[p].str;
+      }
+    }
+    infoString += "\n\nFile Created: " + new Date();
+    return infoString;
+  }
+
+  // setup the dialog
+  var win = new Window("dialog");
+  win.text = localize(locStrings.document_report);
+  win.orientation = "column";
+  win.alignChildren = ["center", "top"];
+  win.alignChildren = "fill";
+
+  // panel - options
+  var pOptions = win.add("panel", undefined, "Include?");
+  pOptions.orientation = "row";
+  pOptions.margins = 20;
+
+  // add checkboxes for each report option
+  var cb;
+  for (var p in reportOptions) {
+    cb = pOptions.add("checkbox", undefined, p);
+    if (reportOptions[p].str) {
+      cb.value = true;
+      // add onClick function for each cb to update rebuild report
+      cb.onClick = function () {
+        if (this.value) {
+          reportOptions[this.text].active = true;
+        } else {
+          reportOptions[this.text].active = false;
+        }
+        info.text = buildReport();
+      };
+    } else {
+      cb.value = false;
+      cb.enabled = false;
+    }
+  }
+
+  // script info
+  var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
+    multiline: true,
+    scrollable: true,
+    readonly: true,
+  }); // TODO: localize
+
+  // window buttons
+  var winButtons = win.add("group");
+  winButtons.orientation = "row";
+  winButtons.alignChildren = ["center", "center"];
+  var saveInfo = winButtons.add("button", undefined, localize(locStrings.save));
+  saveInfo.preferredSize.width = 100;
+  var close = winButtons.add("button", undefined, localize(locStrings.close), {
+    name: "ok",
+  });
+  close.preferredSize.width = 100;
+
+  // save document info to selected file
+  saveInfo.onClick = function () {
+    var f = File.saveDialog();
+    if (f) {
+      try {
+        f.encoding = "UTF-8";
+        f.open("w");
+        f.write(info.text);
+        f.close();
+      } catch (e) {
+        alert(localize(locStrings.fl_error_writing, f));
+      }
+      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
+    }
+  };
+  // show the info dialog
+  win.show();
+}
+
+/**
+ * Export the active artboard as a png file using the api `Document.imageCapture()` method.
+ * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html?#document-imagecapture
+ */
+function imageCapture() {
+  if (activeDocument) {
+    var f = File.saveDialog();
+    if (f) {
+      try {
+        app.activeDocument.imageCapture(f);
+      } catch (e) {
+        alert(localize(locStrings.fl_error_writing, f));
+      }
+      // if chosen file name doesn't end in ".png" add the
+      // correct extension so they captured file open correctly
+      if (f.name.indexOf(".png") < f.name.length - 4)
+        f.rename(f.name.toString() + ".png");
+      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
+    }
+  }
+}
+
+/**
+ *
+ * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-exportvariables
+ */
+function exportVariables() {
+  if (app.activeDocument.variables.length > 0) {
+    var f = File.saveDialog();
+    if (f) {
+      try {
+        app.activeDocument.exportVariables(f);
+      } catch (e) {
+        alert(localize(locStrings.fl_error_writing, f));
+      }
+      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
+    }
+  } else {
+    alert(localize(locStrings.no_document_variables));
+  }
 }
 
 /** Load external scripts into Ai Command Palette. */
@@ -232,18 +444,34 @@ function deleteCommand() {
 
 // BUILT-IN COMMANDS
 
-/** Present a command palette with all artboards then zoom to the chosen artboard. */
+/** Present a command palette with all open documents and open the chosen one. */
+function goToOpenDocument() {
+  var docs = [];
+  for (var i = 0; i < app.documents.length; i++) {
+    if (app.documents[i] != app.activeDocument) docs.push(app.documents[i]);
+  }
+  var item = goToPalette(
+    (commands = docs),
+    (title = localize(locStrings["go_to_open_document"])),
+    (bounds = [0, 0, paletteWidth, 182])
+  );
+  if (item) {
+    item.activate();
+  }
+}
+
+/** Present a command palette with all artboards and zoom to the chosen one. */
 function goToArtboard() {
   var artboards = [];
   for (var i = 0; i < app.activeDocument.artboards.length; i++) {
     artboards.push(app.activeDocument.artboards[i]);
   }
-
   var item = goToPalette(
     (commands = artboards),
     (title = localize(locStrings["go_to_artboard"])),
     (bounds = [0, 0, paletteWidth, 182])
   );
+  // FIXME: if two artboards have the same name it will select the first that matches
   if (item) {
     var ab;
     for (var i = 0; i < app.activeDocument.artboards.length; i++) {
@@ -257,7 +485,7 @@ function goToArtboard() {
   }
 }
 
-/** Present a command palette with all named objects zoom to and select the chosen object. */
+/** Present a command palette with all named objects and zoom to and select the chosen one. */
 function goToNamedObject() {
   if (app.activeDocument.pageItems.length > namedObjectLimit)
     alert(

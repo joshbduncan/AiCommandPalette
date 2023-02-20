@@ -19,13 +19,14 @@ See the LICENSE file for details.
   var _github = "https://github.com/joshbduncan";
 
   //@includepath "include"
+  //@include "polyfills.jsxinc"
   //@include "config.jsxinc"
+  //@include "helpers.jsxinc"
   //@include "builtin.jsxinc"
   //@include "data.jsxinc"
   //@include "commands.jsxinc"
   //@include "dialogs.jsxinc"
   //@include "io.jsxinc"
-  //@include "polyfills.jsxinc"
   //@include "workflows.jsxinc"
 
   // SETUP COMMANDS DATA

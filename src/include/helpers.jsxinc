@@ -1,0 +1,252 @@
+/**
+ *
+ * @returns Make sure at least one document is open for certain built-in commands.
+ */
+function activeDocument() {
+  if (app.documents.length < 1) {
+    alert(localize(locStrings.no_active_document));
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Get every font used inside of an the Ai document.
+ * @param {Object} doc Ai document.
+ */
+function getDocumentFonts(doc) {
+  var fonts = [];
+  for (var i = 0; i < doc.textFrames.length; i++) {
+    for (var j = 0; j < doc.textFrames[i].textRanges.length; j++) {
+      if (!fonts.includes(doc.textFrames[i].textRanges[j].textFont)) {
+        fonts.push(doc.textFrames[i].textRanges[j].textFont);
+      }
+    }
+  }
+  return fonts;
+}
+
+/**
+ * Convert Ai points unit to another api ruler constant.
+ * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
+ * @param   {Number} points Point value to convert.
+ * @param   {String} unit   RulerUnit to convert `points` to.
+ * @returns {Number}        Converted number.
+ */
+function convertPointsTo(points, unit) {
+  var conversions = {
+    Centimeters: 28.346,
+    Qs: 0.709,
+    Inches: 72.0,
+    Pixels: 1.0,
+    Millimeters: 2.834645,
+    Unknown: 1.0,
+    Picas: 12.0,
+    Points: 1.0,
+  };
+  return points / conversions[unit];
+}
+
+/**
+ * Return the names of each object in an Ai collection object.
+ * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
+ * @param   {Object} o Ai collection object.
+ * @returns {Array}    Array containing each object name.
+ */
+function getCollectionObjectNames(c) {
+  names = [];
+  var s;
+  if (c.length > 0) {
+    for (var i = 0; i < c.length; i++) {
+      if (c.typename == "PlacedItems" || c.typename == "RasterItems") {
+        s = "";
+        if (
+          c[i].typename == "PlacedItem" ||
+          (c[i].typename == "RasterItem" && c[i].embedded == true)
+        )
+          s += c[i].file.name;
+        if (c[i].file.fsName) {
+          s += " (path: " + c[i].file.fsName.replace(c[i].file.name, "") + ")";
+        } else {
+          s += " (path: ?)";
+        }
+        names.push(s);
+      } else if (c.typename == "Spots") {
+        if (c[i].name != "[Registration]") {
+          names.push(c[i].name);
+        }
+      } else {
+        names.push(c[i].name);
+      }
+    }
+  }
+  return names;
+}
+
+/**************************************************
+DIALOG HELPER FUNCTIONS
+**************************************************/
+
+function filterCommands(
+  commands,
+  queryFilter,
+  visibleFilter,
+  showHidden,
+  hideCommands
+) {
+  var query = [];
+  var visible = [];
+  var command;
+  for (var i = 0; i < commands.length; i++) {
+    command = commands[i];
+    commandData = commandsData[command];
+    // make sure Ai version meets command requirements
+    if (!versionCheck(command)) continue;
+    // skip any hidden commands
+    if (!showHidden && data.settings.hidden.includes(command)) continue;
+    // skip any specific commands name in hideSpecificCommands
+    if (hideCommands.includes(command)) continue;
+    // then check to see if the command should be filtered out
+    if (!queryFilter.includes(commandsData[command].type)) query.push(command);
+    if (!visibleFilter.includes(commandsData[command].type)) visible.push(command);
+  }
+  return {
+    query: query,
+    visible: visible,
+  };
+}
+
+/**
+ * Score array items based on regex string match.
+ * @param   {String} q   String to search for.
+ * @param   {Array}  arr String items to search for.
+ * @returns {Array}      Matching items sorted by score.
+ */
+function scoreMatches(q, arr) {
+  var word;
+  var words = [];
+  var scores = {};
+  var words = q.split(" ");
+  for (var i = 0; i < arr.length; i++) {
+    var score = 0;
+    for (var n = 0; n < words.length; n++) {
+      word = words[n];
+      if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null) score++;
+    }
+    if (score > 0) scores[arr[i]] = score;
+  }
+  return sortKeysByValue(scores, "score", "name");
+}
+
+/**
+ * Score array items based on regex string match.
+ * @param   {String} q    String to search for.
+ * @param   {Array}  arr  Array of object to search through.
+ * @param   {String} prop Object property to match on.
+ * @returns {Array}       Matching items sorted by score.
+ */
+function scoreObjectMatches(q, arr, prop) {
+  var word;
+  var words = q.split(" ");
+  var matches = [];
+  for (var i = 0; i < arr.length; i++) {
+    var score = 0;
+    for (var n = 0; n < words.length; n++) {
+      word = words[n];
+      if (!arr[i].hasOwnProperty(prop)) continue;
+      if (word != "" && arr[i][prop].match("(?:^|\\s)(" + word + ")", "gi") != null)
+        score++;
+    }
+    if (score > 0) {
+      arr[i].score = score;
+      matches.push(arr[i]);
+    }
+  }
+  // sort all matches by score
+  matches.sort(function (a, b) {
+    return a.score.localeCompare(b.score);
+  });
+  return matches;
+}
+
+function dynamicSort(property) {
+  var sortOrder = 1;
+  if (property[0] === "-") {
+    sortOrder = -1;
+    property = property.substr(1);
+  }
+  return function (a, b) {
+    var result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+    return result * sortOrder;
+  };
+}
+
+/**
+ * Sort object keys by their value.
+ * @param   {Object} obj Simple object with `key`: `value` pairs.
+ * @returns {Array}      Array of keys sorted by value.
+ */
+function sortKeysByValue(obj) {
+  var sorted = [];
+  for (var key in obj) {
+    for (var i = 0; i < sorted.length; i++) {
+      if (obj[key] > obj[sorted[i]]) break;
+    }
+    sorted.splice(i, 0, key);
+  }
+  return sorted;
+}
+
+/**
+ * Simulate a key press for Windows users.
+ *
+ * This function is in response to a known ScriptUI bug on Windows.
+ * You can read more about it in the GitHub issue linked below.
+ * https://github.com/joshbduncan/AiCommandPalette/issues/8
+ *
+ * Basically, on some Windows Ai versions, when a ScriptUI dialog is
+ * presented and the active attribute is set to true on a field, Windows
+ * will flash the Windows Explorer app quickly and then bring Ai back
+ * in focus with the dialog front and center. This is a terrible user
+ * experience so Sergey and I attempted to fix it the best we could.
+ *
+ * This clever solution was created by Sergey Osokin (https://github.com/creold)
+ *
+ * @param {String} k Key to simulate.
+ * @param {Number} n Number of times to simulate the keypress.
+ */
+function simulateKeypress(k, n) {
+  if (!n) n = 1;
+  try {
+    var f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
+    if (!f.exists) {
+      var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
+      while (n--) {
+        data += 'WshShell.SendKeys "{' + k + '}"\n';
+      }
+      f.encoding = "UTF-8";
+      f.open("w");
+      f.write(data);
+      f.close();
+    }
+    f.execute();
+  } catch (e) {
+    $.writeln(e);
+  }
+}
+
+/**
+ * Open a url in the system browser.
+ * @param {String} url URL to open.
+ */
+function openURL(url) {
+  var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
+  html.open("w");
+  var htmlBody =
+    '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' +
+    url +
+    '"></head><body> <p></body></html>';
+  html.write(htmlBody);
+  html.close();
+  html.execute();
+}
