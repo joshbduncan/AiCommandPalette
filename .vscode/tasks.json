@@ -4,9 +4,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "compile",
+      "label": "compile script",
       "type": "shell",
-      "command": "escompile",
+      "command": "/Users/jbd/Dropbox/DEV/projects/extend-script-compiler/escompile.sh",
       "args": ["src/index.jsx", ">", "AiCommandPalette.jsx"],
       "group": "none",
       "presentation": {
@@ -15,10 +15,10 @@
       }
     },
     {
-      "label": "open compiled script",
+      "label": "format script",
       "type": "shell",
-      "command": "code",
-      "args": ["AiCommandPalette.jsx"],
+      "command": "prettier",
+      "args": ["-w", "AiCommandPalette.jsx"],
       "group": "none",
       "presentation": {
         "reveal": "always",
@@ -35,10 +35,10 @@
         "panel": "shared"
       },
       "dependsOrder": "sequence",
-      "dependsOn": ["compile script", "open compiled script"]
+      "dependsOn": ["compile script", "format script"]
     },
     {
-      "label": "download",
+      "label": "download data",
       "type": "shell",
       "command": "python3",
       "args": ["tools/build_data.py", "-d", ">", "src/include/data.jsxinc"],
@@ -49,10 +49,10 @@
       }
     },
     {
-      "label": "open data",
+      "label": "format data",
       "type": "shell",
-      "command": "code",
-      "args": ["src/include/data.jsxinc"],
+      "command": "prettier",
+      "args": ["-w", "src/include/data.jsxinc"],
       "group": "none",
       "presentation": {
         "reveal": "always",
@@ -69,7 +69,7 @@
         "panel": "shared"
       },
       "dependsOrder": "sequence",
-      "dependsOn": ["download", "open data"]
+      "dependsOn": ["download data", "format data"]
     }
   ]
 }
