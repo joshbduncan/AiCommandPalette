@@ -47,31 +47,86 @@ function convertPointsTo(points, unit) {
   return points / conversions[unit];
 }
 
+function getPlacedFileInfoForReport() {
+  if (ExternalObject.AdobeXMPScript == undefined)
+    ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
+  //Read xmp string - You can see document XMP in Illustrator -> File-> File Info -> Raw Data
+  var xmp = new XMPMeta(app.activeDocument.XMPString);
+
+  var names = [];
+  var allFilePaths = getAllPlacedFilePaths(xmp);
+  var brokenFilePaths = getBrokenFilePaths(xmp);
+
+  // convert path to file object for property access
+  var fileObjects = [];
+  for (var i = 0; i < allFilePaths.length; i++) {
+    fileObjects.push(new File(allFilePaths[i]));
+  }
+  // sort the files by name
+  fileObjects.sort(function (a, b) {
+    return a.name - b.name;
+  });
+  // build string with file info for the report
+  var f;
+  for (var i = 0; i < fileObjects.length; i++) {
+    f = fileObjects[i];
+    names.push(
+      "Name: " +
+        f.name +
+        "\nPath: " +
+        f.fsName.replace(f.name, "") +
+        "\nLink: " +
+        (brokenFilePaths.includes(f.path.fsName) ? "Broken" : "Connected") +
+        "\n"
+    );
+  }
+  return names;
+}
+
+/**
+ * Great trick to get all placed files (linked and embeded) @pixxxelschubser
+ * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
+ *
+ * If you try to do this using the placedItems collection from the API you will have issues.
+ */
+function getAllPlacedFilePaths(xmp) {
+  //Read file paths from XMP - this returns file paths of both embedded and linked images
+  var paths = [];
+  var xpath;
+  for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
+    xpath = "xmpMM:Manifest[" + i + "]/stMfs:reference/stRef:filePath";
+    paths.push(xmp.getProperty(XMPConst.NS_XMP_MM, xpath).value);
+  }
+  return paths;
+}
+
+/**
+ * Get placed files with broken links.
+ */
+function getBrokenFilePaths(xmp) {
+  //Read file paths from XMP - this returns file paths of both embedded and linked images
+  var paths = [];
+  var xpath;
+  for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
+    xpath = "xmpMM:Ingredients[" + i + "]/stRef:filePath";
+    paths.push(xmp.getProperty(XMPConst.NS_XMP_MM, xpath).value);
+  }
+  return paths;
+}
+
 /**
  * Return the names of each object in an Ai collection object.
  * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
  * @param   {Object} o Ai collection object.
  * @returns {Array}    Array containing each object name.
  */
-function getCollectionObjectNames(c) {
+function getCollectionObjectNames(c, sorted) {
+  sorted = typeof sorted !== "undefined" ? sorted : false;
   names = [];
   var s;
   if (c.length > 0) {
     for (var i = 0; i < c.length; i++) {
-      if (c.typename == "PlacedItems" || c.typename == "RasterItems") {
-        s = "";
-        if (
-          c[i].typename == "PlacedItem" ||
-          (c[i].typename == "RasterItem" && c[i].embedded == true)
-        )
-          s += c[i].file.name;
-        if (c[i].file.fsName) {
-          s += " (path: " + c[i].file.fsName.replace(c[i].file.name, "") + ")";
-        } else {
-          s += " (path: ?)";
-        }
-        names.push(s);
-      } else if (c.typename == "Spots") {
+      if (c.typename == "Spots") {
         if (c[i].name != "[Registration]") {
           names.push(c[i].name);
         }
@@ -80,7 +135,7 @@ function getCollectionObjectNames(c) {
       }
     }
   }
-  return names;
+  return sorted ? names.sort() : names;
 }
 
 /**************************************************
