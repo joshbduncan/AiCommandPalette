@@ -56,16 +56,27 @@ function getPlacedFileInfoForReport() {
   var names = [];
   var allFilePaths = getAllPlacedFilePaths(xmp);
   var brokenFilePaths = getBrokenFilePaths(xmp);
-  var f;
+
+  // convert path to file object for property access
+  var fileObjects = [];
   for (var i = 0; i < allFilePaths.length; i++) {
-    f = new File(allFilePaths[i]);
+    fileObjects.push(new File(allFilePaths[i]));
+  }
+  // sort the files by name
+  fileObjects.sort(function (a, b) {
+    return a.name - b.name;
+  });
+  // build string with file info for the report
+  var f;
+  for (var i = 0; i < fileObjects.length; i++) {
+    f = fileObjects[i];
     names.push(
       "Name: " +
         f.name +
         "\nPath: " +
         f.fsName.replace(f.name, "") +
         "\nLink: " +
-        (brokenFilePaths.includes(allFilePaths[i]) ? "Broken" : "Connected") +
+        (brokenFilePaths.includes(f.path.fsName) ? "Broken" : "Connected") +
         "\n"
     );
   }
@@ -109,30 +120,13 @@ function getBrokenFilePaths(xmp) {
  * @param   {Object} o Ai collection object.
  * @returns {Array}    Array containing each object name.
  */
-function getCollectionObjectNames(c) {
+function getCollectionObjectNames(c, sorted) {
+  sorted = typeof sorted !== "undefined" ? sorted : false;
   names = [];
   var s;
   if (c.length > 0) {
     for (var i = 0; i < c.length; i++) {
-      if (c.typename == "PlacedItems" || c.typename == "RasterItems") {
-        s = "";
-        try {
-          if (
-            c[i].typename == "PlacedItem" ||
-            (c[i].typename == "RasterItem" && c[i].embedded == true)
-          )
-            s += c[i].file.name;
-          if (c[i].file.fsName) {
-            s += " (path: " + c[i].file.fsName.replace(c[i].file.name, "") + ")";
-          } else {
-            s += " (path: ?)";
-          }
-        } catch (e) {
-          $.writeln(e);
-          s += "There is no file associated with this item";
-        }
-        names.push(s);
-      } else if (c.typename == "Spots") {
+      if (c.typename == "Spots") {
         if (c[i].name != "[Registration]") {
           names.push(c[i].name);
         }
@@ -141,7 +135,7 @@ function getCollectionObjectNames(c) {
       }
     }
   }
-  return names;
+  return sorted ? names.sort() : names;
 }
 
 /**************************************************

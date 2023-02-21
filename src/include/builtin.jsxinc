@@ -186,7 +186,7 @@ function documentReport() {
       active: true,
     },
     Fonts: {
-      str: getCollectionObjectNames(getDocumentFonts(app.activeDocument))
+      str: getCollectionObjectNames(getDocumentFonts(app.activeDocument), true)
         .toString()
         .replace(/,/g, "\n"),
       active: true,
@@ -202,7 +202,7 @@ function documentReport() {
       active: true,
     },
     "Spot Colors": {
-      str: getCollectionObjectNames(app.activeDocument.spots)
+      str: getCollectionObjectNames(app.activeDocument.spots, true)
         .toString()
         .replace(/,/g, "\n"),
       active: true,
