@@ -185,12 +185,6 @@ function documentReport() {
         .replace(/,/g, "\n"),
       active: true,
     },
-    "Embedded Items": {
-      str: getCollectionObjectNames(app.activeDocument.rasterItems)
-        .toString()
-        .replace(/,/g, "\n"),
-      active: true,
-    },
     Fonts: {
       str: getCollectionObjectNames(getDocumentFonts(app.activeDocument))
         .toString()
@@ -204,9 +198,7 @@ function documentReport() {
       active: true,
     },
     "Placed Items": {
-      str: getCollectionObjectNames(app.activeDocument.placedItems)
-        .toString()
-        .replace(/,/g, "\n"),
+      str: getPlacedFileInfoForReport().toString().replace(/,/g, "\n"),
       active: true,
     },
     "Spot Colors": {
