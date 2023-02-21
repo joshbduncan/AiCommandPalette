@@ -1,0 +1,75 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "compile",
+      "type": "shell",
+      "command": "escompile",
+      "args": ["src/index.jsx", ">", "AiCommandPalette.jsx"],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "open compiled script",
+      "type": "shell",
+      "command": "code",
+      "args": ["AiCommandPalette.jsx"],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "compile",
+      "type": "shell",
+      "command": "echo 'compiling script...'",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "dependsOrder": "sequence",
+      "dependsOn": ["compile script", "open compiled script"]
+    },
+    {
+      "label": "download",
+      "type": "shell",
+      "command": "python3",
+      "args": ["tools/build_data.py", "-d", ">", "src/include/data.jsxinc"],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "open data",
+      "type": "shell",
+      "command": "code",
+      "args": ["src/include/data.jsxinc"],
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "commands",
+      "type": "shell",
+      "command": "echo 'downloading updated commands...'",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "dependsOrder": "sequence",
+      "dependsOn": ["download", "open data"]
+    }
+  ]
+}
