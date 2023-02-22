@@ -142,6 +142,11 @@ var locStrings = {
     ru: "Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность.",
   },
   document_report: { en: "Active Document Report", de: "", ru: "" },
+  document_report_warning: {
+    en: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
+    de: "",
+    ru: "",
+  },
   file_saved: { en: "File Saved:\n%1", de: "", ru: "" },
   fl_error_loading: {
     en: "Error loading file:\n%1",

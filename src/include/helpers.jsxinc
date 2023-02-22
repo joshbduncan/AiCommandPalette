@@ -78,8 +78,8 @@ function getPlacedFileInfoForReport() {
         decodeURI(f.name) +
         "\nPath: " +
         f.fsName.replace(f.name, "") +
-        "\nFound: " +
-        (f.brokenLink ? false : true) +
+        "\nLink: " +
+        (f.brokenLink ? "Broken" : "Active") +
         "\n"
     );
   }

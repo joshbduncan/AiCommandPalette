@@ -212,6 +212,8 @@ function documentReport() {
 
   // build the report from the selected options (active = true)
   function buildReport() {
+    if (!app.activeDocument.saved) alert(localize(locStrings.document_report_warning));
+
     var infoString = "Ai Document Information\n\n" + fileInfo;
     for (var p in reportOptions) {
       if (reportOptions[p].active && reportOptions[p].str) {
@@ -256,7 +258,7 @@ function documentReport() {
   }
 
   // script info
-  var info = win.add("edittext", [0, 0, 400, 500], buildReport(), {
+  var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
     multiline: true,
     scrollable: true,
     readonly: true,

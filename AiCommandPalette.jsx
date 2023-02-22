@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.6.0";
+  var _version = "0.6.1";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -272,8 +272,8 @@ See the LICENSE file for details.
           decodeURI(f.name) +
           "\nPath: " +
           f.fsName.replace(f.name, "") +
-          "\nFound: " +
-          (f.brokenLink ? false : true) +
+          "\nLink: " +
+          (f.brokenLink ? "Broken" : "Active") +
           "\n"
       );
     }
@@ -712,6 +712,9 @@ DIALOG HELPER FUNCTIONS
 
     // build the report from the selected options (active = true)
     function buildReport() {
+      if (!app.activeDocument.saved)
+        alert(localize(locStrings.document_report_warning));
+
       var infoString = "Ai Document Information\n\n" + fileInfo;
       for (var p in reportOptions) {
         if (reportOptions[p].active && reportOptions[p].str) {
@@ -756,7 +759,7 @@ DIALOG HELPER FUNCTIONS
     }
 
     // script info
-    var info = win.add("edittext", [0, 0, 400, 500], buildReport(), {
+    var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
       multiline: true,
       scrollable: true,
       readonly: true,
@@ -1309,6 +1312,11 @@ DIALOG HELPER FUNCTIONS
       ru: "Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность.",
     },
     document_report: { en: "Active Document Report", de: "", ru: "" },
+    document_report_warning: {
+      en: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
+      de: "",
+      ru: "",
+    },
     file_saved: { en: "File Saved:\n%1", de: "", ru: "" },
     fl_error_loading: {
       en: "Error loading file:\n%1",
