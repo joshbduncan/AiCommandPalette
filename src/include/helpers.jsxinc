@@ -59,8 +59,11 @@ function getPlacedFileInfoForReport() {
 
   // convert path to file object for property access
   var fileObjects = [];
+  var f;
   for (var i = 0; i < allFilePaths.length; i++) {
-    fileObjects.push(new File(allFilePaths[i]));
+    f = new File(allFilePaths[i]);
+    if (brokenFilePaths.includes(allFilePaths[i])) f.brokenLink = true;
+    fileObjects.push(f);
   }
   // sort the files by name
   fileObjects.sort(function (a, b) {
@@ -72,11 +75,11 @@ function getPlacedFileInfoForReport() {
     f = fileObjects[i];
     names.push(
       "Name: " +
-        f.name +
+        decodeURI(f.name) +
         "\nPath: " +
         f.fsName.replace(f.name, "") +
-        "\nLink: " +
-        (brokenFilePaths.includes(f.path.fsName) ? "Broken" : "Connected") +
+        "\nFound: " +
+        (f.brokenLink ? false : true) +
         "\n"
     );
   }
@@ -180,17 +183,29 @@ function filterCommands(
 function scoreMatches(q, arr) {
   var word;
   var words = [];
-  var scores = {};
+  var matches = [];
   var words = q.split(" ");
   for (var i = 0; i < arr.length; i++) {
     var score = 0;
     for (var n = 0; n < words.length; n++) {
       word = words[n];
-      if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null) score++;
+      if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null)
+        score += word.length;
     }
-    if (score > 0) scores[arr[i]] = score;
+    if (score > 0) matches.push({ command: arr[i], score: score });
   }
-  return sortKeysByValue(scores, "score", "name");
+  // sort the matches by score
+  matches.sort(function (a, b) {
+    return b.score - a.score;
+  });
+  // only return highest scoring matches
+  var matched_commands = [];
+  for (var i = 0; i < matches.length; i++) {
+    if (matches[i].score >= matches[0].score) {
+      matched_commands.push(matches[i].command);
+    }
+  }
+  return matched_commands;
 }
 
 /**
@@ -234,22 +249,6 @@ function dynamicSort(property) {
     var result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
     return result * sortOrder;
   };
-}
-
-/**
- * Sort object keys by their value.
- * @param   {Object} obj Simple object with `key`: `value` pairs.
- * @returns {Array}      Array of keys sorted by value.
- */
-function sortKeysByValue(obj) {
-  var sorted = [];
-  for (var key in obj) {
-    for (var i = 0; i < sorted.length; i++) {
-      if (obj[key] > obj[sorted[i]]) break;
-    }
-    sorted.splice(i, 0, key);
-  }
-  return sorted;
 }
 
 /**

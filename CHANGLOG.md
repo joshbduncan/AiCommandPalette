@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.6.0] 2023-02-22
 
 ### Added 
+
 - New Built-In Commands
     - Redraw Windows
     - Reveal Active Document On System
@@ -23,13 +24,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Folder bookmarks open on your system (Mac Finder or Windows Explorer)
 
 ### Changed
+
+- Updated command query scoring filter to show less matches (only top results)
 - Command "Load Scripts..." -> "Load Script(s)..."
 
 ### Fixed
+
 - Incorrect localized var name for load script window
+- Up/Down keyboard navigation from the command palette search box
 
 ## [0.5.0] 2023-02-03
+
 ### Added
+
 - Go To Functionality
     - new commands: "Go To Artboard...", "Go To Named Object" (any named page item)
         - Go To Artboard - select and artboard from the list, center and zoom view to selection
@@ -38,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - works a bit differently than the original command palette in that is works with an array of actual Ai objects and returns the selected object instead of the `selection.text` from the listbox
 
 ### Changed
+
 - build_data.py
     - can now download data right from live Google Sheet using the `-d/--download` flag
     - input file now must be specified with the `-i, --input` flag
@@ -47,30 +55,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.3] 2022-11-06
 
 ### Fixed
+
 - versionCheck function comparisons were incorrect
 
 ## [0.4.2] 2022-10-25
 
 ### Added
+
 - Some older tools with maxVersions
     - Still need to update translations
 - [Simple script](/tools/Test%20Ai%20Commands.jsx) for testing Ai menu and tool commands
 
 ### Fixed
+
 - typo for command.maxVersion in version check function of base jsx file 
 
 ## [0.4.1] 2022-10-25
+
 ### Added
+
 - New tools and menu items for [Ai 2023 v27.0](https://helpx.adobe.com/illustrator/using/whats-new.html)
     - Still need to update translations
 - [Simple script](/tools/Test%20Ai%20Commands.jsx) for testing Ai menu and tool commands
 
 ### Fixed
+
 - typo for command.maxVersion in version check function
 
 ## [0.4.0] 2022-10-21
 
 ### Added
+
 - Real-Time Localization
     - Handled within the main script file via the ExtendScript `localize()` function.
     - Commands are built at run-time for the current system locale
@@ -80,20 +95,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Settings menu only shows certain commands when applicable
 
 ### Changed
+
 - Script was rewritten from the ground up
     - Variable names have been changed which will break any setting your have save on your system
         - Settings file has been renames to make it easy to roll-back to a previous version
 
 ### Removed
+
 - Redundant and no longer needed functions
 - Excess command data to speed things up
 
 ### Fixed
+
 - Unicode errors for Conté Crayon => Cont\u00E9 Crayon
 
 ## [0.3.0] 2022-09-15
 
 ### Added
+
 - Ai Version Functionality Checker
     - Original idea brought up by [Sergey Osokin](https://github.com/creold) in issue [#6 selectTool](https://github.com/joshbduncan/AiCommandPalette/issues/6)
     - Ai Command Palette now checks the current Ai version at startup to determine which menu commands and tools are compatible with your version of Adobe Illustrator.
@@ -114,9 +133,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New way to build config menu
 
 ### Changes
+
 - [translate.py](/tools/build_translations.py) moved to the tools folder.
 
 ### Fixed
+
 - Typo in workflow builder move down function caused it to move the wrong items when multiple items were selected.
 - Typo on renamed function for moving steps in Workflow builder. (`sortIndexes`)
 - Incorrect regex when editing workflows
@@ -133,6 +154,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.4] - 2022-08-17
 
 ### Changed
+
 - More language updates
     - Updates to German by Kurt Gold
     - Updates ro Russian by [Sergey Osokin](https://github.com/creold)
@@ -140,6 +162,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.3] - 2022-08-17
 
 ### Changed
+
 - Increased the palette size to accommodate alternate languages with longer text
 - Workflow steps are now multiselect (you can select more than one at a time)
     - You can move multiple steps up and down (if the selection is contiguous)
@@ -148,9 +171,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.2] - 2022-08-17
 
 ### Added
+
 - New localized Russian version from @creold
 
 ### Changed
+
 - FIX unicode characters where needed
 - Updated menu commands
 - German translations updates by Kurt Gold
@@ -158,6 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.1] - 2022-08-16
 
 ### Changed
+
 - FIX to German tool names
 - FIX to translate.py to only replace whole strings
 - Updated sample.csv
@@ -166,6 +192,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - 2022-08-16
 
 ### Added
+
 - Ability to activate 80+ of Ai's built-in tools 
 - Ability to **edit workflows** (previously called custom commands)
 - Workflow action validation
@@ -187,6 +214,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Works by creating a CSV file "[Language].txt" in the localization folder.
 
 ### Changed
+
 - **CUSTOM COMMANDS** are now called **WORKFLOWS**
 - UPDATED and TESTED all built-in menu commands.
     - Now match format, text, and order of latest Illustrator version.
@@ -201,9 +229,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Also, if a selection is made inside of the actual listbox frame by the user (via mouse or keyboard) the API doesn't offer any way to know which part of the list is currently visible in the listbox "frame". If the user was to re-enter the searchbox and then hit an arrow key the above event listener will not work correctly so I just move the next selection (be it up or down) to the middle of the "frame".
 
 ### Removed
+
 - Removed around 100 commands that are no longer active or don't work in Ai version 26.4.1.
 
 ## [0.1.0] - 2022-07-27
 
 ### Added
+
 - First official release!

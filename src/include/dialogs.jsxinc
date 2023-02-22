@@ -89,39 +89,51 @@ function commandPalette(
     Only works if multiselect if set to false.
     */
     q.addEventListener("keydown", function (k) {
-      if (k.keyName == "Up") {
-        k.preventDefault();
-        if (list.selection.index > 0) {
-          list.selection = list.selection.index - 1;
-          if (list.selection.index < frameStart) frameStart--;
-        }
-      } else if (k.keyName == "Down") {
-        k.preventDefault();
-        if (list.selection.index < list.items.length) {
-          list.selection = list.selection.index + 1;
-          if (list.selection.index > frameStart + visibleListItems - 1) {
-            if (frameStart < list.items.length - visibleListItems) {
-              frameStart++;
-            } else {
-              frameStart = frameStart;
+      if (k.keyName == "Up" || k.keyName == "Down") {
+        if (k.keyName == "Up") {
+          k.preventDefault();
+          if (!list.selection) {
+            list.selection = 0;
+          } else {
+            if (list.selection.index > 0) {
+              list.selection = list.selection.index - 1;
+              if (list.selection.index < frameStart) frameStart--;
+            }
+          }
+        } else if (k.keyName == "Down") {
+          k.preventDefault();
+          if (!list.selection) {
+            list.selection = 0;
+          } else {
+            if (list.selection.index < list.items.length) {
+              list.selection = list.selection.index + 1;
+              if (list.selection.index > frameStart + visibleListItems - 1) {
+                if (frameStart < list.items.length - visibleListItems) {
+                  frameStart++;
+                } else {
+                  frameStart = frameStart;
+                }
+              }
             }
           }
         }
-      }
-      /*
+        /*
       If a selection is made inside of the actual listbox frame by the user,
       the API doesn't offer any way to know which part of the list is currently
       visible in the listbox "frame". If the user was to re-enter the `q` edittext
       and then hit an arrow key the above event listener will not work correctly so
       I just move the next selection (be it up or down) to the middle of the "frame".
       */
-      if (
-        list.selection.index < frameStart ||
-        list.selection.index > frameStart + visibleListItems - 1
-      )
-        frameStart = list.selection.index - Math.floor(visibleListItems / 2);
-      // move the frame by revealing the calculated `frameStart`
-      list.revealItem(frameStart);
+        if (list.selection) {
+          if (
+            list.selection.index < frameStart ||
+            list.selection.index > frameStart + visibleListItems - 1
+          )
+            frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+          // move the frame by revealing the calculated `frameStart`
+          list.revealItem(frameStart);
+        }
+      }
     });
   }
 
@@ -241,39 +253,51 @@ function goToPalette(commands, title, bounds) {
     Only works if multiselect if set to false.
     */
     q.addEventListener("keydown", function (k) {
-      if (k.keyName == "Up") {
-        k.preventDefault();
-        if (list.selection.index > 0) {
-          list.selection = list.selection.index - 1;
-          if (list.selection.index < frameStart) frameStart--;
-        }
-      } else if (k.keyName == "Down") {
-        k.preventDefault();
-        if (list.selection.index < list.items.length) {
-          list.selection = list.selection.index + 1;
-          if (list.selection.index > frameStart + visibleListItems - 1) {
-            if (frameStart < list.items.length - visibleListItems) {
-              frameStart++;
-            } else {
-              frameStart = frameStart;
+      if (k.keyName == "Up" || k.keyName == "Down") {
+        if (k.keyName == "Up") {
+          k.preventDefault();
+          if (!list.selection) {
+            list.selection = 0;
+          } else {
+            if (list.selection.index > 0) {
+              list.selection = list.selection.index - 1;
+              if (list.selection.index < frameStart) frameStart--;
+            }
+          }
+        } else if (k.keyName == "Down") {
+          k.preventDefault();
+          if (!list.selection) {
+            list.selection = 0;
+          } else {
+            if (list.selection.index < list.items.length) {
+              list.selection = list.selection.index + 1;
+              if (list.selection.index > frameStart + visibleListItems - 1) {
+                if (frameStart < list.items.length - visibleListItems) {
+                  frameStart++;
+                } else {
+                  frameStart = frameStart;
+                }
+              }
             }
           }
         }
-      }
-      /*
+        /*
       If a selection is made inside of the actual listbox frame by the user,
       the API doesn't offer any way to know which part of the list is currently
       visible in the listbox "frame". If the user was to re-enter the `q` edittext
       and then hit an arrow key the above event listener will not work correctly so
       I just move the next selection (be it up or down) to the middle of the "frame".
       */
-      if (
-        list.selection.index < frameStart ||
-        list.selection.index > frameStart + visibleListItems - 1
-      )
-        frameStart = list.selection.index - Math.floor(visibleListItems / 2);
-      // move the frame by revealing the calculated `frameStart`
-      list.revealItem(frameStart);
+        if (list.selection) {
+          if (
+            list.selection.index < frameStart ||
+            list.selection.index > frameStart + visibleListItems - 1
+          )
+            frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+          // move the frame by revealing the calculated `frameStart`
+          list.revealItem(frameStart);
+        }
+      }
     });
   }
 

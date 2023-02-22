@@ -105,6 +105,7 @@ function paletteSettings() {
     (showHidden = false),
     (queryFilter = [
       "builtin",
+      "bookmark",
       "script",
       "workflow",
       "defaults",
@@ -255,7 +256,7 @@ function documentReport() {
   }
 
   // script info
-  var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
+  var info = win.add("edittext", [0, 0, 400, 500], buildReport(), {
     multiline: true,
     scrollable: true,
     readonly: true,

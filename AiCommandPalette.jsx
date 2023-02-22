@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.5.0";
+  var _version = "0.6.0";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -253,8 +253,11 @@ See the LICENSE file for details.
 
     // convert path to file object for property access
     var fileObjects = [];
+    var f;
     for (var i = 0; i < allFilePaths.length; i++) {
-      fileObjects.push(new File(allFilePaths[i]));
+      f = new File(allFilePaths[i]);
+      if (brokenFilePaths.includes(allFilePaths[i])) f.brokenLink = true;
+      fileObjects.push(f);
     }
     // sort the files by name
     fileObjects.sort(function (a, b) {
@@ -266,11 +269,11 @@ See the LICENSE file for details.
       f = fileObjects[i];
       names.push(
         "Name: " +
-          f.name +
+          decodeURI(f.name) +
           "\nPath: " +
           f.fsName.replace(f.name, "") +
-          "\nLink: " +
-          (brokenFilePaths.includes(f.path.fsName) ? "Broken" : "Connected") +
+          "\nFound: " +
+          (f.brokenLink ? false : true) +
           "\n"
       );
     }
@@ -374,18 +377,29 @@ DIALOG HELPER FUNCTIONS
   function scoreMatches(q, arr) {
     var word;
     var words = [];
-    var scores = {};
+    var matches = [];
     var words = q.split(" ");
     for (var i = 0; i < arr.length; i++) {
       var score = 0;
       for (var n = 0; n < words.length; n++) {
         word = words[n];
         if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null)
-          score++;
+          score += word.length;
       }
-      if (score > 0) scores[arr[i]] = score;
+      if (score > 0) matches.push({ command: arr[i], score: score });
     }
-    return sortKeysByValue(scores, "score", "name");
+    // sort the matches by score
+    matches.sort(function (a, b) {
+      return b.score - a.score;
+    });
+    // only return highest scoring matches
+    var matched_commands = [];
+    for (var i = 0; i < matches.length; i++) {
+      if (matches[i].score >= matches[0].score) {
+        matched_commands.push(matches[i].command);
+      }
+    }
+    return matched_commands;
   }
 
   /**
@@ -429,22 +443,6 @@ DIALOG HELPER FUNCTIONS
       var result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
       return result * sortOrder;
     };
-  }
-
-  /**
-   * Sort object keys by their value.
-   * @param   {Object} obj Simple object with `key`: `value` pairs.
-   * @returns {Array}      Array of keys sorted by value.
-   */
-  function sortKeysByValue(obj) {
-    var sorted = [];
-    for (var key in obj) {
-      for (var i = 0; i < sorted.length; i++) {
-        if (obj[key] > obj[sorted[i]]) break;
-      }
-      sorted.splice(i, 0, key);
-    }
-    return sorted;
   }
 
   /**
@@ -607,6 +605,7 @@ DIALOG HELPER FUNCTIONS
       (showHidden = false),
       (queryFilter = [
         "builtin",
+        "bookmark",
         "script",
         "workflow",
         "defaults",
@@ -757,7 +756,7 @@ DIALOG HELPER FUNCTIONS
     }
 
     // script info
-    var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
+    var info = win.add("edittext", [0, 0, 400, 500], buildReport(), {
       multiline: true,
       scrollable: true,
       readonly: true,
@@ -7277,39 +7276,51 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     Only works if multiselect if set to false.
     */
       q.addEventListener("keydown", function (k) {
-        if (k.keyName == "Up") {
-          k.preventDefault();
-          if (list.selection.index > 0) {
-            list.selection = list.selection.index - 1;
-            if (list.selection.index < frameStart) frameStart--;
-          }
-        } else if (k.keyName == "Down") {
-          k.preventDefault();
-          if (list.selection.index < list.items.length) {
-            list.selection = list.selection.index + 1;
-            if (list.selection.index > frameStart + visibleListItems - 1) {
-              if (frameStart < list.items.length - visibleListItems) {
-                frameStart++;
-              } else {
-                frameStart = frameStart;
+        if (k.keyName == "Up" || k.keyName == "Down") {
+          if (k.keyName == "Up") {
+            k.preventDefault();
+            if (!list.selection) {
+              list.selection = 0;
+            } else {
+              if (list.selection.index > 0) {
+                list.selection = list.selection.index - 1;
+                if (list.selection.index < frameStart) frameStart--;
+              }
+            }
+          } else if (k.keyName == "Down") {
+            k.preventDefault();
+            if (!list.selection) {
+              list.selection = 0;
+            } else {
+              if (list.selection.index < list.items.length) {
+                list.selection = list.selection.index + 1;
+                if (list.selection.index > frameStart + visibleListItems - 1) {
+                  if (frameStart < list.items.length - visibleListItems) {
+                    frameStart++;
+                  } else {
+                    frameStart = frameStart;
+                  }
+                }
               }
             }
           }
-        }
-        /*
+          /*
       If a selection is made inside of the actual listbox frame by the user,
       the API doesn't offer any way to know which part of the list is currently
       visible in the listbox "frame". If the user was to re-enter the `q` edittext
       and then hit an arrow key the above event listener will not work correctly so
       I just move the next selection (be it up or down) to the middle of the "frame".
       */
-        if (
-          list.selection.index < frameStart ||
-          list.selection.index > frameStart + visibleListItems - 1
-        )
-          frameStart = list.selection.index - Math.floor(visibleListItems / 2);
-        // move the frame by revealing the calculated `frameStart`
-        list.revealItem(frameStart);
+          if (list.selection) {
+            if (
+              list.selection.index < frameStart ||
+              list.selection.index > frameStart + visibleListItems - 1
+            )
+              frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+            // move the frame by revealing the calculated `frameStart`
+            list.revealItem(frameStart);
+          }
+        }
       });
     }
 
@@ -7431,39 +7442,51 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     Only works if multiselect if set to false.
     */
       q.addEventListener("keydown", function (k) {
-        if (k.keyName == "Up") {
-          k.preventDefault();
-          if (list.selection.index > 0) {
-            list.selection = list.selection.index - 1;
-            if (list.selection.index < frameStart) frameStart--;
-          }
-        } else if (k.keyName == "Down") {
-          k.preventDefault();
-          if (list.selection.index < list.items.length) {
-            list.selection = list.selection.index + 1;
-            if (list.selection.index > frameStart + visibleListItems - 1) {
-              if (frameStart < list.items.length - visibleListItems) {
-                frameStart++;
-              } else {
-                frameStart = frameStart;
+        if (k.keyName == "Up" || k.keyName == "Down") {
+          if (k.keyName == "Up") {
+            k.preventDefault();
+            if (!list.selection) {
+              list.selection = 0;
+            } else {
+              if (list.selection.index > 0) {
+                list.selection = list.selection.index - 1;
+                if (list.selection.index < frameStart) frameStart--;
+              }
+            }
+          } else if (k.keyName == "Down") {
+            k.preventDefault();
+            if (!list.selection) {
+              list.selection = 0;
+            } else {
+              if (list.selection.index < list.items.length) {
+                list.selection = list.selection.index + 1;
+                if (list.selection.index > frameStart + visibleListItems - 1) {
+                  if (frameStart < list.items.length - visibleListItems) {
+                    frameStart++;
+                  } else {
+                    frameStart = frameStart;
+                  }
+                }
               }
             }
           }
-        }
-        /*
+          /*
       If a selection is made inside of the actual listbox frame by the user,
       the API doesn't offer any way to know which part of the list is currently
       visible in the listbox "frame". If the user was to re-enter the `q` edittext
       and then hit an arrow key the above event listener will not work correctly so
       I just move the next selection (be it up or down) to the middle of the "frame".
       */
-        if (
-          list.selection.index < frameStart ||
-          list.selection.index > frameStart + visibleListItems - 1
-        )
-          frameStart = list.selection.index - Math.floor(visibleListItems / 2);
-        // move the frame by revealing the calculated `frameStart`
-        list.revealItem(frameStart);
+          if (list.selection) {
+            if (
+              list.selection.index < frameStart ||
+              list.selection.index > frameStart + visibleListItems - 1
+            )
+              frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+            // move the frame by revealing the calculated `frameStart`
+            list.revealItem(frameStart);
+          }
+        }
       });
     }
 

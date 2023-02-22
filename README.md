@@ -1,6 +1,6 @@
 # Ai Command Palette
 
-Boost your Adobe Illustrator efficiency with quick access to **most Menu Commands** and **Tools**, all of your **Actions**, and any **Scripts** right from your keyboard.
+Boost your Adobe Illustrator efficiency with quick access to **most Menu Commands** and **Tools**, all of your **Actions**, **Bookmarked** file or folder, and any **Scripts** right from your keyboard.
 
 And, with custom **Workflows**, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.
 
@@ -34,6 +34,14 @@ Access all of your saved Actions using Ai Command Palette. Actions are listed "A
 
 !["Actions"](/images/actions.png)
 
+## Bookmarks
+
+Find yourself opening the same file inside of Illustrator multiple times a day? Or need to easily access a folder full of project assets? Bookmarks have you covered.
+
+📝 File bookmarks open right into Illustrator and Folder bookmarks open in your file system.
+
+!["Actions"](/images/bookmarks.png)
+
 ### Scripts
 
 Load any JavaScript files (.js or .jsx) you want quick access to using the `Load Scripts...` command.
@@ -54,9 +62,30 @@ Do You...
 
 🧨 Workflows are a super powerful utility for beginners, pros, and everyone in between. The possibilities are almost limitless!
 
-!["Built-In Tools"](/images/workflow-builder.png)
+!["Workflow Builder"](/images/workflow-builder.png)
 
 The simple workflow above takes your current selection of objects, blends them together, opens the blend options dialog so you can make any necessary adjustments, then expands your blend, and saves your file with an action.
+
+## Go To Functionality
+
+Without leaving your keyboard, quickly jump to a specific artboard, pop to another open document, or zoom in on a specific names object.
+
+!["Go To"](/images/go-to-functionality.png)
+
+## Document Report
+
+Illustrators Document Info palette offers lots of great info  but it can be a little cumbersome to work with. To quickly get right to the info you need, Ai Command Palette offers a quick Document Report that includes, most of the basic info like fonts, artboards, placed image details, spot colors, etc... You can even save it out for future reference.
+
+!["Go To"](/images/document-report.png)
+
+## Additional Built-In Commands
+
+Ai Command Palette has access to most of Illustrator's functionality via the menu command system but there are some features only available (or much easier to access) via the API that I have added as I encounter them.
+
+- Redraw Windows
+- Reveal Active Document On System
+- Export Active Artboard As PNG
+- Export Document Variables
 
 ## Settings
 
