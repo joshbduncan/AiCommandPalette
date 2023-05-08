@@ -55,15 +55,12 @@ function getPlacedFileInfoForReport() {
 
   var names = [];
   var allFilePaths = getAllPlacedFilePaths(xmp);
-  var brokenFilePaths = getBrokenFilePaths(xmp);
+  // var brokenFilePaths = getBrokenFilePaths(xmp);
 
   // convert path to file object for property access
   var fileObjects = [];
-  var f;
   for (var i = 0; i < allFilePaths.length; i++) {
-    f = new File(allFilePaths[i]);
-    if (brokenFilePaths.includes(allFilePaths[i])) f.brokenLink = true;
-    fileObjects.push(f);
+    fileObjects.push(new File(allFilePaths[i]));
   }
   // sort the files by name
   fileObjects.sort(function (a, b) {
@@ -74,13 +71,15 @@ function getPlacedFileInfoForReport() {
   for (var i = 0; i < fileObjects.length; i++) {
     f = fileObjects[i];
     names.push(
-      "Name: " +
+      localize(locStrings.dr_name) +
         decodeURI(f.name) +
-        "\nPath: " +
+        "\n" +
+        localize(locStrings.dr_path) +
         f.fsName.replace(f.name, "") +
-        "\nLink: " +
-        (f.brokenLink ? "Broken" : "Active") +
-        "\n"
+        "\n" +
+        localize(locStrings.dr_file_found) +
+        f.exists.toString().toUpperCase() +
+        (i == fileObjects.length - 1 ? "" : "\n")
     );
   }
   return names;
@@ -141,6 +140,23 @@ function getCollectionObjectNames(c, sorted) {
   return sorted ? names.sort() : names;
 }
 
+/**
+ * Return recently opened files as file objects (also found in File > Open Recent Files).
+ * @returns {Array} Recent file paths.
+ */
+function getRecentFilePaths() {
+  var path;
+  var paths = [];
+  var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
+  for (var i = 0; i < fileCount; i++) {
+    path = app.preferences.getStringPreference(
+      "plugin/MixedFileList/file" + i + "/path"
+    );
+    paths.push(path);
+  }
+  return paths;
+}
+
 /**************************************************
 DIALOG HELPER FUNCTIONS
 **************************************************/
@@ -150,7 +166,9 @@ function filterCommands(
   queryFilter,
   visibleFilter,
   showHidden,
-  hideCommands
+  hideCommands,
+  docRequired,
+  selRequired
 ) {
   var query = [];
   var visible = [];
@@ -158,6 +176,10 @@ function filterCommands(
   for (var i = 0; i < commands.length; i++) {
     command = commands[i];
     commandData = commandsData[command];
+    // hide commands requiring an active documents if requested
+    if (docRequired && !appDocuments && commandData.docRequired) continue;
+    // hide commands requiring an active selection if requested
+    if (selRequired && !docSelection && commandData.selRequired) continue;
     // make sure Ai version meets command requirements
     if (!versionCheck(command)) continue;
     // skip any hidden commands
@@ -165,8 +187,8 @@ function filterCommands(
     // skip any specific commands name in hideSpecificCommands
     if (hideCommands.includes(command)) continue;
     // then check to see if the command should be filtered out
-    if (!queryFilter.includes(commandsData[command].type)) query.push(command);
-    if (!visibleFilter.includes(commandsData[command].type)) visible.push(command);
+    if (!queryFilter.includes(commandData.type)) query.push(command);
+    if (!visibleFilter.includes(commandData.type)) visible.push(command);
   }
   return {
     query: query,
@@ -199,13 +221,21 @@ function scoreMatches(q, arr) {
     return b.score - a.score;
   });
   // only return highest scoring matches
-  var matched_commands = [];
+  var matchedCommands = [];
+  var maxLength = 0;
   for (var i = 0; i < matches.length; i++) {
     if (matches[i].score >= matches[0].score) {
-      matched_commands.push(matches[i].command);
+      matchedCommands.push(matches[i].command);
+      if (matches[i].command.length > maxLength) maxLength = matches[i].command.length;
     }
   }
-  return matched_commands;
+  // script ui seem to incorrectly calculate the `itemSize` length when
+  // filtering a temp list which the truncates some of the item so this
+  // adds a string of "X" the to the end of the result as long as the
+  // longest match which can then be removed after the listbox is created
+  var str = new Array(maxLength + 1).join("X");
+  matchedCommands.push(str);
+  return matchedCommands;
 }
 
 /**

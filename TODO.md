@@ -8,12 +8,17 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 - [ ] startup screens customization: Allow the user to set what shows up when the command palette is first opened. Could be favorite commands, workflows, etc.
 - [ ] sort filtered items by most used: Track command usage counts in the user settings file, and use that count in the scoring algorithm for sorting the palette items.
-- [ ] store command history: Store the last 50 or 100 commands in the user settings file, then allow them to scroll up and down through them when the command palette is first presented (and no text has been entered).
 
 ### Doing
 
+
 ### Done
 
+- [x] store recent command history and make accessible via command palette
+- [x] recent files built-in action
+- [x] fix command truncation (e.g. 'Effect > Distort & Transform > Zig Z...')
+- [x] filter commands out if they require a document and none are open
+- [x] filter commands out if they require a selection
 - [x] alphabetize fonts and spot colors in document report
 - [x] file/folder bookmarks: allow users to save 'bookmarks' to commonly used files and folders, the use the File.execute() method to open them up.
 - [x] new built-in commands: add new commands available to the api and not already accessible via the menu system

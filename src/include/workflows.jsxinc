@@ -19,7 +19,7 @@ function buildWorkflow(workflow) {
     var newName;
     while (allCommands.includes(result.key)) {
       if (
-        Window.confirm(
+        confirm(
           localize(locStrings.wf_already_exists),
           "noAsDflt",
           localize(locStrings.wf_already_exists_title)
@@ -36,7 +36,7 @@ function buildWorkflow(workflow) {
           alert(localize(locStrings.wf_not_saved));
           return false;
         } else {
-          result.key = localize(locStrings.workflow) + ": " + newName;
+          result.key = localize(locStrings.wf_titlecase) + ": " + newName;
           result.name = newName;
         }
       }
@@ -63,7 +63,16 @@ function editWorkflow() {
     (commands = allCommands),
     (showHidden = false),
     (queryFilter = []),
-    (visibleFilter = ["action", "config", "defaults", "menu", "script", "tool"]),
+    (visibleFilter = [
+      "action",
+      "bookmark",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "script",
+      "tool",
+    ]),
     (title = localize(locStrings.wf_edit)),
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false)

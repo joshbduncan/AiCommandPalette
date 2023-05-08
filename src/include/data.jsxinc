@@ -12,7 +12,7 @@ var locStrings = {
     de: "",
     ru: "",
   },
-  bookmark: { en: "Bookmark", de: "", ru: "" },
+  artboards: { en: "Artboards", de: "", ru: "" },
   bm_already_loaded: {
     en: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
     de: "",
@@ -28,7 +28,18 @@ var locStrings = {
   bm_error_loading: { en: "Error loading bookmark:\n%1", de: "", ru: "" },
   bm_set_bookmark: { en: "Set Bookmark(s)", de: "", ru: "" },
   bm_total_loaded: { en: "Total bookmarks loaded:\n%1", de: "", ru: "" },
+  bookmark: { en: "Bookmark", de: "", ru: "" },
   cancel: { en: "Cancel", de: "Abbrechen", ru: "Отмена" },
+  cd_active_document_required: {
+    en: "Command '%1' requires an active document. Continue Anyway?",
+    de: "",
+    ru: "",
+  },
+  cd_active_selection_required: {
+    en: "Command '%1' requires an active selection. Continue Anyway?",
+    de: "",
+    ru: "",
+  },
   cd_all: {
     en: "All Built-In Menu Commands",
     de: "Alle integrierten Menübefehle",
@@ -45,7 +56,7 @@ var locStrings = {
     ru: "Подтвердить удаление команд",
   },
   cd_delete_select: {
-    en: "Select Menu Commands To Delete",
+    en: "Select Commands To Delete",
     de: "Wählen Sie die zu löschenden Menübefehle aus.",
     ru: "Выбрать команды меню для удаления",
   },
@@ -59,6 +70,7 @@ var locStrings = {
     de: "Fehler beim Ausführen des Befehls:\n%1\n\n%2",
     ru: "Ошибка запуска команды:\n%1\n\n%2",
   },
+  cd_exception: { en: "Command Exception", de: "", ru: "" },
   cd_helptip: {
     en: "Double-click a command to add it as a workflow step below.",
     de: "Doppelklicken Sie auf einen Befehl, um ihn unten als benutzerdefinierten Schritt hinzuzufügen.",
@@ -70,7 +82,7 @@ var locStrings = {
     ru: "Подтвердить скрытие команд",
   },
   cd_hide_select: {
-    en: "Select Menu Commands To Hide",
+    en: "Select Commands To Hide",
     de: "Wählen Sie die auszublendenden Menübefehle aus.",
     ru: "Выбрать команды меню для скрытия",
   },
@@ -147,6 +159,16 @@ var locStrings = {
     de: "",
     ru: "",
   },
+  dr_color_space: { en: "Color Space: ", de: "", ru: "" },
+  dr_file_created: { en: "File Created: ", de: "", ru: "" },
+  dr_file_found: { en: "File Found: ", de: "", ru: "" },
+  dr_filename: { en: "File: ", de: "", ru: "" },
+  dr_header: { en: "File Information\n-----\n", de: "", ru: "" },
+  dr_height: { en: "Height: ", de: "", ru: "" },
+  dr_info_string: { en: "Ai Document Information", de: "", ru: "" },
+  dr_name: { en: "Name: ", de: "", ru: "" },
+  dr_path: { en: "Path: ", de: "", ru: "" },
+  dr_width: { en: "Width: ", de: "", ru: "" },
   file_saved: { en: "File Saved:\n%1", de: "", ru: "" },
   fl_error_loading: {
     en: "Error loading file:\n%1",
@@ -158,6 +180,7 @@ var locStrings = {
     de: "Fehler beim Schreiben der Datei:\n%1",
     ru: "Ошибка записи файла:\n%1",
   },
+  fonts: { en: "Fonts", de: "", ru: "" },
   github: {
     en: "Click here to learn more",
     de: "Klicken Sie hier für weitere Informationen",
@@ -168,7 +191,6 @@ var locStrings = {
     de: "Gehen Sie zur Zeichenfläche",
     ru: "Перейти к монтажной области",
   },
-  go_to_open_document: { en: "Go To Open Document", de: "", ru: "" },
   go_to_named_object: {
     en: "Go To Named Object",
     de: "Gehen Sie zum benannten Objekt",
@@ -180,8 +202,20 @@ var locStrings = {
     ru: "",
   },
   go_to_named_object_no_objects: { en: "No named page items found.", de: "", ru: "" },
+  go_to_open_document: { en: "Go To Open Document", de: "", ru: "" },
+  layers: { en: "Layers", de: "", ru: "" },
   no_active_document: { en: "No active documents.", de: "", ru: "" },
   no_document_variables: { en: "No document variables.", de: "", ru: "" },
+  none: { en: "None", de: "", ru: "" },
+  open_recent_file: { en: "Open Recent File", de: "", ru: "" },
+  placed_items: { en: "Placed Items", de: "", ru: "" },
+  pref_file_loading_error: {
+    en: "Error loading preferences file! File has been renamed `BAD` and revealed for manual adjustment",
+    de: "",
+    ru: "",
+  },
+  recent_commands: { en: "Recent Commands", de: "", ru: "" },
+  recent_commands_cleared: { en: "Recent Commands Cleared!", de: "", ru: "" },
   save: { en: "Save", de: "Speichern", ru: "Сохранять" },
   sc_already_loaded: {
     en: "Script already loaded.\nWould you like to replace the previous script with the new one?",
@@ -220,6 +254,7 @@ var locStrings = {
     ru: "Загружено скриптов:\n%1",
   },
   script: { en: "Script", de: "Skript", ru: "Скрипт" },
+  spot_colors: { en: "Spot Colors", de: "", ru: "" },
   step_delete: { en: "Delete", de: "Löschen", ru: "Удалить" },
   step_down: { en: "Move Down", de: "Nach unten", ru: "Вниз" },
   step_up: { en: "Move Up", de: "Nach oben", ru: "Наверх" },
@@ -265,11 +300,6 @@ var locStrings = {
     de: "Fehler beim Speichern des Arbeitsablaufs:\n%1",
     ru: "Ошибка сохранения набора:\n%1",
   },
-  wf_needs_attention: {
-    en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
-    de: "",
-    ru: "Набор требует внимания\nУказанные шаги в вашем наборе команд больше недоступны.\n\nУдаленные команды:\n%1\n\nНесовместимые команды:\n%2",
-  },
   wf_name: {
     en: "Enter a new name for your workflow.",
     de: "Geben Sie einen neuen Namen für den Arbeitsablauf an.",
@@ -279,6 +309,11 @@ var locStrings = {
     en: "New Workflow Name",
     de: "Name des neuen Arbeitsablaufs",
     ru: "Имя нового набора",
+  },
+  wf_needs_attention: {
+    en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
+    de: "",
+    ru: "Набор требует внимания\nУказанные шаги в вашем наборе команд больше недоступны.\n\nУдаленные команды:\n%1\n\nНесовместимые команды:\n%2",
   },
   wf_none_attention: {
     en: "There are no workflows that need attention.",
@@ -315,11 +350,15 @@ var builtCommands = {
     menu_new: {
       action: "new",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "File > New...", de: "Datei > Neu …", ru: "Файл > Новый..." },
     },
     menu_newFromTemplate: {
       action: "newFromTemplate",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "File > New from Template...",
         de: "Datei > Neu aus Vorlage …",
@@ -329,11 +368,15 @@ var builtCommands = {
     menu_open: {
       action: "open",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "File > Open...", de: "Datei > Öffnen …", ru: "Файл > Открыть..." },
     },
     "menu_Adobe Bridge Browse": {
       action: "Adobe Bridge Browse",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "File > Browse in Bridge...",
         de: "Datei > Bridge durchsuchen …",
@@ -343,16 +386,22 @@ var builtCommands = {
     menu_close: {
       action: "close",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "File > Close", de: "Datei > Schließen", ru: "Файл > Закрыть" },
     },
     menu_save: {
       action: "save",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "File > Save", de: "Datei > Speichern", ru: "Файл > Сохранить" },
     },
     menu_saveas: {
       action: "saveas",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Save As...",
         de: "Datei > Speichern unter …",
@@ -362,6 +411,8 @@ var builtCommands = {
     menu_saveacopy: {
       action: "saveacopy",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Save a Copy...",
         de: "Datei > Kopie speichern …",
@@ -371,6 +422,8 @@ var builtCommands = {
     menu_saveastemplate: {
       action: "saveastemplate",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Save as Template...",
         de: "Datei > Als Vorlage speichern …",
@@ -380,6 +433,8 @@ var builtCommands = {
     "menu_Adobe AI Save Selected Slices": {
       action: "Adobe AI Save Selected Slices",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "File > Save Selected Slices...",
         de: "Datei > Ausgewählte Slices speichern …",
@@ -389,6 +444,8 @@ var builtCommands = {
     menu_revert: {
       action: "revert",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Revert",
         de: "Datei > Zurück zur letzten Version",
@@ -398,6 +455,8 @@ var builtCommands = {
     "menu_Search Adobe Stock": {
       action: "Search Adobe Stock",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "File > Search Adobe Stock",
         de: "Datei > Adobe Stock durchsuchen …",
@@ -408,6 +467,8 @@ var builtCommands = {
     "menu_AI Place": {
       action: "AI Place",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Place...",
         de: "Datei > Platzieren …",
@@ -417,6 +478,8 @@ var builtCommands = {
     menu_exportForScreens: {
       action: "exportForScreens",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "File > Export > Export For Screens...",
         de: "Datei > Exportieren > Für Bildschirme exportieren …",
@@ -427,6 +490,8 @@ var builtCommands = {
     menu_export: {
       action: "export",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "File > Export > Export As...",
         de: "Datei > Exportieren …",
@@ -436,6 +501,8 @@ var builtCommands = {
     "menu_Adobe AI Save For Web": {
       action: "Adobe AI Save For Web",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "File > Export > Save for Web (Legacy)...",
         de: "Datei > Für Web speichern (Legacy) …",
@@ -445,6 +512,8 @@ var builtCommands = {
     menu_exportSelection: {
       action: "exportSelection",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Export Selection...",
         de: "Datei > Auswahl exportieren …",
@@ -455,6 +524,8 @@ var builtCommands = {
     "menu_Package Menu Item": {
       action: "Package Menu Item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Package",
         de: "Datei > Verpacken …",
@@ -464,6 +535,8 @@ var builtCommands = {
     menu_ai_browse_for_script: {
       action: "ai_browse_for_script",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "File > Scripts > Other Script...",
         de: "Datei > Skripten > Anderes Skript …",
@@ -473,6 +546,8 @@ var builtCommands = {
     menu_document: {
       action: "document",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Document Setup...",
         de: "Datei > Dokument einrichten …",
@@ -482,6 +557,8 @@ var builtCommands = {
     "menu_doc-color-cmyk": {
       action: "doc-color-cmyk",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Document Color Mode > CMYK Color",
         de: "Datei > Dokumentfarbmodus > CMYK-Farbe",
@@ -491,6 +568,8 @@ var builtCommands = {
     "menu_doc-color-rgb": {
       action: "doc-color-rgb",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > Document Color Mode > RGB Color",
         de: "Datei > Dokumentfarbmodus > RGB-Farbe",
@@ -500,6 +579,8 @@ var builtCommands = {
     "menu_File Info": {
       action: "File Info",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "File > File Info...",
         de: "Datei > Dateiinformationen …",
@@ -509,16 +590,22 @@ var builtCommands = {
     menu_Print: {
       action: "Print",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "File > Print...", de: "Datei > Drucken …", ru: "Файл > Печать..." },
     },
     menu_quit: {
       action: "quit",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "File > Exit", de: "Datei > Illustrator beenden", ru: "Файл > Выход" },
     },
     menu_undo: {
       action: "undo",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Undo",
         de: "Bearbeiten > Rückgängig",
@@ -528,6 +615,8 @@ var builtCommands = {
     menu_redo: {
       action: "redo",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Redo",
         de: "Bearbeiten > Wiederholen",
@@ -537,6 +626,8 @@ var builtCommands = {
     menu_cut: {
       action: "cut",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Cut",
         de: "Bearbeiten > Ausschneiden",
@@ -546,6 +637,8 @@ var builtCommands = {
     menu_copy: {
       action: "copy",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Copy",
         de: "Bearbeiten > Kopieren",
@@ -555,6 +648,8 @@ var builtCommands = {
     menu_paste: {
       action: "paste",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Paste",
         de: "Bearbeiten > Einfügen",
@@ -564,6 +659,8 @@ var builtCommands = {
     menu_pasteFront: {
       action: "pasteFront",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Paste in Front",
         de: "Bearbeiten > Davor einfügen",
@@ -573,6 +670,8 @@ var builtCommands = {
     menu_pasteBack: {
       action: "pasteBack",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Paste in Back",
         de: "Bearbeiten > Dahinter einfügen",
@@ -582,6 +681,8 @@ var builtCommands = {
     menu_pasteInPlace: {
       action: "pasteInPlace",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Paste in Place",
         de: "Bearbeiten > An Originalposition einfügen",
@@ -591,6 +692,8 @@ var builtCommands = {
     menu_pasteInAllArtboard: {
       action: "pasteInAllArtboard",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Paste on All Artboards",
         de: "Bearbeiten > In alle Zeichenflächen einfügen",
@@ -600,6 +703,8 @@ var builtCommands = {
     menu_pasteWithoutFormatting: {
       action: "pasteWithoutFormatting",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Paste without Formatting",
         de: "Bearbeiten > Ohne Formatierung einfügen",
@@ -610,6 +715,8 @@ var builtCommands = {
     menu_clear: {
       action: "clear",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Clear",
         de: "Bearbeiten > Löschen",
@@ -619,6 +726,8 @@ var builtCommands = {
     "menu_Find and Replace": {
       action: "Find and Replace",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Find & Replace...",
         de: "Bearbeiten > Suchen und ersetzen …",
@@ -628,6 +737,8 @@ var builtCommands = {
     "menu_Find Next": {
       action: "Find Next",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Find Next",
         de: "Bearbeiten > Weitersuchen",
@@ -637,6 +748,8 @@ var builtCommands = {
     "menu_Auto Spell Check": {
       action: "Auto Spell Check",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Edit > Spelling > Auto Spell Check",
         de: "Bearbeiten > Rechtschreibung > Automatische Rechtschreibprüfung",
@@ -647,6 +760,8 @@ var builtCommands = {
     "menu_Check Spelling": {
       action: "Check Spelling",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Spelling > Check Spelling...",
         de: "Bearbeiten > Rechtschreibung > Rechtschreibprüfung …",
@@ -657,6 +772,8 @@ var builtCommands = {
     "menu_Edit Custom Dictionary...": {
       action: "Edit Custom Dictionary...",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Edit Custom Dictionary...",
         de: "Bearbeiten > Eigenes Wörterbuch bearbeiten …",
@@ -666,6 +783,8 @@ var builtCommands = {
     "menu_Recolor Art Dialog": {
       action: "Recolor Art Dialog",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Recolor Artwork...",
         de: "Bearbeiten > Farben bearbeiten > Bildmaterial neu färben …",
@@ -675,6 +794,8 @@ var builtCommands = {
     menu_Adjust3: {
       action: "Adjust3",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Adjust Color Balance...",
         de: "Bearbeiten > Farben bearbeiten > Farbbalance einstellen …",
@@ -684,6 +805,8 @@ var builtCommands = {
     menu_Colors3: {
       action: "Colors3",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Blend Front to Back",
         de: "Bearbeiten > Farben bearbeiten > Vorne -> Hinten angleichen",
@@ -693,6 +816,8 @@ var builtCommands = {
     menu_Colors4: {
       action: "Colors4",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Blend Horizontally",
         de: "Bearbeiten > Farben bearbeiten > Horizontal angleichen",
@@ -702,6 +827,8 @@ var builtCommands = {
     menu_Colors5: {
       action: "Colors5",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Blend Vertically",
         de: "Bearbeiten > Farben bearbeiten > Vertikal angleichen",
@@ -711,6 +838,8 @@ var builtCommands = {
     menu_Colors8: {
       action: "Colors8",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Convert to CMYK",
         de: "Bearbeiten > Farben bearbeiten > In CMYK konvertieren",
@@ -720,6 +849,8 @@ var builtCommands = {
     menu_Colors7: {
       action: "Colors7",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Convert to Grayscale",
         de: "Bearbeiten > Farben bearbeiten > In Graustufen konvertieren",
@@ -729,6 +860,8 @@ var builtCommands = {
     menu_Colors9: {
       action: "Colors9",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Convert to RGB",
         de: "Bearbeiten > Farben bearbeiten > In RGB konvertieren",
@@ -738,6 +871,8 @@ var builtCommands = {
     menu_Colors6: {
       action: "Colors6",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Invert Colors",
         de: "Bearbeiten > Farben bearbeiten > Farben invertieren",
@@ -747,6 +882,8 @@ var builtCommands = {
     menu_Overprint2: {
       action: "Overprint2",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Overprint Black...",
         de: "Bearbeiten > Farben bearbeiten > Schwarz überdrucken …",
@@ -756,6 +893,8 @@ var builtCommands = {
     menu_Saturate3: {
       action: "Saturate3",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Saturate...",
         de: "Bearbeiten > Farben bearbeiten > Sättigung erhöhen …",
@@ -765,6 +904,8 @@ var builtCommands = {
     "menu_EditOriginal Menu Item": {
       action: "EditOriginal Menu Item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Edit > Edit Original",
         de: "Bearbeiten > Original bearbeiten",
@@ -774,6 +915,8 @@ var builtCommands = {
     "menu_Transparency Presets": {
       action: "Transparency Presets",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Edit > Transparency Flattener Presets...",
         de: "Bearbeiten > Transparenzreduzierungsvorgaben …",
@@ -783,6 +926,8 @@ var builtCommands = {
     "menu_Print Presets": {
       action: "Print Presets",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Edit > Print Presets...",
         de: "Bearbeiten > Druckvorgaben …",
@@ -792,6 +937,8 @@ var builtCommands = {
     "menu_PDF Presets": {
       action: "PDF Presets",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Edit > Adobe PDF Presets...",
         de: "Bearbeiten > Adobe PDF-Vorgaben …",
@@ -801,6 +948,8 @@ var builtCommands = {
     menu_PerspectiveGridPresets: {
       action: "PerspectiveGridPresets",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Edit > Perspective Grid Presets...",
         de: "Bearbeiten > Vorgaben für Perspektivenraster …",
@@ -810,6 +959,8 @@ var builtCommands = {
     menu_color: {
       action: "color",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Edit > Color Settings...",
         de: "Bearbeiten > Farbeinstellungen …",
@@ -819,6 +970,8 @@ var builtCommands = {
     menu_assignprofile: {
       action: "assignprofile",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Edit > Assign Profile...",
         de: "Bearbeiten > Profil zuweisen …",
@@ -828,6 +981,8 @@ var builtCommands = {
     "menu_KBSC Menu Item": {
       action: "KBSC Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Edit > Keyboard Shortcuts...",
         de: "Bearbeiten > Tastaturbefehle …",
@@ -837,6 +992,8 @@ var builtCommands = {
     menu_SWFPresets: {
       action: "SWFPresets",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Edit > SWF Presets...", de: "", ru: "" },
       minVersion: 22,
       maxVersion: 25.9,
@@ -844,6 +1001,8 @@ var builtCommands = {
     menu_transformagain: {
       action: "transformagain",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Transform > Transform Again",
         de: "Objekt > Transformieren > Erneut transformieren",
@@ -853,6 +1012,8 @@ var builtCommands = {
     menu_transformmove: {
       action: "transformmove",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Transform > Move...",
         de: "Objekt > Transformieren > Verschieben …",
@@ -862,6 +1023,8 @@ var builtCommands = {
     menu_transformrotate: {
       action: "transformrotate",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Transform > Rotate...",
         de: "Objekt > Transformieren > Drehen …",
@@ -871,6 +1034,8 @@ var builtCommands = {
     menu_transformreflect: {
       action: "transformreflect",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Transform > Reflect...",
         de: "Objekt > Transformieren > Spiegeln …",
@@ -880,6 +1045,8 @@ var builtCommands = {
     menu_transformscale: {
       action: "transformscale",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Transform > Scale...",
         de: "Objekt > Transformieren > Skalieren …",
@@ -889,6 +1056,8 @@ var builtCommands = {
     menu_transformshear: {
       action: "transformshear",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Transform > Shear...",
         de: "Objekt > Transformieren > Verbiegen …",
@@ -898,6 +1067,8 @@ var builtCommands = {
     "menu_Transform v23": {
       action: "Transform v23",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Transform Each...",
         de: "Objekt > Transformieren > Einzeln transformieren …",
@@ -907,6 +1078,8 @@ var builtCommands = {
     "menu_AI Reset Bounding Box": {
       action: "AI Reset Bounding Box",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Transform > Reset Bounding Box",
         de: "Objekt > Transform > Begrenzungsrahmen zurücksetzen",
@@ -916,6 +1089,8 @@ var builtCommands = {
     menu_sendToFront: {
       action: "sendToFront",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Arrange > Bring to Front",
         de: "Objekt > Anordnen > In den Vordergrund",
@@ -925,6 +1100,8 @@ var builtCommands = {
     menu_sendForward: {
       action: "sendForward",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Arrange > Bring Forward",
         de: "Objekt > Anordnen > Schrittweise nach vorne",
@@ -934,6 +1111,8 @@ var builtCommands = {
     menu_sendBackward: {
       action: "sendBackward",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Arrange > Send Backward",
         de: "Objekt > Anordnen > Schrittweise nach hinten",
@@ -943,6 +1122,8 @@ var builtCommands = {
     menu_sendToBack: {
       action: "sendToBack",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Arrange > Send to Back",
         de: "Objekt > Anordnen > In den Hintergrund",
@@ -952,6 +1133,8 @@ var builtCommands = {
     "menu_Selection Hat 2": {
       action: "Selection Hat 2",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Arrange > Send to Current Layer",
         de: "Objekt > Anordnen > In aktuelle Ebene verschieben",
@@ -961,6 +1144,8 @@ var builtCommands = {
     "menu_Horizontal Align Left": {
       action: "Horizontal Align Left",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Align > Horizontal Align Left",
         de: "Objekt > Ausrichten > Horizontal links ausrichten",
@@ -971,6 +1156,8 @@ var builtCommands = {
     "menu_Horizontal Align Center": {
       action: "Horizontal Align Center",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Align > Horizontal Align Center",
         de: "Objekt > Ausrichten > Horizontal zentriert ausrichten",
@@ -981,6 +1168,8 @@ var builtCommands = {
     "menu_Horizontal Align Right": {
       action: "Horizontal Align Right",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Align > Horizontal Align Right",
         de: "Objekt > Ausrichten > Horizontal rechts ausrichten",
@@ -991,6 +1180,8 @@ var builtCommands = {
     "menu_Vertical Align Top": {
       action: "Vertical Align Top",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Align > Vertical Align Top",
         de: "Objekt > Ausrichten > Vertikal oben ausrichten",
@@ -1001,6 +1192,8 @@ var builtCommands = {
     "menu_Vertical Align Center": {
       action: "Vertical Align Center",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Align > Vertical Align Center",
         de: "Objekt > Ausrichten > Vertikal zentriert ausrichten",
@@ -1011,6 +1204,8 @@ var builtCommands = {
     "menu_Vertical Align Bottom": {
       action: "Vertical Align Bottom",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Align > Vertical Align Bottom",
         de: "Objekt > Ausrichten > Vertikal unten ausrichten",
@@ -1021,42 +1216,56 @@ var builtCommands = {
     "menu_Vertical Distribute Top": {
       action: "Vertical Distribute Top",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Distribute > Vertical Distribute Top", de: "", ru: "" },
       minVersion: 27,
     },
     "menu_Vertical Distribute Center": {
       action: "Vertical Distribute Center",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Distribute > Vertical Distribute Center", de: "", ru: "" },
       minVersion: 27,
     },
     "menu_Vertical Distribute Bottom": {
       action: "Vertical Distribute Bottom",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Distribute > Vertical Distribute Bottom", de: "", ru: "" },
       minVersion: 27,
     },
     "menu_Horizontal Distribute Left": {
       action: "Horizontal Distribute Left",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Distribute > Horizontal Distribute Left", de: "", ru: "" },
       minVersion: 27,
     },
     "menu_Horizontal Distribute Center": {
       action: "Horizontal Distribute Center",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Distribute > Horizontal Distribute Center", de: "", ru: "" },
       minVersion: 27,
     },
     "menu_Horizontal Distribute Right": {
       action: "Horizontal Distribute Right",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Distribute > Horizontal Distribute Right", de: "", ru: "" },
       minVersion: 27,
     },
     menu_group: {
       action: "group",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Group",
         de: "Objekt > Gruppieren",
@@ -1066,6 +1275,8 @@ var builtCommands = {
     menu_ungroup: {
       action: "ungroup",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Ungroup",
         de: "Objekt > Gruppierung aufheben",
@@ -1075,6 +1286,8 @@ var builtCommands = {
     menu_lock: {
       action: "lock",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Lock > Selection",
         de: "Objekt > Sperren > Auswahl",
@@ -1084,6 +1297,8 @@ var builtCommands = {
     "menu_Selection Hat 5": {
       action: "Selection Hat 5",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Lock > All Artwork Above",
         de: "Objekt > Sperren > Sämtliches Bildmaterial darüber",
@@ -1093,6 +1308,8 @@ var builtCommands = {
     "menu_Selection Hat 7": {
       action: "Selection Hat 7",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Lock > Other Layers",
         de: "Objekt > Sperren > Andere Ebenen",
@@ -1102,6 +1319,8 @@ var builtCommands = {
     menu_unlockAll: {
       action: "unlockAll",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Unlock All",
         de: "Objekt > Alle entsperren",
@@ -1111,6 +1330,8 @@ var builtCommands = {
     menu_hide: {
       action: "hide",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Hide > Selection",
         de: "Objekt > Ausblenden > Auswahl",
@@ -1120,6 +1341,8 @@ var builtCommands = {
     "menu_Selection Hat 4": {
       action: "Selection Hat 4",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Hide > All Artwork Above",
         de: "Objekt > Ausblenden > Sämtliches Bildmaterial darüber",
@@ -1129,6 +1352,8 @@ var builtCommands = {
     "menu_Selection Hat 6": {
       action: "Selection Hat 6",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Hide > Other Layers",
         de: "Objekt > Ausblenden > Andere Ebenen",
@@ -1138,6 +1363,8 @@ var builtCommands = {
     menu_showAll: {
       action: "showAll",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Show All",
         de: "Objekt > Alles einblenden",
@@ -1147,6 +1374,8 @@ var builtCommands = {
     "menu_Crop Image": {
       action: "Crop Image",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Crop Image",
         de: "Objekt > Bild zuschneiden",
@@ -1157,6 +1386,8 @@ var builtCommands = {
     "menu_Rasterize 8 menu item": {
       action: "Rasterize 8 menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Rasterize...",
         de: "Objekt > In Pixelbild umwandeln …",
@@ -1166,6 +1397,8 @@ var builtCommands = {
     "menu_make mesh": {
       action: "make mesh",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Create Gradient Mesh...",
         de: "Objekt > Verlaufsgitter erstellen …",
@@ -1175,6 +1408,8 @@ var builtCommands = {
     "menu_AI Object Mosaic Plug-in4": {
       action: "AI Object Mosaic Plug-in4",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Create Object Mosaic...",
         de: "Objekt > Objektmosaik erstellen …",
@@ -1184,6 +1419,8 @@ var builtCommands = {
     "menu_TrimMark v25": {
       action: "TrimMark v25",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Create Trim Marks...",
         de: "Objekt > Schnittmarken erstellen",
@@ -1193,6 +1430,8 @@ var builtCommands = {
     "menu_Flatten Transparency": {
       action: "Flatten Transparency",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Flatten Transparency...",
         de: "Objekt > Transparenz reduzieren …",
@@ -1202,6 +1441,8 @@ var builtCommands = {
     "menu_Make Pixel Perfect": {
       action: "Make Pixel Perfect",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Make Pixel Perfect",
         de: "Objekt > Pixelgenaue Darstellung anwenden",
@@ -1211,6 +1452,8 @@ var builtCommands = {
     "menu_AISlice Make Slice": {
       action: "AISlice Make Slice",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Make",
         de: "Objekt > Slice > Erstellen",
@@ -1220,6 +1463,8 @@ var builtCommands = {
     "menu_AISlice Release Slice": {
       action: "AISlice Release Slice",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Release",
         de: "Objekt > Slice > Zurückwandeln",
@@ -1229,6 +1474,8 @@ var builtCommands = {
     "menu_AISlice Create from Guides": {
       action: "AISlice Create from Guides",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Slice > Create from Guides",
         de: "Objekt > Slice > Aus Hilfslinien erstellen",
@@ -1238,6 +1485,8 @@ var builtCommands = {
     "menu_AISlice Create from Selection": {
       action: "AISlice Create from Selection",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Create from Selection",
         de: "Objekt > Slice > Aus Auswahl erstellen",
@@ -1247,6 +1496,8 @@ var builtCommands = {
     "menu_AISlice Duplicate": {
       action: "AISlice Duplicate",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Duplicate Slice",
         de: "Objekt > Slice > Slice duplizieren",
@@ -1256,6 +1507,8 @@ var builtCommands = {
     "menu_AISlice Combine": {
       action: "AISlice Combine",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Combine Slices",
         de: "Objekt > Slice > Slices kombinieren",
@@ -1265,6 +1518,8 @@ var builtCommands = {
     "menu_AISlice Divide": {
       action: "AISlice Divide",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Divide Slices...",
         de: "Objekt > Slice > Slices unterteilen …",
@@ -1274,6 +1529,8 @@ var builtCommands = {
     "menu_AISlice Delete All Slices": {
       action: "AISlice Delete All Slices",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Delete All",
         de: "Objekt > Slice > Alle löschen",
@@ -1283,6 +1540,8 @@ var builtCommands = {
     "menu_AISlice Slice Options": {
       action: "AISlice Slice Options",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Slice Options...",
         de: "Objekt > Slice > Slice-Optionen …",
@@ -1292,6 +1551,8 @@ var builtCommands = {
     "menu_AISlice Clip to Artboard": {
       action: "AISlice Clip to Artboard",
       type: "menu",
+      docRequired: false,
+      selRequired: true,
       loc: {
         en: "Object > Slice > Clip to Artboard",
         de: "Objekt > Slice > Ganze Zeichenfläche exportieren",
@@ -1301,6 +1562,8 @@ var builtCommands = {
     menu_Expand3: {
       action: "Expand3",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Expand...",
         de: "Objekt > Umwandeln …",
@@ -1310,6 +1573,8 @@ var builtCommands = {
     menu_expandStyle: {
       action: "expandStyle",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Expand Appearance",
         de: "Objekt > Aussehen umwandeln",
@@ -1319,6 +1584,8 @@ var builtCommands = {
     menu_join: {
       action: "join",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Join",
         de: "Objekt > Pfad > Zusammenfügen",
@@ -1328,6 +1595,8 @@ var builtCommands = {
     menu_average: {
       action: "average",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Average...",
         de: "Objekt > Pfad > Durchschnitt berechnen …",
@@ -1337,6 +1606,8 @@ var builtCommands = {
     "menu_OffsetPath v22": {
       action: "OffsetPath v22",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Outline Stroke",
         de: "Objekt > Pfad > Konturlinie",
@@ -1346,6 +1617,8 @@ var builtCommands = {
     "menu_OffsetPath v23": {
       action: "OffsetPath v23",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Offset Path...",
         de: "Objekt > Pfad > Pfad verschieben …",
@@ -1355,6 +1628,8 @@ var builtCommands = {
     "menu_Reverse Path Direction": {
       action: "Reverse Path Direction",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Reverse Path Direction",
         de: "Objekt > Pfad > Pfadrichtung umkehren",
@@ -1365,6 +1640,8 @@ var builtCommands = {
     "menu_simplify menu item": {
       action: "simplify menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Simplify...",
         de: "Objekt > Pfad > Vereinfachen …",
@@ -1374,6 +1651,8 @@ var builtCommands = {
     "menu_Add Anchor Points2": {
       action: "Add Anchor Points2",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Add Anchor Points",
         de: "Objekt > Pfad > Ankerpunkte hinzufügen",
@@ -1383,6 +1662,8 @@ var builtCommands = {
     "menu_Remove Anchor Points menu": {
       action: "Remove Anchor Points menu",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Remove Anchor Points",
         de: "Objekt > Pfad > Ankerpunkte entfernen",
@@ -1392,6 +1673,8 @@ var builtCommands = {
     "menu_Knife Tool2": {
       action: "Knife Tool2",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Divide Objects Below",
         de: "Objekt > Pfad > Darunter liegende Objekte aufteilen",
@@ -1401,6 +1684,8 @@ var builtCommands = {
     "menu_Rows and Columns....": {
       action: "Rows and Columns....",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Path > Split Into Grid...",
         de: "Objekt > Pfad > In Raster teilen …",
@@ -1410,6 +1695,8 @@ var builtCommands = {
     "menu_cleanup menu item": {
       action: "cleanup menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Path > Clean Up...",
         de: "Objekt > Pfad > Aufräumen …",
@@ -1419,6 +1706,8 @@ var builtCommands = {
     "menu_Convert to Shape": {
       action: "Convert to Shape",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Shape > Convert to Shapes",
         de: "Objekt > Form > In Form umwandeln",
@@ -1429,6 +1718,8 @@ var builtCommands = {
     "menu_Expand Shape": {
       action: "Expand Shape",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Shape > Expand Shapes",
         de: "Objekt > Form > Form umwandeln",
@@ -1439,6 +1730,8 @@ var builtCommands = {
     "menu_Adobe Make Pattern": {
       action: "Adobe Make Pattern",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Pattern > Make",
         de: "Objekt > Muster > Erstellen",
@@ -1448,6 +1741,8 @@ var builtCommands = {
     "menu_Adobe Edit Pattern": {
       action: "Adobe Edit Pattern",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Pattern > Edit Pattern",
         de: "Objekt > Muster > Muster bearbeiten",
@@ -1457,6 +1752,8 @@ var builtCommands = {
     "menu_Adobe Pattern Tile Color": {
       action: "Adobe Pattern Tile Color",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Object > Pattern > Tile Edge Color...",
         de: "Objekt > Muster > Farbe für Musterelement-Kante",
@@ -1466,24 +1763,32 @@ var builtCommands = {
     "menu_Partial Rearrange Make": {
       action: "Partial Rearrange Make",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Intertwine > Make", de: "", ru: "" },
       minVersion: 27,
     },
     "menu_Partial Rearrange Release": {
       action: "Partial Rearrange Release",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Intertwine > Release", de: "", ru: "" },
       minVersion: 27,
     },
     "menu_Partial Rearrange Edit": {
       action: "Partial Rearrange Edit",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: { en: "Object > Intertwine > Edit", de: "", ru: "" },
       minVersion: 27,
     },
     "menu_Make Radial Repeat": {
       action: "Make Radial Repeat",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Repeat > Make Radial",
         de: "Objekt > Wiederholen > Radial",
@@ -1494,6 +1799,8 @@ var builtCommands = {
     "menu_Make Grid Repeat": {
       action: "Make Grid Repeat",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Repeat > Make Grid",
         de: "Objekt > Wiederholen > Raster",
@@ -1504,6 +1811,8 @@ var builtCommands = {
     "menu_Make Symmetry Repeat": {
       action: "Make Symmetry Repeat",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Repeat > Make Symmetry",
         de: "Objekt > Wiederholen > Spiegeln",
@@ -1514,6 +1823,8 @@ var builtCommands = {
     "menu_Release Repeat Art": {
       action: "Release Repeat Art",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Repeat > Release",
         de: "Objekt > Wiederholen > Zurückwandeln",
@@ -1524,8 +1835,10 @@ var builtCommands = {
     "menu_Repeat Art Options": {
       action: "Repeat Art Options",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
-        en: "Object > Repeat > Repeat Art Options...",
+        en: "Object > Repeat > Repeat Options...",
         de: "Objekt > Wiederholen > Optionen …",
         ru: "Объект > Повторить > Параметры…",
       },
@@ -1534,6 +1847,8 @@ var builtCommands = {
     "menu_Path Blend Make": {
       action: "Path Blend Make",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Blend > Make",
         de: "Objekt > Angleichen > Erstellen",
@@ -1543,6 +1858,8 @@ var builtCommands = {
     "menu_Path Blend Release": {
       action: "Path Blend Release",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Blend > Release",
         de: "Objekt > Angleichen > Zurückwandeln",
@@ -1552,6 +1869,8 @@ var builtCommands = {
     "menu_Path Blend Options": {
       action: "Path Blend Options",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Object > Blend > Blend Options...",
         de: "Objekt > Angleichen > Angleichung-Optionen …",
@@ -1561,6 +1880,8 @@ var builtCommands = {
     "menu_Path Blend Expand": {
       action: "Path Blend Expand",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Blend > Expand",
         de: "Objekt > Angleichen > Umwandeln",
@@ -1570,6 +1891,8 @@ var builtCommands = {
     "menu_Path Blend Replace Spine": {
       action: "Path Blend Replace Spine",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Blend > Replace Spine",
         de: "Objekt > Angleichen > Achse ersetzen",
@@ -1579,6 +1902,8 @@ var builtCommands = {
     "menu_Path Blend Reverse Spine": {
       action: "Path Blend Reverse Spine",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Blend > Reverse Spine",
         de: "Objekt > Angleichen > Achse umkehren",
@@ -1588,6 +1913,8 @@ var builtCommands = {
     "menu_Path Blend Reverse Stack": {
       action: "Path Blend Reverse Stack",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Blend > Reverse Front to Back",
         de: "Objekt > Angleichen > Farbrichtung umkehren",
@@ -1597,6 +1924,8 @@ var builtCommands = {
     "menu_Make Warp": {
       action: "Make Warp",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Envelope Distort > Make with Warp...",
         de: "Objekt > Verzerrungshülle > Mit Verkrümmung erstellen …",
@@ -1606,6 +1935,8 @@ var builtCommands = {
     "menu_Create Envelope Grid": {
       action: "Create Envelope Grid",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Envelope Distort > Make with Mesh...",
         de: "Objekt > Verzerrungshülle > Mit Gitter erstellen …",
@@ -1615,6 +1946,8 @@ var builtCommands = {
     "menu_Make Envelope": {
       action: "Make Envelope",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Envelope Distort > Make with Top Object",
         de: "Objekt > Verzerrungshülle > Mit oberstem Objekt erstellen",
@@ -1624,6 +1957,8 @@ var builtCommands = {
     "menu_Release Envelope": {
       action: "Release Envelope",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Envelope Distort > Release",
         de: "Objekt > Verzerrungshülle > Zurückwandeln",
@@ -1633,6 +1968,8 @@ var builtCommands = {
     "menu_Envelope Options": {
       action: "Envelope Options",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Object > Envelope Distort > Envelope Options...",
         de: "Objekt > Verzerrungshülle > Hüllen-Optionen …",
@@ -1642,6 +1979,8 @@ var builtCommands = {
     "menu_Expand Envelope": {
       action: "Expand Envelope",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Envelope Distort > Expand",
         de: "Objekt > Verzerrungshülle > Umwandeln",
@@ -1651,6 +1990,8 @@ var builtCommands = {
     "menu_Edit Envelope Contents": {
       action: "Edit Envelope Contents",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Envelope Distort > Edit Contents",
         de: "Objekt > Verzerrungshülle > Inhalt bearbeiten",
@@ -1660,6 +2001,8 @@ var builtCommands = {
     "menu_Attach to Active Plane": {
       action: "Attach to Active Plane",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Perspective > Attach to Active Plane",
         de: "Objekt > Perspektive > Aktiver Ebene anhängen",
@@ -1669,6 +2012,8 @@ var builtCommands = {
     "menu_Release with Perspective": {
       action: "Release with Perspective",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Perspective > Release with Perspective",
         de: "Objekt > Perspektive > Aus Perspektive freigeben",
@@ -1678,6 +2023,8 @@ var builtCommands = {
     "menu_Show Object Grid Plane": {
       action: "Show Object Grid Plane",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Perspective > Move Plane to Match Object",
         de: "Objekt > Perspektive > Ebene an Objekt ausrichten",
@@ -1687,6 +2034,8 @@ var builtCommands = {
     "menu_Edit Original Object": {
       action: "Edit Original Object",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Perspective > Edit Text",
         de: "Objekt > Perspektive > Text bearbeiten",
@@ -1696,6 +2045,8 @@ var builtCommands = {
     "menu_Make Planet X": {
       action: "Make Planet X",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Live Paint > Make",
         de: "Objekt > Interaktiv malen > Erstellen",
@@ -1705,6 +2056,8 @@ var builtCommands = {
     "menu_Marge Planet X": {
       action: "Marge Planet X",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Live Paint > Merge",
         de: "Objekt > Interaktiv malen > Zusammenfügen",
@@ -1714,6 +2067,8 @@ var builtCommands = {
     "menu_Release Planet X": {
       action: "Release Planet X",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Live Paint > Release",
         de: "Objekt > Interaktiv malen > Zurückwandeln",
@@ -1723,6 +2078,8 @@ var builtCommands = {
     "menu_Planet X Options": {
       action: "Planet X Options",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Object > Live Paint > Gap Options...",
         de: "Objekt > Interaktiv malen > Lückenoptionen …",
@@ -1732,6 +2089,8 @@ var builtCommands = {
     "menu_Expand Planet X": {
       action: "Expand Planet X",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Live Paint > Expand",
         de: "Objekt > Interaktiv malen > Umwandeln",
@@ -1741,6 +2100,8 @@ var builtCommands = {
     "menu_Make Image Tracing": {
       action: "Make Image Tracing",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Image Trace > Make",
         de: "Objekt > Bildnachzeichner > Erstellen",
@@ -1750,6 +2111,8 @@ var builtCommands = {
     "menu_Make and Expand Image Tracing": {
       action: "Make and Expand Image Tracing",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Image Trace > Make and Expand",
         de: "Objekt > Bildnachzeichner > Erstellen und umwandeln",
@@ -1759,6 +2122,8 @@ var builtCommands = {
     "menu_Release Image Tracing": {
       action: "Release Image Tracing",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Image Trace > Release",
         de: "Objekt > Bildnachzeichner > Zurückwandeln",
@@ -1768,6 +2133,8 @@ var builtCommands = {
     "menu_Expand Image Tracing": {
       action: "Expand Image Tracing",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Image Trace > Expand",
         de: "Objekt > Bildnachzeichner > Umwandeln",
@@ -1777,6 +2144,8 @@ var builtCommands = {
     "menu_Make Text Wrap": {
       action: "Make Text Wrap",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Text Wrap > Make",
         de: "Objekt > Textumfluss > Erstellen",
@@ -1786,6 +2155,8 @@ var builtCommands = {
     "menu_Release Text Wrap": {
       action: "Release Text Wrap",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Text Wrap > Release",
         de: "Objekt > Textumfluss > Zurückwandeln",
@@ -1795,6 +2166,8 @@ var builtCommands = {
     "menu_Text Wrap Options...": {
       action: "Text Wrap Options...",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Object > Text Wrap > Text Wrap Options...",
         de: "Objekt > Textumfluss > Textumflussoptionen …",
@@ -1804,6 +2177,8 @@ var builtCommands = {
     menu_makeMask: {
       action: "makeMask",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Clipping Mask > Make",
         de: "Objekt > Schnittmaske > Erstellen",
@@ -1813,6 +2188,8 @@ var builtCommands = {
     menu_releaseMask: {
       action: "releaseMask",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Clipping Mask > Release",
         de: "Objekt > Schnittmaske > Zurückwandeln",
@@ -1822,6 +2199,8 @@ var builtCommands = {
     menu_editMask: {
       action: "editMask",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Clipping Mask > Edit Mask",
         de: "Objekt > Schnittmaske > Maske bearbeiten",
@@ -1831,6 +2210,8 @@ var builtCommands = {
     menu_compoundPath: {
       action: "compoundPath",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Compound Path > Make",
         de: "Objekt > Zusammengesetzter Pfad > Erstellen",
@@ -1840,6 +2221,8 @@ var builtCommands = {
     menu_noCompoundPath: {
       action: "noCompoundPath",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Compound Path > Release",
         de: "Objekt > Zusammengesetzter Pfad > Zurückwandeln",
@@ -1849,6 +2232,8 @@ var builtCommands = {
     menu_setCropMarks: {
       action: "setCropMarks",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Artboards > Convert to Artboards",
         de: "Objekt > Zeichenflächen > In Zeichenflächen konvertieren",
@@ -1858,6 +2243,8 @@ var builtCommands = {
     "menu_ReArrange Artboards": {
       action: "ReArrange Artboards",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Artboards > Rearrange All Artboards",
         de: "Objekt > Zeichenflächen > Alle Zeichenflächen neu anordnen",
@@ -1867,6 +2254,8 @@ var builtCommands = {
     "menu_Fit Artboard to artwork bounds": {
       action: "Fit Artboard to artwork bounds",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Artboards > Fit to Artwork Bounds",
         de: "Objekt > Zeichenflächen > An Bildmaterialbegrenzungen anpassen",
@@ -1876,6 +2265,8 @@ var builtCommands = {
     "menu_Fit Artboard to selected Art": {
       action: "Fit Artboard to selected Art",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Artboards > Fit to Selected Art",
         de: "Objekt > Zeichenflächen > An ausgewählte Grafik anpassen",
@@ -1885,6 +2276,8 @@ var builtCommands = {
     menu_setGraphStyle: {
       action: "setGraphStyle",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Object > Graph > Type...",
         de: "Objekt > Diagramm > Art …",
@@ -1894,6 +2287,8 @@ var builtCommands = {
     menu_editGraphData: {
       action: "editGraphData",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Graph > Data...",
         de: "Objekt > Diagramm > Daten …",
@@ -1903,6 +2298,8 @@ var builtCommands = {
     menu_graphDesigns: {
       action: "graphDesigns",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Graph > Design...",
         de: "Objekt > Diagramm > Designs …",
@@ -1912,6 +2309,8 @@ var builtCommands = {
     menu_setBarDesign: {
       action: "setBarDesign",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Graph > Column...",
         de: "Objekt > Diagramm > Balken …",
@@ -1921,6 +2320,8 @@ var builtCommands = {
     menu_setIconDesign: {
       action: "setIconDesign",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Object > Graph > Marker...",
         de: "Objekt > Diagramm > Punkte …",
@@ -1930,6 +2331,8 @@ var builtCommands = {
     "menu_Browse Typekit Fonts Menu IllustratorUI": {
       action: "Browse Typekit Fonts Menu IllustratorUI",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Type > More from Adobe Fonts...",
         de: "Schrift > Mehr bei Adobe Fonts …",
@@ -1940,11 +2343,15 @@ var builtCommands = {
     "menu_alternate glyph palette plugin": {
       action: "alternate glyph palette plugin",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Type > Glyphs", de: "Schrift > Glyphen", ru: "Текст > Глифы" },
     },
     "menu_area-type-options": {
       action: "area-type-options",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Area Type Options...",
         de: "Schrift > Flächentextoptionen …",
@@ -1954,6 +2361,8 @@ var builtCommands = {
     menu_Rainbow: {
       action: "Rainbow",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type on a Path > Rainbow",
         de: "Schrift > Pfadtext > Regenbogen",
@@ -1963,6 +2372,8 @@ var builtCommands = {
     menu_Skew: {
       action: "Skew",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type on a Path > Skew",
         de: "Schrift > Pfadtext > Asymmetrie",
@@ -1972,6 +2383,8 @@ var builtCommands = {
     "menu_3D ribbon": {
       action: "3D ribbon",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type on a Path > 3D Ribbon",
         de: "Schrift > Pfadtext > 3D-Band",
@@ -1981,6 +2394,8 @@ var builtCommands = {
     "menu_Stair Step": {
       action: "Stair Step",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type on a Path > Stair Step",
         de: "Schrift > Pfadtext > Treppenstufe",
@@ -1990,6 +2405,8 @@ var builtCommands = {
     menu_Gravity: {
       action: "Gravity",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type on a Path > Gravity",
         de: "Schrift > Pfadtext > Schwerkraft",
@@ -1999,6 +2416,8 @@ var builtCommands = {
     menu_typeOnPathOptions: {
       action: "typeOnPathOptions",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type on a Path > Type on a Path Options...",
         de: "Schrift > Pfadtext > Pfadtextoptionen …",
@@ -2008,6 +2427,8 @@ var builtCommands = {
     menu_updateLegacyTOP: {
       action: "updateLegacyTOP",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type on a Path > Update Legacy Type on a Path",
         de: "Schrift > Pfadtext > Alten Pfadtext aktualisieren",
@@ -2017,6 +2438,8 @@ var builtCommands = {
     menu_threadTextCreate: {
       action: "threadTextCreate",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Threaded Text > Create",
         de: "Schrift > Verketteter Text > Erstellen",
@@ -2026,6 +2449,8 @@ var builtCommands = {
     menu_releaseThreadedTextSelection: {
       action: "releaseThreadedTextSelection",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Threaded Text > Release Selection",
         de: "Schrift > Verketteter Text > Auswahl zurückwandeln",
@@ -2035,6 +2460,8 @@ var builtCommands = {
     menu_removeThreading: {
       action: "removeThreading",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Threaded Text > Remove Threading",
         de: "Schrift > Verketteter Text > Verkettung entfernen",
@@ -2044,6 +2471,8 @@ var builtCommands = {
     menu_fitHeadline: {
       action: "fitHeadline",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Fit Headline",
         de: "Schrift > Überschrift einpassen",
@@ -2053,6 +2482,8 @@ var builtCommands = {
     "menu_Adobe IllustratorUI Resolve Missing Font": {
       action: "Adobe IllustratorUI Resolve Missing Font",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Type > Resolve Missing Fonts...",
         de: "Schrift > Fehlende Schriftarten auflösen …",
@@ -2062,6 +2493,8 @@ var builtCommands = {
     "menu_Adobe Illustrator Find Font Menu Item": {
       action: "Adobe Illustrator Find Font Menu Item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Type > Find/Replace Font...",
         de: "Schrift > Schriftart suchen/ersetzen …",
@@ -2071,6 +2504,8 @@ var builtCommands = {
     "menu_UpperCase Change Case Item": {
       action: "UpperCase Change Case Item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Change Case > UPPERCASE",
         de: "Schrift > Groß-/Kleinschreibung ändern > GROSSBUCHSTABEN",
@@ -2080,6 +2515,8 @@ var builtCommands = {
     "menu_LowerCase Change Case Item": {
       action: "LowerCase Change Case Item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Change Case > lowercase",
         de: "Schrift > Groß-/Kleinschreibung ändern > kleinbuchstaben",
@@ -2089,6 +2526,8 @@ var builtCommands = {
     "menu_Title Case Change Case Item": {
       action: "Title Case Change Case Item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Change Case > Title Case",
         de: "Schrift > Groß-/Kleinschreibung ändern > Erster Buchstabe Im Wort Groß",
@@ -2098,6 +2537,8 @@ var builtCommands = {
     "menu_Sentence case Change Case Item": {
       action: "Sentence case Change Case Item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Change Case > Sentence case",
         de: "Schrift > Groß-/Kleinschreibung ändern > Erster buchstabe im satz groß",
@@ -2107,6 +2548,8 @@ var builtCommands = {
     "menu_Adobe Illustrator Smart Punctuation Menu Item": {
       action: "Adobe Illustrator Smart Punctuation Menu Item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Type > Smart Punctuation...",
         de: "Schrift > Satz-/Sonderzeichen …",
@@ -2116,6 +2559,8 @@ var builtCommands = {
     menu_outline: {
       action: "outline",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Create Outlines",
         de: "Schrift > In Pfade umwandeln",
@@ -2125,15 +2570,27 @@ var builtCommands = {
     "menu_Adobe Optical Alignment Item": {
       action: "Adobe Optical Alignment Item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Optical Margin Alignment",
         de: "Schrift > Optischer Randausgleich",
         ru: "Текст > Визуальное выравнивание полей",
       },
     },
+    "menu_convert list style to text": {
+      action: "convert list style to text",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      loc: { en: "Type > Bullets and Numbering > Convert to text", de: "", ru: "" },
+      minVersion: 27.1,
+    },
     menu_showHiddenChar: {
       action: "showHiddenChar",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Type > Show Hidden Characters",
         de: "Schrift > Verborgene Zeichen einblenden / ausblenden",
@@ -2143,6 +2600,8 @@ var builtCommands = {
     "menu_type-horizontal": {
       action: "type-horizontal",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type Orientation > Horizontal",
         de: "Schrift > Textausrichtung > Horizontal",
@@ -2152,6 +2611,8 @@ var builtCommands = {
     "menu_type-vertical": {
       action: "type-vertical",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Type > Type Orientation > Vertical",
         de: "Schrift > Textausrichtung > Vertikal",
@@ -2161,6 +2622,8 @@ var builtCommands = {
     menu_selectall: {
       action: "selectall",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > All",
         de: "Auswahl > Alles auswählen",
@@ -2170,6 +2633,8 @@ var builtCommands = {
     menu_selectallinartboard: {
       action: "selectallinartboard",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > All on Active Artboard",
         de: "Auswahl > Alles auf der aktiven Zeichenfläche",
@@ -2179,6 +2644,8 @@ var builtCommands = {
     menu_deselectall: {
       action: "deselectall",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Deselect",
         de: "Auswahl > Auswahl aufheben",
@@ -2188,6 +2655,8 @@ var builtCommands = {
     "menu_Find Reselect menu item": {
       action: "Find Reselect menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Reselect",
         de: "Auswahl > Erneut auswählen",
@@ -2197,6 +2666,8 @@ var builtCommands = {
     "menu_Inverse menu item": {
       action: "Inverse menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Inverse",
         de: "Auswahl > Auswahl umkehren",
@@ -2206,6 +2677,8 @@ var builtCommands = {
     "menu_Selection Hat 8": {
       action: "Selection Hat 8",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Next Object Above",
         de: "Auswahl > Nächstes Objekt darüber",
@@ -2215,6 +2688,8 @@ var builtCommands = {
     "menu_Selection Hat 9": {
       action: "Selection Hat 9",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Next Object Below",
         de: "Auswahl > Nächstes Objekt darunter",
@@ -2224,6 +2699,8 @@ var builtCommands = {
     "menu_Find Appearance menu item": {
       action: "Find Appearance menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Appearance",
         de: "Auswahl > Gleich > Aussehen",
@@ -2234,6 +2711,8 @@ var builtCommands = {
     "menu_Find Appearance Attributes menu item": {
       action: "Find Appearance Attributes menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Same > Appearance Attribute",
         de: "Auswahl > Gleich > Aussehensattribute",
@@ -2244,6 +2723,8 @@ var builtCommands = {
     "menu_Find Blending Mode menu item": {
       action: "Find Blending Mode menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Blending Mode",
         de: "Auswahl > Gleich > Füllmethode",
@@ -2254,6 +2735,8 @@ var builtCommands = {
     "menu_Find Fill & Stroke menu item": {
       action: "Find Fill & Stroke menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Fill & Stroke",
         de: "Auswahl > Gleich > Fläche und Kontur",
@@ -2264,6 +2747,8 @@ var builtCommands = {
     "menu_Find Fill Color menu item": {
       action: "Find Fill Color menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Fill Color",
         de: "Auswahl > Gleich > Flächenfarbe",
@@ -2274,6 +2759,8 @@ var builtCommands = {
     "menu_Find Opacity menu item": {
       action: "Find Opacity menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Opacity",
         de: "Auswahl > Gleich > Deckkraft",
@@ -2284,6 +2771,8 @@ var builtCommands = {
     "menu_Find Stroke Color menu item": {
       action: "Find Stroke Color menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Stroke Color",
         de: "Auswahl > Gleich > Konturfarbe",
@@ -2294,6 +2783,8 @@ var builtCommands = {
     "menu_Find Stroke Weight menu item": {
       action: "Find Stroke Weight menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Stroke Weight",
         de: "Auswahl > Gleich > Konturstärke",
@@ -2304,6 +2795,8 @@ var builtCommands = {
     "menu_Find Style menu item": {
       action: "Find Style menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Same > Graphic Style",
         de: "Auswahl > Gleich > Grafikstil",
@@ -2314,6 +2807,8 @@ var builtCommands = {
     "menu_Find Live Shape menu item": {
       action: "Find Live Shape menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Same > Shape",
         de: "Auswahl > Gleich > Form",
@@ -2324,6 +2819,8 @@ var builtCommands = {
     "menu_Find Symbol Instance menu item": {
       action: "Find Symbol Instance menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Same > Symbol Instance",
         de: "Auswahl > Gleich > Symbolinstanz",
@@ -2334,6 +2831,8 @@ var builtCommands = {
     "menu_Find Link Block Series menu item": {
       action: "Find Link Block Series menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Same > Link Block Series",
         de: "Auswahl > Gleich > Verknüpfungsblockreihen",
@@ -2344,6 +2843,8 @@ var builtCommands = {
     "menu_Find Text Font Family menu item": {
       action: "Find Text Font Family menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Font Family",
         de: "Auswahl > Gleich > Schriftfamilie",
@@ -2354,6 +2855,8 @@ var builtCommands = {
     "menu_Find Text Font Family Style menu item": {
       action: "Find Text Font Family Style menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Font Family & Style",
         de: "Auswahl > Gleich > Schriftfamilie und -schnitt",
@@ -2364,6 +2867,8 @@ var builtCommands = {
     "menu_Find Text Font Family Style Size menu item": {
       action: "Find Text Font Family Style Size menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Font Family, Style & Size",
         de: "Auswahl > Gleich > Schriftfamilie, -schnitt und -grad",
@@ -2374,6 +2879,8 @@ var builtCommands = {
     "menu_Find Text Font Size menu item": {
       action: "Find Text Font Size menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Font Size",
         de: "Auswahl > Gleich > Schriftgrad",
@@ -2384,6 +2891,8 @@ var builtCommands = {
     "menu_Find Text Fill Color menu item": {
       action: "Find Text Fill Color menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Text Fill Color",
         de: "Auswahl > Gleich > Textflächenfarbe",
@@ -2394,6 +2903,8 @@ var builtCommands = {
     "menu_Find Text Stroke Color menu item": {
       action: "Find Text Stroke Color menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Text Stroke Color",
         de: "Auswahl > Gleich > Textkonturfarbe",
@@ -2404,6 +2915,8 @@ var builtCommands = {
     "menu_Find Text Fill Stroke Color menu item": {
       action: "Find Text Fill Stroke Color menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Same > Text Fill & Stroke Color",
         de: "Auswahl > Gleich > Textflächen- und -konturfarbe",
@@ -2414,6 +2927,8 @@ var builtCommands = {
     "menu_Selection Hat 3": {
       action: "Selection Hat 3",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Object > All on Same Layers",
         de: "Auswahl > Objekt > Alles auf denselben Ebenen",
@@ -2423,6 +2938,8 @@ var builtCommands = {
     "menu_Selection Hat 1": {
       action: "Selection Hat 1",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Object > Direction Handles",
         de: "Auswahl > Objekt > Richtungsgriffe",
@@ -2432,6 +2949,8 @@ var builtCommands = {
     "menu_Bristle Brush Strokes menu item": {
       action: "Bristle Brush Strokes menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Object > Bristle Brush Strokes",
         de: "Auswahl > Objekt > Borstenpinselstriche",
@@ -2441,6 +2960,8 @@ var builtCommands = {
     "menu_Brush Strokes menu item": {
       action: "Brush Strokes menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Object > Brush Strokes",
         de: "Auswahl > Objekt > Pinselkonturen",
@@ -2450,6 +2971,8 @@ var builtCommands = {
     "menu_Clipping Masks menu item": {
       action: "Clipping Masks menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Object > Clipping Masks",
         de: "Auswahl > Objekt > Schnittmasken",
@@ -2459,6 +2982,8 @@ var builtCommands = {
     "menu_Stray Points menu item": {
       action: "Stray Points menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Object > Stray Points",
         de: "Auswahl > Objekt > Einzelne Ankerpunkte",
@@ -2468,6 +2993,8 @@ var builtCommands = {
     "menu_Text Objects menu item": {
       action: "Text Objects menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Object > All Text Objects",
         de: "Auswahl > Objekt > Alle Textobjekte",
@@ -2477,6 +3004,8 @@ var builtCommands = {
     "menu_Point Text Objects menu item": {
       action: "Point Text Objects menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Object > Point Text Objects",
         de: "Auswahl > Objekt > Punkttextobjekte",
@@ -2486,6 +3015,8 @@ var builtCommands = {
     "menu_Area Text Objects menu item": {
       action: "Area Text Objects menu item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Select > Object > Area Text Objects",
         de: "Auswahl > Objekt > Flächenttextobjekte",
@@ -2495,6 +3026,8 @@ var builtCommands = {
     "menu_SmartEdit Menu Item": {
       action: "SmartEdit Menu Item",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Start/Stop Global Edit",
         de: "Auswahl > Globale Bearbeitung starten/anhalten",
@@ -2505,6 +3038,8 @@ var builtCommands = {
     "menu_Selection Hat 10": {
       action: "Selection Hat 10",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Save Selection...",
         de: "Auswahl > Auswahl speichern …",
@@ -2514,6 +3049,8 @@ var builtCommands = {
     "menu_Selection Hat 11": {
       action: "Selection Hat 11",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "Select > Edit Selection...",
         de: "Auswahl > Auswahl bearbeiten …",
@@ -2523,6 +3060,8 @@ var builtCommands = {
     "menu_Adobe Apply Last Effect": {
       action: "Adobe Apply Last Effect",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Apply Last Effect",
         de: "Effekt > Letzten Effekt anwenden",
@@ -2532,6 +3071,8 @@ var builtCommands = {
     "menu_Adobe Last Effect": {
       action: "Adobe Last Effect",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Last Effect",
         de: "Effekt > Letzter Effekt",
@@ -2541,6 +3082,8 @@ var builtCommands = {
     "menu_Live Rasterize Effect Setting": {
       action: "Live Rasterize Effect Setting",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Document Raster Effects Settings...",
         de: "Effekt > Dokument-Rastereffekt-Einstellungen …",
@@ -2550,6 +3093,8 @@ var builtCommands = {
     "menu_Live Adobe Geometry3D Extrude": {
       action: "Live Adobe Geometry3D Extrude",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > 3D and Materials > Extrude & Bevel...",
         de: "Effekt > 3D und Materialien > Extrudieren und abgeflachte Kante …",
@@ -2560,6 +3105,8 @@ var builtCommands = {
     "menu_Live Adobe Geometry3D Revolve": {
       action: "Live Adobe Geometry3D Revolve",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > 3D and Materials > Revolve...",
         de: "Effekt > 3D und Materialien > Kreiseln …",
@@ -2570,6 +3117,8 @@ var builtCommands = {
     "menu_Live Adobe Geometry3D Inflate": {
       action: "Live Adobe Geometry3D Inflate",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > 3D and Materials > Inflate...",
         de: "Effekt > 3D und Materialien > Aufblasen …",
@@ -2580,6 +3129,8 @@ var builtCommands = {
     "menu_Live Adobe Geometry3D Rotate": {
       action: "Live Adobe Geometry3D Rotate",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > 3D and Materials > Rotate...",
         de: "Effekt > 3D und Materialien > Drehen …",
@@ -2590,6 +3141,8 @@ var builtCommands = {
     "menu_Live Adobe Geometry3D Materials": {
       action: "Live Adobe Geometry3D Materials",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > 3D and Materials > Materials...",
         de: "Effekt > 3D und Materialien > Materialien …",
@@ -2600,6 +3153,8 @@ var builtCommands = {
     "menu_Live 3DExtrude": {
       action: "Live 3DExtrude",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...",
         de: "Effekt > 3D (klassisch) > Extrudieren und abgeflachte Kante (klassisch) …",
@@ -2610,6 +3165,8 @@ var builtCommands = {
     "menu_Live 3DRevolve": {
       action: "Live 3DRevolve",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > 3D and Materials > 3D (Classic) > Revolve (Classic)...",
         de: "Effekt > 3D (klassisch) > Kreiseln (klassisch) …",
@@ -2620,6 +3177,8 @@ var builtCommands = {
     "menu_Live 3DRotate": {
       action: "Live 3DRotate",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > 3D and Materials > 3D (Classic) > Rotate (Classic)...",
         de: "Effekt > 3D (klassisch) > Drehen (klassisch) …",
@@ -2630,6 +3189,8 @@ var builtCommands = {
     "menu_Live Rectangle": {
       action: "Live Rectangle",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Convert to Shape > Rectangle...",
         de: "Effekt > In Form umwandeln > Rechteck …",
@@ -2639,6 +3200,8 @@ var builtCommands = {
     "menu_Live Rounded Rectangle": {
       action: "Live Rounded Rectangle",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Convert to Shape > Rounded Rectangle...",
         de: "Effekt > In Form umwandeln > Abgerundetes Rechteck …",
@@ -2648,6 +3211,8 @@ var builtCommands = {
     "menu_Live Ellipse": {
       action: "Live Ellipse",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Convert to Shape > Ellipse...",
         de: "Effekt > In Form umwandeln > Ellipse …",
@@ -2657,6 +3222,8 @@ var builtCommands = {
     "menu_Live Trim Marks": {
       action: "Live Trim Marks",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Crop Marks",
         de: "Effekt > Schnittmarken",
@@ -2666,6 +3233,8 @@ var builtCommands = {
     "menu_Live Free Distort": {
       action: "Live Free Distort",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort & Transform > Free Distort...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Frei verzerren …",
@@ -2675,6 +3244,8 @@ var builtCommands = {
     "menu_Live Pucker & Bloat": {
       action: "Live Pucker & Bloat",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort & Transform > Pucker & Bloat...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Zusammenziehen und aufblasen …",
@@ -2684,6 +3255,8 @@ var builtCommands = {
     "menu_Live Roughen": {
       action: "Live Roughen",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort & Transform > Roughen...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Aufrauen …",
@@ -2693,6 +3266,8 @@ var builtCommands = {
     "menu_Live Transform": {
       action: "Live Transform",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort & Transform > Transform...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Transformieren …",
@@ -2702,6 +3277,8 @@ var builtCommands = {
     "menu_Live Scribble and Tweak": {
       action: "Live Scribble and Tweak",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort & Transform > Tweak...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Tweak …",
@@ -2711,6 +3288,8 @@ var builtCommands = {
     "menu_Live Twist": {
       action: "Live Twist",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort & Transform > Twist...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Wirbel …",
@@ -2720,6 +3299,8 @@ var builtCommands = {
     "menu_Live Zig Zag": {
       action: "Live Zig Zag",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort & Transform > Zig Zag...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Zickzack …",
@@ -2729,6 +3310,8 @@ var builtCommands = {
     "menu_Live Offset Path": {
       action: "Live Offset Path",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Path > Offset Path...",
         de: "Effekt > Pfad > Pfad verschieben …",
@@ -2738,6 +3321,8 @@ var builtCommands = {
     "menu_Live Outline Object": {
       action: "Live Outline Object",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Path > Outline Object",
         de: "Effekt > Pfad > Kontur nachzeichnen",
@@ -2747,6 +3332,8 @@ var builtCommands = {
     "menu_Live Outline Stroke": {
       action: "Live Outline Stroke",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Path > Outline Stroke",
         de: "Effekt > Pfad > Konturlinie",
@@ -2756,6 +3343,8 @@ var builtCommands = {
     "menu_Live Pathfinder Add": {
       action: "Live Pathfinder Add",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Add",
         de: "Effekt > Pathfinder > Hinzufügen",
@@ -2765,6 +3354,8 @@ var builtCommands = {
     "menu_Live Pathfinder Intersect": {
       action: "Live Pathfinder Intersect",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Intersect",
         de: "Effekt > Pathfinder > Schnittmenge bilden",
@@ -2774,6 +3365,8 @@ var builtCommands = {
     "menu_Live Pathfinder Exclude": {
       action: "Live Pathfinder Exclude",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Exclude",
         de: "Effekt > Pathfinder > Schnittmenge entfernen",
@@ -2783,6 +3376,8 @@ var builtCommands = {
     "menu_Live Pathfinder Subtract": {
       action: "Live Pathfinder Subtract",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Subtract",
         de: "Effekt > Pathfinder > Subtrahieren",
@@ -2792,6 +3387,8 @@ var builtCommands = {
     "menu_Live Pathfinder Minus Back": {
       action: "Live Pathfinder Minus Back",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Minus Back",
         de: "Effekt > Pathfinder > Hinteres Objekt abziehen",
@@ -2801,6 +3398,8 @@ var builtCommands = {
     "menu_Live Pathfinder Divide": {
       action: "Live Pathfinder Divide",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Divide",
         de: "Effekt > Pathfinder > Unterteilen",
@@ -2810,6 +3409,8 @@ var builtCommands = {
     "menu_Live Pathfinder Trim": {
       action: "Live Pathfinder Trim",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Trim",
         de: "Effekt > Pathfinder > Überlappungsbereich entfernen",
@@ -2819,6 +3420,8 @@ var builtCommands = {
     "menu_Live Pathfinder Merge": {
       action: "Live Pathfinder Merge",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Merge",
         de: "Effekt > Pathfinder > Verdeckte Fläche entfernen",
@@ -2828,6 +3431,8 @@ var builtCommands = {
     "menu_Live Pathfinder Crop": {
       action: "Live Pathfinder Crop",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Crop",
         de: "Effekt > Pathfinder > Schnittmengenfläche",
@@ -2837,6 +3442,8 @@ var builtCommands = {
     "menu_Live Pathfinder Outline": {
       action: "Live Pathfinder Outline",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Outline",
         de: "Effekt > Pathfinder > Kontur aufteilen",
@@ -2846,6 +3453,8 @@ var builtCommands = {
     "menu_Live Pathfinder Hard Mix": {
       action: "Live Pathfinder Hard Mix",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Hard Mix",
         de: "Effekt > Pathfinder > Hart mischen",
@@ -2855,6 +3464,8 @@ var builtCommands = {
     "menu_Live Pathfinder Soft Mix": {
       action: "Live Pathfinder Soft Mix",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Soft Mix...",
         de: "Effekt > Pathfinder > Weich mischen …",
@@ -2864,6 +3475,8 @@ var builtCommands = {
     "menu_Live Pathfinder Trap": {
       action: "Live Pathfinder Trap",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pathfinder > Trap...",
         de: "Effekt > Pathfinder > Überfüllen …",
@@ -2873,6 +3486,8 @@ var builtCommands = {
     "menu_Live Rasterize": {
       action: "Live Rasterize",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Rasterize...",
         de: "Effekt > In Pixelbild umwandeln …",
@@ -2882,6 +3497,8 @@ var builtCommands = {
     "menu_Live Adobe Drop Shadow": {
       action: "Live Adobe Drop Shadow",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Stylize > Drop Shadow...",
         de: "Effekt > Stilisierungsfilter > Schlagschatten …",
@@ -2891,6 +3508,8 @@ var builtCommands = {
     "menu_Live Feather": {
       action: "Live Feather",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Stylize > Feather...",
         de: "Effekt > Stilisierungsfilter > Weiche Kante …",
@@ -2900,6 +3519,8 @@ var builtCommands = {
     "menu_Live Inner Glow": {
       action: "Live Inner Glow",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Stylize > Inner Glow...",
         de: "Effekt > Stilisierungsfilter > Schein nach innen …",
@@ -2909,6 +3530,8 @@ var builtCommands = {
     "menu_Live Outer Glow": {
       action: "Live Outer Glow",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Stylize > Outer Glow...",
         de: "Effekt > Stilisierungsfilter > Schein nach außen …",
@@ -2918,6 +3541,8 @@ var builtCommands = {
     "menu_Live Adobe Round Corners": {
       action: "Live Adobe Round Corners",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Stylize > Round Corners...",
         de: "Effekt > Stilisierungsfilter > Ecken abrunden …",
@@ -2927,6 +3552,8 @@ var builtCommands = {
     "menu_Live Scribble Fill": {
       action: "Live Scribble Fill",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Stylize > Scribble...",
         de: "Effekt > Stilisierungsfilter > Scribble …",
@@ -2936,6 +3563,8 @@ var builtCommands = {
     "menu_Live SVG Filters": {
       action: "Live SVG Filters",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > SVG Filters > Apply SVG Filter...",
         de: "Effekt > SVG-Filter > SVG-Filter anwenden …",
@@ -2945,6 +3574,8 @@ var builtCommands = {
     "menu_SVG Filter Import": {
       action: "SVG Filter Import",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > SVG Filters > Import SVG Filter...",
         de: "Effekt > SVG-Filter > SVG-Filter importieren …",
@@ -2954,6 +3585,8 @@ var builtCommands = {
     "menu_Live Deform Arc": {
       action: "Live Deform Arc",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Arc...",
         de: "Effekt > Verkrümmungsfilter > Bogen …",
@@ -2963,6 +3596,8 @@ var builtCommands = {
     "menu_Live Deform Arc Lower": {
       action: "Live Deform Arc Lower",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Arc Lower...",
         de: "Effekt > Verkrümmungsfilter > Bogen unten …",
@@ -2972,6 +3607,8 @@ var builtCommands = {
     "menu_Live Deform Arc Upper": {
       action: "Live Deform Arc Upper",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Arc Upper...",
         de: "Effekt > Verkrümmungsfilter > Bogen oben …",
@@ -2981,6 +3618,8 @@ var builtCommands = {
     "menu_Live Deform Arch": {
       action: "Live Deform Arch",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Arch...",
         de: "Effekt > Verkrümmungsfilter > Torbogen …",
@@ -2990,6 +3629,8 @@ var builtCommands = {
     "menu_Live Deform Bulge": {
       action: "Live Deform Bulge",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Bulge...",
         de: "Effekt > Verkrümmungsfilter > Wulst …",
@@ -2999,6 +3640,8 @@ var builtCommands = {
     "menu_Live Deform Shell Lower": {
       action: "Live Deform Shell Lower",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Shell Lower...",
         de: "Effekt > Verkrümmungsfilter > Muschel unten …",
@@ -3008,6 +3651,8 @@ var builtCommands = {
     "menu_Live Deform Shell Upper": {
       action: "Live Deform Shell Upper",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Shell Upper...",
         de: "Effekt > Verkrümmungsfilter > Muschel oben …",
@@ -3017,6 +3662,8 @@ var builtCommands = {
     "menu_Live Deform Flag": {
       action: "Live Deform Flag",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Flag...",
         de: "Effekt > Verkrümmungsfilter > Flagge …",
@@ -3026,6 +3673,8 @@ var builtCommands = {
     "menu_Live Deform Wave": {
       action: "Live Deform Wave",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Wave...",
         de: "Effekt > Verkrümmungsfilter > Schwingungen …",
@@ -3035,6 +3684,8 @@ var builtCommands = {
     "menu_Live Deform Fish": {
       action: "Live Deform Fish",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Fish...",
         de: "Effekt > Verkrümmungsfilter > Fisch …",
@@ -3044,6 +3695,8 @@ var builtCommands = {
     "menu_Live Deform Rise": {
       action: "Live Deform Rise",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Rise...",
         de: "Effekt > Verkrümmungsfilter > Ansteigend …",
@@ -3053,6 +3706,8 @@ var builtCommands = {
     "menu_Live Deform Fisheye": {
       action: "Live Deform Fisheye",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Fisheye...",
         de: "Effekt > Verkrümmungsfilter > Fischauge …",
@@ -3062,6 +3717,8 @@ var builtCommands = {
     "menu_Live Deform Inflate": {
       action: "Live Deform Inflate",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Inflate...",
         de: "Effekt > Verkrümmungsfilter > Aufblasen …",
@@ -3071,6 +3728,8 @@ var builtCommands = {
     "menu_Live Deform Squeeze": {
       action: "Live Deform Squeeze",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Squeeze...",
         de: "Effekt > Verkrümmungsfilter > Stauchen …",
@@ -3080,6 +3739,8 @@ var builtCommands = {
     "menu_Live Deform Twist": {
       action: "Live Deform Twist",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Warp > Twist...",
         de: "Effekt > Verkrümmungsfilter > Wirbel …",
@@ -3089,6 +3750,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_GEfc": {
       action: "Live PSAdapter_plugin_GEfc",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Effect Gallery...",
         de: "Effekt > Effekte-Galerie …",
@@ -3098,6 +3761,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_ClrP": {
       action: "Live PSAdapter_plugin_ClrP",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Colored Pencil...",
         de: "Effekt > Kunstfilter > Buntstiftschraffur …",
@@ -3107,6 +3772,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Ct": {
       action: "Live PSAdapter_plugin_Ct",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Cutout...",
         de: "Effekt > Kunstfilter > Farbpapier-Collage …",
@@ -3116,6 +3783,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_DryB": {
       action: "Live PSAdapter_plugin_DryB",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Dry Brush...",
         de: "Effekt > Kunstfilter > Grobe Malerei …",
@@ -3125,6 +3794,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_FlmG": {
       action: "Live PSAdapter_plugin_FlmG",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Film Grain...",
         de: "Effekt > Kunstfilter > Körnung & Aufhellung …",
@@ -3134,6 +3805,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Frsc": {
       action: "Live PSAdapter_plugin_Frsc",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Fresco...",
         de: "Effekt > Kunstfilter > Fresko …",
@@ -3143,6 +3816,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_NGlw": {
       action: "Live PSAdapter_plugin_NGlw",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Neon Glow...",
         de: "Effekt > Kunstfilter > Neonschein …",
@@ -3152,6 +3827,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_PntD": {
       action: "Live PSAdapter_plugin_PntD",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Paint Daubs...",
         de: "Effekt > Kunstfilter > Ölfarbe getupft …",
@@ -3161,6 +3838,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_PltK": {
       action: "Live PSAdapter_plugin_PltK",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Palette Knife...",
         de: "Effekt > Kunstfilter > Malmesser …",
@@ -3170,6 +3849,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_PlsW": {
       action: "Live PSAdapter_plugin_PlsW",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Plastic Wrap...",
         de: "Effekt > Kunstfilter > Kunststofffolie …",
@@ -3179,6 +3860,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_PstE": {
       action: "Live PSAdapter_plugin_PstE",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Poster Edges...",
         de: "Effekt > Kunstfilter > Tontrennung & Kantenbetonung …",
@@ -3188,6 +3871,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_RghP": {
       action: "Live PSAdapter_plugin_RghP",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Rough Pastels...",
         de: "Effekt > Kunstfilter > Grobes Pastell …",
@@ -3197,6 +3882,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_SmdS": {
       action: "Live PSAdapter_plugin_SmdS",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Smudge Stick...",
         de: "Effekt > Kunstfilter > Diagonal verwischen …",
@@ -3206,6 +3893,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Spng": {
       action: "Live PSAdapter_plugin_Spng",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Sponge...",
         de: "Effekt > Kunstfilter > Schwamm …",
@@ -3215,6 +3904,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Undr": {
       action: "Live PSAdapter_plugin_Undr",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Underpainting...",
         de: "Effekt > Kunstfilter > Malgrund …",
@@ -3224,6 +3915,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Wtrc": {
       action: "Live PSAdapter_plugin_Wtrc",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Artistic > Watercolor...",
         de: "Effekt > Kunstfilter > Aquarell …",
@@ -3233,6 +3926,8 @@ var builtCommands = {
     "menu_Live Adobe PSL Gaussian Blur": {
       action: "Live Adobe PSL Gaussian Blur",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Blur > Gaussian Blur...",
         de: "Effekt > Weichzeichnungsfilter > Gaußscher Weichzeichner …",
@@ -3242,6 +3937,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_RdlB": {
       action: "Live PSAdapter_plugin_RdlB",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Blur > Radial Blur...",
         de: "Effekt > Weichzeichnungsfilter > Radialer Weichzeichner …",
@@ -3251,6 +3948,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_SmrB": {
       action: "Live PSAdapter_plugin_SmrB",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Blur > Smart Blur...",
         de: "Effekt > Weichzeichnungsfilter > Selektiver Weichzeichner …",
@@ -3260,6 +3959,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_AccE": {
       action: "Live PSAdapter_plugin_AccE",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Brush Strokes > Accented Edges...",
         de: "Effekt > Malfilter > Kanten betonen …",
@@ -3269,6 +3970,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_AngS": {
       action: "Live PSAdapter_plugin_AngS",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Brush Strokes > Angled Strokes...",
         de: "Effekt > Malfilter > Gekreuzte Malstriche …",
@@ -3278,6 +3981,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Crsh": {
       action: "Live PSAdapter_plugin_Crsh",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Brush Strokes > Crosshatch...",
         de: "Effekt > Malfilter > Kreuzschraffur …",
@@ -3287,6 +3992,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_DrkS": {
       action: "Live PSAdapter_plugin_DrkS",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Brush Strokes > Dark Strokes...",
         de: "Effekt > Malfilter > Dunkle Malstriche …",
@@ -3296,6 +4003,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_InkO": {
       action: "Live PSAdapter_plugin_InkO",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Brush Strokes > Ink Outlines...",
         de: "Effekt > Malfilter > Konturen mit Tinte nachzeichnen …",
@@ -3305,6 +4014,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Spt": {
       action: "Live PSAdapter_plugin_Spt",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Brush Strokes > Spatter...",
         de: "Effekt > Malfilter > Spritzer …",
@@ -3314,6 +4025,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_SprS": {
       action: "Live PSAdapter_plugin_SprS",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Brush Strokes > Sprayed Strokes...",
         de: "Effekt > Malfilter > Verwackelte Striche …",
@@ -3323,6 +4036,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Smie": {
       action: "Live PSAdapter_plugin_Smie",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Brush Strokes > Sumi-e...",
         de: "Effekt > Malfilter > Sumi-e …",
@@ -3332,6 +4047,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_DfsG": {
       action: "Live PSAdapter_plugin_DfsG",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort > Diffuse Glow...",
         de: "Effekt > Verzerrungsfilter > Weiches Licht …",
@@ -3341,6 +4058,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Gls": {
       action: "Live PSAdapter_plugin_Gls",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort > Glass...",
         de: "Effekt > Verzerrungsfilter > Glas …",
@@ -3350,6 +4069,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_OcnR": {
       action: "Live PSAdapter_plugin_OcnR",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Distort > Ocean Ripple...",
         de: "Effekt > Verzerrungsfilter > Ozeanwellen …",
@@ -3359,6 +4080,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_ClrH": {
       action: "Live PSAdapter_plugin_ClrH",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pixelate > Color Halftone...",
         de: "Effekt > Vergröberungsfilter > Farbraster …",
@@ -3368,6 +4091,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Crst": {
       action: "Live PSAdapter_plugin_Crst",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pixelate > Crystallize...",
         de: "Effekt > Vergröberungsfilter > Kristallisieren …",
@@ -3377,6 +4102,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Mztn": {
       action: "Live PSAdapter_plugin_Mztn",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pixelate > Mezzotint...",
         de: "Effekt > Vergröberungsfilter > Mezzotint …",
@@ -3386,6 +4113,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Pntl": {
       action: "Live PSAdapter_plugin_Pntl",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Pixelate > Pointillize...",
         de: "Effekt > Vergröberungsfilter > Punktieren …",
@@ -3395,6 +4124,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_BsRl": {
       action: "Live PSAdapter_plugin_BsRl",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Bas Relief...",
         de: "Effekt > Zeichenfilter > Basrelief …",
@@ -3404,6 +4135,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_ChlC": {
       action: "Live PSAdapter_plugin_ChlC",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Chalk & Charcoal...",
         de: "Effekt > Zeichenfilter > Chalk & Charcoal …",
@@ -3413,6 +4146,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Chrc": {
       action: "Live PSAdapter_plugin_Chrc",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Charcoal...",
         de: "Effekt > Zeichenfilter > Kohleumsetzung …",
@@ -3422,6 +4157,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Chrm": {
       action: "Live PSAdapter_plugin_Chrm",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Chrome...",
         de: "Effekt > Zeichenfilter > Chrom …",
@@ -3431,6 +4168,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_CntC": {
       action: "Live PSAdapter_plugin_CntC",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Cont\\u00E9 Crayon...",
         de: "Effekt > Zeichenfilter > Cont\\u00E9-Stifte …",
@@ -3440,6 +4179,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_GraP": {
       action: "Live PSAdapter_plugin_GraP",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Graphic Pen...",
         de: "Effekt > Zeichenfilter > Strichumsetzung …",
@@ -3449,6 +4190,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_HlfS": {
       action: "Live PSAdapter_plugin_HlfS",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Halftone Pattern...",
         de: "Effekt > Zeichenfilter > Rasterungseffekt …",
@@ -3458,6 +4201,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_NtPr": {
       action: "Live PSAdapter_plugin_NtPr",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Note Paper...",
         de: "Effekt > Zeichenfilter > Prägepapier …",
@@ -3467,6 +4212,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Phtc": {
       action: "Live PSAdapter_plugin_Phtc",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Photocopy...",
         de: "Effekt > Zeichenfilter > Fotokopie …",
@@ -3476,6 +4223,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Plst": {
       action: "Live PSAdapter_plugin_Plst",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Plaster...",
         de: "Effekt > Zeichenfilter > Stuck …",
@@ -3485,6 +4234,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Rtcl": {
       action: "Live PSAdapter_plugin_Rtcl",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Reticulation...",
         de: "Effekt > Zeichenfilter > Punktierstich …",
@@ -3494,6 +4245,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Stmp": {
       action: "Live PSAdapter_plugin_Stmp",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Stamp...",
         de: "Effekt > Zeichenfilter > Stempel …",
@@ -3503,6 +4256,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_TrnE": {
       action: "Live PSAdapter_plugin_TrnE",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Torn Edges...",
         de: "Effekt > Zeichenfilter > Gerissene Kanten …",
@@ -3512,6 +4267,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_WtrP": {
       action: "Live PSAdapter_plugin_WtrP",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Sketch > Water Paper...",
         de: "Effekt > Zeichenfilter > Feuchtes Papier …",
@@ -3521,6 +4278,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_GlwE": {
       action: "Live PSAdapter_plugin_GlwE",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Stylize > Glowing Edges...",
         de: "Effekt > Stilisierungsfilter > Leuchtende Konturen …",
@@ -3530,6 +4289,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Crql": {
       action: "Live PSAdapter_plugin_Crql",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Texture > Craquelure...",
         de: "Effekt > Strukturierungsfilter > Risse …",
@@ -3539,6 +4300,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Grn": {
       action: "Live PSAdapter_plugin_Grn",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Texture > Grain...",
         de: "Effekt > Strukturierungsfilter > Körnung …",
@@ -3548,6 +4311,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_MscT": {
       action: "Live PSAdapter_plugin_MscT",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Texture > Mosaic Tiles...",
         de: "Effekt > Strukturierungsfilter > Kacheln …",
@@ -3557,6 +4322,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Ptch": {
       action: "Live PSAdapter_plugin_Ptch",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Texture > Patchwork...",
         de: "Effekt > Strukturierungsfilter > Patchwork …",
@@ -3566,6 +4333,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_StnG": {
       action: "Live PSAdapter_plugin_StnG",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Texture > Stained Glass...",
         de: "Effekt > Strukturierungsfilter > Buntglas-Mosaik …",
@@ -3575,6 +4344,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Txtz": {
       action: "Live PSAdapter_plugin_Txtz",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Texture > Texturizer...",
         de: "Effekt > Strukturierungsfilter > Mit Struktur versehen …",
@@ -3584,6 +4355,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_Dntr": {
       action: "Live PSAdapter_plugin_Dntr",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Video > De-Interlace...",
         de: "Effekt > Videofilter > De-Interlace …",
@@ -3593,6 +4366,8 @@ var builtCommands = {
     "menu_Live PSAdapter_plugin_NTSC": {
       action: "Live PSAdapter_plugin_NTSC",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Effect > Video > NTSC Colors",
         de: "Effekt > Videofilter > NTSC-Farben",
@@ -3602,6 +4377,8 @@ var builtCommands = {
     menu_preview: {
       action: "preview",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Outline / Preview",
         de: "Ansicht > Vorschau / Pfadansicht",
@@ -3611,6 +4388,8 @@ var builtCommands = {
     "menu_GPU Preview": {
       action: "GPU Preview",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > GPU Preview / Preview on CPU",
         de: "Ansicht > Mit GPU anzeigen / Mit CPU anzeigen",
@@ -3620,6 +4399,8 @@ var builtCommands = {
     menu_ink: {
       action: "ink",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Overprint Preview",
         de: "Ansicht > Überdruckenvorschau",
@@ -3629,6 +4410,8 @@ var builtCommands = {
     menu_raster: {
       action: "raster",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Pixel Preview",
         de: "Ansicht > Pixelvorschau",
@@ -3638,6 +4421,8 @@ var builtCommands = {
     "menu_proof-document": {
       action: "proof-document",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Proof Setup > Working CMYK",
         de: "Ansicht > Proof einrichten > Dokument-CMYK",
@@ -3647,6 +4432,8 @@ var builtCommands = {
     "menu_proof-mac-rgb": {
       action: "proof-mac-rgb",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Proof Setup > Legacy Macintosh RGB (Gamma 1.8)",
         de: "Ansicht > Proof einrichten > Altes Macintosh-RGB (Gamma 1.8)",
@@ -3656,6 +4443,8 @@ var builtCommands = {
     "menu_proof-win-rgb": {
       action: "proof-win-rgb",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Proof Setup > Internet Standard RGB (sRGB)",
         de: "Ansicht > Proof einrichten > Internet-Standard-RGB (sRGB)",
@@ -3665,6 +4454,8 @@ var builtCommands = {
     "menu_proof-monitor-rgb": {
       action: "proof-monitor-rgb",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Proof Setup > Monitor RGB",
         de: "Ansicht > Proof einrichten > Monitor-RGB",
@@ -3674,6 +4465,8 @@ var builtCommands = {
     "menu_proof-colorblindp": {
       action: "proof-colorblindp",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Proof Setup > Color blindness - Protanopia-type",
         de: "Ansicht > Proof einrichten > Farbenblindheit (Protanopie)",
@@ -3683,6 +4476,8 @@ var builtCommands = {
     "menu_proof-colorblindd": {
       action: "proof-colorblindd",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Proof Setup > Color blindness - Deuteranopia-type",
         de: "Ansicht > Proof einrichten > Farbenblindheit (Deuteranopie)",
@@ -3692,6 +4487,8 @@ var builtCommands = {
     "menu_proof-custom": {
       action: "proof-custom",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Proof Setup > Customize...",
         de: "Ansicht > Proof einrichten > Anpassen …",
@@ -3701,6 +4498,8 @@ var builtCommands = {
     menu_proofColors: {
       action: "proofColors",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Proof Colors",
         de: "Ansicht > Farbproof",
@@ -3710,6 +4509,8 @@ var builtCommands = {
     menu_zoomin: {
       action: "zoomin",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Zoom In",
         de: "Ansicht > Einzoomen",
@@ -3719,6 +4520,8 @@ var builtCommands = {
     menu_zoomout: {
       action: "zoomout",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Zoom Out",
         de: "Ansicht > Auszoomen",
@@ -3728,6 +4531,8 @@ var builtCommands = {
     menu_fitin: {
       action: "fitin",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Fit Artboard in Window",
         de: "Ansicht > Zeichenfläche in Fenster einpassen",
@@ -3737,6 +4542,8 @@ var builtCommands = {
     menu_fitall: {
       action: "fitall",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Fit All in Window",
         de: "Ansicht > Alle in Fenster einpassen",
@@ -3746,6 +4553,8 @@ var builtCommands = {
     "menu_AISlice Feedback Menu": {
       action: "AISlice Feedback Menu",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Slices",
         de: "Ansicht > Slices einblenden / ausblenden",
@@ -3755,6 +4564,8 @@ var builtCommands = {
     "menu_AISlice Lock Menu": {
       action: "AISlice Lock Menu",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "View > Lock Slices",
         de: "Ansicht > Slices fixieren",
@@ -3764,6 +4575,8 @@ var builtCommands = {
     "menu_AI Bounding Box Toggle": {
       action: "AI Bounding Box Toggle",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Bounding Box",
         de: "Ansicht > Begrenzungsrahmen einblenden / ausblenden",
@@ -3773,6 +4586,8 @@ var builtCommands = {
     "menu_TransparencyGrid Menu Item": {
       action: "TransparencyGrid Menu Item",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Transparency Grid",
         de: "Ansicht > Transparenzraster einblenden / ausblenden",
@@ -3782,6 +4597,8 @@ var builtCommands = {
     menu_actualsize: {
       action: "actualsize",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Actual Size",
         de: "Ansicht > Originalgröße",
@@ -3791,6 +4608,8 @@ var builtCommands = {
     "menu_Show Gaps Planet X": {
       action: "Show Gaps Planet X",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Live Paint Gaps",
         de: "Ansicht > Interaktive Mallücken einblenden / ausblenden",
@@ -3800,6 +4619,8 @@ var builtCommands = {
     "menu_Gradient Feedback": {
       action: "Gradient Feedback",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Gradient Annotator",
         de: "Ansicht > Verlaufsoptimierer einblenden / ausblenden",
@@ -3809,6 +4630,8 @@ var builtCommands = {
     "menu_Live Corner Annotator": {
       action: "Live Corner Annotator",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Corner Widget",
         de: "Ansicht > Ecken-Widget einblenden / ausblenden",
@@ -3819,6 +4642,8 @@ var builtCommands = {
     menu_edge: {
       action: "edge",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Edges",
         de: "Ansicht > Ecken einblenden / ausblenden",
@@ -3828,6 +4653,8 @@ var builtCommands = {
     "menu_Snapomatic on-off menu item": {
       action: "Snapomatic on-off menu item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "View > Smart Guides",
         de: "Ansicht > Intelligente Hilfslinien",
@@ -3837,6 +4664,8 @@ var builtCommands = {
     "menu_Show Perspective Grid": {
       action: "Show Perspective Grid",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Perspective Grid > Show / Hide Grid",
         de: "Ansicht > Perspektivenraster > Raster einblenden / ausblenden",
@@ -3846,6 +4675,8 @@ var builtCommands = {
     "menu_Show Ruler": {
       action: "Show Ruler",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Perspective Grid > Show / Hide Rulers",
         de: "Ansicht > Perspektivenraster > Lineale einblenden / ausblenden",
@@ -3855,6 +4686,8 @@ var builtCommands = {
     "menu_Snap to Grid": {
       action: "Snap to Grid",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Perspective Grid > Snap to Grid",
         de: "Ansicht > Perspektivenraster > Am Raster ausrichten",
@@ -3864,6 +4697,8 @@ var builtCommands = {
     "menu_Lock Perspective Grid": {
       action: "Lock Perspective Grid",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Perspective Grid > Lock Grid",
         de: "Ansicht > Perspektivenraster > Raster sperren",
@@ -3873,6 +4708,8 @@ var builtCommands = {
     "menu_Lock Station Point": {
       action: "Lock Station Point",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Perspective Grid > Lock Station Point",
         de: "Ansicht > Perspektivenraster > Bezugspunkt sperren",
@@ -3882,6 +4719,8 @@ var builtCommands = {
     "menu_Define Perspective Grid": {
       action: "Define Perspective Grid",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Perspective Grid > Define Grid",
         de: "Ansicht > Perspektivenraster > Raster definieren",
@@ -3891,6 +4730,8 @@ var builtCommands = {
     "menu_Save Perspective Grid as Preset": {
       action: "Save Perspective Grid as Preset",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Perspective Grid > Save Grid as Preset",
         de: "Ansicht > Perspektivenraster > Raster als Vorgabe speichern",
@@ -3900,6 +4741,8 @@ var builtCommands = {
     menu_artboard: {
       action: "artboard",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Artboards",
         de: "Ansicht > Zeichenflächen einblenden / ausblenden",
@@ -3909,6 +4752,8 @@ var builtCommands = {
     menu_pagetiling: {
       action: "pagetiling",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Print Tiling",
         de: "Ansicht > Druckaufteilung einblenden / ausblenden",
@@ -3918,6 +4763,8 @@ var builtCommands = {
     menu_showtemplate: {
       action: "showtemplate",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Template",
         de: "Ansicht > Vorlage einblenden / ausblenden",
@@ -3927,6 +4774,8 @@ var builtCommands = {
     menu_ruler: {
       action: "ruler",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Rulers > Show / Hide Rulers",
         de: "Ansicht > Lineale > Lineale einblende / ausblendenn",
@@ -3936,6 +4785,8 @@ var builtCommands = {
     menu_rulerCoordinateSystem: {
       action: "rulerCoordinateSystem",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Rulers > Change to Global Rulers",
         de: "Ansicht > Lineale > In globale Lineale ändern",
@@ -3945,6 +4796,8 @@ var builtCommands = {
     menu_videoruler: {
       action: "videoruler",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Rulers > Show / Hide Video Rulers",
         de: "Ansicht > Lineale > Videolineale einblenden / ausblenden",
@@ -3954,6 +4807,8 @@ var builtCommands = {
     menu_textthreads: {
       action: "textthreads",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Text Threads",
         de: "Ansicht > Textverkettungen einblenden / ausblenden",
@@ -3963,6 +4818,8 @@ var builtCommands = {
     menu_showguide: {
       action: "showguide",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Guides > Show / Hide Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien einblenden / ausblenden",
@@ -3972,6 +4829,8 @@ var builtCommands = {
     menu_lockguide: {
       action: "lockguide",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Guides > Lock Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien sperren",
@@ -3981,6 +4840,8 @@ var builtCommands = {
     menu_makeguide: {
       action: "makeguide",
       type: "menu",
+      docRequired: true,
+      selRequired: true,
       loc: {
         en: "View > Guides > Make Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien erstellen",
@@ -3990,6 +4851,8 @@ var builtCommands = {
     menu_releaseguide: {
       action: "releaseguide",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Guides > Release Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien zurückwandeln",
@@ -3999,6 +4862,8 @@ var builtCommands = {
     menu_clearguide: {
       action: "clearguide",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Guides > Clear Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien löschen",
@@ -4008,6 +4873,8 @@ var builtCommands = {
     menu_showgrid: {
       action: "showgrid",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Show / Hide Grid",
         de: "Ansicht > Raster einblenden / ausblenden",
@@ -4017,6 +4884,8 @@ var builtCommands = {
     menu_snapgrid: {
       action: "snapgrid",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Snap to Grid",
         de: "Ansicht > Am Raster ausrichten",
@@ -4026,6 +4895,8 @@ var builtCommands = {
     menu_snappoint: {
       action: "snappoint",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Snap to Point",
         de: "Ansicht > An Punkt ausrichten",
@@ -4035,6 +4906,8 @@ var builtCommands = {
     menu_newview: {
       action: "newview",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > New View...",
         de: "Ansicht > Neue Ansicht …",
@@ -4044,6 +4917,8 @@ var builtCommands = {
     menu_editview: {
       action: "editview",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "View > Edit Views...",
         de: "Ansicht > Ansicht bearbeiten …",
@@ -4053,6 +4928,8 @@ var builtCommands = {
     menu_newwindow: {
       action: "newwindow",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Window > New Window",
         de: "Fenster > Neues Fenster",
@@ -4062,6 +4939,8 @@ var builtCommands = {
     menu_cascade: {
       action: "cascade",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Window > Arrange > Cascade",
         de: "Fenster > Anordnen > Überlappend",
@@ -4071,6 +4950,8 @@ var builtCommands = {
     menu_tile: {
       action: "tile",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Window > Arrange > Tile",
         de: "Fenster > Anordnen > Nebeneinander",
@@ -4080,6 +4961,8 @@ var builtCommands = {
     menu_floatInWindow: {
       action: "floatInWindow",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Window > Arrange > Float in Window",
         de: "Fenster > Anordnen > In Fenster verschiebbar machen",
@@ -4089,6 +4972,8 @@ var builtCommands = {
     menu_floatAllInWindows: {
       action: "floatAllInWindows",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Window > Arrange > Float All in Windows",
         de: "Fenster > Anordnen > Alle in Fenstern verschiebbar machen",
@@ -4098,15 +4983,31 @@ var builtCommands = {
     menu_consolidateAllWindows: {
       action: "consolidateAllWindows",
       type: "menu",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Window > Arrange > Consolidate All Windows",
         de: "Fenster > Anordnen > Alle Fenster zusammenführen",
         ru: "Окно > Упорядить > Объединить все окна",
       },
     },
+    "menu_Browse Add-Ons Menu": {
+      action: "Browse Add-Ons Menu",
+      type: "menu",
+      docRequired: false,
+      selRequired: false,
+      loc: {
+        en: "Window > Find Extensions on Exchange...",
+        de: "Fenster > Erweiterungen auf Exchange suchen …",
+        ru: "Окно > Поиск расширений на Exchange...",
+      },
+      minVersion: 19,
+    },
     "menu_Adobe Reset Workspace": {
       action: "Adobe Reset Workspace",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Reset Workspace",
         de: "Fenster > Arbeitsbereich > Zurücksetzen",
@@ -4116,6 +5017,8 @@ var builtCommands = {
     "menu_Adobe New Workspace": {
       action: "Adobe New Workspace",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Workspace > New Workspace...",
         de: "Fenster > Arbeitsbereich > Neuer Arbeitsbereich …",
@@ -4125,25 +5028,19 @@ var builtCommands = {
     "menu_Adobe Manage Workspace": {
       action: "Adobe Manage Workspace",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Workspace > Manage Workspaces...",
         de: "Fenster > Arbeitsbereich > Arbeitsbereiche verwalten …",
         ru: "Окно > Рабочая среда > Управление рабочими средами...",
       },
     },
-    "menu_Browse Add-Ons Menu": {
-      action: "Browse Add-Ons Menu",
-      type: "menu",
-      loc: {
-        en: "Window > Find Extensions on Exchange...",
-        de: "Fenster > Erweiterungen auf Exchange suchen …",
-        ru: "Окно > Поиск расширений на Exchange...",
-      },
-      minVersion: 19,
-    },
     "menu_drover control palette plugin": {
       action: "drover control palette plugin",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Control",
         de: "Fenster > Steuerung",
@@ -4153,6 +5050,8 @@ var builtCommands = {
     "menu_Adobe Advanced Toolbar Menu": {
       action: "Adobe Advanced Toolbar Menu",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Toolbars > Advanced",
         de: "Fenster > Werkzeugleisten > Erweitert",
@@ -4163,6 +5062,8 @@ var builtCommands = {
     "menu_Adobe Basic Toolbar Menu": {
       action: "Adobe Basic Toolbar Menu",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Toolbars > Basic",
         de: "Fenster > Werkzeugleisten > Einfach",
@@ -4173,6 +5074,8 @@ var builtCommands = {
     "menu_New Tools Panel": {
       action: "New Tools Panel",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Toolbars > New Toolbar...",
         de: "Fenster > Werkzeugleisten > Neue Werkzeugleiste …",
@@ -4183,6 +5086,8 @@ var builtCommands = {
     "menu_Manage Tools Panel": {
       action: "Manage Tools Panel",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Toolbars > Manage Toolbar...",
         de: "Fenster > Werkzeugleisten > Werkzeugleisten verwalten …",
@@ -4193,6 +5098,8 @@ var builtCommands = {
     "menu_Adobe 3D Panel": {
       action: "Adobe 3D Panel",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > 3D and Materials",
         de: "Fenster > 3D und Materialien",
@@ -4203,11 +5110,15 @@ var builtCommands = {
     "menu_Adobe Action Palette": {
       action: "Adobe Action Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Actions", de: "Fenster > Aktionen", ru: "Окно > Операции" },
     },
     menu_AdobeAlignObjects2: {
       action: "AdobeAlignObjects2",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Align",
         de: "Fenster > Ausrichten",
@@ -4217,6 +5128,8 @@ var builtCommands = {
     "menu_Style Palette": {
       action: "Style Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Appearance",
         de: "Fenster > Aussehen",
@@ -4226,6 +5139,8 @@ var builtCommands = {
     "menu_Adobe Artboard Palette": {
       action: "Adobe Artboard Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Artboards",
         de: "Fenster > Zeichenflächen",
@@ -4235,6 +5150,8 @@ var builtCommands = {
     "menu_Adobe SmartExport Panel Menu Item": {
       action: "Adobe SmartExport Panel Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Asset Export",
         de: "Fenster > Export von Element",
@@ -4245,6 +5162,8 @@ var builtCommands = {
     "menu_internal palettes posing as plug-in menus-attributes": {
       action: "internal palettes posing as plug-in menus-attributes",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Attributes",
         de: "Fenster > Attribute",
@@ -4254,16 +5173,22 @@ var builtCommands = {
     "menu_Adobe BrushManager Menu Item": {
       action: "Adobe BrushManager Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Brushes", de: "Fenster > Pinsel", ru: "Окно > Кисти" },
     },
     "menu_Adobe Color Palette": {
       action: "Adobe Color Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Color", de: "Fenster > Farbe", ru: "Окно > Цвет" },
     },
     "menu_Adobe Harmony Palette": {
       action: "Adobe Harmony Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Color Guide",
         de: "Fenster > Farbhilfe",
@@ -4273,6 +5198,8 @@ var builtCommands = {
     "menu_Adobe Illustrator Kuler Panel": {
       action: "Adobe Illustrator Kuler Panel",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Color Themes", de: "", ru: "" },
       minVersion: 22,
       maxVersion: 25.9,
@@ -4280,6 +5207,8 @@ var builtCommands = {
     "menu_Adobe Commenting Palette": {
       action: "Adobe Commenting Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Comments",
         de: "Fenster > Kommentare",
@@ -4290,6 +5219,8 @@ var builtCommands = {
     "menu_CSS Menu Item": {
       action: "CSS Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > CSS Properties",
         de: "CSS-Eigenschaften",
@@ -4299,6 +5230,8 @@ var builtCommands = {
     menu_DocInfo1: {
       action: "DocInfo1",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Document Info",
         de: "Fenster > Dokumentinformationen",
@@ -4308,6 +5241,8 @@ var builtCommands = {
     "menu_Adobe Flattening Preview": {
       action: "Adobe Flattening Preview",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Flattener Preview",
         de: "Fenster > Reduzierungsvorschau",
@@ -4317,11 +5252,15 @@ var builtCommands = {
     "menu_Adobe Gradient Palette": {
       action: "Adobe Gradient Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Gradient", de: "Fenster > Verlauf", ru: "Окно > Градиент" },
     },
     "menu_Adobe Style Palette": {
       action: "Adobe Style Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Graphic Styles",
         de: "Fenster > Grafikstile",
@@ -4331,6 +5270,8 @@ var builtCommands = {
     "menu_Adobe HistoryPanel Menu Item": {
       action: "Adobe HistoryPanel Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > History",
         de: "Fenster > Versionsverlauf",
@@ -4342,6 +5283,8 @@ var builtCommands = {
     "menu_Adobe History Panel Menu Item": {
       action: "Adobe History Panel Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > History",
         de: "Fenster > Versionsverlauf",
@@ -4352,21 +5295,29 @@ var builtCommands = {
     "menu_Adobe Vectorize Panel": {
       action: "Adobe Vectorize Panel",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Image Trace", de: "", ru: "" },
     },
     "menu_internal palettes posing as plug-in menus-info": {
       action: "internal palettes posing as plug-in menus-info",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Info", de: "Fenster > Info", ru: "Окно > Информация" },
     },
     menu_AdobeLayerPalette1: {
       action: "AdobeLayerPalette1",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Layers", de: "Fenster > Ebenen", ru: "Окно > Слои" },
     },
     "menu_Adobe Learn Panel Menu Item": {
       action: "Adobe Learn Panel Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Learn", de: "", ru: "" },
       minVersion: 22,
       maxVersion: 25.9,
@@ -4374,6 +5325,8 @@ var builtCommands = {
     "menu_Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries": {
       action: "Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Libraries",
         de: "Fenster > Bibliotheken",
@@ -4383,11 +5336,15 @@ var builtCommands = {
     "menu_Adobe LinkPalette Menu Item": {
       action: "Adobe LinkPalette Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Links", de: "Fenster > Verknüpfungen", ru: "Окно > Связи" },
     },
     "menu_AI Magic Wand": {
       action: "AI Magic Wand",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Magic Wand",
         de: "Fenster > Zauberstab",
@@ -4397,6 +5354,8 @@ var builtCommands = {
     menu_AdobeNavigator: {
       action: "AdobeNavigator",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Navigator",
         de: "Fenster > Navigator",
@@ -4406,6 +5365,8 @@ var builtCommands = {
     "menu_Adobe PathfinderUI": {
       action: "Adobe PathfinderUI",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Pathfinder",
         de: "Fenster > Pathfinder",
@@ -4415,6 +5376,8 @@ var builtCommands = {
     "menu_Adobe Pattern Panel Toggle": {
       action: "Adobe Pattern Panel Toggle",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Pattern Options",
         de: "Fenster > Musteroptionen",
@@ -4424,6 +5387,8 @@ var builtCommands = {
     "menu_Adobe Property Palette": {
       action: "Adobe Property Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Properties",
         de: "Fenster > Eigenschaften",
@@ -4434,6 +5399,8 @@ var builtCommands = {
     "menu_Adobe Separation Preview Panel": {
       action: "Adobe Separation Preview Panel",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Separations Preview",
         de: "Fenster > Separationenvorschau",
@@ -4443,11 +5410,15 @@ var builtCommands = {
     "menu_Adobe Stroke Palette": {
       action: "Adobe Stroke Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Stroke", de: "Fenster > Kontur", ru: "Окно > Обводка" },
     },
     "menu_Adobe SVG Interactivity Palette": {
       action: "Adobe SVG Interactivity Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > SVG Interactivity",
         de: "Fenster > SVG-Interaktivität",
@@ -4457,6 +5428,8 @@ var builtCommands = {
     "menu_Adobe Swatches Menu Item": {
       action: "Adobe Swatches Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Swatches",
         de: "Fenster > Farbfelder",
@@ -4466,11 +5439,15 @@ var builtCommands = {
     "menu_Adobe Symbol Palette": {
       action: "Adobe Symbol Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Window > Symbols", de: "Fenster > Symbole", ru: "Окно > Символы" },
     },
     menu_AdobeTransformObjects1: {
       action: "AdobeTransformObjects1",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Transform",
         de: "Fenster > Transformieren",
@@ -4480,6 +5457,8 @@ var builtCommands = {
     "menu_Adobe Transparency Palette Menu Item": {
       action: "Adobe Transparency Palette Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Transparency",
         de: "Fenster > Transparenz",
@@ -4489,6 +5468,8 @@ var builtCommands = {
     "menu_internal palettes posing as plug-in menus-character": {
       action: "internal palettes posing as plug-in menus-character",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Type > Character",
         de: "Fenster > Schrift > Zeichen",
@@ -4498,6 +5479,8 @@ var builtCommands = {
     "menu_Character Styles": {
       action: "Character Styles",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Type > Character Styles",
         de: "Fenster > Schrift > Zeichenformate",
@@ -4507,6 +5490,8 @@ var builtCommands = {
     "menu_alternate glyph palette plugin 2": {
       action: "alternate glyph palette plugin 2",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Type > Glyphs",
         de: "Fenster > Schrift > Glyphen",
@@ -4516,6 +5501,8 @@ var builtCommands = {
     "menu_internal palettes posing as plug-in menus-opentype": {
       action: "internal palettes posing as plug-in menus-opentype",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Type > OpenType",
         de: "Fenster > Schrift > OpenType",
@@ -4525,6 +5512,8 @@ var builtCommands = {
     "menu_internal palettes posing as plug-in menus-paragraph": {
       action: "internal palettes posing as plug-in menus-paragraph",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Type > Paragraph",
         de: "Fenster > Schrift > Absatz",
@@ -4534,6 +5523,8 @@ var builtCommands = {
     "menu_Adobe Paragraph Styles Palette": {
       action: "Adobe Paragraph Styles Palette",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Type > Paragraph Styles",
         de: "Fenster > Schrift > Absatzformate",
@@ -4543,6 +5534,8 @@ var builtCommands = {
     "menu_internal palettes posing as plug-in menus-tab": {
       action: "internal palettes posing as plug-in menus-tab",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Type > Tabs",
         de: "Fenster > Schrift > Tabulatoren",
@@ -4552,6 +5545,8 @@ var builtCommands = {
     "menu_Adobe Variables Palette Menu Item": {
       action: "Adobe Variables Palette Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Variables",
         de: "Fenster > Variablen",
@@ -4561,6 +5556,8 @@ var builtCommands = {
     "menu_Adobe Version History File Menu Item": {
       action: "Adobe Version History File Menu Item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Version History",
         de: "Fenster > Versionsverlauf",
@@ -4571,6 +5568,8 @@ var builtCommands = {
     "menu_AdobeBrushMgrUI Other libraries menu item": {
       action: "AdobeBrushMgrUI Other libraries menu item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Brush Libraries > Other Library",
         de: "Fenster > Pinsel-Bibliotheken > Andere Bibliothek …",
@@ -4580,6 +5579,8 @@ var builtCommands = {
     "menu_Adobe Art Style Plugin Other libraries menu item": {
       action: "Adobe Art Style Plugin Other libraries menu item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Graphic Style Libraries > Other Library...",
         de: "Fenster > Grafikstil-Bibliotheken > Andere Bibliothek …",
@@ -4589,6 +5590,8 @@ var builtCommands = {
     "menu_AdobeSwatch_ Other libraries menu item": {
       action: "AdobeSwatch_ Other libraries menu item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Swatch Libraries > Other Library...",
         de: "Fenster > Farbfeld-Bibliotheken > Andere Bibliothek …",
@@ -4598,6 +5601,8 @@ var builtCommands = {
     "menu_Adobe Symbol Palette Plugin Other libraries menu item": {
       action: "Adobe Symbol Palette Plugin Other libraries menu item",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Window > Symbol Libraries > Other Library...",
         de: "Fenster > Symbol-Bibliotheken > Andere Bibliothek …",
@@ -4607,6 +5612,8 @@ var builtCommands = {
     menu_helpcontent: {
       action: "helpcontent",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Help > Illustrator Help...",
         de: "Hilfe > Illustrator-Hilfe …",
@@ -4616,6 +5623,8 @@ var builtCommands = {
     menu_supportCommunity: {
       action: "supportCommunity",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Help > Support Community",
         de: "Hilfe > Support-Community",
@@ -4626,6 +5635,8 @@ var builtCommands = {
     menu_wishform: {
       action: "wishform",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Help > Submit Bug/Feature Request...",
         de: "Hilfe > Fehlermeldung / Funktionswunsch senden …",
@@ -4636,6 +5647,8 @@ var builtCommands = {
     "menu_System Info": {
       action: "System Info",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Help > System Info...",
         de: "Hilfe > Systeminformationen …",
@@ -4645,6 +5658,8 @@ var builtCommands = {
     "menu_Adobe Actions Batch": {
       action: "Adobe Actions Batch",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Actions > Batch...",
         de: "Anderes Bedienfeld > Aktionsstapel …",
@@ -4654,6 +5669,8 @@ var builtCommands = {
     "menu_Adobe New Fill Shortcut": {
       action: "Adobe New Fill Shortcut",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Appearance > Add New Fill",
         de: "Anderes Bedienfeld > Neue Fläche hinzufügen",
@@ -4663,6 +5680,8 @@ var builtCommands = {
     "menu_Adobe New Stroke Shortcut": {
       action: "Adobe New Stroke Shortcut",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Appearance > Add New Stroke",
         de: "Anderes Bedienfeld > Neue Kontur hinzufügen",
@@ -4672,6 +5691,8 @@ var builtCommands = {
     "menu_Adobe New Style Shortcut": {
       action: "Adobe New Style Shortcut",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Graphic Styles > New Graphic Style...",
         de: "Anderes Bedienfeld > Neuer Grafikstil …",
@@ -4681,6 +5702,8 @@ var builtCommands = {
     menu_AdobeLayerPalette2: {
       action: "AdobeLayerPalette2",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Layers > New Layer",
         de: "Anderes Bedienfeld > Neue Ebene",
@@ -4690,6 +5713,8 @@ var builtCommands = {
     menu_AdobeLayerPalette3: {
       action: "AdobeLayerPalette3",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Layers > New Layer with Dialog...",
         de: "Anderes Bedienfeld > Neue Ebene mit Dialog …",
@@ -4699,6 +5724,8 @@ var builtCommands = {
     "menu_Adobe Update Link Shortcut": {
       action: "Adobe Update Link Shortcut",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Links > Update Link",
         de: "Anderes Bedienfeld > Verknüpfung aktualisieren",
@@ -4708,6 +5735,8 @@ var builtCommands = {
     "menu_Adobe New Swatch Shortcut Menu": {
       action: "Adobe New Swatch Shortcut Menu",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Swatches > New Swatch...",
         de: "Anderes Bedienfeld > Neues Farbfeld …",
@@ -4717,6 +5746,8 @@ var builtCommands = {
     "menu_Adobe New Symbol Shortcut": {
       action: "Adobe New Symbol Shortcut",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Palette > Symbols > New Symbol...",
         de: "Anderes Bedienfeld > Neues Symbol …",
@@ -4726,6 +5757,8 @@ var builtCommands = {
     menu_about: {
       action: "about",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "About Illustrator...",
         de: "Über Illustrator …",
@@ -4735,6 +5768,8 @@ var builtCommands = {
     menu_preference: {
       action: "preference",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > General...",
         de: "Voreinstellungen > Allgemein …",
@@ -4744,6 +5779,8 @@ var builtCommands = {
     menu_selectPref: {
       action: "selectPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Selection & Anchor Display...",
         de: "Voreinstellungen > Auswahl und Ankerpunkt-Anzeige …",
@@ -4753,6 +5790,8 @@ var builtCommands = {
     menu_keyboardPref: {
       action: "keyboardPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Type...",
         de: "Voreinstellungen > Schrift …",
@@ -4762,6 +5801,8 @@ var builtCommands = {
     menu_unitundoPref: {
       action: "unitundoPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Units...",
         de: "Voreinstellungen > Einheit …",
@@ -4771,6 +5812,8 @@ var builtCommands = {
     menu_guidegridPref: {
       action: "guidegridPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Guides & Grid...",
         de: "Voreinstellungen > Hilfslinien und Raster …",
@@ -4780,6 +5823,8 @@ var builtCommands = {
     menu_snapPref: {
       action: "snapPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Smart Guides...",
         de: "Voreinstellungen > Intelligente Hilfslinien …",
@@ -4789,6 +5834,8 @@ var builtCommands = {
     menu_slicePref: {
       action: "slicePref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Slices...",
         de: "Voreinstellungen > Slices …",
@@ -4798,6 +5845,8 @@ var builtCommands = {
     menu_hyphenPref: {
       action: "hyphenPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Hyphenation...",
         de: "Voreinstellungen > Silbentrennung …",
@@ -4807,6 +5856,8 @@ var builtCommands = {
     menu_pluginPref: {
       action: "pluginPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Plug-ins & Scratch Disks...",
         de: "Voreinstellungen > Zusatzmodule und virtueller Speicher …",
@@ -4816,6 +5867,8 @@ var builtCommands = {
     menu_UIPref: {
       action: "UIPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > User Interface...",
         de: "Voreinstellungen > Benutzeroberfläche …",
@@ -4825,6 +5878,8 @@ var builtCommands = {
     menu_GPUPerformancePref: {
       action: "GPUPerformancePref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Performance",
         de: "Voreinstellungen > Leistung …",
@@ -4835,6 +5890,8 @@ var builtCommands = {
     menu_FilePref: {
       action: "FilePref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > File Handling...",
         de: "Voreinstellungen > Dateihandhabung…",
@@ -4844,6 +5901,8 @@ var builtCommands = {
     menu_ClipboardPref: {
       action: "ClipboardPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Clipboard Handling",
         de: "Voreinstellungen > Zwischenablageoptionen …",
@@ -4854,6 +5913,8 @@ var builtCommands = {
     menu_BlackPref: {
       action: "BlackPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Appearance of Black...",
         de: "Bearbeiten > Voreinstellungen > Aussehen von Schwarz …",
@@ -4863,6 +5924,8 @@ var builtCommands = {
     menu_DevicesPref: {
       action: "DevicesPref",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Preferences > Devices",
         de: "Voreinstellungen > Geräte …",
@@ -4873,6 +5936,8 @@ var builtCommands = {
     "menu_Debug Panel": {
       action: "Debug Panel",
       type: "menu",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Debug Panel", de: "", ru: "" },
     },
   },
@@ -4880,6 +5945,8 @@ var builtCommands = {
     "tool_Adobe Add Anchor Point Tool": {
       action: "Adobe Add Anchor Point Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Add Anchor Point Tool",
         de: "Ankerpunkt-hinzufügen-Werkzeug",
@@ -4890,6 +5957,8 @@ var builtCommands = {
     "tool_Adobe Anchor Point Tool": {
       action: "Adobe Anchor Point Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Anchor Point Tool",
         de: "Ankerpunkt-Werkzeug",
@@ -4900,12 +5969,16 @@ var builtCommands = {
     "tool_Adobe Arc Tool": {
       action: "Adobe Arc Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Arc Tool", de: "Bogen-Werkzeug", ru: "Инструмент: Дуга" },
       minVersion: 24,
     },
     "tool_Adobe Area Graph Tool": {
       action: "Adobe Area Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Area Graph Tool",
         de: "Flächendiagramm",
@@ -4916,6 +5989,8 @@ var builtCommands = {
     "tool_Adobe Area Type Tool": {
       action: "Adobe Area Type Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Area Type Tool",
         de: "Flächentext-Werkzeug",
@@ -4926,6 +6001,8 @@ var builtCommands = {
     "tool_Adobe Crop Tool": {
       action: "Adobe Crop Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Artboard Tool",
         de: "Zeichenflächen-Werkzeug",
@@ -4936,6 +6013,8 @@ var builtCommands = {
     "tool_Adobe Bar Graph Tool": {
       action: "Adobe Bar Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Bar Graph Tool",
         de: "Horizontales Balkendiagramm",
@@ -4946,18 +6025,24 @@ var builtCommands = {
     "tool_Adobe Blend Tool": {
       action: "Adobe Blend Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Blend Tool", de: "Angleichen-Werkzeug", ru: "Инструмент: Переход" },
       minVersion: 24,
     },
     "tool_Adobe Bloat Tool": {
       action: "Adobe Bloat Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Bloat Tool", de: "Aufblasen-Werkzeug", ru: "Инструмент: Раздувание" },
       minVersion: 24,
     },
     "tool_Adobe Blob Brush Tool": {
       action: "Adobe Blob Brush Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Blob Brush Tool",
         de: "Tropfenpinsel-Werkzeug",
@@ -4968,6 +6053,8 @@ var builtCommands = {
     "tool_Adobe Column Graph Tool": {
       action: "Adobe Column Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Column Graph Tool",
         de: "Vertikales Balkendiagramm",
@@ -4978,6 +6065,8 @@ var builtCommands = {
     "tool_Adobe Cyrstallize Tool": {
       action: "Adobe Cyrstallize Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Crystallize Tool",
         de: "Kristallisieren-Werkzeug",
@@ -4988,12 +6077,16 @@ var builtCommands = {
     "tool_Adobe Curvature Tool": {
       action: "Adobe Curvature Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Curvature Tool", de: "Kurvenzeichner", ru: "Инструмент: Кривизна" },
       minVersion: 24,
     },
     "tool_Adobe Delete Anchor Point Tool": {
       action: "Adobe Delete Anchor Point Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Delete Anchor Point Tool",
         de: "Ankerpunkt-löschen-Werkzeug",
@@ -5004,6 +6097,8 @@ var builtCommands = {
     "tool_Adobe Direct Select Tool": {
       action: "Adobe Direct Select Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Direct Selection Tool",
         de: "Direktauswahl-Werkzeug",
@@ -5014,30 +6109,40 @@ var builtCommands = {
     "tool_Adobe Ellipse Shape Tool": {
       action: "Adobe Ellipse Shape Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Ellipse Tool", de: "Ellipse-Werkzeug", ru: "Инструмент: Эллипс" },
       minVersion: 24,
     },
     "tool_Adobe Eraser Tool": {
       action: "Adobe Eraser Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Eraser Tool", de: "Radiergummi-Werkzeug", ru: "Инструмент: Ластик" },
       minVersion: 24,
     },
     "tool_Adobe Eyedropper Tool": {
       action: "Adobe Eyedropper Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Eyedropper Tool", de: "Pipette-Werkzeug", ru: "Инструмент: Пипетка" },
       minVersion: 24,
     },
     "tool_Adobe Flare Tool": {
       action: "Adobe Flare Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Flare Tool", de: "Blendenflecke-Werkzeug", ru: "Инструмент: Блик" },
       minVersion: 24,
     },
     "tool_Adobe Free Transform Tool": {
       action: "Adobe Free Transform Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Free Transform Tool",
         de: "Frei-transformieren-Werkzeug",
@@ -5048,12 +6153,16 @@ var builtCommands = {
     "tool_Adobe Gradient Vector Tool": {
       action: "Adobe Gradient Vector Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Gradient Tool", de: "Verlauf-Werkzeug", ru: "Инструмент: Градиент" },
       minVersion: 24,
     },
     "tool_Adobe Direct Object Select Tool": {
       action: "Adobe Direct Object Select Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Group Selection Tool",
         de: "Gruppenauswahl-Werkzeug",
@@ -5064,18 +6173,24 @@ var builtCommands = {
     "tool_Adobe Scroll Tool": {
       action: "Adobe Scroll Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Hand Tool", de: "Hand-Werkzeug", ru: "Инструмент: Рука" },
       minVersion: 24,
     },
     "tool_Adobe Intertwine Zone Marker Tool": {
       action: "Adobe Intertwine Zone Marker Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Intertwine Tool", de: "", ru: "" },
       minVersion: 27,
     },
     "tool_Adobe Corner Join Tool": {
       action: "Adobe Corner Join Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Join Tool",
         de: "Zusammenfügen-Werkzeug",
@@ -5086,18 +6201,24 @@ var builtCommands = {
     "tool_Adobe Knife Tool": {
       action: "Adobe Knife Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Knife Tool", de: "Messer-Werkzeug", ru: "Инструмент: Нож" },
       minVersion: 24,
     },
     "tool_Adobe Direct Lasso Tool": {
       action: "Adobe Direct Lasso Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Lasso Tool", de: "Lasso-Werkzeug", ru: "Инструмент: Лассо" },
       minVersion: 24,
     },
     "tool_Adobe Line Graph Tool": {
       action: "Adobe Line Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Line Graph Tool",
         de: "Liniendiagramm",
@@ -5108,6 +6229,8 @@ var builtCommands = {
     "tool_Adobe Line Tool": {
       action: "Adobe Line Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Line Segment Tool",
         de: "Liniensegment-Werkzeug",
@@ -5118,6 +6241,8 @@ var builtCommands = {
     "tool_Adobe Planar Paintbucket Tool": {
       action: "Adobe Planar Paintbucket Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Live Paint Bucket Tool",
         de: "Interaktiv-malen-Werkzeug",
@@ -5128,6 +6253,8 @@ var builtCommands = {
     "tool_Adobe Planar Face Select Tool": {
       action: "Adobe Planar Face Select Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Live Paint Selection Tool",
         de: "Interaktiv-malen-Auswahlwerkzeug",
@@ -5138,6 +6265,8 @@ var builtCommands = {
     "tool_Adobe Magic Wand Tool": {
       action: "Adobe Magic Wand Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Magic Wand Tool",
         de: "Zauberstab-Werkzeug",
@@ -5148,24 +6277,32 @@ var builtCommands = {
     "tool_Adobe Measure Tool": {
       action: "Adobe Measure Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Measure Tool", de: "Mess-Werkzeug", ru: "Инструмент: Линейка" },
       minVersion: 24,
     },
     "tool_Adobe Mesh Editing Tool": {
       action: "Adobe Mesh Editing Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Mesh Tool", de: "Gitter-Werkzeug", ru: "Инструмент: Сетка" },
       minVersion: 24,
     },
     "tool_Adobe Brush Tool": {
       action: "Adobe Brush Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Paintbrush Tool", de: "Pinsel-Werkzeug", ru: "Инструмент: Кисть" },
       minVersion: 24,
     },
     "tool_Adobe Freehand Erase Tool": {
       action: "Adobe Freehand Erase Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Path Eraser Tool",
         de: "Löschen-Werkzeug",
@@ -5176,6 +6313,8 @@ var builtCommands = {
     "tool_Adobe Pattern Tile Tool": {
       action: "Adobe Pattern Tile Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Pattern Tile Tool",
         de: "Musterelement-Werkzeug",
@@ -5186,18 +6325,24 @@ var builtCommands = {
     "tool_Adobe Pen Tool": {
       action: "Adobe Pen Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Pen Tool", de: "Zeichenstift-Werkzeug", ru: "Инструмент: Перо" },
       minVersion: 24,
     },
     "tool_Adobe Freehand Tool": {
       action: "Adobe Freehand Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Pencil Tool", de: "Buntstift-Werkzeug", ru: "Инструмент: Карандаш" },
       minVersion: 24,
     },
     "tool_Perspective Grid Tool": {
       action: "Perspective Grid Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Perspective Grid Tool",
         de: "Perspektivenraster-Werkzeug",
@@ -5208,6 +6353,8 @@ var builtCommands = {
     "tool_Perspective Selection Tool": {
       action: "Perspective Selection Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Perspective Selection Tool",
         de: "Perspektivenauswahl-Werkzeug",
@@ -5218,6 +6365,8 @@ var builtCommands = {
     "tool_Adobe Pie Graph Tool": {
       action: "Adobe Pie Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Pie Graph Tool",
         de: "Kreisdiagramm-Werkzeug",
@@ -5228,6 +6377,8 @@ var builtCommands = {
     "tool_Adobe Polar Grid Tool": {
       action: "Adobe Polar Grid Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Polar Grid Tool",
         de: "Radiales-Raster-Werkzeug",
@@ -5238,6 +6389,8 @@ var builtCommands = {
     "tool_Adobe Shape Construction Regular Polygon Tool": {
       action: "Adobe Shape Construction Regular Polygon Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Polygon Tool",
         de: "Polygon-Werkzeug",
@@ -5248,6 +6401,8 @@ var builtCommands = {
     "tool_Adobe Page Tool": {
       action: "Adobe Page Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Print Tiling Tool",
         de: "Druckaufteilungs-Werkzeug",
@@ -5258,6 +6413,8 @@ var builtCommands = {
     "tool_Adobe Pucker Tool": {
       action: "Adobe Pucker Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Pucker Tool",
         de: "Zusammenziehen-Werkzeug",
@@ -5268,6 +6425,8 @@ var builtCommands = {
     "tool_Adobe Puppet Warp Tool": {
       action: "Adobe Puppet Warp Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Puppet Warp Tool",
         de: "Formgitter-Werkzeug",
@@ -5278,6 +6437,8 @@ var builtCommands = {
     "tool_Adobe Radar Graph Tool": {
       action: "Adobe Radar Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Radar Graph Tool",
         de: "Netzdiagramm",
@@ -5288,6 +6449,8 @@ var builtCommands = {
     "tool_Adobe Rectangle Shape Tool": {
       action: "Adobe Rectangle Shape Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Rectangle Tool",
         de: "Rechteck-Werkzeug",
@@ -5298,6 +6461,8 @@ var builtCommands = {
     "tool_Adobe Rectangular Grid Tool": {
       action: "Adobe Rectangular Grid Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Rectangular Grid Tool",
         de: "Rechteckiges-Raster-Werkzeug",
@@ -5308,6 +6473,8 @@ var builtCommands = {
     "tool_Adobe Reflect Tool": {
       action: "Adobe Reflect Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Reflect Tool",
         de: "Spiegeln-Werkzeug",
@@ -5318,6 +6485,8 @@ var builtCommands = {
     "tool_Adobe Reshape Tool": {
       action: "Adobe Reshape Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Reshape Tool",
         de: "Form-ändern-Werkzeug",
@@ -5328,12 +6497,16 @@ var builtCommands = {
     "tool_Adobe Rotate Tool": {
       action: "Adobe Rotate Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Rotate Tool", de: "Drehen-Werkzeug", ru: "Инструмент: Поворот" },
       minVersion: 24,
     },
     "tool_Adobe Rotate Canvas Tool": {
       action: "Adobe Rotate Canvas Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Rotate View Tool",
         de: "Ansichtdrehung-Werkzeug",
@@ -5344,6 +6517,8 @@ var builtCommands = {
     "tool_Adobe Rounded Rectangle Tool": {
       action: "Adobe Rounded Rectangle Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Rounded Rectangle Tool",
         de: "Abgerundetes-Rechteck-Werkzeug",
@@ -5354,18 +6529,24 @@ var builtCommands = {
     "tool_Adobe Scale Tool": {
       action: "Adobe Scale Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Scale Tool", de: "Skalieren-Werkzeug", ru: "Инструмент: Масштаб" },
       minVersion: 24,
     },
     "tool_Adobe Scallop Tool": {
       action: "Adobe Scallop Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Scallop Tool", de: "Ausbuchten-Werkzeug", ru: "Инструмент: Зубцы" },
       minVersion: 24,
     },
     "tool_Adobe Scatter Graph Tool": {
       action: "Adobe Scatter Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Scatter Graph Tool",
         de: "Streudiagramm",
@@ -5376,12 +6557,16 @@ var builtCommands = {
     "tool_Adobe Scissors Tool": {
       action: "Adobe Scissors Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Scissors Tool", de: "Schere-Werkzeug", ru: "Инструмент: Ножницы" },
       minVersion: 24,
     },
     "tool_Adobe Select Tool": {
       action: "Adobe Select Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Selection Tool",
         de: "Auswahl-Werkzeug",
@@ -5392,6 +6577,8 @@ var builtCommands = {
     "tool_Adobe Shape Builder Tool": {
       action: "Adobe Shape Builder Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Shape Builder Tool",
         de: "Formerstellungs-Werkzeug",
@@ -5402,6 +6589,8 @@ var builtCommands = {
     "tool_Adobe Shaper Tool": {
       action: "Adobe Shaper Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Shaper Tool",
         de: "Shaper-Werkzeug",
@@ -5412,18 +6601,24 @@ var builtCommands = {
     "tool_Adobe Shear Tool": {
       action: "Adobe Shear Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Shear Tool", de: "Verbiegen-Werkzeug", ru: "Инструмент: Наклон" },
       minVersion: 24,
     },
     "tool_Adobe Slice Tool": {
       action: "Adobe Slice Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Slice Tool", de: "Slice-Werkzeug", ru: "Инструмент: Фрагменты" },
       minVersion: 24,
     },
     "tool_Adobe Slice Select Tool": {
       action: "Adobe Slice Select Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Slice Selection Tool",
         de: "Slice-Auswahl-Werkzeug",
@@ -5434,18 +6629,24 @@ var builtCommands = {
     "tool_Adobe Freehand Smooth Tool": {
       action: "Adobe Freehand Smooth Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Smooth Tool", de: "Glätten-Werkzeug", ru: "Инструмент: Сглаживание" },
       minVersion: 24,
     },
     "tool_Adobe Shape Construction Spiral Tool": {
       action: "Adobe Shape Construction Spiral Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Spiral Tool", de: "Spirale-Werkzeug", ru: "Инструмент: Спираль" },
       minVersion: 24,
     },
     "tool_Adobe Stacked Bar Graph Tool": {
       action: "Adobe Stacked Bar Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Stacked Bar Graph Tool",
         de: "Gestapeltes horizontales Balkendiagramm",
@@ -5456,6 +6657,8 @@ var builtCommands = {
     "tool_Adobe Stacked Column Graph Tool": {
       action: "Adobe Stacked Column Graph Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Stacked Column Graph Tool",
         de: "Gestapeltes vertikales Balkendiagramm",
@@ -5466,12 +6669,16 @@ var builtCommands = {
     "tool_Adobe Shape Construction Star Tool": {
       action: "Adobe Shape Construction Star Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Star Tool", de: "Stern-Werkzeug", ru: "Инструмент: Звезда" },
       minVersion: 24,
     },
     "tool_Adobe Symbol Screener Tool": {
       action: "Adobe Symbol Screener Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Symbol Screener Tool",
         de: "Symbol-transparent-gestalten-Werkzeug",
@@ -5482,6 +6689,8 @@ var builtCommands = {
     "tool_Adobe Symbol Scruncher Tool": {
       action: "Adobe Symbol Scruncher Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Symbol Scruncher Tool",
         de: "Symbol-stauchen-Werkzeug",
@@ -5492,6 +6701,8 @@ var builtCommands = {
     "tool_Adobe Symbol Shifter Tool": {
       action: "Adobe Symbol Shifter Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Symbol Shifter Tool",
         de: "Symbol-verschieben-Werkzeug",
@@ -5502,6 +6713,8 @@ var builtCommands = {
     "tool_Adobe Symbol Sizer Tool": {
       action: "Adobe Symbol Sizer Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Symbol Sizer Tool",
         de: "Symbol-skalieren-Werkzeug",
@@ -5512,6 +6725,8 @@ var builtCommands = {
     "tool_Adobe Symbol Spinner Tool": {
       action: "Adobe Symbol Spinner Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Symbol Spinner Tool",
         de: "Symbol-drehen-Werkzeug",
@@ -5522,6 +6737,8 @@ var builtCommands = {
     "tool_Adobe Symbol Sprayer Tool": {
       action: "Adobe Symbol Sprayer Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Symbol Sprayer Tool",
         de: "Symbol-aufsprühen-Werkzeug",
@@ -5532,6 +6749,8 @@ var builtCommands = {
     "tool_Adobe Symbol Stainer Tool": {
       action: "Adobe Symbol Stainer Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Symbol Stainer Tool",
         de: "Symbol-färben-Werkzeug",
@@ -5542,6 +6761,8 @@ var builtCommands = {
     "tool_Adobe Symbol Styler Tool": {
       action: "Adobe Symbol Styler Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Symbol Styler Tool",
         de: "Symbol-gestalten-Werkzeug",
@@ -5552,6 +6773,8 @@ var builtCommands = {
     "tool_Adobe Touch Type Tool": {
       action: "Adobe Touch Type Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Touch Type Tool",
         de: "Touch-Type-Textwerkzeug",
@@ -5562,18 +6785,24 @@ var builtCommands = {
     "tool_Adobe New Twirl Tool": {
       action: "Adobe New Twirl Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Twirl Tool", de: "Strudel-Werkzeug", ru: "Инструмент: Воронка" },
       minVersion: 24,
     },
     "tool_Adobe Type Tool": {
       action: "Adobe Type Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Type Tool", de: "Text-Werkzeug", ru: "Инструмент: Текст" },
       minVersion: 24,
     },
     "tool_Adobe Path Type Tool": {
       action: "Adobe Path Type Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Type on a Path Tool",
         de: "Pfadtext-Werkzeug",
@@ -5584,6 +6813,8 @@ var builtCommands = {
     "tool_Adobe Vertical Area Type Tool": {
       action: "Adobe Vertical Area Type Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Vertical Area Type Tool",
         de: "Vertikaler-Flächentext-Werkzeug",
@@ -5594,6 +6825,8 @@ var builtCommands = {
     "tool_Adobe Vertical Type Tool": {
       action: "Adobe Vertical Type Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Vertical Type Tool",
         de: "Vertikaler-Text-Werkzeug",
@@ -5604,6 +6837,8 @@ var builtCommands = {
     "tool_Adobe Vertical Path Type Tool": {
       action: "Adobe Vertical Path Type Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Vertical Type on a Path Tool",
         de: "Vertikaler-Pfadtext-Werkzeug",
@@ -5614,18 +6849,24 @@ var builtCommands = {
     "tool_Adobe Warp Tool": {
       action: "Adobe Warp Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Warp Tool", de: "Verkrümmen-Werkzeug", ru: "Инструмент: Деформация" },
       minVersion: 24,
     },
     "tool_Adobe Width Tool": {
       action: "Adobe Width Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Width Tool", de: "Breiten-Werkzeug", ru: "Инструмент: Ширина" },
       minVersion: 24,
     },
     "tool_Adobe Wrinkle Tool": {
       action: "Adobe Wrinkle Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Wrinkle Tool",
         de: "Zerknittern-Werkzeug",
@@ -5636,6 +6877,8 @@ var builtCommands = {
     "tool_Adobe Zoom Tool": {
       action: "Adobe Zoom Tool",
       type: "tool",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Zoom Tool", de: "Zoom-Werkzeug", ru: "Инструмент: Масштаб" },
       minVersion: 24,
     },
@@ -5644,6 +6887,8 @@ var builtCommands = {
     defaults_settings: {
       action: "settings",
       type: "defaults",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Ai Command Palette Settings...",
         de: "Kurzbefehle – Einstellungen …",
@@ -5655,6 +6900,8 @@ var builtCommands = {
     config_about: {
       action: "about",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "About Ai Command Palette...",
         de: "Über Kurzbefehle …",
@@ -5664,6 +6911,8 @@ var builtCommands = {
     config_buildWorkflow: {
       action: "buildWorkflow",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Build Workflow...",
         de: "Arbeitsablauf erstellen …",
@@ -5673,6 +6922,8 @@ var builtCommands = {
     config_editWorkflow: {
       action: "editWorkflow",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Edit Workflow...",
         de: "Arbeitsablauf bearbeiten …",
@@ -5682,26 +6933,36 @@ var builtCommands = {
     config_loadScript: {
       action: "loadScript",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Load Script(s)...", de: "Skripte laden …", ru: "Загрузить скрипты" },
     },
     config_setFileBookmark: {
       action: "setFileBookmark",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Set File Bookmark(s)...", de: "", ru: "" },
     },
     config_setFolderBookmark: {
       action: "setFolderBookmark",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Set Folder Bookmark...", de: "", ru: "" },
     },
     config_hideCommand: {
       action: "hideCommand",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Hide Commands...", de: "Befehle ausblenden …", ru: "Скрыть команды" },
     },
     config_unhideCommand: {
       action: "unhideCommand",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Unhide Commands...",
         de: "Befehle einblenden …",
@@ -5711,11 +6972,22 @@ var builtCommands = {
     config_deleteCommand: {
       action: "deleteCommand",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: { en: "Delete Commands...", de: "Befehle löschen …", ru: "Удалить команды" },
+    },
+    config_clearRecentCommands: {
+      action: "clearRecentCommands",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "Clear Recent Comands", de: "", ru: "" },
     },
     config_revealPrefFile: {
       action: "revealPrefFile",
       type: "config",
+      docRequired: false,
+      selRequired: false,
       loc: {
         en: "Reveal Preferences File",
         de: "Einstellungen-Datei anzeigen",
@@ -5727,6 +6999,8 @@ var builtCommands = {
     builtin_goToArtboard: {
       action: "goToArtboard",
       type: "builtin",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Go To Artboard...",
         de: "Gehen Sie zur Zeichenfläche...",
@@ -5736,11 +7010,15 @@ var builtCommands = {
     builtin_goToDocument: {
       action: "goToDocument",
       type: "builtin",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Go To Open Document", de: "", ru: "" },
     },
     builtin_goToNamedObject: {
       action: "goToNamedObject",
       type: "builtin",
+      docRequired: true,
+      selRequired: false,
       loc: {
         en: "Go To Named Object...",
         de: "Gehen Sie zum benannten Objekt...",
@@ -5750,27 +7028,51 @@ var builtCommands = {
     builtin_redrawWindows: {
       action: "redrawWindows",
       type: "builtin",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Redraw Windows", de: "", ru: "" },
     },
     builtin_revealActiveDocument: {
       action: "revealActiveDocument",
       type: "builtin",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Reveal Active Document On System", de: "", ru: "" },
     },
     builtin_documentReport: {
       action: "documentReport",
       type: "builtin",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Active Document Report", de: "", ru: "" },
     },
     builtin_imageCapture: {
       action: "imageCapture",
       type: "builtin",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Export Active Artboard As PNG", de: "", ru: "" },
     },
     builtin_exportVariables: {
       action: "exportVariables",
       type: "builtin",
+      docRequired: true,
+      selRequired: false,
       loc: { en: "Export Document Variables As XML", de: "", ru: "" },
+    },
+    builtin_recentFiles: {
+      action: "recentFiles",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "Open Recent File...", de: "", ru: "" },
+    },
+    builtin_recentCommands: {
+      action: "recentCommands",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "Recent Commands...", de: "", ru: "" },
     },
   },
 };
