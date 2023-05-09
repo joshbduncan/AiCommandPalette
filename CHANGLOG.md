@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 'Go To Open Document' dialog
     - Active document is now included in the list and is marked with an 'x'
     - Document color mode added to the name for reference
+- Sorting (scoring) of matched commands now takes into account recently used commands
 
 ### Removed
 

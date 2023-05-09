@@ -6,14 +6,13 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ### Todo
 
-- [ ] startup screens customization: Allow the user to set what shows up when the command palette is first opened. Could be favorite commands, workflows, etc.
-- [ ] sort filtered items by most used: Track command usage counts in the user settings file, and use that count in the scoring algorithm for sorting the palette items.
-
 ### Doing
 
+- [ ] startup screens customization: Allow the user to set what shows up when the command palette is first opened. Could be favorite commands, workflows, etc.
 
 ### Done
 
+- [x] sort filtered items by most used: Track command usage counts in the user settings file, and use that count in the scoring algorithm for sorting the palette items.
 - [x] store recent command history and make accessible via command palette
 - [x] recent files built-in action
 - [x] fix command truncation (e.g. 'Effect > Distort & Transform > Zig Z...')
