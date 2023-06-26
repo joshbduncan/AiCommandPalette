@@ -1,5 +1,18 @@
 // USER DIALOGS
 
+/**
+ * Show a filterable commands palette.
+ * @param {Array}   commands      Commands available to the palette.
+ * @param {Boolean} showHidden    Should user hidden commands be shown in the palette.
+ * @param {Array}   queryFilter   Types of commands to hide from the search query.
+ * @param {Array}   visibleFilter Types of commands to hide from the initial view.
+ * @param {String}  title         Command palette title.
+ * @param {Array}   bounds        Command palette bounds.
+ * @param {Boolean} multiselect   Can multiple items be selected.
+ * @param {Boolean} docRequired   Should commands requiring an active document to work be hidden if there is no active document.
+ * @param {Boolean} selRequired   Should commands requiring an active selection to work be hidden if there is no active selection.
+ * @returns
+ */
 function commandPalette(
   commands,
   showHidden,
@@ -8,20 +21,29 @@ function commandPalette(
   title,
   bounds,
   multiselect,
-  simple
+  docRequired,
+  selRequired
 ) {
-  // if a simple dialog is requested all filtering is skipped
-  if (simple) {
+  // skip all filtering if queryFilter and visibleFilter are not set
+  if (queryFilter.length == 0 && visibleFilter.length == 0) {
     commands = {
-      visible: commands,
       query: commands,
+      visible: commands,
     };
   } else {
     // filter the commands based on supplied args
     // make it so you don't have to specify the same array
     // for both filters if they should be the same
     if (visibleFilter.length == 0) visibleFilter = queryFilter;
-    commands = filterCommands(commands, queryFilter, visibleFilter, showHidden, []);
+    commands = filterCommands(
+      commands,
+      queryFilter,
+      visibleFilter,
+      showHidden,
+      [],
+      docRequired,
+      selRequired
+    );
   }
 
   // create the dialog
@@ -56,10 +78,11 @@ function commandPalette(
   cancel.preferredSize.width = 100;
 
   // as a query is typed update the list box
+  var matches, temp;
   var frameStart = 0;
   q.onChanging = function () {
     frameStart = 0;
-    matches =
+    var matches =
       this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
     if (matches.length > 0) {
       temp = win.add("listbox", list.bounds, matches, {
@@ -69,8 +92,12 @@ function commandPalette(
       temp.onDoubleClick = function () {
         if (list.selection) win.close(1);
       };
+      // remove the temp 'truncation fix' item from the list
+      if (matches != commands.visible) temp.remove(temp.items.length - 1);
+      // change the original listbox reference to the updated `temp` version
       win.remove(list);
       list = temp;
+      // reset the selection
       list.selection = 0;
     }
   };
@@ -179,6 +206,14 @@ function goToPalette(commands, title, bounds) {
   // add items to list
   for (var i = 0; i < matches.length; i++) {
     switch (matches[i].typename) {
+      case "Document":
+        var colormode =
+          "(" + matches[i].documentColorSpace.toString().split(".").pop() + ")";
+        matches[i]["queryName"] =
+          matches[i] == app.activeDocument
+            ? "x " + matches[i].name + " " + colormode
+            : "   " + matches[i].name + " " + colormode;
+        break;
       case "PlacedItem":
         matches[i]["queryName"] = matches[i].file.name;
         break;
@@ -210,6 +245,7 @@ function goToPalette(commands, title, bounds) {
   cancel.preferredSize.width = 100;
 
   // as a query is typed update the list box
+  var matches, temp;
   var frameStart = 0;
   q.onChanging = function () {
     frameStart = 0;
@@ -228,14 +264,15 @@ function goToPalette(commands, title, bounds) {
           subItems[0].text = matches[i].typename;
         }
       }
-      temp.selection = 0;
-
       // close window when double-clicking a selection
       temp.onDoubleClick = function () {
         if (list.selection) win.close(1);
       };
+      // remove the temp 'truncation fix' item from the list
+      if (matches != commands.visible) temp.remove(temp.items.length - 1);
       win.remove(list);
       list = temp;
+      list.selection = 0;
     }
   };
 
@@ -415,8 +452,12 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
       });
       // add command when double-clicking
       temp.onDoubleClick = list.onDoubleClick;
+      // remove the temp 'truncation fix' item from the list
+      if (matches != commands.visible) temp.remove(temp.items.length - 1);
+      // change the original listbox reference to the updated `temp` version
       pSearch.remove(list);
       list = temp;
+      // reset the selection
       list.selection = 0;
       cur = 0;
     }

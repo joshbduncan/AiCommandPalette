@@ -15,6 +15,11 @@ function buildCommands(commands, filter) {
         // hide `Unhide Commands...` setting command if no hidden commands
         if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
           continue;
+        // // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
+        if (command == "builtin_recentCommands" && data.recent.commands.length == 0)
+          continue;
+        if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
+          continue;
         // make sure commands has localized strings
         if (commandData.hasOwnProperty("loc"))
           commandsData[localize(commandData.loc)] = commandData;
@@ -57,6 +62,17 @@ function loadActions() {
  */
 function processCommand(command) {
   var commandData = commandsData[command];
+  // update recent commands list
+  if (command != "Recent Commands...") {
+    // make sure commands isn't already in the lest
+    var idx = data.recent.commands.indexOf(command);
+    if (idx > -1) data.recent.commands.splice(idx, 1);
+    data.recent.commands.unshift(command);
+    // keep list at 10 items
+    if (data.recent.commands.length > recentCommandsCount) data.recent.commands.pop();
+    settings.save();
+  }
+
   var type = commandData.type;
   if (type == "workflow") {
     var actions = commandData.actions;
@@ -86,6 +102,29 @@ function processCommand(command) {
  */
 function executeCommand(command) {
   var commandData = commandsData[command];
+  // check command to see if an active document is required
+  appDocuments = app.documents.length > 0;
+  if (!appDocuments && commandData.docRequired)
+    if (
+      !confirm(
+        localize(locStrings.cd_active_document_required, commandData.action),
+        "noAsDflt",
+        localize(locStrings.cd_exception)
+      )
+    )
+      return;
+  // check command to see if an active selection is required
+  appDocuments = app.documents.length > 0;
+  docSelection = appDocuments && app.activeDocument.selection.length > 0;
+  if (!docSelection && commandData.selRequired)
+    if (
+      !confirm(
+        localize(locStrings.cd_active_selection_required, commandData.action),
+        "noAsDflt",
+        localize(locStrings.cd_exception)
+      )
+    )
+      return;
   switch (commandData.type.toLowerCase()) {
     case "config":
     case "defaults":

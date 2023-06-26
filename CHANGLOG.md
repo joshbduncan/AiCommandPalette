@@ -4,6 +4,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- New Built-In Commands
+    - Open Recent Files (based on File > Open Recent Files menu)
+- Commands requiring an active document filtering and error catching
+    - Commands are now filtered out (hidden) if they require a document to be open and none are
+        - This required adding a new column to the build data spreadsheet "docRequired"
+    - Commands in workflows that are running and require an active document to be open and none are now alert the user asking if they would like to continue.
+- Commands requiring an active selection filtering and error catching
+    - Commands are now filtered out (hidden) if they require an selection selection
+        - This required adding a new column to the build data spreadsheet "selRequired"
+    - Commands in workflows that are running and require an active selection to be open and none are now alert the user asking if they would like to continue.
+- Recent Commands
+    - Access your 25 most recent palette commands with 'Recent Commands...'
+    - You can also clear them using the 'Clear Recent Commands' command
+    - Command are stored in your preferences file
+
+### Fixed
+
+- While filtering the command palette ScriptUI would truncate some item (bug) so I implemented a fix within the `scoreMatches()` function that adds a temporary item to the list longer than any matches. That temporary item is then removed after the new list is created.
+- Fixed workflow saving when workflow with same name already exist.
+- 'Go To Artboard' now works correctly when there are multiple artboards of the same name
+
+### Changed
+
+- 'Go To Open Document' dialog
+    - Active document is now included in the list and is marked with an 'x'
+    - Document color mode added to the name for reference
+- Sorting (scoring) of matched commands now takes into account recently used commands
+- New commands from sttk3 on the Adobe Forum
+    - Window > Retype (Beta)
+    - Edit > Edit Colors > Generative Recolor (Beta)
+
+### Removed
+
+- Removed `runAction` case in `scriptAction()` switch statement as it is no longer used.
+
 ## [0.6.1] 2023-02-22
 
 ### Fixed
@@ -23,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - Report can be copied right from the window or saved out to a text file.
     - Export Active Artboard As PNG
     - Export Document Variables
-    - Go To (another) Open Document
+    - Go To Open Document
     - Set File and Folder Bookmarks
         - File bookmarks open up directly in Ai
             - Accepted file types (taken from Ai open dialog): "ai", "ait", "pdf", "dxf", "avif", "BMP", "RLE", "DIB", "cgm", "cdr", "eps", "epsf", "ps", "emf", "gif", "heic", "heif", "eps", "epsf", "ps", "jpg", "jpe", "jpeg", "jpf", "jpx", "jp2", "j2k", "j2c", "jpc", "rtf", "doc", "docx", "PCX", "psd", "psb", "pdd", "PXR", "png", "pns", "svg", "svgz", "TGA", "VDA", "ICB", "VST", "txt", "tif", "tiff", "webp", "wmf"

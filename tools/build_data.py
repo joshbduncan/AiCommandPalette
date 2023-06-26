@@ -22,7 +22,15 @@ def convert_to_num(n):
 
 def localized_strings_object(row):
     loc = {}
-    ignored_cols = ["VALUE", "IGNORE", "TYPE", "MINVERSION", "MAXVERSION"]
+    ignored_cols = [
+        "VALUE",
+        "IGNORE",
+        "TYPE",
+        "MINVERSION",
+        "MAXVERSION",
+        "DOCREQUIRED",
+        "SELREQUIRED",
+    ]
     for k, v in row.items():
         if k.upper() not in ignored_cols:
             loc[k] = v
@@ -39,12 +47,13 @@ def get_data():
         print(f"An error occurred while requesting {e.request.url!r}.")
     except httpx.HTTPStatusError as e:
         print(
-            f"Error response {e.response.status_code} while requesting {e.request.url!r}."
+            f"Error response {e.response.status_code} \
+                while requesting {e.request.url!r}."
         )
     return response.text
 
 
-def main(argv = None):
+def main(argv=None):
     # setup parser and arguments
     parser = argparse.ArgumentParser(
         description="Build Ai Command Palette JSX Objects.",
@@ -80,6 +89,9 @@ def main(argv = None):
     # with open(input_file, "r") as f:
     reader = csv.DictReader(data)
     for row in reader:
+        # skip any empty rows
+        if not row:
+            continue
 
         # check to see if command should be ignored
         if row["ignore"].upper() == "TRUE":
@@ -95,6 +107,8 @@ def main(argv = None):
         command = {
             "action": row["value"],
             "type": row["type"],
+            "docRequired": row["docRequired"] == "TRUE",
+            "selRequired": row["selRequired"] == "TRUE",
             "loc": localized_strings_object(row),
         }
         # only add min and max version if present

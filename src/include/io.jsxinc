@@ -1,14 +1,6 @@
 // FILE/FOLDER OPERATIONS
 
 /**
- * Write user data to disk.
- * @param {Object} f File object for user preference data.
- */
-function writeUserData(f) {
-  writeJSONData(data.settings, f);
-}
-
-/**
  * Setup folder object or create if doesn't exist.
  * @param   {String} path System folder path.
  * @returns {Object}      Folder object.

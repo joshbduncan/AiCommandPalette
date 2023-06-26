@@ -19,6 +19,7 @@ var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 
 var paletteWidth = 600;
 var visibleListItems = 9;
+var recentCommandsCount = 25;
 
 // MISCELLANEOUS SETTINGS
 
@@ -42,13 +43,20 @@ settings.file = function () {
 settings.load = function () {
   var file = this.file();
   if (file.exists) {
-    var settings = readJSONData(file);
-    if (settings != {}) {
-      for (var prop in settings) {
-        for (var subProp in settings[prop]) {
-          data[prop][subProp] = settings[prop][subProp];
+    try {
+      var settings = readJSONData(file);
+      if (settings != {}) {
+        for (var prop in settings) {
+          for (var subProp in settings[prop]) {
+            data[prop][subProp] = settings[prop][subProp];
+          }
         }
       }
+    } catch (e) {
+      var file = this.file();
+      file.rename("BAD_" + file.name);
+      this.reveal();
+      Error.runtimeError(1, localize(locStrings.pref_file_loading_error));
     }
   }
 };
@@ -68,10 +76,32 @@ settings.save = function () {
       locale: locale,
       aiVersion: aiVersion,
     },
+    recent: data.recent,
   };
   writeJSONData(obj, file);
 };
 settings.reveal = function () {
-  folder = this.folder();
+  var folder = this.folder();
   folder.execute();
+};
+
+// DEVELOPMENT HELPERS
+
+var devInfo = {};
+devInfo.folder = function () {
+  return settingsFolder;
+};
+devInfo.dataFile = function () {
+  var folder = this.folder();
+  var file = setupFileObject(folder, "data.json");
+  return file;
+};
+devInfo.commandsFile = function () {
+  var folder = this.folder();
+  var file = setupFileObject(folder, "commands.json");
+  return file;
+};
+devInfo.save = function () {
+  writeJSONData(data, this.dataFile());
+  writeJSONData(commandsData, this.commandsFile());
 };

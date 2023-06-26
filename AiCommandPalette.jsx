@@ -136,6 +136,7 @@ See the LICENSE file for details.
 
   var paletteWidth = 600;
   var visibleListItems = 9;
+  var recentCommandsCount = 25;
 
   // MISCELLANEOUS SETTINGS
 
@@ -159,13 +160,20 @@ See the LICENSE file for details.
   settings.load = function () {
     var file = this.file();
     if (file.exists) {
-      var settings = readJSONData(file);
-      if (settings != {}) {
-        for (var prop in settings) {
-          for (var subProp in settings[prop]) {
-            data[prop][subProp] = settings[prop][subProp];
+      try {
+        var settings = readJSONData(file);
+        if (settings != {}) {
+          for (var prop in settings) {
+            for (var subProp in settings[prop]) {
+              data[prop][subProp] = settings[prop][subProp];
+            }
           }
         }
+      } catch (e) {
+        var file = this.file();
+        file.rename("BAD_" + file.name);
+        this.reveal();
+        Error.runtimeError(1, localize(locStrings.pref_file_loading_error));
       }
     }
   };
@@ -185,12 +193,34 @@ See the LICENSE file for details.
         locale: locale,
         aiVersion: aiVersion,
       },
+      recent: data.recent,
     };
     writeJSONData(obj, file);
   };
   settings.reveal = function () {
-    folder = this.folder();
+    var folder = this.folder();
     folder.execute();
+  };
+
+  // DEVELOPMENT HELPERS
+
+  var devInfo = {};
+  devInfo.folder = function () {
+    return settingsFolder;
+  };
+  devInfo.dataFile = function () {
+    var folder = this.folder();
+    var file = setupFileObject(folder, "data.json");
+    return file;
+  };
+  devInfo.commandsFile = function () {
+    var folder = this.folder();
+    var file = setupFileObject(folder, "commands.json");
+    return file;
+  };
+  devInfo.save = function () {
+    writeJSONData(data, this.dataFile());
+    writeJSONData(commandsData, this.commandsFile());
   };
   /**
    *
@@ -249,15 +279,12 @@ See the LICENSE file for details.
 
     var names = [];
     var allFilePaths = getAllPlacedFilePaths(xmp);
-    var brokenFilePaths = getBrokenFilePaths(xmp);
+    // var brokenFilePaths = getBrokenFilePaths(xmp);
 
     // convert path to file object for property access
     var fileObjects = [];
-    var f;
     for (var i = 0; i < allFilePaths.length; i++) {
-      f = new File(allFilePaths[i]);
-      if (brokenFilePaths.includes(allFilePaths[i])) f.brokenLink = true;
-      fileObjects.push(f);
+      fileObjects.push(new File(allFilePaths[i]));
     }
     // sort the files by name
     fileObjects.sort(function (a, b) {
@@ -268,13 +295,15 @@ See the LICENSE file for details.
     for (var i = 0; i < fileObjects.length; i++) {
       f = fileObjects[i];
       names.push(
-        "Name: " +
+        localize(locStrings.dr_name) +
           decodeURI(f.name) +
-          "\nPath: " +
+          "\n" +
+          localize(locStrings.dr_path) +
           f.fsName.replace(f.name, "") +
-          "\nLink: " +
-          (f.brokenLink ? "Broken" : "Active") +
-          "\n"
+          "\n" +
+          localize(locStrings.dr_file_found) +
+          f.exists.toString().toUpperCase() +
+          (i == fileObjects.length - 1 ? "" : "\n")
       );
     }
     return names;
@@ -335,6 +364,23 @@ See the LICENSE file for details.
     return sorted ? names.sort() : names;
   }
 
+  /**
+   * Return recently opened files as file objects (also found in File > Open Recent Files).
+   * @returns {Array} Recent file paths.
+   */
+  function getRecentFilePaths() {
+    var path;
+    var paths = [];
+    var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
+    for (var i = 0; i < fileCount; i++) {
+      path = app.preferences.getStringPreference(
+        "plugin/MixedFileList/file" + i + "/path"
+      );
+      paths.push(path);
+    }
+    return paths;
+  }
+
   /**************************************************
 DIALOG HELPER FUNCTIONS
 **************************************************/
@@ -344,7 +390,9 @@ DIALOG HELPER FUNCTIONS
     queryFilter,
     visibleFilter,
     showHidden,
-    hideCommands
+    hideCommands,
+    docRequired,
+    selRequired
   ) {
     var query = [];
     var visible = [];
@@ -352,6 +400,10 @@ DIALOG HELPER FUNCTIONS
     for (var i = 0; i < commands.length; i++) {
       command = commands[i];
       commandData = commandsData[command];
+      // hide commands requiring an active documents if requested
+      if (docRequired && !appDocuments && commandData.docRequired) continue;
+      // hide commands requiring an active selection if requested
+      if (selRequired && !docSelection && commandData.selRequired) continue;
       // make sure Ai version meets command requirements
       if (!versionCheck(command)) continue;
       // skip any hidden commands
@@ -359,8 +411,8 @@ DIALOG HELPER FUNCTIONS
       // skip any specific commands name in hideSpecificCommands
       if (hideCommands.includes(command)) continue;
       // then check to see if the command should be filtered out
-      if (!queryFilter.includes(commandsData[command].type)) query.push(command);
-      if (!visibleFilter.includes(commandsData[command].type)) visible.push(command);
+      if (!queryFilter.includes(commandData.type)) query.push(command);
+      if (!visibleFilter.includes(commandData.type)) visible.push(command);
     }
     return {
       query: query,
@@ -377,7 +429,8 @@ DIALOG HELPER FUNCTIONS
   function scoreMatches(q, arr) {
     var word;
     var words = [];
-    var matches = [];
+    var matches = {};
+    var maxScore = 0;
     var words = q.split(" ");
     for (var i = 0; i < arr.length; i++) {
       var score = 0;
@@ -386,20 +439,42 @@ DIALOG HELPER FUNCTIONS
         if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null)
           score += word.length;
       }
-      if (score > 0) matches.push({ command: arr[i], score: score });
-    }
-    // sort the matches by score
-    matches.sort(function (a, b) {
-      return b.score - a.score;
-    });
-    // only return highest scoring matches
-    var matched_commands = [];
-    for (var i = 0; i < matches.length; i++) {
-      if (matches[i].score >= matches[0].score) {
-        matched_commands.push(matches[i].command);
+      if (score > 0) {
+        matches[arr[i]] = score;
+        if (score > maxScore) maxScore = score;
       }
     }
-    return matched_commands;
+
+    // only return highest scoring matches
+    // var matchedCommands = [];
+    // var maxLength = 0;
+    // for (var i = 0; i < matches.length; i++) {
+    //   if (matches[i].score >= maxScore / 2) matchedCommands.push(matches[i].command);
+    //   if (matches[i].command.length > maxLength) maxLength = matches[i].command.length;
+    // }
+
+    var matchedCommands = [];
+    var maxLength = 0;
+    $.writeln("-------------------------");
+    for (var c in matches) {
+      if (matches[c] >= maxScore / 2) matchedCommands.push(c);
+      if (c.length > maxLength) maxLength = c.length;
+      // increase score if command found in recent commands
+      if (matches[c] == maxScore && data.recent.commands.indexOf(c) > -1) matches[c]++;
+    }
+
+    // sort the matches by score
+    matchedCommands.sort(function (a, b) {
+      return matches[b] - matches[a];
+    });
+
+    // script ui seem to incorrectly calculate the `itemSize` length when
+    // filtering a temp list which the truncates some of the item so this
+    // adds a string of "X" the to the end of the result as long as the
+    // longest match which can then be removed after the listbox is created
+    var str = new Array(maxLength + 1).join("X");
+    matchedCommands.push(str);
+    return matchedCommands;
   }
 
   /**
@@ -530,10 +605,6 @@ DIALOG HELPER FUNCTIONS
         break;
       case "setFolderBookmark":
         loadFolderBookmark();
-        write = true;
-        break;
-      case "runAction":
-        runAction();
         break;
       case "hideCommand":
         hideCommand();
@@ -543,6 +614,10 @@ DIALOG HELPER FUNCTIONS
         break;
       case "deleteCommand":
         deleteCommand();
+        break;
+      case "clearRecentCommands":
+        data.recent.commands = [];
+        alert(localize(locStrings.recent_commands_cleared));
         break;
       case "revealPrefFile":
         settings.reveal();
@@ -579,6 +654,12 @@ DIALOG HELPER FUNCTIONS
         break;
       case "imageCapture":
         imageCapture();
+        break;
+      case "recentFiles":
+        recentFiles();
+        break;
+      case "recentCommands":
+        recentCommands();
         break;
       case "redrawWindows":
         app.redraw();
@@ -662,47 +743,53 @@ DIALOG HELPER FUNCTIONS
     // setup the basic document info
     var rulerUnits = app.activeDocument.rulerUnits.toString().split(".").pop();
     var fileInfo =
-      "File Information:\n-----\nFile: " +
+      localize(locStrings.dr_header) +
+      localize(locStrings.dr_filename) +
       app.activeDocument.name +
-      "\nPath: " +
-      (app.activeDocument.path.fsName ? app.activeDocument.path.fsName : "None") +
-      "\nColor Space: " +
+      "\n" +
+      localize(locStrings.dr_path) +
+      (app.activeDocument.path.fsName
+        ? app.activeDocument.path.fsName
+        : localize(locStrings.none)) +
+      "\n" +
+      localize(locStrings.dr_color_space) +
       app.activeDocument.documentColorSpace.toString().split(".").pop() +
-      "\nWidth: " +
+      "\n" +
+      localize(locStrings.dr_width) +
       convertPointsTo(app.activeDocument.width, rulerUnits) +
       " " +
       rulerUnits +
-      "\nHeight: " +
+      "\n" +
+      localize(locStrings.dr_height) +
       convertPointsTo(app.activeDocument.height, rulerUnits) +
       " " +
       rulerUnits;
 
     // generate all optional report information (all included by default)
-    // TODO: localize options
     var reportOptions = {
-      Artboards: {
+      artboards: {
         str: getCollectionObjectNames(app.activeDocument.artboards)
           .toString()
           .replace(/,/g, "\n"),
         active: true,
       },
-      Fonts: {
+      fonts: {
         str: getCollectionObjectNames(getDocumentFonts(app.activeDocument), true)
           .toString()
           .replace(/,/g, "\n"),
         active: true,
       },
-      Layers: {
+      layers: {
         str: getCollectionObjectNames(app.activeDocument.layers)
           .toString()
           .replace(/,/g, "\n"),
         active: true,
       },
-      "Placed Items": {
+      placed_items: {
         str: getPlacedFileInfoForReport().toString().replace(/,/g, "\n"),
         active: true,
       },
-      "Spot Colors": {
+      spot_colors: {
         str: getCollectionObjectNames(app.activeDocument.spots, true)
           .toString()
           .replace(/,/g, "\n"),
@@ -715,13 +802,17 @@ DIALOG HELPER FUNCTIONS
       if (!app.activeDocument.saved)
         alert(localize(locStrings.document_report_warning));
 
-      var infoString = "Ai Document Information\n\n" + fileInfo;
+      var infoString = localize(locStrings.dr_info_string) + "\n\n" + fileInfo;
       for (var p in reportOptions) {
         if (reportOptions[p].active && reportOptions[p].str) {
-          infoString += "\n\n" + p + "\n-----\n" + reportOptions[p].str;
+          infoString +=
+            "\n\n" +
+            localize(locStrings[p.toLowerCase()]) +
+            "\n-----\n" +
+            reportOptions[p].str;
         }
       }
-      infoString += "\n\nFile Created: " + new Date();
+      infoString += "\n\n" + localize(locStrings.dr_file_created) + new Date();
       return infoString;
     }
 
@@ -763,7 +854,7 @@ DIALOG HELPER FUNCTIONS
       multiline: true,
       scrollable: true,
       readonly: true,
-    }); // TODO: localize
+    });
 
     // window buttons
     var winButtons = win.add("group");
@@ -901,7 +992,7 @@ DIALOG HELPER FUNCTIONS
         key = localize(locStrings.bookmark) + ": " + fname;
         if (data.commands.bookmark.hasOwnProperty(key)) {
           if (
-            !Window.confirm(
+            !confirm(
               localize(locStrings.bm_already_loaded),
               "noAsDflt",
               localize(locStrings.bm_already_loaded_title)
@@ -932,7 +1023,7 @@ DIALOG HELPER FUNCTIONS
       key = localize(locStrings.bookmark) + ": " + fname;
       if (data.commands.bookmark.hasOwnProperty(key)) {
         if (
-          !Window.confirm(
+          !confirm(
             localize(locStrings.bm_already_loaded),
             "noAsDflt",
             localize(locStrings.bm_already_loaded_title)
@@ -966,7 +1057,7 @@ DIALOG HELPER FUNCTIONS
         key = localize(locStrings.script) + ": " + fname;
         if (data.commands.script.hasOwnProperty(key)) {
           if (
-            !Window.confirm(
+            !confirm(
               localize(locStrings.sc_already_loaded),
               "noAsDflt",
               localize(locStrings.sc_already_loaded_title)
@@ -1040,7 +1131,7 @@ DIALOG HELPER FUNCTIONS
     );
     if (result) {
       if (
-        Window.confirm(
+        confirm(
           localize(locStrings.cd_delete_confirm, result.join("\n")),
           "noAsDflt",
           localize(locStrings.cd_delete_confirm_title)
@@ -1064,12 +1155,8 @@ DIALOG HELPER FUNCTIONS
 
   /** Present a command palette with all open documents and open the chosen one. */
   function goToOpenDocument() {
-    var docs = [];
-    for (var i = 0; i < app.documents.length; i++) {
-      if (app.documents[i] != app.activeDocument) docs.push(app.documents[i]);
-    }
     var item = goToPalette(
-      (commands = docs),
+      (commands = app.documents),
       (title = localize(locStrings["go_to_open_document"])),
       (bounds = [0, 0, paletteWidth, 182])
     );
@@ -1080,21 +1167,16 @@ DIALOG HELPER FUNCTIONS
 
   /** Present a command palette with all artboards and zoom to the chosen one. */
   function goToArtboard() {
-    var artboards = [];
-    for (var i = 0; i < app.activeDocument.artboards.length; i++) {
-      artboards.push(app.activeDocument.artboards[i]);
-    }
     var item = goToPalette(
-      (commands = artboards),
+      (commands = app.activeDocument.artboards),
       (title = localize(locStrings["go_to_artboard"])),
       (bounds = [0, 0, paletteWidth, 182])
     );
-    // FIXME: if two artboards have the same name it will select the first that matches
     if (item) {
       var ab;
       for (var i = 0; i < app.activeDocument.artboards.length; i++) {
         ab = app.activeDocument.artboards[i];
-        if (ab.name == item.name) {
+        if (item == ab) {
           app.activeDocument.artboards.setActiveArtboardIndex(i);
           app.executeMenuCommand("fitin");
           break;
@@ -1168,6 +1250,53 @@ DIALOG HELPER FUNCTIONS
       alert(localize(locStrings.go_to_named_object_no_objects));
     }
   }
+
+  /** Present a command palette with all recently open files and open the chosen one. */
+  function recentFiles() {
+    var f, path;
+    var filePaths = getRecentFilePaths();
+    var files = {};
+    var fileNames = [];
+    for (var i = 0; i < filePaths.length; i++) {
+      path = filePaths[i];
+      f = File(path);
+      if (!f.exists) continue;
+      files[f.fsName] = f;
+      fileNames.push(f.fsName);
+    }
+    var item = commandPalette(
+      (commands = fileNames),
+      (showHidden = true),
+      (queryFilter = []),
+      (visibleFilter = []),
+      (title = localize(locStrings.open_recent_file)),
+      (bounds = [0, 0, paletteWidth, 182]),
+      (multiselect = false)
+    );
+    if (item) {
+      try {
+        app.open(files[item]);
+      } catch (e) {
+        alert(localize(locStrings.fl_error_loading, item));
+      }
+    }
+  }
+
+  /** Present a command palette with more recent commands and process the selected one. */
+  function recentCommands() {
+    var result = commandPalette(
+      (commands = data.recent.commands),
+      (showHidden = false),
+      (queryFilter = []),
+      (visibleFilter = []),
+      (title = localize(locStrings.recent_commands)),
+      (bounds = [0, 0, paletteWidth, 182]),
+      (multiselect = false)
+    );
+    if (result) {
+      processCommand(result[0].text);
+    }
+  }
   // ALL BUILT DATA FROM PYTHON SCRIPT
 
   var locStrings = {
@@ -1182,7 +1311,7 @@ DIALOG HELPER FUNCTIONS
       de: "",
       ru: "",
     },
-    bookmark: { en: "Bookmark", de: "", ru: "" },
+    artboards: { en: "Artboards", de: "", ru: "" },
     bm_already_loaded: {
       en: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
       de: "",
@@ -1198,7 +1327,18 @@ DIALOG HELPER FUNCTIONS
     bm_error_loading: { en: "Error loading bookmark:\n%1", de: "", ru: "" },
     bm_set_bookmark: { en: "Set Bookmark(s)", de: "", ru: "" },
     bm_total_loaded: { en: "Total bookmarks loaded:\n%1", de: "", ru: "" },
+    bookmark: { en: "Bookmark", de: "", ru: "" },
     cancel: { en: "Cancel", de: "Abbrechen", ru: "Отмена" },
+    cd_active_document_required: {
+      en: "Command '%1' requires an active document. Continue Anyway?",
+      de: "",
+      ru: "",
+    },
+    cd_active_selection_required: {
+      en: "Command '%1' requires an active selection. Continue Anyway?",
+      de: "",
+      ru: "",
+    },
     cd_all: {
       en: "All Built-In Menu Commands",
       de: "Alle integrierten Menübefehle",
@@ -1215,7 +1355,7 @@ DIALOG HELPER FUNCTIONS
       ru: "Подтвердить удаление команд",
     },
     cd_delete_select: {
-      en: "Select Menu Commands To Delete",
+      en: "Select Commands To Delete",
       de: "Wählen Sie die zu löschenden Menübefehle aus.",
       ru: "Выбрать команды меню для удаления",
     },
@@ -1229,6 +1369,7 @@ DIALOG HELPER FUNCTIONS
       de: "Fehler beim Ausführen des Befehls:\n%1\n\n%2",
       ru: "Ошибка запуска команды:\n%1\n\n%2",
     },
+    cd_exception: { en: "Command Exception", de: "", ru: "" },
     cd_helptip: {
       en: "Double-click a command to add it as a workflow step below.",
       de: "Doppelklicken Sie auf einen Befehl, um ihn unten als benutzerdefinierten Schritt hinzuzufügen.",
@@ -1240,7 +1381,7 @@ DIALOG HELPER FUNCTIONS
       ru: "Подтвердить скрытие команд",
     },
     cd_hide_select: {
-      en: "Select Menu Commands To Hide",
+      en: "Select Commands To Hide",
       de: "Wählen Sie die auszublendenden Menübefehle aus.",
       ru: "Выбрать команды меню для скрытия",
     },
@@ -1317,6 +1458,16 @@ DIALOG HELPER FUNCTIONS
       de: "",
       ru: "",
     },
+    dr_color_space: { en: "Color Space: ", de: "", ru: "" },
+    dr_file_created: { en: "File Created: ", de: "", ru: "" },
+    dr_file_found: { en: "File Found: ", de: "", ru: "" },
+    dr_filename: { en: "File: ", de: "", ru: "" },
+    dr_header: { en: "File Information\n-----\n", de: "", ru: "" },
+    dr_height: { en: "Height: ", de: "", ru: "" },
+    dr_info_string: { en: "Ai Document Information", de: "", ru: "" },
+    dr_name: { en: "Name: ", de: "", ru: "" },
+    dr_path: { en: "Path: ", de: "", ru: "" },
+    dr_width: { en: "Width: ", de: "", ru: "" },
     file_saved: { en: "File Saved:\n%1", de: "", ru: "" },
     fl_error_loading: {
       en: "Error loading file:\n%1",
@@ -1328,6 +1479,7 @@ DIALOG HELPER FUNCTIONS
       de: "Fehler beim Schreiben der Datei:\n%1",
       ru: "Ошибка записи файла:\n%1",
     },
+    fonts: { en: "Fonts", de: "", ru: "" },
     github: {
       en: "Click here to learn more",
       de: "Klicken Sie hier für weitere Informationen",
@@ -1338,7 +1490,6 @@ DIALOG HELPER FUNCTIONS
       de: "Gehen Sie zur Zeichenfläche",
       ru: "Перейти к монтажной области",
     },
-    go_to_open_document: { en: "Go To Open Document", de: "", ru: "" },
     go_to_named_object: {
       en: "Go To Named Object",
       de: "Gehen Sie zum benannten Objekt",
@@ -1350,8 +1501,20 @@ DIALOG HELPER FUNCTIONS
       ru: "",
     },
     go_to_named_object_no_objects: { en: "No named page items found.", de: "", ru: "" },
+    go_to_open_document: { en: "Go To Open Document", de: "", ru: "" },
+    layers: { en: "Layers", de: "", ru: "" },
     no_active_document: { en: "No active documents.", de: "", ru: "" },
     no_document_variables: { en: "No document variables.", de: "", ru: "" },
+    none: { en: "None", de: "", ru: "" },
+    open_recent_file: { en: "Open Recent File", de: "", ru: "" },
+    placed_items: { en: "Placed Items", de: "", ru: "" },
+    pref_file_loading_error: {
+      en: "Error loading preferences file! File has been renamed `BAD` and revealed for manual adjustment",
+      de: "",
+      ru: "",
+    },
+    recent_commands: { en: "Recent Commands", de: "", ru: "" },
+    recent_commands_cleared: { en: "Recent Commands Cleared!", de: "", ru: "" },
     save: { en: "Save", de: "Speichern", ru: "Сохранять" },
     sc_already_loaded: {
       en: "Script already loaded.\nWould you like to replace the previous script with the new one?",
@@ -1390,6 +1553,7 @@ DIALOG HELPER FUNCTIONS
       ru: "Загружено скриптов:\n%1",
     },
     script: { en: "Script", de: "Skript", ru: "Скрипт" },
+    spot_colors: { en: "Spot Colors", de: "", ru: "" },
     step_delete: { en: "Delete", de: "Löschen", ru: "Удалить" },
     step_down: { en: "Move Down", de: "Nach unten", ru: "Вниз" },
     step_up: { en: "Move Up", de: "Nach oben", ru: "Наверх" },
@@ -1435,11 +1599,6 @@ DIALOG HELPER FUNCTIONS
       de: "Fehler beim Speichern des Arbeitsablaufs:\n%1",
       ru: "Ошибка сохранения набора:\n%1",
     },
-    wf_needs_attention: {
-      en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
-      de: "",
-      ru: "Набор требует внимания\nУказанные шаги в вашем наборе команд больше недоступны.\n\nУдаленные команды:\n%1\n\nНесовместимые команды:\n%2",
-    },
     wf_name: {
       en: "Enter a new name for your workflow.",
       de: "Geben Sie einen neuen Namen für den Arbeitsablauf an.",
@@ -1449,6 +1608,11 @@ DIALOG HELPER FUNCTIONS
       en: "New Workflow Name",
       de: "Name des neuen Arbeitsablaufs",
       ru: "Имя нового набора",
+    },
+    wf_needs_attention: {
+      en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
+      de: "",
+      ru: "Набор требует внимания\nУказанные шаги в вашем наборе команд больше недоступны.\n\nУдаленные команды:\n%1\n\nНесовместимые команды:\n%2",
     },
     wf_none_attention: {
       en: "There are no workflows that need attention.",
@@ -1485,11 +1649,15 @@ DIALOG HELPER FUNCTIONS
       menu_new: {
         action: "new",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "File > New...", de: "Datei > Neu …", ru: "Файл > Новый..." },
       },
       menu_newFromTemplate: {
         action: "newFromTemplate",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "File > New from Template...",
           de: "Datei > Neu aus Vorlage …",
@@ -1499,11 +1667,15 @@ DIALOG HELPER FUNCTIONS
       menu_open: {
         action: "open",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "File > Open...", de: "Datei > Öffnen …", ru: "Файл > Открыть..." },
       },
       "menu_Adobe Bridge Browse": {
         action: "Adobe Bridge Browse",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "File > Browse in Bridge...",
           de: "Datei > Bridge durchsuchen …",
@@ -1513,16 +1685,22 @@ DIALOG HELPER FUNCTIONS
       menu_close: {
         action: "close",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "File > Close", de: "Datei > Schließen", ru: "Файл > Закрыть" },
       },
       menu_save: {
         action: "save",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "File > Save", de: "Datei > Speichern", ru: "Файл > Сохранить" },
       },
       menu_saveas: {
         action: "saveas",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Save As...",
           de: "Datei > Speichern unter …",
@@ -1532,6 +1710,8 @@ DIALOG HELPER FUNCTIONS
       menu_saveacopy: {
         action: "saveacopy",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Save a Copy...",
           de: "Datei > Kopie speichern …",
@@ -1541,6 +1721,8 @@ DIALOG HELPER FUNCTIONS
       menu_saveastemplate: {
         action: "saveastemplate",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Save as Template...",
           de: "Datei > Als Vorlage speichern …",
@@ -1550,6 +1732,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe AI Save Selected Slices": {
         action: "Adobe AI Save Selected Slices",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "File > Save Selected Slices...",
           de: "Datei > Ausgewählte Slices speichern …",
@@ -1559,6 +1743,8 @@ DIALOG HELPER FUNCTIONS
       menu_revert: {
         action: "revert",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Revert",
           de: "Datei > Zurück zur letzten Version",
@@ -1568,6 +1754,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Search Adobe Stock": {
         action: "Search Adobe Stock",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "File > Search Adobe Stock",
           de: "Datei > Adobe Stock durchsuchen …",
@@ -1578,6 +1766,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AI Place": {
         action: "AI Place",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Place...",
           de: "Datei > Platzieren …",
@@ -1587,6 +1777,8 @@ DIALOG HELPER FUNCTIONS
       menu_exportForScreens: {
         action: "exportForScreens",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "File > Export > Export For Screens...",
           de: "Datei > Exportieren > Für Bildschirme exportieren …",
@@ -1597,6 +1789,8 @@ DIALOG HELPER FUNCTIONS
       menu_export: {
         action: "export",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "File > Export > Export As...",
           de: "Datei > Exportieren …",
@@ -1606,6 +1800,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe AI Save For Web": {
         action: "Adobe AI Save For Web",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "File > Export > Save for Web (Legacy)...",
           de: "Datei > Für Web speichern (Legacy) …",
@@ -1615,6 +1811,8 @@ DIALOG HELPER FUNCTIONS
       menu_exportSelection: {
         action: "exportSelection",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Export Selection...",
           de: "Datei > Auswahl exportieren …",
@@ -1625,6 +1823,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Package Menu Item": {
         action: "Package Menu Item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Package",
           de: "Datei > Verpacken …",
@@ -1634,6 +1834,8 @@ DIALOG HELPER FUNCTIONS
       menu_ai_browse_for_script: {
         action: "ai_browse_for_script",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "File > Scripts > Other Script...",
           de: "Datei > Skripten > Anderes Skript …",
@@ -1643,6 +1845,8 @@ DIALOG HELPER FUNCTIONS
       menu_document: {
         action: "document",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Document Setup...",
           de: "Datei > Dokument einrichten …",
@@ -1652,6 +1856,8 @@ DIALOG HELPER FUNCTIONS
       "menu_doc-color-cmyk": {
         action: "doc-color-cmyk",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Document Color Mode > CMYK Color",
           de: "Datei > Dokumentfarbmodus > CMYK-Farbe",
@@ -1661,6 +1867,8 @@ DIALOG HELPER FUNCTIONS
       "menu_doc-color-rgb": {
         action: "doc-color-rgb",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > Document Color Mode > RGB Color",
           de: "Datei > Dokumentfarbmodus > RGB-Farbe",
@@ -1670,6 +1878,8 @@ DIALOG HELPER FUNCTIONS
       "menu_File Info": {
         action: "File Info",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "File > File Info...",
           de: "Datei > Dateiinformationen …",
@@ -1679,11 +1889,15 @@ DIALOG HELPER FUNCTIONS
       menu_Print: {
         action: "Print",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "File > Print...", de: "Datei > Drucken …", ru: "Файл > Печать..." },
       },
       menu_quit: {
         action: "quit",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "File > Exit",
           de: "Datei > Illustrator beenden",
@@ -1693,6 +1907,8 @@ DIALOG HELPER FUNCTIONS
       menu_undo: {
         action: "undo",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Undo",
           de: "Bearbeiten > Rückgängig",
@@ -1702,6 +1918,8 @@ DIALOG HELPER FUNCTIONS
       menu_redo: {
         action: "redo",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Redo",
           de: "Bearbeiten > Wiederholen",
@@ -1711,6 +1929,8 @@ DIALOG HELPER FUNCTIONS
       menu_cut: {
         action: "cut",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Cut",
           de: "Bearbeiten > Ausschneiden",
@@ -1720,6 +1940,8 @@ DIALOG HELPER FUNCTIONS
       menu_copy: {
         action: "copy",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Copy",
           de: "Bearbeiten > Kopieren",
@@ -1729,6 +1951,8 @@ DIALOG HELPER FUNCTIONS
       menu_paste: {
         action: "paste",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Paste",
           de: "Bearbeiten > Einfügen",
@@ -1738,6 +1962,8 @@ DIALOG HELPER FUNCTIONS
       menu_pasteFront: {
         action: "pasteFront",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Paste in Front",
           de: "Bearbeiten > Davor einfügen",
@@ -1747,6 +1973,8 @@ DIALOG HELPER FUNCTIONS
       menu_pasteBack: {
         action: "pasteBack",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Paste in Back",
           de: "Bearbeiten > Dahinter einfügen",
@@ -1756,6 +1984,8 @@ DIALOG HELPER FUNCTIONS
       menu_pasteInPlace: {
         action: "pasteInPlace",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Paste in Place",
           de: "Bearbeiten > An Originalposition einfügen",
@@ -1765,6 +1995,8 @@ DIALOG HELPER FUNCTIONS
       menu_pasteInAllArtboard: {
         action: "pasteInAllArtboard",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Paste on All Artboards",
           de: "Bearbeiten > In alle Zeichenflächen einfügen",
@@ -1774,6 +2006,8 @@ DIALOG HELPER FUNCTIONS
       menu_pasteWithoutFormatting: {
         action: "pasteWithoutFormatting",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Paste without Formatting",
           de: "Bearbeiten > Ohne Formatierung einfügen",
@@ -1784,6 +2018,8 @@ DIALOG HELPER FUNCTIONS
       menu_clear: {
         action: "clear",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Clear",
           de: "Bearbeiten > Löschen",
@@ -1793,6 +2029,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find and Replace": {
         action: "Find and Replace",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Find & Replace...",
           de: "Bearbeiten > Suchen und ersetzen …",
@@ -1802,6 +2040,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Next": {
         action: "Find Next",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Find Next",
           de: "Bearbeiten > Weitersuchen",
@@ -1811,6 +2051,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Auto Spell Check": {
         action: "Auto Spell Check",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Edit > Spelling > Auto Spell Check",
           de: "Bearbeiten > Rechtschreibung > Automatische Rechtschreibprüfung",
@@ -1821,6 +2063,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Check Spelling": {
         action: "Check Spelling",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Spelling > Check Spelling...",
           de: "Bearbeiten > Rechtschreibung > Rechtschreibprüfung …",
@@ -1831,6 +2075,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Edit Custom Dictionary...": {
         action: "Edit Custom Dictionary...",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Edit Custom Dictionary...",
           de: "Bearbeiten > Eigenes Wörterbuch bearbeiten …",
@@ -1840,6 +2086,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Recolor Art Dialog": {
         action: "Recolor Art Dialog",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Recolor Artwork...",
           de: "Bearbeiten > Farben bearbeiten > Bildmaterial neu färben …",
@@ -1849,6 +2097,8 @@ DIALOG HELPER FUNCTIONS
       menu_Adjust3: {
         action: "Adjust3",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Adjust Color Balance...",
           de: "Bearbeiten > Farben bearbeiten > Farbbalance einstellen …",
@@ -1858,6 +2108,8 @@ DIALOG HELPER FUNCTIONS
       menu_Colors3: {
         action: "Colors3",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Blend Front to Back",
           de: "Bearbeiten > Farben bearbeiten > Vorne -> Hinten angleichen",
@@ -1867,6 +2119,8 @@ DIALOG HELPER FUNCTIONS
       menu_Colors4: {
         action: "Colors4",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Blend Horizontally",
           de: "Bearbeiten > Farben bearbeiten > Horizontal angleichen",
@@ -1876,6 +2130,8 @@ DIALOG HELPER FUNCTIONS
       menu_Colors5: {
         action: "Colors5",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Blend Vertically",
           de: "Bearbeiten > Farben bearbeiten > Vertikal angleichen",
@@ -1885,6 +2141,8 @@ DIALOG HELPER FUNCTIONS
       menu_Colors8: {
         action: "Colors8",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Convert to CMYK",
           de: "Bearbeiten > Farben bearbeiten > In CMYK konvertieren",
@@ -1894,6 +2152,8 @@ DIALOG HELPER FUNCTIONS
       menu_Colors7: {
         action: "Colors7",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Convert to Grayscale",
           de: "Bearbeiten > Farben bearbeiten > In Graustufen konvertieren",
@@ -1903,15 +2163,27 @@ DIALOG HELPER FUNCTIONS
       menu_Colors9: {
         action: "Colors9",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Convert to RGB",
           de: "Bearbeiten > Farben bearbeiten > In RGB konvertieren",
           ru: "Редактирование > Редактировать цвета > Преобразовать в RGB",
         },
       },
+      "menu_Generative Recolor Art Dialog": {
+        action: "Generative Recolor Art Dialog",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        loc: { en: "Edit > Edit Colors > Generative Recolor (Beta)", de: "", ru: "" },
+        minVersion: 27.6,
+      },
       menu_Colors6: {
         action: "Colors6",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Invert Colors",
           de: "Bearbeiten > Farben bearbeiten > Farben invertieren",
@@ -1921,6 +2193,8 @@ DIALOG HELPER FUNCTIONS
       menu_Overprint2: {
         action: "Overprint2",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Overprint Black...",
           de: "Bearbeiten > Farben bearbeiten > Schwarz überdrucken …",
@@ -1930,6 +2204,8 @@ DIALOG HELPER FUNCTIONS
       menu_Saturate3: {
         action: "Saturate3",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Colors > Saturate...",
           de: "Bearbeiten > Farben bearbeiten > Sättigung erhöhen …",
@@ -1939,6 +2215,8 @@ DIALOG HELPER FUNCTIONS
       "menu_EditOriginal Menu Item": {
         action: "EditOriginal Menu Item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Edit > Edit Original",
           de: "Bearbeiten > Original bearbeiten",
@@ -1948,6 +2226,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Transparency Presets": {
         action: "Transparency Presets",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Edit > Transparency Flattener Presets...",
           de: "Bearbeiten > Transparenzreduzierungsvorgaben …",
@@ -1957,6 +2237,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Print Presets": {
         action: "Print Presets",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Edit > Print Presets...",
           de: "Bearbeiten > Druckvorgaben …",
@@ -1966,6 +2248,8 @@ DIALOG HELPER FUNCTIONS
       "menu_PDF Presets": {
         action: "PDF Presets",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Edit > Adobe PDF Presets...",
           de: "Bearbeiten > Adobe PDF-Vorgaben …",
@@ -1975,6 +2259,8 @@ DIALOG HELPER FUNCTIONS
       menu_PerspectiveGridPresets: {
         action: "PerspectiveGridPresets",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Edit > Perspective Grid Presets...",
           de: "Bearbeiten > Vorgaben für Perspektivenraster …",
@@ -1984,6 +2270,8 @@ DIALOG HELPER FUNCTIONS
       menu_color: {
         action: "color",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Edit > Color Settings...",
           de: "Bearbeiten > Farbeinstellungen …",
@@ -1993,6 +2281,8 @@ DIALOG HELPER FUNCTIONS
       menu_assignprofile: {
         action: "assignprofile",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Edit > Assign Profile...",
           de: "Bearbeiten > Profil zuweisen …",
@@ -2002,6 +2292,8 @@ DIALOG HELPER FUNCTIONS
       "menu_KBSC Menu Item": {
         action: "KBSC Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Edit > Keyboard Shortcuts...",
           de: "Bearbeiten > Tastaturbefehle …",
@@ -2011,6 +2303,8 @@ DIALOG HELPER FUNCTIONS
       menu_SWFPresets: {
         action: "SWFPresets",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Edit > SWF Presets...", de: "", ru: "" },
         minVersion: 22,
         maxVersion: 25.9,
@@ -2018,6 +2312,8 @@ DIALOG HELPER FUNCTIONS
       menu_transformagain: {
         action: "transformagain",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Transform > Transform Again",
           de: "Objekt > Transformieren > Erneut transformieren",
@@ -2027,6 +2323,8 @@ DIALOG HELPER FUNCTIONS
       menu_transformmove: {
         action: "transformmove",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Transform > Move...",
           de: "Objekt > Transformieren > Verschieben …",
@@ -2036,6 +2334,8 @@ DIALOG HELPER FUNCTIONS
       menu_transformrotate: {
         action: "transformrotate",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Transform > Rotate...",
           de: "Objekt > Transformieren > Drehen …",
@@ -2045,6 +2345,8 @@ DIALOG HELPER FUNCTIONS
       menu_transformreflect: {
         action: "transformreflect",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Transform > Reflect...",
           de: "Objekt > Transformieren > Spiegeln …",
@@ -2054,6 +2356,8 @@ DIALOG HELPER FUNCTIONS
       menu_transformscale: {
         action: "transformscale",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Transform > Scale...",
           de: "Objekt > Transformieren > Skalieren …",
@@ -2063,6 +2367,8 @@ DIALOG HELPER FUNCTIONS
       menu_transformshear: {
         action: "transformshear",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Transform > Shear...",
           de: "Objekt > Transformieren > Verbiegen …",
@@ -2072,6 +2378,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Transform v23": {
         action: "Transform v23",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Transform Each...",
           de: "Objekt > Transformieren > Einzeln transformieren …",
@@ -2081,6 +2389,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AI Reset Bounding Box": {
         action: "AI Reset Bounding Box",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Transform > Reset Bounding Box",
           de: "Objekt > Transform > Begrenzungsrahmen zurücksetzen",
@@ -2090,6 +2400,8 @@ DIALOG HELPER FUNCTIONS
       menu_sendToFront: {
         action: "sendToFront",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Arrange > Bring to Front",
           de: "Objekt > Anordnen > In den Vordergrund",
@@ -2099,6 +2411,8 @@ DIALOG HELPER FUNCTIONS
       menu_sendForward: {
         action: "sendForward",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Arrange > Bring Forward",
           de: "Objekt > Anordnen > Schrittweise nach vorne",
@@ -2108,6 +2422,8 @@ DIALOG HELPER FUNCTIONS
       menu_sendBackward: {
         action: "sendBackward",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Arrange > Send Backward",
           de: "Objekt > Anordnen > Schrittweise nach hinten",
@@ -2117,6 +2433,8 @@ DIALOG HELPER FUNCTIONS
       menu_sendToBack: {
         action: "sendToBack",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Arrange > Send to Back",
           de: "Objekt > Anordnen > In den Hintergrund",
@@ -2126,6 +2444,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 2": {
         action: "Selection Hat 2",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Arrange > Send to Current Layer",
           de: "Objekt > Anordnen > In aktuelle Ebene verschieben",
@@ -2135,6 +2455,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Horizontal Align Left": {
         action: "Horizontal Align Left",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Align > Horizontal Align Left",
           de: "Objekt > Ausrichten > Horizontal links ausrichten",
@@ -2145,6 +2467,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Horizontal Align Center": {
         action: "Horizontal Align Center",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Align > Horizontal Align Center",
           de: "Objekt > Ausrichten > Horizontal zentriert ausrichten",
@@ -2155,6 +2479,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Horizontal Align Right": {
         action: "Horizontal Align Right",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Align > Horizontal Align Right",
           de: "Objekt > Ausrichten > Horizontal rechts ausrichten",
@@ -2165,6 +2491,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Vertical Align Top": {
         action: "Vertical Align Top",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Align > Vertical Align Top",
           de: "Objekt > Ausrichten > Vertikal oben ausrichten",
@@ -2175,6 +2503,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Vertical Align Center": {
         action: "Vertical Align Center",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Align > Vertical Align Center",
           de: "Objekt > Ausrichten > Vertikal zentriert ausrichten",
@@ -2185,6 +2515,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Vertical Align Bottom": {
         action: "Vertical Align Bottom",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Align > Vertical Align Bottom",
           de: "Objekt > Ausrichten > Vertikal unten ausrichten",
@@ -2195,30 +2527,40 @@ DIALOG HELPER FUNCTIONS
       "menu_Vertical Distribute Top": {
         action: "Vertical Distribute Top",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: { en: "Object > Distribute > Vertical Distribute Top", de: "", ru: "" },
         minVersion: 27,
       },
       "menu_Vertical Distribute Center": {
         action: "Vertical Distribute Center",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: { en: "Object > Distribute > Vertical Distribute Center", de: "", ru: "" },
         minVersion: 27,
       },
       "menu_Vertical Distribute Bottom": {
         action: "Vertical Distribute Bottom",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: { en: "Object > Distribute > Vertical Distribute Bottom", de: "", ru: "" },
         minVersion: 27,
       },
       "menu_Horizontal Distribute Left": {
         action: "Horizontal Distribute Left",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: { en: "Object > Distribute > Horizontal Distribute Left", de: "", ru: "" },
         minVersion: 27,
       },
       "menu_Horizontal Distribute Center": {
         action: "Horizontal Distribute Center",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Distribute > Horizontal Distribute Center",
           de: "",
@@ -2229,6 +2571,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Horizontal Distribute Right": {
         action: "Horizontal Distribute Right",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Distribute > Horizontal Distribute Right",
           de: "",
@@ -2239,6 +2583,8 @@ DIALOG HELPER FUNCTIONS
       menu_group: {
         action: "group",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Group",
           de: "Objekt > Gruppieren",
@@ -2248,6 +2594,8 @@ DIALOG HELPER FUNCTIONS
       menu_ungroup: {
         action: "ungroup",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Ungroup",
           de: "Objekt > Gruppierung aufheben",
@@ -2257,6 +2605,8 @@ DIALOG HELPER FUNCTIONS
       menu_lock: {
         action: "lock",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Lock > Selection",
           de: "Objekt > Sperren > Auswahl",
@@ -2266,6 +2616,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 5": {
         action: "Selection Hat 5",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Lock > All Artwork Above",
           de: "Objekt > Sperren > Sämtliches Bildmaterial darüber",
@@ -2275,6 +2627,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 7": {
         action: "Selection Hat 7",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Lock > Other Layers",
           de: "Objekt > Sperren > Andere Ebenen",
@@ -2284,6 +2638,8 @@ DIALOG HELPER FUNCTIONS
       menu_unlockAll: {
         action: "unlockAll",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Unlock All",
           de: "Objekt > Alle entsperren",
@@ -2293,6 +2649,8 @@ DIALOG HELPER FUNCTIONS
       menu_hide: {
         action: "hide",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Hide > Selection",
           de: "Objekt > Ausblenden > Auswahl",
@@ -2302,6 +2660,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 4": {
         action: "Selection Hat 4",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Hide > All Artwork Above",
           de: "Objekt > Ausblenden > Sämtliches Bildmaterial darüber",
@@ -2311,6 +2671,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 6": {
         action: "Selection Hat 6",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Hide > Other Layers",
           de: "Objekt > Ausblenden > Andere Ebenen",
@@ -2320,6 +2682,8 @@ DIALOG HELPER FUNCTIONS
       menu_showAll: {
         action: "showAll",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Show All",
           de: "Objekt > Alles einblenden",
@@ -2329,6 +2693,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Crop Image": {
         action: "Crop Image",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Crop Image",
           de: "Objekt > Bild zuschneiden",
@@ -2339,6 +2705,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Rasterize 8 menu item": {
         action: "Rasterize 8 menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Rasterize...",
           de: "Objekt > In Pixelbild umwandeln …",
@@ -2348,6 +2716,8 @@ DIALOG HELPER FUNCTIONS
       "menu_make mesh": {
         action: "make mesh",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Create Gradient Mesh...",
           de: "Objekt > Verlaufsgitter erstellen …",
@@ -2357,6 +2727,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AI Object Mosaic Plug-in4": {
         action: "AI Object Mosaic Plug-in4",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Create Object Mosaic...",
           de: "Objekt > Objektmosaik erstellen …",
@@ -2366,6 +2738,8 @@ DIALOG HELPER FUNCTIONS
       "menu_TrimMark v25": {
         action: "TrimMark v25",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Create Trim Marks...",
           de: "Objekt > Schnittmarken erstellen",
@@ -2375,6 +2749,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Flatten Transparency": {
         action: "Flatten Transparency",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Flatten Transparency...",
           de: "Objekt > Transparenz reduzieren …",
@@ -2384,6 +2760,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make Pixel Perfect": {
         action: "Make Pixel Perfect",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Make Pixel Perfect",
           de: "Objekt > Pixelgenaue Darstellung anwenden",
@@ -2393,6 +2771,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Make Slice": {
         action: "AISlice Make Slice",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Make",
           de: "Objekt > Slice > Erstellen",
@@ -2402,6 +2782,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Release Slice": {
         action: "AISlice Release Slice",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Release",
           de: "Objekt > Slice > Zurückwandeln",
@@ -2411,6 +2793,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Create from Guides": {
         action: "AISlice Create from Guides",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Slice > Create from Guides",
           de: "Objekt > Slice > Aus Hilfslinien erstellen",
@@ -2420,6 +2804,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Create from Selection": {
         action: "AISlice Create from Selection",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Create from Selection",
           de: "Objekt > Slice > Aus Auswahl erstellen",
@@ -2429,6 +2815,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Duplicate": {
         action: "AISlice Duplicate",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Duplicate Slice",
           de: "Objekt > Slice > Slice duplizieren",
@@ -2438,6 +2826,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Combine": {
         action: "AISlice Combine",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Combine Slices",
           de: "Objekt > Slice > Slices kombinieren",
@@ -2447,6 +2837,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Divide": {
         action: "AISlice Divide",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Divide Slices...",
           de: "Objekt > Slice > Slices unterteilen …",
@@ -2456,6 +2848,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Delete All Slices": {
         action: "AISlice Delete All Slices",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Delete All",
           de: "Objekt > Slice > Alle löschen",
@@ -2465,6 +2859,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Slice Options": {
         action: "AISlice Slice Options",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Slice Options...",
           de: "Objekt > Slice > Slice-Optionen …",
@@ -2474,6 +2870,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Clip to Artboard": {
         action: "AISlice Clip to Artboard",
         type: "menu",
+        docRequired: false,
+        selRequired: true,
         loc: {
           en: "Object > Slice > Clip to Artboard",
           de: "Objekt > Slice > Ganze Zeichenfläche exportieren",
@@ -2483,6 +2881,8 @@ DIALOG HELPER FUNCTIONS
       menu_Expand3: {
         action: "Expand3",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Expand...",
           de: "Objekt > Umwandeln …",
@@ -2492,6 +2892,8 @@ DIALOG HELPER FUNCTIONS
       menu_expandStyle: {
         action: "expandStyle",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Expand Appearance",
           de: "Objekt > Aussehen umwandeln",
@@ -2501,6 +2903,8 @@ DIALOG HELPER FUNCTIONS
       menu_join: {
         action: "join",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Join",
           de: "Objekt > Pfad > Zusammenfügen",
@@ -2510,6 +2914,8 @@ DIALOG HELPER FUNCTIONS
       menu_average: {
         action: "average",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Average...",
           de: "Objekt > Pfad > Durchschnitt berechnen …",
@@ -2519,6 +2925,8 @@ DIALOG HELPER FUNCTIONS
       "menu_OffsetPath v22": {
         action: "OffsetPath v22",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Outline Stroke",
           de: "Objekt > Pfad > Konturlinie",
@@ -2528,6 +2936,8 @@ DIALOG HELPER FUNCTIONS
       "menu_OffsetPath v23": {
         action: "OffsetPath v23",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Offset Path...",
           de: "Objekt > Pfad > Pfad verschieben …",
@@ -2537,6 +2947,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Reverse Path Direction": {
         action: "Reverse Path Direction",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Reverse Path Direction",
           de: "Objekt > Pfad > Pfadrichtung umkehren",
@@ -2547,6 +2959,8 @@ DIALOG HELPER FUNCTIONS
       "menu_simplify menu item": {
         action: "simplify menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Simplify...",
           de: "Objekt > Pfad > Vereinfachen …",
@@ -2556,6 +2970,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Add Anchor Points2": {
         action: "Add Anchor Points2",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Add Anchor Points",
           de: "Objekt > Pfad > Ankerpunkte hinzufügen",
@@ -2565,6 +2981,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Remove Anchor Points menu": {
         action: "Remove Anchor Points menu",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Remove Anchor Points",
           de: "Objekt > Pfad > Ankerpunkte entfernen",
@@ -2574,6 +2992,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Knife Tool2": {
         action: "Knife Tool2",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Divide Objects Below",
           de: "Objekt > Pfad > Darunter liegende Objekte aufteilen",
@@ -2583,6 +3003,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Rows and Columns....": {
         action: "Rows and Columns....",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Path > Split Into Grid...",
           de: "Objekt > Pfad > In Raster teilen …",
@@ -2592,6 +3014,8 @@ DIALOG HELPER FUNCTIONS
       "menu_cleanup menu item": {
         action: "cleanup menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Path > Clean Up...",
           de: "Objekt > Pfad > Aufräumen …",
@@ -2601,6 +3025,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Convert to Shape": {
         action: "Convert to Shape",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Shape > Convert to Shapes",
           de: "Objekt > Form > In Form umwandeln",
@@ -2611,6 +3037,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Expand Shape": {
         action: "Expand Shape",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Shape > Expand Shapes",
           de: "Objekt > Form > Form umwandeln",
@@ -2621,6 +3049,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Make Pattern": {
         action: "Adobe Make Pattern",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Pattern > Make",
           de: "Objekt > Muster > Erstellen",
@@ -2630,6 +3060,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Edit Pattern": {
         action: "Adobe Edit Pattern",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Pattern > Edit Pattern",
           de: "Objekt > Muster > Muster bearbeiten",
@@ -2639,6 +3071,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Pattern Tile Color": {
         action: "Adobe Pattern Tile Color",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Object > Pattern > Tile Edge Color...",
           de: "Objekt > Muster > Farbe für Musterelement-Kante",
@@ -2648,24 +3082,32 @@ DIALOG HELPER FUNCTIONS
       "menu_Partial Rearrange Make": {
         action: "Partial Rearrange Make",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: { en: "Object > Intertwine > Make", de: "", ru: "" },
         minVersion: 27,
       },
       "menu_Partial Rearrange Release": {
         action: "Partial Rearrange Release",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: { en: "Object > Intertwine > Release", de: "", ru: "" },
         minVersion: 27,
       },
       "menu_Partial Rearrange Edit": {
         action: "Partial Rearrange Edit",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: { en: "Object > Intertwine > Edit", de: "", ru: "" },
         minVersion: 27,
       },
       "menu_Make Radial Repeat": {
         action: "Make Radial Repeat",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Repeat > Make Radial",
           de: "Objekt > Wiederholen > Radial",
@@ -2676,6 +3118,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make Grid Repeat": {
         action: "Make Grid Repeat",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Repeat > Make Grid",
           de: "Objekt > Wiederholen > Raster",
@@ -2686,6 +3130,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make Symmetry Repeat": {
         action: "Make Symmetry Repeat",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Repeat > Make Symmetry",
           de: "Objekt > Wiederholen > Spiegeln",
@@ -2696,6 +3142,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Release Repeat Art": {
         action: "Release Repeat Art",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Repeat > Release",
           de: "Objekt > Wiederholen > Zurückwandeln",
@@ -2706,8 +3154,10 @@ DIALOG HELPER FUNCTIONS
       "menu_Repeat Art Options": {
         action: "Repeat Art Options",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
-          en: "Object > Repeat > Repeat Art Options...",
+          en: "Object > Repeat > Repeat Options...",
           de: "Objekt > Wiederholen > Optionen …",
           ru: "Объект > Повторить > Параметры…",
         },
@@ -2716,6 +3166,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Path Blend Make": {
         action: "Path Blend Make",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Blend > Make",
           de: "Objekt > Angleichen > Erstellen",
@@ -2725,6 +3177,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Path Blend Release": {
         action: "Path Blend Release",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Blend > Release",
           de: "Objekt > Angleichen > Zurückwandeln",
@@ -2734,6 +3188,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Path Blend Options": {
         action: "Path Blend Options",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Object > Blend > Blend Options...",
           de: "Objekt > Angleichen > Angleichung-Optionen …",
@@ -2743,6 +3199,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Path Blend Expand": {
         action: "Path Blend Expand",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Blend > Expand",
           de: "Objekt > Angleichen > Umwandeln",
@@ -2752,6 +3210,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Path Blend Replace Spine": {
         action: "Path Blend Replace Spine",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Blend > Replace Spine",
           de: "Objekt > Angleichen > Achse ersetzen",
@@ -2761,6 +3221,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Path Blend Reverse Spine": {
         action: "Path Blend Reverse Spine",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Blend > Reverse Spine",
           de: "Objekt > Angleichen > Achse umkehren",
@@ -2770,6 +3232,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Path Blend Reverse Stack": {
         action: "Path Blend Reverse Stack",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Blend > Reverse Front to Back",
           de: "Objekt > Angleichen > Farbrichtung umkehren",
@@ -2779,6 +3243,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make Warp": {
         action: "Make Warp",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Envelope Distort > Make with Warp...",
           de: "Objekt > Verzerrungshülle > Mit Verkrümmung erstellen …",
@@ -2788,6 +3254,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Create Envelope Grid": {
         action: "Create Envelope Grid",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Envelope Distort > Make with Mesh...",
           de: "Objekt > Verzerrungshülle > Mit Gitter erstellen …",
@@ -2797,6 +3265,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make Envelope": {
         action: "Make Envelope",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Envelope Distort > Make with Top Object",
           de: "Objekt > Verzerrungshülle > Mit oberstem Objekt erstellen",
@@ -2806,6 +3276,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Release Envelope": {
         action: "Release Envelope",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Envelope Distort > Release",
           de: "Objekt > Verzerrungshülle > Zurückwandeln",
@@ -2815,6 +3287,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Envelope Options": {
         action: "Envelope Options",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Object > Envelope Distort > Envelope Options...",
           de: "Objekt > Verzerrungshülle > Hüllen-Optionen …",
@@ -2824,6 +3298,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Expand Envelope": {
         action: "Expand Envelope",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Envelope Distort > Expand",
           de: "Objekt > Verzerrungshülle > Umwandeln",
@@ -2833,6 +3309,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Edit Envelope Contents": {
         action: "Edit Envelope Contents",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Envelope Distort > Edit Contents",
           de: "Objekt > Verzerrungshülle > Inhalt bearbeiten",
@@ -2842,6 +3320,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Attach to Active Plane": {
         action: "Attach to Active Plane",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Perspective > Attach to Active Plane",
           de: "Objekt > Perspektive > Aktiver Ebene anhängen",
@@ -2851,6 +3331,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Release with Perspective": {
         action: "Release with Perspective",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Perspective > Release with Perspective",
           de: "Objekt > Perspektive > Aus Perspektive freigeben",
@@ -2860,6 +3342,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Show Object Grid Plane": {
         action: "Show Object Grid Plane",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Perspective > Move Plane to Match Object",
           de: "Objekt > Perspektive > Ebene an Objekt ausrichten",
@@ -2869,6 +3353,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Edit Original Object": {
         action: "Edit Original Object",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Perspective > Edit Text",
           de: "Objekt > Perspektive > Text bearbeiten",
@@ -2878,6 +3364,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make Planet X": {
         action: "Make Planet X",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Live Paint > Make",
           de: "Objekt > Interaktiv malen > Erstellen",
@@ -2887,6 +3375,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Marge Planet X": {
         action: "Marge Planet X",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Live Paint > Merge",
           de: "Objekt > Interaktiv malen > Zusammenfügen",
@@ -2896,6 +3386,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Release Planet X": {
         action: "Release Planet X",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Live Paint > Release",
           de: "Objekt > Interaktiv malen > Zurückwandeln",
@@ -2905,6 +3397,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Planet X Options": {
         action: "Planet X Options",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Object > Live Paint > Gap Options...",
           de: "Objekt > Interaktiv malen > Lückenoptionen …",
@@ -2914,6 +3408,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Expand Planet X": {
         action: "Expand Planet X",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Live Paint > Expand",
           de: "Objekt > Interaktiv malen > Umwandeln",
@@ -2923,6 +3419,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make Image Tracing": {
         action: "Make Image Tracing",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Image Trace > Make",
           de: "Objekt > Bildnachzeichner > Erstellen",
@@ -2932,6 +3430,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make and Expand Image Tracing": {
         action: "Make and Expand Image Tracing",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Image Trace > Make and Expand",
           de: "Objekt > Bildnachzeichner > Erstellen und umwandeln",
@@ -2941,6 +3441,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Release Image Tracing": {
         action: "Release Image Tracing",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Image Trace > Release",
           de: "Objekt > Bildnachzeichner > Zurückwandeln",
@@ -2950,6 +3452,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Expand Image Tracing": {
         action: "Expand Image Tracing",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Image Trace > Expand",
           de: "Objekt > Bildnachzeichner > Umwandeln",
@@ -2959,6 +3463,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Make Text Wrap": {
         action: "Make Text Wrap",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Text Wrap > Make",
           de: "Objekt > Textumfluss > Erstellen",
@@ -2968,6 +3474,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Release Text Wrap": {
         action: "Release Text Wrap",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Text Wrap > Release",
           de: "Objekt > Textumfluss > Zurückwandeln",
@@ -2977,6 +3485,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Text Wrap Options...": {
         action: "Text Wrap Options...",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Object > Text Wrap > Text Wrap Options...",
           de: "Objekt > Textumfluss > Textumflussoptionen …",
@@ -2986,6 +3496,8 @@ DIALOG HELPER FUNCTIONS
       menu_makeMask: {
         action: "makeMask",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Clipping Mask > Make",
           de: "Objekt > Schnittmaske > Erstellen",
@@ -2995,6 +3507,8 @@ DIALOG HELPER FUNCTIONS
       menu_releaseMask: {
         action: "releaseMask",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Clipping Mask > Release",
           de: "Objekt > Schnittmaske > Zurückwandeln",
@@ -3004,6 +3518,8 @@ DIALOG HELPER FUNCTIONS
       menu_editMask: {
         action: "editMask",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Clipping Mask > Edit Mask",
           de: "Objekt > Schnittmaske > Maske bearbeiten",
@@ -3013,6 +3529,8 @@ DIALOG HELPER FUNCTIONS
       menu_compoundPath: {
         action: "compoundPath",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Compound Path > Make",
           de: "Objekt > Zusammengesetzter Pfad > Erstellen",
@@ -3022,6 +3540,8 @@ DIALOG HELPER FUNCTIONS
       menu_noCompoundPath: {
         action: "noCompoundPath",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Compound Path > Release",
           de: "Objekt > Zusammengesetzter Pfad > Zurückwandeln",
@@ -3031,6 +3551,8 @@ DIALOG HELPER FUNCTIONS
       menu_setCropMarks: {
         action: "setCropMarks",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Artboards > Convert to Artboards",
           de: "Objekt > Zeichenflächen > In Zeichenflächen konvertieren",
@@ -3040,6 +3562,8 @@ DIALOG HELPER FUNCTIONS
       "menu_ReArrange Artboards": {
         action: "ReArrange Artboards",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Artboards > Rearrange All Artboards",
           de: "Objekt > Zeichenflächen > Alle Zeichenflächen neu anordnen",
@@ -3049,6 +3573,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Fit Artboard to artwork bounds": {
         action: "Fit Artboard to artwork bounds",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Artboards > Fit to Artwork Bounds",
           de: "Objekt > Zeichenflächen > An Bildmaterialbegrenzungen anpassen",
@@ -3058,6 +3584,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Fit Artboard to selected Art": {
         action: "Fit Artboard to selected Art",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Artboards > Fit to Selected Art",
           de: "Objekt > Zeichenflächen > An ausgewählte Grafik anpassen",
@@ -3067,6 +3595,8 @@ DIALOG HELPER FUNCTIONS
       menu_setGraphStyle: {
         action: "setGraphStyle",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Object > Graph > Type...",
           de: "Objekt > Diagramm > Art …",
@@ -3076,6 +3606,8 @@ DIALOG HELPER FUNCTIONS
       menu_editGraphData: {
         action: "editGraphData",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Graph > Data...",
           de: "Objekt > Diagramm > Daten …",
@@ -3085,6 +3617,8 @@ DIALOG HELPER FUNCTIONS
       menu_graphDesigns: {
         action: "graphDesigns",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Graph > Design...",
           de: "Objekt > Diagramm > Designs …",
@@ -3094,6 +3628,8 @@ DIALOG HELPER FUNCTIONS
       menu_setBarDesign: {
         action: "setBarDesign",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Graph > Column...",
           de: "Objekt > Diagramm > Balken …",
@@ -3103,6 +3639,8 @@ DIALOG HELPER FUNCTIONS
       menu_setIconDesign: {
         action: "setIconDesign",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Object > Graph > Marker...",
           de: "Objekt > Diagramm > Punkte …",
@@ -3112,6 +3650,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Browse Typekit Fonts Menu IllustratorUI": {
         action: "Browse Typekit Fonts Menu IllustratorUI",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Type > More from Adobe Fonts...",
           de: "Schrift > Mehr bei Adobe Fonts …",
@@ -3122,11 +3662,15 @@ DIALOG HELPER FUNCTIONS
       "menu_alternate glyph palette plugin": {
         action: "alternate glyph palette plugin",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Type > Glyphs", de: "Schrift > Glyphen", ru: "Текст > Глифы" },
       },
       "menu_area-type-options": {
         action: "area-type-options",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Area Type Options...",
           de: "Schrift > Flächentextoptionen …",
@@ -3136,6 +3680,8 @@ DIALOG HELPER FUNCTIONS
       menu_Rainbow: {
         action: "Rainbow",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type on a Path > Rainbow",
           de: "Schrift > Pfadtext > Regenbogen",
@@ -3145,6 +3691,8 @@ DIALOG HELPER FUNCTIONS
       menu_Skew: {
         action: "Skew",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type on a Path > Skew",
           de: "Schrift > Pfadtext > Asymmetrie",
@@ -3154,6 +3702,8 @@ DIALOG HELPER FUNCTIONS
       "menu_3D ribbon": {
         action: "3D ribbon",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type on a Path > 3D Ribbon",
           de: "Schrift > Pfadtext > 3D-Band",
@@ -3163,6 +3713,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Stair Step": {
         action: "Stair Step",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type on a Path > Stair Step",
           de: "Schrift > Pfadtext > Treppenstufe",
@@ -3172,6 +3724,8 @@ DIALOG HELPER FUNCTIONS
       menu_Gravity: {
         action: "Gravity",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type on a Path > Gravity",
           de: "Schrift > Pfadtext > Schwerkraft",
@@ -3181,6 +3735,8 @@ DIALOG HELPER FUNCTIONS
       menu_typeOnPathOptions: {
         action: "typeOnPathOptions",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type on a Path > Type on a Path Options...",
           de: "Schrift > Pfadtext > Pfadtextoptionen …",
@@ -3190,6 +3746,8 @@ DIALOG HELPER FUNCTIONS
       menu_updateLegacyTOP: {
         action: "updateLegacyTOP",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type on a Path > Update Legacy Type on a Path",
           de: "Schrift > Pfadtext > Alten Pfadtext aktualisieren",
@@ -3199,6 +3757,8 @@ DIALOG HELPER FUNCTIONS
       menu_threadTextCreate: {
         action: "threadTextCreate",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Threaded Text > Create",
           de: "Schrift > Verketteter Text > Erstellen",
@@ -3208,6 +3768,8 @@ DIALOG HELPER FUNCTIONS
       menu_releaseThreadedTextSelection: {
         action: "releaseThreadedTextSelection",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Threaded Text > Release Selection",
           de: "Schrift > Verketteter Text > Auswahl zurückwandeln",
@@ -3217,6 +3779,8 @@ DIALOG HELPER FUNCTIONS
       menu_removeThreading: {
         action: "removeThreading",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Threaded Text > Remove Threading",
           de: "Schrift > Verketteter Text > Verkettung entfernen",
@@ -3226,6 +3790,8 @@ DIALOG HELPER FUNCTIONS
       menu_fitHeadline: {
         action: "fitHeadline",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Fit Headline",
           de: "Schrift > Überschrift einpassen",
@@ -3235,6 +3801,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe IllustratorUI Resolve Missing Font": {
         action: "Adobe IllustratorUI Resolve Missing Font",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Type > Resolve Missing Fonts...",
           de: "Schrift > Fehlende Schriftarten auflösen …",
@@ -3244,6 +3812,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Illustrator Find Font Menu Item": {
         action: "Adobe Illustrator Find Font Menu Item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Type > Find/Replace Font...",
           de: "Schrift > Schriftart suchen/ersetzen …",
@@ -3253,6 +3823,8 @@ DIALOG HELPER FUNCTIONS
       "menu_UpperCase Change Case Item": {
         action: "UpperCase Change Case Item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Change Case > UPPERCASE",
           de: "Schrift > Groß-/Kleinschreibung ändern > GROSSBUCHSTABEN",
@@ -3262,6 +3834,8 @@ DIALOG HELPER FUNCTIONS
       "menu_LowerCase Change Case Item": {
         action: "LowerCase Change Case Item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Change Case > lowercase",
           de: "Schrift > Groß-/Kleinschreibung ändern > kleinbuchstaben",
@@ -3271,6 +3845,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Title Case Change Case Item": {
         action: "Title Case Change Case Item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Change Case > Title Case",
           de: "Schrift > Groß-/Kleinschreibung ändern > Erster Buchstabe Im Wort Groß",
@@ -3280,6 +3856,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Sentence case Change Case Item": {
         action: "Sentence case Change Case Item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Change Case > Sentence case",
           de: "Schrift > Groß-/Kleinschreibung ändern > Erster buchstabe im satz groß",
@@ -3289,6 +3867,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Illustrator Smart Punctuation Menu Item": {
         action: "Adobe Illustrator Smart Punctuation Menu Item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Type > Smart Punctuation...",
           de: "Schrift > Satz-/Sonderzeichen …",
@@ -3298,6 +3878,8 @@ DIALOG HELPER FUNCTIONS
       menu_outline: {
         action: "outline",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Create Outlines",
           de: "Schrift > In Pfade umwandeln",
@@ -3307,15 +3889,27 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Optical Alignment Item": {
         action: "Adobe Optical Alignment Item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Optical Margin Alignment",
           de: "Schrift > Optischer Randausgleich",
           ru: "Текст > Визуальное выравнивание полей",
         },
       },
+      "menu_convert list style to text": {
+        action: "convert list style to text",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        loc: { en: "Type > Bullets and Numbering > Convert to text", de: "", ru: "" },
+        minVersion: 27.1,
+      },
       menu_showHiddenChar: {
         action: "showHiddenChar",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Type > Show Hidden Characters",
           de: "Schrift > Verborgene Zeichen einblenden / ausblenden",
@@ -3325,6 +3919,8 @@ DIALOG HELPER FUNCTIONS
       "menu_type-horizontal": {
         action: "type-horizontal",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type Orientation > Horizontal",
           de: "Schrift > Textausrichtung > Horizontal",
@@ -3334,6 +3930,8 @@ DIALOG HELPER FUNCTIONS
       "menu_type-vertical": {
         action: "type-vertical",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Type > Type Orientation > Vertical",
           de: "Schrift > Textausrichtung > Vertikal",
@@ -3343,6 +3941,8 @@ DIALOG HELPER FUNCTIONS
       menu_selectall: {
         action: "selectall",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > All",
           de: "Auswahl > Alles auswählen",
@@ -3352,6 +3952,8 @@ DIALOG HELPER FUNCTIONS
       menu_selectallinartboard: {
         action: "selectallinartboard",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > All on Active Artboard",
           de: "Auswahl > Alles auf der aktiven Zeichenfläche",
@@ -3361,6 +3963,8 @@ DIALOG HELPER FUNCTIONS
       menu_deselectall: {
         action: "deselectall",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Deselect",
           de: "Auswahl > Auswahl aufheben",
@@ -3370,6 +3974,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Reselect menu item": {
         action: "Find Reselect menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Reselect",
           de: "Auswahl > Erneut auswählen",
@@ -3379,6 +3985,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Inverse menu item": {
         action: "Inverse menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Inverse",
           de: "Auswahl > Auswahl umkehren",
@@ -3388,6 +3996,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 8": {
         action: "Selection Hat 8",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Next Object Above",
           de: "Auswahl > Nächstes Objekt darüber",
@@ -3397,6 +4007,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 9": {
         action: "Selection Hat 9",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Next Object Below",
           de: "Auswahl > Nächstes Objekt darunter",
@@ -3406,6 +4018,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Appearance menu item": {
         action: "Find Appearance menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Appearance",
           de: "Auswahl > Gleich > Aussehen",
@@ -3416,6 +4030,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Appearance Attributes menu item": {
         action: "Find Appearance Attributes menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Same > Appearance Attribute",
           de: "Auswahl > Gleich > Aussehensattribute",
@@ -3426,6 +4042,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Blending Mode menu item": {
         action: "Find Blending Mode menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Blending Mode",
           de: "Auswahl > Gleich > Füllmethode",
@@ -3436,6 +4054,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Fill & Stroke menu item": {
         action: "Find Fill & Stroke menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Fill & Stroke",
           de: "Auswahl > Gleich > Fläche und Kontur",
@@ -3446,6 +4066,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Fill Color menu item": {
         action: "Find Fill Color menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Fill Color",
           de: "Auswahl > Gleich > Flächenfarbe",
@@ -3456,6 +4078,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Opacity menu item": {
         action: "Find Opacity menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Opacity",
           de: "Auswahl > Gleich > Deckkraft",
@@ -3466,6 +4090,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Stroke Color menu item": {
         action: "Find Stroke Color menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Stroke Color",
           de: "Auswahl > Gleich > Konturfarbe",
@@ -3476,6 +4102,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Stroke Weight menu item": {
         action: "Find Stroke Weight menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Stroke Weight",
           de: "Auswahl > Gleich > Konturstärke",
@@ -3486,6 +4114,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Style menu item": {
         action: "Find Style menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Same > Graphic Style",
           de: "Auswahl > Gleich > Grafikstil",
@@ -3496,6 +4126,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Live Shape menu item": {
         action: "Find Live Shape menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Same > Shape",
           de: "Auswahl > Gleich > Form",
@@ -3506,6 +4138,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Symbol Instance menu item": {
         action: "Find Symbol Instance menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Same > Symbol Instance",
           de: "Auswahl > Gleich > Symbolinstanz",
@@ -3516,6 +4150,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Link Block Series menu item": {
         action: "Find Link Block Series menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Same > Link Block Series",
           de: "Auswahl > Gleich > Verknüpfungsblockreihen",
@@ -3526,6 +4162,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Text Font Family menu item": {
         action: "Find Text Font Family menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Font Family",
           de: "Auswahl > Gleich > Schriftfamilie",
@@ -3536,6 +4174,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Text Font Family Style menu item": {
         action: "Find Text Font Family Style menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Font Family & Style",
           de: "Auswahl > Gleich > Schriftfamilie und -schnitt",
@@ -3546,6 +4186,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Text Font Family Style Size menu item": {
         action: "Find Text Font Family Style Size menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Font Family, Style & Size",
           de: "Auswahl > Gleich > Schriftfamilie, -schnitt und -grad",
@@ -3556,6 +4198,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Text Font Size menu item": {
         action: "Find Text Font Size menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Font Size",
           de: "Auswahl > Gleich > Schriftgrad",
@@ -3566,6 +4210,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Text Fill Color menu item": {
         action: "Find Text Fill Color menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Text Fill Color",
           de: "Auswahl > Gleich > Textflächenfarbe",
@@ -3576,6 +4222,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Text Stroke Color menu item": {
         action: "Find Text Stroke Color menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Text Stroke Color",
           de: "Auswahl > Gleich > Textkonturfarbe",
@@ -3586,6 +4234,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Find Text Fill Stroke Color menu item": {
         action: "Find Text Fill Stroke Color menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Same > Text Fill & Stroke Color",
           de: "Auswahl > Gleich > Textflächen- und -konturfarbe",
@@ -3596,6 +4246,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 3": {
         action: "Selection Hat 3",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Object > All on Same Layers",
           de: "Auswahl > Objekt > Alles auf denselben Ebenen",
@@ -3605,6 +4257,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 1": {
         action: "Selection Hat 1",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Object > Direction Handles",
           de: "Auswahl > Objekt > Richtungsgriffe",
@@ -3614,6 +4268,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Bristle Brush Strokes menu item": {
         action: "Bristle Brush Strokes menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Object > Bristle Brush Strokes",
           de: "Auswahl > Objekt > Borstenpinselstriche",
@@ -3623,6 +4279,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Brush Strokes menu item": {
         action: "Brush Strokes menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Object > Brush Strokes",
           de: "Auswahl > Objekt > Pinselkonturen",
@@ -3632,6 +4290,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Clipping Masks menu item": {
         action: "Clipping Masks menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Object > Clipping Masks",
           de: "Auswahl > Objekt > Schnittmasken",
@@ -3641,6 +4301,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Stray Points menu item": {
         action: "Stray Points menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Object > Stray Points",
           de: "Auswahl > Objekt > Einzelne Ankerpunkte",
@@ -3650,6 +4312,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Text Objects menu item": {
         action: "Text Objects menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Object > All Text Objects",
           de: "Auswahl > Objekt > Alle Textobjekte",
@@ -3659,6 +4323,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Point Text Objects menu item": {
         action: "Point Text Objects menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Object > Point Text Objects",
           de: "Auswahl > Objekt > Punkttextobjekte",
@@ -3668,6 +4334,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Area Text Objects menu item": {
         action: "Area Text Objects menu item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Select > Object > Area Text Objects",
           de: "Auswahl > Objekt > Flächenttextobjekte",
@@ -3677,6 +4345,8 @@ DIALOG HELPER FUNCTIONS
       "menu_SmartEdit Menu Item": {
         action: "SmartEdit Menu Item",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Start/Stop Global Edit",
           de: "Auswahl > Globale Bearbeitung starten/anhalten",
@@ -3687,6 +4357,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 10": {
         action: "Selection Hat 10",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Save Selection...",
           de: "Auswahl > Auswahl speichern …",
@@ -3696,6 +4368,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Selection Hat 11": {
         action: "Selection Hat 11",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "Select > Edit Selection...",
           de: "Auswahl > Auswahl bearbeiten …",
@@ -3705,6 +4379,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Apply Last Effect": {
         action: "Adobe Apply Last Effect",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Apply Last Effect",
           de: "Effekt > Letzten Effekt anwenden",
@@ -3714,6 +4390,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Last Effect": {
         action: "Adobe Last Effect",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Last Effect",
           de: "Effekt > Letzter Effekt",
@@ -3723,6 +4401,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Rasterize Effect Setting": {
         action: "Live Rasterize Effect Setting",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Document Raster Effects Settings...",
           de: "Effekt > Dokument-Rastereffekt-Einstellungen …",
@@ -3732,6 +4412,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Adobe Geometry3D Extrude": {
         action: "Live Adobe Geometry3D Extrude",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > 3D and Materials > Extrude & Bevel...",
           de: "Effekt > 3D und Materialien > Extrudieren und abgeflachte Kante …",
@@ -3742,6 +4424,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Adobe Geometry3D Revolve": {
         action: "Live Adobe Geometry3D Revolve",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > 3D and Materials > Revolve...",
           de: "Effekt > 3D und Materialien > Kreiseln …",
@@ -3752,6 +4436,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Adobe Geometry3D Inflate": {
         action: "Live Adobe Geometry3D Inflate",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > 3D and Materials > Inflate...",
           de: "Effekt > 3D und Materialien > Aufblasen …",
@@ -3762,6 +4448,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Adobe Geometry3D Rotate": {
         action: "Live Adobe Geometry3D Rotate",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > 3D and Materials > Rotate...",
           de: "Effekt > 3D und Materialien > Drehen …",
@@ -3772,6 +4460,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Adobe Geometry3D Materials": {
         action: "Live Adobe Geometry3D Materials",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > 3D and Materials > Materials...",
           de: "Effekt > 3D und Materialien > Materialien …",
@@ -3782,6 +4472,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live 3DExtrude": {
         action: "Live 3DExtrude",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...",
           de: "Effekt > 3D (klassisch) > Extrudieren und abgeflachte Kante (klassisch) …",
@@ -3792,6 +4484,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live 3DRevolve": {
         action: "Live 3DRevolve",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > 3D and Materials > 3D (Classic) > Revolve (Classic)...",
           de: "Effekt > 3D (klassisch) > Kreiseln (klassisch) …",
@@ -3802,6 +4496,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live 3DRotate": {
         action: "Live 3DRotate",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > 3D and Materials > 3D (Classic) > Rotate (Classic)...",
           de: "Effekt > 3D (klassisch) > Drehen (klassisch) …",
@@ -3812,6 +4508,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Rectangle": {
         action: "Live Rectangle",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Convert to Shape > Rectangle...",
           de: "Effekt > In Form umwandeln > Rechteck …",
@@ -3821,6 +4519,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Rounded Rectangle": {
         action: "Live Rounded Rectangle",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Convert to Shape > Rounded Rectangle...",
           de: "Effekt > In Form umwandeln > Abgerundetes Rechteck …",
@@ -3830,6 +4530,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Ellipse": {
         action: "Live Ellipse",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Convert to Shape > Ellipse...",
           de: "Effekt > In Form umwandeln > Ellipse …",
@@ -3839,6 +4541,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Trim Marks": {
         action: "Live Trim Marks",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Crop Marks",
           de: "Effekt > Schnittmarken",
@@ -3848,6 +4552,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Free Distort": {
         action: "Live Free Distort",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort & Transform > Free Distort...",
           de: "Effekt > Verzerrungs- und Transformationsfilter > Frei verzerren …",
@@ -3857,6 +4563,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pucker & Bloat": {
         action: "Live Pucker & Bloat",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort & Transform > Pucker & Bloat...",
           de: "Effekt > Verzerrungs- und Transformationsfilter > Zusammenziehen und aufblasen …",
@@ -3866,6 +4574,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Roughen": {
         action: "Live Roughen",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort & Transform > Roughen...",
           de: "Effekt > Verzerrungs- und Transformationsfilter > Aufrauen …",
@@ -3875,6 +4585,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Transform": {
         action: "Live Transform",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort & Transform > Transform...",
           de: "Effekt > Verzerrungs- und Transformationsfilter > Transformieren …",
@@ -3884,6 +4596,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Scribble and Tweak": {
         action: "Live Scribble and Tweak",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort & Transform > Tweak...",
           de: "Effekt > Verzerrungs- und Transformationsfilter > Tweak …",
@@ -3893,6 +4607,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Twist": {
         action: "Live Twist",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort & Transform > Twist...",
           de: "Effekt > Verzerrungs- und Transformationsfilter > Wirbel …",
@@ -3902,6 +4618,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Zig Zag": {
         action: "Live Zig Zag",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort & Transform > Zig Zag...",
           de: "Effekt > Verzerrungs- und Transformationsfilter > Zickzack …",
@@ -3911,6 +4629,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Offset Path": {
         action: "Live Offset Path",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Path > Offset Path...",
           de: "Effekt > Pfad > Pfad verschieben …",
@@ -3920,6 +4640,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Outline Object": {
         action: "Live Outline Object",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Path > Outline Object",
           de: "Effekt > Pfad > Kontur nachzeichnen",
@@ -3929,6 +4651,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Outline Stroke": {
         action: "Live Outline Stroke",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Path > Outline Stroke",
           de: "Effekt > Pfad > Konturlinie",
@@ -3938,6 +4662,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Add": {
         action: "Live Pathfinder Add",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Add",
           de: "Effekt > Pathfinder > Hinzufügen",
@@ -3947,6 +4673,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Intersect": {
         action: "Live Pathfinder Intersect",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Intersect",
           de: "Effekt > Pathfinder > Schnittmenge bilden",
@@ -3956,6 +4684,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Exclude": {
         action: "Live Pathfinder Exclude",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Exclude",
           de: "Effekt > Pathfinder > Schnittmenge entfernen",
@@ -3965,6 +4695,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Subtract": {
         action: "Live Pathfinder Subtract",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Subtract",
           de: "Effekt > Pathfinder > Subtrahieren",
@@ -3974,6 +4706,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Minus Back": {
         action: "Live Pathfinder Minus Back",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Minus Back",
           de: "Effekt > Pathfinder > Hinteres Objekt abziehen",
@@ -3983,6 +4717,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Divide": {
         action: "Live Pathfinder Divide",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Divide",
           de: "Effekt > Pathfinder > Unterteilen",
@@ -3992,6 +4728,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Trim": {
         action: "Live Pathfinder Trim",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Trim",
           de: "Effekt > Pathfinder > Überlappungsbereich entfernen",
@@ -4001,6 +4739,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Merge": {
         action: "Live Pathfinder Merge",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Merge",
           de: "Effekt > Pathfinder > Verdeckte Fläche entfernen",
@@ -4010,6 +4750,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Crop": {
         action: "Live Pathfinder Crop",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Crop",
           de: "Effekt > Pathfinder > Schnittmengenfläche",
@@ -4019,6 +4761,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Outline": {
         action: "Live Pathfinder Outline",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Outline",
           de: "Effekt > Pathfinder > Kontur aufteilen",
@@ -4028,6 +4772,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Hard Mix": {
         action: "Live Pathfinder Hard Mix",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Hard Mix",
           de: "Effekt > Pathfinder > Hart mischen",
@@ -4037,6 +4783,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Soft Mix": {
         action: "Live Pathfinder Soft Mix",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Soft Mix...",
           de: "Effekt > Pathfinder > Weich mischen …",
@@ -4046,6 +4794,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Pathfinder Trap": {
         action: "Live Pathfinder Trap",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pathfinder > Trap...",
           de: "Effekt > Pathfinder > Überfüllen …",
@@ -4055,6 +4805,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Rasterize": {
         action: "Live Rasterize",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Rasterize...",
           de: "Effekt > In Pixelbild umwandeln …",
@@ -4064,6 +4816,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Adobe Drop Shadow": {
         action: "Live Adobe Drop Shadow",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Stylize > Drop Shadow...",
           de: "Effekt > Stilisierungsfilter > Schlagschatten …",
@@ -4073,6 +4827,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Feather": {
         action: "Live Feather",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Stylize > Feather...",
           de: "Effekt > Stilisierungsfilter > Weiche Kante …",
@@ -4082,6 +4838,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Inner Glow": {
         action: "Live Inner Glow",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Stylize > Inner Glow...",
           de: "Effekt > Stilisierungsfilter > Schein nach innen …",
@@ -4091,6 +4849,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Outer Glow": {
         action: "Live Outer Glow",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Stylize > Outer Glow...",
           de: "Effekt > Stilisierungsfilter > Schein nach außen …",
@@ -4100,6 +4860,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Adobe Round Corners": {
         action: "Live Adobe Round Corners",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Stylize > Round Corners...",
           de: "Effekt > Stilisierungsfilter > Ecken abrunden …",
@@ -4109,6 +4871,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Scribble Fill": {
         action: "Live Scribble Fill",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Stylize > Scribble...",
           de: "Effekt > Stilisierungsfilter > Scribble …",
@@ -4118,6 +4882,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live SVG Filters": {
         action: "Live SVG Filters",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > SVG Filters > Apply SVG Filter...",
           de: "Effekt > SVG-Filter > SVG-Filter anwenden …",
@@ -4127,6 +4893,8 @@ DIALOG HELPER FUNCTIONS
       "menu_SVG Filter Import": {
         action: "SVG Filter Import",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > SVG Filters > Import SVG Filter...",
           de: "Effekt > SVG-Filter > SVG-Filter importieren …",
@@ -4136,6 +4904,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Arc": {
         action: "Live Deform Arc",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Arc...",
           de: "Effekt > Verkrümmungsfilter > Bogen …",
@@ -4145,6 +4915,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Arc Lower": {
         action: "Live Deform Arc Lower",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Arc Lower...",
           de: "Effekt > Verkrümmungsfilter > Bogen unten …",
@@ -4154,6 +4926,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Arc Upper": {
         action: "Live Deform Arc Upper",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Arc Upper...",
           de: "Effekt > Verkrümmungsfilter > Bogen oben …",
@@ -4163,6 +4937,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Arch": {
         action: "Live Deform Arch",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Arch...",
           de: "Effekt > Verkrümmungsfilter > Torbogen …",
@@ -4172,6 +4948,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Bulge": {
         action: "Live Deform Bulge",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Bulge...",
           de: "Effekt > Verkrümmungsfilter > Wulst …",
@@ -4181,6 +4959,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Shell Lower": {
         action: "Live Deform Shell Lower",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Shell Lower...",
           de: "Effekt > Verkrümmungsfilter > Muschel unten …",
@@ -4190,6 +4970,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Shell Upper": {
         action: "Live Deform Shell Upper",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Shell Upper...",
           de: "Effekt > Verkrümmungsfilter > Muschel oben …",
@@ -4199,6 +4981,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Flag": {
         action: "Live Deform Flag",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Flag...",
           de: "Effekt > Verkrümmungsfilter > Flagge …",
@@ -4208,6 +4992,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Wave": {
         action: "Live Deform Wave",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Wave...",
           de: "Effekt > Verkrümmungsfilter > Schwingungen …",
@@ -4217,6 +5003,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Fish": {
         action: "Live Deform Fish",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Fish...",
           de: "Effekt > Verkrümmungsfilter > Fisch …",
@@ -4226,6 +5014,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Rise": {
         action: "Live Deform Rise",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Rise...",
           de: "Effekt > Verkrümmungsfilter > Ansteigend …",
@@ -4235,6 +5025,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Fisheye": {
         action: "Live Deform Fisheye",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Fisheye...",
           de: "Effekt > Verkrümmungsfilter > Fischauge …",
@@ -4244,6 +5036,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Inflate": {
         action: "Live Deform Inflate",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Inflate...",
           de: "Effekt > Verkrümmungsfilter > Aufblasen …",
@@ -4253,6 +5047,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Squeeze": {
         action: "Live Deform Squeeze",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Squeeze...",
           de: "Effekt > Verkrümmungsfilter > Stauchen …",
@@ -4262,6 +5058,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Deform Twist": {
         action: "Live Deform Twist",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Warp > Twist...",
           de: "Effekt > Verkrümmungsfilter > Wirbel …",
@@ -4271,6 +5069,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_GEfc": {
         action: "Live PSAdapter_plugin_GEfc",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Effect Gallery...",
           de: "Effekt > Effekte-Galerie …",
@@ -4280,6 +5080,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_ClrP": {
         action: "Live PSAdapter_plugin_ClrP",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Colored Pencil...",
           de: "Effekt > Kunstfilter > Buntstiftschraffur …",
@@ -4289,6 +5091,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Ct": {
         action: "Live PSAdapter_plugin_Ct",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Cutout...",
           de: "Effekt > Kunstfilter > Farbpapier-Collage …",
@@ -4298,6 +5102,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_DryB": {
         action: "Live PSAdapter_plugin_DryB",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Dry Brush...",
           de: "Effekt > Kunstfilter > Grobe Malerei …",
@@ -4307,6 +5113,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_FlmG": {
         action: "Live PSAdapter_plugin_FlmG",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Film Grain...",
           de: "Effekt > Kunstfilter > Körnung & Aufhellung …",
@@ -4316,6 +5124,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Frsc": {
         action: "Live PSAdapter_plugin_Frsc",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Fresco...",
           de: "Effekt > Kunstfilter > Fresko …",
@@ -4325,6 +5135,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_NGlw": {
         action: "Live PSAdapter_plugin_NGlw",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Neon Glow...",
           de: "Effekt > Kunstfilter > Neonschein …",
@@ -4334,6 +5146,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_PntD": {
         action: "Live PSAdapter_plugin_PntD",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Paint Daubs...",
           de: "Effekt > Kunstfilter > Ölfarbe getupft …",
@@ -4343,6 +5157,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_PltK": {
         action: "Live PSAdapter_plugin_PltK",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Palette Knife...",
           de: "Effekt > Kunstfilter > Malmesser …",
@@ -4352,6 +5168,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_PlsW": {
         action: "Live PSAdapter_plugin_PlsW",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Plastic Wrap...",
           de: "Effekt > Kunstfilter > Kunststofffolie …",
@@ -4361,6 +5179,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_PstE": {
         action: "Live PSAdapter_plugin_PstE",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Poster Edges...",
           de: "Effekt > Kunstfilter > Tontrennung & Kantenbetonung …",
@@ -4370,6 +5190,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_RghP": {
         action: "Live PSAdapter_plugin_RghP",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Rough Pastels...",
           de: "Effekt > Kunstfilter > Grobes Pastell …",
@@ -4379,6 +5201,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_SmdS": {
         action: "Live PSAdapter_plugin_SmdS",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Smudge Stick...",
           de: "Effekt > Kunstfilter > Diagonal verwischen …",
@@ -4388,6 +5212,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Spng": {
         action: "Live PSAdapter_plugin_Spng",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Sponge...",
           de: "Effekt > Kunstfilter > Schwamm …",
@@ -4397,6 +5223,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Undr": {
         action: "Live PSAdapter_plugin_Undr",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Underpainting...",
           de: "Effekt > Kunstfilter > Malgrund …",
@@ -4406,6 +5234,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Wtrc": {
         action: "Live PSAdapter_plugin_Wtrc",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Artistic > Watercolor...",
           de: "Effekt > Kunstfilter > Aquarell …",
@@ -4415,6 +5245,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Adobe PSL Gaussian Blur": {
         action: "Live Adobe PSL Gaussian Blur",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Blur > Gaussian Blur...",
           de: "Effekt > Weichzeichnungsfilter > Gaußscher Weichzeichner …",
@@ -4424,6 +5256,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_RdlB": {
         action: "Live PSAdapter_plugin_RdlB",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Blur > Radial Blur...",
           de: "Effekt > Weichzeichnungsfilter > Radialer Weichzeichner …",
@@ -4433,6 +5267,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_SmrB": {
         action: "Live PSAdapter_plugin_SmrB",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Blur > Smart Blur...",
           de: "Effekt > Weichzeichnungsfilter > Selektiver Weichzeichner …",
@@ -4442,6 +5278,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_AccE": {
         action: "Live PSAdapter_plugin_AccE",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Brush Strokes > Accented Edges...",
           de: "Effekt > Malfilter > Kanten betonen …",
@@ -4451,6 +5289,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_AngS": {
         action: "Live PSAdapter_plugin_AngS",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Brush Strokes > Angled Strokes...",
           de: "Effekt > Malfilter > Gekreuzte Malstriche …",
@@ -4460,6 +5300,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Crsh": {
         action: "Live PSAdapter_plugin_Crsh",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Brush Strokes > Crosshatch...",
           de: "Effekt > Malfilter > Kreuzschraffur …",
@@ -4469,6 +5311,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_DrkS": {
         action: "Live PSAdapter_plugin_DrkS",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Brush Strokes > Dark Strokes...",
           de: "Effekt > Malfilter > Dunkle Malstriche …",
@@ -4478,6 +5322,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_InkO": {
         action: "Live PSAdapter_plugin_InkO",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Brush Strokes > Ink Outlines...",
           de: "Effekt > Malfilter > Konturen mit Tinte nachzeichnen …",
@@ -4487,6 +5333,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Spt": {
         action: "Live PSAdapter_plugin_Spt",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Brush Strokes > Spatter...",
           de: "Effekt > Malfilter > Spritzer …",
@@ -4496,6 +5344,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_SprS": {
         action: "Live PSAdapter_plugin_SprS",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Brush Strokes > Sprayed Strokes...",
           de: "Effekt > Malfilter > Verwackelte Striche …",
@@ -4505,6 +5355,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Smie": {
         action: "Live PSAdapter_plugin_Smie",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Brush Strokes > Sumi-e...",
           de: "Effekt > Malfilter > Sumi-e …",
@@ -4514,6 +5366,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_DfsG": {
         action: "Live PSAdapter_plugin_DfsG",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort > Diffuse Glow...",
           de: "Effekt > Verzerrungsfilter > Weiches Licht …",
@@ -4523,6 +5377,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Gls": {
         action: "Live PSAdapter_plugin_Gls",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort > Glass...",
           de: "Effekt > Verzerrungsfilter > Glas …",
@@ -4532,6 +5388,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_OcnR": {
         action: "Live PSAdapter_plugin_OcnR",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Distort > Ocean Ripple...",
           de: "Effekt > Verzerrungsfilter > Ozeanwellen …",
@@ -4541,6 +5399,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_ClrH": {
         action: "Live PSAdapter_plugin_ClrH",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pixelate > Color Halftone...",
           de: "Effekt > Vergröberungsfilter > Farbraster …",
@@ -4550,6 +5410,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Crst": {
         action: "Live PSAdapter_plugin_Crst",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pixelate > Crystallize...",
           de: "Effekt > Vergröberungsfilter > Kristallisieren …",
@@ -4559,6 +5421,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Mztn": {
         action: "Live PSAdapter_plugin_Mztn",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pixelate > Mezzotint...",
           de: "Effekt > Vergröberungsfilter > Mezzotint …",
@@ -4568,6 +5432,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Pntl": {
         action: "Live PSAdapter_plugin_Pntl",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Pixelate > Pointillize...",
           de: "Effekt > Vergröberungsfilter > Punktieren …",
@@ -4577,6 +5443,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_BsRl": {
         action: "Live PSAdapter_plugin_BsRl",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Bas Relief...",
           de: "Effekt > Zeichenfilter > Basrelief …",
@@ -4586,6 +5454,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_ChlC": {
         action: "Live PSAdapter_plugin_ChlC",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Chalk & Charcoal...",
           de: "Effekt > Zeichenfilter > Chalk & Charcoal …",
@@ -4595,6 +5465,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Chrc": {
         action: "Live PSAdapter_plugin_Chrc",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Charcoal...",
           de: "Effekt > Zeichenfilter > Kohleumsetzung …",
@@ -4604,6 +5476,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Chrm": {
         action: "Live PSAdapter_plugin_Chrm",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Chrome...",
           de: "Effekt > Zeichenfilter > Chrom …",
@@ -4613,6 +5487,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_CntC": {
         action: "Live PSAdapter_plugin_CntC",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Cont\\u00E9 Crayon...",
           de: "Effekt > Zeichenfilter > Cont\\u00E9-Stifte …",
@@ -4622,6 +5498,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_GraP": {
         action: "Live PSAdapter_plugin_GraP",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Graphic Pen...",
           de: "Effekt > Zeichenfilter > Strichumsetzung …",
@@ -4631,6 +5509,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_HlfS": {
         action: "Live PSAdapter_plugin_HlfS",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Halftone Pattern...",
           de: "Effekt > Zeichenfilter > Rasterungseffekt …",
@@ -4640,6 +5520,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_NtPr": {
         action: "Live PSAdapter_plugin_NtPr",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Note Paper...",
           de: "Effekt > Zeichenfilter > Prägepapier …",
@@ -4649,6 +5531,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Phtc": {
         action: "Live PSAdapter_plugin_Phtc",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Photocopy...",
           de: "Effekt > Zeichenfilter > Fotokopie …",
@@ -4658,6 +5542,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Plst": {
         action: "Live PSAdapter_plugin_Plst",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Plaster...",
           de: "Effekt > Zeichenfilter > Stuck …",
@@ -4667,6 +5553,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Rtcl": {
         action: "Live PSAdapter_plugin_Rtcl",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Reticulation...",
           de: "Effekt > Zeichenfilter > Punktierstich …",
@@ -4676,6 +5564,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Stmp": {
         action: "Live PSAdapter_plugin_Stmp",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Stamp...",
           de: "Effekt > Zeichenfilter > Stempel …",
@@ -4685,6 +5575,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_TrnE": {
         action: "Live PSAdapter_plugin_TrnE",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Torn Edges...",
           de: "Effekt > Zeichenfilter > Gerissene Kanten …",
@@ -4694,6 +5586,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_WtrP": {
         action: "Live PSAdapter_plugin_WtrP",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Sketch > Water Paper...",
           de: "Effekt > Zeichenfilter > Feuchtes Papier …",
@@ -4703,6 +5597,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_GlwE": {
         action: "Live PSAdapter_plugin_GlwE",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Stylize > Glowing Edges...",
           de: "Effekt > Stilisierungsfilter > Leuchtende Konturen …",
@@ -4712,6 +5608,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Crql": {
         action: "Live PSAdapter_plugin_Crql",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Texture > Craquelure...",
           de: "Effekt > Strukturierungsfilter > Risse …",
@@ -4721,6 +5619,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Grn": {
         action: "Live PSAdapter_plugin_Grn",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Texture > Grain...",
           de: "Effekt > Strukturierungsfilter > Körnung …",
@@ -4730,6 +5630,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_MscT": {
         action: "Live PSAdapter_plugin_MscT",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Texture > Mosaic Tiles...",
           de: "Effekt > Strukturierungsfilter > Kacheln …",
@@ -4739,6 +5641,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Ptch": {
         action: "Live PSAdapter_plugin_Ptch",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Texture > Patchwork...",
           de: "Effekt > Strukturierungsfilter > Patchwork …",
@@ -4748,6 +5652,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_StnG": {
         action: "Live PSAdapter_plugin_StnG",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Texture > Stained Glass...",
           de: "Effekt > Strukturierungsfilter > Buntglas-Mosaik …",
@@ -4757,6 +5663,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Txtz": {
         action: "Live PSAdapter_plugin_Txtz",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Texture > Texturizer...",
           de: "Effekt > Strukturierungsfilter > Mit Struktur versehen …",
@@ -4766,6 +5674,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_Dntr": {
         action: "Live PSAdapter_plugin_Dntr",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Video > De-Interlace...",
           de: "Effekt > Videofilter > De-Interlace …",
@@ -4775,6 +5685,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live PSAdapter_plugin_NTSC": {
         action: "Live PSAdapter_plugin_NTSC",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Effect > Video > NTSC Colors",
           de: "Effekt > Videofilter > NTSC-Farben",
@@ -4784,6 +5696,8 @@ DIALOG HELPER FUNCTIONS
       menu_preview: {
         action: "preview",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Outline / Preview",
           de: "Ansicht > Vorschau / Pfadansicht",
@@ -4793,6 +5707,8 @@ DIALOG HELPER FUNCTIONS
       "menu_GPU Preview": {
         action: "GPU Preview",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > GPU Preview / Preview on CPU",
           de: "Ansicht > Mit GPU anzeigen / Mit CPU anzeigen",
@@ -4802,6 +5718,8 @@ DIALOG HELPER FUNCTIONS
       menu_ink: {
         action: "ink",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Overprint Preview",
           de: "Ansicht > Überdruckenvorschau",
@@ -4811,6 +5729,8 @@ DIALOG HELPER FUNCTIONS
       menu_raster: {
         action: "raster",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Pixel Preview",
           de: "Ansicht > Pixelvorschau",
@@ -4820,6 +5740,8 @@ DIALOG HELPER FUNCTIONS
       "menu_proof-document": {
         action: "proof-document",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Proof Setup > Working CMYK",
           de: "Ansicht > Proof einrichten > Dokument-CMYK",
@@ -4829,6 +5751,8 @@ DIALOG HELPER FUNCTIONS
       "menu_proof-mac-rgb": {
         action: "proof-mac-rgb",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Proof Setup > Legacy Macintosh RGB (Gamma 1.8)",
           de: "Ansicht > Proof einrichten > Altes Macintosh-RGB (Gamma 1.8)",
@@ -4838,6 +5762,8 @@ DIALOG HELPER FUNCTIONS
       "menu_proof-win-rgb": {
         action: "proof-win-rgb",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Proof Setup > Internet Standard RGB (sRGB)",
           de: "Ansicht > Proof einrichten > Internet-Standard-RGB (sRGB)",
@@ -4847,6 +5773,8 @@ DIALOG HELPER FUNCTIONS
       "menu_proof-monitor-rgb": {
         action: "proof-monitor-rgb",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Proof Setup > Monitor RGB",
           de: "Ansicht > Proof einrichten > Monitor-RGB",
@@ -4856,6 +5784,8 @@ DIALOG HELPER FUNCTIONS
       "menu_proof-colorblindp": {
         action: "proof-colorblindp",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Proof Setup > Color blindness - Protanopia-type",
           de: "Ansicht > Proof einrichten > Farbenblindheit (Protanopie)",
@@ -4865,6 +5795,8 @@ DIALOG HELPER FUNCTIONS
       "menu_proof-colorblindd": {
         action: "proof-colorblindd",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Proof Setup > Color blindness - Deuteranopia-type",
           de: "Ansicht > Proof einrichten > Farbenblindheit (Deuteranopie)",
@@ -4874,6 +5806,8 @@ DIALOG HELPER FUNCTIONS
       "menu_proof-custom": {
         action: "proof-custom",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Proof Setup > Customize...",
           de: "Ansicht > Proof einrichten > Anpassen …",
@@ -4883,6 +5817,8 @@ DIALOG HELPER FUNCTIONS
       menu_proofColors: {
         action: "proofColors",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Proof Colors",
           de: "Ansicht > Farbproof",
@@ -4892,6 +5828,8 @@ DIALOG HELPER FUNCTIONS
       menu_zoomin: {
         action: "zoomin",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Zoom In",
           de: "Ansicht > Einzoomen",
@@ -4901,6 +5839,8 @@ DIALOG HELPER FUNCTIONS
       menu_zoomout: {
         action: "zoomout",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Zoom Out",
           de: "Ansicht > Auszoomen",
@@ -4910,6 +5850,8 @@ DIALOG HELPER FUNCTIONS
       menu_fitin: {
         action: "fitin",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Fit Artboard in Window",
           de: "Ansicht > Zeichenfläche in Fenster einpassen",
@@ -4919,6 +5861,8 @@ DIALOG HELPER FUNCTIONS
       menu_fitall: {
         action: "fitall",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Fit All in Window",
           de: "Ansicht > Alle in Fenster einpassen",
@@ -4928,6 +5872,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Feedback Menu": {
         action: "AISlice Feedback Menu",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Slices",
           de: "Ansicht > Slices einblenden / ausblenden",
@@ -4937,6 +5883,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AISlice Lock Menu": {
         action: "AISlice Lock Menu",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "View > Lock Slices",
           de: "Ansicht > Slices fixieren",
@@ -4946,6 +5894,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AI Bounding Box Toggle": {
         action: "AI Bounding Box Toggle",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Bounding Box",
           de: "Ansicht > Begrenzungsrahmen einblenden / ausblenden",
@@ -4955,6 +5905,8 @@ DIALOG HELPER FUNCTIONS
       "menu_TransparencyGrid Menu Item": {
         action: "TransparencyGrid Menu Item",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Transparency Grid",
           de: "Ansicht > Transparenzraster einblenden / ausblenden",
@@ -4964,6 +5916,8 @@ DIALOG HELPER FUNCTIONS
       menu_actualsize: {
         action: "actualsize",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Actual Size",
           de: "Ansicht > Originalgröße",
@@ -4973,6 +5927,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Show Gaps Planet X": {
         action: "Show Gaps Planet X",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Live Paint Gaps",
           de: "Ansicht > Interaktive Mallücken einblenden / ausblenden",
@@ -4982,6 +5938,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Gradient Feedback": {
         action: "Gradient Feedback",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Gradient Annotator",
           de: "Ansicht > Verlaufsoptimierer einblenden / ausblenden",
@@ -4991,6 +5949,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Live Corner Annotator": {
         action: "Live Corner Annotator",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Corner Widget",
           de: "Ansicht > Ecken-Widget einblenden / ausblenden",
@@ -5001,6 +5961,8 @@ DIALOG HELPER FUNCTIONS
       menu_edge: {
         action: "edge",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Edges",
           de: "Ansicht > Ecken einblenden / ausblenden",
@@ -5010,6 +5972,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Snapomatic on-off menu item": {
         action: "Snapomatic on-off menu item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "View > Smart Guides",
           de: "Ansicht > Intelligente Hilfslinien",
@@ -5019,6 +5983,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Show Perspective Grid": {
         action: "Show Perspective Grid",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Perspective Grid > Show / Hide Grid",
           de: "Ansicht > Perspektivenraster > Raster einblenden / ausblenden",
@@ -5028,6 +5994,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Show Ruler": {
         action: "Show Ruler",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Perspective Grid > Show / Hide Rulers",
           de: "Ansicht > Perspektivenraster > Lineale einblenden / ausblenden",
@@ -5037,6 +6005,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Snap to Grid": {
         action: "Snap to Grid",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Perspective Grid > Snap to Grid",
           de: "Ansicht > Perspektivenraster > Am Raster ausrichten",
@@ -5046,6 +6016,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Lock Perspective Grid": {
         action: "Lock Perspective Grid",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Perspective Grid > Lock Grid",
           de: "Ansicht > Perspektivenraster > Raster sperren",
@@ -5055,6 +6027,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Lock Station Point": {
         action: "Lock Station Point",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Perspective Grid > Lock Station Point",
           de: "Ansicht > Perspektivenraster > Bezugspunkt sperren",
@@ -5064,6 +6038,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Define Perspective Grid": {
         action: "Define Perspective Grid",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Perspective Grid > Define Grid",
           de: "Ansicht > Perspektivenraster > Raster definieren",
@@ -5073,6 +6049,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Save Perspective Grid as Preset": {
         action: "Save Perspective Grid as Preset",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Perspective Grid > Save Grid as Preset",
           de: "Ansicht > Perspektivenraster > Raster als Vorgabe speichern",
@@ -5082,6 +6060,8 @@ DIALOG HELPER FUNCTIONS
       menu_artboard: {
         action: "artboard",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Artboards",
           de: "Ansicht > Zeichenflächen einblenden / ausblenden",
@@ -5091,6 +6071,8 @@ DIALOG HELPER FUNCTIONS
       menu_pagetiling: {
         action: "pagetiling",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Print Tiling",
           de: "Ansicht > Druckaufteilung einblenden / ausblenden",
@@ -5100,6 +6082,8 @@ DIALOG HELPER FUNCTIONS
       menu_showtemplate: {
         action: "showtemplate",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Template",
           de: "Ansicht > Vorlage einblenden / ausblenden",
@@ -5109,6 +6093,8 @@ DIALOG HELPER FUNCTIONS
       menu_ruler: {
         action: "ruler",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Rulers > Show / Hide Rulers",
           de: "Ansicht > Lineale > Lineale einblende / ausblendenn",
@@ -5118,6 +6104,8 @@ DIALOG HELPER FUNCTIONS
       menu_rulerCoordinateSystem: {
         action: "rulerCoordinateSystem",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Rulers > Change to Global Rulers",
           de: "Ansicht > Lineale > In globale Lineale ändern",
@@ -5127,6 +6115,8 @@ DIALOG HELPER FUNCTIONS
       menu_videoruler: {
         action: "videoruler",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Rulers > Show / Hide Video Rulers",
           de: "Ansicht > Lineale > Videolineale einblenden / ausblenden",
@@ -5136,6 +6126,8 @@ DIALOG HELPER FUNCTIONS
       menu_textthreads: {
         action: "textthreads",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Text Threads",
           de: "Ansicht > Textverkettungen einblenden / ausblenden",
@@ -5145,6 +6137,8 @@ DIALOG HELPER FUNCTIONS
       menu_showguide: {
         action: "showguide",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Guides > Show / Hide Guides",
           de: "Ansicht > Hilfslinien > Hilfslinien einblenden / ausblenden",
@@ -5154,6 +6148,8 @@ DIALOG HELPER FUNCTIONS
       menu_lockguide: {
         action: "lockguide",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Guides > Lock Guides",
           de: "Ansicht > Hilfslinien > Hilfslinien sperren",
@@ -5163,6 +6159,8 @@ DIALOG HELPER FUNCTIONS
       menu_makeguide: {
         action: "makeguide",
         type: "menu",
+        docRequired: true,
+        selRequired: true,
         loc: {
           en: "View > Guides > Make Guides",
           de: "Ansicht > Hilfslinien > Hilfslinien erstellen",
@@ -5172,6 +6170,8 @@ DIALOG HELPER FUNCTIONS
       menu_releaseguide: {
         action: "releaseguide",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Guides > Release Guides",
           de: "Ansicht > Hilfslinien > Hilfslinien zurückwandeln",
@@ -5181,6 +6181,8 @@ DIALOG HELPER FUNCTIONS
       menu_clearguide: {
         action: "clearguide",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Guides > Clear Guides",
           de: "Ansicht > Hilfslinien > Hilfslinien löschen",
@@ -5190,6 +6192,8 @@ DIALOG HELPER FUNCTIONS
       menu_showgrid: {
         action: "showgrid",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Show / Hide Grid",
           de: "Ansicht > Raster einblenden / ausblenden",
@@ -5199,6 +6203,8 @@ DIALOG HELPER FUNCTIONS
       menu_snapgrid: {
         action: "snapgrid",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Snap to Grid",
           de: "Ansicht > Am Raster ausrichten",
@@ -5208,6 +6214,8 @@ DIALOG HELPER FUNCTIONS
       menu_snappoint: {
         action: "snappoint",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Snap to Point",
           de: "Ansicht > An Punkt ausrichten",
@@ -5217,6 +6225,8 @@ DIALOG HELPER FUNCTIONS
       menu_newview: {
         action: "newview",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > New View...",
           de: "Ansicht > Neue Ansicht …",
@@ -5226,6 +6236,8 @@ DIALOG HELPER FUNCTIONS
       menu_editview: {
         action: "editview",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "View > Edit Views...",
           de: "Ansicht > Ansicht bearbeiten …",
@@ -5235,6 +6247,8 @@ DIALOG HELPER FUNCTIONS
       menu_newwindow: {
         action: "newwindow",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Window > New Window",
           de: "Fenster > Neues Fenster",
@@ -5244,6 +6258,8 @@ DIALOG HELPER FUNCTIONS
       menu_cascade: {
         action: "cascade",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Window > Arrange > Cascade",
           de: "Fenster > Anordnen > Überlappend",
@@ -5253,6 +6269,8 @@ DIALOG HELPER FUNCTIONS
       menu_tile: {
         action: "tile",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Window > Arrange > Tile",
           de: "Fenster > Anordnen > Nebeneinander",
@@ -5262,6 +6280,8 @@ DIALOG HELPER FUNCTIONS
       menu_floatInWindow: {
         action: "floatInWindow",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Window > Arrange > Float in Window",
           de: "Fenster > Anordnen > In Fenster verschiebbar machen",
@@ -5271,6 +6291,8 @@ DIALOG HELPER FUNCTIONS
       menu_floatAllInWindows: {
         action: "floatAllInWindows",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Window > Arrange > Float All in Windows",
           de: "Fenster > Anordnen > Alle in Fenstern verschiebbar machen",
@@ -5280,15 +6302,31 @@ DIALOG HELPER FUNCTIONS
       menu_consolidateAllWindows: {
         action: "consolidateAllWindows",
         type: "menu",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Window > Arrange > Consolidate All Windows",
           de: "Fenster > Anordnen > Alle Fenster zusammenführen",
           ru: "Окно > Упорядить > Объединить все окна",
         },
       },
+      "menu_Browse Add-Ons Menu": {
+        action: "Browse Add-Ons Menu",
+        type: "menu",
+        docRequired: false,
+        selRequired: false,
+        loc: {
+          en: "Window > Find Extensions on Exchange...",
+          de: "Fenster > Erweiterungen auf Exchange suchen …",
+          ru: "Окно > Поиск расширений на Exchange...",
+        },
+        minVersion: 19,
+      },
       "menu_Adobe Reset Workspace": {
         action: "Adobe Reset Workspace",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Reset Workspace",
           de: "Fenster > Arbeitsbereich > Zurücksetzen",
@@ -5298,6 +6336,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe New Workspace": {
         action: "Adobe New Workspace",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Workspace > New Workspace...",
           de: "Fenster > Arbeitsbereich > Neuer Arbeitsbereich …",
@@ -5307,25 +6347,19 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Manage Workspace": {
         action: "Adobe Manage Workspace",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Workspace > Manage Workspaces...",
           de: "Fenster > Arbeitsbereich > Arbeitsbereiche verwalten …",
           ru: "Окно > Рабочая среда > Управление рабочими средами...",
         },
       },
-      "menu_Browse Add-Ons Menu": {
-        action: "Browse Add-Ons Menu",
-        type: "menu",
-        loc: {
-          en: "Window > Find Extensions on Exchange...",
-          de: "Fenster > Erweiterungen auf Exchange suchen …",
-          ru: "Окно > Поиск расширений на Exchange...",
-        },
-        minVersion: 19,
-      },
       "menu_drover control palette plugin": {
         action: "drover control palette plugin",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Control",
           de: "Fenster > Steuerung",
@@ -5335,6 +6369,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Advanced Toolbar Menu": {
         action: "Adobe Advanced Toolbar Menu",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Toolbars > Advanced",
           de: "Fenster > Werkzeugleisten > Erweitert",
@@ -5345,6 +6381,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Basic Toolbar Menu": {
         action: "Adobe Basic Toolbar Menu",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Toolbars > Basic",
           de: "Fenster > Werkzeugleisten > Einfach",
@@ -5355,6 +6393,8 @@ DIALOG HELPER FUNCTIONS
       "menu_New Tools Panel": {
         action: "New Tools Panel",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Toolbars > New Toolbar...",
           de: "Fenster > Werkzeugleisten > Neue Werkzeugleiste …",
@@ -5365,6 +6405,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Manage Tools Panel": {
         action: "Manage Tools Panel",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Toolbars > Manage Toolbar...",
           de: "Fenster > Werkzeugleisten > Werkzeugleisten verwalten …",
@@ -5375,6 +6417,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe 3D Panel": {
         action: "Adobe 3D Panel",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > 3D and Materials",
           de: "Fenster > 3D und Materialien",
@@ -5385,6 +6429,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Action Palette": {
         action: "Adobe Action Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Actions",
           de: "Fenster > Aktionen",
@@ -5394,6 +6440,8 @@ DIALOG HELPER FUNCTIONS
       menu_AdobeAlignObjects2: {
         action: "AdobeAlignObjects2",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Align",
           de: "Fenster > Ausrichten",
@@ -5403,6 +6451,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Style Palette": {
         action: "Style Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Appearance",
           de: "Fenster > Aussehen",
@@ -5412,6 +6462,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Artboard Palette": {
         action: "Adobe Artboard Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Artboards",
           de: "Fenster > Zeichenflächen",
@@ -5421,6 +6473,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe SmartExport Panel Menu Item": {
         action: "Adobe SmartExport Panel Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Asset Export",
           de: "Fenster > Export von Element",
@@ -5431,6 +6485,8 @@ DIALOG HELPER FUNCTIONS
       "menu_internal palettes posing as plug-in menus-attributes": {
         action: "internal palettes posing as plug-in menus-attributes",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Attributes",
           de: "Fenster > Attribute",
@@ -5440,16 +6496,22 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe BrushManager Menu Item": {
         action: "Adobe BrushManager Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Brushes", de: "Fenster > Pinsel", ru: "Окно > Кисти" },
       },
       "menu_Adobe Color Palette": {
         action: "Adobe Color Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Color", de: "Fenster > Farbe", ru: "Окно > Цвет" },
       },
       "menu_Adobe Harmony Palette": {
         action: "Adobe Harmony Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Color Guide",
           de: "Fenster > Farbhilfe",
@@ -5459,6 +6521,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Illustrator Kuler Panel": {
         action: "Adobe Illustrator Kuler Panel",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Color Themes", de: "", ru: "" },
         minVersion: 22,
         maxVersion: 25.9,
@@ -5466,6 +6530,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Commenting Palette": {
         action: "Adobe Commenting Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Comments",
           de: "Fenster > Kommentare",
@@ -5476,6 +6542,8 @@ DIALOG HELPER FUNCTIONS
       "menu_CSS Menu Item": {
         action: "CSS Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > CSS Properties",
           de: "CSS-Eigenschaften",
@@ -5485,6 +6553,8 @@ DIALOG HELPER FUNCTIONS
       menu_DocInfo1: {
         action: "DocInfo1",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Document Info",
           de: "Fenster > Dokumentinformationen",
@@ -5494,6 +6564,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Flattening Preview": {
         action: "Adobe Flattening Preview",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Flattener Preview",
           de: "Fenster > Reduzierungsvorschau",
@@ -5503,6 +6575,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Gradient Palette": {
         action: "Adobe Gradient Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Gradient",
           de: "Fenster > Verlauf",
@@ -5512,6 +6586,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Style Palette": {
         action: "Adobe Style Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Graphic Styles",
           de: "Fenster > Grafikstile",
@@ -5521,6 +6597,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe HistoryPanel Menu Item": {
         action: "Adobe HistoryPanel Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > History",
           de: "Fenster > Versionsverlauf",
@@ -5532,6 +6610,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe History Panel Menu Item": {
         action: "Adobe History Panel Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > History",
           de: "Fenster > Versionsverlauf",
@@ -5542,21 +6622,29 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Vectorize Panel": {
         action: "Adobe Vectorize Panel",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Image Trace", de: "", ru: "" },
       },
       "menu_internal palettes posing as plug-in menus-info": {
         action: "internal palettes posing as plug-in menus-info",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Info", de: "Fenster > Info", ru: "Окно > Информация" },
       },
       menu_AdobeLayerPalette1: {
         action: "AdobeLayerPalette1",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Layers", de: "Fenster > Ebenen", ru: "Окно > Слои" },
       },
       "menu_Adobe Learn Panel Menu Item": {
         action: "Adobe Learn Panel Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Learn", de: "", ru: "" },
         minVersion: 22,
         maxVersion: 25.9,
@@ -5564,6 +6652,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries": {
         action: "Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Libraries",
           de: "Fenster > Bibliotheken",
@@ -5573,6 +6663,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe LinkPalette Menu Item": {
         action: "Adobe LinkPalette Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Links",
           de: "Fenster > Verknüpfungen",
@@ -5582,6 +6674,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AI Magic Wand": {
         action: "AI Magic Wand",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Magic Wand",
           de: "Fenster > Zauberstab",
@@ -5591,6 +6685,8 @@ DIALOG HELPER FUNCTIONS
       menu_AdobeNavigator: {
         action: "AdobeNavigator",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Navigator",
           de: "Fenster > Navigator",
@@ -5600,6 +6696,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe PathfinderUI": {
         action: "Adobe PathfinderUI",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Pathfinder",
           de: "Fenster > Pathfinder",
@@ -5609,25 +6707,27 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Pattern Panel Toggle": {
         action: "Adobe Pattern Panel Toggle",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Pattern Options",
           de: "Fenster > Musteroptionen",
           ru: "Окно > Параметры узора",
         },
       },
-      "menu_Adobe Property Palette": {
-        action: "Adobe Property Palette",
+      menu_ReTypeWindowMenu: {
+        action: "ReTypeWindowMenu",
         type: "menu",
-        loc: {
-          en: "Window > Properties",
-          de: "Fenster > Eigenschaften",
-          ru: "Окно > Свойства",
-        },
-        minVersion: 26,
+        docRequired: false,
+        selRequired: false,
+        loc: { en: "Window > Retype (Beta)", de: "", ru: "" },
+        minVersion: 27.6,
       },
       "menu_Adobe Separation Preview Panel": {
         action: "Adobe Separation Preview Panel",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Separations Preview",
           de: "Fenster > Separationenvorschau",
@@ -5637,11 +6737,15 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Stroke Palette": {
         action: "Adobe Stroke Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Stroke", de: "Fenster > Kontur", ru: "Окно > Обводка" },
       },
       "menu_Adobe SVG Interactivity Palette": {
         action: "Adobe SVG Interactivity Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > SVG Interactivity",
           de: "Fenster > SVG-Interaktivität",
@@ -5651,6 +6755,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Swatches Menu Item": {
         action: "Adobe Swatches Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Swatches",
           de: "Fenster > Farbfelder",
@@ -5660,11 +6766,15 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Symbol Palette": {
         action: "Adobe Symbol Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Window > Symbols", de: "Fenster > Symbole", ru: "Окно > Символы" },
       },
       menu_AdobeTransformObjects1: {
         action: "AdobeTransformObjects1",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Transform",
           de: "Fenster > Transformieren",
@@ -5674,6 +6784,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Transparency Palette Menu Item": {
         action: "Adobe Transparency Palette Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Transparency",
           de: "Fenster > Transparenz",
@@ -5683,6 +6795,8 @@ DIALOG HELPER FUNCTIONS
       "menu_internal palettes posing as plug-in menus-character": {
         action: "internal palettes posing as plug-in menus-character",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Type > Character",
           de: "Fenster > Schrift > Zeichen",
@@ -5692,6 +6806,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Character Styles": {
         action: "Character Styles",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Type > Character Styles",
           de: "Fenster > Schrift > Zeichenformate",
@@ -5701,6 +6817,8 @@ DIALOG HELPER FUNCTIONS
       "menu_alternate glyph palette plugin 2": {
         action: "alternate glyph palette plugin 2",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Type > Glyphs",
           de: "Fenster > Schrift > Glyphen",
@@ -5710,6 +6828,8 @@ DIALOG HELPER FUNCTIONS
       "menu_internal palettes posing as plug-in menus-opentype": {
         action: "internal palettes posing as plug-in menus-opentype",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Type > OpenType",
           de: "Fenster > Schrift > OpenType",
@@ -5719,6 +6839,8 @@ DIALOG HELPER FUNCTIONS
       "menu_internal palettes posing as plug-in menus-paragraph": {
         action: "internal palettes posing as plug-in menus-paragraph",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Type > Paragraph",
           de: "Fenster > Schrift > Absatz",
@@ -5728,6 +6850,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Paragraph Styles Palette": {
         action: "Adobe Paragraph Styles Palette",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Type > Paragraph Styles",
           de: "Fenster > Schrift > Absatzformate",
@@ -5737,6 +6861,8 @@ DIALOG HELPER FUNCTIONS
       "menu_internal palettes posing as plug-in menus-tab": {
         action: "internal palettes posing as plug-in menus-tab",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Type > Tabs",
           de: "Fenster > Schrift > Tabulatoren",
@@ -5746,6 +6872,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Variables Palette Menu Item": {
         action: "Adobe Variables Palette Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Variables",
           de: "Fenster > Variablen",
@@ -5755,6 +6883,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Version History File Menu Item": {
         action: "Adobe Version History File Menu Item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Version History",
           de: "Fenster > Versionsverlauf",
@@ -5765,6 +6895,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AdobeBrushMgrUI Other libraries menu item": {
         action: "AdobeBrushMgrUI Other libraries menu item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Brush Libraries > Other Library",
           de: "Fenster > Pinsel-Bibliotheken > Andere Bibliothek …",
@@ -5774,6 +6906,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Art Style Plugin Other libraries menu item": {
         action: "Adobe Art Style Plugin Other libraries menu item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Graphic Style Libraries > Other Library...",
           de: "Fenster > Grafikstil-Bibliotheken > Andere Bibliothek …",
@@ -5783,6 +6917,8 @@ DIALOG HELPER FUNCTIONS
       "menu_AdobeSwatch_ Other libraries menu item": {
         action: "AdobeSwatch_ Other libraries menu item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Swatch Libraries > Other Library...",
           de: "Fenster > Farbfeld-Bibliotheken > Andere Bibliothek …",
@@ -5792,6 +6928,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Symbol Palette Plugin Other libraries menu item": {
         action: "Adobe Symbol Palette Plugin Other libraries menu item",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Window > Symbol Libraries > Other Library...",
           de: "Fenster > Symbol-Bibliotheken > Andere Bibliothek …",
@@ -5801,6 +6939,8 @@ DIALOG HELPER FUNCTIONS
       menu_helpcontent: {
         action: "helpcontent",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Help > Illustrator Help...",
           de: "Hilfe > Illustrator-Hilfe …",
@@ -5810,6 +6950,8 @@ DIALOG HELPER FUNCTIONS
       menu_supportCommunity: {
         action: "supportCommunity",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Help > Support Community",
           de: "Hilfe > Support-Community",
@@ -5820,6 +6962,8 @@ DIALOG HELPER FUNCTIONS
       menu_wishform: {
         action: "wishform",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Help > Submit Bug/Feature Request...",
           de: "Hilfe > Fehlermeldung / Funktionswunsch senden …",
@@ -5830,6 +6974,8 @@ DIALOG HELPER FUNCTIONS
       "menu_System Info": {
         action: "System Info",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Help > System Info...",
           de: "Hilfe > Systeminformationen …",
@@ -5839,6 +6985,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Actions Batch": {
         action: "Adobe Actions Batch",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Actions > Batch...",
           de: "Anderes Bedienfeld > Aktionsstapel …",
@@ -5848,6 +6996,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe New Fill Shortcut": {
         action: "Adobe New Fill Shortcut",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Appearance > Add New Fill",
           de: "Anderes Bedienfeld > Neue Fläche hinzufügen",
@@ -5857,6 +7007,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe New Stroke Shortcut": {
         action: "Adobe New Stroke Shortcut",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Appearance > Add New Stroke",
           de: "Anderes Bedienfeld > Neue Kontur hinzufügen",
@@ -5866,6 +7018,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe New Style Shortcut": {
         action: "Adobe New Style Shortcut",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Graphic Styles > New Graphic Style...",
           de: "Anderes Bedienfeld > Neuer Grafikstil …",
@@ -5875,6 +7029,8 @@ DIALOG HELPER FUNCTIONS
       menu_AdobeLayerPalette2: {
         action: "AdobeLayerPalette2",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Layers > New Layer",
           de: "Anderes Bedienfeld > Neue Ebene",
@@ -5884,6 +7040,8 @@ DIALOG HELPER FUNCTIONS
       menu_AdobeLayerPalette3: {
         action: "AdobeLayerPalette3",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Layers > New Layer with Dialog...",
           de: "Anderes Bedienfeld > Neue Ebene mit Dialog …",
@@ -5893,6 +7051,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe Update Link Shortcut": {
         action: "Adobe Update Link Shortcut",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Links > Update Link",
           de: "Anderes Bedienfeld > Verknüpfung aktualisieren",
@@ -5902,6 +7062,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe New Swatch Shortcut Menu": {
         action: "Adobe New Swatch Shortcut Menu",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Swatches > New Swatch...",
           de: "Anderes Bedienfeld > Neues Farbfeld …",
@@ -5911,6 +7073,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Adobe New Symbol Shortcut": {
         action: "Adobe New Symbol Shortcut",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Palette > Symbols > New Symbol...",
           de: "Anderes Bedienfeld > Neues Symbol …",
@@ -5920,6 +7084,8 @@ DIALOG HELPER FUNCTIONS
       menu_about: {
         action: "about",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "About Illustrator...",
           de: "Über Illustrator …",
@@ -5929,6 +7095,8 @@ DIALOG HELPER FUNCTIONS
       menu_preference: {
         action: "preference",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > General...",
           de: "Voreinstellungen > Allgemein …",
@@ -5938,6 +7106,8 @@ DIALOG HELPER FUNCTIONS
       menu_selectPref: {
         action: "selectPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Selection & Anchor Display...",
           de: "Voreinstellungen > Auswahl und Ankerpunkt-Anzeige …",
@@ -5947,6 +7117,8 @@ DIALOG HELPER FUNCTIONS
       menu_keyboardPref: {
         action: "keyboardPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Type...",
           de: "Voreinstellungen > Schrift …",
@@ -5956,6 +7128,8 @@ DIALOG HELPER FUNCTIONS
       menu_unitundoPref: {
         action: "unitundoPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Units...",
           de: "Voreinstellungen > Einheit …",
@@ -5965,6 +7139,8 @@ DIALOG HELPER FUNCTIONS
       menu_guidegridPref: {
         action: "guidegridPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Guides & Grid...",
           de: "Voreinstellungen > Hilfslinien und Raster …",
@@ -5974,6 +7150,8 @@ DIALOG HELPER FUNCTIONS
       menu_snapPref: {
         action: "snapPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Smart Guides...",
           de: "Voreinstellungen > Intelligente Hilfslinien …",
@@ -5983,6 +7161,8 @@ DIALOG HELPER FUNCTIONS
       menu_slicePref: {
         action: "slicePref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Slices...",
           de: "Voreinstellungen > Slices …",
@@ -5992,6 +7172,8 @@ DIALOG HELPER FUNCTIONS
       menu_hyphenPref: {
         action: "hyphenPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Hyphenation...",
           de: "Voreinstellungen > Silbentrennung …",
@@ -6001,6 +7183,8 @@ DIALOG HELPER FUNCTIONS
       menu_pluginPref: {
         action: "pluginPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Plug-ins & Scratch Disks...",
           de: "Voreinstellungen > Zusatzmodule und virtueller Speicher …",
@@ -6010,6 +7194,8 @@ DIALOG HELPER FUNCTIONS
       menu_UIPref: {
         action: "UIPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > User Interface...",
           de: "Voreinstellungen > Benutzeroberfläche …",
@@ -6019,6 +7205,8 @@ DIALOG HELPER FUNCTIONS
       menu_GPUPerformancePref: {
         action: "GPUPerformancePref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Performance",
           de: "Voreinstellungen > Leistung …",
@@ -6029,6 +7217,8 @@ DIALOG HELPER FUNCTIONS
       menu_FilePref: {
         action: "FilePref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > File Handling...",
           de: "Voreinstellungen > Dateihandhabung…",
@@ -6038,6 +7228,8 @@ DIALOG HELPER FUNCTIONS
       menu_ClipboardPref: {
         action: "ClipboardPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Clipboard Handling",
           de: "Voreinstellungen > Zwischenablageoptionen …",
@@ -6048,6 +7240,8 @@ DIALOG HELPER FUNCTIONS
       menu_BlackPref: {
         action: "BlackPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Appearance of Black...",
           de: "Bearbeiten > Voreinstellungen > Aussehen von Schwarz …",
@@ -6057,6 +7251,8 @@ DIALOG HELPER FUNCTIONS
       menu_DevicesPref: {
         action: "DevicesPref",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Preferences > Devices",
           de: "Voreinstellungen > Geräte …",
@@ -6067,6 +7263,8 @@ DIALOG HELPER FUNCTIONS
       "menu_Debug Panel": {
         action: "Debug Panel",
         type: "menu",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Debug Panel", de: "", ru: "" },
       },
     },
@@ -6074,6 +7272,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Add Anchor Point Tool": {
         action: "Adobe Add Anchor Point Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Add Anchor Point Tool",
           de: "Ankerpunkt-hinzufügen-Werkzeug",
@@ -6084,6 +7284,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Anchor Point Tool": {
         action: "Adobe Anchor Point Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Anchor Point Tool",
           de: "Ankerpunkt-Werkzeug",
@@ -6094,12 +7296,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Arc Tool": {
         action: "Adobe Arc Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Arc Tool", de: "Bogen-Werkzeug", ru: "Инструмент: Дуга" },
         minVersion: 24,
       },
       "tool_Adobe Area Graph Tool": {
         action: "Adobe Area Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Area Graph Tool",
           de: "Flächendiagramm",
@@ -6110,6 +7316,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Area Type Tool": {
         action: "Adobe Area Type Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Area Type Tool",
           de: "Flächentext-Werkzeug",
@@ -6120,6 +7328,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Crop Tool": {
         action: "Adobe Crop Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Artboard Tool",
           de: "Zeichenflächen-Werkzeug",
@@ -6130,6 +7340,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Bar Graph Tool": {
         action: "Adobe Bar Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Bar Graph Tool",
           de: "Horizontales Balkendiagramm",
@@ -6140,12 +7352,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Blend Tool": {
         action: "Adobe Blend Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Blend Tool", de: "Angleichen-Werkzeug", ru: "Инструмент: Переход" },
         minVersion: 24,
       },
       "tool_Adobe Bloat Tool": {
         action: "Adobe Bloat Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Bloat Tool",
           de: "Aufblasen-Werkzeug",
@@ -6156,6 +7372,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Blob Brush Tool": {
         action: "Adobe Blob Brush Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Blob Brush Tool",
           de: "Tropfenpinsel-Werkzeug",
@@ -6166,6 +7384,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Column Graph Tool": {
         action: "Adobe Column Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Column Graph Tool",
           de: "Vertikales Balkendiagramm",
@@ -6176,6 +7396,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Cyrstallize Tool": {
         action: "Adobe Cyrstallize Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Crystallize Tool",
           de: "Kristallisieren-Werkzeug",
@@ -6186,12 +7408,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Curvature Tool": {
         action: "Adobe Curvature Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Curvature Tool", de: "Kurvenzeichner", ru: "Инструмент: Кривизна" },
         minVersion: 24,
       },
       "tool_Adobe Delete Anchor Point Tool": {
         action: "Adobe Delete Anchor Point Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Delete Anchor Point Tool",
           de: "Ankerpunkt-löschen-Werkzeug",
@@ -6202,6 +7428,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Direct Select Tool": {
         action: "Adobe Direct Select Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Direct Selection Tool",
           de: "Direktauswahl-Werkzeug",
@@ -6212,12 +7440,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Ellipse Shape Tool": {
         action: "Adobe Ellipse Shape Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Ellipse Tool", de: "Ellipse-Werkzeug", ru: "Инструмент: Эллипс" },
         minVersion: 24,
       },
       "tool_Adobe Eraser Tool": {
         action: "Adobe Eraser Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Eraser Tool",
           de: "Radiergummi-Werkzeug",
@@ -6228,6 +7460,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Eyedropper Tool": {
         action: "Adobe Eyedropper Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Eyedropper Tool",
           de: "Pipette-Werkzeug",
@@ -6238,12 +7472,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Flare Tool": {
         action: "Adobe Flare Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Flare Tool", de: "Blendenflecke-Werkzeug", ru: "Инструмент: Блик" },
         minVersion: 24,
       },
       "tool_Adobe Free Transform Tool": {
         action: "Adobe Free Transform Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Free Transform Tool",
           de: "Frei-transformieren-Werkzeug",
@@ -6254,6 +7492,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Gradient Vector Tool": {
         action: "Adobe Gradient Vector Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Gradient Tool",
           de: "Verlauf-Werkzeug",
@@ -6264,6 +7504,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Direct Object Select Tool": {
         action: "Adobe Direct Object Select Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Group Selection Tool",
           de: "Gruppenauswahl-Werkzeug",
@@ -6274,18 +7516,24 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Scroll Tool": {
         action: "Adobe Scroll Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Hand Tool", de: "Hand-Werkzeug", ru: "Инструмент: Рука" },
         minVersion: 24,
       },
       "tool_Adobe Intertwine Zone Marker Tool": {
         action: "Adobe Intertwine Zone Marker Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Intertwine Tool", de: "", ru: "" },
         minVersion: 27,
       },
       "tool_Adobe Corner Join Tool": {
         action: "Adobe Corner Join Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Join Tool",
           de: "Zusammenfügen-Werkzeug",
@@ -6296,18 +7544,24 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Knife Tool": {
         action: "Adobe Knife Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Knife Tool", de: "Messer-Werkzeug", ru: "Инструмент: Нож" },
         minVersion: 24,
       },
       "tool_Adobe Direct Lasso Tool": {
         action: "Adobe Direct Lasso Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Lasso Tool", de: "Lasso-Werkzeug", ru: "Инструмент: Лассо" },
         minVersion: 24,
       },
       "tool_Adobe Line Graph Tool": {
         action: "Adobe Line Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Line Graph Tool",
           de: "Liniendiagramm",
@@ -6318,6 +7572,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Line Tool": {
         action: "Adobe Line Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Line Segment Tool",
           de: "Liniensegment-Werkzeug",
@@ -6328,6 +7584,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Planar Paintbucket Tool": {
         action: "Adobe Planar Paintbucket Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Live Paint Bucket Tool",
           de: "Interaktiv-malen-Werkzeug",
@@ -6338,6 +7596,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Planar Face Select Tool": {
         action: "Adobe Planar Face Select Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Live Paint Selection Tool",
           de: "Interaktiv-malen-Auswahlwerkzeug",
@@ -6348,6 +7608,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Magic Wand Tool": {
         action: "Adobe Magic Wand Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Magic Wand Tool",
           de: "Zauberstab-Werkzeug",
@@ -6358,24 +7620,32 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Measure Tool": {
         action: "Adobe Measure Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Measure Tool", de: "Mess-Werkzeug", ru: "Инструмент: Линейка" },
         minVersion: 24,
       },
       "tool_Adobe Mesh Editing Tool": {
         action: "Adobe Mesh Editing Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Mesh Tool", de: "Gitter-Werkzeug", ru: "Инструмент: Сетка" },
         minVersion: 24,
       },
       "tool_Adobe Brush Tool": {
         action: "Adobe Brush Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Paintbrush Tool", de: "Pinsel-Werkzeug", ru: "Инструмент: Кисть" },
         minVersion: 24,
       },
       "tool_Adobe Freehand Erase Tool": {
         action: "Adobe Freehand Erase Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Path Eraser Tool",
           de: "Löschen-Werkzeug",
@@ -6386,6 +7656,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Pattern Tile Tool": {
         action: "Adobe Pattern Tile Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Pattern Tile Tool",
           de: "Musterelement-Werkzeug",
@@ -6396,12 +7668,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Pen Tool": {
         action: "Adobe Pen Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Pen Tool", de: "Zeichenstift-Werkzeug", ru: "Инструмент: Перо" },
         minVersion: 24,
       },
       "tool_Adobe Freehand Tool": {
         action: "Adobe Freehand Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Pencil Tool",
           de: "Buntstift-Werkzeug",
@@ -6412,6 +7688,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Perspective Grid Tool": {
         action: "Perspective Grid Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Perspective Grid Tool",
           de: "Perspektivenraster-Werkzeug",
@@ -6422,6 +7700,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Perspective Selection Tool": {
         action: "Perspective Selection Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Perspective Selection Tool",
           de: "Perspektivenauswahl-Werkzeug",
@@ -6432,6 +7712,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Pie Graph Tool": {
         action: "Adobe Pie Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Pie Graph Tool",
           de: "Kreisdiagramm-Werkzeug",
@@ -6442,6 +7724,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Polar Grid Tool": {
         action: "Adobe Polar Grid Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Polar Grid Tool",
           de: "Radiales-Raster-Werkzeug",
@@ -6452,6 +7736,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Shape Construction Regular Polygon Tool": {
         action: "Adobe Shape Construction Regular Polygon Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Polygon Tool",
           de: "Polygon-Werkzeug",
@@ -6462,6 +7748,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Page Tool": {
         action: "Adobe Page Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Print Tiling Tool",
           de: "Druckaufteilungs-Werkzeug",
@@ -6472,6 +7760,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Pucker Tool": {
         action: "Adobe Pucker Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Pucker Tool",
           de: "Zusammenziehen-Werkzeug",
@@ -6482,6 +7772,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Puppet Warp Tool": {
         action: "Adobe Puppet Warp Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Puppet Warp Tool",
           de: "Formgitter-Werkzeug",
@@ -6492,6 +7784,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Radar Graph Tool": {
         action: "Adobe Radar Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Radar Graph Tool",
           de: "Netzdiagramm",
@@ -6502,6 +7796,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Rectangle Shape Tool": {
         action: "Adobe Rectangle Shape Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Rectangle Tool",
           de: "Rechteck-Werkzeug",
@@ -6512,6 +7808,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Rectangular Grid Tool": {
         action: "Adobe Rectangular Grid Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Rectangular Grid Tool",
           de: "Rechteckiges-Raster-Werkzeug",
@@ -6522,6 +7820,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Reflect Tool": {
         action: "Adobe Reflect Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Reflect Tool",
           de: "Spiegeln-Werkzeug",
@@ -6532,6 +7832,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Reshape Tool": {
         action: "Adobe Reshape Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Reshape Tool",
           de: "Form-ändern-Werkzeug",
@@ -6542,12 +7844,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Rotate Tool": {
         action: "Adobe Rotate Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Rotate Tool", de: "Drehen-Werkzeug", ru: "Инструмент: Поворот" },
         minVersion: 24,
       },
       "tool_Adobe Rotate Canvas Tool": {
         action: "Adobe Rotate Canvas Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Rotate View Tool",
           de: "Ansichtdrehung-Werkzeug",
@@ -6558,6 +7864,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Rounded Rectangle Tool": {
         action: "Adobe Rounded Rectangle Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Rounded Rectangle Tool",
           de: "Abgerundetes-Rechteck-Werkzeug",
@@ -6568,18 +7876,24 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Scale Tool": {
         action: "Adobe Scale Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Scale Tool", de: "Skalieren-Werkzeug", ru: "Инструмент: Масштаб" },
         minVersion: 24,
       },
       "tool_Adobe Scallop Tool": {
         action: "Adobe Scallop Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Scallop Tool", de: "Ausbuchten-Werkzeug", ru: "Инструмент: Зубцы" },
         minVersion: 24,
       },
       "tool_Adobe Scatter Graph Tool": {
         action: "Adobe Scatter Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Scatter Graph Tool",
           de: "Streudiagramm",
@@ -6590,12 +7904,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Scissors Tool": {
         action: "Adobe Scissors Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Scissors Tool", de: "Schere-Werkzeug", ru: "Инструмент: Ножницы" },
         minVersion: 24,
       },
       "tool_Adobe Select Tool": {
         action: "Adobe Select Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Selection Tool",
           de: "Auswahl-Werkzeug",
@@ -6606,6 +7924,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Shape Builder Tool": {
         action: "Adobe Shape Builder Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Shape Builder Tool",
           de: "Formerstellungs-Werkzeug",
@@ -6616,6 +7936,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Shaper Tool": {
         action: "Adobe Shaper Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Shaper Tool",
           de: "Shaper-Werkzeug",
@@ -6626,18 +7948,24 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Shear Tool": {
         action: "Adobe Shear Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Shear Tool", de: "Verbiegen-Werkzeug", ru: "Инструмент: Наклон" },
         minVersion: 24,
       },
       "tool_Adobe Slice Tool": {
         action: "Adobe Slice Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Slice Tool", de: "Slice-Werkzeug", ru: "Инструмент: Фрагменты" },
         minVersion: 24,
       },
       "tool_Adobe Slice Select Tool": {
         action: "Adobe Slice Select Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Slice Selection Tool",
           de: "Slice-Auswahl-Werkzeug",
@@ -6648,6 +7976,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Freehand Smooth Tool": {
         action: "Adobe Freehand Smooth Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Smooth Tool",
           de: "Glätten-Werkzeug",
@@ -6658,12 +7988,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Shape Construction Spiral Tool": {
         action: "Adobe Shape Construction Spiral Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Spiral Tool", de: "Spirale-Werkzeug", ru: "Инструмент: Спираль" },
         minVersion: 24,
       },
       "tool_Adobe Stacked Bar Graph Tool": {
         action: "Adobe Stacked Bar Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Stacked Bar Graph Tool",
           de: "Gestapeltes horizontales Balkendiagramm",
@@ -6674,6 +8008,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Stacked Column Graph Tool": {
         action: "Adobe Stacked Column Graph Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Stacked Column Graph Tool",
           de: "Gestapeltes vertikales Balkendiagramm",
@@ -6684,12 +8020,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Shape Construction Star Tool": {
         action: "Adobe Shape Construction Star Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Star Tool", de: "Stern-Werkzeug", ru: "Инструмент: Звезда" },
         minVersion: 24,
       },
       "tool_Adobe Symbol Screener Tool": {
         action: "Adobe Symbol Screener Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Symbol Screener Tool",
           de: "Symbol-transparent-gestalten-Werkzeug",
@@ -6700,6 +8040,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Symbol Scruncher Tool": {
         action: "Adobe Symbol Scruncher Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Symbol Scruncher Tool",
           de: "Symbol-stauchen-Werkzeug",
@@ -6710,6 +8052,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Symbol Shifter Tool": {
         action: "Adobe Symbol Shifter Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Symbol Shifter Tool",
           de: "Symbol-verschieben-Werkzeug",
@@ -6720,6 +8064,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Symbol Sizer Tool": {
         action: "Adobe Symbol Sizer Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Symbol Sizer Tool",
           de: "Symbol-skalieren-Werkzeug",
@@ -6730,6 +8076,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Symbol Spinner Tool": {
         action: "Adobe Symbol Spinner Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Symbol Spinner Tool",
           de: "Symbol-drehen-Werkzeug",
@@ -6740,6 +8088,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Symbol Sprayer Tool": {
         action: "Adobe Symbol Sprayer Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Symbol Sprayer Tool",
           de: "Symbol-aufsprühen-Werkzeug",
@@ -6750,6 +8100,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Symbol Stainer Tool": {
         action: "Adobe Symbol Stainer Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Symbol Stainer Tool",
           de: "Symbol-färben-Werkzeug",
@@ -6760,6 +8112,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Symbol Styler Tool": {
         action: "Adobe Symbol Styler Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Symbol Styler Tool",
           de: "Symbol-gestalten-Werkzeug",
@@ -6770,6 +8124,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Touch Type Tool": {
         action: "Adobe Touch Type Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Touch Type Tool",
           de: "Touch-Type-Textwerkzeug",
@@ -6780,18 +8136,24 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe New Twirl Tool": {
         action: "Adobe New Twirl Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Twirl Tool", de: "Strudel-Werkzeug", ru: "Инструмент: Воронка" },
         minVersion: 24,
       },
       "tool_Adobe Type Tool": {
         action: "Adobe Type Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Type Tool", de: "Text-Werkzeug", ru: "Инструмент: Текст" },
         minVersion: 24,
       },
       "tool_Adobe Path Type Tool": {
         action: "Adobe Path Type Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Type on a Path Tool",
           de: "Pfadtext-Werkzeug",
@@ -6802,6 +8164,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Vertical Area Type Tool": {
         action: "Adobe Vertical Area Type Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Vertical Area Type Tool",
           de: "Vertikaler-Flächentext-Werkzeug",
@@ -6812,6 +8176,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Vertical Type Tool": {
         action: "Adobe Vertical Type Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Vertical Type Tool",
           de: "Vertikaler-Text-Werkzeug",
@@ -6822,6 +8188,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Vertical Path Type Tool": {
         action: "Adobe Vertical Path Type Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Vertical Type on a Path Tool",
           de: "Vertikaler-Pfadtext-Werkzeug",
@@ -6832,6 +8200,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Warp Tool": {
         action: "Adobe Warp Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Warp Tool",
           de: "Verkrümmen-Werkzeug",
@@ -6842,12 +8212,16 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Width Tool": {
         action: "Adobe Width Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Width Tool", de: "Breiten-Werkzeug", ru: "Инструмент: Ширина" },
         minVersion: 24,
       },
       "tool_Adobe Wrinkle Tool": {
         action: "Adobe Wrinkle Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Wrinkle Tool",
           de: "Zerknittern-Werkzeug",
@@ -6858,6 +8232,8 @@ DIALOG HELPER FUNCTIONS
       "tool_Adobe Zoom Tool": {
         action: "Adobe Zoom Tool",
         type: "tool",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Zoom Tool", de: "Zoom-Werkzeug", ru: "Инструмент: Масштаб" },
         minVersion: 24,
       },
@@ -6866,6 +8242,8 @@ DIALOG HELPER FUNCTIONS
       defaults_settings: {
         action: "settings",
         type: "defaults",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Ai Command Palette Settings...",
           de: "Kurzbefehle – Einstellungen …",
@@ -6877,6 +8255,8 @@ DIALOG HELPER FUNCTIONS
       config_about: {
         action: "about",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "About Ai Command Palette...",
           de: "Über Kurzbefehle …",
@@ -6886,6 +8266,8 @@ DIALOG HELPER FUNCTIONS
       config_buildWorkflow: {
         action: "buildWorkflow",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Build Workflow...",
           de: "Arbeitsablauf erstellen …",
@@ -6895,6 +8277,8 @@ DIALOG HELPER FUNCTIONS
       config_editWorkflow: {
         action: "editWorkflow",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Edit Workflow...",
           de: "Arbeitsablauf bearbeiten …",
@@ -6904,6 +8288,8 @@ DIALOG HELPER FUNCTIONS
       config_loadScript: {
         action: "loadScript",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Load Script(s)...",
           de: "Skripte laden …",
@@ -6913,16 +8299,22 @@ DIALOG HELPER FUNCTIONS
       config_setFileBookmark: {
         action: "setFileBookmark",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Set File Bookmark(s)...", de: "", ru: "" },
       },
       config_setFolderBookmark: {
         action: "setFolderBookmark",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: { en: "Set Folder Bookmark...", de: "", ru: "" },
       },
       config_hideCommand: {
         action: "hideCommand",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Hide Commands...",
           de: "Befehle ausblenden …",
@@ -6932,6 +8324,8 @@ DIALOG HELPER FUNCTIONS
       config_unhideCommand: {
         action: "unhideCommand",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Unhide Commands...",
           de: "Befehle einblenden …",
@@ -6941,15 +8335,26 @@ DIALOG HELPER FUNCTIONS
       config_deleteCommand: {
         action: "deleteCommand",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Delete Commands...",
           de: "Befehle löschen …",
           ru: "Удалить команды",
         },
       },
+      config_clearRecentCommands: {
+        action: "clearRecentCommands",
+        type: "config",
+        docRequired: false,
+        selRequired: false,
+        loc: { en: "Clear Recent Comands", de: "", ru: "" },
+      },
       config_revealPrefFile: {
         action: "revealPrefFile",
         type: "config",
+        docRequired: false,
+        selRequired: false,
         loc: {
           en: "Reveal Preferences File",
           de: "Einstellungen-Datei anzeigen",
@@ -6961,6 +8366,8 @@ DIALOG HELPER FUNCTIONS
       builtin_goToArtboard: {
         action: "goToArtboard",
         type: "builtin",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Go To Artboard...",
           de: "Gehen Sie zur Zeichenfläche...",
@@ -6970,11 +8377,15 @@ DIALOG HELPER FUNCTIONS
       builtin_goToDocument: {
         action: "goToDocument",
         type: "builtin",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Go To Open Document", de: "", ru: "" },
       },
       builtin_goToNamedObject: {
         action: "goToNamedObject",
         type: "builtin",
+        docRequired: true,
+        selRequired: false,
         loc: {
           en: "Go To Named Object...",
           de: "Gehen Sie zum benannten Objekt...",
@@ -6984,27 +8395,51 @@ DIALOG HELPER FUNCTIONS
       builtin_redrawWindows: {
         action: "redrawWindows",
         type: "builtin",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Redraw Windows", de: "", ru: "" },
       },
       builtin_revealActiveDocument: {
         action: "revealActiveDocument",
         type: "builtin",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Reveal Active Document On System", de: "", ru: "" },
       },
       builtin_documentReport: {
         action: "documentReport",
         type: "builtin",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Active Document Report", de: "", ru: "" },
       },
       builtin_imageCapture: {
         action: "imageCapture",
         type: "builtin",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Export Active Artboard As PNG", de: "", ru: "" },
       },
       builtin_exportVariables: {
         action: "exportVariables",
         type: "builtin",
+        docRequired: true,
+        selRequired: false,
         loc: { en: "Export Document Variables As XML", de: "", ru: "" },
+      },
+      builtin_recentFiles: {
+        action: "recentFiles",
+        type: "builtin",
+        docRequired: false,
+        selRequired: false,
+        loc: { en: "Open Recent File...", de: "", ru: "" },
+      },
+      builtin_recentCommands: {
+        action: "recentCommands",
+        type: "builtin",
+        docRequired: false,
+        selRequired: false,
+        loc: { en: "Recent Commands...", de: "", ru: "" },
       },
     },
   };
@@ -7024,6 +8459,14 @@ DIALOG HELPER FUNCTIONS
             continue;
           // hide `Unhide Commands...` setting command if no hidden commands
           if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
+            continue;
+          // // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
+          if (command == "builtin_recentCommands" && data.recent.commands.length == 0)
+            continue;
+          if (
+            command == "config_clearRecentCommands" &&
+            data.recent.commands.length == 0
+          )
             continue;
           // make sure commands has localized strings
           if (commandData.hasOwnProperty("loc"))
@@ -7069,6 +8512,17 @@ DIALOG HELPER FUNCTIONS
    */
   function processCommand(command) {
     var commandData = commandsData[command];
+    // update recent commands list
+    if (command != "Recent Commands...") {
+      // make sure commands isn't already in the lest
+      var idx = data.recent.commands.indexOf(command);
+      if (idx > -1) data.recent.commands.splice(idx, 1);
+      data.recent.commands.unshift(command);
+      // keep list at 10 items
+      if (data.recent.commands.length > recentCommandsCount) data.recent.commands.pop();
+      settings.save();
+    }
+
     var type = commandData.type;
     if (type == "workflow") {
       var actions = commandData.actions;
@@ -7098,6 +8552,29 @@ DIALOG HELPER FUNCTIONS
    */
   function executeCommand(command) {
     var commandData = commandsData[command];
+    // check command to see if an active document is required
+    appDocuments = app.documents.length > 0;
+    if (!appDocuments && commandData.docRequired)
+      if (
+        !confirm(
+          localize(locStrings.cd_active_document_required, commandData.action),
+          "noAsDflt",
+          localize(locStrings.cd_exception)
+        )
+      )
+        return;
+    // check command to see if an active selection is required
+    appDocuments = app.documents.length > 0;
+    docSelection = appDocuments && app.activeDocument.selection.length > 0;
+    if (!docSelection && commandData.selRequired)
+      if (
+        !confirm(
+          localize(locStrings.cd_active_selection_required, commandData.action),
+          "noAsDflt",
+          localize(locStrings.cd_exception)
+        )
+      )
+        return;
     switch (commandData.type.toLowerCase()) {
       case "config":
       case "defaults":
@@ -7195,6 +8672,19 @@ SUPPLEMENTAL COMMAND FUNCTIONS
   }
   // USER DIALOGS
 
+  /**
+   * Show a filterable commands palette.
+   * @param {Array}   commands      Commands available to the palette.
+   * @param {Boolean} showHidden    Should user hidden commands be shown in the palette.
+   * @param {Array}   queryFilter   Types of commands to hide from the search query.
+   * @param {Array}   visibleFilter Types of commands to hide from the initial view.
+   * @param {String}  title         Command palette title.
+   * @param {Array}   bounds        Command palette bounds.
+   * @param {Boolean} multiselect   Can multiple items be selected.
+   * @param {Boolean} docRequired   Should commands requiring an active document to work be hidden if there is no active document.
+   * @param {Boolean} selRequired   Should commands requiring an active selection to work be hidden if there is no active selection.
+   * @returns
+   */
   function commandPalette(
     commands,
     showHidden,
@@ -7203,20 +8693,29 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     title,
     bounds,
     multiselect,
-    simple
+    docRequired,
+    selRequired
   ) {
-    // if a simple dialog is requested all filtering is skipped
-    if (simple) {
+    // skip all filtering if queryFilter and visibleFilter are not set
+    if (queryFilter.length == 0 && visibleFilter.length == 0) {
       commands = {
-        visible: commands,
         query: commands,
+        visible: commands,
       };
     } else {
       // filter the commands based on supplied args
       // make it so you don't have to specify the same array
       // for both filters if they should be the same
       if (visibleFilter.length == 0) visibleFilter = queryFilter;
-      commands = filterCommands(commands, queryFilter, visibleFilter, showHidden, []);
+      commands = filterCommands(
+        commands,
+        queryFilter,
+        visibleFilter,
+        showHidden,
+        [],
+        docRequired,
+        selRequired
+      );
     }
 
     // create the dialog
@@ -7251,10 +8750,11 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     cancel.preferredSize.width = 100;
 
     // as a query is typed update the list box
+    var matches, temp;
     var frameStart = 0;
     q.onChanging = function () {
       frameStart = 0;
-      matches =
+      var matches =
         this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
       if (matches.length > 0) {
         temp = win.add("listbox", list.bounds, matches, {
@@ -7264,8 +8764,12 @@ SUPPLEMENTAL COMMAND FUNCTIONS
         temp.onDoubleClick = function () {
           if (list.selection) win.close(1);
         };
+        // remove the temp 'truncation fix' item from the list
+        if (matches != commands.visible) temp.remove(temp.items.length - 1);
+        // change the original listbox reference to the updated `temp` version
         win.remove(list);
         list = temp;
+        // reset the selection
         list.selection = 0;
       }
     };
@@ -7374,6 +8878,14 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     // add items to list
     for (var i = 0; i < matches.length; i++) {
       switch (matches[i].typename) {
+        case "Document":
+          var colormode =
+            "(" + matches[i].documentColorSpace.toString().split(".").pop() + ")";
+          matches[i]["queryName"] =
+            matches[i] == app.activeDocument
+              ? "x " + matches[i].name + " " + colormode
+              : "   " + matches[i].name + " " + colormode;
+          break;
         case "PlacedItem":
           matches[i]["queryName"] = matches[i].file.name;
           break;
@@ -7405,6 +8917,7 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     cancel.preferredSize.width = 100;
 
     // as a query is typed update the list box
+    var matches, temp;
     var frameStart = 0;
     q.onChanging = function () {
       frameStart = 0;
@@ -7425,14 +8938,15 @@ SUPPLEMENTAL COMMAND FUNCTIONS
             subItems[0].text = matches[i].typename;
           }
         }
-        temp.selection = 0;
-
         // close window when double-clicking a selection
         temp.onDoubleClick = function () {
           if (list.selection) win.close(1);
         };
+        // remove the temp 'truncation fix' item from the list
+        if (matches != commands.visible) temp.remove(temp.items.length - 1);
         win.remove(list);
         list = temp;
+        list.selection = 0;
       }
     };
 
@@ -7617,8 +9131,12 @@ SUPPLEMENTAL COMMAND FUNCTIONS
         });
         // add command when double-clicking
         temp.onDoubleClick = list.onDoubleClick;
+        // remove the temp 'truncation fix' item from the list
+        if (matches != commands.visible) temp.remove(temp.items.length - 1);
+        // change the original listbox reference to the updated `temp` version
         pSearch.remove(list);
         list = temp;
+        // reset the selection
         list.selection = 0;
         cur = 0;
       }
@@ -7721,14 +9239,6 @@ SUPPLEMENTAL COMMAND FUNCTIONS
   // FILE/FOLDER OPERATIONS
 
   /**
-   * Write user data to disk.
-   * @param {Object} f File object for user preference data.
-   */
-  function writeUserData(f) {
-    writeJSONData(data.settings, f);
-  }
-
-  /**
    * Setup folder object or create if doesn't exist.
    * @param   {String} path System folder path.
    * @returns {Object}      Folder object.
@@ -7805,7 +9315,7 @@ SUPPLEMENTAL COMMAND FUNCTIONS
       var newName;
       while (allCommands.includes(result.key)) {
         if (
-          Window.confirm(
+          confirm(
             localize(locStrings.wf_already_exists),
             "noAsDflt",
             localize(locStrings.wf_already_exists_title)
@@ -7822,7 +9332,7 @@ SUPPLEMENTAL COMMAND FUNCTIONS
             alert(localize(locStrings.wf_not_saved));
             return false;
           } else {
-            result.key = localize(locStrings.workflow) + ": " + newName;
+            result.key = localize(locStrings.wf_titlecase) + ": " + newName;
             result.name = newName;
           }
         }
@@ -7849,7 +9359,16 @@ SUPPLEMENTAL COMMAND FUNCTIONS
       (commands = allCommands),
       (showHidden = false),
       (queryFilter = []),
-      (visibleFilter = ["action", "config", "defaults", "menu", "script", "tool"]),
+      (visibleFilter = [
+        "action",
+        "bookmark",
+        "builtin",
+        "config",
+        "defaults",
+        "menu",
+        "script",
+        "tool",
+      ]),
       (title = localize(locStrings.wf_edit)),
       (bounds = [0, 0, paletteWidth, 182]),
       (multiselect = false)
@@ -7898,6 +9417,9 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     settings: {
       hidden: [],
     },
+    recent: {
+      commands: [],
+    },
   };
 
   // load user settings
@@ -7905,6 +9427,8 @@ SUPPLEMENTAL COMMAND FUNCTIONS
   loadActions();
 
   // build all commands
+  var appDocuments = app.documents.length > 0;
+  var docSelection = appDocuments && app.activeDocument.selection.length > 0;
   var commandsData = {};
   buildCommands(data.commands, []);
   var allCommands = Object.keys(commandsData);
@@ -7918,7 +9442,11 @@ SUPPLEMENTAL COMMAND FUNCTIONS
     (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
     (title = localize(locStrings.title)),
     (bounds = [0, 0, paletteWidth, 182]),
-    (multiselect = false)
+    (multiselect = false),
+    (docRequired = true),
+    (selRequired = true)
   );
-  if (result) processCommand(result);
+  if (result) {
+    processCommand(result[0].text);
+  }
 })();

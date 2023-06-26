@@ -46,6 +46,9 @@ See the LICENSE file for details.
     settings: {
       hidden: [],
     },
+    recent: {
+      commands: [],
+    },
   };
 
   // load user settings
@@ -53,6 +56,8 @@ See the LICENSE file for details.
   loadActions();
 
   // build all commands
+  var appDocuments = app.documents.length > 0;
+  var docSelection = appDocuments && app.activeDocument.selection.length > 0;
   var commandsData = {};
   buildCommands(data.commands, []);
   var allCommands = Object.keys(commandsData);
@@ -66,7 +71,11 @@ See the LICENSE file for details.
     (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
     (title = localize(locStrings.title)),
     (bounds = [0, 0, paletteWidth, 182]),
-    (multiselect = false)
+    (multiselect = false),
+    (docRequired = true),
+    (selRequired = true)
   );
-  if (result) processCommand(result);
+  if (result) {
+    processCommand(result[0].text);
+  }
 })();
