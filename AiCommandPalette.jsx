@@ -429,7 +429,8 @@ DIALOG HELPER FUNCTIONS
   function scoreMatches(q, arr) {
     var word;
     var words = [];
-    var matches = [];
+    var matches = {};
+    var maxScore = 0;
     var words = q.split(" ");
     for (var i = 0; i < arr.length; i++) {
       var score = 0;
@@ -438,22 +439,35 @@ DIALOG HELPER FUNCTIONS
         if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null)
           score += word.length;
       }
-      if (score > 0) matches.push({ command: arr[i], score: score });
-    }
-    // sort the matches by score
-    matches.sort(function (a, b) {
-      return b.score - a.score;
-    });
-    // only return highest scoring matches
-    var matchedCommands = [];
-    var maxLength = 0;
-    for (var i = 0; i < matches.length; i++) {
-      if (matches[i].score >= matches[0].score) {
-        matchedCommands.push(matches[i].command);
-        if (matches[i].command.length > maxLength)
-          maxLength = matches[i].command.length;
+      if (score > 0) {
+        matches[arr[i]] = score;
+        if (score > maxScore) maxScore = score;
       }
     }
+
+    // only return highest scoring matches
+    // var matchedCommands = [];
+    // var maxLength = 0;
+    // for (var i = 0; i < matches.length; i++) {
+    //   if (matches[i].score >= maxScore / 2) matchedCommands.push(matches[i].command);
+    //   if (matches[i].command.length > maxLength) maxLength = matches[i].command.length;
+    // }
+
+    var matchedCommands = [];
+    var maxLength = 0;
+    $.writeln("-------------------------");
+    for (var c in matches) {
+      if (matches[c] >= maxScore / 2) matchedCommands.push(c);
+      if (c.length > maxLength) maxLength = c.length;
+      // increase score if command found in recent commands
+      if (matches[c] == maxScore && data.recent.commands.indexOf(c) > -1) matches[c]++;
+    }
+
+    // sort the matches by score
+    matchedCommands.sort(function (a, b) {
+      return matches[b] - matches[a];
+    });
+
     // script ui seem to incorrectly calculate the `itemSize` length when
     // filtering a temp list which the truncates some of the item so this
     // adds a string of "X" the to the end of the result as long as the
@@ -2156,6 +2170,14 @@ DIALOG HELPER FUNCTIONS
           de: "Bearbeiten > Farben bearbeiten > In RGB konvertieren",
           ru: "Редактирование > Редактировать цвета > Преобразовать в RGB",
         },
+      },
+      "menu_Generative Recolor Art Dialog": {
+        action: "Generative Recolor Art Dialog",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        loc: { en: "Edit > Edit Colors > Generative Recolor (Beta)", de: "", ru: "" },
+        minVersion: 27.6,
       },
       menu_Colors6: {
         action: "Colors6",
@@ -6693,17 +6715,13 @@ DIALOG HELPER FUNCTIONS
           ru: "Окно > Параметры узора",
         },
       },
-      "menu_Adobe Property Palette": {
-        action: "Adobe Property Palette",
+      menu_ReTypeWindowMenu: {
+        action: "ReTypeWindowMenu",
         type: "menu",
         docRequired: false,
         selRequired: false,
-        loc: {
-          en: "Window > Properties",
-          de: "Fenster > Eigenschaften",
-          ru: "Окно > Свойства",
-        },
-        minVersion: 26,
+        loc: { en: "Window > Retype (Beta)", de: "", ru: "" },
+        minVersion: 27.6,
       },
       "menu_Adobe Separation Preview Panel": {
         action: "Adobe Separation Preview Panel",
@@ -8501,7 +8519,7 @@ DIALOG HELPER FUNCTIONS
       if (idx > -1) data.recent.commands.splice(idx, 1);
       data.recent.commands.unshift(command);
       // keep list at 10 items
-      if (data.recent.commands.length > recentCommandsCount) data.recent.pop();
+      if (data.recent.commands.length > recentCommandsCount) data.recent.commands.pop();
       settings.save();
     }
 

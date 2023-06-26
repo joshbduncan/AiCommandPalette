@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - New Built-In Commands
-    - Open Recent File (based on File > Open Recent Files menu)
+    - Open Recent Files (based on File > Open Recent Files menu)
 - Commands requiring an active document filtering and error catching
     - Commands are now filtered out (hidden) if they require a document to be open and none are
         - This required adding a new column to the build data spreadsheet "docRequired"
@@ -35,6 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Active document is now included in the list and is marked with an 'x'
     - Document color mode added to the name for reference
 - Sorting (scoring) of matched commands now takes into account recently used commands
+- New commands from sttk3 on the Adobe Forum
+    - Window > Retype (Beta)
+    - Edit > Edit Colors > Generative Recolor (Beta)
 
 ### Removed
 

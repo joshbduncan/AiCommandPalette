@@ -868,6 +868,14 @@ var builtCommands = {
         ru: "Редактирование > Редактировать цвета > Преобразовать в RGB",
       },
     },
+    "menu_Generative Recolor Art Dialog": {
+      action: "Generative Recolor Art Dialog",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      loc: { en: "Edit > Edit Colors > Generative Recolor (Beta)", de: "", ru: "" },
+      minVersion: 27.6,
+    },
     menu_Colors6: {
       action: "Colors6",
       type: "menu",
@@ -5384,17 +5392,13 @@ var builtCommands = {
         ru: "Окно > Параметры узора",
       },
     },
-    "menu_Adobe Property Palette": {
-      action: "Adobe Property Palette",
+    menu_ReTypeWindowMenu: {
+      action: "ReTypeWindowMenu",
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
-        en: "Window > Properties",
-        de: "Fenster > Eigenschaften",
-        ru: "Окно > Свойства",
-      },
-      minVersion: 26,
+      loc: { en: "Window > Retype (Beta)", de: "", ru: "" },
+      minVersion: 27.6,
     },
     "menu_Adobe Separation Preview Panel": {
       action: "Adobe Separation Preview Panel",

@@ -40,7 +40,7 @@
     {
       "label": "download data",
       "type": "shell",
-      "command": "python3",
+      "command": "${command:python.interpreterPath}",
       "args": ["tools/build_data.py", "-d", ">", "src/include/data.jsxinc"],
       "group": "none",
       "presentation": {

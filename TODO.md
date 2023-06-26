@@ -6,9 +6,9 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ### Todo
 
-### Doing
-
 - [ ] startup screens customization: Allow the user to set what shows up when the command palette is first opened. Could be favorite commands, workflows, etc.
+
+### Doing
 
 ### Done
 

@@ -69,7 +69,7 @@ function processCommand(command) {
     if (idx > -1) data.recent.commands.splice(idx, 1);
     data.recent.commands.unshift(command);
     // keep list at 10 items
-    if (data.recent.commands.length > recentCommandsCount) data.recent.pop();
+    if (data.recent.commands.length > recentCommandsCount) data.recent.commands.pop();
     settings.save();
   }
 
