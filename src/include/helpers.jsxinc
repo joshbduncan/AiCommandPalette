@@ -119,7 +119,7 @@ function getBrokenFilePaths(xmp) {
 /**
  * Return the names of each object in an Ai collection object.
  * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
- * @param   {Object} o Ai collection object.
+ * @param   {Object} c Ai collection object.
  * @returns {Array}    Array containing each object name.
  */
 function getCollectionObjectNames(c, sorted) {

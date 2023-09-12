@@ -121,9 +121,9 @@ def main(argv=None):
 
     output = f"""// ALL BUILT DATA FROM PYTHON SCRIPT
 
-var locStrings = {json.dumps(strings, ensure_ascii=False)}
+var locStrings = {json.dumps(strings)}
 
-var builtCommands = {json.dumps(data_dict, ensure_ascii=False)}"""
+var builtCommands = {json.dumps(data_dict)}"""
 
     print(output.replace("\\\\n", "\\n"))
 

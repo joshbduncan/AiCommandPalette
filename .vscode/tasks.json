@@ -70,6 +70,17 @@
       },
       "dependsOrder": "sequence",
       "dependsOn": ["download data", "format data"]
-    }
+    },
+    {
+      "label": "copy-to-scripts-folder",
+      "type": "shell",
+      "command": "cp",
+      "args": ["AiCommandPalette.jsx", "/Applications/Adobe Illustrator 2023/Presets.localized/en_US/Scripts"],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
   ]
 }
