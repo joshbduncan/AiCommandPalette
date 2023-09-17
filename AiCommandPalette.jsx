@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.6.1";
+  var _version = "0.7.1";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -8727,9 +8727,11 @@ function executeCommand(command) {
     )
       return;
   // check command to see if an active selection is required
-  appDocuments = app.documents.length > 0;
-  docSelection = appDocuments && app.activeDocument.selection.length > 0;
-  if (!docSelection && commandData.selRequired)
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.selection.length < 1 &&
+    commandData.selRequired
+  )
     if (
       !confirm(
         localize(locStrings.cd_active_selection_required, commandData.action),
@@ -9584,7 +9586,7 @@ function checkWorkflowActions(actions) {
 
   // build all commands
   var appDocuments = app.documents.length > 0;
-  var docSelection = appDocuments && app.activeDocument.selection.length > 0;
+  var docSelection = appDocuments ? app.activeDocument.selection.length : null;
   var commandsData = {};
   buildCommands(data.commands, []);
   var allCommands = Object.keys(commandsData);

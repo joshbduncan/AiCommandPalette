@@ -57,7 +57,7 @@ See the LICENSE file for details.
 
   // build all commands
   var appDocuments = app.documents.length > 0;
-  var docSelection = appDocuments && app.activeDocument.selection.length > 0;
+  var docSelection = appDocuments ? app.activeDocument.selection.length : null;
   var commandsData = {};
   buildCommands(data.commands, []);
   var allCommands = Object.keys(commandsData);

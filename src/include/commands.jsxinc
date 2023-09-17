@@ -114,9 +114,11 @@ function executeCommand(command) {
     )
       return;
   // check command to see if an active selection is required
-  appDocuments = app.documents.length > 0;
-  docSelection = appDocuments && app.activeDocument.selection.length > 0;
-  if (!docSelection && commandData.selRequired)
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.selection.length < 1 &&
+    commandData.selRequired
+  )
     if (
       !confirm(
         localize(locStrings.cd_active_selection_required, commandData.action),
