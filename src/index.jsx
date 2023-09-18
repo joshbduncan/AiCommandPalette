@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.8.0";
+  var _version = "0.8.2";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -66,7 +66,7 @@ See the LICENSE file for details.
   var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // check preferences file
-  if (data.settings.version < "0.8.1") {
+  if (data.settings.hasOwnProperty("version") && data.settings.version < "0.8.1") {
     alert(localize(locStrings.pref_file_non_compatible));
     settings.backup();
     updateOldWorkflows();

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 # [0.8.1] 2023-09-18
 
+### [Fixed]
+
+- Missing localized strings
+
+# [0.8.1] 2023-09-18
+
 ### [Added]
 
 - Old incompatible preferences files will automatically be updated to work with v0.8.0 of the script
