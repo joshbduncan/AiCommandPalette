@@ -218,7 +218,12 @@ var locStrings = {
   open_recent_file: { en: "Open Recent File", de: "", ru: "" },
   placed_items: { en: "Placed Items", de: "", ru: "" },
   pref_file_loading_error: {
-    en: "Error loading preferences file! File has been renamed `BAD` and revealed for manual adjustment",
+    en: "Error Loading Preferences\nA backup copy of your settings has been created.",
+    de: "",
+    ru: "",
+  },
+  perf_file_non_compatible: {
+    en: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
     de: "",
     ru: "",
   },

@@ -42,6 +42,7 @@ settings.file = function () {
 };
 settings.load = function () {
   var file = this.file();
+  var valid_prefs = false;
   if (file.exists) {
     try {
       var settings = readJSONData(file);
@@ -57,9 +58,10 @@ settings.load = function () {
           }
         }
       }
+      valid_prefs = true;
     } catch (e) {
-      var file = this.file();
-      file.rename("BAD_" + file.name);
+      if (!valid_prefs) return;
+      file.rename(file.name + ".bak");
       this.reveal();
       Error.runtimeError(1, localize(locStrings.pref_file_loading_error));
     }
