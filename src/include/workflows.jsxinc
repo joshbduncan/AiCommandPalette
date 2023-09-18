@@ -7,7 +7,7 @@
 function buildWorkflow(workflow) {
   // show the workflow builder dialog
   var result = workflowBuilder(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = true),
     (queryFilter = ["config", "defaults"]),
     (visibleFilter = []),
@@ -45,7 +45,7 @@ function buildWorkflow(workflow) {
     var workflowActions = [];
     try {
       for (var i = 0; i < result.actions.length; i++)
-        workflowActions.push(result.actions[i].text);
+        workflowActions.push(localizedCommandLookup[result.actions[i].text]);
       data.commands.workflow[result.key] = {
         name: result.name,
         type: "workflow",
@@ -60,7 +60,7 @@ function buildWorkflow(workflow) {
 /** Choose a workflow to edit. */
 function editWorkflow() {
   var result = commandPalette(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = false),
     (queryFilter = []),
     (visibleFilter = [
@@ -77,7 +77,7 @@ function editWorkflow() {
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false)
   );
-  if (result) buildWorkflow(result);
+  if (result) buildWorkflow(localizedCommandLookup[result[0].text]);
 }
 
 /**

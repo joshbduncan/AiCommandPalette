@@ -172,9 +172,10 @@ function filterCommands(
 ) {
   var query = [];
   var visible = [];
-  var command;
+  var localizedCommand;
   for (var i = 0; i < commands.length; i++) {
-    command = commands[i];
+    localizedCommand = commands[i];
+    command = localizedCommandLookup[localizedCommand];
     commandData = commandsData[command];
     // hide commands requiring an active documents if requested
     if (docRequired && !appDocuments && commandData.docRequired) continue;
@@ -187,8 +188,8 @@ function filterCommands(
     // skip any specific commands name in hideSpecificCommands
     if (hideCommands.includes(command)) continue;
     // then check to see if the command should be filtered out
-    if (!queryFilter.includes(commandData.type)) query.push(command);
-    if (!visibleFilter.includes(commandData.type)) visible.push(command);
+    if (!queryFilter.includes(commandData.type)) query.push(localizedCommand);
+    if (!visibleFilter.includes(commandData.type)) visible.push(localizedCommand);
   }
   return {
     query: query,

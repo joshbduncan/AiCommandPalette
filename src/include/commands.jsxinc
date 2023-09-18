@@ -20,12 +20,12 @@ function buildCommands(commands, filter) {
           continue;
         if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
           continue;
-        // make sure commands has localized strings
-        if (commandData.hasOwnProperty("loc"))
-          commandsData[localize(commandData.loc)] = commandData;
-        else {
-          commandsData[command] = commandData;
-        }
+        commandsData[command] = commandData;
+        localizedCommand = commandData.hasOwnProperty("loc")
+          ? localize(commandData.loc)
+          : command;
+        idCommandLookup[command] = localizedCommand;
+        localizedCommandLookup[localizedCommand] = command;
       }
     }
   }
@@ -64,7 +64,7 @@ function processCommand(command) {
   var commandData = commandsData[command];
   // update recent commands list
   if (command != "Recent Commands...") {
-    // make sure commands isn't already in the lest
+    // make sure command isn't already in the list
     var idx = data.recent.commands.indexOf(command);
     if (idx > -1) data.recent.commands.splice(idx, 1);
     data.recent.commands.unshift(command);

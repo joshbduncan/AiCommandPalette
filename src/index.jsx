@@ -59,13 +59,16 @@ See the LICENSE file for details.
   var appDocuments = app.documents.length > 0;
   var docSelection = appDocuments ? app.activeDocument.selection.length : null;
   var commandsData = {};
+  var idCommandLookup = {};
+  var localizedCommandLookup = {};
   buildCommands(data.commands, []);
   var allCommands = Object.keys(commandsData);
+  var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // SHOW THE COMMAND PALETTE
 
   var result = commandPalette(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = false),
     (queryFilter = []),
     (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
@@ -75,7 +78,5 @@ See the LICENSE file for details.
     (docRequired = true),
     (selRequired = true)
   );
-  if (result) {
-    processCommand(result[0].text);
-  }
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
 })();

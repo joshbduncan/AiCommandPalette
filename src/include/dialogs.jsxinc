@@ -2,16 +2,16 @@
 
 /**
  * Show a filterable commands palette.
- * @param {Array}   commands      Commands available to the palette.
- * @param {Boolean} showHidden    Should user hidden commands be shown in the palette.
- * @param {Array}   queryFilter   Types of commands to hide from the search query.
- * @param {Array}   visibleFilter Types of commands to hide from the initial view.
- * @param {String}  title         Command palette title.
- * @param {Array}   bounds        Command palette bounds.
- * @param {Boolean} multiselect   Can multiple items be selected.
- * @param {Boolean} docRequired   Should commands requiring an active document to work be hidden if there is no active document.
- * @param {Boolean} selRequired   Should commands requiring an active selection to work be hidden if there is no active selection.
- * @returns
+ * @param   {Array}   commands      Commands available to the palette.
+ * @param   {Boolean} showHidden    Should user hidden commands be shown in the palette.
+ * @param   {Array}   queryFilter   Types of commands to hide from the search query.
+ * @param   {Array}   visibleFilter Types of commands to hide from the initial view.
+ * @param   {String}  title         Command palette title.
+ * @param   {Array}   bounds        Command palette bounds.
+ * @param   {Boolean} multiselect   Can multiple items be selected.
+ * @param   {Boolean} docRequired   Should commands requiring an active document to work be hidden if there is no active document.
+ * @param   {Boolean} selRequired   Should commands requiring an active selection to work be hidden if there is no active selection.
+ * @returns {Array}                 Array of selected list items.
  */
 function commandPalette(
   commands,
@@ -361,10 +361,12 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   var actions = [];
   var hideCommands = [];
   if (edit != undefined) {
-    command = commandsData[edit[0].text];
-    actions = command.actions;
+    command = commandsData[localizedCommandLookup[edit]];
+    for (var i = 0; i < command.actions.length; i++) {
+      actions.push(idCommandLookup[command.actions[i]]);
+    }
     // make sure workflows can't include themselves
-    hideCommands.push(edit[0].text);
+    hideCommands.push(edit);
   }
 
   // filter the commands based on supplied args
