@@ -4,9 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [0.8.0] 2023-09-18
 
-### Fixed
+### [Changed]
+
+- Commands are now saved to the user preferences file with an 'id' instead of the localized command string (which was causing errors)
+    - THIS IS A BREAKING CHANGE and will require users to setup new preferences. Users will be alerted is they have an older incompatible preference file.
+
+### [Fixed]
 
 - check command to see if an active selection is required
 

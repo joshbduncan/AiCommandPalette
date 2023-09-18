@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.7.1";
+  var _version = "0.8.0";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -159,9 +159,15 @@ settings.file = function () {
 };
 settings.load = function () {
   var file = this.file();
+  var valid_prefs = false;
   if (file.exists) {
     try {
       var settings = readJSONData(file);
+      if (settings.settings.version < "0.7.2") {
+        alert(localize(locStrings.perf_file_non_compatible));
+        file.rename(file.name + ".bak");
+        file.reveal();
+      }
       if (settings != {}) {
         for (var prop in settings) {
           for (var subProp in settings[prop]) {
@@ -169,9 +175,10 @@ settings.load = function () {
           }
         }
       }
+      valid_prefs = true;
     } catch (e) {
-      var file = this.file();
-      file.rename("BAD_" + file.name);
+      if (!valid_prefs) return;
+      file.rename(file.name + ".bak");
       this.reveal();
       Error.runtimeError(1, localize(locStrings.pref_file_loading_error));
     }
@@ -396,9 +403,10 @@ function filterCommands(
 ) {
   var query = [];
   var visible = [];
-  var command;
+  var localizedCommand;
   for (var i = 0; i < commands.length; i++) {
-    command = commands[i];
+    localizedCommand = commands[i];
+    command = localizedCommandLookup[localizedCommand];
     commandData = commandsData[command];
     // hide commands requiring an active documents if requested
     if (docRequired && !appDocuments && commandData.docRequired) continue;
@@ -411,8 +419,8 @@ function filterCommands(
     // skip any specific commands name in hideSpecificCommands
     if (hideCommands.includes(command)) continue;
     // then check to see if the command should be filtered out
-    if (!queryFilter.includes(commandData.type)) query.push(command);
-    if (!visibleFilter.includes(commandData.type)) visible.push(command);
+    if (!queryFilter.includes(commandData.type)) query.push(localizedCommand);
+    if (!visibleFilter.includes(commandData.type)) visible.push(localizedCommand);
   }
   return {
     query: query,
@@ -682,7 +690,7 @@ function builtinAction(action) {
 /** Ai Command Palette configuration commands. */
 function paletteSettings() {
   var result = commandPalette(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = false),
     (queryFilter = [
       "builtin",
@@ -699,7 +707,7 @@ function paletteSettings() {
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false)
   );
-  if (result) processCommand(result);
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Ai Command Palette About Dialog. */
@@ -1078,7 +1086,7 @@ function loadScripts() {
 /** Hide commands from Ai Command Palette. */
 function hideCommand() {
   var result = commandPalette(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = false),
     (queryFilter = ["config", "defaults"]),
     (visibleFilter = []),
@@ -1087,15 +1095,20 @@ function hideCommand() {
     (multiselect = true)
   );
   if (result) {
-    for (var i = 0; i < result.length; i++) data.settings.hidden.push(result[i].text);
+    for (var i = 0; i < result.length; i++)
+      data.settings.hidden.push(localizedCommandLookup[result[i].text]);
   }
 }
 
 /** Unhide hidden commands. */
 function unhideCommand() {
   if (data.settings.hidden.length > 0) {
+    commands = [];
+    for (var i = 0; i < data.settings.hidden.length; i++) {
+      commands.push(idCommandLookup[data.settings.hidden[i]]);
+    }
     var result = commandPalette(
-      (commands = data.settings.hidden),
+      (commands = commands),
       (showHidden = true),
       (queryFilter = []),
       (visibleFilter = []),
@@ -1105,8 +1118,10 @@ function unhideCommand() {
     );
     if (result) {
       for (var i = 0; i < result.length; i++) {
+        commandToHide = localizedCommandLookup[result[i].text];
         for (var n = 0; n < data.settings.hidden.length; n++) {
-          if (result[i].text == data.settings.hidden[n]) {
+          hiddenCommand = data.settings.hidden[n];
+          if (commandToHide == hiddenCommand) {
             data.settings.hidden.splice(n, 1);
           }
         }
@@ -1120,7 +1135,7 @@ function unhideCommand() {
 /** Delete commands from Ai Command Palette. */
 function deleteCommand() {
   var result = commandPalette(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = true),
     (queryFilter = ["action", "builtin", "config", "defaults", "menu", "tool"]),
     (visibleFilter = []),
@@ -1138,7 +1153,7 @@ function deleteCommand() {
     ) {
       var command, type;
       for (var i = 0; i < result.length; i++) {
-        command = result[i].text;
+        command = localizedCommandLookup[result[i].text];
         type = commandsData[command].type;
         try {
           delete data.commands[type][command];
@@ -1260,7 +1275,7 @@ function recentFiles() {
     files[f.fsName] = f;
     fileNames.push(f.fsName);
   }
-  var item = commandPalette(
+  var result = commandPalette(
     (commands = fileNames),
     (showHidden = true),
     (queryFilter = []),
@@ -1269,19 +1284,24 @@ function recentFiles() {
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false)
   );
-  if (item) {
+  if (result) {
     try {
-      app.open(files[item]);
+      app.open(files[result]);
     } catch (e) {
-      alert(localize(locStrings.fl_error_loading, item));
+      alert(localize(locStrings.fl_error_loading, result));
     }
   }
 }
 
 /** Present a command palette with more recent commands and process the selected one. */
 function recentCommands() {
+  commands = [];
+  for (var i = 0; i < data.recent.commands.length; i++) {
+    if (!idCommandLookup.hasOwnProperty(data.recent.commands[i])) continue;
+    commands.push(idCommandLookup[data.recent.commands[i]]);
+  }
   var result = commandPalette(
-    (commands = data.recent.commands),
+    (commands = commands),
     (showHidden = false),
     (queryFilter = []),
     (visibleFilter = []),
@@ -1289,9 +1309,7 @@ function recentCommands() {
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false)
   );
-  if (result) {
-    processCommand(result[0].text);
-  }
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
 }
   // ALL BUILT DATA FROM PYTHON SCRIPT
 
@@ -1513,7 +1531,12 @@ var locStrings = {
   open_recent_file: { en: "Open Recent File", de: "", ru: "" },
   placed_items: { en: "Placed Items", de: "", ru: "" },
   pref_file_loading_error: {
-    en: "Error loading preferences file! File has been renamed `BAD` and revealed for manual adjustment",
+    en: "Error Loading Preferences\nA backup copy of your settings has been created.",
+    de: "",
+    ru: "",
+  },
+  perf_file_non_compatible: {
+    en: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
     de: "",
     ru: "",
   },
@@ -8633,12 +8656,12 @@ function buildCommands(commands, filter) {
           continue;
         if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
           continue;
-        // make sure commands has localized strings
-        if (commandData.hasOwnProperty("loc"))
-          commandsData[localize(commandData.loc)] = commandData;
-        else {
-          commandsData[command] = commandData;
-        }
+        commandsData[command] = commandData;
+        localizedCommand = commandData.hasOwnProperty("loc")
+          ? localize(commandData.loc)
+          : command;
+        idCommandLookup[command] = localizedCommand;
+        localizedCommandLookup[localizedCommand] = command;
       }
     }
   }
@@ -8677,7 +8700,7 @@ function processCommand(command) {
   var commandData = commandsData[command];
   // update recent commands list
   if (command != "Recent Commands...") {
-    // make sure commands isn't already in the lest
+    // make sure command isn't already in the list
     var idx = data.recent.commands.indexOf(command);
     if (idx > -1) data.recent.commands.splice(idx, 1);
     data.recent.commands.unshift(command);
@@ -8839,16 +8862,16 @@ function versionCheck(command) {
 
 /**
  * Show a filterable commands palette.
- * @param {Array}   commands      Commands available to the palette.
- * @param {Boolean} showHidden    Should user hidden commands be shown in the palette.
- * @param {Array}   queryFilter   Types of commands to hide from the search query.
- * @param {Array}   visibleFilter Types of commands to hide from the initial view.
- * @param {String}  title         Command palette title.
- * @param {Array}   bounds        Command palette bounds.
- * @param {Boolean} multiselect   Can multiple items be selected.
- * @param {Boolean} docRequired   Should commands requiring an active document to work be hidden if there is no active document.
- * @param {Boolean} selRequired   Should commands requiring an active selection to work be hidden if there is no active selection.
- * @returns
+ * @param   {Array}   commands      Commands available to the palette.
+ * @param   {Boolean} showHidden    Should user hidden commands be shown in the palette.
+ * @param   {Array}   queryFilter   Types of commands to hide from the search query.
+ * @param   {Array}   visibleFilter Types of commands to hide from the initial view.
+ * @param   {String}  title         Command palette title.
+ * @param   {Array}   bounds        Command palette bounds.
+ * @param   {Boolean} multiselect   Can multiple items be selected.
+ * @param   {Boolean} docRequired   Should commands requiring an active document to work be hidden if there is no active document.
+ * @param   {Boolean} selRequired   Should commands requiring an active selection to work be hidden if there is no active selection.
+ * @returns {Array}                 Array of selected list items.
  */
 function commandPalette(
   commands,
@@ -9198,10 +9221,12 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   var actions = [];
   var hideCommands = [];
   if (edit != undefined) {
-    command = commandsData[edit[0].text];
-    actions = command.actions;
+    command = commandsData[localizedCommandLookup[edit]];
+    for (var i = 0; i < command.actions.length; i++) {
+      actions.push(idCommandLookup[command.actions[i]]);
+    }
     // make sure workflows can't include themselves
-    hideCommands.push(edit[0].text);
+    hideCommands.push(edit);
   }
 
   // filter the commands based on supplied args
@@ -9461,7 +9486,7 @@ function writeJSONData(obj, f) {
 function buildWorkflow(workflow) {
   // show the workflow builder dialog
   var result = workflowBuilder(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = true),
     (queryFilter = ["config", "defaults"]),
     (visibleFilter = []),
@@ -9499,7 +9524,7 @@ function buildWorkflow(workflow) {
     var workflowActions = [];
     try {
       for (var i = 0; i < result.actions.length; i++)
-        workflowActions.push(result.actions[i].text);
+        workflowActions.push(localizedCommandLookup[result.actions[i].text]);
       data.commands.workflow[result.key] = {
         name: result.name,
         type: "workflow",
@@ -9514,7 +9539,7 @@ function buildWorkflow(workflow) {
 /** Choose a workflow to edit. */
 function editWorkflow() {
   var result = commandPalette(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = false),
     (queryFilter = []),
     (visibleFilter = [
@@ -9531,7 +9556,7 @@ function editWorkflow() {
     (bounds = [0, 0, paletteWidth, 182]),
     (multiselect = false)
   );
-  if (result) buildWorkflow(result);
+  if (result) buildWorkflow(localizedCommandLookup[result[0].text]);
 }
 
 /**
@@ -9588,13 +9613,16 @@ function checkWorkflowActions(actions) {
   var appDocuments = app.documents.length > 0;
   var docSelection = appDocuments ? app.activeDocument.selection.length : null;
   var commandsData = {};
+  var idCommandLookup = {};
+  var localizedCommandLookup = {};
   buildCommands(data.commands, []);
   var allCommands = Object.keys(commandsData);
+  var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // SHOW THE COMMAND PALETTE
 
   var result = commandPalette(
-    (commands = allCommands),
+    (commands = allCommandsLocalized),
     (showHidden = false),
     (queryFilter = []),
     (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
@@ -9604,7 +9632,5 @@ function checkWorkflowActions(actions) {
     (docRequired = true),
     (selRequired = true)
   );
-  if (result) {
-    processCommand(result[0].text);
-  }
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
 })();
