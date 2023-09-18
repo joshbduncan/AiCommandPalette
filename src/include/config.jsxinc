@@ -42,15 +42,9 @@ settings.file = function () {
 };
 settings.load = function () {
   var file = this.file();
-  var valid_prefs = false;
   if (file.exists) {
     try {
       var settings = readJSONData(file);
-      if (settings.settings.version < "0.7.2") {
-        alert(localize(locStrings.perf_file_non_compatible));
-        file.rename(file.name + ".bak");
-        file.reveal();
-      }
       if (settings != {}) {
         for (var prop in settings) {
           for (var subProp in settings[prop]) {
@@ -58,9 +52,7 @@ settings.load = function () {
           }
         }
       }
-      valid_prefs = true;
     } catch (e) {
-      if (!valid_prefs) return;
       file.rename(file.name + ".bak");
       this.reveal();
       Error.runtimeError(1, localize(locStrings.pref_file_loading_error));
@@ -86,6 +78,10 @@ settings.save = function () {
     recent: data.recent,
   };
   writeJSONData(obj, file);
+};
+settings.backup = function () {
+  var backupFile = new File(this.file() + ".bak");
+  this.file().copy(backupFile);
 };
 settings.reveal = function () {
   var folder = this.folder();

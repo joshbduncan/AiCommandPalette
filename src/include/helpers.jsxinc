@@ -350,3 +350,39 @@ function openURL(url) {
   html.close();
   html.execute();
 }
+
+function updateOldWorkflows() {
+  updatedActions = [];
+  var currentActions, currentAction;
+  for (var workflow in data.commands.workflow) {
+    currentActions = data.commands.workflow[workflow].actions;
+    for (var i = 0; i < currentActions.length; i++) {
+      currentAction = currentActions[i];
+      if (!localizedCommandLookup.hasOwnProperty(currentAction)) {
+        alert(
+          "Workflow Update Error\n" +
+            "Workflow command '" +
+            currentAction +
+            "' couldn't be updated.\n\nThe command has been removed from your '" +
+            workflow.replace("Workflow: ", "") +
+            "' workflow."
+        );
+        continue;
+      }
+      updatedActions.push(localizedCommandLookup[currentAction]);
+    }
+    data.commands.workflow[workflow].actions = updatedActions;
+  }
+}
+
+function updateOldRecents() {
+  updatedRecentCommands = [];
+  var recentCommand;
+  for (var i = 0; i < data.recent.commands.length; i++) {
+    recentCommand = data.recent.commands[i];
+    if (localizedCommandLookup.hasOwnProperty(recentCommand)) {
+      updatedRecentCommands.push(localizedCommandLookup[recentCommand]);
+    }
+  }
+  data.recent.commands = updatedRecentCommands;
+}

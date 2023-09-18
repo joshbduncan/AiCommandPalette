@@ -65,6 +65,16 @@ See the LICENSE file for details.
   var allCommands = Object.keys(commandsData);
   var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
+  // check preferences file
+  if (data.settings.version < "0.8.1") {
+    alert(localize(locStrings.pref_file_non_compatible));
+    settings.backup();
+    updateOldWorkflows();
+    updateOldRecents();
+    settings.save();
+    alert(localize(locStrings.pref_update_complete));
+  }
+
   // SHOW THE COMMAND PALETTE
 
   var result = commandPalette(

@@ -159,15 +159,9 @@ settings.file = function () {
 };
 settings.load = function () {
   var file = this.file();
-  var valid_prefs = false;
   if (file.exists) {
     try {
       var settings = readJSONData(file);
-      if (settings.settings.version < "0.7.2") {
-        alert(localize(locStrings.perf_file_non_compatible));
-        file.rename(file.name + ".bak");
-        file.reveal();
-      }
       if (settings != {}) {
         for (var prop in settings) {
           for (var subProp in settings[prop]) {
@@ -175,9 +169,7 @@ settings.load = function () {
           }
         }
       }
-      valid_prefs = true;
     } catch (e) {
-      if (!valid_prefs) return;
       file.rename(file.name + ".bak");
       this.reveal();
       Error.runtimeError(1, localize(locStrings.pref_file_loading_error));
@@ -203,6 +195,10 @@ settings.save = function () {
     recent: data.recent,
   };
   writeJSONData(obj, file);
+};
+settings.backup = function () {
+  var backupFile = new File(this.file() + ".bak");
+  this.file().copy(backupFile);
 };
 settings.reveal = function () {
   var folder = this.folder();
@@ -580,6 +576,42 @@ function openURL(url) {
   html.write(htmlBody);
   html.close();
   html.execute();
+}
+
+function updateOldWorkflows() {
+  updatedActions = [];
+  var currentActions, currentAction;
+  for (var workflow in data.commands.workflow) {
+    currentActions = data.commands.workflow[workflow].actions;
+    for (var i = 0; i < currentActions.length; i++) {
+      currentAction = currentActions[i];
+      if (!localizedCommandLookup.hasOwnProperty(currentAction)) {
+        alert(
+          "Workflow Update Error\n" +
+            "Workflow command '" +
+            currentAction +
+            "' couldn't be updated.\n\nThe command has been removed from your '" +
+            workflow.replace("Workflow: ", "") +
+            "' workflow."
+        );
+        continue;
+      }
+      updatedActions.push(localizedCommandLookup[currentAction]);
+    }
+    data.commands.workflow[workflow].actions = updatedActions;
+  }
+}
+
+function updateOldRecents() {
+  updatedRecentCommands = [];
+  var recentCommand;
+  for (var i = 0; i < data.recent.commands.length; i++) {
+    recentCommand = data.recent.commands[i];
+    if (localizedCommandLookup.hasOwnProperty(recentCommand)) {
+      updatedRecentCommands.push(localizedCommandLookup[recentCommand]);
+    }
+  }
+  data.recent.commands = updatedRecentCommands;
 }
   // AI COMMAND PALETTE OPERATIONS
 
@@ -1535,11 +1567,12 @@ var locStrings = {
     de: "",
     ru: "",
   },
-  perf_file_non_compatible: {
+  pref_file_non_compatible: {
     en: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
     de: "",
     ru: "",
   },
+  pref_update_complete: { en: "Preferences Update Complete", de: "", ru: "" },
   recent_commands: { en: "Recent Commands", de: "", ru: "" },
   recent_commands_cleared: { en: "Recent Commands Cleared!", de: "", ru: "" },
   save: {
@@ -9618,6 +9651,16 @@ function checkWorkflowActions(actions) {
   buildCommands(data.commands, []);
   var allCommands = Object.keys(commandsData);
   var allCommandsLocalized = Object.keys(localizedCommandLookup);
+
+  // check preferences file
+  if (data.settings.version < "0.8.0") {
+    alert(localize(locStrings.pref_file_non_compatible));
+    settings.backup();
+    updateOldWorkflows();
+    updateOldRecents();
+    settings.save();
+    alert(localize(locStrings.pref_update_complete));
+  }
 
   // SHOW THE COMMAND PALETTE
 

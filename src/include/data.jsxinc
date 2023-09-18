@@ -222,11 +222,12 @@ var locStrings = {
     de: "",
     ru: "",
   },
-  perf_file_non_compatible: {
+  pref_file_non_compatible: {
     en: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
     de: "",
     ru: "",
   },
+  pref_update_complete: { en: "Preferences Update Complete", de: "", ru: "" },
   recent_commands: { en: "Recent Commands", de: "", ru: "" },
   recent_commands_cleared: { en: "Recent Commands Cleared!", de: "", ru: "" },
   save: {
