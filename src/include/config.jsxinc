@@ -45,6 +45,11 @@ settings.load = function () {
   if (file.exists) {
     try {
       var settings = readJSONData(file);
+      if (settings.settings.version < "0.7.2") {
+        alert(localize(locStrings.perf_file_non_compatible));
+        file.rename(file.name + ".bak");
+        file.reveal();
+      }
       if (settings != {}) {
         for (var prop in settings) {
           for (var subProp in settings[prop]) {
