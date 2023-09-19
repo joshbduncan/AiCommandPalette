@@ -55,9 +55,11 @@ See the LICENSE file for details.
   settings.load();
   loadActions();
 
-  // build all commands
   var appDocuments = app.documents.length > 0;
   var docSelection = appDocuments ? app.activeDocument.selection.length : null;
+  var insideWorkflow = false;
+
+  // build all commands
   var commandsData = {};
   var idCommandLookup = {};
   var localizedCommandLookup = {};
