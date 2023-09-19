@@ -351,11 +351,21 @@ function openURL(url) {
   html.execute();
 }
 
+function updateOldPreferences() {
+  updateOldWorkflows();
+  updateOldBookmarks();
+  updateOldScripts();
+  updateOldHiddens();
+  data.recent.commands = [];
+}
+
 function updateOldWorkflows() {
+  updatedWorkflows = {};
   updatedActions = [];
-  var currentActions, currentAction;
+  var currentWorkflow, currentActions, currentAction;
   for (var workflow in data.commands.workflow) {
-    currentActions = data.commands.workflow[workflow].actions;
+    currentWorkflow = data.commands.workflow[workflow];
+    currentActions = currentWorkflow.actions;
     for (var i = 0; i < currentActions.length; i++) {
       currentAction = currentActions[i];
       if (!localizedCommandLookup.hasOwnProperty(currentAction)) {
@@ -371,8 +381,51 @@ function updateOldWorkflows() {
       }
       updatedActions.push(localizedCommandLookup[currentAction]);
     }
-    data.commands.workflow[workflow].actions = updatedActions;
+    updatedWorkflows[currentWorkflow.name] = {
+      type: "workflow",
+      actions: updatedActions,
+    };
   }
+  data.commands.workflow = updatedWorkflows;
+}
+
+function updateOldBookmarks() {
+  updatedBookmarks = {};
+  var currentBookmark;
+  for (var bookmark in data.commands.bookmark) {
+    currentBookmark = data.commands.bookmark[bookmark];
+    updatedBookmarks[currentBookmark.name] = {
+      type: "bookmark",
+      path: currentBookmark.path,
+      bookmarkType: currentBookmark.bookmarkType,
+    };
+  }
+  data.commands.bookmark = updatedBookmarks;
+}
+
+function updateOldScripts() {
+  updatedScripts = {};
+  var currentScript;
+  for (var script in data.commands.script) {
+    currentScript = data.commands.script[script];
+    updatedScripts[currentScript.name] = {
+      type: "script",
+      path: currentScript.path,
+    };
+  }
+  data.commands.script = updatedScripts;
+}
+
+function updateOldHiddens() {
+  updatedHiddenCommands = [];
+  var hiddenCommand;
+  for (var i = 0; i < data.settings.hidden.length; i++) {
+    hiddenCommand = data.settings.hidden[i];
+    if (localizedCommandLookup.hasOwnProperty(hiddenCommand)) {
+      updatedHiddenCommands.push(localizedCommandLookup[hiddenCommand]);
+    }
+  }
+  data.settings.hidden = updatedHiddenCommands;
 }
 
 function updateOldRecents() {

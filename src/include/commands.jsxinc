@@ -6,13 +6,37 @@ function buildCommands(commands, filter) {
       var commandData;
       for (var command in commands[type]) {
         commandData = commands[type][command];
-        // hide `Edit Workflow...` setting command if no workflows
+        // hide `Edit Workflow...` command if no workflows
         if (
           command == "config_editWorkflow" &&
           Object.keys(data.commands.workflow).length < 1
         )
           continue;
-        // hide `Unhide Commands...` setting command if no hidden commands
+        // hide `All Workflows...` command if no workflows
+        if (
+          command == "config_allWorkflows" &&
+          Object.keys(data.commands.workflow).length < 1
+        )
+          continue;
+        // hide `All Scripts...` command if no scripts
+        if (
+          command == "config_allScripts" &&
+          Object.keys(data.commands.script).length < 1
+        )
+          continue;
+        // hide `All Bookmarks...` command if no bookmarks
+        if (
+          command == "config_allBookmarks" &&
+          Object.keys(data.commands.bookmark).length < 1
+        )
+          continue;
+        // hide `All Actions...` command if no actions
+        if (
+          command == "config_allActions" &&
+          Object.keys(data.commands.action).length < 1
+        )
+          continue;
+        // hide `Unhide Commands...` command if no hidden commands
         if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
           continue;
         // // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
@@ -48,7 +72,7 @@ function loadActions() {
     var name, key;
     for (var j = 1; j <= actionCount; j++) {
       name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
-      key = "Action: " + name + " [" + set + "]";
+      key = name + " [" + set + "]";
       data.commands.action[key] = { name: name, type: "action", set: set };
     }
   }

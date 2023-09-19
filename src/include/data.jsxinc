@@ -11,6 +11,7 @@ var locStrings = {
     de: "Fehler beim Ausf\u00fchren der Aktion:\n%1\n\n%2",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438:\n%1\n\n%2",
   },
+  Actions: { en: "Actions", de: "Actions", ru: "Actions" },
   active_document_not_saved: {
     en: "Active document not yet saved to the file system.",
     de: "Active document not yet saved to the file system.",
@@ -53,6 +54,7 @@ var locStrings = {
     ru: "Total bookmarks loaded:\n%1",
   },
   bookmark: { en: "Bookmark", de: "Bookmark", ru: "Bookmark" },
+  Bookmarks: { en: "Bookmarks", de: "Bookmarks", ru: "Bookmarks" },
   cancel: { en: "Cancel", de: "Abbrechen", ru: "\u041e\u0442\u043c\u0435\u043d\u0430" },
   cd_active_document_required: {
     en: "Command '%1' requires an active document. Continue Anyway?",
@@ -288,7 +290,7 @@ var locStrings = {
     ru: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
   },
   pref_update_complete: {
-    en: "Preferences Update Complete",
+    en: "Preferences Update Complete\nRe-run script.",
     de: "Preferences Update Complete",
     ru: "Preferences Update Complete",
   },
@@ -344,6 +346,7 @@ var locStrings = {
     ru: "\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432:\n%1",
   },
   script: { en: "Script", de: "Skript", ru: "\u0421\u043a\u0440\u0438\u043f\u0442" },
+  Scripts: { en: "Scripts", de: "Scripts", ru: "Scripts" },
   spot_colors: { en: "Spot Colors", de: "Spot Colors", ru: "Spot Colors" },
   step_delete: {
     en: "Delete",
@@ -457,6 +460,7 @@ var locStrings = {
     de: "Arbeitsablauf",
     ru: "\u041d\u0430\u0431\u043e\u0440\u044b",
   },
+  Workflows: { en: "Workflows", de: "Workflows", ru: "Workflows" },
 };
 
 var builtCommands = {
@@ -7296,6 +7300,13 @@ var builtCommands = {
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
       },
     },
+    config_allWorkflows: {
+      action: "allWorkflows",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "All Workflows...", de: "All Workflows...", ru: "All Workflows..." },
+    },
     config_loadScript: {
       action: "loadScript",
       type: "config",
@@ -7307,19 +7318,48 @@ var builtCommands = {
         ru: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0441\u043a\u0440\u0438\u043f\u0442\u044b",
       },
     },
+    config_allScripts: {
+      action: "allScripts",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "All Scripts...", de: "All Scripts...", ru: "All Scripts..." },
+    },
     config_setFileBookmark: {
       action: "setFileBookmark",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Set File Bookmark(s)...", de: "", ru: "" },
+      loc: {
+        en: "Set File Bookmark(s)...",
+        de: "Set File Bookmark(s)...",
+        ru: "Set File Bookmark(s)...",
+      },
     },
     config_setFolderBookmark: {
       action: "setFolderBookmark",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Set Folder Bookmark...", de: "", ru: "" },
+      loc: {
+        en: "Set Folder Bookmark...",
+        de: "Set Folder Bookmark...",
+        ru: "Set Folder Bookmark...",
+      },
+    },
+    config_allBookmarks: {
+      action: "allBookmarks",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "All Bookmarks...", de: "All Bookmarks...", ru: "All Bookmarks..." },
+    },
+    config_allActions: {
+      action: "allActions",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "All Actions...", de: "All Actions...", ru: "All Actions..." },
     },
     config_hideCommand: {
       action: "hideCommand",
@@ -7359,7 +7399,11 @@ var builtCommands = {
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Clear Recent Comands", de: "", ru: "" },
+      loc: {
+        en: "Clear Recent Comands",
+        de: "Clear Recent Comands",
+        ru: "Clear Recent Comands",
+      },
     },
     config_revealPrefFile: {
       action: "revealPrefFile",
@@ -7390,7 +7434,11 @@ var builtCommands = {
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Go To Open Document", de: "", ru: "" },
+      loc: {
+        en: "Go To Open Document",
+        de: "Go To Open Document",
+        ru: "Go To Open Document",
+      },
     },
     builtin_goToNamedObject: {
       action: "goToNamedObject",
@@ -7408,49 +7456,73 @@ var builtCommands = {
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Redraw Windows", de: "", ru: "" },
+      loc: { en: "Redraw Windows", de: "Redraw Windows", ru: "Redraw Windows" },
     },
     builtin_revealActiveDocument: {
       action: "revealActiveDocument",
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Reveal Active Document On System", de: "", ru: "" },
+      loc: {
+        en: "Reveal Active Document On System",
+        de: "Reveal Active Document On System",
+        ru: "Reveal Active Document On System",
+      },
     },
     builtin_documentReport: {
       action: "documentReport",
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Active Document Report", de: "", ru: "" },
+      loc: {
+        en: "Active Document Report",
+        de: "Active Document Report",
+        ru: "Active Document Report",
+      },
     },
     builtin_imageCapture: {
       action: "imageCapture",
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Export Active Artboard As PNG", de: "", ru: "" },
+      loc: {
+        en: "Export Active Artboard As PNG",
+        de: "Export Active Artboard As PNG",
+        ru: "Export Active Artboard As PNG",
+      },
     },
     builtin_exportVariables: {
       action: "exportVariables",
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Export Document Variables As XML", de: "", ru: "" },
+      loc: {
+        en: "Export Document Variables As XML",
+        de: "Export Document Variables As XML",
+        ru: "Export Document Variables As XML",
+      },
     },
     builtin_recentFiles: {
       action: "recentFiles",
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Open Recent File...", de: "", ru: "" },
+      loc: {
+        en: "Open Recent File...",
+        de: "Open Recent File...",
+        ru: "Open Recent File...",
+      },
     },
     builtin_recentCommands: {
       action: "recentCommands",
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Recent Commands...", de: "", ru: "" },
+      loc: {
+        en: "Recent Commands...",
+        de: "Recent Commands...",
+        ru: "Recent Commands...",
+      },
     },
   },
 };

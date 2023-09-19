@@ -18,11 +18,17 @@ function scriptAction(action) {
     case "buildWorkflow":
       buildWorkflow();
       break;
+    case "allWorkflows":
+      showAllWorkflows();
+      break;
     case "editWorkflow":
       editWorkflow();
       break;
     case "loadScript":
       loadScripts();
+      break;
+    case "allScripts":
+      showAllScripts();
       break;
     case "setFileBookmark":
       loadFileBookmark();
@@ -30,6 +36,12 @@ function scriptAction(action) {
       break;
     case "setFolderBookmark":
       loadFolderBookmark();
+      break;
+    case "allBookmarks":
+      showAllBookmarks();
+      break;
+    case "allActions":
+      showAllActions();
       break;
     case "hideCommand":
       hideCommand();
@@ -498,6 +510,75 @@ function loadScripts() {
   } else {
     alert(localize(locStrings.sc_none_selected));
   }
+}
+
+/** Show all scripts. */
+function showAllScripts() {
+  var result = commandPalette(
+    (commands = allCommandsLocalized),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = [
+      "action",
+      "bookmark",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "tool",
+      "workflow",
+    ]),
+    (title = localize(locStrings.Scripts)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
+}
+
+/** Show all bookmarks. */
+function showAllBookmarks() {
+  var result = commandPalette(
+    (commands = allCommandsLocalized),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = [
+      "action",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "script",
+      "tool",
+      "workflow",
+    ]),
+    (title = localize(locStrings.Bookmarks)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
+}
+
+/** Show all actions. */
+function showAllActions() {
+  var result = commandPalette(
+    (commands = allCommandsLocalized),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = [
+      "bookmark",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "script",
+      "tool",
+      "workflow",
+    ]),
+    (title = localize(locStrings.Actions)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Hide commands from Ai Command Palette. */

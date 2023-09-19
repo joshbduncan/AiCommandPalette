@@ -17,7 +17,7 @@ function buildWorkflow(workflow) {
   if (result) {
     // check to make sure there isn't a workflow already saved with the same name
     var newName;
-    while (allCommands.includes(result.key)) {
+    while (allCommands.includes(result.name)) {
       if (
         confirm(
           localize(locStrings.wf_already_exists),
@@ -36,7 +36,6 @@ function buildWorkflow(workflow) {
           alert(localize(locStrings.wf_not_saved));
           return false;
         } else {
-          result.key = localize(locStrings.wf_titlecase) + ": " + newName;
           result.name = newName;
         }
       }
@@ -46,8 +45,7 @@ function buildWorkflow(workflow) {
     try {
       for (var i = 0; i < result.actions.length; i++)
         workflowActions.push(localizedCommandLookup[result.actions[i].text]);
-      data.commands.workflow[result.key] = {
-        name: result.name,
+      data.commands.workflow[result.name] = {
         type: "workflow",
         actions: workflowActions,
       };
@@ -55,6 +53,29 @@ function buildWorkflow(workflow) {
       alert(localize(locStrings.wf_error_saving, result.name));
     }
   }
+}
+
+/** Show all workflows. */
+function showAllWorkflows() {
+  var result = commandPalette(
+    (commands = allCommandsLocalized),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = [
+      "action",
+      "bookmark",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "script",
+      "tool",
+    ]),
+    (title = localize(locStrings.Workflows)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Choose a workflow to edit. */

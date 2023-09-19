@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [Unreleased]
+
+### [Changed]
+
+- User commands (Actions, Bookmarks, Scripts, and Workflows) not longer have their command type (e.g. "Action: ", "Bookmark: ", "Script: ", or "Workflow: ") prepended to their name. This was causing issues with localized keys in the user preferences json file.
+    - To help find loaded Actions, Bookmarks, Scripts, and Workflows, there are four new built-in commands that can be found in the "Ai Command Palette Settings..." menu.
+
 # [0.8.1] 2023-09-18
 
 ### [Fixed]

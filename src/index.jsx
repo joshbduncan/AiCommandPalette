@@ -62,18 +62,19 @@ See the LICENSE file for details.
   var idCommandLookup = {};
   var localizedCommandLookup = {};
   buildCommands(data.commands, []);
-  var allCommands = Object.keys(commandsData);
-  var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // check preferences file
   if (data.settings.hasOwnProperty("version") && data.settings.version < "0.8.1") {
     alert(localize(locStrings.pref_file_non_compatible));
     settings.backup();
-    updateOldWorkflows();
-    updateOldRecents();
+    updateOldPreferences();
     settings.save();
     alert(localize(locStrings.pref_update_complete));
+    return;
   }
+
+  var allCommands = Object.keys(commandsData);
+  var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // SHOW THE COMMAND PALETTE
 

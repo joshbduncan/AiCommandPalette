@@ -427,7 +427,7 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   var pName = win.add("panel", undefined, localize(locStrings.wf_save_as));
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;
-  var workflowNameText = edit == undefined ? "" : command.name;
+  var workflowNameText = edit == undefined ? "" : edit;
   var workflowName = pName.add("edittext", undefined, workflowNameText);
   workflowName.enabled = edit == undefined ? false : true;
 
@@ -532,8 +532,7 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   };
 
   if (win.show() == 1) {
-    var key = localize(locStrings.wf_titlecase) + ": " + workflowName.text.trim();
-    return { key: key, name: workflowName.text, actions: steps.items };
+    return { name: workflowName.text.trim(), actions: steps.items };
   }
   return false;
 }

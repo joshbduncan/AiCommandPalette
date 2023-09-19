@@ -578,11 +578,21 @@ function openURL(url) {
   html.execute();
 }
 
+function updateOldPreferences() {
+  updateOldWorkflows();
+  updateOldBookmarks();
+  updateOldScripts();
+  updateOldHiddens();
+  data.recent.commands = [];
+}
+
 function updateOldWorkflows() {
+  updatedWorkflows = {};
   updatedActions = [];
-  var currentActions, currentAction;
+  var currentWorkflow, currentActions, currentAction;
   for (var workflow in data.commands.workflow) {
-    currentActions = data.commands.workflow[workflow].actions;
+    currentWorkflow = data.commands.workflow[workflow];
+    currentActions = currentWorkflow.actions;
     for (var i = 0; i < currentActions.length; i++) {
       currentAction = currentActions[i];
       if (!localizedCommandLookup.hasOwnProperty(currentAction)) {
@@ -598,8 +608,51 @@ function updateOldWorkflows() {
       }
       updatedActions.push(localizedCommandLookup[currentAction]);
     }
-    data.commands.workflow[workflow].actions = updatedActions;
+    updatedWorkflows[currentWorkflow.name] = {
+      type: "workflow",
+      actions: updatedActions,
+    };
   }
+  data.commands.workflow = updatedWorkflows;
+}
+
+function updateOldBookmarks() {
+  updatedBookmarks = {};
+  var currentBookmark;
+  for (var bookmark in data.commands.bookmark) {
+    currentBookmark = data.commands.bookmark[bookmark];
+    updatedBookmarks[currentBookmark.name] = {
+      type: "bookmark",
+      path: currentBookmark.path,
+      bookmarkType: currentBookmark.bookmarkType,
+    };
+  }
+  data.commands.bookmark = updatedBookmarks;
+}
+
+function updateOldScripts() {
+  updatedScripts = {};
+  var currentScript;
+  for (var script in data.commands.script) {
+    currentScript = data.commands.script[script];
+    updatedScripts[currentScript.name] = {
+      type: "script",
+      path: currentScript.path,
+    };
+  }
+  data.commands.script = updatedScripts;
+}
+
+function updateOldHiddens() {
+  updatedHiddenCommands = [];
+  var hiddenCommand;
+  for (var i = 0; i < data.settings.hidden.length; i++) {
+    hiddenCommand = data.settings.hidden[i];
+    if (localizedCommandLookup.hasOwnProperty(hiddenCommand)) {
+      updatedHiddenCommands.push(localizedCommandLookup[hiddenCommand]);
+    }
+  }
+  data.settings.hidden = updatedHiddenCommands;
 }
 
 function updateOldRecents() {
@@ -633,11 +686,17 @@ function scriptAction(action) {
     case "buildWorkflow":
       buildWorkflow();
       break;
+    case "allWorkflows":
+      showAllWorkflows();
+      break;
     case "editWorkflow":
       editWorkflow();
       break;
     case "loadScript":
       loadScripts();
+      break;
+    case "allScripts":
+      showAllScripts();
       break;
     case "setFileBookmark":
       loadFileBookmark();
@@ -645,6 +704,12 @@ function scriptAction(action) {
       break;
     case "setFolderBookmark":
       loadFolderBookmark();
+      break;
+    case "allBookmarks":
+      showAllBookmarks();
+      break;
+    case "allActions":
+      showAllActions();
       break;
     case "hideCommand":
       hideCommand();
@@ -1115,6 +1180,75 @@ function loadScripts() {
   }
 }
 
+/** Show all scripts. */
+function showAllScripts() {
+  var result = commandPalette(
+    (commands = allCommandsLocalized),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = [
+      "action",
+      "bookmark",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "tool",
+      "workflow",
+    ]),
+    (title = localize(locStrings.Scripts)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
+}
+
+/** Show all bookmarks. */
+function showAllBookmarks() {
+  var result = commandPalette(
+    (commands = allCommandsLocalized),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = [
+      "action",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "script",
+      "tool",
+      "workflow",
+    ]),
+    (title = localize(locStrings.Bookmarks)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
+}
+
+/** Show all actions. */
+function showAllActions() {
+  var result = commandPalette(
+    (commands = allCommandsLocalized),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = [
+      "bookmark",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "script",
+      "tool",
+      "workflow",
+    ]),
+    (title = localize(locStrings.Actions)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
+}
+
 /** Hide commands from Ai Command Palette. */
 function hideCommand() {
   var result = commandPalette(
@@ -1356,6 +1490,7 @@ var locStrings = {
     de: "Fehler beim Ausf\u00fchren der Aktion:\n%1\n\n%2",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438:\n%1\n\n%2",
   },
+  Actions: { en: "Actions", de: "Actions", ru: "Actions" },
   active_document_not_saved: {
     en: "Active document not yet saved to the file system.",
     de: "Active document not yet saved to the file system.",
@@ -1398,6 +1533,7 @@ var locStrings = {
     ru: "Total bookmarks loaded:\n%1",
   },
   bookmark: { en: "Bookmark", de: "Bookmark", ru: "Bookmark" },
+  Bookmarks: { en: "Bookmarks", de: "Bookmarks", ru: "Bookmarks" },
   cancel: { en: "Cancel", de: "Abbrechen", ru: "\u041e\u0442\u043c\u0435\u043d\u0430" },
   cd_active_document_required: {
     en: "Command '%1' requires an active document. Continue Anyway?",
@@ -1633,7 +1769,7 @@ var locStrings = {
     ru: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
   },
   pref_update_complete: {
-    en: "Preferences Update Complete",
+    en: "Preferences Update Complete\nRe-run script.",
     de: "Preferences Update Complete",
     ru: "Preferences Update Complete",
   },
@@ -1689,6 +1825,7 @@ var locStrings = {
     ru: "\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432:\n%1",
   },
   script: { en: "Script", de: "Skript", ru: "\u0421\u043a\u0440\u0438\u043f\u0442" },
+  Scripts: { en: "Scripts", de: "Scripts", ru: "Scripts" },
   spot_colors: { en: "Spot Colors", de: "Spot Colors", ru: "Spot Colors" },
   step_delete: {
     en: "Delete",
@@ -1802,6 +1939,7 @@ var locStrings = {
     de: "Arbeitsablauf",
     ru: "\u041d\u0430\u0431\u043e\u0440\u044b",
   },
+  Workflows: { en: "Workflows", de: "Workflows", ru: "Workflows" },
 };
 
 var builtCommands = {
@@ -8641,6 +8779,13 @@ var builtCommands = {
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
       },
     },
+    config_allWorkflows: {
+      action: "allWorkflows",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "All Workflows...", de: "All Workflows...", ru: "All Workflows..." },
+    },
     config_loadScript: {
       action: "loadScript",
       type: "config",
@@ -8652,19 +8797,48 @@ var builtCommands = {
         ru: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0441\u043a\u0440\u0438\u043f\u0442\u044b",
       },
     },
+    config_allScripts: {
+      action: "allScripts",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "All Scripts...", de: "All Scripts...", ru: "All Scripts..." },
+    },
     config_setFileBookmark: {
       action: "setFileBookmark",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Set File Bookmark(s)...", de: "", ru: "" },
+      loc: {
+        en: "Set File Bookmark(s)...",
+        de: "Set File Bookmark(s)...",
+        ru: "Set File Bookmark(s)...",
+      },
     },
     config_setFolderBookmark: {
       action: "setFolderBookmark",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Set Folder Bookmark...", de: "", ru: "" },
+      loc: {
+        en: "Set Folder Bookmark...",
+        de: "Set Folder Bookmark...",
+        ru: "Set Folder Bookmark...",
+      },
+    },
+    config_allBookmarks: {
+      action: "allBookmarks",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "All Bookmarks...", de: "All Bookmarks...", ru: "All Bookmarks..." },
+    },
+    config_allActions: {
+      action: "allActions",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: { en: "All Actions...", de: "All Actions...", ru: "All Actions..." },
     },
     config_hideCommand: {
       action: "hideCommand",
@@ -8704,7 +8878,11 @@ var builtCommands = {
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Clear Recent Comands", de: "", ru: "" },
+      loc: {
+        en: "Clear Recent Comands",
+        de: "Clear Recent Comands",
+        ru: "Clear Recent Comands",
+      },
     },
     config_revealPrefFile: {
       action: "revealPrefFile",
@@ -8735,7 +8913,11 @@ var builtCommands = {
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Go To Open Document", de: "", ru: "" },
+      loc: {
+        en: "Go To Open Document",
+        de: "Go To Open Document",
+        ru: "Go To Open Document",
+      },
     },
     builtin_goToNamedObject: {
       action: "goToNamedObject",
@@ -8753,49 +8935,73 @@ var builtCommands = {
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Redraw Windows", de: "", ru: "" },
+      loc: { en: "Redraw Windows", de: "Redraw Windows", ru: "Redraw Windows" },
     },
     builtin_revealActiveDocument: {
       action: "revealActiveDocument",
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Reveal Active Document On System", de: "", ru: "" },
+      loc: {
+        en: "Reveal Active Document On System",
+        de: "Reveal Active Document On System",
+        ru: "Reveal Active Document On System",
+      },
     },
     builtin_documentReport: {
       action: "documentReport",
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Active Document Report", de: "", ru: "" },
+      loc: {
+        en: "Active Document Report",
+        de: "Active Document Report",
+        ru: "Active Document Report",
+      },
     },
     builtin_imageCapture: {
       action: "imageCapture",
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Export Active Artboard As PNG", de: "", ru: "" },
+      loc: {
+        en: "Export Active Artboard As PNG",
+        de: "Export Active Artboard As PNG",
+        ru: "Export Active Artboard As PNG",
+      },
     },
     builtin_exportVariables: {
       action: "exportVariables",
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Export Document Variables As XML", de: "", ru: "" },
+      loc: {
+        en: "Export Document Variables As XML",
+        de: "Export Document Variables As XML",
+        ru: "Export Document Variables As XML",
+      },
     },
     builtin_recentFiles: {
       action: "recentFiles",
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Open Recent File...", de: "", ru: "" },
+      loc: {
+        en: "Open Recent File...",
+        de: "Open Recent File...",
+        ru: "Open Recent File...",
+      },
     },
     builtin_recentCommands: {
       action: "recentCommands",
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Recent Commands...", de: "", ru: "" },
+      loc: {
+        en: "Recent Commands...",
+        de: "Recent Commands...",
+        ru: "Recent Commands...",
+      },
     },
   },
 };
@@ -8807,13 +9013,37 @@ function buildCommands(commands, filter) {
       var commandData;
       for (var command in commands[type]) {
         commandData = commands[type][command];
-        // hide `Edit Workflow...` setting command if no workflows
+        // hide `Edit Workflow...` command if no workflows
         if (
           command == "config_editWorkflow" &&
           Object.keys(data.commands.workflow).length < 1
         )
           continue;
-        // hide `Unhide Commands...` setting command if no hidden commands
+        // hide `All Workflows...` command if no workflows
+        if (
+          command == "config_allWorkflows" &&
+          Object.keys(data.commands.workflow).length < 1
+        )
+          continue;
+        // hide `All Scripts...` command if no scripts
+        if (
+          command == "config_allScripts" &&
+          Object.keys(data.commands.script).length < 1
+        )
+          continue;
+        // hide `All Bookmarks...` command if no bookmarks
+        if (
+          command == "config_allBookmarks" &&
+          Object.keys(data.commands.bookmark).length < 1
+        )
+          continue;
+        // hide `All Actions...` command if no actions
+        if (
+          command == "config_allActions" &&
+          Object.keys(data.commands.action).length < 1
+        )
+          continue;
+        // hide `Unhide Commands...` command if no hidden commands
         if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
           continue;
         // // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
@@ -8849,7 +9079,7 @@ function loadActions() {
     var name, key;
     for (var j = 1; j <= actionCount; j++) {
       name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
-      key = "Action: " + name + " [" + set + "]";
+      key = name + " [" + set + "]";
       data.commands.action[key] = { name: name, type: "action", set: set };
     }
   }
@@ -9452,7 +9682,7 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   var pName = win.add("panel", undefined, localize(locStrings.wf_save_as));
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;
-  var workflowNameText = edit == undefined ? "" : command.name;
+  var workflowNameText = edit == undefined ? "" : edit;
   var workflowName = pName.add("edittext", undefined, workflowNameText);
   workflowName.enabled = edit == undefined ? false : true;
 
@@ -9557,8 +9787,7 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   };
 
   if (win.show() == 1) {
-    var key = localize(locStrings.wf_titlecase) + ": " + workflowName.text.trim();
-    return { key: key, name: workflowName.text, actions: steps.items };
+    return { name: workflowName.text.trim(), actions: steps.items };
   }
   return false;
 }
@@ -9661,7 +9890,7 @@ function buildWorkflow(workflow) {
   if (result) {
     // check to make sure there isn't a workflow already saved with the same name
     var newName;
-    while (allCommands.includes(result.key)) {
+    while (allCommands.includes(result.name)) {
       if (
         confirm(
           localize(locStrings.wf_already_exists),
@@ -9680,7 +9909,6 @@ function buildWorkflow(workflow) {
           alert(localize(locStrings.wf_not_saved));
           return false;
         } else {
-          result.key = localize(locStrings.wf_titlecase) + ": " + newName;
           result.name = newName;
         }
       }
@@ -9690,8 +9918,7 @@ function buildWorkflow(workflow) {
     try {
       for (var i = 0; i < result.actions.length; i++)
         workflowActions.push(localizedCommandLookup[result.actions[i].text]);
-      data.commands.workflow[result.key] = {
-        name: result.name,
+      data.commands.workflow[result.name] = {
         type: "workflow",
         actions: workflowActions,
       };
@@ -9699,6 +9926,29 @@ function buildWorkflow(workflow) {
       alert(localize(locStrings.wf_error_saving, result.name));
     }
   }
+}
+
+/** Show all workflows. */
+function showAllWorkflows() {
+  var result = commandPalette(
+    (commands = allCommandsLocalized),
+    (showHidden = false),
+    (queryFilter = []),
+    (visibleFilter = [
+      "action",
+      "bookmark",
+      "builtin",
+      "config",
+      "defaults",
+      "menu",
+      "script",
+      "tool",
+    ]),
+    (title = localize(locStrings.Workflows)),
+    (bounds = [0, 0, paletteWidth, 182]),
+    (multiselect = false)
+  );
+  if (result) processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Choose a workflow to edit. */
@@ -9781,18 +10031,19 @@ function checkWorkflowActions(actions) {
   var idCommandLookup = {};
   var localizedCommandLookup = {};
   buildCommands(data.commands, []);
-  var allCommands = Object.keys(commandsData);
-  var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // check preferences file
   if (data.settings.hasOwnProperty("version") && data.settings.version < "0.8.1") {
     alert(localize(locStrings.pref_file_non_compatible));
     settings.backup();
-    updateOldWorkflows();
-    updateOldRecents();
+    updateOldPreferences();
     settings.save();
     alert(localize(locStrings.pref_update_complete));
+    return;
   }
+
+  var allCommands = Object.keys(commandsData);
+  var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // SHOW THE COMMAND PALETTE
 
