@@ -421,12 +421,11 @@ function loadFileBookmark() {
   re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
   var files = loadFileTypes(localize(locStrings.bm_set_bookmark), true, re);
   if (files.length > 0) {
-    var f, key, fname;
+    var f, fname;
     for (var i = 0; i < files.length; i++) {
       f = files[i];
       fname = decodeURI(f.name);
-      key = localize(locStrings.bookmark) + ": " + fname;
-      if (data.commands.bookmark.hasOwnProperty(key)) {
+      if (data.commands.bookmark.hasOwnProperty(fname)) {
         if (
           !confirm(
             localize(locStrings.bm_already_loaded),
@@ -437,8 +436,7 @@ function loadFileBookmark() {
           continue;
       }
       try {
-        data.commands.bookmark[key] = {
-          name: fname,
+        data.commands.bookmark[fname] = {
           type: "bookmark",
           path: f.fsName,
           bookmarkType: "file",
@@ -452,12 +450,11 @@ function loadFileBookmark() {
 
 /** Set bookmarked folder to open on system from within Ai Command Palette. */
 function loadFolderBookmark() {
-  var f, key, fname;
+  var f, fname;
   f = Folder.selectDialog(localize(locStrings.bm_set_bookmark));
   if (f) {
     fname = decodeURI(f.name);
-    key = localize(locStrings.bookmark) + ": " + fname;
-    if (data.commands.bookmark.hasOwnProperty(key)) {
+    if (data.commands.bookmark.hasOwnProperty(fname)) {
       if (
         !confirm(
           localize(locStrings.bm_already_loaded),
@@ -468,8 +465,7 @@ function loadFolderBookmark() {
         return;
     }
     try {
-      data.commands.bookmark[key] = {
-        name: fname,
+      data.commands.bookmark[fname] = {
         type: "bookmark",
         path: f.fsName,
         bookmarkType: "folder",
@@ -486,12 +482,11 @@ function loadScripts() {
   re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
   var files = loadFileTypes(localize(locStrings.sc_load_script), true, ".jsx$|.js$");
   if (files.length > 0) {
-    var f, key, fname;
+    var f, fname;
     for (var i = 0; i < files.length; i++) {
       f = files[i];
       fname = decodeURI(f.name);
-      key = localize(locStrings.script) + ": " + fname;
-      if (data.commands.script.hasOwnProperty(key)) {
+      if (data.commands.script.hasOwnProperty(fname)) {
         if (
           !confirm(
             localize(locStrings.sc_already_loaded),
@@ -502,7 +497,7 @@ function loadScripts() {
           continue;
       }
       try {
-        data.commands.script[key] = { name: fname, type: "script", path: f.fsName };
+        data.commands.script[fname] = { type: "script", path: f.fsName };
       } catch (e) {
         alert(localize(locStrings.sc_error_loading, f.fsName));
       }
