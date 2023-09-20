@@ -8,7 +8,7 @@ function scriptAction(action) {
   var write = true;
   switch (action) {
     case "settings":
-      paletteSettings();
+      AiCommandPaletteSettings();
       write = false;
       break;
     case "about":
@@ -117,7 +117,7 @@ function builtinAction(action) {
 }
 
 /** Ai Command Palette configuration commands. */
-function paletteSettings() {
+function AiCommandPaletteSettings() {
   var result = commandPalette(
     (commands = allCommandsLocalized),
     (showHidden = false),
@@ -133,7 +133,7 @@ function paletteSettings() {
     ]),
     (visibleFilter = []),
     (title = localize(locStrings.cp_config)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -524,7 +524,7 @@ function showAllScripts() {
       "workflow",
     ]),
     (title = localize(locStrings.Scripts)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -547,7 +547,7 @@ function showAllBookmarks() {
       "workflow",
     ]),
     (title = localize(locStrings.Bookmarks)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -570,7 +570,7 @@ function showAllActions() {
       "workflow",
     ]),
     (title = localize(locStrings.Actions)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -584,7 +584,7 @@ function hideCommand() {
     (queryFilter = ["config", "defaults"]),
     (visibleFilter = []),
     (title = localize(locStrings.cd_hide_select)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = true)
   );
   if (result) {
@@ -606,7 +606,7 @@ function unhideCommand() {
       (queryFilter = []),
       (visibleFilter = []),
       (title = localize(locStrings.cd_reveal_menu_select)),
-      (bounds = [0, 0, paletteWidth, 182]),
+      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = true)
     );
     if (result) {
@@ -633,7 +633,7 @@ function deleteCommand() {
     (queryFilter = ["action", "builtin", "config", "defaults", "menu", "tool"]),
     (visibleFilter = []),
     (title = localize(locStrings.cd_delete_select)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = true)
   );
   if (result) {
@@ -665,7 +665,7 @@ function goToOpenDocument() {
   var item = goToPalette(
     (commands = app.documents),
     (title = localize(locStrings["go_to_open_document"])),
-    (bounds = [0, 0, paletteWidth, 182])
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
   );
   if (item) {
     item.activate();
@@ -677,7 +677,7 @@ function goToArtboard() {
   var item = goToPalette(
     (commands = app.activeDocument.artboards),
     (title = localize(locStrings["go_to_artboard"])),
-    (bounds = [0, 0, paletteWidth, 182])
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
   );
   if (item) {
     var ab;
@@ -714,7 +714,7 @@ function goToNamedObject() {
     var selectedObject = goToPalette(
       (commands = namedObjects),
       (title = localize(locStrings["goto_named_object"])),
-      (bounds = [0, 0, paletteWidth, 182])
+      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
     );
     if (selectedObject) {
       app.activeDocument.selection = null;
@@ -774,7 +774,7 @@ function recentFiles() {
     (queryFilter = []),
     (visibleFilter = []),
     (title = localize(locStrings.open_recent_file)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) {
@@ -799,7 +799,7 @@ function recentCommands() {
     (queryFilter = []),
     (visibleFilter = []),
     (title = localize(locStrings.recent_commands)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);

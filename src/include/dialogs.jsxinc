@@ -24,27 +24,27 @@ function commandPalette(
   docRequired,
   selRequired
 ) {
-  // skip all filtering if queryFilter and visibleFilter are not set
-  if (queryFilter.length == 0 && visibleFilter.length == 0) {
-    commands = {
-      query: commands,
-      visible: commands,
-    };
-  } else {
-    // filter the commands based on supplied args
-    // make it so you don't have to specify the same array
-    // for both filters if they should be the same
-    if (visibleFilter.length == 0) visibleFilter = queryFilter;
-    commands = filterCommands(
-      commands,
-      queryFilter,
-      visibleFilter,
-      showHidden,
-      [],
-      docRequired,
-      selRequired
-    );
+  // insert command and type into listbox
+  function insertCommands(list, commands) {
+    var command, commandData;
+    for (var i = 0; i < commands.length; i++) {
+      command = commands[i];
+      commandData = commandsData[localizedCommandLookup[command]];
+      with (list.add("item", command)) {
+        subItems[0].text = commandData.type; // TODO: add localization
+      }
+    }
   }
+
+  commands = filterCommands(
+    commands,
+    queryFilter,
+    visibleFilter,
+    showHidden,
+    [],
+    docRequired,
+    selRequired
+  );
 
   // create the dialog
   var win = new Window("dialog");
@@ -53,18 +53,28 @@ function commandPalette(
   var q = win.add("edittext");
   q.helpTip = localize(locStrings.cd_q_helptip);
 
+  // setup the commands listbox
+  var list = win.add("listbox", bounds, undefined, {
+    numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
+    showHeaders: paletteSettings.listboxProperties.showHeaders,
+    columnTitles: paletteSettings.listboxProperties.columnTitles,
+    columnWidths: paletteSettings.listboxProperties.columnWidths,
+    multiselect: multiselect,
+  });
+  insertCommands(list, commands.visible);
+  list.selection = 0;
+
+  // close list on double-click of list item
+  list.onDoubleClick = function () {
+    if (list.selection) win.close(1);
+  };
+
   // work-around to stop windows from flickering/flashing explorer
   if (windowsFlickerFix) {
     simulateKeypress("TAB", 1);
   } else {
     q.active = true;
   }
-
-  // setup the commands listbox
-  var list = win.add("listbox", bounds, commands.visible, {
-    multiselect: multiselect,
-  });
-  list.selection = 0;
 
   // window buttons
   var winButtons = win.add("group");
@@ -82,18 +92,25 @@ function commandPalette(
   var frameStart = 0;
   q.onChanging = function () {
     frameStart = 0;
-    var matches =
+    matches =
       this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
     if (matches.length > 0) {
-      temp = win.add("listbox", list.bounds, matches, {
+      // setup the temp commands listbox
+      var temp = win.add("listbox", list.bounds, undefined, {
+        numberOfColumns: list.properties.numberOfColumns,
+        showHeaders: list.properties.showHeaders,
+        columnTitles: list.properties.columnTitles,
+        columnWidths: list.properties.columnWidths,
         multiselect: list.properties.multiselect,
       });
-      // close window when double-clicking a selection
+      insertCommands(temp, matches);
+      // temp.selection = 0;
+
+      // close list on double-click of list item
       temp.onDoubleClick = function () {
-        if (list.selection) win.close(1);
+        if (temp.selection) win.close(1);
       };
-      // remove the temp 'truncation fix' item from the list
-      if (matches != commands.visible) temp.remove(temp.items.length - 1);
+
       // change the original listbox reference to the updated `temp` version
       win.remove(list);
       list = temp;
@@ -164,11 +181,6 @@ function commandPalette(
     });
   }
 
-  // close window when double-clicking a selection
-  list.onDoubleClick = function () {
-    if (list.selection) win.close(1);
-  };
-
   if (win.show() == 1) {
     if (list.selection) {
       return multiselect ? list.selection : [list.selection];
@@ -196,12 +208,7 @@ function goToPalette(commands, title, bounds) {
   }
 
   // setup the commands listbox
-  var list = win.add("listbox", bounds, [], {
-    numberOfColumns: 2,
-    showHeaders: true,
-    columnTitles: ["Name", "Type"],
-    columnWidths: [bounds[2] - 200, 195],
-  });
+  var list = win.add("listbox", bounds, [], paletteSettings.listboxProperties);
 
   // add items to list
   for (var i = 0; i < matches.length; i++) {
@@ -400,9 +407,14 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
     q.active = true;
   }
 
-  var list = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], commands.visible, {
-    multiselect: false,
-  });
+  var list = pSearch.add(
+    "listbox",
+    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
+    commands.visible,
+    {
+      multiselect: false,
+    }
+  );
   list.helpTip = localize(locStrings.cd_helptip);
   list.selection = 0;
 
@@ -410,9 +422,14 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
-  var steps = pSteps.add("listbox", [0, 0, paletteWidth + 40, 182], actions, {
-    multiselect: true,
-  });
+  var steps = pSteps.add(
+    "listbox",
+    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
+    actions,
+    {
+      multiselect: true,
+    }
+  );
   steps.helpTip = localize(locStrings.wf_steps_helptip);
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";

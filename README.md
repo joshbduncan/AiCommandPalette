@@ -123,6 +123,8 @@ I recommend installing this action into your scripts folder ([how-to](https://ww
 
 Using Ai Command Palette requires some basic knowledge of Illustrator. The script doesn't know which commands can or can't be run at the time of execution so tread carefully. I've included error checking where possible, so in most cases you should get an explanation when something breaks.
 
+⚠️ Action Execution: There are some known issues with executing actions via a script. There are no known solutions to this so if you encounter errors with a particular Action, it just may not be suitable to execute via Ai Command Palette.
+
 🐞 If you find a bug please [file an issue](https://github.com/joshbduncan/AiCommandPalette/issues).
 
 😬 Also know, most every action this script executes can be undone by choosing Edit > Undo (from the Edit menu at the top of your screen), or by pressing Command-Z (Mac) or Control+Z (Windows).
@@ -132,6 +134,10 @@ Using Ai Command Palette requires some basic knowledge of Illustrator. The scrip
 ### Localization
 - [Kurt Gold](https://community.adobe.com/t5/user/viewprofilepage/user-id/8354168) for his work localizing the German.
 - [Sergey Osokin](https://github.com/creold) for his work localizing the Russian version.
+
+## Testing
+- [Kurt Gold](https://community.adobe.com/t5/user/viewprofilepage/user-id/8354168)
+- [Sergey Osokin](https://github.com/creold)
 
 ### Built-In Menu Commands and Tools
 - [krasnovpro](https://community.adobe.com/t5/user/viewprofilepage/user-id/9425584)

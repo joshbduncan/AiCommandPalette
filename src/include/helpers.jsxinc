@@ -170,6 +170,7 @@ function filterCommands(
   docRequired,
   selRequired
 ) {
+  if (visibleFilter.length == 0) visibleFilter = queryFilter;
   var query = [];
   var visible = [];
   var localizedCommand;
@@ -208,31 +209,44 @@ function scoreMatches(q, arr) {
   var words = [];
   var matches = {};
   var maxScore = 0;
+  var regexEllipsis = /\.\.\.$/;
+  var regexCarrot = /\s>\s/g;
+  q = q.toLowerCase();
   var words = q.split(" ");
+  var command, strippedString;
   for (var i = 0; i < arr.length; i++) {
+    command = arr[i].toLowerCase();
+    strippedString = command.replace(regexEllipsis, "").replace(regexCarrot, " ");
     var score = 0;
+
+    // check for exact match
+    if (
+      q == command ||
+      q.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString
+    ) {
+      score += 1;
+    }
+
+    // check for singular word matches
     for (var n = 0; n < words.length; n++) {
       word = words[n];
-      if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null)
+      if (
+        word != "" &&
+        (command.match("(?:^|\\s)(" + word + ")", "gi") != null ||
+          strippedString.match("(?:^|\\s)(" + word + ")", "gi") != null)
+      )
         score += word.length;
     }
+
+    // updated scores for matches
     if (score > 0) {
       matches[arr[i]] = score;
       if (score > maxScore) maxScore = score;
     }
   }
 
-  // only return highest scoring matches
-  // var matchedCommands = [];
-  // var maxLength = 0;
-  // for (var i = 0; i < matches.length; i++) {
-  //   if (matches[i].score >= maxScore / 2) matchedCommands.push(matches[i].command);
-  //   if (matches[i].command.length > maxLength) maxLength = matches[i].command.length;
-  // }
-
   var matchedCommands = [];
   var maxLength = 0;
-  $.writeln("-------------------------");
   for (var c in matches) {
     if (matches[c] >= maxScore / 2) matchedCommands.push(c);
     if (c.length > maxLength) maxLength = c.length;
@@ -245,12 +259,6 @@ function scoreMatches(q, arr) {
     return matches[b] - matches[a];
   });
 
-  // script ui seem to incorrectly calculate the `itemSize` length when
-  // filtering a temp list which the truncates some of the item so this
-  // adds a string of "X" the to the end of the result as long as the
-  // longest match which can then be removed after the listbox is created
-  var str = new Array(maxLength + 1).join("X");
-  matchedCommands.push(str);
   return matchedCommands;
 }
 

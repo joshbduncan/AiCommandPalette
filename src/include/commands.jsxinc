@@ -139,7 +139,7 @@ function executeCommand(command) {
       return;
   // check command to see if an active selection is required
   if (
-    app.documents.length > 0 &&
+    appDocuments &&
     app.activeDocument.selection.length < 1 &&
     commandData.selRequired
   )

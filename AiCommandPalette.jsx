@@ -134,7 +134,17 @@ var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 
 // DIALOG SETTINGS
 
-var paletteWidth = 600;
+var paletteSettings = {
+  paletteWidth: 600,
+  paletteHeight: 201,
+  listboxProperties: {
+    numberOfColumns: 2,
+    showHeaders: true,
+    columnTitles: ["Name", "Type"],
+    columnWidths: [475, 100],
+  },
+};
+
 var visibleListItems = 9;
 var recentCommandsCount = 25;
 
@@ -397,6 +407,7 @@ function filterCommands(
   docRequired,
   selRequired
 ) {
+  if (visibleFilter.length == 0) visibleFilter = queryFilter;
   var query = [];
   var visible = [];
   var localizedCommand;
@@ -435,31 +446,44 @@ function scoreMatches(q, arr) {
   var words = [];
   var matches = {};
   var maxScore = 0;
+  var regexEllipsis = /\.\.\.$/;
+  var regexCarrot = /\s>\s/g;
+  q = q.toLowerCase();
   var words = q.split(" ");
+  var command, strippedString;
   for (var i = 0; i < arr.length; i++) {
+    command = arr[i].toLowerCase();
+    strippedString = command.replace(regexEllipsis, "").replace(regexCarrot, " ");
     var score = 0;
+
+    // check for exact match
+    if (
+      q == command ||
+      q.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString
+    ) {
+      score += 1;
+    }
+
+    // check for singular word matches
     for (var n = 0; n < words.length; n++) {
       word = words[n];
-      if (word != "" && arr[i].match("(?:^|\\s)(" + word + ")", "gi") != null)
+      if (
+        word != "" &&
+        (command.match("(?:^|\\s)(" + word + ")", "gi") != null ||
+          strippedString.match("(?:^|\\s)(" + word + ")", "gi") != null)
+      )
         score += word.length;
     }
+
+    // updated scores for matches
     if (score > 0) {
       matches[arr[i]] = score;
       if (score > maxScore) maxScore = score;
     }
   }
 
-  // only return highest scoring matches
-  // var matchedCommands = [];
-  // var maxLength = 0;
-  // for (var i = 0; i < matches.length; i++) {
-  //   if (matches[i].score >= maxScore / 2) matchedCommands.push(matches[i].command);
-  //   if (matches[i].command.length > maxLength) maxLength = matches[i].command.length;
-  // }
-
   var matchedCommands = [];
   var maxLength = 0;
-  $.writeln("-------------------------");
   for (var c in matches) {
     if (matches[c] >= maxScore / 2) matchedCommands.push(c);
     if (c.length > maxLength) maxLength = c.length;
@@ -472,12 +496,6 @@ function scoreMatches(q, arr) {
     return matches[b] - matches[a];
   });
 
-  // script ui seem to incorrectly calculate the `itemSize` length when
-  // filtering a temp list which the truncates some of the item so this
-  // adds a string of "X" the to the end of the result as long as the
-  // longest match which can then be removed after the listbox is created
-  var str = new Array(maxLength + 1).join("X");
-  matchedCommands.push(str);
   return matchedCommands;
 }
 
@@ -676,7 +694,7 @@ function scriptAction(action) {
   var write = true;
   switch (action) {
     case "settings":
-      paletteSettings();
+      AiCommandPaletteSettings();
       write = false;
       break;
     case "about":
@@ -785,7 +803,7 @@ function builtinAction(action) {
 }
 
 /** Ai Command Palette configuration commands. */
-function paletteSettings() {
+function AiCommandPaletteSettings() {
   var result = commandPalette(
     (commands = allCommandsLocalized),
     (showHidden = false),
@@ -801,7 +819,7 @@ function paletteSettings() {
     ]),
     (visibleFilter = []),
     (title = localize(locStrings.cp_config)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1089,12 +1107,11 @@ function loadFileBookmark() {
   re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
   var files = loadFileTypes(localize(locStrings.bm_set_bookmark), true, re);
   if (files.length > 0) {
-    var f, key, fname;
+    var f, fname;
     for (var i = 0; i < files.length; i++) {
       f = files[i];
       fname = decodeURI(f.name);
-      key = localize(locStrings.bookmark) + ": " + fname;
-      if (data.commands.bookmark.hasOwnProperty(key)) {
+      if (data.commands.bookmark.hasOwnProperty(fname)) {
         if (
           !confirm(
             localize(locStrings.bm_already_loaded),
@@ -1105,8 +1122,7 @@ function loadFileBookmark() {
           continue;
       }
       try {
-        data.commands.bookmark[key] = {
-          name: fname,
+        data.commands.bookmark[fname] = {
           type: "bookmark",
           path: f.fsName,
           bookmarkType: "file",
@@ -1120,12 +1136,11 @@ function loadFileBookmark() {
 
 /** Set bookmarked folder to open on system from within Ai Command Palette. */
 function loadFolderBookmark() {
-  var f, key, fname;
+  var f, fname;
   f = Folder.selectDialog(localize(locStrings.bm_set_bookmark));
   if (f) {
     fname = decodeURI(f.name);
-    key = localize(locStrings.bookmark) + ": " + fname;
-    if (data.commands.bookmark.hasOwnProperty(key)) {
+    if (data.commands.bookmark.hasOwnProperty(fname)) {
       if (
         !confirm(
           localize(locStrings.bm_already_loaded),
@@ -1136,8 +1151,7 @@ function loadFolderBookmark() {
         return;
     }
     try {
-      data.commands.bookmark[key] = {
-        name: fname,
+      data.commands.bookmark[fname] = {
         type: "bookmark",
         path: f.fsName,
         bookmarkType: "folder",
@@ -1154,12 +1168,11 @@ function loadScripts() {
   re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
   var files = loadFileTypes(localize(locStrings.sc_load_script), true, ".jsx$|.js$");
   if (files.length > 0) {
-    var f, key, fname;
+    var f, fname;
     for (var i = 0; i < files.length; i++) {
       f = files[i];
       fname = decodeURI(f.name);
-      key = localize(locStrings.script) + ": " + fname;
-      if (data.commands.script.hasOwnProperty(key)) {
+      if (data.commands.script.hasOwnProperty(fname)) {
         if (
           !confirm(
             localize(locStrings.sc_already_loaded),
@@ -1170,7 +1183,7 @@ function loadScripts() {
           continue;
       }
       try {
-        data.commands.script[key] = { name: fname, type: "script", path: f.fsName };
+        data.commands.script[fname] = { type: "script", path: f.fsName };
       } catch (e) {
         alert(localize(locStrings.sc_error_loading, f.fsName));
       }
@@ -1197,7 +1210,7 @@ function showAllScripts() {
       "workflow",
     ]),
     (title = localize(locStrings.Scripts)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1220,7 +1233,7 @@ function showAllBookmarks() {
       "workflow",
     ]),
     (title = localize(locStrings.Bookmarks)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1243,7 +1256,7 @@ function showAllActions() {
       "workflow",
     ]),
     (title = localize(locStrings.Actions)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1257,7 +1270,7 @@ function hideCommand() {
     (queryFilter = ["config", "defaults"]),
     (visibleFilter = []),
     (title = localize(locStrings.cd_hide_select)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = true)
   );
   if (result) {
@@ -1279,7 +1292,7 @@ function unhideCommand() {
       (queryFilter = []),
       (visibleFilter = []),
       (title = localize(locStrings.cd_reveal_menu_select)),
-      (bounds = [0, 0, paletteWidth, 182]),
+      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = true)
     );
     if (result) {
@@ -1306,7 +1319,7 @@ function deleteCommand() {
     (queryFilter = ["action", "builtin", "config", "defaults", "menu", "tool"]),
     (visibleFilter = []),
     (title = localize(locStrings.cd_delete_select)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = true)
   );
   if (result) {
@@ -1338,7 +1351,7 @@ function goToOpenDocument() {
   var item = goToPalette(
     (commands = app.documents),
     (title = localize(locStrings["go_to_open_document"])),
-    (bounds = [0, 0, paletteWidth, 182])
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
   );
   if (item) {
     item.activate();
@@ -1350,7 +1363,7 @@ function goToArtboard() {
   var item = goToPalette(
     (commands = app.activeDocument.artboards),
     (title = localize(locStrings["go_to_artboard"])),
-    (bounds = [0, 0, paletteWidth, 182])
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
   );
   if (item) {
     var ab;
@@ -1387,7 +1400,7 @@ function goToNamedObject() {
     var selectedObject = goToPalette(
       (commands = namedObjects),
       (title = localize(locStrings["goto_named_object"])),
-      (bounds = [0, 0, paletteWidth, 182])
+      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
     );
     if (selectedObject) {
       app.activeDocument.selection = null;
@@ -1447,7 +1460,7 @@ function recentFiles() {
     (queryFilter = []),
     (visibleFilter = []),
     (title = localize(locStrings.open_recent_file)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) {
@@ -1472,7 +1485,7 @@ function recentCommands() {
     (queryFilter = []),
     (visibleFilter = []),
     (title = localize(locStrings.recent_commands)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1490,59 +1503,59 @@ var locStrings = {
     de: "Fehler beim Ausf\u00fchren der Aktion:\n%1\n\n%2",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438:\n%1\n\n%2",
   },
-  Actions: { en: "Actions", de: "Actions", ru: "Actions" },
+  Actions: { en: "Actions", de: "Aktionen", ru: "Actions" },
   active_document_not_saved: {
     en: "Active document not yet saved to the file system.",
-    de: "Active document not yet saved to the file system.",
+    de: "Das aktuelle Dokument wurde noch nicht gespeichert.",
     ru: "Active document not yet saved to the file system.",
   },
-  artboards: { en: "Artboards", de: "Artboards", ru: "Artboards" },
+  artboards: { en: "Artboards", de: "Zeichenfl\u00e4chen", ru: "Artboards" },
   bm_already_loaded: {
     en: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
-    de: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
+    de: "Dieses Lesezeichen wurde bereits erstellt..\nM\u00f6chten Sie es mit dem neuen Lesezeichen ersetzen?",
     ru: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
   },
   bm_already_loaded_title: {
     en: "Bookmark Load Conflict",
-    de: "Bookmark Load Conflict",
+    de: "Konflikt beim Laden des Lesezeichens",
     ru: "Bookmark Load Conflict",
   },
   bm_error_execution: {
     en: "Error opening bookmark:\n%1\n\n%2",
-    de: "Error opening bookmark:\n%1\n\n%2",
+    de: "Fehler beim \u00d6ffnen des Lesezeichens:\n%1\n\n%2",
     ru: "Error opening bookmark:\n%1\n\n%2",
   },
   bm_error_exists: {
     en: "Bookmark no longer exists at original path. Try reloading.\n%1",
-    de: "Bookmark no longer exists at original path. Try reloading.\n%1",
+    de: "Das Lesezeichen ist an dieser Stelle nicht mehr vorhanden. Versuchen Sie, es nochmal zu laden.\n%1",
     ru: "Bookmark no longer exists at original path. Try reloading.\n%1",
   },
   bm_error_loading: {
     en: "Error loading bookmark:\n%1",
-    de: "Error loading bookmark:\n%1",
+    de: "Fehler beim Ladenn des Lesezeichens:\n%1",
     ru: "Error loading bookmark:\n%1",
   },
   bm_set_bookmark: {
     en: "Set Bookmark(s)",
-    de: "Set Bookmark(s)",
+    de: "Lesezeichen erstellen",
     ru: "Set Bookmark(s)",
   },
   bm_total_loaded: {
     en: "Total bookmarks loaded:\n%1",
-    de: "Total bookmarks loaded:\n%1",
+    de: "Anzahl der geladenen Lesezeichen:\n%1",
     ru: "Total bookmarks loaded:\n%1",
   },
-  bookmark: { en: "Bookmark", de: "Bookmark", ru: "Bookmark" },
-  Bookmarks: { en: "Bookmarks", de: "Bookmarks", ru: "Bookmarks" },
+  bookmark: { en: "Bookmark", de: "Lesezeichen", ru: "Bookmark" },
+  Bookmarks: { en: "Bookmarks", de: "Lesezeichen", ru: "Bookmarks" },
   cancel: { en: "Cancel", de: "Abbrechen", ru: "\u041e\u0442\u043c\u0435\u043d\u0430" },
   cd_active_document_required: {
     en: "Command '%1' requires an active document. Continue Anyway?",
-    de: "Command '%1' requires an active document. Continue Anyway?",
+    de: "Der Befehl '%1' erfordert ein ge\u00f6ffnetes Dokument. Trotzdem fortfahren?",
     ru: "Command '%1' requires an active document. Continue Anyway?",
   },
   cd_active_selection_required: {
     en: "Command '%1' requires an active selection. Continue Anyway?",
-    de: "Command '%1' requires an active selection. Continue Anyway?",
+    de: "Der Befehl '%1' erfordert eine Auswahl. Trotzdem fortfahren?",
     ru: "Command '%1' requires an active selection. Continue Anyway?",
   },
   cd_all: {
@@ -1577,7 +1590,7 @@ var locStrings = {
   },
   cd_exception: {
     en: "Command Exception",
-    de: "Command Exception",
+    de: "Befehls-Ausnahme",
     ru: "Command Exception",
   },
   cd_helptip: {
@@ -1672,33 +1685,41 @@ var locStrings = {
   },
   document_report: {
     en: "Active Document Report",
-    de: "Active Document Report",
+    de: "Dokumentinformationen",
     ru: "Active Document Report",
   },
   document_report_warning: {
     en: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
-    de: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
+    de: "Achtung:\nSeit dem letzen Speichern des Dokuments wurden \u00c4nderungen vorgenommen. Daher k\u00f6nnten einige Informationen falsch sein.\n\nSpeichern Sie das Dokument, bevor Sie die Dokumentinformationen erneut abrufen.",
     ru: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
   },
-  dr_color_space: { en: "Color Space: ", de: "Color Space: ", ru: "Color Space: " },
-  dr_file_created: { en: "File Created: ", de: "File Created: ", ru: "File Created: " },
-  dr_file_found: { en: "File Found: ", de: "File Found: ", ru: "File Found: " },
-  dr_filename: { en: "File: ", de: "File: ", ru: "File: " },
+  dr_color_space: { en: "Color Space: ", de: "Farbmodus: ", ru: "Color Space: " },
+  dr_file_created: {
+    en: "File Created: ",
+    de: "Datei erstellt am: ",
+    ru: "File Created: ",
+  },
+  dr_file_found: { en: "File Found: ", de: "Datei gefunden: ", ru: "File Found: " },
+  dr_filename: { en: "File: ", de: "Datei: ", ru: "File: " },
   dr_header: {
     en: "File Information\n-----\n",
-    de: "File Information\n-----\n",
+    de: "Datei-Information\n-----\n",
     ru: "File Information\n-----\n",
   },
-  dr_height: { en: "Height: ", de: "Height: ", ru: "Height: " },
+  dr_height: { en: "Height: ", de: "H\u00f6he: ", ru: "Height: " },
   dr_info_string: {
     en: "Ai Document Information",
-    de: "Ai Document Information",
+    de: "AI-Dokument-Information",
     ru: "Ai Document Information",
   },
   dr_name: { en: "Name: ", de: "Name: ", ru: "Name: " },
-  dr_path: { en: "Path: ", de: "Path: ", ru: "Path: " },
-  dr_width: { en: "Width: ", de: "Width: ", ru: "Width: " },
-  file_saved: { en: "File Saved:\n%1", de: "File Saved:\n%1", ru: "File Saved:\n%1" },
+  dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
+  dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
+  file_saved: {
+    en: "File Saved:\n%1",
+    de: "Datei gespeichert:\n%1",
+    ru: "File Saved:\n%1",
+  },
   fl_error_loading: {
     en: "Error loading file:\n%1",
     de: "Fehler beim Laden der Datei:\n%1",
@@ -1709,7 +1730,7 @@ var locStrings = {
     de: "Fehler beim Schreiben der Datei:\n%1",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
   },
-  fonts: { en: "Fonts", de: "Fonts", ru: "Fonts" },
+  fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
   github: {
     en: "Click here to learn more",
     de: "Klicken Sie hier f\u00fcr weitere Informationen",
@@ -1732,55 +1753,55 @@ var locStrings = {
   },
   go_to_named_object_no_objects: {
     en: "No named page items found.",
-    de: "No named page items found.",
+    de: "Keine benannten Objekte vorhanden.",
     ru: "No named page items found.",
   },
   go_to_open_document: {
     en: "Go To Open Document",
-    de: "Go To Open Document",
+    de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen",
     ru: "Go To Open Document",
   },
-  layers: { en: "Layers", de: "Layers", ru: "Layers" },
+  layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
   no_active_document: {
     en: "No active documents.",
-    de: "No active documents.",
+    de: "Keine ge\u00f6ffneten Dokumente vorhanden..",
     ru: "No active documents.",
   },
   no_document_variables: {
     en: "No document variables.",
-    de: "No document variables.",
+    de: "Keine Variablen vorhanden.",
     ru: "No document variables.",
   },
-  none: { en: "None", de: "None", ru: "None" },
+  none: { en: "None", de: "Ohne", ru: "None" },
   open_recent_file: {
     en: "Open Recent File",
-    de: "Open Recent File",
+    de: "Zuletzt benutzte Datei \u00f6ffnen",
     ru: "Open Recent File",
   },
-  placed_items: { en: "Placed Items", de: "Placed Items", ru: "Placed Items" },
+  placed_items: { en: "Placed Items", de: "Platzierte Objecte", ru: "Placed Items" },
   pref_file_loading_error: {
     en: "Error Loading Preferences\nA backup copy of your settings has been created.",
-    de: "Error Loading Preferences\nA backup copy of your settings has been created.",
+    de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
     ru: "Error Loading Preferences\nA backup copy of your settings has been created.",
   },
   pref_file_non_compatible: {
     en: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
-    de: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
+    de: "Fehler beim Laden der Voreinstellungen\nIhre Voreinstellungen sind nicht kompatibel mit der aktuellen Version der Kurzbefehle. Ihre Voreinstellungen werden zur\u00fcckgesetzt.\n\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
     ru: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
   },
   pref_update_complete: {
     en: "Preferences Update Complete\nRe-run script.",
-    de: "Preferences Update Complete",
+    de: "Aktualisierung der Voreinstellungen fertiggestellt",
     ru: "Preferences Update Complete",
   },
   recent_commands: {
     en: "Recent Commands",
-    de: "Recent Commands",
+    de: "Zuletzt verwendete Befehle",
     ru: "Recent Commands",
   },
   recent_commands_cleared: {
     en: "Recent Commands Cleared!",
-    de: "Recent Commands Cleared!",
+    de: "Zuletzt verwendete Befehle wurden gel\u00f6scht!",
     ru: "Recent Commands Cleared!",
   },
   save: {
@@ -1813,7 +1834,7 @@ var locStrings = {
     de: "Fehler beim Laden des Skripts:\n%1",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0441\u043a\u0440\u0438\u043f\u0442\u0430:\n%1",
   },
-  sc_load_script: { en: "Load Script(s)", de: "Load Script(s)", ru: "Load Script(s)" },
+  sc_load_script: { en: "Load Script(s)", de: "Skripte laden", ru: "Load Script(s)" },
   sc_none_selected: {
     en: "No script files selected.\nMust be JavaScript '.js' or '.jsx' files.",
     de: "Keine Skriptdateien ausgew\u00e4hlt.\nEs m\u00fcssen JavaScript-'.js'- oder '.jsx'-Dateien sein.",
@@ -1825,8 +1846,8 @@ var locStrings = {
     ru: "\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432:\n%1",
   },
   script: { en: "Script", de: "Skript", ru: "\u0421\u043a\u0440\u0438\u043f\u0442" },
-  Scripts: { en: "Scripts", de: "Scripts", ru: "Scripts" },
-  spot_colors: { en: "Spot Colors", de: "Spot Colors", ru: "Spot Colors" },
+  Scripts: { en: "Scripts", de: "Skripte laden", ru: "Scripts" },
+  spot_colors: { en: "Spot Colors", de: "Volltonfarben", ru: "Spot Colors" },
   step_delete: {
     en: "Delete",
     de: "L\u00f6schen",
@@ -1896,7 +1917,7 @@ var locStrings = {
   },
   wf_needs_attention: {
     en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
-    de: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
+    de: "Achtung!\nDie folgenden Aktionsschritte sind nicht mehr vorhanden\n\nGel\u00f6schte Aktionen:\n%1\n\nInkompatible Aktionen:\n%2",
     ru: "\u041d\u0430\u0431\u043e\u0440 \u0442\u0440\u0435\u0431\u0443\u0435\u0442 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u044f\n\u0423\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0435 \u0448\u0430\u0433\u0438 \u0432 \u0432\u0430\u0448\u0435\u043c \u043d\u0430\u0431\u043e\u0440\u0435 \u043a\u043e\u043c\u0430\u043d\u0434 \u0431\u043e\u043b\u044c\u0448\u0435 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b.\n\n\u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n%1\n\n\u041d\u0435\u0441\u043e\u0432\u043c\u0435\u0441\u0442\u0438\u043c\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n%2",
   },
   wf_none_attention: {
@@ -1939,7 +1960,7 @@ var locStrings = {
     de: "Arbeitsablauf",
     ru: "\u041d\u0430\u0431\u043e\u0440\u044b",
   },
-  Workflows: { en: "Workflows", de: "Workflows", ru: "Workflows" },
+  Workflows: { en: "Workflows", de: "Arbeitsabl\u00e4ufe", ru: "Workflows" },
 };
 
 var builtCommands = {
@@ -2496,7 +2517,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Generative Recolor (Beta)",
-        de: "Edit > Edit Colors > Generative Recolor (Beta)",
+        de: "Bearbeiten > Farben bearbeiten > Generative Neuf\u00e4rbung",
         ru: "Edit > Edit Colors > Generative Recolor (Beta)",
       },
       minVersion: 27.6,
@@ -2629,7 +2650,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Edit > SWF Presets...",
-        de: "Edit > SWF Presets...",
+        de: "Bearbeiten > SWF-Vorgaben \u2026",
         ru: "Edit > SWF Presets...",
       },
       minVersion: 22,
@@ -3428,7 +3449,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Object > Intertwine > Make",
-        de: "Object > Intertwine > Make",
+        de: "Objekt > Verflechtung > Erstellen",
         ru: "Object > Intertwine > Make",
       },
       minVersion: 27,
@@ -3440,7 +3461,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Object > Intertwine > Release",
-        de: "Object > Intertwine > Release",
+        de: "Objekt > Verflechtung > Zur\u00fcckwandeln",
         ru: "Object > Intertwine > Release",
       },
       minVersion: 27,
@@ -3452,7 +3473,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Object > Intertwine > Edit",
-        de: "Object > Intertwine > Edit",
+        de: "Objekt > Verflechtung > Bearbeiten",
         ru: "Object > Intertwine > Edit",
       },
       minVersion: 27,
@@ -4262,7 +4283,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Type > Bullets and Numbering > Convert to text",
-        de: "Type > Bullets and Numbering > Convert to text",
+        de: "Schrift > Aufz\u00e4hlungszeichen und Nummerierung > In Text konvertieren",
         ru: "Type > Bullets and Numbering > Convert to text",
       },
       minVersion: 27.1,
@@ -7000,7 +7021,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Window > Image Trace",
-        de: "Window > Image Trace",
+        de: "Fenster > Bildnachzeichner",
         ru: "Window > Image Trace",
       },
     },
@@ -7108,7 +7129,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Window > Retype (Beta)",
-        de: "Window > Retype (Beta)",
+        de: "Fenster > Retype (Beta)",
         ru: "Window > Retype (Beta)",
       },
       minVersion: 27.6,
@@ -8784,7 +8805,11 @@ var builtCommands = {
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Workflows...", de: "All Workflows...", ru: "All Workflows..." },
+      loc: {
+        en: "All Workflows...",
+        de: "Alle Arbeitsabl\u00e4ufe \u2026",
+        ru: "All Workflows...",
+      },
     },
     config_loadScript: {
       action: "loadScript",
@@ -8802,7 +8827,7 @@ var builtCommands = {
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Scripts...", de: "All Scripts...", ru: "All Scripts..." },
+      loc: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
     },
     config_setFileBookmark: {
       action: "setFileBookmark",
@@ -8811,7 +8836,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Set File Bookmark(s)...",
-        de: "Set File Bookmark(s)...",
+        de: "Lesezeichen erstellen \u2026",
         ru: "Set File Bookmark(s)...",
       },
     },
@@ -8822,7 +8847,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Set Folder Bookmark...",
-        de: "Set Folder Bookmark...",
+        de: "Lesezeichen-Ordner erstellen \u2026",
         ru: "Set Folder Bookmark...",
       },
     },
@@ -8831,14 +8856,18 @@ var builtCommands = {
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Bookmarks...", de: "All Bookmarks...", ru: "All Bookmarks..." },
+      loc: {
+        en: "All Bookmarks...",
+        de: "Alle Lesezeichen \u2026",
+        ru: "All Bookmarks...",
+      },
     },
     config_allActions: {
       action: "allActions",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Actions...", de: "All Actions...", ru: "All Actions..." },
+      loc: { en: "All Actions...", de: "Alle Aktionen \u2026", ru: "All Actions..." },
     },
     config_hideCommand: {
       action: "hideCommand",
@@ -8879,8 +8908,8 @@ var builtCommands = {
       docRequired: false,
       selRequired: false,
       loc: {
-        en: "Clear Recent Comands",
-        de: "Clear Recent Comands",
+        en: "Clear Recent Commands",
+        de: "Die letzten Befehle l\u00f6schen",
         ru: "Clear Recent Comands",
       },
     },
@@ -8915,7 +8944,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Go To Open Document",
-        de: "Go To Open Document",
+        de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen \u2026",
         ru: "Go To Open Document",
       },
     },
@@ -8926,7 +8955,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Go To Named Object...",
-        de: "Gehen Sie zum benannten Objekt...",
+        de: "Benannte Objekte ausw\u00e4hlen \u2026",
         ru: "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u043e\u043c\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u0443...",
       },
     },
@@ -8935,7 +8964,7 @@ var builtCommands = {
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Redraw Windows", de: "Redraw Windows", ru: "Redraw Windows" },
+      loc: { en: "Redraw Windows", de: "Fenster aktualisieren", ru: "Redraw Windows" },
     },
     builtin_revealActiveDocument: {
       action: "revealActiveDocument",
@@ -8944,7 +8973,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Reveal Active Document On System",
-        de: "Reveal Active Document On System",
+        de: "Aktuelles Dokument im Dateimanager anzeigen",
         ru: "Reveal Active Document On System",
       },
     },
@@ -8955,7 +8984,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Active Document Report",
-        de: "Active Document Report",
+        de: "Dokumentinformationen",
         ru: "Active Document Report",
       },
     },
@@ -8966,7 +8995,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Export Active Artboard As PNG",
-        de: "Export Active Artboard As PNG",
+        de: "Ausgew\u00e4hlte Zeichenfl\u00e4che als PNG exportieren",
         ru: "Export Active Artboard As PNG",
       },
     },
@@ -8977,7 +9006,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Export Document Variables As XML",
-        de: "Export Document Variables As XML",
+        de: "Variablen als XML exportieren",
         ru: "Export Document Variables As XML",
       },
     },
@@ -8988,7 +9017,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Open Recent File...",
-        de: "Open Recent File...",
+        de: "Letzte Datei \u00f6ffnen \u2026",
         ru: "Open Recent File...",
       },
     },
@@ -8999,7 +9028,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Recent Commands...",
-        de: "Recent Commands...",
+        de: "Letzte Befehle \u2026",
         ru: "Recent Commands...",
       },
     },
@@ -9146,7 +9175,7 @@ function executeCommand(command) {
       return;
   // check command to see if an active selection is required
   if (
-    app.documents.length > 0 &&
+    appDocuments &&
     app.activeDocument.selection.length < 1 &&
     commandData.selRequired
   )
@@ -9279,27 +9308,27 @@ function commandPalette(
   docRequired,
   selRequired
 ) {
-  // skip all filtering if queryFilter and visibleFilter are not set
-  if (queryFilter.length == 0 && visibleFilter.length == 0) {
-    commands = {
-      query: commands,
-      visible: commands,
-    };
-  } else {
-    // filter the commands based on supplied args
-    // make it so you don't have to specify the same array
-    // for both filters if they should be the same
-    if (visibleFilter.length == 0) visibleFilter = queryFilter;
-    commands = filterCommands(
-      commands,
-      queryFilter,
-      visibleFilter,
-      showHidden,
-      [],
-      docRequired,
-      selRequired
-    );
+  // insert command and type into listbox
+  function insertCommands(list, commands) {
+    var command, commandData;
+    for (var i = 0; i < commands.length; i++) {
+      command = commands[i];
+      commandData = commandsData[localizedCommandLookup[command]];
+      with (list.add("item", command)) {
+        subItems[0].text = commandData.type; // TODO: add localization
+      }
+    }
   }
+
+  commands = filterCommands(
+    commands,
+    queryFilter,
+    visibleFilter,
+    showHidden,
+    [],
+    docRequired,
+    selRequired
+  );
 
   // create the dialog
   var win = new Window("dialog");
@@ -9308,18 +9337,28 @@ function commandPalette(
   var q = win.add("edittext");
   q.helpTip = localize(locStrings.cd_q_helptip);
 
+  // setup the commands listbox
+  var list = win.add("listbox", bounds, undefined, {
+    numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
+    showHeaders: paletteSettings.listboxProperties.showHeaders,
+    columnTitles: paletteSettings.listboxProperties.columnTitles,
+    columnWidths: paletteSettings.listboxProperties.columnWidths,
+    multiselect: multiselect,
+  });
+  insertCommands(list, commands.visible);
+  list.selection = 0;
+
+  // close list on double-click of list item
+  list.onDoubleClick = function () {
+    if (list.selection) win.close(1);
+  };
+
   // work-around to stop windows from flickering/flashing explorer
   if (windowsFlickerFix) {
     simulateKeypress("TAB", 1);
   } else {
     q.active = true;
   }
-
-  // setup the commands listbox
-  var list = win.add("listbox", bounds, commands.visible, {
-    multiselect: multiselect,
-  });
-  list.selection = 0;
 
   // window buttons
   var winButtons = win.add("group");
@@ -9337,18 +9376,25 @@ function commandPalette(
   var frameStart = 0;
   q.onChanging = function () {
     frameStart = 0;
-    var matches =
+    matches =
       this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
     if (matches.length > 0) {
-      temp = win.add("listbox", list.bounds, matches, {
+      // setup the temp commands listbox
+      var temp = win.add("listbox", list.bounds, undefined, {
+        numberOfColumns: list.properties.numberOfColumns,
+        showHeaders: list.properties.showHeaders,
+        columnTitles: list.properties.columnTitles,
+        columnWidths: list.properties.columnWidths,
         multiselect: list.properties.multiselect,
       });
-      // close window when double-clicking a selection
+      insertCommands(temp, matches);
+      // temp.selection = 0;
+
+      // close list on double-click of list item
       temp.onDoubleClick = function () {
-        if (list.selection) win.close(1);
+        if (temp.selection) win.close(1);
       };
-      // remove the temp 'truncation fix' item from the list
-      if (matches != commands.visible) temp.remove(temp.items.length - 1);
+
       // change the original listbox reference to the updated `temp` version
       win.remove(list);
       list = temp;
@@ -9419,11 +9465,6 @@ function commandPalette(
     });
   }
 
-  // close window when double-clicking a selection
-  list.onDoubleClick = function () {
-    if (list.selection) win.close(1);
-  };
-
   if (win.show() == 1) {
     if (list.selection) {
       return multiselect ? list.selection : [list.selection];
@@ -9451,12 +9492,7 @@ function goToPalette(commands, title, bounds) {
   }
 
   // setup the commands listbox
-  var list = win.add("listbox", bounds, [], {
-    numberOfColumns: 2,
-    showHeaders: true,
-    columnTitles: ["Name", "Type"],
-    columnWidths: [bounds[2] - 200, 195],
-  });
+  var list = win.add("listbox", bounds, [], paletteSettings.listboxProperties);
 
   // add items to list
   for (var i = 0; i < matches.length; i++) {
@@ -9655,9 +9691,14 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
     q.active = true;
   }
 
-  var list = pSearch.add("listbox", [0, 0, paletteWidth + 40, 182], commands.visible, {
-    multiselect: false,
-  });
+  var list = pSearch.add(
+    "listbox",
+    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
+    commands.visible,
+    {
+      multiselect: false,
+    }
+  );
   list.helpTip = localize(locStrings.cd_helptip);
   list.selection = 0;
 
@@ -9665,9 +9706,14 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
-  var steps = pSteps.add("listbox", [0, 0, paletteWidth + 40, 182], actions, {
-    multiselect: true,
-  });
+  var steps = pSteps.add(
+    "listbox",
+    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
+    actions,
+    {
+      multiselect: true,
+    }
+  );
   steps.helpTip = localize(locStrings.wf_steps_helptip);
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
@@ -9945,7 +9991,7 @@ function showAllWorkflows() {
       "tool",
     ]),
     (title = localize(locStrings.Workflows)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -9968,7 +10014,7 @@ function editWorkflow() {
       "tool",
     ]),
     (title = localize(locStrings.wf_edit)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) buildWorkflow(localizedCommandLookup[result[0].text]);
@@ -10055,7 +10101,7 @@ function checkWorkflowActions(actions) {
     (queryFilter = []),
     (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
     (title = localize(locStrings.title)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false),
     (docRequired = true),
     (selRequired = true)

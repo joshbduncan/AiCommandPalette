@@ -17,7 +17,17 @@ var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 
 // DIALOG SETTINGS
 
-var paletteWidth = 600;
+var paletteSettings = {
+  paletteWidth: 600,
+  paletteHeight: 201,
+  listboxProperties: {
+    numberOfColumns: 2,
+    showHeaders: true,
+    columnTitles: ["Name", "Type"],
+    columnWidths: [475, 100],
+  },
+};
+
 var visibleListItems = 9;
 var recentCommandsCount = 25;
 

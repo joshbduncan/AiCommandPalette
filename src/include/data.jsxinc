@@ -11,59 +11,59 @@ var locStrings = {
     de: "Fehler beim Ausf\u00fchren der Aktion:\n%1\n\n%2",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438:\n%1\n\n%2",
   },
-  Actions: { en: "Actions", de: "Actions", ru: "Actions" },
+  Actions: { en: "Actions", de: "Aktionen", ru: "Actions" },
   active_document_not_saved: {
     en: "Active document not yet saved to the file system.",
-    de: "Active document not yet saved to the file system.",
+    de: "Das aktuelle Dokument wurde noch nicht gespeichert.",
     ru: "Active document not yet saved to the file system.",
   },
-  artboards: { en: "Artboards", de: "Artboards", ru: "Artboards" },
+  artboards: { en: "Artboards", de: "Zeichenfl\u00e4chen", ru: "Artboards" },
   bm_already_loaded: {
     en: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
-    de: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
+    de: "Dieses Lesezeichen wurde bereits erstellt..\nM\u00f6chten Sie es mit dem neuen Lesezeichen ersetzen?",
     ru: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
   },
   bm_already_loaded_title: {
     en: "Bookmark Load Conflict",
-    de: "Bookmark Load Conflict",
+    de: "Konflikt beim Laden des Lesezeichens",
     ru: "Bookmark Load Conflict",
   },
   bm_error_execution: {
     en: "Error opening bookmark:\n%1\n\n%2",
-    de: "Error opening bookmark:\n%1\n\n%2",
+    de: "Fehler beim \u00d6ffnen des Lesezeichens:\n%1\n\n%2",
     ru: "Error opening bookmark:\n%1\n\n%2",
   },
   bm_error_exists: {
     en: "Bookmark no longer exists at original path. Try reloading.\n%1",
-    de: "Bookmark no longer exists at original path. Try reloading.\n%1",
+    de: "Das Lesezeichen ist an dieser Stelle nicht mehr vorhanden. Versuchen Sie, es nochmal zu laden.\n%1",
     ru: "Bookmark no longer exists at original path. Try reloading.\n%1",
   },
   bm_error_loading: {
     en: "Error loading bookmark:\n%1",
-    de: "Error loading bookmark:\n%1",
+    de: "Fehler beim Ladenn des Lesezeichens:\n%1",
     ru: "Error loading bookmark:\n%1",
   },
   bm_set_bookmark: {
     en: "Set Bookmark(s)",
-    de: "Set Bookmark(s)",
+    de: "Lesezeichen erstellen",
     ru: "Set Bookmark(s)",
   },
   bm_total_loaded: {
     en: "Total bookmarks loaded:\n%1",
-    de: "Total bookmarks loaded:\n%1",
+    de: "Anzahl der geladenen Lesezeichen:\n%1",
     ru: "Total bookmarks loaded:\n%1",
   },
-  bookmark: { en: "Bookmark", de: "Bookmark", ru: "Bookmark" },
-  Bookmarks: { en: "Bookmarks", de: "Bookmarks", ru: "Bookmarks" },
+  bookmark: { en: "Bookmark", de: "Lesezeichen", ru: "Bookmark" },
+  Bookmarks: { en: "Bookmarks", de: "Lesezeichen", ru: "Bookmarks" },
   cancel: { en: "Cancel", de: "Abbrechen", ru: "\u041e\u0442\u043c\u0435\u043d\u0430" },
   cd_active_document_required: {
     en: "Command '%1' requires an active document. Continue Anyway?",
-    de: "Command '%1' requires an active document. Continue Anyway?",
+    de: "Der Befehl '%1' erfordert ein ge\u00f6ffnetes Dokument. Trotzdem fortfahren?",
     ru: "Command '%1' requires an active document. Continue Anyway?",
   },
   cd_active_selection_required: {
     en: "Command '%1' requires an active selection. Continue Anyway?",
-    de: "Command '%1' requires an active selection. Continue Anyway?",
+    de: "Der Befehl '%1' erfordert eine Auswahl. Trotzdem fortfahren?",
     ru: "Command '%1' requires an active selection. Continue Anyway?",
   },
   cd_all: {
@@ -98,7 +98,7 @@ var locStrings = {
   },
   cd_exception: {
     en: "Command Exception",
-    de: "Command Exception",
+    de: "Befehls-Ausnahme",
     ru: "Command Exception",
   },
   cd_helptip: {
@@ -193,33 +193,41 @@ var locStrings = {
   },
   document_report: {
     en: "Active Document Report",
-    de: "Active Document Report",
+    de: "Dokumentinformationen",
     ru: "Active Document Report",
   },
   document_report_warning: {
     en: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
-    de: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
+    de: "Achtung:\nSeit dem letzen Speichern des Dokuments wurden \u00c4nderungen vorgenommen. Daher k\u00f6nnten einige Informationen falsch sein.\n\nSpeichern Sie das Dokument, bevor Sie die Dokumentinformationen erneut abrufen.",
     ru: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
   },
-  dr_color_space: { en: "Color Space: ", de: "Color Space: ", ru: "Color Space: " },
-  dr_file_created: { en: "File Created: ", de: "File Created: ", ru: "File Created: " },
-  dr_file_found: { en: "File Found: ", de: "File Found: ", ru: "File Found: " },
-  dr_filename: { en: "File: ", de: "File: ", ru: "File: " },
+  dr_color_space: { en: "Color Space: ", de: "Farbmodus: ", ru: "Color Space: " },
+  dr_file_created: {
+    en: "File Created: ",
+    de: "Datei erstellt am: ",
+    ru: "File Created: ",
+  },
+  dr_file_found: { en: "File Found: ", de: "Datei gefunden: ", ru: "File Found: " },
+  dr_filename: { en: "File: ", de: "Datei: ", ru: "File: " },
   dr_header: {
     en: "File Information\n-----\n",
-    de: "File Information\n-----\n",
+    de: "Datei-Information\n-----\n",
     ru: "File Information\n-----\n",
   },
-  dr_height: { en: "Height: ", de: "Height: ", ru: "Height: " },
+  dr_height: { en: "Height: ", de: "H\u00f6he: ", ru: "Height: " },
   dr_info_string: {
     en: "Ai Document Information",
-    de: "Ai Document Information",
+    de: "AI-Dokument-Information",
     ru: "Ai Document Information",
   },
   dr_name: { en: "Name: ", de: "Name: ", ru: "Name: " },
-  dr_path: { en: "Path: ", de: "Path: ", ru: "Path: " },
-  dr_width: { en: "Width: ", de: "Width: ", ru: "Width: " },
-  file_saved: { en: "File Saved:\n%1", de: "File Saved:\n%1", ru: "File Saved:\n%1" },
+  dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
+  dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
+  file_saved: {
+    en: "File Saved:\n%1",
+    de: "Datei gespeichert:\n%1",
+    ru: "File Saved:\n%1",
+  },
   fl_error_loading: {
     en: "Error loading file:\n%1",
     de: "Fehler beim Laden der Datei:\n%1",
@@ -230,7 +238,7 @@ var locStrings = {
     de: "Fehler beim Schreiben der Datei:\n%1",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
   },
-  fonts: { en: "Fonts", de: "Fonts", ru: "Fonts" },
+  fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
   github: {
     en: "Click here to learn more",
     de: "Klicken Sie hier f\u00fcr weitere Informationen",
@@ -253,55 +261,55 @@ var locStrings = {
   },
   go_to_named_object_no_objects: {
     en: "No named page items found.",
-    de: "No named page items found.",
+    de: "Keine benannten Objekte vorhanden.",
     ru: "No named page items found.",
   },
   go_to_open_document: {
     en: "Go To Open Document",
-    de: "Go To Open Document",
+    de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen",
     ru: "Go To Open Document",
   },
-  layers: { en: "Layers", de: "Layers", ru: "Layers" },
+  layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
   no_active_document: {
     en: "No active documents.",
-    de: "No active documents.",
+    de: "Keine ge\u00f6ffneten Dokumente vorhanden..",
     ru: "No active documents.",
   },
   no_document_variables: {
     en: "No document variables.",
-    de: "No document variables.",
+    de: "Keine Variablen vorhanden.",
     ru: "No document variables.",
   },
-  none: { en: "None", de: "None", ru: "None" },
+  none: { en: "None", de: "Ohne", ru: "None" },
   open_recent_file: {
     en: "Open Recent File",
-    de: "Open Recent File",
+    de: "Zuletzt benutzte Datei \u00f6ffnen",
     ru: "Open Recent File",
   },
-  placed_items: { en: "Placed Items", de: "Placed Items", ru: "Placed Items" },
+  placed_items: { en: "Placed Items", de: "Platzierte Objecte", ru: "Placed Items" },
   pref_file_loading_error: {
     en: "Error Loading Preferences\nA backup copy of your settings has been created.",
-    de: "Error Loading Preferences\nA backup copy of your settings has been created.",
+    de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
     ru: "Error Loading Preferences\nA backup copy of your settings has been created.",
   },
   pref_file_non_compatible: {
     en: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
-    de: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
+    de: "Fehler beim Laden der Voreinstellungen\nIhre Voreinstellungen sind nicht kompatibel mit der aktuellen Version der Kurzbefehle. Ihre Voreinstellungen werden zur\u00fcckgesetzt.\n\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
     ru: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
   },
   pref_update_complete: {
     en: "Preferences Update Complete\nRe-run script.",
-    de: "Preferences Update Complete",
+    de: "Aktualisierung der Voreinstellungen fertiggestellt",
     ru: "Preferences Update Complete",
   },
   recent_commands: {
     en: "Recent Commands",
-    de: "Recent Commands",
+    de: "Zuletzt verwendete Befehle",
     ru: "Recent Commands",
   },
   recent_commands_cleared: {
     en: "Recent Commands Cleared!",
-    de: "Recent Commands Cleared!",
+    de: "Zuletzt verwendete Befehle wurden gel\u00f6scht!",
     ru: "Recent Commands Cleared!",
   },
   save: {
@@ -334,7 +342,7 @@ var locStrings = {
     de: "Fehler beim Laden des Skripts:\n%1",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0441\u043a\u0440\u0438\u043f\u0442\u0430:\n%1",
   },
-  sc_load_script: { en: "Load Script(s)", de: "Load Script(s)", ru: "Load Script(s)" },
+  sc_load_script: { en: "Load Script(s)", de: "Skripte laden", ru: "Load Script(s)" },
   sc_none_selected: {
     en: "No script files selected.\nMust be JavaScript '.js' or '.jsx' files.",
     de: "Keine Skriptdateien ausgew\u00e4hlt.\nEs m\u00fcssen JavaScript-'.js'- oder '.jsx'-Dateien sein.",
@@ -346,8 +354,8 @@ var locStrings = {
     ru: "\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432:\n%1",
   },
   script: { en: "Script", de: "Skript", ru: "\u0421\u043a\u0440\u0438\u043f\u0442" },
-  Scripts: { en: "Scripts", de: "Scripts", ru: "Scripts" },
-  spot_colors: { en: "Spot Colors", de: "Spot Colors", ru: "Spot Colors" },
+  Scripts: { en: "Scripts", de: "Skripte laden", ru: "Scripts" },
+  spot_colors: { en: "Spot Colors", de: "Volltonfarben", ru: "Spot Colors" },
   step_delete: {
     en: "Delete",
     de: "L\u00f6schen",
@@ -417,7 +425,7 @@ var locStrings = {
   },
   wf_needs_attention: {
     en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
-    de: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
+    de: "Achtung!\nDie folgenden Aktionsschritte sind nicht mehr vorhanden\n\nGel\u00f6schte Aktionen:\n%1\n\nInkompatible Aktionen:\n%2",
     ru: "\u041d\u0430\u0431\u043e\u0440 \u0442\u0440\u0435\u0431\u0443\u0435\u0442 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u044f\n\u0423\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0435 \u0448\u0430\u0433\u0438 \u0432 \u0432\u0430\u0448\u0435\u043c \u043d\u0430\u0431\u043e\u0440\u0435 \u043a\u043e\u043c\u0430\u043d\u0434 \u0431\u043e\u043b\u044c\u0448\u0435 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b.\n\n\u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n%1\n\n\u041d\u0435\u0441\u043e\u0432\u043c\u0435\u0441\u0442\u0438\u043c\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n%2",
   },
   wf_none_attention: {
@@ -460,7 +468,7 @@ var locStrings = {
     de: "Arbeitsablauf",
     ru: "\u041d\u0430\u0431\u043e\u0440\u044b",
   },
-  Workflows: { en: "Workflows", de: "Workflows", ru: "Workflows" },
+  Workflows: { en: "Workflows", de: "Arbeitsabl\u00e4ufe", ru: "Workflows" },
 };
 
 var builtCommands = {
@@ -1017,7 +1025,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Edit > Edit Colors > Generative Recolor (Beta)",
-        de: "Edit > Edit Colors > Generative Recolor (Beta)",
+        de: "Bearbeiten > Farben bearbeiten > Generative Neuf\u00e4rbung",
         ru: "Edit > Edit Colors > Generative Recolor (Beta)",
       },
       minVersion: 27.6,
@@ -1150,7 +1158,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Edit > SWF Presets...",
-        de: "Edit > SWF Presets...",
+        de: "Bearbeiten > SWF-Vorgaben \u2026",
         ru: "Edit > SWF Presets...",
       },
       minVersion: 22,
@@ -1949,7 +1957,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Object > Intertwine > Make",
-        de: "Object > Intertwine > Make",
+        de: "Objekt > Verflechtung > Erstellen",
         ru: "Object > Intertwine > Make",
       },
       minVersion: 27,
@@ -1961,7 +1969,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Object > Intertwine > Release",
-        de: "Object > Intertwine > Release",
+        de: "Objekt > Verflechtung > Zur\u00fcckwandeln",
         ru: "Object > Intertwine > Release",
       },
       minVersion: 27,
@@ -1973,7 +1981,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Object > Intertwine > Edit",
-        de: "Object > Intertwine > Edit",
+        de: "Objekt > Verflechtung > Bearbeiten",
         ru: "Object > Intertwine > Edit",
       },
       minVersion: 27,
@@ -2783,7 +2791,7 @@ var builtCommands = {
       selRequired: true,
       loc: {
         en: "Type > Bullets and Numbering > Convert to text",
-        de: "Type > Bullets and Numbering > Convert to text",
+        de: "Schrift > Aufz\u00e4hlungszeichen und Nummerierung > In Text konvertieren",
         ru: "Type > Bullets and Numbering > Convert to text",
       },
       minVersion: 27.1,
@@ -5521,7 +5529,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Window > Image Trace",
-        de: "Window > Image Trace",
+        de: "Fenster > Bildnachzeichner",
         ru: "Window > Image Trace",
       },
     },
@@ -5629,7 +5637,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Window > Retype (Beta)",
-        de: "Window > Retype (Beta)",
+        de: "Fenster > Retype (Beta)",
         ru: "Window > Retype (Beta)",
       },
       minVersion: 27.6,
@@ -7305,7 +7313,11 @@ var builtCommands = {
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Workflows...", de: "All Workflows...", ru: "All Workflows..." },
+      loc: {
+        en: "All Workflows...",
+        de: "Alle Arbeitsabl\u00e4ufe \u2026",
+        ru: "All Workflows...",
+      },
     },
     config_loadScript: {
       action: "loadScript",
@@ -7323,7 +7335,7 @@ var builtCommands = {
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Scripts...", de: "All Scripts...", ru: "All Scripts..." },
+      loc: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
     },
     config_setFileBookmark: {
       action: "setFileBookmark",
@@ -7332,7 +7344,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Set File Bookmark(s)...",
-        de: "Set File Bookmark(s)...",
+        de: "Lesezeichen erstellen \u2026",
         ru: "Set File Bookmark(s)...",
       },
     },
@@ -7343,7 +7355,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Set Folder Bookmark...",
-        de: "Set Folder Bookmark...",
+        de: "Lesezeichen-Ordner erstellen \u2026",
         ru: "Set Folder Bookmark...",
       },
     },
@@ -7352,14 +7364,18 @@ var builtCommands = {
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Bookmarks...", de: "All Bookmarks...", ru: "All Bookmarks..." },
+      loc: {
+        en: "All Bookmarks...",
+        de: "Alle Lesezeichen \u2026",
+        ru: "All Bookmarks...",
+      },
     },
     config_allActions: {
       action: "allActions",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Actions...", de: "All Actions...", ru: "All Actions..." },
+      loc: { en: "All Actions...", de: "Alle Aktionen \u2026", ru: "All Actions..." },
     },
     config_hideCommand: {
       action: "hideCommand",
@@ -7400,8 +7416,8 @@ var builtCommands = {
       docRequired: false,
       selRequired: false,
       loc: {
-        en: "Clear Recent Comands",
-        de: "Clear Recent Comands",
+        en: "Clear Recent Commands",
+        de: "Die letzten Befehle l\u00f6schen",
         ru: "Clear Recent Comands",
       },
     },
@@ -7436,7 +7452,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Go To Open Document",
-        de: "Go To Open Document",
+        de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen \u2026",
         ru: "Go To Open Document",
       },
     },
@@ -7447,7 +7463,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Go To Named Object...",
-        de: "Gehen Sie zum benannten Objekt...",
+        de: "Benannte Objekte ausw\u00e4hlen \u2026",
         ru: "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u043e\u043c\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u0443...",
       },
     },
@@ -7456,7 +7472,7 @@ var builtCommands = {
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Redraw Windows", de: "Redraw Windows", ru: "Redraw Windows" },
+      loc: { en: "Redraw Windows", de: "Fenster aktualisieren", ru: "Redraw Windows" },
     },
     builtin_revealActiveDocument: {
       action: "revealActiveDocument",
@@ -7465,7 +7481,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Reveal Active Document On System",
-        de: "Reveal Active Document On System",
+        de: "Aktuelles Dokument im Dateimanager anzeigen",
         ru: "Reveal Active Document On System",
       },
     },
@@ -7476,7 +7492,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Active Document Report",
-        de: "Active Document Report",
+        de: "Dokumentinformationen",
         ru: "Active Document Report",
       },
     },
@@ -7487,7 +7503,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Export Active Artboard As PNG",
-        de: "Export Active Artboard As PNG",
+        de: "Ausgew\u00e4hlte Zeichenfl\u00e4che als PNG exportieren",
         ru: "Export Active Artboard As PNG",
       },
     },
@@ -7498,7 +7514,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Export Document Variables As XML",
-        de: "Export Document Variables As XML",
+        de: "Variablen als XML exportieren",
         ru: "Export Document Variables As XML",
       },
     },
@@ -7509,7 +7525,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Open Recent File...",
-        de: "Open Recent File...",
+        de: "Letzte Datei \u00f6ffnen \u2026",
         ru: "Open Recent File...",
       },
     },
@@ -7520,7 +7536,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Recent Commands...",
-        de: "Recent Commands...",
+        de: "Letzte Befehle \u2026",
         ru: "Recent Commands...",
       },
     },

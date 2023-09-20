@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - User commands (Actions, Bookmarks, Scripts, and Workflows) not longer have their command type (e.g. "Action: ", "Bookmark: ", "Script: ", or "Workflow: ") prepended to their name. This was causing issues with localized keys in the user preferences json file.
     - To help find loaded Actions, Bookmarks, Scripts, and Workflows, there are four new built-in commands that can be found in the "Ai Command Palette Settings..." menu.
 - Commands run inside of a workflow are no longer added to the recent commands list
+- Command palette listbox now shows command types
+- Update scoring for command palette searching
+    - sanitizing input and commands
+    - all string now in lowercase
+    - scoring bump for exact matches
 
 # [0.8.1] 2023-09-18
 

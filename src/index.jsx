@@ -86,7 +86,7 @@ See the LICENSE file for details.
     (queryFilter = []),
     (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
     (title = localize(locStrings.title)),
-    (bounds = [0, 0, paletteWidth, 182]),
+    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false),
     (docRequired = true),
     (selRequired = true)
