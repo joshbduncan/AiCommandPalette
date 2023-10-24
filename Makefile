@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 PWD := $(realpath $(dir $(abspath $(firstword $(MAKEFILE_LIST)))))
 
 .DEFAULT_GOAL := help

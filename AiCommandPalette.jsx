@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.8.2";
+  var _version = "0.9.0";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -3385,6 +3385,18 @@ var builtCommands = {
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0412\u044b\u0447\u0438\u0441\u0442\u0438\u0442\u044c\u2026",
       },
     },
+    "menu_smooth menu item": {
+      action: "smooth menu item",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      loc: {
+        en: "Object > Path > Smooth",
+        de: "Object > Path > Smooth",
+        ru: "Object > Path > Smooth",
+      },
+      minVersion: 28,
+    },
     "menu_Convert to Shape": {
       action: "Convert to Shape",
       type: "menu",
@@ -3441,6 +3453,18 @@ var builtCommands = {
         de: "Objekt > Muster > Farbe f\u00fcr Musterelement-Kante",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0423\u0437\u043e\u0440 > \u0426\u0432\u0435\u0442 \u043a\u0440\u0430\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430...",
       },
+    },
+    "menu_Text To Pattern": {
+      action: "Text To Pattern",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      loc: {
+        en: "Object > Pattern > Text to Pattern (Beta)",
+        de: "Object > Pattern > Text to Pattern (Beta)",
+        ru: "Object > Pattern > Text to Pattern (Beta)",
+      },
+      minVersion: 28,
     },
     "menu_Partial Rearrange Make": {
       action: "Partial Rearrange Make",
@@ -3834,6 +3858,42 @@ var builtCommands = {
         de: "Objekt > Bildnachzeichner > Umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
       },
+    },
+    "menu_Make Vector Edge": {
+      action: "Make Vector Edge",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      loc: {
+        en: "Object > Mockup (Beta) > Make",
+        de: "Object > Mockup (Beta) > Make",
+        ru: "Object > Mockup (Beta) > Make",
+      },
+      minVersion: 28,
+    },
+    "menu_Release Vector Edge": {
+      action: "Release Vector Edge",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      loc: {
+        en: "Object > Mockup (Beta) > Release",
+        de: "Object > Mockup (Beta) > Release",
+        ru: "Object > Mockup (Beta) > Release",
+      },
+      minVersion: 28,
+    },
+    "menu_Edit Vector Edge": {
+      action: "Edit Vector Edge",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      loc: {
+        en: "Object > Mockup (Beta) > Edit",
+        de: "Object > Mockup (Beta) > Edit",
+        ru: "Object > Mockup (Beta) > Edit",
+      },
+      minVersion: 28,
     },
     "menu_Make Text Wrap": {
       action: "Make Text Wrap",
@@ -4408,7 +4468,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Aussehen",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435",
       },
-      minVersion: 26,
     },
     "menu_Find Appearance Attributes menu item": {
       action: "Find Appearance Attributes menu item",
@@ -4420,7 +4479,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Aussehensattribute",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044b \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f",
       },
-      minVersion: 26,
     },
     "menu_Find Blending Mode menu item": {
       action: "Find Blending Mode menu item",
@@ -4432,7 +4490,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > F\u00fcllmethode",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0440\u0435\u0436\u0438\u043c\u043e\u043c \u043d\u0430\u043b\u043e\u0436\u0435\u043d\u0438\u044f",
       },
-      minVersion: 26,
     },
     "menu_Find Fill & Stroke menu item": {
       action: "Find Fill & Stroke menu item",
@@ -4444,7 +4501,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Fl\u00e4che und Kontur",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c\u0438 \u0437\u0430\u043b\u0438\u0432\u043a\u043e\u0439 \u0438 \u043e\u0431\u0432\u043e\u0434\u043a\u043e\u0439",
       },
-      minVersion: 26,
     },
     "menu_Find Fill Color menu item": {
       action: "Find Fill Color menu item",
@@ -4456,7 +4512,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Fl\u00e4chenfarbe",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0446\u0432\u0435\u0442\u043e\u043c \u0437\u0430\u043b\u0438\u0432\u043a\u0438",
       },
-      minVersion: 26,
     },
     "menu_Find Opacity menu item": {
       action: "Find Opacity menu item",
@@ -4468,7 +4523,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Deckkraft",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e\u0439 \u043d\u0435\u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c\u044e",
       },
-      minVersion: 26,
     },
     "menu_Find Stroke Color menu item": {
       action: "Find Stroke Color menu item",
@@ -4480,7 +4534,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Konturfarbe",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0446\u0432\u0435\u0442\u043e\u043c \u043e\u0431\u0432\u043e\u0434\u043a\u0438",
       },
-      minVersion: 26,
     },
     "menu_Find Stroke Weight menu item": {
       action: "Find Stroke Weight menu item",
@@ -4492,7 +4545,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Konturst\u00e4rke",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e\u0439 \u0442\u043e\u043b\u0449\u0438\u043d\u043e\u0439 \u043e\u0431\u0432\u043e\u0434\u043a\u0438",
       },
-      minVersion: 26,
     },
     "menu_Find Style menu item": {
       action: "Find Style menu item",
@@ -4504,7 +4556,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Grafikstil",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0442\u0438\u043b\u044c \u0433\u0440\u0430\u0444\u0438\u043a\u0438",
       },
-      minVersion: 26,
     },
     "menu_Find Live Shape menu item": {
       action: "Find Live Shape menu item",
@@ -4516,7 +4567,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Form",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0424\u0438\u0433\u0443\u0440\u0430",
       },
-      minVersion: 26,
     },
     "menu_Find Symbol Instance menu item": {
       action: "Find Symbol Instance menu item",
@@ -4528,7 +4578,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Symbolinstanz",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u0435 \u043e\u0431\u0440\u0430\u0437\u0446\u044b \u0441\u0438\u043c\u0432\u043e\u043b\u0430",
       },
-      minVersion: 26,
     },
     "menu_Find Link Block Series menu item": {
       action: "Find Link Block Series menu item",
@@ -4540,7 +4589,6 @@ var builtCommands = {
         de: "Auswahl > Gleich > Verkn\u00fcpfungsblockreihen",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041f\u043e\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0445 \u0431\u043b\u043e\u043a\u043e\u0432",
       },
-      minVersion: 26,
     },
     "menu_Find Text Font Family menu item": {
       action: "Find Text Font Family menu item",
@@ -7089,6 +7137,18 @@ var builtCommands = {
         ru: "\u041e\u043a\u043d\u043e > \u0412\u043e\u043b\u0448\u0435\u0431\u043d\u0430\u044f \u043f\u0430\u043b\u043e\u0447\u043a\u0430",
       },
     },
+    "menu_Adobe Vector Edge Panel": {
+      action: "Adobe Vector Edge Panel",
+      type: "menu",
+      docRequired: false,
+      selRequired: false,
+      loc: {
+        en: "Window > Mockup (Beta)",
+        de: "Window > Mockup (Beta)",
+        ru: "Window > Mockup (Beta)",
+      },
+      minVersion: 28,
+    },
     menu_AdobeNavigator: {
       action: "AdobeNavigator",
       type: "menu",
@@ -7188,6 +7248,18 @@ var builtCommands = {
         de: "Fenster > Symbole",
         ru: "\u041e\u043a\u043d\u043e > \u0421\u0438\u043c\u0432\u043e\u043b\u044b",
       },
+    },
+    menu_Generate: {
+      action: "Generate",
+      type: "menu",
+      docRequired: false,
+      selRequired: false,
+      loc: {
+        en: "Window > Text to Vector Graphic (Beta)",
+        de: "Window > Text to Vector Graphic (Beta)",
+        ru: "Window > Text to Vector Graphic (Beta)",
+      },
+      minVersion: 28,
     },
     menu_AdobeTransformObjects1: {
       action: "AdobeTransformObjects1",
@@ -8933,7 +9005,7 @@ var builtCommands = {
       selRequired: false,
       loc: {
         en: "Go To Artboard...",
-        de: "Gehen Sie zur Zeichenfl\u00e4che...",
+        de: "Zeichenfl\u00e4chen ausw\u00e4hlen \u2026",
         ru: "Gehen Sie zur Zeichenfl\u00e4che...",
       },
     },

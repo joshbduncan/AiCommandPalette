@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# [Unreleased]
+# [0.9.0]
+
+### [Added]
+
+- New commands for version 28.0 (provided by [sttk3](https://community.adobe.com/t5/user/viewprofilepage/user-id/6940356))
 
 ### [Changed]
 
@@ -16,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - sanitizing input and commands
     - all string now in lowercase
     - scoring bump for exact matches
+
+### [Fixed]
+
+- incorrect minimum version for some of the Select > Same > ..." menu options from issue #19 (thanks @creold for your help)
 
 # [0.8.1] 2023-09-18
 
