@@ -14,7 +14,7 @@ commands:  ## download latest command data
 	source venv/bin/activate && python tools/build_data.py -d > src/include/data.jsxinc && prettier -w src/include/data.jsxinc
 
 copy:  ## copy compiled script to Ai scripts folder
-	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2023/Presets.localized/en_US/Scripts
+	sudo cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2024/Presets.localized/en_US/Scripts
 
 reset: compile copy  ## re-compile script and copy to Ai scripts folder
 

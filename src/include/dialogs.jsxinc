@@ -96,7 +96,7 @@ function commandPalette(
       this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
     if (matches.length > 0) {
       // setup the temp commands listbox
-      var temp = win.add("listbox", list.bounds, undefined, {
+      temp = win.add("listbox", list.bounds, undefined, {
         numberOfColumns: list.properties.numberOfColumns,
         showHeaders: list.properties.showHeaders,
         columnTitles: list.properties.columnTitles,
@@ -104,7 +104,6 @@ function commandPalette(
         multiselect: list.properties.multiselect,
       });
       insertCommands(temp, matches);
-      // temp.selection = 0;
 
       // close list on double-click of list item
       temp.onDoubleClick = function () {
@@ -114,6 +113,7 @@ function commandPalette(
       // change the original listbox reference to the updated `temp` version
       win.remove(list);
       list = temp;
+
       // reset the selection
       list.selection = 0;
     }
@@ -362,7 +362,26 @@ function goToPalette(commands, title, bounds) {
   return false;
 }
 
-function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit) {
+/**
+ * Show the workflow builder with a filterable listbox.
+ * @param   {Array}    commands      Commands available to the palette.
+ * @param   {Array}    queryFilter   Types of commands to hide from the search query.
+ * @param   {String}   edit          Name of a current workflow to edit (if any).
+ * @returns {Array}                  Array of selected list items.
+ */
+function workflowBuilder(commands, queryFilter, edit) {
+  // insert command and type into listbox
+  function insertCommands(list, commands) {
+    var command, commandData;
+    for (var i = 0; i < commands.length; i++) {
+      command = commands[i];
+      commandData = commandsData[localizedCommandLookup[command]];
+      with (list.add("item", command)) {
+        subItems[0].text = commandData.type; // TODO: add localization
+      }
+    }
+  }
+
   // if editing a command, pull in variables to prefill dialog with
   var command;
   var actions = [];
@@ -376,17 +395,7 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
     hideCommands.push(edit);
   }
 
-  // filter the commands based on supplied args
-  // make it so you don't have to specify the same array
-  // for both filters if they should be the same
-  if (visibleFilter.length == 0) visibleFilter = queryFilter;
-  commands = filterCommands(
-    commands,
-    queryFilter,
-    visibleFilter,
-    showHidden,
-    hideCommands
-  );
+  commands = filterCommands(commands, queryFilter, [], true, [], false, false);
 
   // create the dialog
   var win = new Window("dialog");
@@ -410,13 +419,27 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
   var list = pSearch.add(
     "listbox",
     [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
-    commands.visible,
+    undefined,
     {
+      numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
+      showHeaders: paletteSettings.listboxProperties.showHeaders,
+      columnTitles: paletteSettings.listboxProperties.columnTitles,
+      columnWidths: paletteSettings.listboxProperties.columnWidths,
       multiselect: false,
     }
   );
   list.helpTip = localize(locStrings.cd_helptip);
+  insertCommands(list, commands.visible);
   list.selection = 0;
+
+  // add item to workflow step on double-click
+  list.onDoubleClick = function () {
+    if (list.selection) {
+      steps.add("item", list.selection);
+      workflowName.enabled = steps.items.length > 0 ? true : false;
+      ok.enabled = workflowName.text.length > 0 ? true : false;
+    }
+  };
 
   // workflow steps
   var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
@@ -462,23 +485,37 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
 
   // as a query is typed update the list box
   var matches, temp;
+  var frameStart = 0;
   q.onChanging = function () {
+    frameStart = 0;
     matches =
-      this.text === "" ? commands.visible : scoreMatches(this.text, commands.visible);
+      this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
     if (matches.length > 0) {
-      temp = pSearch.add("listbox", list.bounds, matches, {
+      // setup the temp commands listbox
+      temp = pSearch.add("listbox", list.bounds, undefined, {
+        numberOfColumns: list.properties.numberOfColumns,
+        showHeaders: list.properties.showHeaders,
+        columnTitles: list.properties.columnTitles,
+        columnWidths: list.properties.columnWidths,
         multiselect: list.properties.multiselect,
       });
-      // add command when double-clicking
-      temp.onDoubleClick = list.onDoubleClick;
-      // remove the temp 'truncation fix' item from the list
-      if (matches != commands.visible) temp.remove(temp.items.length - 1);
+      insertCommands(temp, matches);
+
+      // add item to workflow step on double-click
+      temp.onDoubleClick = function () {
+        if (temp.selection) {
+          steps.add("item", temp.selection);
+          workflowName.enabled = steps.items.length > 0 ? true : false;
+          ok.enabled = workflowName.text.length > 0 ? true : false;
+        }
+      };
+
       // change the original listbox reference to the updated `temp` version
       pSearch.remove(list);
       list = temp;
+
       // reset the selection
       list.selection = 0;
-      cur = 0;
     }
   };
 
@@ -538,14 +575,6 @@ function workflowBuilder(commands, showHidden, queryFilter, visibleFilter, edit)
     steps.selection == null;
     workflowName.enabled = steps.items.length > 0 ? true : false;
     ok.enabled = workflowName.text.length > 0 ? true : false;
-  };
-
-  list.onDoubleClick = function () {
-    if (list.selection) {
-      steps.add("item", list.selection);
-      workflowName.enabled = steps.items.length > 0 ? true : false;
-      ok.enabled = workflowName.text.length > 0 ? true : false;
-    }
   };
 
   if (win.show() == 1) {

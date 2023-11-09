@@ -8,9 +8,7 @@ function buildWorkflow(workflow) {
   // show the workflow builder dialog
   var result = workflowBuilder(
     (commands = allCommandsLocalized),
-    (showHidden = true),
     (queryFilter = ["config", "defaults"]),
-    (visibleFilter = []),
     (edit = workflow)
   );
 

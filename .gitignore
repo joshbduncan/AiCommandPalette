@@ -2,6 +2,5 @@ tmp
 types
 venv
 working
-.DS_Store
 .prettierignore
 scratchpad.*
