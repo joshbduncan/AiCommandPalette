@@ -10,7 +10,7 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ### Doing
 
-### Done
+### Done ✓
 
 - [x] sort filtered items by most used: Track command usage counts in the user settings file, and use that count in the scoring algorithm for sorting the palette items.
 - [x] store recent command history and make accessible via command palette

@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.9.0";
+  var _version = "0.9.2";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -9466,6 +9466,8 @@ See the LICENSE file for details.
           if (temp.selection) win.close(1);
         };
 
+        if (!multiselect) scrollList(temp);
+
         // change the original listbox reference to the updated `temp` version
         win.remove(list);
         list = temp;
@@ -9474,6 +9476,8 @@ See the LICENSE file for details.
         list.selection = 0;
       }
     };
+
+    if (!multiselect) scrollList(list);
 
     if (!multiselect && list.items.length > 0) {
       /*
@@ -9494,6 +9498,10 @@ See the LICENSE file for details.
             k.preventDefault();
             if (!list.selection) {
               list.selection = 0;
+            } else if (list.selection.index == 0) {
+              // jump to the bottom if at top
+              list.selection = list.items.length - 1;
+              frameStart = list.items.length - 1 - visibleListItems;
             } else {
               if (list.selection.index > 0) {
                 list.selection = list.selection.index - 1;
@@ -9504,6 +9512,10 @@ See the LICENSE file for details.
             k.preventDefault();
             if (!list.selection) {
               list.selection = 0;
+            } else if (list.selection.index === list.items.length - 1) {
+              // jump to the top if at the bottom
+              list.selection = 0;
+              frameStart = 0;
             } else {
               if (list.selection.index < list.items.length) {
                 list.selection = list.selection.index + 1;
@@ -9631,6 +9643,9 @@ See the LICENSE file for details.
         temp.onDoubleClick = function () {
           if (list.selection) win.close(1);
         };
+
+        if (!multiselect) scrollList(list);
+
         // remove the temp 'truncation fix' item from the list
         if (matches != commands.visible) temp.remove(temp.items.length - 1);
         win.remove(list);
@@ -9638,6 +9653,8 @@ See the LICENSE file for details.
         list.selection = 0;
       }
     };
+
+    scrollList(list);
 
     if (list.items.length > 0) {
       /*
@@ -9658,6 +9675,10 @@ See the LICENSE file for details.
             k.preventDefault();
             if (!list.selection) {
               list.selection = 0;
+            } else if (list.selection.index == 0) {
+              // jump to the bottom if at top
+              list.selection = list.items.length - 1;
+              frameStart = list.items.length - 1 - visibleListItems;
             } else {
               if (list.selection.index > 0) {
                 list.selection = list.selection.index - 1;
@@ -9668,6 +9689,10 @@ See the LICENSE file for details.
             k.preventDefault();
             if (!list.selection) {
               list.selection = 0;
+            } else if (list.selection.index === list.items.length - 1) {
+              // jump to the top if at the bottom
+              list.selection = 0;
+              frameStart = 0;
             } else {
               if (list.selection.index < list.items.length) {
                 list.selection = list.selection.index + 1;
@@ -9959,6 +9984,31 @@ See the LICENSE file for details.
       }
     }
     return results;
+  }
+
+  /**
+   * Present File.openDialog() for user to select files to load.
+   * @param   {String}  prompt        Prompt for dialog.
+   * @param   {Boolean} multiselect   Can multiple files be selected.
+   * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
+   * @returns {Array}                 Selected file(s).
+   */
+
+  /**
+   * Allow end-to-end scrolling from within a listbox.
+   * @param {Object}  list  An ExtendScript listbox.
+   */
+  function scrollList(list) {
+    list.addEventListener("keydown", function (k) {
+      if (k.keyName == "Up" && list.selection.index == 0) {
+        list.selection = list.items.length - 1;
+        k.preventDefault();
+      }
+      if (k.keyName == "Down" && list.selection.index == list.items.length - 1) {
+        list.selection = 0;
+        k.preventDefault();
+      }
+    });
   }
   // FILE/FOLDER OPERATIONS
 

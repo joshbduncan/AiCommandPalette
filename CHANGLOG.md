@@ -4,13 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# [0.9.1] 2023-11-09
+## [0.9.2] 2023-11-15
+
+### Added
+
+- Ability for end-to-end scrolling. So, if you press the up key while on the first list item it will jump to the bottom and if you are at the bottom of the list options and press the down key, you'll jump all the way back to the top. Thanks for the idea @creold Issue #20.
+
+## [0.9.1] 2023-11-09
 
 ### Fixed
 
 - Fixed issue where the queryable listbox within the workflow builder was showing incorrect results ([Issue #20](https://github.com/joshbduncan/AiCommandPalette/issues/20))
 
-# [0.9.0] 2023-10-24
+## [0.9.0] 2023-10-24
 
 ### [Added]
 
@@ -31,13 +37,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - incorrect minimum version for some of the Select > Same > ..." menu options from issue #19 (thanks @creold for your help)
 
-# [0.8.1] 2023-09-18
+## [0.8.1] 2023-09-18
 
 ### [Fixed]
 
 - Missing localized strings
 
-# [0.8.1] 2023-09-18
+## [0.8.1] 2023-09-18
 
 ### [Added]
 
