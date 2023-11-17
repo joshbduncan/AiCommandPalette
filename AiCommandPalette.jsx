@@ -738,6 +738,9 @@ See the LICENSE file for details.
       case "deleteCommand":
         deleteCommand();
         break;
+      case "recentCommands":
+        recentCommands();
+        break;
       case "clearRecentCommands":
         data.recent.commands = [];
         alert(localize(locStrings.recent_commands_cleared));
@@ -780,9 +783,6 @@ See the LICENSE file for details.
         break;
       case "recentFiles":
         recentFiles();
-        break;
-      case "recentCommands":
-        recentCommands();
         break;
       case "redrawWindows":
         app.redraw();
@@ -8825,19 +8825,6 @@ See the LICENSE file for details.
         minVersion: 24,
       },
     },
-    defaults: {
-      defaults_settings: {
-        action: "settings",
-        type: "defaults",
-        docRequired: false,
-        selRequired: false,
-        loc: {
-          en: "Ai Command Palette Settings...",
-          de: "Kurzbefehle \u2013 Einstellungen \u2026",
-          ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
-        },
-      },
-    },
     config: {
       config_about: {
         action: "about",
@@ -9093,15 +9080,28 @@ See the LICENSE file for details.
           ru: "Open Recent File...",
         },
       },
-      builtin_recentCommands: {
+    },
+    defaults: {
+      defaults_recentCommands: {
         action: "recentCommands",
-        type: "builtin",
+        type: "defaults",
         docRequired: false,
         selRequired: false,
         loc: {
           en: "Recent Commands...",
           de: "Letzte Befehle \u2026",
           ru: "Recent Commands...",
+        },
+      },
+      defaults_settings: {
+        action: "settings",
+        type: "defaults",
+        docRequired: false,
+        selRequired: false,
+        loc: {
+          en: "Ai Command Palette Settings...",
+          de: "Kurzbefehle \u2013 Einstellungen \u2026",
+          ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
         },
       },
     },

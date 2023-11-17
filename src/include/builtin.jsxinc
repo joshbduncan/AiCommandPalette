@@ -52,6 +52,9 @@ function scriptAction(action) {
     case "deleteCommand":
       deleteCommand();
       break;
+    case "recentCommands":
+      recentCommands();
+      break;
     case "clearRecentCommands":
       data.recent.commands = [];
       alert(localize(locStrings.recent_commands_cleared));
@@ -94,9 +97,6 @@ function builtinAction(action) {
       break;
     case "recentFiles":
       recentFiles();
-      break;
-    case "recentCommands":
-      recentCommands();
       break;
     case "redrawWindows":
       app.redraw();
