@@ -9215,7 +9215,7 @@ See the LICENSE file for details.
       for (var i = 0; i < commands.length; i++) processCommand(commands[i]);
     } else {
       // update recent commands list
-      if (!insideWorkflow && command != "builtin_recentCommands") {
+      if (!insideWorkflow && command != "defaults_recentCommands") {
         // make sure command isn't already in the list
         var idx = data.recent.commands.indexOf(command);
         if (idx > -1) data.recent.commands.splice(idx, 1);
