@@ -1,0 +1,9 @@
+repos:
+-   repo: local
+    hooks:
+      - id: compile-script
+        name: compile-script
+        entry: bash -c '/Users/jbd/Dropbox/DEV/projects/extend-script-compiler/escompile.sh src/index.jsx > AiCommandPalette.jsx && git add AiCommandPalette.jsx'
+        language: system
+        types: [bash]
+        always_run: true
