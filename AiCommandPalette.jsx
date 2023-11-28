@@ -9542,6 +9542,8 @@ See the LICENSE file for details.
               list.selection.index > frameStart + visibleListItems - 1
             )
               frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+            // don't move the frame if list items don't fill the available rows
+            if (list.items.length <= visibleListItems) return;
             // move the frame by revealing the calculated `frameStart`
             list.revealItem(frameStart);
           }
@@ -9719,6 +9721,8 @@ See the LICENSE file for details.
               list.selection.index > frameStart + visibleListItems - 1
             )
               frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+            // don't move the frame if list items don't fill the available rows
+            if (list.items.length <= visibleListItems) return;
             // move the frame by revealing the calculated `frameStart`
             list.revealItem(frameStart);
           }
