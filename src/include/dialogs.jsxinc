@@ -1,80 +1,176 @@
-// USER DIALOGS
+// CUSTOM SCRIPTUI LISTBOX
 
-/**
- * Show a filterable commands palette.
- * @param   {Array}   commands      Commands available to the palette.
- * @param   {Boolean} showHidden    Should user hidden commands be shown in the palette.
- * @param   {Array}   queryFilter   Types of commands to hide from the search query.
- * @param   {Array}   visibleFilter Types of commands to hide from the initial view.
- * @param   {String}  title         Command palette title.
- * @param   {Array}   bounds        Command palette bounds.
- * @param   {Boolean} multiselect   Can multiple items be selected.
- * @param   {Boolean} docRequired   Should commands requiring an active document to work be hidden if there is no active document.
- * @param   {Boolean} selRequired   Should commands requiring an active selection to work be hidden if there is no active selection.
- * @returns {Array}                 Array of selected list items.
- */
-function commandPalette(
-  commands,
-  showHidden,
-  queryFilter,
-  visibleFilter,
-  title,
-  bounds,
-  multiselect,
-  docRequired,
-  selRequired
-) {
-  // insert command and type into listbox
-  function insertCommands(list, commands) {
-    var command, commandData;
+function ListBoxWrapper(commands, win, multiselect) {
+  this.listbox = this.make(commands, win, paletteSettings.bounds, multiselect);
+}
+
+ListBoxWrapper.prototype = {
+  make: function (commands, win, bounds, multiselect) {
+    listbox = win.add("listbox", bounds, undefined, {
+      numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
+      showHeaders: paletteSettings.listboxProperties.showHeaders,
+      columnTitles: paletteSettings.listboxProperties.columnTitles,
+      columnWidths: paletteSettings.listboxProperties.columnWidths,
+      multiselect: multiselect,
+    });
+    this.loadCommands(listbox, commands);
+    this.addListeners(listbox);
+    listbox.frameStart = 0;
+    listbox.selection = 0;
+    return listbox;
+  },
+  update: function (matches) {
+    temp = this.make(
+      matches,
+      this.listbox.window,
+      this.listbox.bounds,
+      this.listbox.properties.multiselect
+    );
+    this.listbox.window.remove(this.listbox);
+    this.listbox = temp;
+  },
+  loadCommands: function (lb, commands) {
+    var command;
     for (var i = 0; i < commands.length; i++) {
       command = commands[i];
-      commandData = commandsData[localizedCommandLookup[command]];
-      with (list.add("item", command)) {
-        subItems[0].text = commandData.type; // TODO: add localization
+      with (lb.add("item", command.name)) {
+        subItems[0].text = command.type; // TODO: add localization
       }
     }
-  }
+  },
+  addListeners: function (lb) {
+    selectOnDoubleClick(lb);
+    if (!lb.properties.multiselect) {
+      scrollListBoxWithArrows(lb);
+    }
+  },
+};
 
-  commands = filterCommands(
-    commands,
-    queryFilter,
-    visibleFilter,
-    showHidden,
-    [],
-    docRequired,
-    selRequired
-  );
+// LISTBOXWRAPPER LISTENERS
 
+/**
+ * Close listbox when double-clicking a command.
+ * @param {Object}  lb  ScriptUI listbox.
+ */
+function selectOnDoubleClick(lb) {
+  lb.onDoubleClick = function () {
+    if (lb.selection) lb.window.close(1);
+  };
+}
+
+/**
+ * Allow end-to-end scrolling from within a listbox.
+ * @param {Object}  lb  ScriptUI listbox.
+ */
+function scrollListBoxWithArrows(lb) {
+  lb.addEventListener("keydown", function (e) {
+    if (e.fromQuery) {
+      if (e.fromQueryShiftKey) {
+        if (e.keyName == "Up") {
+          if (this.selection.index == 0) {
+            this.selection = this.items.length - 1;
+            e.preventDefault();
+          } else {
+            this.selection--;
+          }
+        }
+        if (e.keyName == "Down") {
+          if (this.selection.index == this.items.length - 1) {
+            this.selection = 0;
+            e.preventDefault();
+          } else {
+            if (e.keyName == "Down") this.selection++;
+          }
+        }
+      } else {
+        if (e.keyName == "Up" || e.keyName == "Down") {
+          if (e.keyName == "Up") {
+            e.preventDefault();
+            if (!this.selection) {
+              this.selection = 0;
+            } else if (this.selection.index == 0) {
+              // jump to the bottom if at top
+              this.selection = this.items.length - 1;
+              this.frameStart = this.items.length - 1 - visibleListItems;
+            } else {
+              if (this.selection.index > 0) {
+                this.selection = this.selection.index - 1;
+                if (this.selection.index < this.frameStart) this.frameStart--;
+              }
+            }
+          } else if (e.keyName == "Down") {
+            e.preventDefault();
+            if (!this.selection) {
+              this.selection = 0;
+            } else if (this.selection.index === this.items.length - 1) {
+              // jump to the top if at the bottom
+              this.selection = 0;
+              this.frameStart = 0;
+            } else {
+              if (this.selection.index < this.items.length) {
+                this.selection = this.selection.index + 1;
+                if (this.selection.index > this.frameStart + visibleListItems - 1) {
+                  if (this.frameStart < this.items.length - visibleListItems) {
+                    this.frameStart++;
+                  } else {
+                    this.frameStart = this.frameStart;
+                  }
+                }
+              }
+            }
+          }
+          /*
+        If a selection is made inside of the actual listbox frame by the user,
+        the API doesn't offer any way to know which part of the list is currently
+        visible in the listbox "frame". If the user was to re-enter the `q` edittext
+        and then hit an arrow key the above event listener will not work correctly so
+        I just move the next selection (be it up or down) to the middle of the "frame".
+        */
+          if (this.selection) {
+            if (
+              this.selection.index < this.frameStart ||
+              this.selection.index > this.frameStart + visibleListItems - 1
+            )
+              this.frameStart = this.selection.index - Math.floor(visibleListItems / 2);
+            // don't move the frame if list items don't fill the available rows
+            if (this.items.length <= visibleListItems) return;
+            // move the frame by revealing the calculated `this.frameStart`
+            this.revealItem(this.frameStart);
+          }
+        }
+      }
+    } else {
+      if (e.keyName == "Up" && this.selection.index == 0) {
+        this.selection = this.items.length - 1;
+        e.preventDefault();
+      }
+      if (e.keyName == "Down" && this.selection.index == this.items.length - 1) {
+        this.selection = 0;
+        e.preventDefault();
+      }
+    }
+  });
+}
+
+// USER DIALOGS
+
+function commandPalette(commands, title, multiselect, showOnly) {
   // create the dialog
   var win = new Window("dialog");
   win.text = title;
   win.alignChildren = "fill";
+
+  // setup the query input
   var q = win.add("edittext");
   q.helpTip = localize(locStrings.cd_q_helptip);
 
   // setup the commands listbox
-  var list = win.add("listbox", bounds, undefined, {
-    numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
-    showHeaders: paletteSettings.listboxProperties.showHeaders,
-    columnTitles: paletteSettings.listboxProperties.columnTitles,
-    columnWidths: paletteSettings.listboxProperties.columnWidths,
-    multiselect: multiselect,
-  });
-  insertCommands(list, commands.visible);
-  list.selection = 0;
-
-  // close list on double-click of list item
-  list.onDoubleClick = function () {
-    if (list.selection) win.close(1);
-  };
-
-  // work-around to stop windows from flickering/flashing explorer
-  if (windowsFlickerFix) {
-    simulateKeypress("TAB", 1);
-  } else {
-    q.active = true;
-  }
+  var list = new ListBoxWrapper(
+    showOnly ? showOnly : commands,
+    win,
+    multiselect,
+    showOnly
+  );
 
   // window buttons
   var winButtons = win.add("group");
@@ -87,123 +183,47 @@ function commandPalette(
   });
   cancel.preferredSize.width = 100;
 
-  // as a query is typed update the list box
-  var matches, temp;
-  var frameStart = 0;
+  // work-around to stop windows from flickering/flashing explorer
+  if (windowsFlickerFix) {
+    simulateKeypress("TAB", 1);
+  } else {
+    q.active = true;
+  }
+
+  // as a query is typed update the listbox
+  var matches;
   q.onChanging = function () {
-    frameStart = 0;
-    matches =
-      this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
+    if (this.text === "") {
+      matches = showOnly ? showOnly : commands;
+    } else {
+      matches = scoreMatches(this.text, commands);
+    }
     if (matches.length > 0) {
-      // setup the temp commands listbox
-      temp = win.add("listbox", list.bounds, undefined, {
-        numberOfColumns: list.properties.numberOfColumns,
-        showHeaders: list.properties.showHeaders,
-        columnTitles: list.properties.columnTitles,
-        columnWidths: list.properties.columnWidths,
-        multiselect: list.properties.multiselect,
-      });
-      insertCommands(temp, matches);
-
-      // close list on double-click of list item
-      temp.onDoubleClick = function () {
-        if (temp.selection) win.close(1);
-      };
-
-      if (!multiselect) scrollList(temp);
-
-      // change the original listbox reference to the updated `temp` version
-      win.remove(list);
-      list = temp;
-
-      // reset the selection
-      list.selection = 0;
+      list.update(matches);
     }
   };
 
-  if (!multiselect) scrollList(list);
-
-  if (!multiselect && list.items.length > 0) {
-    /*
-    Move the listbox frame of visible items when using the
-    up and down arrow keys while in the `q` edittext.
-
-    One problem with this functionality is that when a listbox listitem
-    is selected via a script the API moves the visible "frame" of items
-    so that the new selection is at the top. This is not standard behavior,
-    and not even how the listbox behaves when you use the up and down keys inside
-    of the actual listbox.
-
-    Only works if multiselect if set to false.
-    */
-    q.addEventListener("keydown", function (k) {
-      if (k.keyName == "Up" || k.keyName == "Down") {
-        if (k.keyName == "Up") {
-          k.preventDefault();
-          if (!list.selection) {
-            list.selection = 0;
-          } else if (list.selection.index == 0) {
-            // jump to the bottom if at top
-            list.selection = list.items.length - 1;
-            frameStart = list.items.length - 1 - visibleListItems;
-          } else {
-            if (list.selection.index > 0) {
-              list.selection = list.selection.index - 1;
-              if (list.selection.index < frameStart) frameStart--;
-            }
-          }
-        } else if (k.keyName == "Down") {
-          k.preventDefault();
-          if (!list.selection) {
-            list.selection = 0;
-          } else if (list.selection.index === list.items.length - 1) {
-            // jump to the top if at the bottom
-            list.selection = 0;
-            frameStart = 0;
-          } else {
-            if (list.selection.index < list.items.length) {
-              list.selection = list.selection.index + 1;
-              if (list.selection.index > frameStart + visibleListItems - 1) {
-                if (frameStart < list.items.length - visibleListItems) {
-                  frameStart++;
-                } else {
-                  frameStart = frameStart;
-                }
-              }
-            }
-          }
-        }
-        /*
-      If a selection is made inside of the actual listbox frame by the user,
-      the API doesn't offer any way to know which part of the list is currently
-      visible in the listbox "frame". If the user was to re-enter the `q` edittext
-      and then hit an arrow key the above event listener will not work correctly so
-      I just move the next selection (be it up or down) to the middle of the "frame".
-      */
-        if (list.selection) {
-          if (
-            list.selection.index < frameStart ||
-            list.selection.index > frameStart + visibleListItems - 1
-          )
-            frameStart = list.selection.index - Math.floor(visibleListItems / 2);
-          // don't move the frame if list items don't fill the available rows
-          if (list.items.length <= visibleListItems) return;
-          // move the frame by revealing the calculated `frameStart`
-          list.revealItem(frameStart);
-        }
-      }
-    });
-  }
+  // allow using arrow key from query input
+  var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
+  q.addEventListener("keydown", function (e) {
+    if (e.keyName == "Up" || e.keyName == "Down") {
+      kbEvent.initKeyboardEvent("keydown", true, true, list.listbox, e.keyName, 0, "");
+      kbEvent.fromQuery = true;
+      kbEvent.fromQueryShiftKey = e.getModifierState("shift");
+      list.listbox.dispatchEvent(kbEvent);
+      e.preventDefault();
+    }
+  });
 
   if (win.show() == 1) {
-    if (list.selection) {
-      return multiselect ? list.selection : [list.selection];
+    if (list.listbox.selection) {
+      return multiselect ? list.listbox.selection : [list.listbox.selection];
     }
   }
   return false;
 }
 
-function goToPalette(commands, title, bounds) {
+function goToPalette(commands, title) {
   // copy the commands
   var matches = commands;
 
@@ -222,7 +242,12 @@ function goToPalette(commands, title, bounds) {
   }
 
   // setup the commands listbox
-  var list = win.add("listbox", bounds, [], paletteSettings.listboxProperties);
+  var list = win.add(
+    "listbox",
+    paletteSettings.bounds,
+    [],
+    paletteSettings.listboxProperties
+  );
 
   // add items to list
   for (var i = 0; i < matches.length; i++) {
@@ -267,9 +292,8 @@ function goToPalette(commands, title, bounds) {
 
   // as a query is typed update the list box
   var matches, temp;
-  var frameStart = 0;
   q.onChanging = function () {
-    frameStart = 0;
+    list.frameStart = 0;
     matches =
       this.text === "" ? commands : scoreObjectMatches(this.text, matches, "queryName");
     if (matches.length > 0) {
@@ -290,7 +314,7 @@ function goToPalette(commands, title, bounds) {
         if (list.selection) win.close(1);
       };
 
-      if (!multiselect) scrollList(list);
+      // if (!multiselect) scrollListBox(list);
 
       // remove the temp 'truncation fix' item from the list
       if (matches != commands.visible) temp.remove(temp.items.length - 1);
@@ -300,7 +324,7 @@ function goToPalette(commands, title, bounds) {
     }
   };
 
-  scrollList(list);
+  // scrollListBox(list);
 
   if (list.items.length > 0) {
     /*
@@ -324,11 +348,11 @@ function goToPalette(commands, title, bounds) {
           } else if (list.selection.index == 0) {
             // jump to the bottom if at top
             list.selection = list.items.length - 1;
-            frameStart = list.items.length - 1 - visibleListItems;
+            list.frameStart = list.items.length - 1 - visibleListItems;
           } else {
             if (list.selection.index > 0) {
               list.selection = list.selection.index - 1;
-              if (list.selection.index < frameStart) frameStart--;
+              if (list.selection.index < list.frameStart) list.frameStart--;
             }
           }
         } else if (k.keyName == "Down") {
@@ -338,15 +362,15 @@ function goToPalette(commands, title, bounds) {
           } else if (list.selection.index === list.items.length - 1) {
             // jump to the top if at the bottom
             list.selection = 0;
-            frameStart = 0;
+            list.frameStart = 0;
           } else {
             if (list.selection.index < list.items.length) {
               list.selection = list.selection.index + 1;
-              if (list.selection.index > frameStart + visibleListItems - 1) {
-                if (frameStart < list.items.length - visibleListItems) {
-                  frameStart++;
+              if (list.selection.index > list.frameStart + visibleListItems - 1) {
+                if (list.frameStart < list.items.length - visibleListItems) {
+                  list.frameStart++;
                 } else {
-                  frameStart = frameStart;
+                  list.frameStart = list.frameStart;
                 }
               }
             }
@@ -361,14 +385,14 @@ function goToPalette(commands, title, bounds) {
       */
         if (list.selection) {
           if (
-            list.selection.index < frameStart ||
-            list.selection.index > frameStart + visibleListItems - 1
+            list.selection.index < list.frameStart ||
+            list.selection.index > list.frameStart + visibleListItems - 1
           )
-            frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+            list.frameStart = list.selection.index - Math.floor(visibleListItems / 2);
           // don't move the frame if list items don't fill the available rows
           if (list.items.length <= visibleListItems) return;
-          // move the frame by revealing the calculated `frameStart`
-          list.revealItem(frameStart);
+          // move the frame by revealing the calculated `list.frameStart`
+          list.revealItem(list.frameStart);
         }
       }
     });
@@ -514,9 +538,8 @@ function workflowBuilder(commands, queryFilter, edit) {
 
   // as a query is typed update the list box
   var matches, temp;
-  var frameStart = 0;
   q.onChanging = function () {
-    frameStart = 0;
+    list.frameStart = 0;
     matches =
       this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
     if (matches.length > 0) {
@@ -635,26 +658,12 @@ function loadFileTypes(prompt, multiselect, fileTypeRegex) {
 }
 
 /**
- * Present File.openDialog() for user to select files to load.
- * @param   {String}  prompt        Prompt for dialog.
- * @param   {Boolean} multiselect   Can multiple files be selected.
- * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
- * @returns {Array}                 Selected file(s).
+ * close list on double-click of list item
+ * @param {Object} listbox ScriptUI ListBox.
  */
-
-/**
- * Allow end-to-end scrolling from within a listbox.
- * @param {Object}  list  An ExtendScript listbox.
- */
-function scrollList(list) {
-  list.addEventListener("keydown", function (k) {
-    if (k.keyName == "Up" && list.selection.index == 0) {
-      list.selection = list.items.length - 1;
-      k.preventDefault();
-    }
-    if (k.keyName == "Down" && list.selection.index == list.items.length - 1) {
-      list.selection = 0;
-      k.preventDefault();
-    }
-  });
+function selectOnDoubleClick(listbox) {
+  win = listbox.parent;
+  listbox.onDoubleClick = function () {
+    if (listbox.selection) win.close(1);
+  };
 }

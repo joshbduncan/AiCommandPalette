@@ -5,7 +5,6 @@ function buildCommands(commands, filter) {
     if (!filter.includes(type)) {
       var commandData;
       for (var command in commands[type]) {
-        commandData = commands[type][command];
         // hide `Edit Workflow...` command if no workflows
         if (
           command == "config_editWorkflow" &&
@@ -44,6 +43,7 @@ function buildCommands(commands, filter) {
           continue;
         if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
           continue;
+        commandData = commands[type][command];
         commandsData[command] = commandData;
         localizedCommand = commandData.hasOwnProperty("loc")
           ? localize(commandData.loc)

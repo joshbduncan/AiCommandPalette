@@ -137,6 +137,7 @@ See the LICENSE file for details.
   var paletteSettings = {
     paletteWidth: 600,
     paletteHeight: 201,
+    bounds: [0, 0, 600, 201],
     listboxProperties: {
       numberOfColumns: 2,
       showHeaders: true,
@@ -398,23 +399,31 @@ See the LICENSE file for details.
   DIALOG HELPER FUNCTIONS
   **************************************************/
 
+  /**
+   * Filter the supplied commands by multiple factors.
+   * @param commands Array of localized command strings to filter.
+   * @param types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+   * @param showHidden Should command hidden by the user be included?
+   * @param hideSpecificCommands Future me including a hack to hide specific commands.
+   * @param docRequired
+   * @param selRequired
+   * @returns
+   */
   function filterCommands(
     commands,
-    queryFilter,
-    visibleFilter,
+    types,
     showHidden,
-    hideCommands,
+    hideSpecificCommands,
     docRequired,
     selRequired
   ) {
-    if (visibleFilter.length == 0) visibleFilter = queryFilter;
-    var query = [];
-    var visible = [];
-    var localizedCommand;
+    var filteredCommands = [];
+    var command, commandData, localizedCommand, type;
     for (var i = 0; i < commands.length; i++) {
       localizedCommand = commands[i];
       command = localizedCommandLookup[localizedCommand];
       commandData = commandsData[command];
+      type = commandData.type;
       // hide commands requiring an active documents if requested
       if (docRequired && !appDocuments && commandData.docRequired) continue;
       // hide commands requiring an active selection if requested
@@ -424,76 +433,80 @@ See the LICENSE file for details.
       // skip any hidden commands
       if (!showHidden && data.settings.hidden.includes(command)) continue;
       // skip any specific commands name in hideSpecificCommands
-      if (hideCommands.includes(command)) continue;
-      // then check to see if the command should be filtered out
-      if (!queryFilter.includes(commandData.type)) query.push(localizedCommand);
-      if (!visibleFilter.includes(commandData.type)) visible.push(localizedCommand);
+      if (hideSpecificCommands && hideSpecificCommands.includes(command)) continue;
+      // then check to see if the command should be included
+      if (!types || types.includes(commandData.type))
+        filteredCommands.push({ name: localizedCommand, type: type });
     }
-    return {
-      query: query,
-      visible: visible,
-    };
+    return filteredCommands;
   }
 
   /**
    * Score array items based on regex string match.
-   * @param   {String} q   String to search for.
-   * @param   {Array}  arr String items to search for.
-   * @returns {Array}      Matching items sorted by score.
+   * @param {String} query String to search for.
+   * @param {Array} commands Commands to match on.
+   * @returns {Array} Matching items sorted by score.
    */
-  function scoreMatches(q, arr) {
-    var word;
-    var words = [];
-    var matches = {};
-    var maxScore = 0;
+  function scoreMatches(query, commands) {
     var regexEllipsis = /\.\.\.$/;
     var regexCarrot = /\s>\s/g;
-    q = q.toLowerCase();
-    var words = q.split(" ");
-    var command, strippedString;
-    for (var i = 0; i < arr.length; i++) {
-      command = arr[i].toLowerCase();
-      strippedString = command.replace(regexEllipsis, "").replace(regexCarrot, " ");
-      var score = 0;
+
+    var words = [];
+    var matches = [];
+    var matchedCommands = [];
+    var maxScore = 0;
+    query = query.toLowerCase();
+    var words = query.split(" ");
+    var command, commandName, score, strippedString;
+    for (var i = 0; i < commands.length; i++) {
+      command = commands[i];
+      commandName = command.name.toLowerCase();
+      strippedString = commandName.replace(regexEllipsis, "").replace(regexCarrot, " ");
+      score = 0;
 
       // check for exact match
       if (
-        q == command ||
-        q.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString
+        query == commandName ||
+        query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString
       ) {
         score += 1;
       }
 
       // check for singular word matches
+      var word;
       for (var n = 0; n < words.length; n++) {
         word = words[n];
+        if (!word) continue;
         if (
-          word != "" &&
-          (command.match("(?:^|\\s)(" + word + ")", "gi") != null ||
-            strippedString.match("(?:^|\\s)(" + word + ")", "gi") != null)
+          commandName.match("\\b" + word, "gi") != null ||
+          strippedString.match("\\b" + word, "gi") != null
         )
           score += word.length;
       }
 
       // updated scores for matches
       if (score > 0) {
-        matches[arr[i]] = score;
+        command.score = score;
+        matches.push(command);
         if (score > maxScore) maxScore = score;
+      }
+
+      // increase score if command found in recent commands
+      if (
+        command.score == maxScore &&
+        data.recent.commands.indexOf(localizedCommandLookup[command.name]) > -1
+      ) {
+        command.score++;
       }
     }
 
-    var matchedCommands = [];
-    var maxLength = 0;
-    for (var c in matches) {
-      if (matches[c] >= maxScore / 2) matchedCommands.push(c);
-      if (c.length > maxLength) maxLength = c.length;
-      // increase score if command found in recent commands
-      if (matches[c] == maxScore && data.recent.commands.indexOf(c) > -1) matches[c]++;
+    for (var m = 0; m < matches.length; m++) {
+      if (matches[m].score >= maxScore / 2) matchedCommands.push(matches[m]);
     }
 
     // sort the matches by score
     matchedCommands.sort(function (a, b) {
-      return matches[b] - matches[a];
+      return b.score - a.score;
     });
 
     return matchedCommands;
@@ -525,7 +538,7 @@ See the LICENSE file for details.
     }
     // sort all matches by score
     matches.sort(function (a, b) {
-      return a.score.localeCompare(b.score);
+      return b.score - a.score;
     });
     return matches;
   }
@@ -804,22 +817,17 @@ See the LICENSE file for details.
 
   /** Ai Command Palette configuration commands. */
   function AiCommandPaletteSettings() {
-    var result = commandPalette(
+    commands = filterCommands(
       (commands = allCommandsLocalized),
+      (types = ["config"]),
       (showHidden = false),
-      (queryFilter = [
-        "builtin",
-        "bookmark",
-        "script",
-        "workflow",
-        "defaults",
-        "action",
-        "menu",
-        "tool",
-      ]),
-      (visibleFilter = []),
+      (hideCommands = null),
+      (docRequired = true),
+      (selRequired = true)
+    );
+    var result = commandPalette(
+      (commands = commands),
       (title = localize(locStrings.cp_config)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = false)
     );
     if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1195,22 +1203,17 @@ See the LICENSE file for details.
 
   /** Show all scripts. */
   function showAllScripts() {
-    var result = commandPalette(
+    commands = filterCommands(
       (commands = allCommandsLocalized),
+      (types = ["script"]),
       (showHidden = false),
-      (queryFilter = []),
-      (visibleFilter = [
-        "action",
-        "bookmark",
-        "builtin",
-        "config",
-        "defaults",
-        "menu",
-        "tool",
-        "workflow",
-      ]),
+      (hideCommands = null),
+      (docRequired = false),
+      (selRequired = false)
+    );
+    var result = commandPalette(
+      (commands = commands),
       (title = localize(locStrings.Scripts)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = false)
     );
     if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1218,9 +1221,8 @@ See the LICENSE file for details.
 
   /** Show all bookmarks. */
   function showAllBookmarks() {
-    var result = commandPalette(
+    commands = filterCommands(
       (commands = allCommandsLocalized),
-      (showHidden = false),
       (queryFilter = []),
       (visibleFilter = [
         "action",
@@ -1232,8 +1234,14 @@ See the LICENSE file for details.
         "tool",
         "workflow",
       ]),
+      (showHidden = false),
+      (hideCommands = []),
+      (docRequired = false),
+      (selRequired = false)
+    );
+    var result = commandPalette(
+      (commands = commands),
       (title = localize(locStrings.Bookmarks)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = false)
     );
     if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1241,9 +1249,8 @@ See the LICENSE file for details.
 
   /** Show all actions. */
   function showAllActions() {
-    var result = commandPalette(
+    commands = filterCommands(
       (commands = allCommandsLocalized),
-      (showHidden = false),
       (queryFilter = []),
       (visibleFilter = [
         "bookmark",
@@ -1255,8 +1262,14 @@ See the LICENSE file for details.
         "tool",
         "workflow",
       ]),
+      (showHidden = false),
+      (hideCommands = []),
+      (docRequired = false),
+      (selRequired = false)
+    );
+    var result = commandPalette(
+      (commands = commands),
       (title = localize(locStrings.Actions)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = false)
     );
     if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -1264,13 +1277,18 @@ See the LICENSE file for details.
 
   /** Hide commands from Ai Command Palette. */
   function hideCommand() {
-    var result = commandPalette(
+    commands = filterCommands(
       (commands = allCommandsLocalized),
-      (showHidden = false),
       (queryFilter = ["config", "defaults"]),
       (visibleFilter = []),
+      (showHidden = false),
+      (hideCommands = []),
+      (docRequired = false),
+      (selRequired = false)
+    );
+    var result = commandPalette(
+      (commands = commands),
       (title = localize(locStrings.cd_hide_select)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = true)
     );
     if (result) {
@@ -1281,48 +1299,67 @@ See the LICENSE file for details.
 
   /** Unhide hidden commands. */
   function unhideCommand() {
-    if (data.settings.hidden.length > 0) {
-      commands = [];
-      for (var i = 0; i < data.settings.hidden.length; i++) {
-        commands.push(idCommandLookup[data.settings.hidden[i]]);
-      }
-      var result = commandPalette(
-        (commands = commands),
-        (showHidden = true),
-        (queryFilter = []),
-        (visibleFilter = []),
-        (title = localize(locStrings.cd_reveal_menu_select)),
-        (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
-        (multiselect = true)
-      );
-      if (result) {
-        for (var i = 0; i < result.length; i++) {
-          commandToHide = localizedCommandLookup[result[i].text];
-          for (var n = 0; n < data.settings.hidden.length; n++) {
-            hiddenCommand = data.settings.hidden[n];
-            if (commandToHide == hiddenCommand) {
-              data.settings.hidden.splice(n, 1);
-            }
+    var command;
+    localizedCommands = [];
+    for (var i = 0; i < data.settings.hidden.length; i++) {
+      command = data.settings.hidden[i];
+      commandData = commandsData[command];
+      localizedCommand = commandData.hasOwnProperty("loc")
+        ? localize(commandData.loc)
+        : command;
+      localizedCommands.push(localizedCommand);
+    }
+    commands = filterCommands(
+      (commands = localizedCommands),
+      (queryFilter = []),
+      (visibleFilter = []),
+      (showHidden = true),
+      (hideCommands = []),
+      (docRequired = false),
+      (selRequired = false)
+    );
+    // FIXME
+    var result = commandPalette(
+      (commands = commands),
+      (title = localize(locStrings.cd_reveal_menu_select)),
+      (multiselect = true)
+    );
+    if (result) {
+      for (var i = 0; i < result.length; i++) {
+        commandToHide = localizedCommandLookup[result[i].text];
+        for (var n = 0; n < data.settings.hidden.length; n++) {
+          hiddenCommand = data.settings.hidden[n];
+          if (commandToHide == hiddenCommand) {
+            data.settings.hidden.splice(n, 1);
           }
         }
       }
-    } else {
-      alert(localize(logStrings.cd_none_reveal));
     }
   }
 
   /** Delete commands from Ai Command Palette. */
   function deleteCommand() {
-    var result = commandPalette(
+    commands = filterCommands(
       (commands = allCommandsLocalized),
-      (showHidden = true),
       (queryFilter = ["action", "builtin", "config", "defaults", "menu", "tool"]),
       (visibleFilter = []),
+      (showHidden = true),
+      (hideCommands = []),
+      (docRequired = false),
+      (selRequired = false)
+    );
+    var result = commandPalette(
+      (commands = commands),
       (title = localize(locStrings.cd_delete_select)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = true)
     );
     if (result) {
+      x = confirm(
+        localize(locStrings.cd_delete_confirm, result.join("\n")),
+        "noAsDflt",
+        localize(locStrings.cd_delete_confirm_title)
+      );
+      alert(x);
       if (
         confirm(
           localize(locStrings.cd_delete_confirm, result.join("\n")),
@@ -1350,8 +1387,7 @@ See the LICENSE file for details.
   function goToOpenDocument() {
     var item = goToPalette(
       (commands = app.documents),
-      (title = localize(locStrings["go_to_open_document"])),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
+      (title = localize(locStrings["go_to_open_document"]))
     );
     if (item) {
       item.activate();
@@ -1362,8 +1398,7 @@ See the LICENSE file for details.
   function goToArtboard() {
     var item = goToPalette(
       (commands = app.activeDocument.artboards),
-      (title = localize(locStrings["go_to_artboard"])),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
+      (title = localize(locStrings["go_to_artboard"]))
     );
     if (item) {
       var ab;
@@ -1399,8 +1434,7 @@ See the LICENSE file for details.
     if (namedObjects.length) {
       var selectedObject = goToPalette(
         (commands = namedObjects),
-        (title = localize(locStrings["goto_named_object"])),
-        (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight])
+        (title = localize(locStrings["goto_named_object"]))
       );
       if (selectedObject) {
         app.activeDocument.selection = null;
@@ -1446,22 +1480,24 @@ See the LICENSE file for details.
     var f, path;
     var filePaths = getRecentFilePaths();
     var files = {};
-    var fileNames = [];
+    commands = {
+      query: [],
+      visible: [],
+    };
     for (var i = 0; i < filePaths.length; i++) {
       path = filePaths[i];
       f = File(path);
       if (!f.exists) continue;
-      files[f.fsName] = f;
-      fileNames.push(f.fsName);
+      fname = decodeURI(f.name);
+      files[fname] = f;
+      commands.query.push(fname);
+      commands.visible.push(fname);
     }
     var result = commandPalette(
-      (commands = fileNames),
-      (showHidden = true),
-      (queryFilter = []),
-      (visibleFilter = []),
+      (commands = commands),
       (title = localize(locStrings.open_recent_file)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
-      (multiselect = false)
+      (multiselect = false),
+      (type = "file")
     );
     if (result) {
       try {
@@ -1474,18 +1510,29 @@ See the LICENSE file for details.
 
   /** Present a command palette with more recent commands and process the selected one. */
   function recentCommands() {
-    commands = [];
+    var command;
+    var localizedCommands = [];
     for (var i = 0; i < data.recent.commands.length; i++) {
-      if (!idCommandLookup.hasOwnProperty(data.recent.commands[i])) continue;
-      commands.push(idCommandLookup[data.recent.commands[i]]);
+      command = data.recent.commands[i];
+      if (!idCommandLookup.hasOwnProperty(command)) continue;
+      commandData = commandsData[command];
+      localizedCommand = commandData.hasOwnProperty("loc")
+        ? localize(commandData.loc)
+        : command;
+      localizedCommands.push(localizedCommand);
     }
+
+    commands = filterCommands(
+      (commands = localizedCommands),
+      (types = null),
+      (showHidden = true),
+      (hideCommands = null),
+      (docRequired = false),
+      (selRequired = false)
+    );
     var result = commandPalette(
       (commands = commands),
-      (showHidden = false),
-      (queryFilter = []),
-      (visibleFilter = []),
       (title = localize(locStrings.recent_commands)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = false)
     );
     if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -9113,7 +9160,6 @@ See the LICENSE file for details.
       if (!filter.includes(type)) {
         var commandData;
         for (var command in commands[type]) {
-          commandData = commands[type][command];
           // hide `Edit Workflow...` command if no workflows
           if (
             command == "config_editWorkflow" &&
@@ -9152,6 +9198,7 @@ See the LICENSE file for details.
             continue;
           if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
             continue;
+          commandData = commands[type][command];
           commandsData[command] = commandData;
           localizedCommand = commandData.hasOwnProperty("loc")
             ? localize(commandData.loc)
@@ -9354,83 +9401,179 @@ See the LICENSE file for details.
       return false;
     return true;
   }
-  // USER DIALOGS
+  // CUSTOM SCRIPTUI LISTBOX
 
-  /**
-   * Show a filterable commands palette.
-   * @param   {Array}   commands      Commands available to the palette.
-   * @param   {Boolean} showHidden    Should user hidden commands be shown in the palette.
-   * @param   {Array}   queryFilter   Types of commands to hide from the search query.
-   * @param   {Array}   visibleFilter Types of commands to hide from the initial view.
-   * @param   {String}  title         Command palette title.
-   * @param   {Array}   bounds        Command palette bounds.
-   * @param   {Boolean} multiselect   Can multiple items be selected.
-   * @param   {Boolean} docRequired   Should commands requiring an active document to work be hidden if there is no active document.
-   * @param   {Boolean} selRequired   Should commands requiring an active selection to work be hidden if there is no active selection.
-   * @returns {Array}                 Array of selected list items.
-   */
-  function commandPalette(
-    commands,
-    showHidden,
-    queryFilter,
-    visibleFilter,
-    title,
-    bounds,
-    multiselect,
-    docRequired,
-    selRequired
-  ) {
-    // insert command and type into listbox
-    function insertCommands(list, commands) {
-      var command, commandData;
+  function ListBoxWrapper(commands, win, multiselect) {
+    this.listbox = this.make(commands, win, paletteSettings.bounds, multiselect);
+  }
+
+  ListBoxWrapper.prototype = {
+    make: function (commands, win, bounds, multiselect) {
+      listbox = win.add("listbox", bounds, undefined, {
+        numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
+        showHeaders: paletteSettings.listboxProperties.showHeaders,
+        columnTitles: paletteSettings.listboxProperties.columnTitles,
+        columnWidths: paletteSettings.listboxProperties.columnWidths,
+        multiselect: multiselect,
+      });
+      this.loadCommands(listbox, commands);
+      this.addListeners(listbox);
+      listbox.frameStart = 0;
+      listbox.selection = 0;
+      return listbox;
+    },
+    update: function (matches) {
+      temp = this.make(
+        matches,
+        this.listbox.window,
+        this.listbox.bounds,
+        this.listbox.properties.multiselect
+      );
+      this.listbox.window.remove(this.listbox);
+      this.listbox = temp;
+    },
+    loadCommands: function (lb, commands) {
+      var command;
       for (var i = 0; i < commands.length; i++) {
         command = commands[i];
-        commandData = commandsData[localizedCommandLookup[command]];
-        with (list.add("item", command)) {
-          subItems[0].text = commandData.type; // TODO: add localization
+        with (lb.add("item", command.name)) {
+          subItems[0].text = command.type; // TODO: add localization
         }
       }
-    }
+    },
+    addListeners: function (lb) {
+      selectOnDoubleClick(lb);
+      if (!lb.properties.multiselect) {
+        scrollListBoxWithArrows(lb);
+      }
+    },
+  };
 
-    commands = filterCommands(
-      commands,
-      queryFilter,
-      visibleFilter,
-      showHidden,
-      [],
-      docRequired,
-      selRequired
-    );
+  // LISTBOXWRAPPER LISTENERS
 
+  /**
+   * Close listbox when double-clicking a command.
+   * @param {Object}  lb  ScriptUI listbox.
+   */
+  function selectOnDoubleClick(lb) {
+    lb.onDoubleClick = function () {
+      if (lb.selection) lb.window.close(1);
+    };
+  }
+
+  /**
+   * Allow end-to-end scrolling from within a listbox.
+   * @param {Object}  lb  ScriptUI listbox.
+   */
+  function scrollListBoxWithArrows(lb) {
+    lb.addEventListener("keydown", function (e) {
+      if (e.fromQuery) {
+        if (e.fromQueryShiftKey) {
+          if (e.keyName == "Up") {
+            if (this.selection.index == 0) {
+              this.selection = this.items.length - 1;
+              e.preventDefault();
+            } else {
+              this.selection--;
+            }
+          }
+          if (e.keyName == "Down") {
+            if (this.selection.index == this.items.length - 1) {
+              this.selection = 0;
+              e.preventDefault();
+            } else {
+              if (e.keyName == "Down") this.selection++;
+            }
+          }
+        } else {
+          if (e.keyName == "Up" || e.keyName == "Down") {
+            if (e.keyName == "Up") {
+              e.preventDefault();
+              if (!this.selection) {
+                this.selection = 0;
+              } else if (this.selection.index == 0) {
+                // jump to the bottom if at top
+                this.selection = this.items.length - 1;
+                this.frameStart = this.items.length - 1 - visibleListItems;
+              } else {
+                if (this.selection.index > 0) {
+                  this.selection = this.selection.index - 1;
+                  if (this.selection.index < this.frameStart) this.frameStart--;
+                }
+              }
+            } else if (e.keyName == "Down") {
+              e.preventDefault();
+              if (!this.selection) {
+                this.selection = 0;
+              } else if (this.selection.index === this.items.length - 1) {
+                // jump to the top if at the bottom
+                this.selection = 0;
+                this.frameStart = 0;
+              } else {
+                if (this.selection.index < this.items.length) {
+                  this.selection = this.selection.index + 1;
+                  if (this.selection.index > this.frameStart + visibleListItems - 1) {
+                    if (this.frameStart < this.items.length - visibleListItems) {
+                      this.frameStart++;
+                    } else {
+                      this.frameStart = this.frameStart;
+                    }
+                  }
+                }
+              }
+            }
+            /*
+          If a selection is made inside of the actual listbox frame by the user,
+          the API doesn't offer any way to know which part of the list is currently
+          visible in the listbox "frame". If the user was to re-enter the `q` edittext
+          and then hit an arrow key the above event listener will not work correctly so
+          I just move the next selection (be it up or down) to the middle of the "frame".
+          */
+            if (this.selection) {
+              if (
+                this.selection.index < this.frameStart ||
+                this.selection.index > this.frameStart + visibleListItems - 1
+              )
+                this.frameStart = this.selection.index - Math.floor(visibleListItems / 2);
+              // don't move the frame if list items don't fill the available rows
+              if (this.items.length <= visibleListItems) return;
+              // move the frame by revealing the calculated `this.frameStart`
+              this.revealItem(this.frameStart);
+            }
+          }
+        }
+      } else {
+        if (e.keyName == "Up" && this.selection.index == 0) {
+          this.selection = this.items.length - 1;
+          e.preventDefault();
+        }
+        if (e.keyName == "Down" && this.selection.index == this.items.length - 1) {
+          this.selection = 0;
+          e.preventDefault();
+        }
+      }
+    });
+  }
+
+  // USER DIALOGS
+
+  function commandPalette(commands, title, multiselect, showOnly) {
     // create the dialog
     var win = new Window("dialog");
     win.text = title;
     win.alignChildren = "fill";
+
+    // setup the query input
     var q = win.add("edittext");
     q.helpTip = localize(locStrings.cd_q_helptip);
 
     // setup the commands listbox
-    var list = win.add("listbox", bounds, undefined, {
-      numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
-      showHeaders: paletteSettings.listboxProperties.showHeaders,
-      columnTitles: paletteSettings.listboxProperties.columnTitles,
-      columnWidths: paletteSettings.listboxProperties.columnWidths,
-      multiselect: multiselect,
-    });
-    insertCommands(list, commands.visible);
-    list.selection = 0;
-
-    // close list on double-click of list item
-    list.onDoubleClick = function () {
-      if (list.selection) win.close(1);
-    };
-
-    // work-around to stop windows from flickering/flashing explorer
-    if (windowsFlickerFix) {
-      simulateKeypress("TAB", 1);
-    } else {
-      q.active = true;
-    }
+    var list = new ListBoxWrapper(
+      showOnly ? showOnly : commands,
+      win,
+      multiselect,
+      showOnly
+    );
 
     // window buttons
     var winButtons = win.add("group");
@@ -9443,123 +9586,47 @@ See the LICENSE file for details.
     });
     cancel.preferredSize.width = 100;
 
-    // as a query is typed update the list box
-    var matches, temp;
-    var frameStart = 0;
+    // work-around to stop windows from flickering/flashing explorer
+    if (windowsFlickerFix) {
+      simulateKeypress("TAB", 1);
+    } else {
+      q.active = true;
+    }
+
+    // as a query is typed update the listbox
+    var matches;
     q.onChanging = function () {
-      frameStart = 0;
-      matches =
-        this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
+      if (this.text === "") {
+        matches = showOnly ? showOnly : commands;
+      } else {
+        matches = scoreMatches(this.text, commands);
+      }
       if (matches.length > 0) {
-        // setup the temp commands listbox
-        temp = win.add("listbox", list.bounds, undefined, {
-          numberOfColumns: list.properties.numberOfColumns,
-          showHeaders: list.properties.showHeaders,
-          columnTitles: list.properties.columnTitles,
-          columnWidths: list.properties.columnWidths,
-          multiselect: list.properties.multiselect,
-        });
-        insertCommands(temp, matches);
-
-        // close list on double-click of list item
-        temp.onDoubleClick = function () {
-          if (temp.selection) win.close(1);
-        };
-
-        if (!multiselect) scrollList(temp);
-
-        // change the original listbox reference to the updated `temp` version
-        win.remove(list);
-        list = temp;
-
-        // reset the selection
-        list.selection = 0;
+        list.update(matches);
       }
     };
 
-    if (!multiselect) scrollList(list);
-
-    if (!multiselect && list.items.length > 0) {
-      /*
-      Move the listbox frame of visible items when using the
-      up and down arrow keys while in the `q` edittext.
-
-      One problem with this functionality is that when a listbox listitem
-      is selected via a script the API moves the visible "frame" of items
-      so that the new selection is at the top. This is not standard behavior,
-      and not even how the listbox behaves when you use the up and down keys inside
-      of the actual listbox.
-
-      Only works if multiselect if set to false.
-      */
-      q.addEventListener("keydown", function (k) {
-        if (k.keyName == "Up" || k.keyName == "Down") {
-          if (k.keyName == "Up") {
-            k.preventDefault();
-            if (!list.selection) {
-              list.selection = 0;
-            } else if (list.selection.index == 0) {
-              // jump to the bottom if at top
-              list.selection = list.items.length - 1;
-              frameStart = list.items.length - 1 - visibleListItems;
-            } else {
-              if (list.selection.index > 0) {
-                list.selection = list.selection.index - 1;
-                if (list.selection.index < frameStart) frameStart--;
-              }
-            }
-          } else if (k.keyName == "Down") {
-            k.preventDefault();
-            if (!list.selection) {
-              list.selection = 0;
-            } else if (list.selection.index === list.items.length - 1) {
-              // jump to the top if at the bottom
-              list.selection = 0;
-              frameStart = 0;
-            } else {
-              if (list.selection.index < list.items.length) {
-                list.selection = list.selection.index + 1;
-                if (list.selection.index > frameStart + visibleListItems - 1) {
-                  if (frameStart < list.items.length - visibleListItems) {
-                    frameStart++;
-                  } else {
-                    frameStart = frameStart;
-                  }
-                }
-              }
-            }
-          }
-          /*
-        If a selection is made inside of the actual listbox frame by the user,
-        the API doesn't offer any way to know which part of the list is currently
-        visible in the listbox "frame". If the user was to re-enter the `q` edittext
-        and then hit an arrow key the above event listener will not work correctly so
-        I just move the next selection (be it up or down) to the middle of the "frame".
-        */
-          if (list.selection) {
-            if (
-              list.selection.index < frameStart ||
-              list.selection.index > frameStart + visibleListItems - 1
-            )
-              frameStart = list.selection.index - Math.floor(visibleListItems / 2);
-            // don't move the frame if list items don't fill the available rows
-            if (list.items.length <= visibleListItems) return;
-            // move the frame by revealing the calculated `frameStart`
-            list.revealItem(frameStart);
-          }
-        }
-      });
-    }
+    // allow using arrow key from query input
+    var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
+    q.addEventListener("keydown", function (e) {
+      if (e.keyName == "Up" || e.keyName == "Down") {
+        kbEvent.initKeyboardEvent("keydown", true, true, list.listbox, e.keyName, 0, "");
+        kbEvent.fromQuery = true;
+        kbEvent.fromQueryShiftKey = e.getModifierState("shift");
+        list.listbox.dispatchEvent(kbEvent);
+        e.preventDefault();
+      }
+    });
 
     if (win.show() == 1) {
-      if (list.selection) {
-        return multiselect ? list.selection : [list.selection];
+      if (list.listbox.selection) {
+        return multiselect ? list.listbox.selection : [list.listbox.selection];
       }
     }
     return false;
   }
 
-  function goToPalette(commands, title, bounds) {
+  function goToPalette(commands, title) {
     // copy the commands
     var matches = commands;
 
@@ -9578,7 +9645,12 @@ See the LICENSE file for details.
     }
 
     // setup the commands listbox
-    var list = win.add("listbox", bounds, [], paletteSettings.listboxProperties);
+    var list = win.add(
+      "listbox",
+      paletteSettings.bounds,
+      [],
+      paletteSettings.listboxProperties
+    );
 
     // add items to list
     for (var i = 0; i < matches.length; i++) {
@@ -9623,9 +9695,8 @@ See the LICENSE file for details.
 
     // as a query is typed update the list box
     var matches, temp;
-    var frameStart = 0;
     q.onChanging = function () {
-      frameStart = 0;
+      list.frameStart = 0;
       matches =
         this.text === "" ? commands : scoreObjectMatches(this.text, matches, "queryName");
       if (matches.length > 0) {
@@ -9646,7 +9717,7 @@ See the LICENSE file for details.
           if (list.selection) win.close(1);
         };
 
-        if (!multiselect) scrollList(list);
+        // if (!multiselect) scrollListBox(list);
 
         // remove the temp 'truncation fix' item from the list
         if (matches != commands.visible) temp.remove(temp.items.length - 1);
@@ -9656,7 +9727,7 @@ See the LICENSE file for details.
       }
     };
 
-    scrollList(list);
+    // scrollListBox(list);
 
     if (list.items.length > 0) {
       /*
@@ -9680,11 +9751,11 @@ See the LICENSE file for details.
             } else if (list.selection.index == 0) {
               // jump to the bottom if at top
               list.selection = list.items.length - 1;
-              frameStart = list.items.length - 1 - visibleListItems;
+              list.frameStart = list.items.length - 1 - visibleListItems;
             } else {
               if (list.selection.index > 0) {
                 list.selection = list.selection.index - 1;
-                if (list.selection.index < frameStart) frameStart--;
+                if (list.selection.index < list.frameStart) list.frameStart--;
               }
             }
           } else if (k.keyName == "Down") {
@@ -9694,15 +9765,15 @@ See the LICENSE file for details.
             } else if (list.selection.index === list.items.length - 1) {
               // jump to the top if at the bottom
               list.selection = 0;
-              frameStart = 0;
+              list.frameStart = 0;
             } else {
               if (list.selection.index < list.items.length) {
                 list.selection = list.selection.index + 1;
-                if (list.selection.index > frameStart + visibleListItems - 1) {
-                  if (frameStart < list.items.length - visibleListItems) {
-                    frameStart++;
+                if (list.selection.index > list.frameStart + visibleListItems - 1) {
+                  if (list.frameStart < list.items.length - visibleListItems) {
+                    list.frameStart++;
                   } else {
-                    frameStart = frameStart;
+                    list.frameStart = list.frameStart;
                   }
                 }
               }
@@ -9717,14 +9788,14 @@ See the LICENSE file for details.
         */
           if (list.selection) {
             if (
-              list.selection.index < frameStart ||
-              list.selection.index > frameStart + visibleListItems - 1
+              list.selection.index < list.frameStart ||
+              list.selection.index > list.frameStart + visibleListItems - 1
             )
-              frameStart = list.selection.index - Math.floor(visibleListItems / 2);
+              list.frameStart = list.selection.index - Math.floor(visibleListItems / 2);
             // don't move the frame if list items don't fill the available rows
             if (list.items.length <= visibleListItems) return;
-            // move the frame by revealing the calculated `frameStart`
-            list.revealItem(frameStart);
+            // move the frame by revealing the calculated `list.frameStart`
+            list.revealItem(list.frameStart);
           }
         }
       });
@@ -9870,9 +9941,8 @@ See the LICENSE file for details.
 
     // as a query is typed update the list box
     var matches, temp;
-    var frameStart = 0;
     q.onChanging = function () {
-      frameStart = 0;
+      list.frameStart = 0;
       matches =
         this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
       if (matches.length > 0) {
@@ -9991,28 +10061,14 @@ See the LICENSE file for details.
   }
 
   /**
-   * Present File.openDialog() for user to select files to load.
-   * @param   {String}  prompt        Prompt for dialog.
-   * @param   {Boolean} multiselect   Can multiple files be selected.
-   * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
-   * @returns {Array}                 Selected file(s).
+   * close list on double-click of list item
+   * @param {Object} listbox ScriptUI ListBox.
    */
-
-  /**
-   * Allow end-to-end scrolling from within a listbox.
-   * @param {Object}  list  An ExtendScript listbox.
-   */
-  function scrollList(list) {
-    list.addEventListener("keydown", function (k) {
-      if (k.keyName == "Up" && list.selection.index == 0) {
-        list.selection = list.items.length - 1;
-        k.preventDefault();
-      }
-      if (k.keyName == "Down" && list.selection.index == list.items.length - 1) {
-        list.selection = 0;
-        k.preventDefault();
-      }
-    });
+  function selectOnDoubleClick(listbox) {
+    win = listbox.parent;
+    listbox.onDoubleClick = function () {
+      if (listbox.selection) win.close(1);
+    };
   }
   // FILE/FOLDER OPERATIONS
 
@@ -10144,7 +10200,6 @@ See the LICENSE file for details.
         "tool",
       ]),
       (title = localize(locStrings.Workflows)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = false)
     );
     if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -10167,7 +10222,6 @@ See the LICENSE file for details.
         "tool",
       ]),
       (title = localize(locStrings.wf_edit)),
-      (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
       (multiselect = false)
     );
     if (result) buildWorkflow(localizedCommandLookup[result[0].text]);
@@ -10247,17 +10301,29 @@ See the LICENSE file for details.
   var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // SHOW THE COMMAND PALETTE
-
-  var result = commandPalette(
+  var queryableCommands, showOnlyCommands;
+  queryableCommands = filterCommands(
     (commands = allCommandsLocalized),
+    (types = null),
     (showHidden = false),
-    (queryFilter = []),
-    (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
-    (title = localize(locStrings.title)),
-    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
-    (multiselect = false),
+    (hideCommands = null),
     (docRequired = true),
     (selRequired = true)
+  );
+  // FIXME: build start-up customizer
+  showOnlyCommands = filterCommands(
+    (commands = allCommandsLocalized),
+    (types = ["bookmark", "script", "workflow", "defaults"]),
+    (showHidden = false),
+    (hideCommands = null),
+    (docRequired = true),
+    (selRequired = true)
+  );
+  var result = commandPalette(
+    (commands = queryableCommands),
+    (title = localize(locStrings.title)),
+    (multiselect = false),
+    (showOnly = showOnlyCommands)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
 })();

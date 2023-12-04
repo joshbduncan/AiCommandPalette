@@ -79,17 +79,29 @@ See the LICENSE file for details.
   var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // SHOW THE COMMAND PALETTE
-
-  var result = commandPalette(
+  var queryableCommands, showOnlyCommands;
+  queryableCommands = filterCommands(
     (commands = allCommandsLocalized),
+    (types = null),
     (showHidden = false),
-    (queryFilter = []),
-    (visibleFilter = ["action", "builtin", "config", "menu", "tool"]),
-    (title = localize(locStrings.title)),
-    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
-    (multiselect = false),
+    (hideCommands = null),
     (docRequired = true),
     (selRequired = true)
+  );
+  // FIXME: build start-up customizer
+  showOnlyCommands = filterCommands(
+    (commands = allCommandsLocalized),
+    (types = ["bookmark", "script", "workflow", "defaults"]),
+    (showHidden = false),
+    (hideCommands = null),
+    (docRequired = true),
+    (selRequired = true)
+  );
+  var result = commandPalette(
+    (commands = queryableCommands),
+    (title = localize(locStrings.title)),
+    (multiselect = false),
+    (showOnly = showOnlyCommands)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
 })();

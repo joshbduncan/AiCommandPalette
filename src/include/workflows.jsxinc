@@ -70,7 +70,6 @@ function showAllWorkflows() {
       "tool",
     ]),
     (title = localize(locStrings.Workflows)),
-    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) processCommand(localizedCommandLookup[result[0].text]);
@@ -93,7 +92,6 @@ function editWorkflow() {
       "tool",
     ]),
     (title = localize(locStrings.wf_edit)),
-    (bounds = [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight]),
     (multiselect = false)
   );
   if (result) buildWorkflow(localizedCommandLookup[result[0].text]);

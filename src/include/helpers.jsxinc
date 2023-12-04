@@ -161,23 +161,31 @@ function getRecentFilePaths() {
 DIALOG HELPER FUNCTIONS
 **************************************************/
 
+/**
+ * Filter the supplied commands by multiple factors.
+ * @param commands Array of localized command strings to filter.
+ * @param types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+ * @param showHidden Should command hidden by the user be included?
+ * @param hideSpecificCommands Future me including a hack to hide specific commands.
+ * @param docRequired
+ * @param selRequired
+ * @returns
+ */
 function filterCommands(
   commands,
-  queryFilter,
-  visibleFilter,
+  types,
   showHidden,
-  hideCommands,
+  hideSpecificCommands,
   docRequired,
   selRequired
 ) {
-  if (visibleFilter.length == 0) visibleFilter = queryFilter;
-  var query = [];
-  var visible = [];
-  var localizedCommand;
+  var filteredCommands = [];
+  var command, commandData, localizedCommand, type;
   for (var i = 0; i < commands.length; i++) {
     localizedCommand = commands[i];
     command = localizedCommandLookup[localizedCommand];
     commandData = commandsData[command];
+    type = commandData.type;
     // hide commands requiring an active documents if requested
     if (docRequired && !appDocuments && commandData.docRequired) continue;
     // hide commands requiring an active selection if requested
@@ -187,76 +195,80 @@ function filterCommands(
     // skip any hidden commands
     if (!showHidden && data.settings.hidden.includes(command)) continue;
     // skip any specific commands name in hideSpecificCommands
-    if (hideCommands.includes(command)) continue;
-    // then check to see if the command should be filtered out
-    if (!queryFilter.includes(commandData.type)) query.push(localizedCommand);
-    if (!visibleFilter.includes(commandData.type)) visible.push(localizedCommand);
+    if (hideSpecificCommands && hideSpecificCommands.includes(command)) continue;
+    // then check to see if the command should be included
+    if (!types || types.includes(commandData.type))
+      filteredCommands.push({ name: localizedCommand, type: type });
   }
-  return {
-    query: query,
-    visible: visible,
-  };
+  return filteredCommands;
 }
 
 /**
  * Score array items based on regex string match.
- * @param   {String} q   String to search for.
- * @param   {Array}  arr String items to search for.
- * @returns {Array}      Matching items sorted by score.
+ * @param {String} query String to search for.
+ * @param {Array} commands Commands to match on.
+ * @returns {Array} Matching items sorted by score.
  */
-function scoreMatches(q, arr) {
-  var word;
-  var words = [];
-  var matches = {};
-  var maxScore = 0;
+function scoreMatches(query, commands) {
   var regexEllipsis = /\.\.\.$/;
   var regexCarrot = /\s>\s/g;
-  q = q.toLowerCase();
-  var words = q.split(" ");
-  var command, strippedString;
-  for (var i = 0; i < arr.length; i++) {
-    command = arr[i].toLowerCase();
-    strippedString = command.replace(regexEllipsis, "").replace(regexCarrot, " ");
-    var score = 0;
+
+  var words = [];
+  var matches = [];
+  var matchedCommands = [];
+  var maxScore = 0;
+  query = query.toLowerCase();
+  var words = query.split(" ");
+  var command, commandName, score, strippedString;
+  for (var i = 0; i < commands.length; i++) {
+    command = commands[i];
+    commandName = command.name.toLowerCase();
+    strippedString = commandName.replace(regexEllipsis, "").replace(regexCarrot, " ");
+    score = 0;
 
     // check for exact match
     if (
-      q == command ||
-      q.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString
+      query == commandName ||
+      query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString
     ) {
       score += 1;
     }
 
     // check for singular word matches
+    var word;
     for (var n = 0; n < words.length; n++) {
       word = words[n];
+      if (!word) continue;
       if (
-        word != "" &&
-        (command.match("(?:^|\\s)(" + word + ")", "gi") != null ||
-          strippedString.match("(?:^|\\s)(" + word + ")", "gi") != null)
+        commandName.match("\\b" + word, "gi") != null ||
+        strippedString.match("\\b" + word, "gi") != null
       )
         score += word.length;
     }
 
     // updated scores for matches
     if (score > 0) {
-      matches[arr[i]] = score;
+      command.score = score;
+      matches.push(command);
       if (score > maxScore) maxScore = score;
+    }
+
+    // increase score if command found in recent commands
+    if (
+      command.score == maxScore &&
+      data.recent.commands.indexOf(localizedCommandLookup[command.name]) > -1
+    ) {
+      command.score++;
     }
   }
 
-  var matchedCommands = [];
-  var maxLength = 0;
-  for (var c in matches) {
-    if (matches[c] >= maxScore / 2) matchedCommands.push(c);
-    if (c.length > maxLength) maxLength = c.length;
-    // increase score if command found in recent commands
-    if (matches[c] == maxScore && data.recent.commands.indexOf(c) > -1) matches[c]++;
+  for (var m = 0; m < matches.length; m++) {
+    if (matches[m].score >= maxScore / 2) matchedCommands.push(matches[m]);
   }
 
   // sort the matches by score
   matchedCommands.sort(function (a, b) {
-    return matches[b] - matches[a];
+    return b.score - a.score;
   });
 
   return matchedCommands;
@@ -288,7 +300,7 @@ function scoreObjectMatches(q, arr, prop) {
   }
   // sort all matches by score
   matches.sort(function (a, b) {
-    return a.score.localeCompare(b.score);
+    return b.score - a.score;
   });
   return matches;
 }

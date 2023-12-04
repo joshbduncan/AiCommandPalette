@@ -20,6 +20,7 @@ var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 var paletteSettings = {
   paletteWidth: 600,
   paletteHeight: 201,
+  bounds: [0, 0, 600, 201],
   listboxProperties: {
     numberOfColumns: 2,
     showHeaders: true,
