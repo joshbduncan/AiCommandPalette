@@ -17,16 +17,21 @@ var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 
 // DIALOG SETTINGS
 
-var paletteSettings = {
-  paletteWidth: 600,
-  paletteHeight: 201,
-  bounds: [0, 0, 600, 201],
-  listboxProperties: {
-    numberOfColumns: 2,
-    showHeaders: true,
-    columnTitles: ["Name", "Type"],
-    columnWidths: [475, 100],
-  },
+var paletteSettings = {};
+paletteSettings.paletteWidth = 600;
+// was informed windows and mac have different listbox row hights so this makes sure exactly 9 rows show
+paletteSettings.paletteHeight = sysOS === "win" ? 211 : 201;
+paletteSettings.bounds = [
+  0,
+  0,
+  paletteSettings.paletteWidth,
+  paletteSettings.paletteHeight,
+];
+paletteSettings.listboxProperties = {
+  numberOfColumns: 2,
+  showHeaders: true,
+  columnTitles: ["Name", "Type"],
+  columnWidths: [475, 100],
 };
 
 var visibleListItems = 9;
@@ -85,6 +90,7 @@ settings.save = function () {
       os: os,
       locale: locale,
       aiVersion: aiVersion,
+      searchIncludesType: data.settings.searchIncludesType,
     },
     recent: data.recent,
   };

@@ -79,8 +79,7 @@ See the LICENSE file for details.
   var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // SHOW THE COMMAND PALETTE
-  var queryableCommands, showOnlyCommands;
-  queryableCommands = filterCommands(
+  var queryableCommands = filterCommands(
     (commands = allCommandsLocalized),
     (types = null),
     (showHidden = false),
@@ -89,7 +88,7 @@ See the LICENSE file for details.
     (selRequired = true)
   );
   // FIXME: build start-up customizer
-  showOnlyCommands = filterCommands(
+  var showOnlyCommands = filterCommands(
     (commands = allCommandsLocalized),
     (types = ["bookmark", "script", "workflow", "defaults"]),
     (showHidden = false),
@@ -103,5 +102,6 @@ See the LICENSE file for details.
     (multiselect = false),
     (showOnly = showOnlyCommands)
   );
-  if (result) processCommand(localizedCommandLookup[result[0].text]);
+  if (!result) return;
+  processCommand(localizedCommandLookup[result[0].text]);
 })();

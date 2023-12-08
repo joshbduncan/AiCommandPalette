@@ -17,6 +17,7 @@ var locStrings = {
     de: "Das aktuelle Dokument wurde noch nicht gespeichert.",
     ru: "Active document not yet saved to the file system.",
   },
+  artboard: { en: "Artboard", de: "Artboard", ru: "Artboard" },
   artboards: { en: "Artboards", de: "Zeichenfl\u00e4chen", ru: "Artboards" },
   bm_already_loaded: {
     en: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
@@ -55,6 +56,7 @@ var locStrings = {
   },
   bookmark: { en: "Bookmark", de: "Lesezeichen", ru: "Bookmark" },
   Bookmarks: { en: "Bookmarks", de: "Lesezeichen", ru: "Bookmarks" },
+  builtin: { en: "Built-In", de: "Built-In", ru: "Built-In" },
   cancel: { en: "Cancel", de: "Abbrechen", ru: "\u041e\u0442\u043c\u0435\u043d\u0430" },
   cd_active_document_required: {
     en: "Command '%1' requires an active document. Continue Anyway?",
@@ -70,6 +72,11 @@ var locStrings = {
     en: "All Built-In Menu Commands",
     de: "Alle integrierten Men\u00fcbefehle",
     ru: "\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b \u043c\u0435\u043d\u044e",
+  },
+  cd_clear_recent_confirm: {
+    en: "Are you sure you want to clear your recent commands?",
+    de: "Are you sure you want to clear your recent commands?",
+    ru: "Are you sure you want to clear your recent commands?",
   },
   cd_delete_confirm: {
     en: "Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n%1",
@@ -171,6 +178,7 @@ var locStrings = {
     de: "Schlie\u00dfen",
     ru: "\u0417\u0430\u043a\u0440\u044b\u0432\u0430\u0442\u044c",
   },
+  config: { en: "Configuration", de: "Configuration", ru: "Configuration" },
   copyright: {
     en: "Copyright 2022 Josh Duncan",
     de: "Copyright 2022 Josh Duncan",
@@ -186,11 +194,13 @@ var locStrings = {
     de: "Befehle, Aktionen und geladene Skripte suchen.",
     ru: "\u041f\u043e\u0438\u0441\u043a \u043a\u043e\u043c\u0430\u043d\u0434, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u0445 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432",
   },
+  defaults: { en: "Defaults", de: "Defaults", ru: "Defaults" },
   description: {
     en: "Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.",
     de: "Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Men\u00fcbefehle und Werkzeuge sowie alle Aktionen und Skripte, die direkt \u00fcber die Tastatur ausgef\u00fchrt werden k\u00f6nnen. Mit benutzerdefinierten Arbeitsabl\u00e4ufen k\u00f6nnen Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabl\u00e4ufen und steigern Sie Ihre Produktivit\u00e4t.",
     ru: "\u041f\u043e\u0432\u044b\u0441\u044c\u0442\u0435 \u0441\u043a\u043e\u0440\u043e\u0441\u0442\u044c \u0440\u0430\u0431\u043e\u0442\u044b \u0432 Adobe Illustrator \u0431\u043b\u0430\u0433\u043e\u0434\u0430\u0440\u044f \u0431\u044b\u0441\u0442\u0440\u043e\u043c\u0443 \u0434\u043e\u0441\u0442\u0443\u043f\u0443 \u043a \u0431\u043e\u043b\u044c\u0448\u0438\u043d\u0441\u0442\u0432\u0443 \u043a\u043e\u043c\u0430\u043d\u0434 \u043c\u0435\u043d\u044e, \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u0430\u043c, \u0432\u0441\u0435\u043c \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u044f\u043c \u0438 \u043b\u044e\u0431\u044b\u043c \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u043c \u0441\u043a\u0440\u0438\u043f\u0442\u0430\u043c \u043f\u0440\u044f\u043c\u043e \u0441 \u043a\u043b\u0430\u0432\u0438\u0430\u0442\u0443\u0440\u044b. \u0410 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u0441\u043a\u0438\u0435 \u043d\u0430\u0431\u043e\u0440\u044b \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u044e\u0442 \u043a\u043e\u043c\u0431\u0438\u043d\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u043a\u043e\u043c\u0430\u043d\u0434, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432. \u0417\u0430\u043c\u0435\u043d\u0438\u0442\u0435 \u043f\u043e\u0432\u0442\u043e\u0440\u044f\u044e\u0449\u0438\u0435\u0441\u044f \u0437\u0430\u0434\u0430\u0447\u0438 \u043d\u0430\u0431\u043e\u0440\u0430\u043c\u0438 \u043a\u043e\u043c\u0430\u043d\u0434 \u0438 \u043f\u043e\u0432\u044b\u0441\u044c\u0442\u0435 \u0441\u0432\u043e\u044e \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c.",
   },
+  document: { en: "Document", de: "Document", ru: "Document" },
   document_report: {
     en: "Active Document Report",
     de: "Dokumentinformationen",
@@ -223,6 +233,7 @@ var locStrings = {
   dr_name: { en: "Name: ", de: "Name: ", ru: "Name: " },
   dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
   dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
+  file: { en: "File", de: "File", ru: "File" },
   file_saved: {
     en: "File Saved:\n%1",
     de: "Datei gespeichert:\n%1",
@@ -270,6 +281,7 @@ var locStrings = {
     ru: "Go To Open Document",
   },
   layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
+  menu: { en: "Menu", de: "Menu", ru: "Menu" },
   no_active_document: {
     en: "No active documents.",
     de: "Keine ge\u00f6ffneten Dokumente vorhanden..",
@@ -383,6 +395,7 @@ var locStrings = {
     de: "Zurzeit sind keine Werkzeuge verf\u00fcgbar.",
     ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b \u0432 \u0434\u0430\u043d\u043d\u044b\u0439 \u043c\u043e\u043c\u0435\u043d\u0442 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b",
   },
+  tool: { en: "Tool", de: "Tool", ru: "Tool" },
   version: {
     en: "Version %1",
     de: "Ausf\u00fchrung %1",
@@ -458,13 +471,8 @@ var locStrings = {
     de: "Die Befehlskombinationen werden in der Reihenfolge von oben nach unten ausgef\u00fchrt.",
     ru: "\u041d\u0430\u0431\u043e\u0440 \u0432\u044b\u043f\u043e\u043b\u043d\u044f\u0435\u0442\u0441\u044f \u0441\u0432\u0435\u0440\u0445\u0443 \u0432\u043d\u0438\u0437",
   },
-  wf_titlecase: {
-    en: "Workflow",
-    de: "Arbeitsablauf",
-    ru: "\u041d\u0430\u0431\u043e\u0440\u044b",
-  },
   workflow: {
-    en: "workflow",
+    en: "Workflow",
     de: "Arbeitsablauf",
     ru: "\u041d\u0430\u0431\u043e\u0440\u044b",
   },
@@ -7467,6 +7475,28 @@ var builtCommands = {
         en: "Delete Commands...",
         de: "Befehle l\u00f6schen \u2026",
         ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+      },
+    },
+    config_enableTypeInSearch: {
+      action: "enableTypeInSearch",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: {
+        en: "Enable Searching on Command Type",
+        de: "Enable Searching on Command Type",
+        ru: "Enable Searching on Command Type",
+      },
+    },
+    config_disableTypeInSearch: {
+      action: "disableTypeInSearch",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: {
+        en: "Disable Searching on Command Type",
+        de: "Disable Searching on Command Type",
+        ru: "Disable Searching on Command Type",
       },
     },
     config_clearRecentCommands: {

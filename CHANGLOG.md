@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## Added
+
+- Confirmation dialog when clearing recent commands
+
+## Changed
+
+- Complete rebuild of command palette, goto palette, and workflow builder (ScriptUI dialog)
+- Better sorting with recent command showing higher in results list
+- Query now also uses the command type when searching (can be toggled)
+
+## Fixed
+
+- Correct number of (full) table rows (commands) show on Windows (Issue #22)
+
 ## [0.9.3] 2023-11-27
 
 ## Fixed

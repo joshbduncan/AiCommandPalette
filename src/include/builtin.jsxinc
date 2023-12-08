@@ -52,10 +52,22 @@ function scriptAction(action) {
     case "deleteCommand":
       deleteCommand();
       break;
+    case "enableTypeInSearch":
+    case "disableTypeInSearch":
+      data.settings.searchIncludesType = !data.settings.searchIncludesType;
+      break;
     case "recentCommands":
       recentCommands();
       break;
     case "clearRecentCommands":
+      if (
+        !confirm(
+          localize(locStrings.cd_clear_recent_confirm),
+          "noAsDflt",
+          localize(locStrings.cd_exception)
+        )
+      )
+        return;
       data.recent.commands = [];
       alert(localize(locStrings.recent_commands_cleared));
       break;
@@ -118,20 +130,21 @@ function builtinAction(action) {
 
 /** Ai Command Palette configuration commands. */
 function AiCommandPaletteSettings() {
-  commands = filterCommands(
+  var configCommands = filterCommands(
     (commands = allCommandsLocalized),
     (types = ["config"]),
     (showHidden = false),
     (hideCommands = null),
-    (docRequired = true),
-    (selRequired = true)
+    (docRequired = false),
+    (selRequired = false)
   );
   var result = commandPalette(
-    (commands = commands),
+    (commands = configCommands),
     (title = localize(locStrings.cp_config)),
     (multiselect = false)
   );
-  if (result) processCommand(localizedCommandLookup[result[0].text]);
+  if (!result) return;
+  processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Ai Command Palette About Dialog. */
@@ -504,7 +517,7 @@ function loadScripts() {
 
 /** Show all scripts. */
 function showAllScripts() {
-  commands = filterCommands(
+  var scriptCommands = filterCommands(
     (commands = allCommandsLocalized),
     (types = ["script"]),
     (showHidden = false),
@@ -513,126 +526,96 @@ function showAllScripts() {
     (selRequired = false)
   );
   var result = commandPalette(
-    (commands = commands),
+    (commands = scriptCommands),
     (title = localize(locStrings.Scripts)),
     (multiselect = false)
   );
-  if (result) processCommand(localizedCommandLookup[result[0].text]);
+  if (!result) return;
+  processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Show all bookmarks. */
 function showAllBookmarks() {
-  commands = filterCommands(
+  var bookmarkCommands = filterCommands(
     (commands = allCommandsLocalized),
-    (queryFilter = []),
-    (visibleFilter = [
-      "action",
-      "builtin",
-      "config",
-      "defaults",
-      "menu",
-      "script",
-      "tool",
-      "workflow",
-    ]),
+    (types = ["bookmark"]),
     (showHidden = false),
-    (hideCommands = []),
+    (hideCommands = null),
     (docRequired = false),
     (selRequired = false)
   );
   var result = commandPalette(
-    (commands = commands),
+    (commands = bookmarkCommands),
     (title = localize(locStrings.Bookmarks)),
     (multiselect = false)
   );
-  if (result) processCommand(localizedCommandLookup[result[0].text]);
+  if (!result) return;
+  processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Show all actions. */
 function showAllActions() {
-  commands = filterCommands(
+  var actionCommands = filterCommands(
     (commands = allCommandsLocalized),
-    (queryFilter = []),
-    (visibleFilter = [
-      "bookmark",
-      "builtin",
-      "config",
-      "defaults",
-      "menu",
-      "script",
-      "tool",
-      "workflow",
-    ]),
+    (types = ["action"]),
     (showHidden = false),
-    (hideCommands = []),
+    (hideCommands = null),
     (docRequired = false),
     (selRequired = false)
   );
   var result = commandPalette(
-    (commands = commands),
+    (commands = actionCommands),
     (title = localize(locStrings.Actions)),
     (multiselect = false)
   );
-  if (result) processCommand(localizedCommandLookup[result[0].text]);
+  if (!result) return;
+  processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Hide commands from Ai Command Palette. */
 function hideCommand() {
-  commands = filterCommands(
+  var hideableCommands = filterCommands(
     (commands = allCommandsLocalized),
-    (queryFilter = ["config", "defaults"]),
-    (visibleFilter = []),
+    (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
     (showHidden = false),
-    (hideCommands = []),
+    (hideCommands = null),
     (docRequired = false),
     (selRequired = false)
   );
   var result = commandPalette(
-    (commands = commands),
+    (commands = hideableCommands),
     (title = localize(locStrings.cd_hide_select)),
     (multiselect = true)
   );
-  if (result) {
-    for (var i = 0; i < result.length; i++)
-      data.settings.hidden.push(localizedCommandLookup[result[i].text]);
-  }
+  if (!result) return;
+  for (var i = 0; i < result.length; i++)
+    data.settings.hidden.push(localizedCommandLookup[result[i].text]);
 }
 
 /** Unhide hidden commands. */
 function unhideCommand() {
   var command;
-  localizedCommands = [];
+  var hiddenCommands = [];
   for (var i = 0; i < data.settings.hidden.length; i++) {
     command = data.settings.hidden[i];
     commandData = commandsData[command];
     localizedCommand = commandData.hasOwnProperty("loc")
       ? localize(commandData.loc)
       : command;
-    localizedCommands.push(localizedCommand);
+    hiddenCommands.push({ name: localizedCommand, type: commandData.type });
   }
-  commands = filterCommands(
-    (commands = localizedCommands),
-    (queryFilter = []),
-    (visibleFilter = []),
-    (showHidden = true),
-    (hideCommands = []),
-    (docRequired = false),
-    (selRequired = false)
-  );
-  // FIXME
   var result = commandPalette(
-    (commands = commands),
+    (commands = hiddenCommands),
     (title = localize(locStrings.cd_reveal_menu_select)),
     (multiselect = true)
   );
-  if (result) {
-    for (var i = 0; i < result.length; i++) {
-      commandToHide = localizedCommandLookup[result[i].text];
-      for (var n = 0; n < data.settings.hidden.length; n++) {
-        hiddenCommand = data.settings.hidden[n];
-        if (commandToHide == hiddenCommand) {
-          data.settings.hidden.splice(n, 1);
-        }
+  if (!result) return;
+  for (var i = 0; i < result.length; i++) {
+    commandToHide = localizedCommandLookup[result[i].text];
+    for (var n = 0; n < data.settings.hidden.length; n++) {
+      hiddenCommand = data.settings.hidden[n];
+      if (commandToHide == hiddenCommand) {
+        data.settings.hidden.splice(n, 1);
       }
     }
   }
@@ -640,43 +623,35 @@ function unhideCommand() {
 
 /** Delete commands from Ai Command Palette. */
 function deleteCommand() {
-  commands = filterCommands(
+  var deletableCommands = filterCommands(
     (commands = allCommandsLocalized),
-    (queryFilter = ["action", "builtin", "config", "defaults", "menu", "tool"]),
-    (visibleFilter = []),
-    (showHidden = true),
-    (hideCommands = []),
+    (types = ["bookmark", "script", "workflow"]),
+    (showHidden = false),
+    (hideCommands = null),
     (docRequired = false),
     (selRequired = false)
   );
   var result = commandPalette(
-    (commands = commands),
+    (commands = deletableCommands),
     (title = localize(locStrings.cd_delete_select)),
     (multiselect = true)
   );
-  if (result) {
-    x = confirm(
+  if (!result) return;
+  if (
+    confirm(
       localize(locStrings.cd_delete_confirm, result.join("\n")),
       "noAsDflt",
       localize(locStrings.cd_delete_confirm_title)
-    );
-    alert(x);
-    if (
-      confirm(
-        localize(locStrings.cd_delete_confirm, result.join("\n")),
-        "noAsDflt",
-        localize(locStrings.cd_delete_confirm_title)
-      )
-    ) {
-      var command, type;
-      for (var i = 0; i < result.length; i++) {
-        command = localizedCommandLookup[result[i].text];
-        type = commandsData[command].type;
-        try {
-          delete data.commands[type][command];
-        } catch (e) {
-          alert(localize(locStrings.cd_error_delete, command));
-        }
+    )
+  ) {
+    var command, type;
+    for (var i = 0; i < result.length; i++) {
+      command = localizedCommandLookup[result[i].text];
+      type = commandsData[command].type;
+      try {
+        delete data.commands[type][command];
+      } catch (e) {
+        alert(localize(locStrings.cd_error_delete, command));
       }
     }
   }
@@ -684,34 +659,49 @@ function deleteCommand() {
 
 // BUILT-IN COMMANDS
 
-/** Present a command palette with all open documents and open the chosen one. */
+/** Present a command palette with all open documents and goto the chosen one. */
 function goToOpenDocument() {
-  var item = goToPalette(
-    (commands = app.documents),
-    (title = localize(locStrings["go_to_open_document"]))
-  );
-  if (item) {
-    item.activate();
+  var documentLookup = {};
+  var openDocuments = [];
+  var curDocument, documentName;
+  for (var i = 0; i < app.documents.length; i++) {
+    curDocument = app.documents[i];
+    var colormode =
+      " (" + curDocument.documentColorSpace.toString().split(".").pop() + ")";
+    documentName =
+      curDocument == app.activeDocument
+        ? "x " + curDocument.name + " " + colormode
+        : "   " + curDocument.name + " " + colormode;
+    openDocuments.push({ name: documentName, type: localize(locStrings.document) });
+    documentLookup[documentName] = curDocument;
   }
+  var result = commandPalette(
+    (commands = openDocuments),
+    (title = localize(locStrings.go_to_open_document)),
+    (multiselect = false)
+  );
+  if (!result) return;
+  documentLookup[result].activate();
 }
 
 /** Present a command palette with all artboards and zoom to the chosen one. */
 function goToArtboard() {
-  var item = goToPalette(
-    (commands = app.activeDocument.artboards),
-    (title = localize(locStrings["go_to_artboard"]))
-  );
-  if (item) {
-    var ab;
-    for (var i = 0; i < app.activeDocument.artboards.length; i++) {
-      ab = app.activeDocument.artboards[i];
-      if (item == ab) {
-        app.activeDocument.artboards.setActiveArtboardIndex(i);
-        app.executeMenuCommand("fitin");
-        break;
-      }
-    }
+  var artboardLookup = {};
+  var artboards = [];
+  var abName;
+  for (var i = 0; i < app.activeDocument.artboards.length; i++) {
+    abName = "#" + i + "  " + app.activeDocument.artboards[i].name;
+    artboards.push({ name: abName, type: localize(locStrings.artboard) });
+    artboardLookup[abName] = i;
   }
+  var result = commandPalette(
+    (commands = artboards),
+    (title = localize(locStrings.go_to_artboard)),
+    (multiselect = false)
+  );
+  if (!result) return;
+  app.activeDocument.artboards.setActiveArtboardIndex(artboardLookup[result]);
+  app.executeMenuCommand("fitin");
 }
 
 /** Present a command palette with all named objects and zoom to and select the chosen one. */
@@ -720,8 +710,9 @@ function goToNamedObject() {
     alert(
       localize(locStrings.go_to_named_object_limit, app.activeDocument.pageItems.length)
     );
+  var objectLookup = {};
   var namedObjects = [];
-  var item;
+  var item, itemName, itemType;
   for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
     item = app.activeDocument.pageItems[i];
     if (
@@ -729,51 +720,60 @@ function goToNamedObject() {
       item.name.length ||
       item.typename == "PlacedItem" ||
       item.typename == "SymbolItem"
-    )
-      namedObjects.push(item);
-  }
-  if (namedObjects.length) {
-    var selectedObject = goToPalette(
-      (commands = namedObjects),
-      (title = localize(locStrings["goto_named_object"]))
-    );
-    if (selectedObject) {
-      app.activeDocument.selection = null;
-      selectedObject.selected = true;
-
-      // reset zoom for current document
-      app.activeDocument.views[0].zoom = 1;
-
-      // get screen information
-      var screenBounds = app.activeDocument.views[0].bounds;
-      var screenW = screenBounds[2] - screenBounds[0];
-      var screenH = screenBounds[1] - screenBounds[3];
-
-      // get the (true) visible bounds of the returned object
-      var bounds = selectedObject.visibleBounds;
-      var selectedObjectW = bounds[2] - bounds[0];
-      var selectedObjectH = bounds[1] - bounds[3];
-      var selectedObjectCX = bounds[0] + selectedObjectW / 2;
-      var selectedObjectCY = bounds[1] - selectedObjectH / 2;
-
-      // reset the current view to center of selected object
-      doc.views[0].centerPoint = [selectedObjectCX, selectedObjectCY];
-
-      // calculate new zoom ratio to fit view to selected object
-      var zoomRatio;
-      if (selectedObjectW * (screenH / screenW) >= selectedObjectH) {
-        zoomRatio = screenW / selectedObjectW;
+    ) {
+      if (item.typename == "PlacedItem") {
+        itemName = item.file.name;
+      } else if (item.typename == "SymbolItem") {
+        alert(item.symbol.name);
+        itemName = item.name || item.name.length ? item.name : item.symbol.name;
       } else {
-        zoomRatio = screenH / selectedObjectH;
+        itemName = item.name;
       }
-
-      // set zoom to fit selected object plus a bit of padding
-      var padding = 0.9;
-      doc.views[0].zoom = zoomRatio * padding;
     }
-  } else {
-    alert(localize(locStrings.go_to_named_object_no_objects));
+    itemName += " (" + item.layer.name + ")";
+    namedObjects.push({ name: itemName, type: item.typename });
+    objectLookup[itemName] = item;
   }
+  if (!namedObjects.length) alert(localize(locStrings.go_to_named_object_no_objects));
+  var result = commandPalette(
+    (commands = namedObjects),
+    (title = localize(locStrings.go_to_named_object)),
+    (multiselect = false)
+  );
+  if (!result) return;
+  app.activeDocument.selection = null;
+  item = objectLookup[result];
+  item.selected = true;
+
+  // reset zoom for current document
+  app.activeDocument.views[0].zoom = 1;
+
+  // get screen information
+  var screenBounds = app.activeDocument.views[0].bounds;
+  var screenW = screenBounds[2] - screenBounds[0];
+  var screenH = screenBounds[1] - screenBounds[3];
+
+  // get the (true) visible bounds of the returned object
+  var bounds = item.visibleBounds;
+  var itemW = bounds[2] - bounds[0];
+  var itemH = bounds[1] - bounds[3];
+  var itemCX = bounds[0] + itemW / 2;
+  var itemCY = bounds[1] - itemH / 2;
+
+  // reset the current view to center of selected object
+  app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
+
+  // calculate new zoom ratio to fit view to selected object
+  var zoomRatio;
+  if (itemW * (screenH / screenW) >= itemH) {
+    zoomRatio = screenW / itemW;
+  } else {
+    zoomRatio = screenH / itemH;
+  }
+
+  // set zoom to fit selected object plus a bit of padding
+  var padding = 0.9;
+  app.activeDocument.views[0].zoom = zoomRatio * padding;
 }
 
 /** Present a command palette with all recently open files and open the chosen one. */
@@ -781,38 +781,32 @@ function recentFiles() {
   var f, path;
   var filePaths = getRecentFilePaths();
   var files = {};
-  commands = {
-    query: [],
-    visible: [],
-  };
+  var recentFileCommands = [];
   for (var i = 0; i < filePaths.length; i++) {
     path = filePaths[i];
     f = File(path);
     if (!f.exists) continue;
     fname = decodeURI(f.name);
     files[fname] = f;
-    commands.query.push(fname);
-    commands.visible.push(fname);
+    recentFileCommands.push({ name: fname, type: localize(locStrings.file) });
   }
   var result = commandPalette(
-    (commands = commands),
+    (commands = recentFileCommands),
     (title = localize(locStrings.open_recent_file)),
-    (multiselect = false),
-    (type = "file")
+    (multiselect = false)
   );
-  if (result) {
-    try {
-      app.open(files[result]);
-    } catch (e) {
-      alert(localize(locStrings.fl_error_loading, result));
-    }
+  if (!result) return;
+  try {
+    app.open(files[result]);
+  } catch (e) {
+    alert(localize(locStrings.fl_error_loading, result));
   }
 }
 
 /** Present a command palette with more recent commands and process the selected one. */
 function recentCommands() {
   var command;
-  var localizedCommands = [];
+  var recentCommands = [];
   for (var i = 0; i < data.recent.commands.length; i++) {
     command = data.recent.commands[i];
     if (!idCommandLookup.hasOwnProperty(command)) continue;
@@ -820,21 +814,16 @@ function recentCommands() {
     localizedCommand = commandData.hasOwnProperty("loc")
       ? localize(commandData.loc)
       : command;
-    localizedCommands.push(localizedCommand);
+    recentCommands.push({
+      name: localizedCommand,
+      type: localize(locStrings[commandData.type]),
+    });
   }
-
-  commands = filterCommands(
-    (commands = localizedCommands),
-    (types = null),
-    (showHidden = true),
-    (hideCommands = null),
-    (docRequired = false),
-    (selRequired = false)
-  );
   var result = commandPalette(
-    (commands = commands),
+    (commands = recentCommands),
     (title = localize(locStrings.recent_commands)),
     (multiselect = false)
   );
-  if (result) processCommand(localizedCommandLookup[result[0].text]);
+  if (!result) return;
+  processCommand(localizedCommandLookup[result[0].text]);
 }

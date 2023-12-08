@@ -35,6 +35,15 @@ function buildCommands(commands, filter) {
           Object.keys(data.commands.action).length < 1
         )
           continue;
+        // hide `Enable Searching on Command Type` command if already enabled
+        if (command == "config_enableTypeInSearch" && data.settings.searchIncludesType)
+          continue;
+        // hide `Disable Searching on Command Type` command if already disabled
+        if (
+          command == "config_disableTypeInSearch" &&
+          !data.settings.searchIncludesType
+        )
+          continue;
         // hide `Unhide Commands...` command if no hidden commands
         if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
           continue;

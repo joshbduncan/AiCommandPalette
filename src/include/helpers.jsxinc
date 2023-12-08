@@ -1,5 +1,5 @@
 /**
- *
+ * Check to see if there is an active document.
  * @returns Make sure at least one document is open for certain built-in commands.
  */
 function activeDocument() {
@@ -47,6 +47,10 @@ function convertPointsTo(points, unit) {
   return points / conversions[unit];
 }
 
+/**
+ * Get info for all placed files for the current document.
+ * @returns {Array} Placed file information.
+ */
 function getPlacedFileInfoForReport() {
   if (ExternalObject.AdobeXMPScript == undefined)
     ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
@@ -91,6 +95,15 @@ function getPlacedFileInfoForReport() {
  *
  * If you try to do this using the placedItems collection from the API you will have issues.
  */
+
+/**
+ * Great trick to get all placed files (linked and embeded) @pixxxelschubser
+ * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
+ *
+ * If you try to do this using the placedItems collection from the API you will have issues.
+ * @param   {String} xmp Document xml data.
+ * @returns {Array}      Placed file paths.
+ */
 function getAllPlacedFilePaths(xmp) {
   //Read file paths from XMP - this returns file paths of both embedded and linked images
   var paths = [];
@@ -103,7 +116,9 @@ function getAllPlacedFilePaths(xmp) {
 }
 
 /**
- * Get placed files with broken links.
+ * Check for any placed files with broken links in the current document.
+ * @param   {String} xmp Document xml data.
+ * @returns {Array}      Broken placed file paths.
  */
 function getBrokenFilePaths(xmp) {
   //Read file paths from XMP - this returns file paths of both embedded and linked images
@@ -119,21 +134,28 @@ function getBrokenFilePaths(xmp) {
 /**
  * Return the names of each object in an Ai collection object.
  * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
- * @param   {Object} c Ai collection object.
- * @returns {Array}    Array containing each object name.
+ * @param   {Object} collection Ai collection object.
+ * @returns {Array}             Names of each object inside of `collection`.
  */
-function getCollectionObjectNames(c, sorted) {
+
+/**
+ * Return the names of each object in an Ai collection object.
+ * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
+ * @param {Object}  collection Ai collection object.
+ * @param {Boolean} sorted     Should the results be sorted.
+ * @returns {Array}            Names of each object inside of `collection`.
+ */
+function getCollectionObjectNames(collection, sorted) {
   sorted = typeof sorted !== "undefined" ? sorted : false;
   names = [];
-  var s;
-  if (c.length > 0) {
-    for (var i = 0; i < c.length; i++) {
-      if (c.typename == "Spots") {
-        if (c[i].name != "[Registration]") {
-          names.push(c[i].name);
+  if (collection.length > 0) {
+    for (var i = 0; i < collection.length; i++) {
+      if (collection.typename == "Spots") {
+        if (collection[i].name != "[Registration]") {
+          names.push(collection[i].name);
         }
       } else {
-        names.push(c[i].name);
+        names.push(collection[i].name);
       }
     }
   }
@@ -163,13 +185,13 @@ DIALOG HELPER FUNCTIONS
 
 /**
  * Filter the supplied commands by multiple factors.
- * @param commands Array of localized command strings to filter.
- * @param types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
- * @param showHidden Should command hidden by the user be included?
- * @param hideSpecificCommands Future me including a hack to hide specific commands.
- * @param docRequired
- * @param selRequired
- * @returns
+ * @param   {Array}   commands Array of localized command strings to filter.
+ * @param   {Array}   types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+ * @param   {Boolean} showHidden Should command hidden by the user be included?
+ * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
+ * @param   {Boolean} docRequired Should commands requiring an active document be included.
+ * @param   {Boolean} selRequired Should commands requiring an active selection be included.
+ * @returns {Array}   Filtered commands in the form of {name: command name, type: command type}.
  */
 function filterCommands(
   commands,
@@ -186,6 +208,7 @@ function filterCommands(
     command = localizedCommandLookup[localizedCommand];
     commandData = commandsData[command];
     type = commandData.type;
+    typeName = locStrings.hasOwnProperty(type) ? localize(locStrings[type]) : type;
     // hide commands requiring an active documents if requested
     if (docRequired && !appDocuments && commandData.docRequired) continue;
     // hide commands requiring an active selection if requested
@@ -198,16 +221,16 @@ function filterCommands(
     if (hideSpecificCommands && hideSpecificCommands.includes(command)) continue;
     // then check to see if the command should be included
     if (!types || types.includes(commandData.type))
-      filteredCommands.push({ name: localizedCommand, type: type });
+      filteredCommands.push({ name: localizedCommand, type: typeName });
   }
   return filteredCommands;
 }
 
 /**
  * Score array items based on regex string match.
- * @param {String} query String to search for.
- * @param {Array} commands Commands to match on.
- * @returns {Array} Matching items sorted by score.
+ * @param   {String} query    String to search for.
+ * @param   {Array}  commands Commands to match on.
+ * @returns {Array}           Matching items sorted by score.
  */
 function scoreMatches(query, commands) {
   var regexEllipsis = /\.\.\.$/;
@@ -219,17 +242,19 @@ function scoreMatches(query, commands) {
   var maxScore = 0;
   query = query.toLowerCase();
   var words = query.split(" ");
-  var command, commandName, score, strippedString;
+  var command, commandName, commandType, score, strippedString;
   for (var i = 0; i < commands.length; i++) {
     command = commands[i];
     commandName = command.name.toLowerCase();
+    commandType = command.type.toLowerCase();
     strippedString = commandName.replace(regexEllipsis, "").replace(regexCarrot, " ");
     score = 0;
 
     // check for exact match
     if (
       query == commandName ||
-      query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString
+      query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString ||
+      (data.settings.searchIncludesType && query == commandType)
     ) {
       score += 1;
     }
@@ -241,7 +266,9 @@ function scoreMatches(query, commands) {
       if (!word) continue;
       if (
         commandName.match("\\b" + word, "gi") != null ||
-        strippedString.match("\\b" + word, "gi") != null
+        strippedString.match("\\b" + word, "gi") != null ||
+        (data.settings.searchIncludesType &&
+          commandType.match("\\b" + word, "gi") != null)
       )
         score += word.length;
     }
@@ -276,26 +303,26 @@ function scoreMatches(query, commands) {
 
 /**
  * Score array items based on regex string match.
- * @param   {String} q    String to search for.
- * @param   {Array}  arr  Array of object to search through.
- * @param   {String} prop Object property to match on.
- * @returns {Array}       Matching items sorted by score.
+ * @param   {String} query   String to search for.
+ * @param   {Array}  objects Array of objects to search through.
+ * @param   {String} prop    Object property to match on.
+ * @returns {Array}          Matching items sorted by score.
  */
-function scoreObjectMatches(q, arr, prop) {
+function scoreObjectMatches(query, objects, prop) {
   var word;
-  var words = q.split(" ");
+  var words = query.split(" ");
   var matches = [];
-  for (var i = 0; i < arr.length; i++) {
+  for (var i = 0; i < objects.length; i++) {
     var score = 0;
     for (var n = 0; n < words.length; n++) {
       word = words[n];
-      if (!arr[i].hasOwnProperty(prop)) continue;
-      if (word != "" && arr[i][prop].match("(?:^|\\s)(" + word + ")", "gi") != null)
+      if (!objects[i].hasOwnProperty(prop)) continue;
+      if (word != "" && objects[i][prop].match("(?:^|\\s)(" + word + ")", "gi") != null)
         score++;
     }
     if (score > 0) {
-      arr[i].score = score;
-      matches.push(arr[i]);
+      objects[i].score = score;
+      matches.push(objects[i]);
     }
   }
   // sort all matches by score
@@ -303,18 +330,6 @@ function scoreObjectMatches(q, arr, prop) {
     return b.score - a.score;
   });
   return matches;
-}
-
-function dynamicSort(property) {
-  var sortOrder = 1;
-  if (property[0] === "-") {
-    sortOrder = -1;
-    property = property.substr(1);
-  }
-  return function (a, b) {
-    var result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
-    return result * sortOrder;
-  };
 }
 
 /**
@@ -371,11 +386,15 @@ function openURL(url) {
   html.execute();
 }
 
+/**
+ * Wrapper for helper functions that update a users preferences to the new format.
+ */
 function updateOldPreferences() {
   updateOldWorkflows();
   updateOldBookmarks();
   updateOldScripts();
   updateOldHiddens();
+  data.settings.searchIncludesType = true;
   data.recent.commands = [];
 }
 

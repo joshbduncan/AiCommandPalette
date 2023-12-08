@@ -1,10 +1,26 @@
-// CUSTOM SCRIPTUI LISTBOX
+// CUSTOM SCRIPTUI FILTERABLE LISTBOX
 
-function ListBoxWrapper(commands, win, multiselect) {
-  this.listbox = this.make(commands, win, paletteSettings.bounds, multiselect);
+/**
+ * Custom wrapper for a ScriptUI Listbox.
+ * @param {Array}   commands    Commands to load into the list box (e.g. [{name: command name, type: command type}]).
+ * @param {Object}  win         ScriptUI window the listbox should be attached to.
+ * @param {Array}   bounds      Bounds array for the listbox.
+ * @param {Boolean} multiselect Should the listbox allow multiple selections (disable some features).
+ * @param {String}  helptip     Listbox helptip/tooltip pop-up.
+ * @param {Array}   listeners   ScriptUI listeners to add to the listbox.
+ */
+function ListBoxWrapper(commands, win, bounds, multiselect, helptip, listeners) {
+  this.helptip = helptip;
+  this.listeners = listeners;
+  this.listbox = this.make(commands, win, bounds, multiselect);
 }
 
 ListBoxWrapper.prototype = {
+  /**
+   * Initialize a new ScriptUI listbox, load the initial commands, and attach event listeners.
+   * @param {Array} commands Commands to load into the list box (e.g. [{name: command name, type: command type}]).
+   * @returns {Object} ScriptUI listbox.
+   */
   make: function (commands, win, bounds, multiselect) {
     listbox = win.add("listbox", bounds, undefined, {
       numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
@@ -15,10 +31,15 @@ ListBoxWrapper.prototype = {
     });
     this.loadCommands(listbox, commands);
     this.addListeners(listbox);
+    if (this.helptip) listbox.helpTip = this.helptip;
     listbox.frameStart = 0;
     listbox.selection = 0;
     return listbox;
   },
+  /**
+   * Update the listbox with new items.
+   * @param {Array} matches New commands to load into the list box (e.g. [{name: command name, type: command type}]).
+   */
   update: function (matches) {
     temp = this.make(
       matches,
@@ -29,19 +50,29 @@ ListBoxWrapper.prototype = {
     this.listbox.window.remove(this.listbox);
     this.listbox = temp;
   },
-  loadCommands: function (lb, commands) {
+  /**
+   * Load command items in a ScriptUI listbox.
+   * @param {Object} listbox ScriptUI listbox to load the command item in to.
+   * @param {Array} commands Commands to load into the list box (e.g. [{name: command name, type: command type}]).
+   */
+  loadCommands: function (listbox, commands) {
     var command;
     for (var i = 0; i < commands.length; i++) {
       command = commands[i];
-      with (lb.add("item", command.name)) {
-        subItems[0].text = command.type; // TODO: add localization
+      with (listbox.add("item", command.name)) {
+        subItems[0].text = command.type;
       }
     }
   },
-  addListeners: function (lb) {
-    selectOnDoubleClick(lb);
-    if (!lb.properties.multiselect) {
-      scrollListBoxWithArrows(lb);
+  /**
+   * Attach event listeners to the specified listbox.
+   * @param {Object} listbox ScriptUI listbox to attach the listeners to.
+   */
+  addListeners: function (listbox) {
+    var listener;
+    for (var i = 0; i < this.listeners.length; i++) {
+      listener = this.listeners[i];
+      listener(listbox);
     }
   },
 };
@@ -50,20 +81,35 @@ ListBoxWrapper.prototype = {
 
 /**
  * Close listbox when double-clicking a command.
- * @param {Object}  lb  ScriptUI listbox.
+ * @param {Object}  listbox  ScriptUI listbox.
  */
-function selectOnDoubleClick(lb) {
-  lb.onDoubleClick = function () {
-    if (lb.selection) lb.window.close(1);
+function selectOnDoubleClick(listbox) {
+  listbox.onDoubleClick = function () {
+    if (listbox.selection) listbox.window.close(1);
+  };
+}
+
+/**
+ * Add listbox command to Workflow when double-clicking.
+ * @param {Object}  listbox  ScriptUI listbox.
+ */
+function addToWorkflowOnDoubleClick(listbox) {
+  listbox.onDoubleClick = function () {
+    if (listbox.selection) {
+      var win = listbox.window;
+      var steps = win.findElement("workflowSteps");
+      steps.add("item", listbox.selection);
+      steps.notify("onChange");
+    }
   };
 }
 
 /**
  * Allow end-to-end scrolling from within a listbox.
- * @param {Object}  lb  ScriptUI listbox.
+ * @param {Object}  listbox  ScriptUI listbox.
  */
-function scrollListBoxWithArrows(lb) {
-  lb.addEventListener("keydown", function (e) {
+function scrollListBoxWithArrows(listbox) {
+  listbox.addEventListener("keydown", function (e) {
     if (e.fromQuery) {
       if (e.fromQueryShiftKey) {
         if (e.keyName == "Up") {
@@ -168,8 +214,10 @@ function commandPalette(commands, title, multiselect, showOnly) {
   var list = new ListBoxWrapper(
     showOnly ? showOnly : commands,
     win,
+    paletteSettings.bounds,
     multiselect,
-    showOnly
+    null,
+    [selectOnDoubleClick, scrollListBoxWithArrows]
   );
 
   // window buttons
@@ -203,17 +251,32 @@ function commandPalette(commands, title, multiselect, showOnly) {
     }
   };
 
-  // allow using arrow key from query input
-  var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
-  q.addEventListener("keydown", function (e) {
-    if (e.keyName == "Up" || e.keyName == "Down") {
-      kbEvent.initKeyboardEvent("keydown", true, true, list.listbox, e.keyName, 0, "");
-      kbEvent.fromQuery = true;
-      kbEvent.fromQueryShiftKey = e.getModifierState("shift");
-      list.listbox.dispatchEvent(kbEvent);
-      e.preventDefault();
-    }
-  });
+  // allow using arrow key from query input by sending a custom keyboard event to the list box
+  if (!multiselect) {
+    var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
+    q.addEventListener("keydown", function (e) {
+      // hack to keep original commands from reloading before closing command palette when hitting the escape key while within the query box
+      if (e.keyName == "Escape") {
+        e.preventDefault();
+        win.close();
+      }
+      if (e.keyName == "Up" || e.keyName == "Down") {
+        kbEvent.initKeyboardEvent(
+          "keydown",
+          true,
+          true,
+          list.listbox,
+          e.keyName,
+          0,
+          ""
+        );
+        kbEvent.fromQuery = true;
+        kbEvent.fromQueryShiftKey = e.getModifierState("shift");
+        list.listbox.dispatchEvent(kbEvent);
+        e.preventDefault();
+      }
+    });
+  }
 
   if (win.show() == 1) {
     if (list.listbox.selection) {
@@ -223,276 +286,35 @@ function commandPalette(commands, title, multiselect, showOnly) {
   return false;
 }
 
-function goToPalette(commands, title) {
-  // copy the commands
-  var matches = commands;
-
+function workflowBuilder(commands, editWorkflow, editCommands) {
   // create the dialog
   var win = new Window("dialog");
-  win.text = title;
-  win.alignChildren = "fill";
-  var q = win.add("edittext");
-  q.helpTip = localize(locStrings.cd_q_helptip);
-
-  // work-around to stop windows from flickering/flashing explorer
-  if (windowsFlickerFix) {
-    simulateKeypress("TAB", 1);
-  } else {
-    q.active = true;
-  }
-
-  // setup the commands listbox
-  var list = win.add(
-    "listbox",
-    paletteSettings.bounds,
-    [],
-    paletteSettings.listboxProperties
-  );
-
-  // add items to list
-  for (var i = 0; i < matches.length; i++) {
-    switch (matches[i].typename) {
-      case "Document":
-        var colormode =
-          "(" + matches[i].documentColorSpace.toString().split(".").pop() + ")";
-        matches[i]["queryName"] =
-          matches[i] == app.activeDocument
-            ? "x " + matches[i].name + " " + colormode
-            : "   " + matches[i].name + " " + colormode;
-        break;
-      case "PlacedItem":
-        matches[i]["queryName"] = matches[i].file.name;
-        break;
-      case "SymbolItem":
-        matches[i]["queryName"] =
-          matches[i].name || matches[i].name.length
-            ? matches[i].name
-            : matches[i].symbol.name;
-        break;
-      default:
-        matches[i]["queryName"] = matches[i].name;
-        break;
-    }
-    with (list.add("Item", truncateCommandName(matches[i].queryName, 50))) {
-      subItems[0].text = matches[i].typename;
-    }
-  }
-  list.selection = 0;
-
-  // window buttons
-  var winButtons = win.add("group");
-  winButtons.orientation = "row";
-  winButtons.alignChildren = ["center", "center"];
-  var ok = winButtons.add("button", undefined, "OK");
-  ok.preferredSize.width = 100;
-  var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
-    name: "cancel",
-  });
-  cancel.preferredSize.width = 100;
-
-  // as a query is typed update the list box
-  var matches, temp;
-  q.onChanging = function () {
-    list.frameStart = 0;
-    matches =
-      this.text === "" ? commands : scoreObjectMatches(this.text, matches, "queryName");
-    if (matches.length > 0) {
-      var temp = win.add("listbox", list.bounds, [], {
-        numberOfColumns: list.properties.numberOfColumns,
-        showHeaders: list.properties.showHeaders,
-        columnTitles: list.properties.columnTitles,
-        columnWidths: list.properties.columnWidths,
-      });
-
-      for (var i = 0; i < matches.length; i++) {
-        with (temp.add("Item", truncateCommandName(matches[i].queryName, 50))) {
-          subItems[0].text = matches[i].typename;
-        }
-      }
-      // close window when double-clicking a selection
-      temp.onDoubleClick = function () {
-        if (list.selection) win.close(1);
-      };
-
-      // if (!multiselect) scrollListBox(list);
-
-      // remove the temp 'truncation fix' item from the list
-      if (matches != commands.visible) temp.remove(temp.items.length - 1);
-      win.remove(list);
-      list = temp;
-      list.selection = 0;
-    }
-  };
-
-  // scrollListBox(list);
-
-  if (list.items.length > 0) {
-    /*
-    Move the listbox frame of visible items when using the
-    up and down arrow keys while in the `q` edittext.
-
-    One problem with this functionality is that when a listbox listitem
-    is selected via a script the API moves the visible "frame" of items
-    so that the new selection is at the top. This is not standard behavior,
-    and not even how the listbox behaves when you use the up and down keys inside
-    of the actual listbox.
-
-    Only works if multiselect if set to false.
-    */
-    q.addEventListener("keydown", function (k) {
-      if (k.keyName == "Up" || k.keyName == "Down") {
-        if (k.keyName == "Up") {
-          k.preventDefault();
-          if (!list.selection) {
-            list.selection = 0;
-          } else if (list.selection.index == 0) {
-            // jump to the bottom if at top
-            list.selection = list.items.length - 1;
-            list.frameStart = list.items.length - 1 - visibleListItems;
-          } else {
-            if (list.selection.index > 0) {
-              list.selection = list.selection.index - 1;
-              if (list.selection.index < list.frameStart) list.frameStart--;
-            }
-          }
-        } else if (k.keyName == "Down") {
-          k.preventDefault();
-          if (!list.selection) {
-            list.selection = 0;
-          } else if (list.selection.index === list.items.length - 1) {
-            // jump to the top if at the bottom
-            list.selection = 0;
-            list.frameStart = 0;
-          } else {
-            if (list.selection.index < list.items.length) {
-              list.selection = list.selection.index + 1;
-              if (list.selection.index > list.frameStart + visibleListItems - 1) {
-                if (list.frameStart < list.items.length - visibleListItems) {
-                  list.frameStart++;
-                } else {
-                  list.frameStart = list.frameStart;
-                }
-              }
-            }
-          }
-        }
-        /*
-      If a selection is made inside of the actual listbox frame by the user,
-      the API doesn't offer any way to know which part of the list is currently
-      visible in the listbox "frame". If the user was to re-enter the `q` edittext
-      and then hit an arrow key the above event listener will not work correctly so
-      I just move the next selection (be it up or down) to the middle of the "frame".
-      */
-        if (list.selection) {
-          if (
-            list.selection.index < list.frameStart ||
-            list.selection.index > list.frameStart + visibleListItems - 1
-          )
-            list.frameStart = list.selection.index - Math.floor(visibleListItems / 2);
-          // don't move the frame if list items don't fill the available rows
-          if (list.items.length <= visibleListItems) return;
-          // move the frame by revealing the calculated `list.frameStart`
-          list.revealItem(list.frameStart);
-        }
-      }
-    });
-  }
-
-  function truncateCommandName(s, n) {
-    return s.length <= n ? s : s.slice(0, n) + "...";
-  }
-
-  // close window when double-clicking a selection
-  list.onDoubleClick = function () {
-    if (list.selection) win.close(1);
-  };
-
-  if (win.show() == 1) {
-    if (list.selection) {
-      return matches[list.selection.index];
-    }
-  }
-  return false;
-}
-
-/**
- * Show the workflow builder with a filterable listbox.
- * @param   {Array}    commands      Commands available to the palette.
- * @param   {Array}    queryFilter   Types of commands to hide from the search query.
- * @param   {String}   edit          Name of a current workflow to edit (if any).
- * @returns {Array}                  Array of selected list items.
- */
-function workflowBuilder(commands, queryFilter, edit) {
-  // insert command and type into listbox
-  function insertCommands(list, commands) {
-    var command, commandData;
-    for (var i = 0; i < commands.length; i++) {
-      command = commands[i];
-      commandData = commandsData[localizedCommandLookup[command]];
-      with (list.add("item", command)) {
-        subItems[0].text = commandData.type; // TODO: add localization
-      }
-    }
-  }
-
-  // if editing a command, pull in variables to prefill dialog with
-  var command;
-  var actions = [];
-  var hideCommands = [];
-  if (edit != undefined) {
-    command = commandsData[localizedCommandLookup[edit]];
-    for (var i = 0; i < command.actions.length; i++) {
-      actions.push(idCommandLookup[command.actions[i]]);
-    }
-    // make sure workflows can't include themselves
-    hideCommands.push(edit);
-  }
-
-  commands = filterCommands(commands, queryFilter, [], true, [], false, false);
-
-  // create the dialog
-  var win = new Window("dialog");
-  win.text = localize(locStrings.wf_builder);
+  win.text = locStrings.wf_builder;
   win.alignChildren = "fill";
 
-  // command search
+  // setup the query input
   var pSearch = win.add("panel", undefined, localize(locStrings.cd_search_for));
   pSearch.alignChildren = ["fill", "center"];
   pSearch.margins = 20;
   var q = pSearch.add("edittext");
   q.helpTip = localize(locStrings.cd_q_helptip);
 
+  // setup the commands listbox
+  var list = new ListBoxWrapper(
+    commands,
+    win,
+    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
+    true,
+    localize(locStrings.cd_helptip),
+    [addToWorkflowOnDoubleClick, scrollListBoxWithArrows]
+  );
+
   // work-around to stop windows from flickering/flashing explorer
   if (windowsFlickerFix) {
     simulateKeypress("TAB", 1);
   } else {
     q.active = true;
   }
-
-  var list = pSearch.add(
-    "listbox",
-    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
-    undefined,
-    {
-      numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
-      showHeaders: paletteSettings.listboxProperties.showHeaders,
-      columnTitles: paletteSettings.listboxProperties.columnTitles,
-      columnWidths: paletteSettings.listboxProperties.columnWidths,
-      multiselect: false,
-    }
-  );
-  list.helpTip = localize(locStrings.cd_helptip);
-  insertCommands(list, commands.visible);
-  list.selection = 0;
-
-  // add item to workflow step on double-click
-  list.onDoubleClick = function () {
-    if (list.selection) {
-      steps.add("item", list.selection);
-      workflowName.enabled = steps.items.length > 0 ? true : false;
-      ok.enabled = workflowName.text.length > 0 ? true : false;
-    }
-  };
 
   // workflow steps
   var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
@@ -501,8 +323,9 @@ function workflowBuilder(commands, queryFilter, edit) {
   var steps = pSteps.add(
     "listbox",
     [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
-    actions,
+    editWorkflow ? editCommands : [],
     {
+      name: "workflowSteps",
       multiselect: true,
     }
   );
@@ -520,9 +343,9 @@ function workflowBuilder(commands, queryFilter, edit) {
   var pName = win.add("panel", undefined, localize(locStrings.wf_save_as));
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;
-  var workflowNameText = edit == undefined ? "" : edit;
+  var workflowNameText = editWorkflow ? editWorkflow : "";
   var workflowName = pName.add("edittext", undefined, workflowNameText);
-  workflowName.enabled = edit == undefined ? false : true;
+  workflowName.enabled = editWorkflow ? true : false;
 
   // window buttons
   var winButtons = win.add("group");
@@ -530,45 +353,28 @@ function workflowBuilder(commands, queryFilter, edit) {
   winButtons.alignChildren = ["center", "center"];
   var ok = winButtons.add("button", undefined, "OK");
   ok.preferredSize.width = 100;
-  ok.enabled = edit == undefined ? false : true;
+  ok.enabled = editWorkflow ? true : false;
   var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
     name: "cancel",
   });
   cancel.preferredSize.width = 100;
 
-  // as a query is typed update the list box
-  var matches, temp;
+  // as a query is typed update the listbox
+  var matches;
   q.onChanging = function () {
-    list.frameStart = 0;
-    matches =
-      this.text === "" ? commands.visible : scoreMatches(this.text, commands.query);
-    if (matches.length > 0) {
-      // setup the temp commands listbox
-      temp = pSearch.add("listbox", list.bounds, undefined, {
-        numberOfColumns: list.properties.numberOfColumns,
-        showHeaders: list.properties.showHeaders,
-        columnTitles: list.properties.columnTitles,
-        columnWidths: list.properties.columnWidths,
-        multiselect: list.properties.multiselect,
-      });
-      insertCommands(temp, matches);
-
-      // add item to workflow step on double-click
-      temp.onDoubleClick = function () {
-        if (temp.selection) {
-          steps.add("item", temp.selection);
-          workflowName.enabled = steps.items.length > 0 ? true : false;
-          ok.enabled = workflowName.text.length > 0 ? true : false;
-        }
-      };
-
-      // change the original listbox reference to the updated `temp` version
-      pSearch.remove(list);
-      list = temp;
-
-      // reset the selection
-      list.selection = 0;
+    if (this.text === "") {
+      matches = commands;
+    } else {
+      matches = scoreMatches(this.text, commands);
     }
+    if (matches.length > 0) {
+      list.update(matches);
+    }
+  };
+
+  steps.onChange = function () {
+    workflowName.enabled = steps.items.length > 0 ? true : false;
+    ok.enabled = steps.items.length > 0 && workflowName.text.length > 0 ? true : false;
   };
 
   workflowName.onChanging = function () {
@@ -626,7 +432,7 @@ function workflowBuilder(commands, queryFilter, edit) {
     }
     steps.selection == null;
     workflowName.enabled = steps.items.length > 0 ? true : false;
-    ok.enabled = workflowName.text.length > 0 ? true : false;
+    ok.enabled = steps.items.length > 0 && workflowName.text.length > 0 ? true : false;
   };
 
   if (win.show() == 1) {

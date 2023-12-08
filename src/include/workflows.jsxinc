@@ -5,96 +5,110 @@
  * @param {String} workflow Workflow to edit.
  */
 function buildWorkflow(workflow) {
+  // if editing a workflow, prefill builder with it's commands
+  var command;
+  var workflowActions = [];
+  var hideCommands = [];
+  if (workflow) {
+    command = commandsData[localizedCommandLookup[workflow]];
+    for (var i = 0; i < command.actions.length; i++) {
+      workflowActions.push(idCommandLookup[command.actions[i]]);
+    }
+    // make sure workflows can't include themselves
+    hideCommands.push(workflow);
+  }
+
+  var availableWorkflowCommands = filterCommands(
+    (commands = allCommandsLocalized),
+    (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+    (showHidden = false),
+    (hideCommands = hideCommands),
+    (docRequired = true),
+    (selRequired = true)
+  );
   // show the workflow builder dialog
   var result = workflowBuilder(
-    (commands = allCommandsLocalized),
-    (queryFilter = ["config", "defaults"]),
-    (edit = workflow)
+    (commands = availableWorkflowCommands),
+    (editWorkflow = workflow),
+    (editCommands = workflowActions)
   );
 
-  if (result) {
-    // check to make sure there isn't a workflow already saved with the same name
-    var newName;
-    while (allCommands.includes(result.name)) {
-      if (
-        confirm(
-          localize(locStrings.wf_already_exists),
-          "noAsDflt",
-          localize(locStrings.wf_already_exists_title)
-        )
-      ) {
-        break;
+  if (!result) return;
+  // check to make sure there isn't a workflow already saved with the same name
+  var newName;
+  while (allCommands.includes(result.name)) {
+    if (
+      confirm(
+        localize(locStrings.wf_already_exists),
+        "noAsDflt",
+        localize(locStrings.wf_already_exists_title)
+      )
+    ) {
+      break;
+    } else {
+      newName = Window.prompt(
+        localize(locStrings.wf_name),
+        "",
+        localize(locStrings.wf_name)
+      );
+      if (newName == undefined || newName == null || newName === "") {
+        alert(localize(locStrings.wf_not_saved));
+        return false;
       } else {
-        newName = Window.prompt(
-          localize(locStrings.wf_name),
-          "",
-          localize(locStrings.wf_name)
-        );
-        if (newName == undefined || newName == null || newName === "") {
-          alert(localize(locStrings.wf_not_saved));
-          return false;
-        } else {
-          result.name = newName;
-        }
+        result.name = newName;
       }
     }
+  }
 
-    var workflowActions = [];
-    try {
-      for (var i = 0; i < result.actions.length; i++)
-        workflowActions.push(localizedCommandLookup[result.actions[i].text]);
-      data.commands.workflow[result.name] = {
-        type: "workflow",
-        actions: workflowActions,
-      };
-    } catch (e) {
-      alert(localize(locStrings.wf_error_saving, result.name));
-    }
+  var workflowActions = [];
+  try {
+    for (var i = 0; i < result.actions.length; i++)
+      workflowActions.push(localizedCommandLookup[result.actions[i].text]);
+    data.commands.workflow[result.name] = {
+      type: "workflow",
+      actions: workflowActions,
+    };
+  } catch (e) {
+    alert(localize(locStrings.wf_error_saving, result.name));
   }
 }
 
 /** Show all workflows. */
 function showAllWorkflows() {
-  var result = commandPalette(
+  var workflows = filterCommands(
     (commands = allCommandsLocalized),
+    (types = ["workflow"]),
     (showHidden = false),
-    (queryFilter = []),
-    (visibleFilter = [
-      "action",
-      "bookmark",
-      "builtin",
-      "config",
-      "defaults",
-      "menu",
-      "script",
-      "tool",
-    ]),
+    (hideCommands = null),
+    (docRequired = false),
+    (selRequired = false)
+  );
+  var result = commandPalette(
+    (commands = workflows),
     (title = localize(locStrings.Workflows)),
     (multiselect = false)
   );
-  if (result) processCommand(localizedCommandLookup[result[0].text]);
+  if (!result) return;
+  processCommand(localizedCommandLookup[result[0].text]);
 }
 
 /** Choose a workflow to edit. */
 function editWorkflow() {
-  var result = commandPalette(
+  var workflows = filterCommands(
     (commands = allCommandsLocalized),
+    (types = ["workflow"]),
     (showHidden = false),
-    (queryFilter = []),
-    (visibleFilter = [
-      "action",
-      "bookmark",
-      "builtin",
-      "config",
-      "defaults",
-      "menu",
-      "script",
-      "tool",
-    ]),
+    (hideCommands = null),
+    (docRequired = false),
+    (selRequired = false)
+  );
+  var result = commandPalette(
+    (commands = workflows),
     (title = localize(locStrings.wf_edit)),
     (multiselect = false)
   );
-  if (result) buildWorkflow(localizedCommandLookup[result[0].text]);
+  if (!result) return;
+  buildWorkflow(localizedCommandLookup[result[0].text]);
 }
 
 /**
