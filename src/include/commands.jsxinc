@@ -1,65 +1,74 @@
 // COMMANDS SETUP
 
-function buildCommands(commands, filter) {
-  for (var type in commands) {
-    if (!filter.includes(type)) {
-      var commandData;
-      for (var command in commands[type]) {
-        // hide `Edit Workflow...` command if no workflows
-        if (
-          command == "config_editWorkflow" &&
-          Object.keys(data.commands.workflow).length < 1
-        )
-          continue;
-        // hide `All Workflows...` command if no workflows
-        if (
-          command == "config_allWorkflows" &&
-          Object.keys(data.commands.workflow).length < 1
-        )
-          continue;
-        // hide `All Scripts...` command if no scripts
-        if (
-          command == "config_allScripts" &&
-          Object.keys(data.commands.script).length < 1
-        )
-          continue;
-        // hide `All Bookmarks...` command if no bookmarks
-        if (
-          command == "config_allBookmarks" &&
-          Object.keys(data.commands.bookmark).length < 1
-        )
-          continue;
-        // hide `All Actions...` command if no actions
-        if (
-          command == "config_allActions" &&
-          Object.keys(data.commands.action).length < 1
-        )
-          continue;
-        // hide `Enable Searching on Command Type` command if already enabled
-        if (command == "config_enableTypeInSearch" && data.settings.searchIncludesType)
-          continue;
-        // hide `Disable Searching on Command Type` command if already disabled
-        if (
-          command == "config_disableTypeInSearch" &&
-          !data.settings.searchIncludesType
-        )
-          continue;
-        // hide `Unhide Commands...` command if no hidden commands
-        if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
-          continue;
-        // // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
-        if (command == "builtin_recentCommands" && data.recent.commands.length == 0)
-          continue;
-        if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
-          continue;
-        commandData = commands[type][command];
-        commandsData[command] = commandData;
-        localizedCommand = commandData.hasOwnProperty("loc")
-          ? localize(commandData.loc)
-          : command;
-        idCommandLookup[command] = localizedCommand;
-        localizedCommandLookup[localizedCommand] = command;
-      }
+/**
+ * Build proper command objects for easy access.
+ * @param commands  Command objects to build.
+ * @param filterOut Command types to ignore.
+ */
+function buildCommands(commands, filterOut) {
+  var type;
+  for (type in commands) {
+    if (filterOut && filterOut.includes(type)) continue;
+    var command, commandData;
+    for (command in commands[type]) {
+      // hide `Edit Workflow...` command if no workflows
+      if (
+        command == "config_editWorkflow" &&
+        Object.keys(data.commands.workflow).length < 1
+      )
+        continue;
+      // hide `All Workflows...` command if no workflows
+      if (
+        command == "config_allWorkflows" &&
+        Object.keys(data.commands.workflow).length < 1
+      )
+        continue;
+      // hide `All Scripts...` command if no scripts
+      if (
+        command == "config_allScripts" &&
+        Object.keys(data.commands.script).length < 1
+      )
+        continue;
+      // hide `All Bookmarks...` command if no bookmarks
+      if (
+        command == "config_allBookmarks" &&
+        Object.keys(data.commands.bookmark).length < 1
+      )
+        continue;
+      // hide `All Actions...` command if no actions
+      if (
+        command == "config_allActions" &&
+        Object.keys(data.commands.action).length < 1
+      )
+        continue;
+      // hide `Enable Searching on Command Type` command if already enabled
+      if (command == "config_enableTypeInSearch" && data.settings.searchIncludesType)
+        continue;
+      // hide `Disable Searching on Command Type` command if already disabled
+      if (command == "config_disableTypeInSearch" && !data.settings.searchIncludesType)
+        continue;
+      // hide `Unhide Commands...` command if no hidden commands
+      if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
+        continue;
+      // // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
+      if (command == "builtin_recentCommands" && data.recent.commands.length == 0)
+        continue;
+      if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
+        continue;
+      commandData = commands[type][command];
+      commandData.id = command;
+      commandData.localizedName = commandData.hasOwnProperty("loc")
+        ? localize(commandData.loc)
+        : command;
+      commandData.localizedType = locStrings.hasOwnProperty(commandData.type)
+        ? localize(locStrings[commandData.type])
+        : commandData.type;
+      commandsData[command] = commandData;
+      localizedCommand = commandData.hasOwnProperty("loc")
+        ? localize(commandData.loc)
+        : command;
+      idCommandLookup[command] = localizedCommand;
+      localizedCommandLookup[localizedCommand] = command;
     }
   }
 }
@@ -91,16 +100,13 @@ function loadActions() {
 
 /**
  * Iterate over each action for chosen command.
- * @param {String} command Command to execute.
+ * @param {Object} command Command to execute.
  */
 function processCommand(command) {
-  var commandData = commandsData[command];
-  var type = commandData.type;
-  if (type == "workflow") {
+  if (command.type == "workflow") {
     insideWorkflow = true;
-    var actions = commandData.actions;
     // check to make sure all workflow commands are valid
-    check = checkWorkflowActions(actions);
+    check = checkWorkflowActions(command.actions);
     if (check.deletedActions.length + check.incompatibleActions.length > 0) {
       alert(
         localize(
@@ -111,16 +117,16 @@ function processCommand(command) {
       );
       return;
     }
-    // run each command in the workflow
-    commands = commandsData[command].actions;
-    for (var i = 0; i < commands.length; i++) processCommand(commands[i]);
+    // run each action in the workflow
+    actions = command.actions;
+    for (var i = 0; i < actions.length; i++) processCommand(commandsData[actions[i]]);
   } else {
     // update recent commands list
-    if (!insideWorkflow && command != "defaults_recentCommands") {
+    if (!insideWorkflow && command.id != "defaults_recentCommands") {
       // make sure command isn't already in the list
-      var idx = data.recent.commands.indexOf(command);
+      var idx = data.recent.commands.indexOf(command.id);
       if (idx > -1) data.recent.commands.splice(idx, 1);
-      data.recent.commands.unshift(command);
+      data.recent.commands.unshift(command.id);
       // keep list at 10 items
       if (data.recent.commands.length > recentCommandsCount) data.recent.commands.pop();
       settings.save();
@@ -131,109 +137,104 @@ function processCommand(command) {
 
 /**
  * Execute command action.
- * @param {Object} command Action to execute.
+ * @param {Object} command Command to execute.
  */
 function executeCommand(command) {
-  var commandData = commandsData[command];
   // check command to see if an active document is required
   appDocuments = app.documents.length > 0;
-  if (!appDocuments && commandData.docRequired)
+  if (!appDocuments && command.docRequired)
     if (
       !confirm(
-        localize(locStrings.cd_active_document_required, commandData.action),
+        localize(locStrings.cd_active_document_required, command.action),
         "noAsDflt",
         localize(locStrings.cd_exception)
       )
     )
       return;
   // check command to see if an active selection is required
-  if (
-    appDocuments &&
-    app.activeDocument.selection.length < 1 &&
-    commandData.selRequired
-  )
+  if (appDocuments && app.activeDocument.selection.length < 1 && command.selRequired)
     if (
       !confirm(
-        localize(locStrings.cd_active_selection_required, commandData.action),
+        localize(locStrings.cd_active_selection_required, command.action),
         "noAsDflt",
         localize(locStrings.cd_exception)
       )
     )
       return;
-  switch (commandData.type.toLowerCase()) {
+  switch (command.type.toLowerCase()) {
     case "config":
     case "defaults":
       try {
-        scriptAction(commandData.action);
+        scriptAction(command.action);
       } catch (e) {
-        alert(localize(locStrings.cd_error_executing, command, e));
+        alert(localize(locStrings.cd_error_executing, command.localizedName, e));
       }
       break;
     case "builtin":
       try {
-        builtinAction(commandData.action);
+        builtinAction(command.action);
       } catch (e) {
-        alert(localize(locStrings.cd_error_executing, command, e));
+        alert(localize(locStrings.cd_error_executing, command.localizedName, e));
       }
       break;
     case "menu":
       try {
-        app.executeMenuCommand(commandData.action);
+        app.executeMenuCommand(command.action);
       } catch (e) {
-        alert(localize(locStrings.cd_error_executing, command, e));
+        alert(localize(locStrings.cd_error_executing, command.localizedName, e));
       }
       break;
     case "tool":
       try {
-        app.selectTool(commandData.action);
+        app.selectTool(command.action);
       } catch (e) {
         alert(localize(locStrings.tl_error_selecting, command, e));
       }
       break;
     case "action":
       try {
-        app.doScript(commandData.name, commandData.set);
+        app.doScript(command.name, command.set);
       } catch (e) {
         alert(localize(locStrings.ac_error_execution, command, e));
       }
       break;
     case "bookmark":
       f =
-        commandData.bookmarkType == "file"
-          ? new File(commandData.path)
-          : new Folder(commandData.path);
+        command.bookmarkType == "file"
+          ? new File(command.path)
+          : new Folder(command.path);
       if (!f.exists) {
-        alert(localize(locStrings.bm_error_exists, commandData.path));
+        alert(localize(locStrings.bm_error_exists, command.path));
         delete data.commands.bookmark[command];
         settings.save();
       } else {
         try {
-          if (commandData.bookmarkType == "file") {
+          if (command.bookmarkType == "file") {
             app.open(f);
           } else {
             f.execute();
           }
         } catch (e) {
-          alert(localize(locStrings.sc_error_execution, commandData.name, e));
+          alert(localize(locStrings.sc_error_execution, command.name, e));
         }
       }
       break;
     case "script":
-      f = new File(commandData.path);
+      f = new File(command.path);
       if (!f.exists) {
-        alert(localize(locStrings.sc_error_exists, commandData.path));
+        alert(localize(locStrings.sc_error_exists, command.path));
         delete data.commands.script[command];
         settings.save();
       } else {
         try {
           $.evalFile(f);
         } catch (e) {
-          alert(localize(locStrings.sc_error_execution, commandData.name, e));
+          alert(localize(locStrings.sc_error_execution, command.name, e));
         }
       }
       break;
     default:
-      alert(localize(locStrings.cd_invalid, commandData.type));
+      alert(localize(locStrings.cd_invalid, command.type));
   }
   try {
     app.redraw();
@@ -247,10 +248,9 @@ SUPPLEMENTAL COMMAND FUNCTIONS
 **************************************************/
 
 function versionCheck(command) {
-  var commandData = commandsData[command];
   if (
-    (commandData.minVersion && commandData.minVersion > aiVersion) ||
-    (commandData.maxVersion && commandData.maxVersion < aiVersion)
+    (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
+    (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
   )
     return false;
   return true;

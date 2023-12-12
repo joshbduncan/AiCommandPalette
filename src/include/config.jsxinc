@@ -27,11 +27,10 @@ paletteSettings.bounds = [
   paletteSettings.paletteWidth,
   paletteSettings.paletteHeight,
 ];
-paletteSettings.listboxProperties = {
-  numberOfColumns: 2,
-  showHeaders: true,
-  columnTitles: ["Name", "Type"],
-  columnWidths: [475, 100],
+
+paletteSettings.defaultColumns = {
+  Name: { width: 475, key: "localizedName" },
+  Type: { width: 100, key: "localizedType" },
 };
 
 var visibleListItems = 9;

@@ -2,34 +2,56 @@
 
 /**
  * Custom wrapper for a ScriptUI Listbox.
- * @param {Array}   commands    Commands to load into the list box (e.g. [{name: command name, type: command type}]).
+ * @param {Array}   commands    Commands to load into the list box.
  * @param {Object}  win         ScriptUI window the listbox should be attached to.
  * @param {Array}   bounds      Bounds array for the listbox.
+ * @param {Object}  columns     Listbox column information.
  * @param {Boolean} multiselect Should the listbox allow multiple selections (disable some features).
  * @param {String}  helptip     Listbox helptip/tooltip pop-up.
  * @param {Array}   listeners   ScriptUI listeners to add to the listbox.
  */
-function ListBoxWrapper(commands, win, bounds, multiselect, helptip, listeners) {
+function ListBoxWrapper(
+  commands,
+  win,
+  bounds,
+  columns,
+  multiselect,
+  helptip,
+  listeners
+) {
+  this.win = win;
+  this.columns = columns;
+  this.multiselect = multiselect;
   this.helptip = helptip;
   this.listeners = listeners;
-  this.listbox = this.make(commands, win, bounds, multiselect);
+  this.listbox = this.make(commands, bounds);
 }
 
 ListBoxWrapper.prototype = {
   /**
    * Initialize a new ScriptUI listbox, load the initial commands, and attach event listeners.
-   * @param {Array} commands Commands to load into the list box (e.g. [{name: command name, type: command type}]).
-   * @returns {Object} ScriptUI listbox.
+   * @param commands Item to load into the listbox.
+   * @param bounds   ScriptUI bounds array.
+   * @returns        ScriptUI listbox.
    */
-  make: function (commands, win, bounds, multiselect) {
-    listbox = win.add("listbox", bounds, undefined, {
-      numberOfColumns: paletteSettings.listboxProperties.numberOfColumns,
-      showHeaders: paletteSettings.listboxProperties.showHeaders,
-      columnTitles: paletteSettings.listboxProperties.columnTitles,
-      columnWidths: paletteSettings.listboxProperties.columnWidths,
-      multiselect: multiselect,
+  make: function (commands, bounds) {
+    var column;
+    var columnTitles = [];
+    var columnWidths = [];
+    var columnKeys = [];
+    for (column in this.columns) {
+      columnTitles.push(column);
+      columnWidths.push(this.columns[column].width);
+      columnKeys.push(this.columns[column].key);
+    }
+    listbox = this.win.add("listbox", bounds, undefined, {
+      numberOfColumns: columnTitles.length,
+      showHeaders: true,
+      columnTitles: columnTitles,
+      columnWidths: columnWidths,
+      multiselect: this.multiselect,
     });
-    this.loadCommands(listbox, commands);
+    this.loadCommands(listbox, commands, columnKeys);
     this.addListeners(listbox);
     if (this.helptip) listbox.helpTip = this.helptip;
     listbox.frameStart = 0;
@@ -38,29 +60,27 @@ ListBoxWrapper.prototype = {
   },
   /**
    * Update the listbox with new items.
-   * @param {Array} matches New commands to load into the list box (e.g. [{name: command name, type: command type}]).
+   * @param {Array} matches Update listbox with new commands.
    */
   update: function (matches) {
-    temp = this.make(
-      matches,
-      this.listbox.window,
-      this.listbox.bounds,
-      this.listbox.properties.multiselect
-    );
+    temp = this.make(matches, this.listbox.bounds);
     this.listbox.window.remove(this.listbox);
     this.listbox = temp;
   },
   /**
    * Load command items in a ScriptUI listbox.
-   * @param {Object} listbox ScriptUI listbox to load the command item in to.
-   * @param {Array} commands Commands to load into the list box (e.g. [{name: command name, type: command type}]).
+   * @param {Array}  listbox    ScriptUI listbox to load the command item in to.
+   * @param {Array}  commands   Commands to load into the list box.
+   * @param {Array}  columnKeys Command lookup key for each column.
    */
-  loadCommands: function (listbox, commands) {
+  loadCommands: function (listbox, commands, columnKeys) {
     var command;
     for (var i = 0; i < commands.length; i++) {
       command = commands[i];
-      with (listbox.add("item", command.name)) {
-        subItems[0].text = command.type;
+      with (listbox.add("item", command[columnKeys[0]])) {
+        for (var j = 1; j < columnKeys.length; j++) {
+          subItems[0].text = command[columnKeys[j]];
+        }
       }
     }
   },
@@ -81,7 +101,7 @@ ListBoxWrapper.prototype = {
 
 /**
  * Close listbox when double-clicking a command.
- * @param {Object}  listbox  ScriptUI listbox.
+ * @param {Object} listbox ScriptUI listbox.
  */
 function selectOnDoubleClick(listbox) {
   listbox.onDoubleClick = function () {
@@ -200,7 +220,7 @@ function scrollListBoxWithArrows(listbox) {
 
 // USER DIALOGS
 
-function commandPalette(commands, title, multiselect, showOnly) {
+function commandPalette(commands, title, columns, multiselect, showOnly) {
   // create the dialog
   var win = new Window("dialog");
   win.text = title;
@@ -211,10 +231,12 @@ function commandPalette(commands, title, multiselect, showOnly) {
   q.helpTip = localize(locStrings.cd_q_helptip);
 
   // setup the commands listbox
+  var matches = showOnly ? showOnly : commands;
   var list = new ListBoxWrapper(
-    showOnly ? showOnly : commands,
+    matches,
     win,
     paletteSettings.bounds,
+    columns,
     multiselect,
     null,
     [selectOnDoubleClick, scrollListBoxWithArrows]
@@ -239,7 +261,6 @@ function commandPalette(commands, title, multiselect, showOnly) {
   }
 
   // as a query is typed update the listbox
-  var matches;
   q.onChanging = function () {
     if (this.text === "") {
       matches = showOnly ? showOnly : commands;
@@ -279,197 +300,12 @@ function commandPalette(commands, title, multiselect, showOnly) {
   }
 
   if (win.show() == 1) {
-    if (list.listbox.selection) {
-      return multiselect ? list.listbox.selection : [list.listbox.selection];
-    }
+    if (!list.listbox.selection) return;
+    var items = multiselect ? list.listbox.selection : [list.listbox.selection];
+    var selectedCommands = [];
+    for (var i = 0; i < items.length; i++)
+      selectedCommands.push(matches[list.listbox.items[i].index]);
+    return selectedCommands;
   }
   return false;
-}
-
-function workflowBuilder(commands, editWorkflow, editCommands) {
-  // create the dialog
-  var win = new Window("dialog");
-  win.text = locStrings.wf_builder;
-  win.alignChildren = "fill";
-
-  // setup the query input
-  var pSearch = win.add("panel", undefined, localize(locStrings.cd_search_for));
-  pSearch.alignChildren = ["fill", "center"];
-  pSearch.margins = 20;
-  var q = pSearch.add("edittext");
-  q.helpTip = localize(locStrings.cd_q_helptip);
-
-  // setup the commands listbox
-  var list = new ListBoxWrapper(
-    commands,
-    win,
-    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
-    true,
-    localize(locStrings.cd_helptip),
-    [addToWorkflowOnDoubleClick, scrollListBoxWithArrows]
-  );
-
-  // work-around to stop windows from flickering/flashing explorer
-  if (windowsFlickerFix) {
-    simulateKeypress("TAB", 1);
-  } else {
-    q.active = true;
-  }
-
-  // workflow steps
-  var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
-  pSteps.alignChildren = ["fill", "center"];
-  pSteps.margins = 20;
-  var steps = pSteps.add(
-    "listbox",
-    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
-    editWorkflow ? editCommands : [],
-    {
-      name: "workflowSteps",
-      multiselect: true,
-    }
-  );
-  steps.helpTip = localize(locStrings.wf_steps_helptip);
-  var stepButtons = pSteps.add("group");
-  stepButtons.alignment = "center";
-  var up = stepButtons.add("button", undefined, localize(locStrings.step_up));
-  up.preferredSize.width = 100;
-  var down = stepButtons.add("button", undefined, localize(locStrings.step_down));
-  down.preferredSize.width = 100;
-  var del = stepButtons.add("button", undefined, localize(locStrings.step_delete));
-  del.preferredSize.width = 100;
-
-  // command name
-  var pName = win.add("panel", undefined, localize(locStrings.wf_save_as));
-  pName.alignChildren = ["fill", "center"];
-  pName.margins = 20;
-  var workflowNameText = editWorkflow ? editWorkflow : "";
-  var workflowName = pName.add("edittext", undefined, workflowNameText);
-  workflowName.enabled = editWorkflow ? true : false;
-
-  // window buttons
-  var winButtons = win.add("group");
-  winButtons.orientation = "row";
-  winButtons.alignChildren = ["center", "center"];
-  var ok = winButtons.add("button", undefined, "OK");
-  ok.preferredSize.width = 100;
-  ok.enabled = editWorkflow ? true : false;
-  var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
-    name: "cancel",
-  });
-  cancel.preferredSize.width = 100;
-
-  // as a query is typed update the listbox
-  var matches;
-  q.onChanging = function () {
-    if (this.text === "") {
-      matches = commands;
-    } else {
-      matches = scoreMatches(this.text, commands);
-    }
-    if (matches.length > 0) {
-      list.update(matches);
-    }
-  };
-
-  steps.onChange = function () {
-    workflowName.enabled = steps.items.length > 0 ? true : false;
-    ok.enabled = steps.items.length > 0 && workflowName.text.length > 0 ? true : false;
-  };
-
-  workflowName.onChanging = function () {
-    ok.enabled = workflowName.text.length > 0 ? true : false;
-  };
-
-  up.onClick = function () {
-    var selected = sortIndexes(steps.selection);
-    if (selected[i] == 0 || !contiguous(selected)) return;
-    for (var i = 0; i < selected.length; i++)
-      swap(steps.items[selected[i] - 1], steps.items[selected[i]]);
-    steps.selection = null;
-    for (var n = 0; n < selected.length; n++) steps.selection = selected[n] - 1;
-  };
-
-  down.onClick = function () {
-    var selected = sortIndexes(steps.selection);
-    if (
-      selected[selected.length - 1] == steps.items.length - 1 ||
-      !contiguous(selected)
-    )
-      return;
-    for (var i = steps.selection.length - 1; i > -1; i--)
-      swap(steps.items[selected[i]], steps.items[selected[i] + 1]);
-    steps.selection = null;
-    for (var n = 0; n < selected.length; n++) steps.selection = selected[n] + 1;
-  };
-
-  // the api returns the selected items in the order they were
-  // selected/clicked by the user when you call `list.selection`
-  // so their actual listbox indexes need to be sorted for the
-  // up, down, and delete buttons to work when multiple items are selected
-  function sortIndexes(sel) {
-    var indexes = [];
-    for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
-    return indexes.sort();
-  }
-
-  // check to make sure selection is contiguous
-  function contiguous(sel) {
-    return sel.length == sel[sel.length - 1] - sel[0] + 1;
-  }
-
-  /** swap listbox items in place */
-  function swap(x, y) {
-    var t = x.text;
-    x.text = y.text;
-    y.text = t;
-  }
-
-  del.onClick = function () {
-    var selected = sortIndexes(steps.selection);
-    for (var i = steps.selection.length - 1; i > -1; i--) {
-      steps.remove(selected[i]);
-    }
-    steps.selection == null;
-    workflowName.enabled = steps.items.length > 0 ? true : false;
-    ok.enabled = steps.items.length > 0 && workflowName.text.length > 0 ? true : false;
-  };
-
-  if (win.show() == 1) {
-    return { name: workflowName.text.trim(), actions: steps.items };
-  }
-  return false;
-}
-
-/**
- * Present File.openDialog() for user to select files to load.
- * @param   {String}  prompt        Prompt for dialog.
- * @param   {Boolean} multiselect   Can multiple files be selected.
- * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
- * @returns {Array}                 Selected file(s).
- */
-function loadFileTypes(prompt, multiselect, fileTypeRegex) {
-  var results = [];
-  var files = File.openDialog(prompt, "", multiselect);
-  if (files) {
-    for (var i = 0; i < files.length; i++) {
-      f = files[i];
-      fname = decodeURI(f.name);
-      if (f.name.search(fileTypeRegex) >= 0) {
-        results.push(f);
-      }
-    }
-  }
-  return results;
-}
-
-/**
- * close list on double-click of list item
- * @param {Object} listbox ScriptUI ListBox.
- */
-function selectOnDoubleClick(listbox) {
-  win = listbox.parent;
-  listbox.onDoubleClick = function () {
-    if (listbox.selection) win.close(1);
-  };
 }

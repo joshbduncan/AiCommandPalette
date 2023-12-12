@@ -10,7 +10,7 @@ function buildWorkflow(workflow) {
   var workflowActions = [];
   var hideCommands = [];
   if (workflow) {
-    command = commandsData[localizedCommandLookup[workflow]];
+    command = commandsData[localizedCommandLookup[workflow]]; // FIXME: switch to object
     for (var i = 0; i < command.actions.length; i++) {
       workflowActions.push(idCommandLookup[command.actions[i]]);
     }
@@ -19,7 +19,7 @@ function buildWorkflow(workflow) {
   }
 
   var availableWorkflowCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
     (showHidden = false),
     (hideCommands = hideCommands),
@@ -76,7 +76,7 @@ function buildWorkflow(workflow) {
 /** Show all workflows. */
 function showAllWorkflows() {
   var workflows = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["workflow"]),
     (showHidden = false),
     (hideCommands = null),
@@ -86,16 +86,17 @@ function showAllWorkflows() {
   var result = commandPalette(
     (commands = workflows),
     (title = localize(locStrings.Workflows)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(localizedCommandLookup[result[0].text]);
+  processCommand(result[0]);
 }
 
 /** Choose a workflow to edit. */
 function editWorkflow() {
   var workflows = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["workflow"]),
     (showHidden = false),
     (hideCommands = null),
@@ -105,6 +106,7 @@ function editWorkflow() {
   var result = commandPalette(
     (commands = workflows),
     (title = localize(locStrings.wf_edit)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
   if (!result) return;

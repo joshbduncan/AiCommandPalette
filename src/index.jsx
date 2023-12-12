@@ -25,7 +25,8 @@ See the LICENSE file for details.
   //@include "builtin.jsxinc"
   //@include "data.jsxinc"
   //@include "commands.jsxinc"
-  //@include "dialogs.jsxinc"
+  //@include "commandPalette.jsxinc"
+  //@include "workflowBuilder.jsxinc"
   //@include "io.jsxinc"
   //@include "workflows.jsxinc"
 
@@ -63,7 +64,7 @@ See the LICENSE file for details.
   var commandsData = {};
   var idCommandLookup = {};
   var localizedCommandLookup = {};
-  buildCommands(data.commands, []);
+  buildCommands(data.commands);
 
   // check preferences file
   if (data.settings.hasOwnProperty("version") && data.settings.version < "0.8.1") {
@@ -76,11 +77,10 @@ See the LICENSE file for details.
   }
 
   var allCommands = Object.keys(commandsData);
-  var allCommandsLocalized = Object.keys(localizedCommandLookup);
 
   // SHOW THE COMMAND PALETTE
   var queryableCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = null),
     (showHidden = false),
     (hideCommands = null),
@@ -89,7 +89,7 @@ See the LICENSE file for details.
   );
   // FIXME: build start-up customizer
   var showOnlyCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["bookmark", "script", "workflow", "defaults"]),
     (showHidden = false),
     (hideCommands = null),
@@ -99,9 +99,10 @@ See the LICENSE file for details.
   var result = commandPalette(
     (commands = queryableCommands),
     (title = localize(locStrings.title)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = false),
     (showOnly = showOnlyCommands)
   );
   if (!result) return;
-  processCommand(localizedCommandLookup[result[0].text]);
+  processCommand(result[0]);
 })();

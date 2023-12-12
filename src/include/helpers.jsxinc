@@ -185,7 +185,7 @@ DIALOG HELPER FUNCTIONS
 
 /**
  * Filter the supplied commands by multiple factors.
- * @param   {Array}   commands Array of localized command strings to filter.
+ * @param   {Object}  commands Command objects to filter.
  * @param   {Array}   types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
  * @param   {Boolean} showHidden Should command hidden by the user be included?
  * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
@@ -202,26 +202,23 @@ function filterCommands(
   selRequired
 ) {
   var filteredCommands = [];
-  var command, commandData, localizedCommand, type;
-  for (var i = 0; i < commands.length; i++) {
-    localizedCommand = commands[i];
-    command = localizedCommandLookup[localizedCommand];
-    commandData = commandsData[command];
-    type = commandData.type;
-    typeName = locStrings.hasOwnProperty(type) ? localize(locStrings[type]) : type;
+  var prop, command;
+  for (prop in commands) {
+    // for (var i = 0; i < commands.length; i++) {
+    command = commands[prop];
+    // command = commandsData[commands[i]];
     // hide commands requiring an active documents if requested
-    if (docRequired && !appDocuments && commandData.docRequired) continue;
+    if (docRequired && !appDocuments && command.docRequired) continue;
     // hide commands requiring an active selection if requested
-    if (selRequired && !docSelection && commandData.selRequired) continue;
+    if (selRequired && !docSelection && command.selRequired) continue;
     // make sure Ai version meets command requirements
     if (!versionCheck(command)) continue;
     // skip any hidden commands
-    if (!showHidden && data.settings.hidden.includes(command)) continue;
+    if (!showHidden && data.settings.hidden.includes(prop)) continue;
     // skip any specific commands name in hideSpecificCommands
-    if (hideSpecificCommands && hideSpecificCommands.includes(command)) continue;
+    if (hideSpecificCommands && hideSpecificCommands.includes(prop)) continue;
     // then check to see if the command should be included
-    if (!types || types.includes(commandData.type))
-      filteredCommands.push({ name: localizedCommand, type: typeName });
+    if (!types || types.includes(command.type)) filteredCommands.push(command);
   }
   return filteredCommands;
 }
@@ -239,14 +236,15 @@ function scoreMatches(query, commands) {
   var words = [];
   var matches = [];
   var matchedCommands = [];
+  var scores = {};
   var maxScore = 0;
   query = query.toLowerCase();
   var words = query.split(" ");
   var command, commandName, commandType, score, strippedString;
   for (var i = 0; i < commands.length; i++) {
     command = commands[i];
-    commandName = command.name.toLowerCase();
-    commandType = command.type.toLowerCase();
+    commandName = command.localizedName.toLowerCase();
+    commandType = command.localizedType.toLowerCase();
     strippedString = commandName.replace(regexEllipsis, "").replace(regexCarrot, " ");
     score = 0;
 
@@ -273,29 +271,29 @@ function scoreMatches(query, commands) {
         score += word.length;
     }
 
-    // updated scores for matches
-    if (score > 0) {
-      command.score = score;
-      matches.push(command);
-      if (score > maxScore) maxScore = score;
-    }
-
     // increase score if command found in recent commands
     if (
-      command.score == maxScore &&
+      score == maxScore &&
       data.recent.commands.indexOf(localizedCommandLookup[command.name]) > -1
     ) {
-      command.score++;
+      score++;
+    }
+
+    // updated scores for matches
+    if (score > 0) {
+      scores[command.id] = score;
+      matches.push(command);
+      if (score > maxScore) maxScore = score;
     }
   }
 
   for (var m = 0; m < matches.length; m++) {
-    if (matches[m].score >= maxScore / 2) matchedCommands.push(matches[m]);
+    if (scores[matches[m].id] >= maxScore / 2) matchedCommands.push(matches[m]);
   }
 
   // sort the matches by score
   matchedCommands.sort(function (a, b) {
-    return b.score - a.score;
+    return scores[b.id] - scores[a.id];
   });
 
   return matchedCommands;

@@ -78,7 +78,8 @@ function scriptAction(action) {
     default:
       alert(localize(locStrings.cd_invalid, action));
   }
-  if (write) settings.save();
+  if (!write) return;
+  settings.save();
 }
 
 /**
@@ -131,7 +132,7 @@ function builtinAction(action) {
 /** Ai Command Palette configuration commands. */
 function AiCommandPaletteSettings() {
   var configCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["config"]),
     (showHidden = false),
     (hideCommands = null),
@@ -141,10 +142,11 @@ function AiCommandPaletteSettings() {
   var result = commandPalette(
     (commands = configCommands),
     (title = localize(locStrings.cp_config)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(localizedCommandLookup[result[0].text]);
+  processCommand(result[0]);
 }
 
 /** Ai Command Palette About Dialog. */
@@ -518,7 +520,7 @@ function loadScripts() {
 /** Show all scripts. */
 function showAllScripts() {
   var scriptCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["script"]),
     (showHidden = false),
     (hideCommands = null),
@@ -528,16 +530,17 @@ function showAllScripts() {
   var result = commandPalette(
     (commands = scriptCommands),
     (title = localize(locStrings.Scripts)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(localizedCommandLookup[result[0].text]);
+  processCommand(result[0]);
 }
 
 /** Show all bookmarks. */
 function showAllBookmarks() {
   var bookmarkCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["bookmark"]),
     (showHidden = false),
     (hideCommands = null),
@@ -547,16 +550,17 @@ function showAllBookmarks() {
   var result = commandPalette(
     (commands = bookmarkCommands),
     (title = localize(locStrings.Bookmarks)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(localizedCommandLookup[result[0].text]);
+  processCommand(result[0]);
 }
 
 /** Show all actions. */
 function showAllActions() {
   var actionCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["action"]),
     (showHidden = false),
     (hideCommands = null),
@@ -566,16 +570,17 @@ function showAllActions() {
   var result = commandPalette(
     (commands = actionCommands),
     (title = localize(locStrings.Actions)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(localizedCommandLookup[result[0].text]);
+  processCommand(result[0]);
 }
 
 /** Hide commands from Ai Command Palette. */
 function hideCommand() {
   var hideableCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
     (showHidden = false),
     (hideCommands = null),
@@ -585,46 +590,39 @@ function hideCommand() {
   var result = commandPalette(
     (commands = hideableCommands),
     (title = localize(locStrings.cd_hide_select)),
-    (multiselect = true)
-  );
-  if (!result) return;
-  for (var i = 0; i < result.length; i++)
-    data.settings.hidden.push(localizedCommandLookup[result[i].text]);
-}
-
-/** Unhide hidden commands. */
-function unhideCommand() {
-  var command;
-  var hiddenCommands = [];
-  for (var i = 0; i < data.settings.hidden.length; i++) {
-    command = data.settings.hidden[i];
-    commandData = commandsData[command];
-    localizedCommand = commandData.hasOwnProperty("loc")
-      ? localize(commandData.loc)
-      : command;
-    hiddenCommands.push({ name: localizedCommand, type: commandData.type });
-  }
-  var result = commandPalette(
-    (commands = hiddenCommands),
-    (title = localize(locStrings.cd_reveal_menu_select)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = true)
   );
   if (!result) return;
   for (var i = 0; i < result.length; i++) {
-    commandToHide = localizedCommandLookup[result[i].text];
-    for (var n = 0; n < data.settings.hidden.length; n++) {
-      hiddenCommand = data.settings.hidden[n];
-      if (commandToHide == hiddenCommand) {
-        data.settings.hidden.splice(n, 1);
-      }
-    }
+    if (data.settings.hidden.hasOwnProperty(result[i].id)) continue;
+    data.settings.hidden.push(result[i].id);
+  }
+}
+
+/** Unhide hidden commands. */
+function unhideCommand() {
+  var hiddenCommands = [];
+  for (var i = 0; i < data.settings.hidden.length; i++) {
+    if (!commandsData.hasOwnProperty(data.settings.hidden[i])) continue; // FIXME: add alert
+    hiddenCommands.push(commandsData[data.settings.hidden[i]]);
+  }
+  var result = commandPalette(
+    (commands = hiddenCommands),
+    (title = localize(locStrings.cd_reveal_menu_select)),
+    (columns = paletteSettings.defaultColumns),
+    (multiselect = true)
+  );
+  if (!result) return;
+  for (var i = 0; i < result.length; i++) {
+    data.settings.hidden.splice(data.settings.hidden.indexOf(result[i].id), 1);
   }
 }
 
 /** Delete commands from Ai Command Palette. */
 function deleteCommand() {
   var deletableCommands = filterCommands(
-    (commands = allCommandsLocalized),
+    (commands = commandsData),
     (types = ["bookmark", "script", "workflow"]),
     (showHidden = false),
     (hideCommands = null),
@@ -634,6 +632,7 @@ function deleteCommand() {
   var result = commandPalette(
     (commands = deletableCommands),
     (title = localize(locStrings.cd_delete_select)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = true)
   );
   if (!result) return;
@@ -724,7 +723,6 @@ function goToNamedObject() {
       if (item.typename == "PlacedItem") {
         itemName = item.file.name;
       } else if (item.typename == "SymbolItem") {
-        alert(item.symbol.name);
         itemName = item.name || item.name.length ? item.name : item.symbol.name;
       } else {
         itemName = item.name;
@@ -805,25 +803,17 @@ function recentFiles() {
 
 /** Present a command palette with more recent commands and process the selected one. */
 function recentCommands() {
-  var command;
   var recentCommands = [];
   for (var i = 0; i < data.recent.commands.length; i++) {
-    command = data.recent.commands[i];
-    if (!idCommandLookup.hasOwnProperty(command)) continue;
-    commandData = commandsData[command];
-    localizedCommand = commandData.hasOwnProperty("loc")
-      ? localize(commandData.loc)
-      : command;
-    recentCommands.push({
-      name: localizedCommand,
-      type: localize(locStrings[commandData.type]),
-    });
+    if (!commandsData.hasOwnProperty(data.recent.commands[i])) continue; // FIXME: add alert
+    recentCommands.push(commandsData[data.recent.commands[i]]);
   }
   var result = commandPalette(
     (commands = recentCommands),
     (title = localize(locStrings.recent_commands)),
+    (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(localizedCommandLookup[result[0].text]);
+  processCommand(result[0]);
 }
