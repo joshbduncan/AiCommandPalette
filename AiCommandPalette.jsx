@@ -254,6 +254,26 @@ See the LICENSE file for details.
   }
 
   /**
+   * Show an alert with all object data for a command.
+   * @param command Command to show data about.
+   */
+  function alertCommandData(command) {
+    var s = "";
+    for (var prop in command) {
+      var subS = "";
+      if (typeof command[prop] == "object") {
+        for (var subProp in command[prop]) {
+          subS += "> " + subProp + ": " + command[prop][subProp] + "\n";
+        }
+        s += prop + ":\n" + subS;
+      } else {
+        s += prop + ": " + command[prop] + "\n";
+      }
+    }
+    alert(s);
+  }
+
+  /**
    * Get every font used inside of an the Ai document.
    * @param {Object} doc Ai document.
    */
@@ -515,10 +535,7 @@ See the LICENSE file for details.
       }
 
       // increase score if command found in recent commands
-      if (
-        score == maxScore &&
-        data.recent.commands.indexOf(localizedCommandLookup[command.name]) > -1
-      ) {
+      if (score == maxScore && data.recent.commands.indexOf(command.id) > -1) {
         score++;
       }
 
@@ -543,34 +560,25 @@ See the LICENSE file for details.
   }
 
   /**
-   * Score array items based on regex string match.
-   * @param   {String} query   String to search for.
-   * @param   {Array}  objects Array of objects to search through.
-   * @param   {String} prop    Object property to match on.
-   * @returns {Array}          Matching items sorted by score.
+   * Present File.openDialog() for user to select files to load.
+   * @param   {String}  prompt        Prompt for dialog.
+   * @param   {Boolean} multiselect   Can multiple files be selected.
+   * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
+   * @returns {Array}                 Selected file(s).
    */
-  function scoreObjectMatches(query, objects, prop) {
-    var word;
-    var words = query.split(" ");
-    var matches = [];
-    for (var i = 0; i < objects.length; i++) {
-      var score = 0;
-      for (var n = 0; n < words.length; n++) {
-        word = words[n];
-        if (!objects[i].hasOwnProperty(prop)) continue;
-        if (word != "" && objects[i][prop].match("(?:^|\\s)(" + word + ")", "gi") != null)
-          score++;
-      }
-      if (score > 0) {
-        objects[i].score = score;
-        matches.push(objects[i]);
+  function loadFileTypes(prompt, multiselect, fileTypeRegex) {
+    var results = [];
+    var files = File.openDialog(prompt, "", multiselect);
+    if (files) {
+      for (var i = 0; i < files.length; i++) {
+        f = files[i];
+        fname = decodeURI(f.name);
+        if (f.name.search(fileTypeRegex) >= 0) {
+          results.push(f);
+        }
       }
     }
-    // sort all matches by score
-    matches.sort(function (a, b) {
-      return b.score - a.score;
-    });
-    return matches;
+    return results;
   }
 
   /**
@@ -739,17 +747,11 @@ See the LICENSE file for details.
       case "buildWorkflow":
         buildWorkflow();
         break;
-      case "allWorkflows":
-        showAllWorkflows();
-        break;
       case "editWorkflow":
         editWorkflow();
         break;
       case "loadScript":
         loadScripts();
-        break;
-      case "allScripts":
-        showAllScripts();
         break;
       case "setFileBookmark":
         loadFileBookmark();
@@ -757,12 +759,6 @@ See the LICENSE file for details.
         break;
       case "setFolderBookmark":
         loadFolderBookmark();
-        break;
-      case "allBookmarks":
-        showAllBookmarks();
-        break;
-      case "allActions":
-        showAllActions();
         break;
       case "hideCommand":
         hideCommand();
@@ -809,6 +805,18 @@ See the LICENSE file for details.
    */
   function builtinAction(action) {
     switch (action) {
+      case "allWorkflows":
+        showAllWorkflows();
+        break;
+      case "allScripts":
+        showAllScripts();
+        break;
+      case "allBookmarks":
+        showAllBookmarks();
+        break;
+      case "allActions":
+        showAllActions();
+        break;
       case "documentReport":
         if (activeDocument) documentReport();
         break;
@@ -867,7 +875,7 @@ See the LICENSE file for details.
       (multiselect = false)
     );
     if (!result) return;
-    processCommand(result[0]);
+    processCommand(result);
   }
 
   /** Ai Command Palette About Dialog. */
@@ -1255,7 +1263,7 @@ See the LICENSE file for details.
       (multiselect = false)
     );
     if (!result) return;
-    processCommand(result[0]);
+    processCommand(result);
   }
 
   /** Show all bookmarks. */
@@ -1275,7 +1283,7 @@ See the LICENSE file for details.
       (multiselect = false)
     );
     if (!result) return;
-    processCommand(result[0]);
+    processCommand(result);
   }
 
   /** Show all actions. */
@@ -1288,14 +1296,18 @@ See the LICENSE file for details.
       (docRequired = false),
       (selRequired = false)
     );
+    var columns = {
+      Name: { width: 475, key: "localizedName" },
+      "Action Set": { width: 100, key: "set" },
+    };
     var result = commandPalette(
       (commands = actionCommands),
       (title = localize(locStrings.Actions)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = columns),
       (multiselect = false)
     );
     if (!result) return;
-    processCommand(result[0]);
+    processCommand(result);
   }
 
   /** Hide commands from Ai Command Palette. */
@@ -1357,19 +1369,19 @@ See the LICENSE file for details.
       (multiselect = true)
     );
     if (!result) return;
+    var commandNames = [];
+    for (var i = 0; i < result.length; i++)
+      names += commandNames.push(result[i].localizedName);
     if (
       confirm(
-        localize(locStrings.cd_delete_confirm, result.join("\n")),
+        localize(locStrings.cd_delete_confirm, commandNames.join("\n")),
         "noAsDflt",
         localize(locStrings.cd_delete_confirm_title)
       )
     ) {
-      var command, type;
       for (var i = 0; i < result.length; i++) {
-        command = localizedCommandLookup[result[i].text];
-        type = commandsData[command].type;
         try {
-          delete data.commands[type][command];
+          delete data.commands[result[i].type][result[i].id];
         } catch (e) {
           alert(localize(locStrings.cd_error_delete, command));
         }
@@ -1536,7 +1548,7 @@ See the LICENSE file for details.
       (multiselect = false)
     );
     if (!result) return;
-    processCommand(result[0]);
+    processCommand(result);
   }
   // ALL BUILT DATA FROM PYTHON SCRIPT
 
@@ -1551,6 +1563,7 @@ See the LICENSE file for details.
       de: "Fehler beim Ausf\u00fchren der Aktion:\n%1\n\n%2",
       ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438:\n%1\n\n%2",
     },
+    action: { en: "Action", de: "Action", ru: "Action" },
     Actions: { en: "Actions", de: "Aktionen", ru: "Actions" },
     active_document_not_saved: {
       en: "Active document not yet saved to the file system.",
@@ -1966,16 +1979,6 @@ See the LICENSE file for details.
       de: "Fehler beim Speichern des Arbeitsablaufs:\n%1",
       ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u043d\u0430\u0431\u043e\u0440\u0430:\n%1",
     },
-    wf_name: {
-      en: "Enter a new name for your workflow.",
-      de: "Geben Sie einen neuen Namen f\u00fcr den Arbeitsablauf an.",
-      ru: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043d\u043e\u0432\u043e\u0435 \u0438\u043c\u044f \u043d\u0430\u0431\u043e\u0440\u0430",
-    },
-    wf_name_title: {
-      en: "New Workflow Name",
-      de: "Name des neuen Arbeitsablaufs",
-      ru: "\u0418\u043c\u044f \u043d\u043e\u0432\u043e\u0433\u043e \u043d\u0430\u0431\u043e\u0440\u0430",
-    },
     wf_needs_attention: {
       en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
       de: "Achtung!\nDie folgenden Aktionsschritte sind nicht mehr vorhanden\n\nGel\u00f6schte Aktionen:\n%1\n\nInkompatible Aktionen:\n%2",
@@ -1996,6 +1999,7 @@ See the LICENSE file for details.
       de: "Arbeitsablauf nicht gespeichert",
       ru: "\u041d\u0430\u0431\u043e\u0440 \u043d\u0435 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d",
     },
+    wf_save: { en: "Save", de: "Save", ru: "Save" },
     wf_save_as: {
       en: "Save Workflow As",
       de: "Arbeitsablauf speichern als",
@@ -8915,17 +8919,6 @@ See the LICENSE file for details.
           ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
         },
       },
-      config_allWorkflows: {
-        action: "allWorkflows",
-        type: "config",
-        docRequired: false,
-        selRequired: false,
-        loc: {
-          en: "All Workflows...",
-          de: "Alle Arbeitsabl\u00e4ufe \u2026",
-          ru: "All Workflows...",
-        },
-      },
       config_loadScript: {
         action: "loadScript",
         type: "config",
@@ -8936,13 +8929,6 @@ See the LICENSE file for details.
           de: "Skripte laden \u2026",
           ru: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0441\u043a\u0440\u0438\u043f\u0442\u044b",
         },
-      },
-      config_allScripts: {
-        action: "allScripts",
-        type: "config",
-        docRequired: false,
-        selRequired: false,
-        loc: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
       },
       config_setFileBookmark: {
         action: "setFileBookmark",
@@ -8965,24 +8951,6 @@ See the LICENSE file for details.
           de: "Lesezeichen-Ordner erstellen \u2026",
           ru: "Set Folder Bookmark...",
         },
-      },
-      config_allBookmarks: {
-        action: "allBookmarks",
-        type: "config",
-        docRequired: false,
-        selRequired: false,
-        loc: {
-          en: "All Bookmarks...",
-          de: "Alle Lesezeichen \u2026",
-          ru: "All Bookmarks...",
-        },
-      },
-      config_allActions: {
-        action: "allActions",
-        type: "config",
-        docRequired: false,
-        selRequired: false,
-        loc: { en: "All Actions...", de: "Alle Aktionen \u2026", ru: "All Actions..." },
       },
       config_hideCommand: {
         action: "hideCommand",
@@ -9063,6 +9031,42 @@ See the LICENSE file for details.
       },
     },
     builtin: {
+      builtin_allWorkflows: {
+        action: "allWorkflows",
+        type: "builtin",
+        docRequired: false,
+        selRequired: false,
+        loc: {
+          en: "All Workflows...",
+          de: "Alle Arbeitsabl\u00e4ufe \u2026",
+          ru: "All Workflows...",
+        },
+      },
+      builtin_allScripts: {
+        action: "allScripts",
+        type: "builtin",
+        docRequired: false,
+        selRequired: false,
+        loc: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
+      },
+      builtin_allBookmarks: {
+        action: "allBookmarks",
+        type: "builtin",
+        docRequired: false,
+        selRequired: false,
+        loc: {
+          en: "All Bookmarks...",
+          de: "Alle Lesezeichen \u2026",
+          ru: "All Bookmarks...",
+        },
+      },
+      builtin_allActions: {
+        action: "allActions",
+        type: "builtin",
+        docRequired: false,
+        selRequired: false,
+        loc: { en: "All Actions...", de: "Alle Aktionen \u2026", ru: "All Actions..." },
+      },
       builtin_goToArtboard: {
         action: "goToArtboard",
         type: "builtin",
@@ -9253,7 +9257,6 @@ See the LICENSE file for details.
         localizedCommand = commandData.hasOwnProperty("loc")
           ? localize(commandData.loc)
           : command;
-        idCommandLookup[command] = localizedCommand;
         localizedCommandLookup[localizedCommand] = command;
       }
     }
@@ -9446,7 +9449,8 @@ See the LICENSE file for details.
   /**
    * Custom wrapper for a ScriptUI Listbox.
    * @param {Array}   commands    Commands to load into the list box.
-   * @param {Object}  win         ScriptUI window the listbox should be attached to.
+   * @param {Object}  container   ScriptUI window the listbox should be attached to.
+   * @param {String}  name        Lookup name for the listbox.
    * @param {Array}   bounds      Bounds array for the listbox.
    * @param {Object}  columns     Listbox column information.
    * @param {Boolean} multiselect Should the listbox allow multiple selections (disable some features).
@@ -9455,14 +9459,16 @@ See the LICENSE file for details.
    */
   function ListBoxWrapper(
     commands,
-    win,
+    container,
+    name,
     bounds,
     columns,
     multiselect,
     helptip,
     listeners
   ) {
-    this.win = win;
+    this.container = container;
+    this.name = name;
     this.columns = columns;
     this.multiselect = multiselect;
     this.helptip = helptip;
@@ -9487,7 +9493,8 @@ See the LICENSE file for details.
         columnWidths.push(this.columns[column].width);
         columnKeys.push(this.columns[column].key);
       }
-      listbox = this.win.add("listbox", bounds, undefined, {
+      listbox = this.container.add("listbox", bounds, undefined, {
+        name: this.name,
         numberOfColumns: columnTitles.length,
         showHeaders: true,
         columnTitles: columnTitles,
@@ -9558,10 +9565,14 @@ See the LICENSE file for details.
    */
   function addToWorkflowOnDoubleClick(listbox) {
     listbox.onDoubleClick = function () {
+      var win, steps, command;
       if (listbox.selection) {
-        var win = listbox.window;
-        var steps = win.findElement("workflowSteps");
-        steps.add("item", listbox.selection);
+        win = listbox.window;
+        steps = win.findElement("workflowSteps");
+        command = commandsData[localizedCommandLookup[listbox.selection]];
+        with (steps.add("item", command.localizedName)) {
+          subItems[0].text = command.localizedType;
+        }
         steps.notify("onChange");
       }
     };
@@ -9678,6 +9689,7 @@ See the LICENSE file for details.
     var list = new ListBoxWrapper(
       matches,
       win,
+      "commands",
       paletteSettings.bounds,
       columns,
       multiselect,
@@ -9744,18 +9756,22 @@ See the LICENSE file for details.
 
     if (win.show() == 1) {
       if (!list.listbox.selection) return;
-      var items = multiselect ? list.listbox.selection : [list.listbox.selection];
-      var selectedCommands = [];
-      for (var i = 0; i < items.length; i++)
-        selectedCommands.push(matches[list.listbox.items[i].index]);
-      return selectedCommands;
+      if (multiselect) {
+        var items = [];
+        for (var i = 0; i < list.listbox.selection.length; i++) {
+          items.push(matches[list.listbox.selection[i].index]);
+        }
+        return items;
+      } else {
+        return matches[list.listbox.selection.index];
+      }
     }
     return false;
   }
-  function workflowBuilder(commands, editWorkflow, editCommands) {
+  function workflowBuilder(commands, editWorkflow) {
     // create the dialog
     var win = new Window("dialog");
-    win.text = locStrings.wf_builder;
+    win.text = localize(locStrings.wf_builder);
     win.alignChildren = "fill";
 
     // setup the query input
@@ -9768,10 +9784,11 @@ See the LICENSE file for details.
     // setup the commands listbox
     var list = new ListBoxWrapper(
       commands,
-      win,
-      [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
+      pSearch,
+      "commands",
+      [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
       paletteSettings.defaultColumns,
-      true,
+      false,
       localize(locStrings.cd_helptip),
       [addToWorkflowOnDoubleClick, scrollListBoxWithArrows]
     );
@@ -9783,20 +9800,29 @@ See the LICENSE file for details.
       q.active = true;
     }
 
-    // workflow steps
     var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
-    var steps = pSteps.add(
-      "listbox",
-      [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
-      editWorkflow ? editCommands : [],
-      {
-        name: "workflowSteps",
-        multiselect: true,
+
+    var actionSteps = [];
+    if (editWorkflow) {
+      for (var i = 0; i < editWorkflow.actions.length; i++) {
+        actionSteps.push(commandsData[editWorkflow.actions[i]]);
       }
+    }
+
+    // setup the workflow action steps listbox
+    var steps = new ListBoxWrapper(
+      actionSteps,
+      pSteps,
+      "workflowSteps",
+      [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
+      paletteSettings.defaultColumns,
+      true,
+      localize(locStrings.wf_steps_helptip),
+      []
     );
-    steps.helpTip = localize(locStrings.wf_steps_helptip);
+
     var stepButtons = pSteps.add("group");
     stepButtons.alignment = "center";
     var up = stepButtons.add("button", undefined, localize(locStrings.step_up));
@@ -9810,7 +9836,7 @@ See the LICENSE file for details.
     var pName = win.add("panel", undefined, localize(locStrings.wf_save_as));
     pName.alignChildren = ["fill", "center"];
     pName.margins = 20;
-    var workflowNameText = editWorkflow ? editWorkflow : "";
+    var workflowNameText = editWorkflow ? editWorkflow.localizedName : "";
     var workflowName = pName.add("edittext", undefined, workflowNameText);
     workflowName.enabled = editWorkflow ? true : false;
 
@@ -9818,7 +9844,9 @@ See the LICENSE file for details.
     var winButtons = win.add("group");
     winButtons.orientation = "row";
     winButtons.alignChildren = ["center", "center"];
-    var ok = winButtons.add("button", undefined, "OK");
+    var ok = winButtons.add("button", undefined, localize(locStrings.save), {
+      name: "ok",
+    });
     ok.preferredSize.width = 100;
     ok.enabled = editWorkflow ? true : false;
     var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
@@ -9839,9 +9867,10 @@ See the LICENSE file for details.
       }
     };
 
-    steps.onChange = function () {
-      workflowName.enabled = steps.items.length > 0 ? true : false;
-      ok.enabled = steps.items.length > 0 && workflowName.text.length > 0 ? true : false;
+    steps.listbox.onChange = function () {
+      workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
+      ok.enabled =
+        steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
     };
 
     workflowName.onChanging = function () {
@@ -9849,25 +9878,25 @@ See the LICENSE file for details.
     };
 
     up.onClick = function () {
-      var selected = sortIndexes(steps.selection);
+      var selected = sortIndexes(steps.listbox.selection);
       if (selected[i] == 0 || !contiguous(selected)) return;
       for (var i = 0; i < selected.length; i++)
-        swap(steps.items[selected[i] - 1], steps.items[selected[i]]);
-      steps.selection = null;
-      for (var n = 0; n < selected.length; n++) steps.selection = selected[n] - 1;
+        swap(steps.listbox.items[selected[i] - 1], steps.listbox.items[selected[i]]);
+      steps.listbox.selection = null;
+      for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
     };
 
     down.onClick = function () {
-      var selected = sortIndexes(steps.selection);
+      var selected = sortIndexes(steps.listbox.selection);
       if (
-        selected[selected.length - 1] == steps.items.length - 1 ||
+        selected[selected.length - 1] == steps.listbox.items.length - 1 ||
         !contiguous(selected)
       )
         return;
-      for (var i = steps.selection.length - 1; i > -1; i--)
-        swap(steps.items[selected[i]], steps.items[selected[i] + 1]);
-      steps.selection = null;
-      for (var n = 0; n < selected.length; n++) steps.selection = selected[n] + 1;
+      for (var i = steps.listbox.selection.length - 1; i > -1; i--)
+        swap(steps.listbox.items[selected[i]], steps.listbox.items[selected[i] + 1]);
+      steps.listbox.selection = null;
+      for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
     };
 
     // the api returns the selected items in the order they were
@@ -9893,41 +9922,36 @@ See the LICENSE file for details.
     }
 
     del.onClick = function () {
-      var selected = sortIndexes(steps.selection);
-      for (var i = steps.selection.length - 1; i > -1; i--) {
-        steps.remove(selected[i]);
+      var selected = sortIndexes(steps.listbox.selection);
+      for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
+        steps.listbox.remove(selected[i]);
       }
-      steps.selection == null;
-      workflowName.enabled = steps.items.length > 0 ? true : false;
-      ok.enabled = steps.items.length > 0 && workflowName.text.length > 0 ? true : false;
+      steps.listbox.selection == null;
+      workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
+      ok.enabled =
+        steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
+    };
+
+    ok.onClick = function () {
+      // check for workflow overwrite
+      if (
+        !editWorkflow &&
+        data.commands.workflow.hasOwnProperty(workflowName.text.trim()) &&
+        !confirm(
+          localize(locStrings.wf_already_exists) + "\n" + workflowName.text.trim(),
+          "noAsDflt",
+          localize(locStrings.wf_already_exists_title)
+        )
+      ) {
+        return;
+      }
+      win.close(1);
     };
 
     if (win.show() == 1) {
-      return { name: workflowName.text.trim(), actions: steps.items };
+      return { name: workflowName.text.trim(), actions: steps.listbox.items };
     }
     return false;
-  }
-
-  /**
-   * Present File.openDialog() for user to select files to load.
-   * @param   {String}  prompt        Prompt for dialog.
-   * @param   {Boolean} multiselect   Can multiple files be selected.
-   * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
-   * @returns {Array}                 Selected file(s).
-   */
-  function loadFileTypes(prompt, multiselect, fileTypeRegex) {
-    var results = [];
-    var files = File.openDialog(prompt, "", multiselect);
-    if (files) {
-      for (var i = 0; i < files.length; i++) {
-        f = files[i];
-        fname = decodeURI(f.name);
-        if (f.name.search(fileTypeRegex) >= 0) {
-          results.push(f);
-        }
-      }
-    }
-    return results;
   }
   // FILE/FOLDER OPERATIONS
 
@@ -9994,65 +10018,25 @@ See the LICENSE file for details.
    * @param {String} workflow Workflow to edit.
    */
   function buildWorkflow(workflow) {
-    // if editing a workflow, prefill builder with it's commands
-    var command;
-    var workflowActions = [];
-    var hideCommands = [];
-    if (workflow) {
-      command = commandsData[localizedCommandLookup[workflow]]; // FIXME: switch to object
-      for (var i = 0; i < command.actions.length; i++) {
-        workflowActions.push(idCommandLookup[command.actions[i]]);
-      }
-      // make sure workflows can't include themselves
-      hideCommands.push(workflow);
-    }
-
     var availableWorkflowCommands = filterCommands(
       (commands = commandsData),
       (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
       (showHidden = false),
-      (hideCommands = hideCommands),
+      (hideCommands = workflow ? [workflow.id] : []),
       (docRequired = true),
       (selRequired = true)
     );
     // show the workflow builder dialog
     var result = workflowBuilder(
       (commands = availableWorkflowCommands),
-      (editWorkflow = workflow),
-      (editCommands = workflowActions)
+      (editWorkflow = workflow)
     );
 
     if (!result) return;
-    // check to make sure there isn't a workflow already saved with the same name
-    var newName;
-    while (allCommands.includes(result.name)) {
-      if (
-        confirm(
-          localize(locStrings.wf_already_exists),
-          "noAsDflt",
-          localize(locStrings.wf_already_exists_title)
-        )
-      ) {
-        break;
-      } else {
-        newName = Window.prompt(
-          localize(locStrings.wf_name),
-          "",
-          localize(locStrings.wf_name)
-        );
-        if (newName == undefined || newName == null || newName === "") {
-          alert(localize(locStrings.wf_not_saved));
-          return false;
-        } else {
-          result.name = newName;
-        }
-      }
-    }
-
     var workflowActions = [];
     try {
       for (var i = 0; i < result.actions.length; i++)
-        workflowActions.push(localizedCommandLookup[result.actions[i].text]);
+        workflowActions.push(localizedCommandLookup[result.actions[i].text]); // FIXME: switch to object
       data.commands.workflow[result.name] = {
         type: "workflow",
         actions: workflowActions,
@@ -10079,7 +10063,7 @@ See the LICENSE file for details.
       (multiselect = false)
     );
     if (!result) return;
-    processCommand(result[0]);
+    processCommand(result);
   }
 
   /** Choose a workflow to edit. */
@@ -10094,12 +10078,12 @@ See the LICENSE file for details.
     );
     var result = commandPalette(
       (commands = workflows),
-      (title = localize(locStrings.wf_edit)),
+      (title = localize(locStrings.wf_choose)),
       (columns = paletteSettings.defaultColumns),
       (multiselect = false)
     );
     if (!result) return;
-    buildWorkflow(localizedCommandLookup[result[0].text]);
+    buildWorkflow(result);
   }
 
   /**
@@ -10150,6 +10134,8 @@ See the LICENSE file for details.
 
   // load user settings
   settings.load();
+
+  // load current user actions
   loadActions();
 
   var appDocuments = app.documents.length > 0;
@@ -10158,7 +10144,6 @@ See the LICENSE file for details.
 
   // build all commands
   var commandsData = {};
-  var idCommandLookup = {};
   var localizedCommandLookup = {};
   buildCommands(data.commands);
 
@@ -10200,5 +10185,5 @@ See the LICENSE file for details.
     (showOnly = showOnlyCommands)
   );
   if (!result) return;
-  processCommand(result[0]);
+  processCommand(result);
 })();

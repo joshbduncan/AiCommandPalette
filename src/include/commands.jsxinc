@@ -67,7 +67,6 @@ function buildCommands(commands, filterOut) {
       localizedCommand = commandData.hasOwnProperty("loc")
         ? localize(commandData.loc)
         : command;
-      idCommandLookup[command] = localizedCommand;
       localizedCommandLookup[localizedCommand] = command;
     }
   }

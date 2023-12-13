@@ -5,65 +5,25 @@
  * @param {String} workflow Workflow to edit.
  */
 function buildWorkflow(workflow) {
-  // if editing a workflow, prefill builder with it's commands
-  var command;
-  var workflowActions = [];
-  var hideCommands = [];
-  if (workflow) {
-    command = commandsData[localizedCommandLookup[workflow]]; // FIXME: switch to object
-    for (var i = 0; i < command.actions.length; i++) {
-      workflowActions.push(idCommandLookup[command.actions[i]]);
-    }
-    // make sure workflows can't include themselves
-    hideCommands.push(workflow);
-  }
-
   var availableWorkflowCommands = filterCommands(
     (commands = commandsData),
     (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
     (showHidden = false),
-    (hideCommands = hideCommands),
+    (hideCommands = workflow ? [workflow.id] : []),
     (docRequired = true),
     (selRequired = true)
   );
   // show the workflow builder dialog
   var result = workflowBuilder(
     (commands = availableWorkflowCommands),
-    (editWorkflow = workflow),
-    (editCommands = workflowActions)
+    (editWorkflow = workflow)
   );
 
   if (!result) return;
-  // check to make sure there isn't a workflow already saved with the same name
-  var newName;
-  while (allCommands.includes(result.name)) {
-    if (
-      confirm(
-        localize(locStrings.wf_already_exists),
-        "noAsDflt",
-        localize(locStrings.wf_already_exists_title)
-      )
-    ) {
-      break;
-    } else {
-      newName = Window.prompt(
-        localize(locStrings.wf_name),
-        "",
-        localize(locStrings.wf_name)
-      );
-      if (newName == undefined || newName == null || newName === "") {
-        alert(localize(locStrings.wf_not_saved));
-        return false;
-      } else {
-        result.name = newName;
-      }
-    }
-  }
-
   var workflowActions = [];
   try {
     for (var i = 0; i < result.actions.length; i++)
-      workflowActions.push(localizedCommandLookup[result.actions[i].text]);
+      workflowActions.push(localizedCommandLookup[result.actions[i].text]); // FIXME: switch to object
     data.commands.workflow[result.name] = {
       type: "workflow",
       actions: workflowActions,
@@ -90,7 +50,7 @@ function showAllWorkflows() {
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(result[0]);
+  processCommand(result);
 }
 
 /** Choose a workflow to edit. */
@@ -105,12 +65,12 @@ function editWorkflow() {
   );
   var result = commandPalette(
     (commands = workflows),
-    (title = localize(locStrings.wf_edit)),
+    (title = localize(locStrings.wf_choose)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
   if (!result) return;
-  buildWorkflow(localizedCommandLookup[result[0].text]);
+  buildWorkflow(result);
 }
 
 /**

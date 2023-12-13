@@ -18,17 +18,11 @@ function scriptAction(action) {
     case "buildWorkflow":
       buildWorkflow();
       break;
-    case "allWorkflows":
-      showAllWorkflows();
-      break;
     case "editWorkflow":
       editWorkflow();
       break;
     case "loadScript":
       loadScripts();
-      break;
-    case "allScripts":
-      showAllScripts();
       break;
     case "setFileBookmark":
       loadFileBookmark();
@@ -36,12 +30,6 @@ function scriptAction(action) {
       break;
     case "setFolderBookmark":
       loadFolderBookmark();
-      break;
-    case "allBookmarks":
-      showAllBookmarks();
-      break;
-    case "allActions":
-      showAllActions();
       break;
     case "hideCommand":
       hideCommand();
@@ -88,6 +76,18 @@ function scriptAction(action) {
  */
 function builtinAction(action) {
   switch (action) {
+    case "allWorkflows":
+      showAllWorkflows();
+      break;
+    case "allScripts":
+      showAllScripts();
+      break;
+    case "allBookmarks":
+      showAllBookmarks();
+      break;
+    case "allActions":
+      showAllActions();
+      break;
     case "documentReport":
       if (activeDocument) documentReport();
       break;
@@ -146,7 +146,7 @@ function AiCommandPaletteSettings() {
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(result[0]);
+  processCommand(result);
 }
 
 /** Ai Command Palette About Dialog. */
@@ -534,7 +534,7 @@ function showAllScripts() {
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(result[0]);
+  processCommand(result);
 }
 
 /** Show all bookmarks. */
@@ -554,7 +554,7 @@ function showAllBookmarks() {
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(result[0]);
+  processCommand(result);
 }
 
 /** Show all actions. */
@@ -567,14 +567,18 @@ function showAllActions() {
     (docRequired = false),
     (selRequired = false)
   );
+  var columns = {
+    Name: { width: 475, key: "localizedName" },
+    "Action Set": { width: 100, key: "set" },
+  };
   var result = commandPalette(
     (commands = actionCommands),
     (title = localize(locStrings.Actions)),
-    (columns = paletteSettings.defaultColumns),
+    (columns = columns),
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(result[0]);
+  processCommand(result);
 }
 
 /** Hide commands from Ai Command Palette. */
@@ -636,19 +640,19 @@ function deleteCommand() {
     (multiselect = true)
   );
   if (!result) return;
+  var commandNames = [];
+  for (var i = 0; i < result.length; i++)
+    names += commandNames.push(result[i].localizedName);
   if (
     confirm(
-      localize(locStrings.cd_delete_confirm, result.join("\n")),
+      localize(locStrings.cd_delete_confirm, commandNames.join("\n")),
       "noAsDflt",
       localize(locStrings.cd_delete_confirm_title)
     )
   ) {
-    var command, type;
     for (var i = 0; i < result.length; i++) {
-      command = localizedCommandLookup[result[i].text];
-      type = commandsData[command].type;
       try {
-        delete data.commands[type][command];
+        delete data.commands[result[i].type][result[i].id];
       } catch (e) {
         alert(localize(locStrings.cd_error_delete, command));
       }
@@ -815,5 +819,5 @@ function recentCommands() {
     (multiselect = false)
   );
   if (!result) return;
-  processCommand(result[0]);
+  processCommand(result);
 }

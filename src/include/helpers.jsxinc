@@ -11,6 +11,26 @@ function activeDocument() {
 }
 
 /**
+ * Show an alert with all object data for a command.
+ * @param command Command to show data about.
+ */
+function alertCommandData(command) {
+  var s = "";
+  for (var prop in command) {
+    var subS = "";
+    if (typeof command[prop] == "object") {
+      for (var subProp in command[prop]) {
+        subS += "> " + subProp + ": " + command[prop][subProp] + "\n";
+      }
+      s += prop + ":\n" + subS;
+    } else {
+      s += prop + ": " + command[prop] + "\n";
+    }
+  }
+  alert(s);
+}
+
+/**
  * Get every font used inside of an the Ai document.
  * @param {Object} doc Ai document.
  */
@@ -272,10 +292,7 @@ function scoreMatches(query, commands) {
     }
 
     // increase score if command found in recent commands
-    if (
-      score == maxScore &&
-      data.recent.commands.indexOf(localizedCommandLookup[command.name]) > -1
-    ) {
+    if (score == maxScore && data.recent.commands.indexOf(command.id) > -1) {
       score++;
     }
 
@@ -300,34 +317,25 @@ function scoreMatches(query, commands) {
 }
 
 /**
- * Score array items based on regex string match.
- * @param   {String} query   String to search for.
- * @param   {Array}  objects Array of objects to search through.
- * @param   {String} prop    Object property to match on.
- * @returns {Array}          Matching items sorted by score.
+ * Present File.openDialog() for user to select files to load.
+ * @param   {String}  prompt        Prompt for dialog.
+ * @param   {Boolean} multiselect   Can multiple files be selected.
+ * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
+ * @returns {Array}                 Selected file(s).
  */
-function scoreObjectMatches(query, objects, prop) {
-  var word;
-  var words = query.split(" ");
-  var matches = [];
-  for (var i = 0; i < objects.length; i++) {
-    var score = 0;
-    for (var n = 0; n < words.length; n++) {
-      word = words[n];
-      if (!objects[i].hasOwnProperty(prop)) continue;
-      if (word != "" && objects[i][prop].match("(?:^|\\s)(" + word + ")", "gi") != null)
-        score++;
-    }
-    if (score > 0) {
-      objects[i].score = score;
-      matches.push(objects[i]);
+function loadFileTypes(prompt, multiselect, fileTypeRegex) {
+  var results = [];
+  var files = File.openDialog(prompt, "", multiselect);
+  if (files) {
+    for (var i = 0; i < files.length; i++) {
+      f = files[i];
+      fname = decodeURI(f.name);
+      if (f.name.search(fileTypeRegex) >= 0) {
+        results.push(f);
+      }
     }
   }
-  // sort all matches by score
-  matches.sort(function (a, b) {
-    return b.score - a.score;
-  });
-  return matches;
+  return results;
 }
 
 /**

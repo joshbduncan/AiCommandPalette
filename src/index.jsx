@@ -54,6 +54,8 @@ See the LICENSE file for details.
 
   // load user settings
   settings.load();
+
+  // load current user actions
   loadActions();
 
   var appDocuments = app.documents.length > 0;
@@ -62,7 +64,6 @@ See the LICENSE file for details.
 
   // build all commands
   var commandsData = {};
-  var idCommandLookup = {};
   var localizedCommandLookup = {};
   buildCommands(data.commands);
 
@@ -104,5 +105,5 @@ See the LICENSE file for details.
     (showOnly = showOnlyCommands)
   );
   if (!result) return;
-  processCommand(result[0]);
+  processCommand(result);
 })();

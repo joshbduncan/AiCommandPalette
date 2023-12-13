@@ -3,7 +3,8 @@
 /**
  * Custom wrapper for a ScriptUI Listbox.
  * @param {Array}   commands    Commands to load into the list box.
- * @param {Object}  win         ScriptUI window the listbox should be attached to.
+ * @param {Object}  container   ScriptUI window the listbox should be attached to.
+ * @param {String}  name        Lookup name for the listbox.
  * @param {Array}   bounds      Bounds array for the listbox.
  * @param {Object}  columns     Listbox column information.
  * @param {Boolean} multiselect Should the listbox allow multiple selections (disable some features).
@@ -12,14 +13,16 @@
  */
 function ListBoxWrapper(
   commands,
-  win,
+  container,
+  name,
   bounds,
   columns,
   multiselect,
   helptip,
   listeners
 ) {
-  this.win = win;
+  this.container = container;
+  this.name = name;
   this.columns = columns;
   this.multiselect = multiselect;
   this.helptip = helptip;
@@ -44,7 +47,8 @@ ListBoxWrapper.prototype = {
       columnWidths.push(this.columns[column].width);
       columnKeys.push(this.columns[column].key);
     }
-    listbox = this.win.add("listbox", bounds, undefined, {
+    listbox = this.container.add("listbox", bounds, undefined, {
+      name: this.name,
       numberOfColumns: columnTitles.length,
       showHeaders: true,
       columnTitles: columnTitles,
@@ -115,10 +119,14 @@ function selectOnDoubleClick(listbox) {
  */
 function addToWorkflowOnDoubleClick(listbox) {
   listbox.onDoubleClick = function () {
+    var win, steps, command;
     if (listbox.selection) {
-      var win = listbox.window;
-      var steps = win.findElement("workflowSteps");
-      steps.add("item", listbox.selection);
+      win = listbox.window;
+      steps = win.findElement("workflowSteps");
+      command = commandsData[localizedCommandLookup[listbox.selection]];
+      with (steps.add("item", command.localizedName)) {
+        subItems[0].text = command.localizedType;
+      }
       steps.notify("onChange");
     }
   };
@@ -235,6 +243,7 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
   var list = new ListBoxWrapper(
     matches,
     win,
+    "commands",
     paletteSettings.bounds,
     columns,
     multiselect,
@@ -301,11 +310,15 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
 
   if (win.show() == 1) {
     if (!list.listbox.selection) return;
-    var items = multiselect ? list.listbox.selection : [list.listbox.selection];
-    var selectedCommands = [];
-    for (var i = 0; i < items.length; i++)
-      selectedCommands.push(matches[list.listbox.items[i].index]);
-    return selectedCommands;
+    if (multiselect) {
+      var items = [];
+      for (var i = 0; i < list.listbox.selection.length; i++) {
+        items.push(matches[list.listbox.selection[i].index]);
+      }
+      return items;
+    } else {
+      return matches[list.listbox.selection.index];
+    }
   }
   return false;
 }

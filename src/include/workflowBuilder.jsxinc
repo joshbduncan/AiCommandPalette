@@ -1,7 +1,7 @@
-function workflowBuilder(commands, editWorkflow, editCommands) {
+function workflowBuilder(commands, editWorkflow) {
   // create the dialog
   var win = new Window("dialog");
-  win.text = locStrings.wf_builder;
+  win.text = localize(locStrings.wf_builder);
   win.alignChildren = "fill";
 
   // setup the query input
@@ -14,10 +14,11 @@ function workflowBuilder(commands, editWorkflow, editCommands) {
   // setup the commands listbox
   var list = new ListBoxWrapper(
     commands,
-    win,
-    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
+    pSearch,
+    "commands",
+    [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
     paletteSettings.defaultColumns,
-    true,
+    false,
     localize(locStrings.cd_helptip),
     [addToWorkflowOnDoubleClick, scrollListBoxWithArrows]
   );
@@ -29,20 +30,29 @@ function workflowBuilder(commands, editWorkflow, editCommands) {
     q.active = true;
   }
 
-  // workflow steps
   var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
-  var steps = pSteps.add(
-    "listbox",
-    [0, 0, paletteSettings.paletteWidth + 40, paletteSettings.paletteHeight],
-    editWorkflow ? editCommands : [],
-    {
-      name: "workflowSteps",
-      multiselect: true,
+
+  var actionSteps = [];
+  if (editWorkflow) {
+    for (var i = 0; i < editWorkflow.actions.length; i++) {
+      actionSteps.push(commandsData[editWorkflow.actions[i]]);
     }
+  }
+
+  // setup the workflow action steps listbox
+  var steps = new ListBoxWrapper(
+    actionSteps,
+    pSteps,
+    "workflowSteps",
+    [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
+    paletteSettings.defaultColumns,
+    true,
+    localize(locStrings.wf_steps_helptip),
+    []
   );
-  steps.helpTip = localize(locStrings.wf_steps_helptip);
+
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
   var up = stepButtons.add("button", undefined, localize(locStrings.step_up));
@@ -56,7 +66,7 @@ function workflowBuilder(commands, editWorkflow, editCommands) {
   var pName = win.add("panel", undefined, localize(locStrings.wf_save_as));
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;
-  var workflowNameText = editWorkflow ? editWorkflow : "";
+  var workflowNameText = editWorkflow ? editWorkflow.localizedName : "";
   var workflowName = pName.add("edittext", undefined, workflowNameText);
   workflowName.enabled = editWorkflow ? true : false;
 
@@ -64,7 +74,9 @@ function workflowBuilder(commands, editWorkflow, editCommands) {
   var winButtons = win.add("group");
   winButtons.orientation = "row";
   winButtons.alignChildren = ["center", "center"];
-  var ok = winButtons.add("button", undefined, "OK");
+  var ok = winButtons.add("button", undefined, localize(locStrings.save), {
+    name: "ok",
+  });
   ok.preferredSize.width = 100;
   ok.enabled = editWorkflow ? true : false;
   var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
@@ -85,9 +97,10 @@ function workflowBuilder(commands, editWorkflow, editCommands) {
     }
   };
 
-  steps.onChange = function () {
-    workflowName.enabled = steps.items.length > 0 ? true : false;
-    ok.enabled = steps.items.length > 0 && workflowName.text.length > 0 ? true : false;
+  steps.listbox.onChange = function () {
+    workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
+    ok.enabled =
+      steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
   };
 
   workflowName.onChanging = function () {
@@ -95,25 +108,25 @@ function workflowBuilder(commands, editWorkflow, editCommands) {
   };
 
   up.onClick = function () {
-    var selected = sortIndexes(steps.selection);
+    var selected = sortIndexes(steps.listbox.selection);
     if (selected[i] == 0 || !contiguous(selected)) return;
     for (var i = 0; i < selected.length; i++)
-      swap(steps.items[selected[i] - 1], steps.items[selected[i]]);
-    steps.selection = null;
-    for (var n = 0; n < selected.length; n++) steps.selection = selected[n] - 1;
+      swap(steps.listbox.items[selected[i] - 1], steps.listbox.items[selected[i]]);
+    steps.listbox.selection = null;
+    for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
   };
 
   down.onClick = function () {
-    var selected = sortIndexes(steps.selection);
+    var selected = sortIndexes(steps.listbox.selection);
     if (
-      selected[selected.length - 1] == steps.items.length - 1 ||
+      selected[selected.length - 1] == steps.listbox.items.length - 1 ||
       !contiguous(selected)
     )
       return;
-    for (var i = steps.selection.length - 1; i > -1; i--)
-      swap(steps.items[selected[i]], steps.items[selected[i] + 1]);
-    steps.selection = null;
-    for (var n = 0; n < selected.length; n++) steps.selection = selected[n] + 1;
+    for (var i = steps.listbox.selection.length - 1; i > -1; i--)
+      swap(steps.listbox.items[selected[i]], steps.listbox.items[selected[i] + 1]);
+    steps.listbox.selection = null;
+    for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
   };
 
   // the api returns the selected items in the order they were
@@ -139,39 +152,34 @@ function workflowBuilder(commands, editWorkflow, editCommands) {
   }
 
   del.onClick = function () {
-    var selected = sortIndexes(steps.selection);
-    for (var i = steps.selection.length - 1; i > -1; i--) {
-      steps.remove(selected[i]);
+    var selected = sortIndexes(steps.listbox.selection);
+    for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
+      steps.listbox.remove(selected[i]);
     }
-    steps.selection == null;
-    workflowName.enabled = steps.items.length > 0 ? true : false;
-    ok.enabled = steps.items.length > 0 && workflowName.text.length > 0 ? true : false;
+    steps.listbox.selection == null;
+    workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
+    ok.enabled =
+      steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
+  };
+
+  ok.onClick = function () {
+    // check for workflow overwrite
+    if (
+      !editWorkflow &&
+      data.commands.workflow.hasOwnProperty(workflowName.text.trim()) &&
+      !confirm(
+        localize(locStrings.wf_already_exists) + "\n" + workflowName.text.trim(),
+        "noAsDflt",
+        localize(locStrings.wf_already_exists_title)
+      )
+    ) {
+      return;
+    }
+    win.close(1);
   };
 
   if (win.show() == 1) {
-    return { name: workflowName.text.trim(), actions: steps.items };
+    return { name: workflowName.text.trim(), actions: steps.listbox.items };
   }
   return false;
-}
-
-/**
- * Present File.openDialog() for user to select files to load.
- * @param   {String}  prompt        Prompt for dialog.
- * @param   {Boolean} multiselect   Can multiple files be selected.
- * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
- * @returns {Array}                 Selected file(s).
- */
-function loadFileTypes(prompt, multiselect, fileTypeRegex) {
-  var results = [];
-  var files = File.openDialog(prompt, "", multiselect);
-  if (files) {
-    for (var i = 0; i < files.length; i++) {
-      f = files[i];
-      fname = decodeURI(f.name);
-      if (f.name.search(fileTypeRegex) >= 0) {
-        results.push(f);
-      }
-    }
-  }
-  return results;
 }
