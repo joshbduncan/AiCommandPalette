@@ -8,7 +8,7 @@ function buildWorkflow(workflow) {
   var availableWorkflowCommands = filterCommands(
     (commands = commandsData),
     (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
-    (showHidden = false),
+    (showHidden = true),
     (hideCommands = workflow ? [workflow.id] : []),
     (docRequired = true),
     (selRequired = true)

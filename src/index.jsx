@@ -66,6 +66,7 @@ See the LICENSE file for details.
   // build all commands
   var commandsData = {};
   var localizedCommandLookup = {};
+  var hiddenCommands = [];
   buildCommands(data.commands);
 
   // perform version updates
@@ -84,6 +85,10 @@ See the LICENSE file for details.
   );
   var startupCommands = [];
   for (var i = 0; i < data.settings.startupCommands.length; i++) {
+    // check to make sure command is available
+    if (!commandsData.hasOwnProperty(data.settings.startupCommands[i])) continue; // FIXME: add alert
+    // also hide any commands that aren't relevant
+    if (hiddenCommands.includes(data.settings.startupCommands[i])) continue;
     startupCommands.push(commandsData[data.settings.startupCommands[i]]);
   }
   var result = commandPalette(

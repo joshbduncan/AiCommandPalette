@@ -226,7 +226,7 @@ DIALOG HELPER FUNCTIONS
  * Filter the supplied commands by multiple factors.
  * @param   {Object}  commands Command objects to filter.
  * @param   {Array}   types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
- * @param   {Boolean} showHidden Should command hidden by the user be included?
+ * @param   {Boolean} showHidden Should user-hidden or non-relevant commands be included?
  * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
  * @param   {Boolean} docRequired Should commands requiring an active document be included.
  * @param   {Boolean} selRequired Should commands requiring an active selection be included.
@@ -243,9 +243,7 @@ function filterCommands(
   var filteredCommands = [];
   var prop, command;
   for (prop in commands) {
-    // for (var i = 0; i < commands.length; i++) {
     command = commands[prop];
-    // command = commandsData[commands[i]];
     // hide commands requiring an active documents if requested
     if (docRequired && !appDocuments && command.docRequired) continue;
     // hide commands requiring an active selection if requested
@@ -253,7 +251,7 @@ function filterCommands(
     // make sure Ai version meets command requirements
     if (!versionCheck(command)) continue;
     // skip any hidden commands
-    if (!showHidden && data.settings.hidden.includes(prop)) continue;
+    if (!showHidden && hiddenCommands.includes(prop)) continue;
     // skip any specific commands name in hideSpecificCommands
     if (hideSpecificCommands && hideSpecificCommands.includes(prop)) continue;
     // then check to see if the command should be included
@@ -310,13 +308,12 @@ function scoreMatches(query, commands) {
         score += word.length;
     }
 
-    // increase score if command found in recent commands
-    if (score == maxScore && data.recent.commands.indexOf(command.id) > -1) {
-      score++;
-    }
-
     // updated scores for matches
     if (score > 0) {
+      // increase score if command found in recent commands
+      if (score == maxScore && data.recent.commands.indexOf(command.id) > -1) {
+        score++;
+      }
       scores[command.id] = score;
       matches.push(command);
       if (score > maxScore) maxScore = score;

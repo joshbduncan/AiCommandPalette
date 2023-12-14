@@ -636,7 +636,7 @@ function hideCommand() {
   );
   if (!result) return;
   for (var i = 0; i < result.length; i++) {
-    if (data.settings.hidden.hasOwnProperty(result[i].id)) continue;
+    if (hiddenCommands.includes(result[i].id)) continue;
     data.settings.hidden.push(result[i].id);
   }
 }
@@ -645,7 +645,11 @@ function hideCommand() {
 function unhideCommand() {
   var hiddenCommands = [];
   for (var i = 0; i < data.settings.hidden.length; i++) {
-    if (!commandsData.hasOwnProperty(data.settings.hidden[i])) continue; // FIXME: add alert and remove
+    if (!commandsData.hasOwnProperty(data.settings.hidden[i])) {
+      // FIXME: add alert
+      data.settings.hidden.splice(i, 1);
+      continue;
+    }
     hiddenCommands.push(commandsData[data.settings.hidden[i]]);
   }
   var result = commandPalette(
@@ -846,7 +850,11 @@ function recentFiles() {
 function recentCommands() {
   var recentCommands = [];
   for (var i = 0; i < data.recent.commands.length; i++) {
-    if (!commandsData.hasOwnProperty(data.recent.commands[i])) continue; // FIXME: add alert
+    if (!commandsData.hasOwnProperty(data.recent.commands[i])) {
+      // FIXME: add alert
+      data.recent.commands.splice(i, 1);
+      continue;
+    }
     recentCommands.push(commandsData[data.recent.commands[i]]);
   }
   var result = commandPalette(

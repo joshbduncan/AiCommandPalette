@@ -89,7 +89,9 @@ settings.save = function () {
       os: os,
       locale: locale,
       aiVersion: aiVersion,
-      searchIncludesType: data.settings.searchIncludesType,
+      searchIncludesType: data.settings.searchIncludesType
+        ? data.settings.searchIncludesType
+        : false,
       startupCommands: data.settings.startupCommands,
     },
     recent: data.recent,
@@ -134,7 +136,7 @@ settings.versionCheck = function () {
   }
   if (semanticVersionComparison(settingsVersion, "0.10.0") < 0) {
     data.settings.startupCommands = updateStartupScreen();
-    data.settings.searchIncludesType = true;
+    data.settings.searchIncludesType = false;
   }
 
   // save the updated settings file and continue with script

@@ -55,11 +55,14 @@ ListBoxWrapper.prototype = {
       columnWidths: columnWidths,
       multiselect: this.multiselect,
     });
-    this.loadCommands(listbox, commands, columnKeys);
+    if (commands.length) {
+      this.loadCommands(listbox, commands, columnKeys);
+      listbox.selection = 0;
+    }
     this.addListeners(listbox);
     if (this.helptip) listbox.helpTip = this.helptip;
     listbox.frameStart = 0;
-    listbox.selection = 0;
+
     return listbox;
   },
   /**
@@ -276,9 +279,7 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
     } else {
       matches = scoreMatches(this.text, commands);
     }
-    if (matches.length > 0) {
-      list.update(matches);
-    }
+    list.update(matches);
   };
 
   // allow using arrow key from query input by sending a custom keyboard event to the list box
