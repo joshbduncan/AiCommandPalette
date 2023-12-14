@@ -369,6 +369,26 @@ var locStrings = {
   script: { en: "Script", de: "Skript", ru: "\u0421\u043a\u0440\u0438\u043f\u0442" },
   Scripts: { en: "Scripts", de: "Skripte laden", ru: "Scripts" },
   spot_colors: { en: "Spot Colors", de: "Volltonfarben", ru: "Spot Colors" },
+  startup_builder: {
+    en: "Startup Screen Customizer",
+    de: "Startup Screen Customizer",
+    ru: "Startup Screen Customizer",
+  },
+  startup_helptip: {
+    en: "Double-click a command to add it to your startup command list below.",
+    de: "Double-click a command to add it to your startup command list below.",
+    ru: "Double-click a command to add it to your startup command list below.",
+  },
+  startup_steps: {
+    en: "Startup Commands",
+    de: "Startup Commands",
+    ru: "Startup Commands",
+  },
+  startup_steps_helptip: {
+    en: "Startup commands will displayed in order from top to bottom.",
+    de: "Startup commands will displayed in order from top to bottom.",
+    ru: "Startup commands will displayed in order from top to bottom.",
+  },
   step_delete: {
     en: "Delete",
     de: "L\u00f6schen",
@@ -7343,6 +7363,17 @@ var builtCommands = {
         en: "About Ai Command Palette...",
         de: "\u00dcber Kurzbefehle \u2026",
         ru: "\u041e\u0431 Ai Command Palette",
+      },
+    },
+    config_buildStartup: {
+      action: "buildStartup",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: {
+        en: "Startup Commands...",
+        de: "Startup Commands...",
+        ru: "Startup Commands...",
       },
     },
     config_buildWorkflow: {

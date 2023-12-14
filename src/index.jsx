@@ -27,6 +27,7 @@ See the LICENSE file for details.
   //@include "commands.jsxinc"
   //@include "commandPalette.jsxinc"
   //@include "workflowBuilder.jsxinc"
+  //@include "startupBuilder.jsxinc"
   //@include "io.jsxinc"
   //@include "workflows.jsxinc"
 
@@ -81,7 +82,6 @@ See the LICENSE file for details.
     (docRequired = true),
     (selRequired = true)
   );
-  // FIXME: build start-up customizer
   var startupCommands = [];
   for (var i = 0; i < data.settings.startupCommands.length; i++) {
     startupCommands.push(commandsData[data.settings.startupCommands[i]]);

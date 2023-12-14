@@ -22,8 +22,9 @@ function buildWorkflow(workflow) {
   if (!result) return;
   var workflowActions = [];
   try {
-    for (var i = 0; i < result.actions.length; i++)
+    for (var i = 0; i < result.actions.length; i++) {
       workflowActions.push(localizedCommandLookup[result.actions[i].text]); // FIXME: switch to object
+    }
     data.commands.workflow[result.name] = {
       type: "workflow",
       actions: workflowActions,

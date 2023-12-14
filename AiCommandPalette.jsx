@@ -815,6 +815,7 @@ See the LICENSE file for details.
    */
   function scriptAction(action) {
     var write = true;
+    alert(action);
     switch (action) {
       case "settings":
         AiCommandPaletteSettings();
@@ -823,6 +824,9 @@ See the LICENSE file for details.
       case "about":
         about();
         write = false;
+        break;
+      case "buildStartup":
+        buildStartup();
         break;
       case "buildWorkflow":
         buildWorkflow();
@@ -853,9 +857,6 @@ See the LICENSE file for details.
       case "disableTypeInSearch":
         data.settings.searchIncludesType = !data.settings.searchIncludesType;
         break;
-      case "recentCommands":
-        recentCommands();
-        break;
       case "clearRecentCommands":
         if (
           !confirm(
@@ -885,6 +886,9 @@ See the LICENSE file for details.
    */
   function builtinAction(action) {
     switch (action) {
+      case "recentCommands":
+        recentCommands();
+        break;
       case "allWorkflows":
         showAllWorkflows();
         break;
@@ -992,6 +996,40 @@ See the LICENSE file for details.
     });
 
     win.show();
+  }
+
+  function buildStartup() {
+    var availableStartupCommands = filterCommands(
+      (commands = commandsData),
+      (types = [
+        "bookmark",
+        "script",
+        "workflow",
+        "menu",
+        "tool",
+        "action",
+        "builtin",
+        "config",
+      ]),
+      (showHidden = false),
+      (hideCommands = []),
+      (docRequired = true),
+      (selRequired = true)
+    );
+    // show the workflow builder dialog
+    var result = startupBuilder(availableStartupCommands);
+    if (!result) return;
+    var previousStartupCommands = data.settings.startupCommands;
+    var startupCommands = [];
+    try {
+      for (var i = 0; i < result.length; i++) {
+        startupCommands.push(localizedCommandLookup[result[i].text]); // FIXME: switch to object
+      }
+      data.settings.startupCommands = startupCommands;
+    } catch (e) {
+      alert(localize(locStrings.startup_error_saving));
+      data.settings.startupCommands = previousStartupCommands;
+    }
   }
 
   /** Document Info Dialog */
@@ -2001,6 +2039,26 @@ See the LICENSE file for details.
     script: { en: "Script", de: "Skript", ru: "\u0421\u043a\u0440\u0438\u043f\u0442" },
     Scripts: { en: "Scripts", de: "Skripte laden", ru: "Scripts" },
     spot_colors: { en: "Spot Colors", de: "Volltonfarben", ru: "Spot Colors" },
+    startup_builder: {
+      en: "Startup Screen Customizer",
+      de: "Startup Screen Customizer",
+      ru: "Startup Screen Customizer",
+    },
+    startup_helptip: {
+      en: "Double-click a command to add it to your startup command list below.",
+      de: "Double-click a command to add it to your startup command list below.",
+      ru: "Double-click a command to add it to your startup command list below.",
+    },
+    startup_steps: {
+      en: "Startup Commands",
+      de: "Startup Commands",
+      ru: "Startup Commands",
+    },
+    startup_steps_helptip: {
+      en: "Startup commands will displayed in order from top to bottom.",
+      de: "Startup commands will displayed in order from top to bottom.",
+      ru: "Startup commands will displayed in order from top to bottom.",
+    },
     step_delete: {
       en: "Delete",
       de: "L\u00f6schen",
@@ -8977,6 +9035,17 @@ See the LICENSE file for details.
           ru: "\u041e\u0431 Ai Command Palette",
         },
       },
+      config_buildStartup: {
+        action: "buildStartup",
+        type: "config",
+        docRequired: false,
+        selRequired: false,
+        loc: {
+          en: "Startup Commands...",
+          de: "Startup Commands...",
+          ru: "Startup Commands...",
+        },
+      },
       config_buildWorkflow: {
         action: "buildWorkflow",
         type: "config",
@@ -9389,7 +9458,7 @@ See the LICENSE file for details.
       for (var i = 0; i < actions.length; i++) processCommand(commandsData[actions[i]]);
     } else {
       // update recent commands list
-      if (!insideWorkflow && command.id != "defaults_recentCommands") {
+      if (!insideWorkflow && command.id != "builtin_recentCommands") {
         // make sure command isn't already in the list
         var idx = data.recent.commands.indexOf(command.id);
         if (idx > -1) data.recent.commands.splice(idx, 1);
@@ -9640,12 +9709,12 @@ See the LICENSE file for details.
    * Add listbox command to Workflow when double-clicking.
    * @param {Object}  listbox  ScriptUI listbox.
    */
-  function addToWorkflowOnDoubleClick(listbox) {
+  function addToStepsOnDoubleClick(listbox) {
     listbox.onDoubleClick = function () {
       var win, steps, command;
       if (listbox.selection) {
         win = listbox.window;
-        steps = win.findElement("workflowSteps");
+        steps = win.findElement("steps");
         command = commandsData[localizedCommandLookup[listbox.selection]];
         with (steps.add("item", command.localizedName)) {
           subItems[0].text = command.localizedType;
@@ -9867,7 +9936,7 @@ See the LICENSE file for details.
       paletteSettings.defaultColumns,
       false,
       localize(locStrings.cd_helptip),
-      [addToWorkflowOnDoubleClick, scrollListBoxWithArrows]
+      [addToStepsOnDoubleClick, scrollListBoxWithArrows]
     );
 
     // work-around to stop windows from flickering/flashing explorer
@@ -9892,7 +9961,7 @@ See the LICENSE file for details.
     var steps = new ListBoxWrapper(
       actionSteps,
       pSteps,
-      "workflowSteps",
+      "steps",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
       paletteSettings.defaultColumns,
       true,
@@ -9921,11 +9990,11 @@ See the LICENSE file for details.
     var winButtons = win.add("group");
     winButtons.orientation = "row";
     winButtons.alignChildren = ["center", "center"];
-    var ok = winButtons.add("button", undefined, localize(locStrings.save), {
+    var save = winButtons.add("button", undefined, localize(locStrings.save), {
       name: "ok",
     });
-    ok.preferredSize.width = 100;
-    ok.enabled = editWorkflow ? true : false;
+    save.preferredSize.width = 100;
+    save.enabled = editWorkflow ? true : false;
     var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
       name: "cancel",
     });
@@ -9946,12 +10015,12 @@ See the LICENSE file for details.
 
     steps.listbox.onChange = function () {
       workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
-      ok.enabled =
+      save.enabled =
         steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
     };
 
     workflowName.onChanging = function () {
-      ok.enabled = workflowName.text.length > 0 ? true : false;
+      save.enabled = workflowName.text.length > 0 ? true : false;
     };
 
     up.onClick = function () {
@@ -10005,11 +10074,11 @@ See the LICENSE file for details.
       }
       steps.listbox.selection == null;
       workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
-      ok.enabled =
+      save.enabled =
         steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
     };
 
-    ok.onClick = function () {
+    save.onClick = function () {
       // check for workflow overwrite
       if (
         !editWorkflow &&
@@ -10027,6 +10096,157 @@ See the LICENSE file for details.
 
     if (win.show() == 1) {
       return { name: workflowName.text.trim(), actions: steps.listbox.items };
+    }
+    return false;
+  }
+  function startupBuilder(commands) {
+    // create the dialog
+    var win = new Window("dialog");
+    win.text = localize(locStrings.startup_builder);
+    win.alignChildren = "fill";
+
+    // setup the query input
+    var pSearch = win.add("panel", undefined, localize(locStrings.cd_search_for));
+    pSearch.alignChildren = ["fill", "center"];
+    pSearch.margins = 20;
+    var q = pSearch.add("edittext");
+    q.helpTip = localize(locStrings.cd_q_helptip);
+
+    // setup the commands listbox
+    var list = new ListBoxWrapper(
+      commands,
+      pSearch,
+      "commands",
+      [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
+      paletteSettings.defaultColumns,
+      false,
+      localize(locStrings.startup_helptip),
+      [addToStepsOnDoubleClick, scrollListBoxWithArrows]
+    );
+
+    // work-around to stop windows from flickering/flashing explorer
+    if (windowsFlickerFix) {
+      simulateKeypress("TAB", 1);
+    } else {
+      q.active = true;
+    }
+
+    var pSteps = win.add("panel", undefined, localize(locStrings.startup_steps));
+    pSteps.alignChildren = ["fill", "center"];
+    pSteps.margins = 20;
+
+    var commandSteps = [];
+    for (var i = 0; i < data.settings.startupCommands.length; i++) {
+      commandSteps.push(commandsData[data.settings.startupCommands[i]]);
+    }
+
+    // setup the workflow action steps listbox
+    var steps = new ListBoxWrapper(
+      commandSteps,
+      pSteps,
+      "steps",
+      [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
+      paletteSettings.defaultColumns,
+      true,
+      localize(locStrings.startup_steps_helptip),
+      []
+    );
+
+    var stepButtons = pSteps.add("group");
+    stepButtons.alignment = "center";
+    var up = stepButtons.add("button", undefined, localize(locStrings.step_up));
+    up.preferredSize.width = 100;
+    var down = stepButtons.add("button", undefined, localize(locStrings.step_down));
+    down.preferredSize.width = 100;
+    var del = stepButtons.add("button", undefined, localize(locStrings.step_delete));
+    del.preferredSize.width = 100;
+
+    // window buttons
+    var winButtons = win.add("group");
+    winButtons.orientation = "row";
+    winButtons.alignChildren = ["center", "center"];
+    var save = winButtons.add("button", undefined, localize(locStrings.save), {
+      name: "ok",
+    });
+    save.preferredSize.width = 100;
+    save.enabled = editWorkflow ? true : false;
+    var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
+      name: "cancel",
+    });
+    cancel.preferredSize.width = 100;
+
+    // as a query is typed update the listbox
+    var matches;
+    q.onChanging = function () {
+      if (this.text === "") {
+        matches = commands;
+      } else {
+        matches = scoreMatches(this.text, commands);
+      }
+      if (matches.length > 0) {
+        list.update(matches);
+      }
+    };
+
+    steps.listbox.onChange = function () {
+      save.enabled = steps.listbox.items.length > 0 ? true : false;
+    };
+
+    up.onClick = function () {
+      var selected = sortIndexes(steps.listbox.selection);
+      if (selected[i] == 0 || !contiguous(selected)) return;
+      for (var i = 0; i < selected.length; i++)
+        swap(steps.listbox.items[selected[i] - 1], steps.listbox.items[selected[i]]);
+      steps.listbox.selection = null;
+      for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
+    };
+
+    down.onClick = function () {
+      var selected = sortIndexes(steps.listbox.selection);
+      if (
+        selected[selected.length - 1] == steps.listbox.items.length - 1 ||
+        !contiguous(selected)
+      )
+        return;
+      for (var i = steps.listbox.selection.length - 1; i > -1; i--)
+        swap(steps.listbox.items[selected[i]], steps.listbox.items[selected[i] + 1]);
+      steps.listbox.selection = null;
+      for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
+    };
+
+    // the api returns the selected items in the order they were
+    // selected/clicked by the user when you call `list.selection`
+    // so their actual listbox indexes need to be sorted for the
+    // up, down, and delete buttons to work when multiple items are selected
+    function sortIndexes(sel) {
+      var indexes = [];
+      for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
+      return indexes.sort();
+    }
+
+    // check to make sure selection is contiguous
+    function contiguous(sel) {
+      return sel.length == sel[sel.length - 1] - sel[0] + 1;
+    }
+
+    /** swap listbox items in place */
+    function swap(x, y) {
+      var t = x.text;
+      x.text = y.text;
+      y.text = t;
+    }
+
+    del.onClick = function () {
+      var selected = sortIndexes(steps.listbox.selection);
+      for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
+        steps.listbox.remove(selected[i]);
+      }
+      steps.listbox.selection == null;
+      save.enabled = steps.listbox.items.length > 0 ? true : false;
+    };
+
+    if (win.show() == 1) {
+      return steps.listbox.items;
     }
     return false;
   }
@@ -10112,8 +10332,9 @@ See the LICENSE file for details.
     if (!result) return;
     var workflowActions = [];
     try {
-      for (var i = 0; i < result.actions.length; i++)
+      for (var i = 0; i < result.actions.length; i++) {
         workflowActions.push(localizedCommandLookup[result.actions[i].text]); // FIXME: switch to object
+      }
       data.commands.workflow[result.name] = {
         type: "workflow",
         actions: workflowActions,
@@ -10238,7 +10459,6 @@ See the LICENSE file for details.
     (docRequired = true),
     (selRequired = true)
   );
-  // FIXME: build start-up customizer
   var startupCommands = [];
   for (var i = 0; i < data.settings.startupCommands.length; i++) {
     startupCommands.push(commandsData[data.settings.startupCommands[i]]);

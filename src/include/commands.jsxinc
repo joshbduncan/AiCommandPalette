@@ -121,7 +121,7 @@ function processCommand(command) {
     for (var i = 0; i < actions.length; i++) processCommand(commandsData[actions[i]]);
   } else {
     // update recent commands list
-    if (!insideWorkflow && command.id != "defaults_recentCommands") {
+    if (!insideWorkflow && command.id != "builtin_recentCommands") {
       // make sure command isn't already in the list
       var idx = data.recent.commands.indexOf(command.id);
       if (idx > -1) data.recent.commands.splice(idx, 1);

@@ -6,6 +6,7 @@
  */
 function scriptAction(action) {
   var write = true;
+  alert(action);
   switch (action) {
     case "settings":
       AiCommandPaletteSettings();
@@ -14,6 +15,9 @@ function scriptAction(action) {
     case "about":
       about();
       write = false;
+      break;
+    case "buildStartup":
+      buildStartup();
       break;
     case "buildWorkflow":
       buildWorkflow();
@@ -44,9 +48,6 @@ function scriptAction(action) {
     case "disableTypeInSearch":
       data.settings.searchIncludesType = !data.settings.searchIncludesType;
       break;
-    case "recentCommands":
-      recentCommands();
-      break;
     case "clearRecentCommands":
       if (
         !confirm(
@@ -76,6 +77,9 @@ function scriptAction(action) {
  */
 function builtinAction(action) {
   switch (action) {
+    case "recentCommands":
+      recentCommands();
+      break;
     case "allWorkflows":
       showAllWorkflows();
       break;
@@ -183,6 +187,40 @@ function about() {
   });
 
   win.show();
+}
+
+function buildStartup() {
+  var availableStartupCommands = filterCommands(
+    (commands = commandsData),
+    (types = [
+      "bookmark",
+      "script",
+      "workflow",
+      "menu",
+      "tool",
+      "action",
+      "builtin",
+      "config",
+    ]),
+    (showHidden = false),
+    (hideCommands = []),
+    (docRequired = true),
+    (selRequired = true)
+  );
+  // show the workflow builder dialog
+  var result = startupBuilder(availableStartupCommands);
+  if (!result) return;
+  var previousStartupCommands = data.settings.startupCommands;
+  var startupCommands = [];
+  try {
+    for (var i = 0; i < result.length; i++) {
+      startupCommands.push(localizedCommandLookup[result[i].text]); // FIXME: switch to object
+    }
+    data.settings.startupCommands = startupCommands;
+  } catch (e) {
+    alert(localize(locStrings.startup_error_saving));
+    data.settings.startupCommands = previousStartupCommands;
+  }
 }
 
 /** Document Info Dialog */

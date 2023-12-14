@@ -117,12 +117,12 @@ function selectOnDoubleClick(listbox) {
  * Add listbox command to Workflow when double-clicking.
  * @param {Object}  listbox  ScriptUI listbox.
  */
-function addToWorkflowOnDoubleClick(listbox) {
+function addToStepsOnDoubleClick(listbox) {
   listbox.onDoubleClick = function () {
     var win, steps, command;
     if (listbox.selection) {
       win = listbox.window;
-      steps = win.findElement("workflowSteps");
+      steps = win.findElement("steps");
       command = commandsData[localizedCommandLookup[listbox.selection]];
       with (steps.add("item", command.localizedName)) {
         subItems[0].text = command.localizedType;

@@ -1,7 +1,7 @@
-function workflowBuilder(commands, editWorkflow) {
+function startupBuilder(commands) {
   // create the dialog
   var win = new Window("dialog");
-  win.text = localize(locStrings.wf_builder);
+  win.text = localize(locStrings.startup_builder);
   win.alignChildren = "fill";
 
   // setup the query input
@@ -19,7 +19,7 @@ function workflowBuilder(commands, editWorkflow) {
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
     paletteSettings.defaultColumns,
     false,
-    localize(locStrings.cd_helptip),
+    localize(locStrings.startup_helptip),
     [addToStepsOnDoubleClick, scrollListBoxWithArrows]
   );
 
@@ -30,26 +30,24 @@ function workflowBuilder(commands, editWorkflow) {
     q.active = true;
   }
 
-  var pSteps = win.add("panel", undefined, localize(locStrings.wf_steps));
+  var pSteps = win.add("panel", undefined, localize(locStrings.startup_steps));
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
 
-  var actionSteps = [];
-  if (editWorkflow) {
-    for (var i = 0; i < editWorkflow.actions.length; i++) {
-      actionSteps.push(commandsData[editWorkflow.actions[i]]);
-    }
+  var commandSteps = [];
+  for (var i = 0; i < data.settings.startupCommands.length; i++) {
+    commandSteps.push(commandsData[data.settings.startupCommands[i]]);
   }
 
   // setup the workflow action steps listbox
   var steps = new ListBoxWrapper(
-    actionSteps,
+    commandSteps,
     pSteps,
     "steps",
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
     paletteSettings.defaultColumns,
     true,
-    localize(locStrings.wf_steps_helptip),
+    localize(locStrings.startup_steps_helptip),
     []
   );
 
@@ -61,14 +59,6 @@ function workflowBuilder(commands, editWorkflow) {
   down.preferredSize.width = 100;
   var del = stepButtons.add("button", undefined, localize(locStrings.step_delete));
   del.preferredSize.width = 100;
-
-  // command name
-  var pName = win.add("panel", undefined, localize(locStrings.wf_save_as));
-  pName.alignChildren = ["fill", "center"];
-  pName.margins = 20;
-  var workflowNameText = editWorkflow ? editWorkflow.localizedName : "";
-  var workflowName = pName.add("edittext", undefined, workflowNameText);
-  workflowName.enabled = editWorkflow ? true : false;
 
   // window buttons
   var winButtons = win.add("group");
@@ -98,13 +88,7 @@ function workflowBuilder(commands, editWorkflow) {
   };
 
   steps.listbox.onChange = function () {
-    workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
-    save.enabled =
-      steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
-  };
-
-  workflowName.onChanging = function () {
-    save.enabled = workflowName.text.length > 0 ? true : false;
+    save.enabled = steps.listbox.items.length > 0 ? true : false;
   };
 
   up.onClick = function () {
@@ -157,29 +141,11 @@ function workflowBuilder(commands, editWorkflow) {
       steps.listbox.remove(selected[i]);
     }
     steps.listbox.selection == null;
-    workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
-    save.enabled =
-      steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
-  };
-
-  save.onClick = function () {
-    // check for workflow overwrite
-    if (
-      !editWorkflow &&
-      data.commands.workflow.hasOwnProperty(workflowName.text.trim()) &&
-      !confirm(
-        localize(locStrings.wf_already_exists) + "\n" + workflowName.text.trim(),
-        "noAsDflt",
-        localize(locStrings.wf_already_exists_title)
-      )
-    ) {
-      return;
-    }
-    win.close(1);
+    save.enabled = steps.listbox.items.length > 0 ? true : false;
   };
 
   if (win.show() == 1) {
-    return { name: workflowName.text.trim(), actions: steps.listbox.items };
+    return steps.listbox.items;
   }
   return false;
 }
