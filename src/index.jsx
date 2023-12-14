@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.9.3";
+  var _version = "0.10.0";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -37,7 +37,6 @@ See the LICENSE file for details.
       bookmark: {},
       script: {},
       workflow: {},
-      defaults: builtCommands.defaults,
       menu: builtCommands.menu,
       tool: builtCommands.tool,
       action: {},
@@ -46,6 +45,7 @@ See the LICENSE file for details.
     },
     settings: {
       hidden: [],
+      startupCommands: [],
     },
     recent: {
       commands: [],
@@ -67,15 +67,8 @@ See the LICENSE file for details.
   var localizedCommandLookup = {};
   buildCommands(data.commands);
 
-  // check preferences file
-  if (data.settings.hasOwnProperty("version") && data.settings.version < "0.8.1") {
-    alert(localize(locStrings.pref_file_non_compatible));
-    settings.backup();
-    updateOldPreferences();
-    settings.save();
-    alert(localize(locStrings.pref_update_complete));
-    return;
-  }
+  // perform version updates
+  settings.versionCheck();
 
   var allCommands = Object.keys(commandsData);
 
@@ -89,20 +82,16 @@ See the LICENSE file for details.
     (selRequired = true)
   );
   // FIXME: build start-up customizer
-  var showOnlyCommands = filterCommands(
-    (commands = commandsData),
-    (types = ["bookmark", "script", "workflow", "defaults"]),
-    (showHidden = false),
-    (hideCommands = null),
-    (docRequired = true),
-    (selRequired = true)
-  );
+  var startupCommands = [];
+  for (var i = 0; i < data.settings.startupCommands.length; i++) {
+    startupCommands.push(commandsData[data.settings.startupCommands[i]]);
+  }
   var result = commandPalette(
     (commands = queryableCommands),
     (title = localize(locStrings.title)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false),
-    (showOnly = showOnlyCommands)
+    (showOnly = startupCommands)
   );
   if (!result) return;
   processCommand(result);

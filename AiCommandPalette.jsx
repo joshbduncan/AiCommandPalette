@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.9.3";
+  var _version = "0.10.0";
   var _copyright = "Copyright 2022 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -124,6 +124,7 @@ See the LICENSE file for details.
   var os = $.os;
   var sysOS = /mac/i.test(os) ? "mac" : "win";
   var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
+  var settingsRequiredUpdateVersion = "0.10.0";
 
   // DEVELOPMENT SETTINGS
 
@@ -177,11 +178,10 @@ See the LICENSE file for details.
     if (file.exists) {
       try {
         var settings = readJSONData(file);
-        if (settings != {}) {
-          for (var prop in settings) {
-            for (var subProp in settings[prop]) {
-              data[prop][subProp] = settings[prop][subProp];
-            }
+        if (settings == {}) return; // FIXME: add alert
+        for (var prop in settings) {
+          for (var subProp in settings[prop]) {
+            data[prop][subProp] = settings[prop][subProp];
           }
         }
       } catch (e) {
@@ -207,6 +207,7 @@ See the LICENSE file for details.
         locale: locale,
         aiVersion: aiVersion,
         searchIncludesType: data.settings.searchIncludesType,
+        startupCommands: data.settings.startupCommands,
       },
       recent: data.recent,
     };
@@ -220,6 +221,139 @@ See the LICENSE file for details.
     var folder = this.folder();
     folder.execute();
   };
+
+  settings.versionCheck = function () {
+    // if the pref file is so old it doesn't have version info, just backup and start over
+    if (!data.settings.hasOwnProperty("version")) {
+      alert(localize(locStrings.pref_file_non_compatible));
+      settings.backup();
+      this.file.remove();
+      return;
+    }
+
+    // if the settings >= the minimum required update version just continue
+    var settingsVersion = data.settings.version;
+
+    if (semanticVersionComparison(settingsVersion, settingsRequiredUpdateVersion) >= 0)
+      return;
+
+    // warn user about required settings update and backup their current settings
+    alert(localize(locStrings.pref_file_non_compatible));
+    settings.backup();
+    if (semanticVersionComparison(settingsVersion, "0.8.1") < 0) {
+      data.commands.workflow = updateOldWorkflows();
+      data.commands.bookmark = updateOldBookmarks();
+      data.commands.script = updateOldScripts();
+      data.settings.hidden = updateOldHiddens();
+      data.recent.commands = [];
+    }
+    if (semanticVersionComparison(settingsVersion, "0.10.0") < 0) {
+      data.settings.startupCommands = updateStartupScreen();
+      data.settings.searchIncludesType = true;
+    }
+
+    // save the updated settings file and continue with script
+    settings.save();
+    alert(localize(locStrings.pref_update_complete));
+  };
+
+  function updateOldWorkflows() {
+    updatedWorkflows = {};
+    updatedActions = [];
+    var currentWorkflow, currentActions, currentAction;
+    for (var workflow in data.commands.workflow) {
+      currentWorkflow = data.commands.workflow[workflow];
+      currentActions = currentWorkflow.actions;
+      for (var i = 0; i < currentActions.length; i++) {
+        currentAction = currentActions[i];
+        if (!localizedCommandLookup.hasOwnProperty(currentAction)) {
+          alert(
+            "Workflow Update Error\n" +
+              "Workflow command '" +
+              currentAction +
+              "' couldn't be updated.\n\nThe command has been removed from your '" +
+              workflow.replace("Workflow: ", "") +
+              "' workflow."
+          );
+          continue;
+        }
+        updatedActions.push(localizedCommandLookup[currentAction]);
+      }
+      updatedWorkflows[currentWorkflow.name] = {
+        type: "workflow",
+        actions: updatedActions,
+      };
+    }
+    return updatedWorkflows;
+  }
+
+  function updateOldBookmarks() {
+    updatedBookmarks = {};
+    var currentBookmark;
+    for (var bookmark in data.commands.bookmark) {
+      currentBookmark = data.commands.bookmark[bookmark];
+      updatedBookmarks[currentBookmark.name] = {
+        type: "bookmark",
+        path: currentBookmark.path,
+        bookmarkType: currentBookmark.bookmarkType,
+      };
+    }
+    return updatedBookmarks;
+  }
+
+  function updateOldScripts() {
+    updatedScripts = {};
+    var currentScript;
+    for (var script in data.commands.script) {
+      currentScript = data.commands.script[script];
+      updatedScripts[currentScript.name] = {
+        type: "script",
+        path: currentScript.path,
+      };
+    }
+    return updatedScripts;
+  }
+
+  function updateOldHiddens() {
+    updatedHiddenCommands = [];
+    var hiddenCommand;
+    for (var i = 0; i < data.settings.hidden.length; i++) {
+      hiddenCommand = data.settings.hidden[i];
+      if (localizedCommandLookup.hasOwnProperty(hiddenCommand)) {
+        updatedHiddenCommands.push(localizedCommandLookup[hiddenCommand]);
+      }
+    }
+    return updatedHiddenCommands;
+  }
+
+  function updateOldRecents() {
+    updatedRecentCommands = [];
+    var recentCommand;
+    for (var i = 0; i < data.recent.commands.length; i++) {
+      recentCommand = data.recent.commands[i];
+      if (localizedCommandLookup.hasOwnProperty(recentCommand)) {
+        updatedRecentCommands.push(localizedCommandLookup[recentCommand]);
+      }
+    }
+    return updatedRecentCommands;
+  }
+
+  function updateStartupScreen() {
+    var oldStartupCommands = filterCommands(
+      (commands = commandsData),
+      (types = ["bookmark", "script", "workflow"]),
+      (showHidden = false),
+      (hideCommands = null),
+      (docRequired = true),
+      (selRequired = true)
+    );
+    var startupCommands = [];
+    for (var i = 0; i < oldStartupCommands.length; i++) {
+      startupCommands.push(oldStartupCommands[i].id);
+    }
+    startupCommands.push("builtin_recentCommands", "config_settings");
+    return startupCommands;
+  }
 
   // DEVELOPMENT HELPERS
 
@@ -241,17 +375,6 @@ See the LICENSE file for details.
     writeJSONData(data, this.dataFile());
     writeJSONData(commandsData, this.commandsFile());
   };
-  /**
-   * Check to see if there is an active document.
-   * @returns Make sure at least one document is open for certain built-in commands.
-   */
-  function activeDocument() {
-    if (app.documents.length < 1) {
-      alert(localize(locStrings.no_active_document));
-      return false;
-    }
-    return true;
-  }
 
   /**
    * Show an alert with all object data for a command.
@@ -271,6 +394,56 @@ See the LICENSE file for details.
       }
     }
     alert(s);
+  }
+  /**
+   * Check to see if there is an active document.
+   * @returns Make sure at least one document is open for certain built-in commands.
+   */
+  function activeDocument() {
+    if (app.documents.length < 1) {
+      alert(localize(locStrings.no_active_document));
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Compare semantic version numbers.
+   * @param {String} a Semantic version number.
+   * @param {String} b Semantic version number.
+   * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
+   */
+  function semanticVersionComparison(a, b) {
+    if (a === b) {
+      return 0;
+    }
+
+    var a_components = a.split(".");
+    var b_components = b.split(".");
+
+    var len = Math.min(a_components.length, b_components.length);
+
+    // loop while the components are equal
+    for (var i = 0; i < len; i++) {
+      // A bigger than B
+      if (parseInt(a_components[i]) > parseInt(b_components[i])) {
+        return 1;
+      }
+
+      // B bigger than A
+      if (parseInt(a_components[i]) < parseInt(b_components[i])) {
+        return -1;
+      }
+    }
+
+    // If one's a prefix of the other, the longer one is greater.
+    if (a_components.length > b_components.length) {
+      return 1;
+    }
+
+    if (a_components.length < b_components.length) {
+      return -1;
+    }
   }
 
   /**
@@ -633,99 +806,6 @@ See the LICENSE file for details.
     html.write(htmlBody);
     html.close();
     html.execute();
-  }
-
-  /**
-   * Wrapper for helper functions that update a users preferences to the new format.
-   */
-  function updateOldPreferences() {
-    updateOldWorkflows();
-    updateOldBookmarks();
-    updateOldScripts();
-    updateOldHiddens();
-    data.settings.searchIncludesType = true;
-    data.recent.commands = [];
-  }
-
-  function updateOldWorkflows() {
-    updatedWorkflows = {};
-    updatedActions = [];
-    var currentWorkflow, currentActions, currentAction;
-    for (var workflow in data.commands.workflow) {
-      currentWorkflow = data.commands.workflow[workflow];
-      currentActions = currentWorkflow.actions;
-      for (var i = 0; i < currentActions.length; i++) {
-        currentAction = currentActions[i];
-        if (!localizedCommandLookup.hasOwnProperty(currentAction)) {
-          alert(
-            "Workflow Update Error\n" +
-              "Workflow command '" +
-              currentAction +
-              "' couldn't be updated.\n\nThe command has been removed from your '" +
-              workflow.replace("Workflow: ", "") +
-              "' workflow."
-          );
-          continue;
-        }
-        updatedActions.push(localizedCommandLookup[currentAction]);
-      }
-      updatedWorkflows[currentWorkflow.name] = {
-        type: "workflow",
-        actions: updatedActions,
-      };
-    }
-    data.commands.workflow = updatedWorkflows;
-  }
-
-  function updateOldBookmarks() {
-    updatedBookmarks = {};
-    var currentBookmark;
-    for (var bookmark in data.commands.bookmark) {
-      currentBookmark = data.commands.bookmark[bookmark];
-      updatedBookmarks[currentBookmark.name] = {
-        type: "bookmark",
-        path: currentBookmark.path,
-        bookmarkType: currentBookmark.bookmarkType,
-      };
-    }
-    data.commands.bookmark = updatedBookmarks;
-  }
-
-  function updateOldScripts() {
-    updatedScripts = {};
-    var currentScript;
-    for (var script in data.commands.script) {
-      currentScript = data.commands.script[script];
-      updatedScripts[currentScript.name] = {
-        type: "script",
-        path: currentScript.path,
-      };
-    }
-    data.commands.script = updatedScripts;
-  }
-
-  function updateOldHiddens() {
-    updatedHiddenCommands = [];
-    var hiddenCommand;
-    for (var i = 0; i < data.settings.hidden.length; i++) {
-      hiddenCommand = data.settings.hidden[i];
-      if (localizedCommandLookup.hasOwnProperty(hiddenCommand)) {
-        updatedHiddenCommands.push(localizedCommandLookup[hiddenCommand]);
-      }
-    }
-    data.settings.hidden = updatedHiddenCommands;
-  }
-
-  function updateOldRecents() {
-    updatedRecentCommands = [];
-    var recentCommand;
-    for (var i = 0; i < data.recent.commands.length; i++) {
-      recentCommand = data.recent.commands[i];
-      if (localizedCommandLookup.hasOwnProperty(recentCommand)) {
-        updatedRecentCommands.push(localizedCommandLookup[recentCommand]);
-      }
-    }
-    data.recent.commands = updatedRecentCommands;
   }
   // AI COMMAND PALETTE OPERATIONS
 
@@ -1863,7 +1943,7 @@ See the LICENSE file for details.
       ru: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
     },
     pref_update_complete: {
-      en: "Preferences Update Complete\nRe-run script.",
+      en: "Preferences Update Complete.",
       de: "Aktualisierung der Voreinstellungen fertiggestellt",
       ru: "Preferences Update Complete",
     },
@@ -9029,6 +9109,17 @@ See the LICENSE file for details.
           ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0444\u0430\u0439\u043b \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043a",
         },
       },
+      config_settings: {
+        action: "settings",
+        type: "config",
+        docRequired: false,
+        selRequired: false,
+        loc: {
+          en: "Ai Command Palette Settings...",
+          de: "Kurzbefehle \u2013 Einstellungen \u2026",
+          ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+        },
+      },
     },
     builtin: {
       builtin_allWorkflows: {
@@ -9162,28 +9253,15 @@ See the LICENSE file for details.
           ru: "Open Recent File...",
         },
       },
-    },
-    defaults: {
-      defaults_recentCommands: {
+      builtin_recentCommands: {
         action: "recentCommands",
-        type: "defaults",
+        type: "builtin",
         docRequired: false,
         selRequired: false,
         loc: {
           en: "Recent Commands...",
           de: "Letzte Befehle \u2026",
           ru: "Recent Commands...",
-        },
-      },
-      defaults_settings: {
-        action: "settings",
-        type: "defaults",
-        docRequired: false,
-        selRequired: false,
-        loc: {
-          en: "Ai Command Palette Settings...",
-          de: "Kurzbefehle \u2013 Einstellungen \u2026",
-          ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
         },
       },
     },
@@ -9352,7 +9430,6 @@ See the LICENSE file for details.
         return;
     switch (command.type.toLowerCase()) {
       case "config":
-      case "defaults":
         try {
           scriptAction(command.action);
         } catch (e) {
@@ -10117,7 +10194,6 @@ See the LICENSE file for details.
       bookmark: {},
       script: {},
       workflow: {},
-      defaults: builtCommands.defaults,
       menu: builtCommands.menu,
       tool: builtCommands.tool,
       action: {},
@@ -10126,6 +10202,7 @@ See the LICENSE file for details.
     },
     settings: {
       hidden: [],
+      startupCommands: [],
     },
     recent: {
       commands: [],
@@ -10147,15 +10224,8 @@ See the LICENSE file for details.
   var localizedCommandLookup = {};
   buildCommands(data.commands);
 
-  // check preferences file
-  if (data.settings.hasOwnProperty("version") && data.settings.version < "0.8.1") {
-    alert(localize(locStrings.pref_file_non_compatible));
-    settings.backup();
-    updateOldPreferences();
-    settings.save();
-    alert(localize(locStrings.pref_update_complete));
-    return;
-  }
+  // perform version updates
+  settings.versionCheck();
 
   var allCommands = Object.keys(commandsData);
 
@@ -10169,20 +10239,16 @@ See the LICENSE file for details.
     (selRequired = true)
   );
   // FIXME: build start-up customizer
-  var showOnlyCommands = filterCommands(
-    (commands = commandsData),
-    (types = ["bookmark", "script", "workflow", "defaults"]),
-    (showHidden = false),
-    (hideCommands = null),
-    (docRequired = true),
-    (selRequired = true)
-  );
+  var startupCommands = [];
+  for (var i = 0; i < data.settings.startupCommands.length; i++) {
+    startupCommands.push(commandsData[data.settings.startupCommands[i]]);
+  }
   var result = commandPalette(
     (commands = queryableCommands),
     (title = localize(locStrings.title)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false),
-    (showOnly = showOnlyCommands)
+    (showOnly = startupCommands)
   );
   if (!result) return;
   processCommand(result);

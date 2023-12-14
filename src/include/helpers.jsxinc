@@ -11,23 +11,42 @@ function activeDocument() {
 }
 
 /**
- * Show an alert with all object data for a command.
- * @param command Command to show data about.
+ * Compare semantic version numbers.
+ * @param {String} a Semantic version number.
+ * @param {String} b Semantic version number.
+ * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
  */
-function alertCommandData(command) {
-  var s = "";
-  for (var prop in command) {
-    var subS = "";
-    if (typeof command[prop] == "object") {
-      for (var subProp in command[prop]) {
-        subS += "> " + subProp + ": " + command[prop][subProp] + "\n";
-      }
-      s += prop + ":\n" + subS;
-    } else {
-      s += prop + ": " + command[prop] + "\n";
+function semanticVersionComparison(a, b) {
+  if (a === b) {
+    return 0;
+  }
+
+  var a_components = a.split(".");
+  var b_components = b.split(".");
+
+  var len = Math.min(a_components.length, b_components.length);
+
+  // loop while the components are equal
+  for (var i = 0; i < len; i++) {
+    // A bigger than B
+    if (parseInt(a_components[i]) > parseInt(b_components[i])) {
+      return 1;
+    }
+
+    // B bigger than A
+    if (parseInt(a_components[i]) < parseInt(b_components[i])) {
+      return -1;
     }
   }
-  alert(s);
+
+  // If one's a prefix of the other, the longer one is greater.
+  if (a_components.length > b_components.length) {
+    return 1;
+  }
+
+  if (a_components.length < b_components.length) {
+    return -1;
+  }
 }
 
 /**
@@ -390,97 +409,4 @@ function openURL(url) {
   html.write(htmlBody);
   html.close();
   html.execute();
-}
-
-/**
- * Wrapper for helper functions that update a users preferences to the new format.
- */
-function updateOldPreferences() {
-  updateOldWorkflows();
-  updateOldBookmarks();
-  updateOldScripts();
-  updateOldHiddens();
-  data.settings.searchIncludesType = true;
-  data.recent.commands = [];
-}
-
-function updateOldWorkflows() {
-  updatedWorkflows = {};
-  updatedActions = [];
-  var currentWorkflow, currentActions, currentAction;
-  for (var workflow in data.commands.workflow) {
-    currentWorkflow = data.commands.workflow[workflow];
-    currentActions = currentWorkflow.actions;
-    for (var i = 0; i < currentActions.length; i++) {
-      currentAction = currentActions[i];
-      if (!localizedCommandLookup.hasOwnProperty(currentAction)) {
-        alert(
-          "Workflow Update Error\n" +
-            "Workflow command '" +
-            currentAction +
-            "' couldn't be updated.\n\nThe command has been removed from your '" +
-            workflow.replace("Workflow: ", "") +
-            "' workflow."
-        );
-        continue;
-      }
-      updatedActions.push(localizedCommandLookup[currentAction]);
-    }
-    updatedWorkflows[currentWorkflow.name] = {
-      type: "workflow",
-      actions: updatedActions,
-    };
-  }
-  data.commands.workflow = updatedWorkflows;
-}
-
-function updateOldBookmarks() {
-  updatedBookmarks = {};
-  var currentBookmark;
-  for (var bookmark in data.commands.bookmark) {
-    currentBookmark = data.commands.bookmark[bookmark];
-    updatedBookmarks[currentBookmark.name] = {
-      type: "bookmark",
-      path: currentBookmark.path,
-      bookmarkType: currentBookmark.bookmarkType,
-    };
-  }
-  data.commands.bookmark = updatedBookmarks;
-}
-
-function updateOldScripts() {
-  updatedScripts = {};
-  var currentScript;
-  for (var script in data.commands.script) {
-    currentScript = data.commands.script[script];
-    updatedScripts[currentScript.name] = {
-      type: "script",
-      path: currentScript.path,
-    };
-  }
-  data.commands.script = updatedScripts;
-}
-
-function updateOldHiddens() {
-  updatedHiddenCommands = [];
-  var hiddenCommand;
-  for (var i = 0; i < data.settings.hidden.length; i++) {
-    hiddenCommand = data.settings.hidden[i];
-    if (localizedCommandLookup.hasOwnProperty(hiddenCommand)) {
-      updatedHiddenCommands.push(localizedCommandLookup[hiddenCommand]);
-    }
-  }
-  data.settings.hidden = updatedHiddenCommands;
-}
-
-function updateOldRecents() {
-  updatedRecentCommands = [];
-  var recentCommand;
-  for (var i = 0; i < data.recent.commands.length; i++) {
-    recentCommand = data.recent.commands[i];
-    if (localizedCommandLookup.hasOwnProperty(recentCommand)) {
-      updatedRecentCommands.push(localizedCommandLookup[recentCommand]);
-    }
-  }
-  data.recent.commands = updatedRecentCommands;
 }

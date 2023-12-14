@@ -311,7 +311,7 @@ var locStrings = {
     ru: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
   },
   pref_update_complete: {
-    en: "Preferences Update Complete\nRe-run script.",
+    en: "Preferences Update Complete.",
     de: "Aktualisierung der Voreinstellungen fertiggestellt",
     ru: "Preferences Update Complete",
   },
@@ -7477,6 +7477,17 @@ var builtCommands = {
         ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0444\u0430\u0439\u043b \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043a",
       },
     },
+    config_settings: {
+      action: "settings",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      loc: {
+        en: "Ai Command Palette Settings...",
+        de: "Kurzbefehle \u2013 Einstellungen \u2026",
+        ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+      },
+    },
   },
   builtin: {
     builtin_allWorkflows: {
@@ -7610,28 +7621,15 @@ var builtCommands = {
         ru: "Open Recent File...",
       },
     },
-  },
-  defaults: {
-    defaults_recentCommands: {
+    builtin_recentCommands: {
       action: "recentCommands",
-      type: "defaults",
+      type: "builtin",
       docRequired: false,
       selRequired: false,
       loc: {
         en: "Recent Commands...",
         de: "Letzte Befehle \u2026",
         ru: "Recent Commands...",
-      },
-    },
-    defaults_settings: {
-      action: "settings",
-      type: "defaults",
-      docRequired: false,
-      selRequired: false,
-      loc: {
-        en: "Ai Command Palette Settings...",
-        de: "Kurzbefehle \u2013 Einstellungen \u2026",
-        ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
       },
     },
   },

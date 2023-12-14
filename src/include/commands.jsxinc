@@ -162,7 +162,6 @@ function executeCommand(command) {
       return;
   switch (command.type.toLowerCase()) {
     case "config":
-    case "defaults":
       try {
         scriptAction(command.action);
       } catch (e) {
