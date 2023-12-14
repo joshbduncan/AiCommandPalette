@@ -78,14 +78,14 @@ ListBoxWrapper.prototype = {
    * @param {Array}  columnKeys Command lookup key for each column.
    */
   loadCommands: function (listbox, commands, columnKeys) {
-    var command;
+    var command, item;
     for (var i = 0; i < commands.length; i++) {
       command = commands[i];
-      with (listbox.add("item", command[columnKeys[0]])) {
-        for (var j = 1; j < columnKeys.length; j++) {
-          subItems[0].text = command[columnKeys[j]];
-        }
+      item = listbox.add("item", command[columnKeys[0]]);
+      for (var j = 1; j < columnKeys.length; j++) {
+        item.subItems[0].text = command[columnKeys[j]];
       }
+      item.commandId = command.id;
     }
   },
   /**
@@ -124,9 +124,9 @@ function addToStepsOnDoubleClick(listbox) {
       win = listbox.window;
       steps = win.findElement("steps");
       command = commandsData[localizedCommandLookup[listbox.selection]];
-      with (steps.add("item", command.localizedName)) {
-        subItems[0].text = command.localizedType;
-      }
+      newItem = steps.add("item", command.localizedName);
+      newItem.subItems[0].text = command.localizedType;
+      newItem.commandId = command.id;
       steps.notify("onChange");
     }
   };
@@ -313,11 +313,11 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
     if (multiselect) {
       var items = [];
       for (var i = 0; i < list.listbox.selection.length; i++) {
-        items.push(matches[list.listbox.selection[i].index]);
+        items.push(commandsData[list.listbox.selection[i].commandId]);
       }
       return items;
     } else {
-      return matches[list.listbox.selection.index];
+      return commandsData[list.listbox.selection.commandId];
     }
   }
   return false;

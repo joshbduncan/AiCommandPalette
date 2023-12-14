@@ -230,7 +230,7 @@ DIALOG HELPER FUNCTIONS
  * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
  * @param   {Boolean} docRequired Should commands requiring an active document be included.
  * @param   {Boolean} selRequired Should commands requiring an active selection be included.
- * @returns {Array}   Filtered commands in the form of {name: command name, type: command type}.
+ * @returns {Array}   Filtered commands objects.
  */
 function filterCommands(
   commands,

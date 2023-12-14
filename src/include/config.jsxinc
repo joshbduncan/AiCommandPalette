@@ -110,7 +110,9 @@ settings.versionCheck = function () {
   if (!data.settings.hasOwnProperty("version")) {
     alert(localize(locStrings.pref_file_non_compatible));
     settings.backup();
-    this.file.remove();
+    if (this.file.exists) this.file.remove();
+    data.settings.startupCommands.push("config_settings");
+    this.save();
     return;
   }
 

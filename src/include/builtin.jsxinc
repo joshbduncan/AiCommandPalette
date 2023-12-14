@@ -6,7 +6,6 @@
  */
 function scriptAction(action) {
   var write = true;
-  alert(action);
   switch (action) {
     case "settings":
       AiCommandPaletteSettings();
@@ -211,10 +210,10 @@ function buildStartup() {
   var result = startupBuilder(availableStartupCommands);
   if (!result) return;
   var previousStartupCommands = data.settings.startupCommands;
-  var startupCommands = [];
   try {
+    var startupCommands = [];
     for (var i = 0; i < result.length; i++) {
-      startupCommands.push(localizedCommandLookup[result[i].text]); // FIXME: switch to object
+      startupCommands.push(result[i].commandId);
     }
     data.settings.startupCommands = startupCommands;
   } catch (e) {
@@ -646,7 +645,7 @@ function hideCommand() {
 function unhideCommand() {
   var hiddenCommands = [];
   for (var i = 0; i < data.settings.hidden.length; i++) {
-    if (!commandsData.hasOwnProperty(data.settings.hidden[i])) continue; // FIXME: add alert
+    if (!commandsData.hasOwnProperty(data.settings.hidden[i])) continue; // FIXME: add alert and remove
     hiddenCommands.push(commandsData[data.settings.hidden[i]]);
   }
   var result = commandPalette(

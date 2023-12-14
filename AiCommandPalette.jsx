@@ -227,7 +227,9 @@ See the LICENSE file for details.
     if (!data.settings.hasOwnProperty("version")) {
       alert(localize(locStrings.pref_file_non_compatible));
       settings.backup();
-      this.file.remove();
+      if (this.file.exists) this.file.remove();
+      data.settings.startupCommands.push("config_settings");
+      this.save();
       return;
     }
 
@@ -627,7 +629,7 @@ See the LICENSE file for details.
    * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
    * @param   {Boolean} docRequired Should commands requiring an active document be included.
    * @param   {Boolean} selRequired Should commands requiring an active selection be included.
-   * @returns {Array}   Filtered commands in the form of {name: command name, type: command type}.
+   * @returns {Array}   Filtered commands objects.
    */
   function filterCommands(
     commands,
@@ -815,7 +817,6 @@ See the LICENSE file for details.
    */
   function scriptAction(action) {
     var write = true;
-    alert(action);
     switch (action) {
       case "settings":
         AiCommandPaletteSettings();
@@ -1020,10 +1021,10 @@ See the LICENSE file for details.
     var result = startupBuilder(availableStartupCommands);
     if (!result) return;
     var previousStartupCommands = data.settings.startupCommands;
-    var startupCommands = [];
     try {
+      var startupCommands = [];
       for (var i = 0; i < result.length; i++) {
-        startupCommands.push(localizedCommandLookup[result[i].text]); // FIXME: switch to object
+        startupCommands.push(result[i].commandId);
       }
       data.settings.startupCommands = startupCommands;
     } catch (e) {
@@ -1455,7 +1456,7 @@ See the LICENSE file for details.
   function unhideCommand() {
     var hiddenCommands = [];
     for (var i = 0; i < data.settings.hidden.length; i++) {
-      if (!commandsData.hasOwnProperty(data.settings.hidden[i])) continue; // FIXME: add alert
+      if (!commandsData.hasOwnProperty(data.settings.hidden[i])) continue; // FIXME: add alert and remove
       hiddenCommands.push(commandsData[data.settings.hidden[i]]);
     }
     var result = commandPalette(
@@ -9670,14 +9671,14 @@ See the LICENSE file for details.
      * @param {Array}  columnKeys Command lookup key for each column.
      */
     loadCommands: function (listbox, commands, columnKeys) {
-      var command;
+      var command, item;
       for (var i = 0; i < commands.length; i++) {
         command = commands[i];
-        with (listbox.add("item", command[columnKeys[0]])) {
-          for (var j = 1; j < columnKeys.length; j++) {
-            subItems[0].text = command[columnKeys[j]];
-          }
+        item = listbox.add("item", command[columnKeys[0]]);
+        for (var j = 1; j < columnKeys.length; j++) {
+          item.subItems[0].text = command[columnKeys[j]];
         }
+        item.commandId = command.id;
       }
     },
     /**
@@ -9716,9 +9717,9 @@ See the LICENSE file for details.
         win = listbox.window;
         steps = win.findElement("steps");
         command = commandsData[localizedCommandLookup[listbox.selection]];
-        with (steps.add("item", command.localizedName)) {
-          subItems[0].text = command.localizedType;
-        }
+        newItem = steps.add("item", command.localizedName);
+        newItem.subItems[0].text = command.localizedType;
+        newItem.commandId = command.id;
         steps.notify("onChange");
       }
     };
@@ -9905,11 +9906,11 @@ See the LICENSE file for details.
       if (multiselect) {
         var items = [];
         for (var i = 0; i < list.listbox.selection.length; i++) {
-          items.push(matches[list.listbox.selection[i].index]);
+          items.push(commandsData[list.listbox.selection[i].commandId]);
         }
         return items;
       } else {
-        return matches[list.listbox.selection.index];
+        return commandsData[list.listbox.selection.commandId];
       }
     }
     return false;
@@ -10333,7 +10334,7 @@ See the LICENSE file for details.
     var workflowActions = [];
     try {
       for (var i = 0; i < result.actions.length; i++) {
-        workflowActions.push(localizedCommandLookup[result.actions[i].text]); // FIXME: switch to object
+        workflowActions.push(result.actions[i].commandId);
       }
       data.commands.workflow[result.name] = {
         type: "workflow",
