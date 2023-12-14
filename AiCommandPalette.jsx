@@ -2045,6 +2045,11 @@ See the LICENSE file for details.
       de: "Startup Screen Customizer",
       ru: "Startup Screen Customizer",
     },
+    startup_error_saving: {
+      en: "Error saving startup commands.\nPrevious settings were reloaded.",
+      de: "Error saving startup commands.\nPrevious settings were reloaded.",
+      ru: "Error saving startup commands.\nPrevious settings were reloaded.",
+    },
     startup_helptip: {
       en: "Double-click a command to add it to your startup command list below.",
       de: "Double-click a command to add it to your startup command list below.",
@@ -5005,6 +5010,18 @@ See the LICENSE file for details.
           de: "Auswahl > Auswahl bearbeiten \u2026",
           ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c\u2026",
         },
+      },
+      "menu_Selection Hat 14": {
+        action: "Selection Hat 14",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        loc: {
+          en: "Select > Update Selection",
+          de: "Select > Update Selection",
+          ru: "Select > Update Selection",
+        },
+        minVersion: 28,
       },
       "menu_Adobe Apply Last Effect": {
         action: "Adobe Apply Last Effect",
@@ -8126,6 +8143,14 @@ See the LICENSE file for details.
           ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u0443\u044e \u0442\u043e\u0447\u043a\u0443",
         },
         minVersion: 24,
+      },
+      "tool_Adobe Dimension Tool": {
+        action: "Adobe Dimension Tool",
+        type: "tool",
+        docRequired: true,
+        selRequired: false,
+        loc: { en: "Dimension Tool", de: "Dimension Tool", ru: "Dimension Tool" },
+        minVersion: 28.1,
       },
       "tool_Adobe Direct Select Tool": {
         action: "Adobe Direct Select Tool",
