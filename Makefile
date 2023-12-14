@@ -11,7 +11,7 @@ help: ## Display this help section
 ##@ Development
 commands:  ## download latest command data
 	@echo "⬇️ download commands..."
-	venv/bin/python tools/build_data.py -d > src/include/data.jsxinc && prettier -w src/include/data.jsxinc
+	venv/bin/python tools/build_data.py -d | prettier > src/include/data.jsxinc
 
 copy:  ## copy compiled script to Ai scripts folder
 	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2024/Presets.localized/en_US/Scripts

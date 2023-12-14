@@ -50,7 +50,7 @@ def get_data():
             f"Error response {e.response.status_code} \
                 while requesting {e.request.url!r}."
         )
-    return response.text
+    return response.text.split("\n")
 
 
 def main(argv=None):
@@ -73,15 +73,24 @@ def main(argv=None):
         action="store_true",
         help="download latest csv data from google",
     )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=argparse.FileType("w"),
+        help="output build data to a file",
+    )
 
     # capture all cli arguments
     args = parser.parse_args(argv)
 
     # get data from either stdin, file, or via download
+    if not args.download or args.input:
+        parser.exit(
+            "No input file provide. Use -d/--download to download \
+commands from google. Learn more with -h/--help"
+        )
     if args.download:
-        data = get_data().split("\n")
-    else:
-        data = args.input.readlines()
+        data = get_data() if args.download else args.input.readlines()
 
     # read build data csv file
     data_dict = defaultdict(dict)
@@ -125,7 +134,10 @@ var locStrings = {json.dumps(strings)}
 
 var builtCommands = {json.dumps(data_dict)}"""
 
-    print(output.replace("\\\\n", "\\n"))
+    if args.output:
+        args.output.write(output.replace("\\\\n", "\\n"))
+    else:
+        print(output.replace("\\\\n", "\\n"))
 
     return 0
 
