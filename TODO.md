@@ -10,6 +10,8 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 - [ ] update hidden commands to now use command id in setting file instead of name
 - [ ] ask if new scripts, workflows, and bookmarks should be added to the start screen
 - [ ] validate all startup screen items on launch
+- [ ] removal deletion of missing workflow commands, instead alert user of how to remove them
+- [ ] when deleting a command, check to see if included in any workflows
 
 ### Doing
 
