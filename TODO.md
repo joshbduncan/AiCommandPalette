@@ -12,6 +12,7 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 - [ ] validate all startup screen items on launch
 - [ ] removal deletion of missing workflow commands, instead alert user of how to remove them
 - [ ] when deleting a command, check to see if included in any workflows
+- [ ] fix and reenable old prefs version check
 
 ### Doing
 

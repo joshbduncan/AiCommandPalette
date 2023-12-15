@@ -69,9 +69,6 @@ See the LICENSE file for details.
   var hiddenCommands = [];
   buildCommands(data.commands);
 
-  // perform version updates
-  settings.versionCheck();
-
   var allCommands = Object.keys(commandsData);
 
   // SHOW THE COMMAND PALETTE
@@ -83,6 +80,10 @@ See the LICENSE file for details.
     (docRequired = true),
     (selRequired = true)
   );
+  // add basic defaults to the startup on a first/fresh install
+  if (!settings.data) {
+    data.settings.startupCommands = ["builtin_recentCommands", "config_settings"];
+  }
   var startupCommands = [];
   for (var i = 0; i < data.settings.startupCommands.length; i++) {
     // check to make sure command is available

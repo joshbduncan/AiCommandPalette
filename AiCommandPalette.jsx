@@ -224,141 +224,6 @@ See the LICENSE file for details.
     folder.execute();
   };
 
-  settings.versionCheck = function () {
-    // if the pref file is so old it doesn't have version info, just backup and start over
-    if (!data.settings.hasOwnProperty("version")) {
-      alert(localize(locStrings.pref_file_non_compatible));
-      settings.backup();
-      if (this.file.exists) this.file.remove();
-      data.settings.startupCommands.push("config_settings");
-      this.save();
-      return;
-    }
-
-    // if the settings >= the minimum required update version just continue
-    var settingsVersion = data.settings.version;
-
-    if (semanticVersionComparison(settingsVersion, settingsRequiredUpdateVersion) >= 0)
-      return;
-
-    // warn user about required settings update and backup their current settings
-    alert(localize(locStrings.pref_file_non_compatible));
-    settings.backup();
-    if (semanticVersionComparison(settingsVersion, "0.8.1") < 0) {
-      data.commands.workflow = updateOldWorkflows();
-      data.commands.bookmark = updateOldBookmarks();
-      data.commands.script = updateOldScripts();
-      data.settings.hidden = updateOldHiddens();
-      data.recent.commands = [];
-    }
-    if (semanticVersionComparison(settingsVersion, "0.10.0") < 0) {
-      data.settings.startupCommands = updateStartupScreen();
-      data.settings.searchIncludesType = false;
-    }
-
-    // save the updated settings file and continue with script
-    settings.save();
-    alert(localize(locStrings.pref_update_complete));
-  };
-
-  function updateOldWorkflows() {
-    updatedWorkflows = {};
-    updatedActions = [];
-    var currentWorkflow, currentActions, currentAction;
-    for (var workflow in data.commands.workflow) {
-      currentWorkflow = data.commands.workflow[workflow];
-      currentActions = currentWorkflow.actions;
-      for (var i = 0; i < currentActions.length; i++) {
-        currentAction = currentActions[i];
-        if (!localizedCommandLookup.hasOwnProperty(currentAction)) {
-          alert(
-            "Workflow Update Error\n" +
-              "Workflow command '" +
-              currentAction +
-              "' couldn't be updated.\n\nThe command has been removed from your '" +
-              workflow.replace("Workflow: ", "") +
-              "' workflow."
-          );
-          continue;
-        }
-        updatedActions.push(localizedCommandLookup[currentAction]);
-      }
-      updatedWorkflows[currentWorkflow.name] = {
-        type: "workflow",
-        actions: updatedActions,
-      };
-    }
-    return updatedWorkflows;
-  }
-
-  function updateOldBookmarks() {
-    updatedBookmarks = {};
-    var currentBookmark;
-    for (var bookmark in data.commands.bookmark) {
-      currentBookmark = data.commands.bookmark[bookmark];
-      updatedBookmarks[currentBookmark.name] = {
-        type: "bookmark",
-        path: currentBookmark.path,
-        bookmarkType: currentBookmark.bookmarkType,
-      };
-    }
-    return updatedBookmarks;
-  }
-
-  function updateOldScripts() {
-    updatedScripts = {};
-    var currentScript;
-    for (var script in data.commands.script) {
-      currentScript = data.commands.script[script];
-      updatedScripts[currentScript.name] = {
-        type: "script",
-        path: currentScript.path,
-      };
-    }
-    return updatedScripts;
-  }
-
-  function updateOldHiddens() {
-    updatedHiddenCommands = [];
-    var hiddenCommand;
-    for (var i = 0; i < data.settings.hidden.length; i++) {
-      hiddenCommand = data.settings.hidden[i];
-      if (localizedCommandLookup.hasOwnProperty(hiddenCommand)) {
-        updatedHiddenCommands.push(localizedCommandLookup[hiddenCommand]);
-      }
-    }
-    return updatedHiddenCommands;
-  }
-
-  function updateOldRecents() {
-    updatedRecentCommands = [];
-    var recentCommand;
-    for (var i = 0; i < data.recent.commands.length; i++) {
-      recentCommand = data.recent.commands[i];
-      if (localizedCommandLookup.hasOwnProperty(recentCommand)) {
-        updatedRecentCommands.push(localizedCommandLookup[recentCommand]);
-      }
-    }
-    return updatedRecentCommands;
-  }
-
-  function updateStartupScreen() {
-    var oldStartupCommands = filterCommands(
-      (commands = commandsData),
-      (types = ["bookmark", "script", "workflow"]),
-      (showHidden = false),
-      (hideCommands = null),
-      (docRequired = true),
-      (selRequired = true)
-    );
-    var startupCommands = [];
-    for (var i = 0; i < oldStartupCommands.length; i++) {
-      startupCommands.push(oldStartupCommands[i].id);
-    }
-    startupCommands.push("builtin_recentCommands", "config_settings");
-    return startupCommands;
-  }
-
   // DEVELOPMENT HELPERS
 
   var devInfo = {};
@@ -10492,9 +10357,6 @@ See the LICENSE file for details.
   var hiddenCommands = [];
   buildCommands(data.commands);
 
-  // perform version updates
-  settings.versionCheck();
-
   var allCommands = Object.keys(commandsData);
 
   // SHOW THE COMMAND PALETTE
@@ -10506,6 +10368,10 @@ See the LICENSE file for details.
     (docRequired = true),
     (selRequired = true)
   );
+  // add basic defaults to the startup on a first/fresh install
+  if (!settings.data) {
+    data.settings.startupCommands = ["builtin_recentCommands", "config_settings"];
+  }
   var startupCommands = [];
   for (var i = 0; i < data.settings.startupCommands.length; i++) {
     // check to make sure command is available
