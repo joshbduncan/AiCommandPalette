@@ -81,14 +81,15 @@ ListBoxWrapper.prototype = {
    * @param {Array}  columnKeys Command lookup key for each column.
    */
   loadCommands: function (listbox, commands, columnKeys) {
-    var command, item;
+    var id, command, item;
     for (var i = 0; i < commands.length; i++) {
-      command = commands[i];
+      id = commands[i];
+      command = commandsData[id];
       item = listbox.add("item", localize(command[columnKeys[0]]));
       for (var j = 1; j < columnKeys.length; j++) {
         item.subItems[0].text = localize(strings[command[columnKeys[j]]]);
       }
-      item.command = command;
+      item.id = id;
     }
   },
   /**
@@ -129,7 +130,7 @@ function addToStepsOnDoubleClick(listbox) {
       command = commandsData[localizedCommandLookup[listbox.selection]];
       newItem = steps.add("item", command.localizedName);
       newItem.subItems[0].text = command.localizedType;
-      newItem.command = command;
+      newItem.id = command.id;
       steps.notify("onChange");
     }
   };
@@ -314,11 +315,11 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
     if (multiselect) {
       var items = [];
       for (var i = 0; i < list.listbox.selection.length; i++) {
-        items.push(list.listbox.selection[i].command);
+        items.push(list.listbox.selection[i].id);
       }
       return items;
     } else {
-      return list.listbox.selection.command;
+      return list.listbox.selection.id;
     }
   }
   return false;

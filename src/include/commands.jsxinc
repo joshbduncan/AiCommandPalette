@@ -115,9 +115,10 @@ function updateRecentCommands(command) {
 
 /**
  * Iterate over each action for chosen command.
- * @param {Object} command Command to execute.
+ * @param {Object} id Command id/key to execute.
  */
-function processCommand(command) {
+function processCommand(id) {
+  var command = commandsData[id];
   if (command.type == "workflow") {
     insideWorkflow = true;
     // check to make sure all workflow commands are valid

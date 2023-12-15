@@ -9497,7 +9497,7 @@ See the LICENSE file for details.
       // skip any specific commands name in hideSpecificCommands
       if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
       // then check to see if the command should be included
-      if (!types || types.includes(command.type)) filteredCommands.push(command);
+      if (!types || types.includes(command.type)) filteredCommands.push(id);
     }
     return filteredCommands;
   }
@@ -9505,26 +9505,27 @@ See the LICENSE file for details.
   /**
    * Score array items based on regex string match.
    * @param   {String} query    String to search for.
-   * @param   {Array}  commands Commands to match on.
+   * @param   {Array}  commands Commands to match `query` against.
    * @returns {Array}           Matching items sorted by score.
    */
   function scoreMatches(query, commands) {
     var words = [];
     var matches = [];
-    var matchedCommands = [];
+    var bestMatches = [];
     var scores = {};
     var maxScore = 0;
     query = query.toLowerCase();
     var words = query.split(" ");
-    var command, name, type, score, strippedString;
+    var id, command, name, type, score, strippedString;
     for (var i = 0; i < commands.length; i++) {
-      command = commands[i];
+      id = commands[i];
+      command = commandsData[id];
       if (command.hasOwnProperty("loc")) {
         name = localize(command.loc).toLowerCase();
       } else if (command.hasOwnProperty("name")) {
         name = command.name.toLowerCase();
       } else {
-        name = command.id.toLowerCase().replace("_", " "); // FIXME: not sure about this
+        name = id.toLowerCase().replace("_", " "); // FIXME: not sure about this
       }
       if (strings.hasOwnProperty(command.type)) {
         type = localize(strings[command.type]).toLowerCase();
@@ -9573,22 +9574,23 @@ See the LICENSE file for details.
         // if (score == maxScore && data.recent.commands.indexOf(command.id) > -1) {
         //   score++;
         // }
-        scores[command.id] = score;
-        matches.push(command);
+        scores[id] = score;
+        matches.push(id);
         if (score > maxScore) maxScore = score;
       }
     }
 
+    // limit the matching commands to only the highest scoring matches
     for (var m = 0; m < matches.length; m++) {
-      if (scores[matches[m].id] >= maxScore / 2) matchedCommands.push(matches[m]);
+      if (scores[matches[m]] >= maxScore / 2) bestMatches.push(matches[m]);
     }
 
     // sort the matches by score
-    matchedCommands.sort(function (a, b) {
-      return scores[b.id] - scores[a.id];
+    bestMatches.sort(function (a, b) {
+      return scores[b] - scores[a];
     });
 
-    return matchedCommands;
+    return bestMatches;
   }
 
   /**
@@ -10651,9 +10653,10 @@ See the LICENSE file for details.
 
   /**
    * Iterate over each action for chosen command.
-   * @param {Object} command Command to execute.
+   * @param {Object} id Command id/key to execute.
    */
-  function processCommand(command) {
+  function processCommand(id) {
+    var command = commandsData[id];
     if (command.type == "workflow") {
       insideWorkflow = true;
       // check to make sure all workflow commands are valid
@@ -10884,14 +10887,15 @@ See the LICENSE file for details.
      * @param {Array}  columnKeys Command lookup key for each column.
      */
     loadCommands: function (listbox, commands, columnKeys) {
-      var command, item;
+      var id, command, item;
       for (var i = 0; i < commands.length; i++) {
-        command = commands[i];
+        id = commands[i];
+        command = commandsData[id];
         item = listbox.add("item", localize(command[columnKeys[0]]));
         for (var j = 1; j < columnKeys.length; j++) {
           item.subItems[0].text = localize(strings[command[columnKeys[j]]]);
         }
-        item.command = command;
+        item.id = id;
       }
     },
     /**
@@ -10932,7 +10936,7 @@ See the LICENSE file for details.
         command = commandsData[localizedCommandLookup[listbox.selection]];
         newItem = steps.add("item", command.localizedName);
         newItem.subItems[0].text = command.localizedType;
-        newItem.command = command;
+        newItem.id = command.id;
         steps.notify("onChange");
       }
     };
@@ -11117,11 +11121,11 @@ See the LICENSE file for details.
       if (multiselect) {
         var items = [];
         for (var i = 0; i < list.listbox.selection.length; i++) {
-          items.push(list.listbox.selection[i].command);
+          items.push(list.listbox.selection[i].id);
         }
         return items;
       } else {
-        return list.listbox.selection.command;
+        return list.listbox.selection.id;
       }
     }
     return false;
@@ -11662,5 +11666,6 @@ See the LICENSE file for details.
     (showOnly = null)
   );
   if (!result) return;
+  alert(result);
   processCommand(result);
 })();

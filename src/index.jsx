@@ -73,5 +73,6 @@ See the LICENSE file for details.
     (showOnly = null)
   );
   if (!result) return;
+  alert(result);
   processCommand(result);
 })();

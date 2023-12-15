@@ -258,7 +258,7 @@ function filterCommands(
     // skip any specific commands name in hideSpecificCommands
     if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
     // then check to see if the command should be included
-    if (!types || types.includes(command.type)) filteredCommands.push(command);
+    if (!types || types.includes(command.type)) filteredCommands.push(id);
   }
   return filteredCommands;
 }
@@ -266,26 +266,27 @@ function filterCommands(
 /**
  * Score array items based on regex string match.
  * @param   {String} query    String to search for.
- * @param   {Array}  commands Commands to match on.
+ * @param   {Array}  commands Commands to match `query` against.
  * @returns {Array}           Matching items sorted by score.
  */
 function scoreMatches(query, commands) {
   var words = [];
   var matches = [];
-  var matchedCommands = [];
+  var bestMatches = [];
   var scores = {};
   var maxScore = 0;
   query = query.toLowerCase();
   var words = query.split(" ");
-  var command, name, type, score, strippedString;
+  var id, command, name, type, score, strippedString;
   for (var i = 0; i < commands.length; i++) {
-    command = commands[i];
+    id = commands[i];
+    command = commandsData[id];
     if (command.hasOwnProperty("loc")) {
       name = localize(command.loc).toLowerCase();
     } else if (command.hasOwnProperty("name")) {
       name = command.name.toLowerCase();
     } else {
-      name = command.id.toLowerCase().replace("_", " "); // FIXME: not sure about this
+      name = id.toLowerCase().replace("_", " "); // FIXME: not sure about this
     }
     if (strings.hasOwnProperty(command.type)) {
       type = localize(strings[command.type]).toLowerCase();
@@ -334,22 +335,23 @@ function scoreMatches(query, commands) {
       // if (score == maxScore && data.recent.commands.indexOf(command.id) > -1) {
       //   score++;
       // }
-      scores[command.id] = score;
-      matches.push(command);
+      scores[id] = score;
+      matches.push(id);
       if (score > maxScore) maxScore = score;
     }
   }
 
+  // limit the matching commands to only the highest scoring matches
   for (var m = 0; m < matches.length; m++) {
-    if (scores[matches[m].id] >= maxScore / 2) matchedCommands.push(matches[m]);
+    if (scores[matches[m]] >= maxScore / 2) bestMatches.push(matches[m]);
   }
 
   // sort the matches by score
-  matchedCommands.sort(function (a, b) {
-    return scores[b.id] - scores[a.id];
+  bestMatches.sort(function (a, b) {
+    return scores[b] - scores[a];
   });
 
-  return matchedCommands;
+  return bestMatches;
 }
 
 /**
