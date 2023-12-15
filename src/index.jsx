@@ -20,10 +20,10 @@ See the LICENSE file for details.
 
   //@includepath "include"
   //@include "polyfills.jsxinc"
+  //@include "data.jsxinc"
   //@include "config.jsxinc"
   //@include "helpers.jsxinc"
   //@include "builtin.jsxinc"
-  //@include "data.jsxinc"
   //@include "commands.jsxinc"
   //@include "commandPalette.jsxinc"
   //@include "workflowBuilder.jsxinc"
@@ -31,73 +31,46 @@ See the LICENSE file for details.
   //@include "io.jsxinc"
   //@include "workflows.jsxinc"
 
-  // SETUP COMMANDS DATA
-
-  var data = {
-    commands: {
-      bookmark: {},
-      script: {},
-      workflow: {},
-      menu: builtCommands.menu,
-      tool: builtCommands.tool,
-      action: {},
-      builtin: builtCommands.builtin,
-      config: builtCommands.config,
-    },
-    settings: {
-      hidden: [],
-      startupCommands: [],
-    },
-    recent: {
-      commands: [],
-    },
-  };
-
   // load user settings
-  settings.load();
+  // settings.load();
 
   // load current user actions
-  loadActions();
+  // loadActions();
 
   var appDocuments = app.documents.length > 0;
   var docSelection = appDocuments ? app.activeDocument.selection.length : null;
   var insideWorkflow = false;
 
-  // build all commands
-  var commandsData = {};
-  var localizedCommandLookup = {};
-  var hiddenCommands = [];
-  buildCommands(data.commands);
-
-  var allCommands = Object.keys(commandsData);
-
   // SHOW THE COMMAND PALETTE
+  // TODO: set hidden property on any user hidden commands
+  // TODO: set hidden property on any non-relevant commands
   var queryableCommands = filterCommands(
-    (commands = commandsData),
+    (commands = null),
     (types = null),
     (showHidden = false),
-    (hideCommands = null),
+    (hideSpecificCommands = null),
     (docRequired = true),
     (selRequired = true)
   );
+
   // add basic defaults to the startup on a first/fresh install
-  if (!settings.data) {
-    data.settings.startupCommands = ["builtin_recentCommands", "config_settings"];
-  }
-  var startupCommands = [];
-  for (var i = 0; i < data.settings.startupCommands.length; i++) {
-    // check to make sure command is available
-    if (!commandsData.hasOwnProperty(data.settings.startupCommands[i])) continue; // FIXME: add alert
-    // also hide any commands that aren't relevant
-    if (hiddenCommands.includes(data.settings.startupCommands[i])) continue;
-    startupCommands.push(commandsData[data.settings.startupCommands[i]]);
-  }
+  // if (!settings.data) {
+  //   data.settings.startupCommands = ["builtin_recentCommands", "config_settings"];
+  // }
+  // var startupCommands = [];
+  // for (var i = 0; i < data.settings.startupCommands.length; i++) {
+  //   // check to make sure command is available
+  //   if (!commandsData.hasOwnProperty(data.settings.startupCommands[i])) continue; // FIXME: add alert
+  //   // also hide any commands that aren't relevant
+  //   if (hiddenCommands.includes(data.settings.startupCommands[i])) continue;
+  //   startupCommands.push(commandsData[data.settings.startupCommands[i]]);
+  // }
   var result = commandPalette(
     (commands = queryableCommands),
-    (title = localize(locStrings.title)),
+    (title = localize(strings.title)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false),
-    (showOnly = startupCommands)
+    (showOnly = null)
   );
   if (!result) return;
   processCommand(result);

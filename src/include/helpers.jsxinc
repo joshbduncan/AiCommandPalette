@@ -4,7 +4,7 @@
  */
 function activeDocument() {
   if (app.documents.length < 1) {
-    alert(localize(locStrings.no_active_document));
+    alert(localize(strings.no_active_document));
     return false;
   }
   return true;
@@ -114,13 +114,13 @@ function getPlacedFileInfoForReport() {
   for (var i = 0; i < fileObjects.length; i++) {
     f = fileObjects[i];
     names.push(
-      localize(locStrings.dr_name) +
+      localize(strings.dr_name) +
         decodeURI(f.name) +
         "\n" +
-        localize(locStrings.dr_path) +
+        localize(strings.dr_path) +
         f.fsName.replace(f.name, "") +
         "\n" +
-        localize(locStrings.dr_file_found) +
+        localize(strings.dr_file_found) +
         f.exists.toString().toUpperCase() +
         (i == fileObjects.length - 1 ? "" : "\n")
     );
@@ -224,7 +224,7 @@ DIALOG HELPER FUNCTIONS
 
 /**
  * Filter the supplied commands by multiple factors.
- * @param   {Object}  commands Command objects to filter.
+ * @param   {Array}   commandIds Command `id`s to filter through.
  * @param   {Array}   types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
  * @param   {Boolean} showHidden Should user-hidden or non-relevant commands be included?
  * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
@@ -241,9 +241,12 @@ function filterCommands(
   selRequired
 ) {
   var filteredCommands = [];
-  var prop, command;
-  for (prop in commands) {
-    command = commands[prop];
+  var id, command;
+  commands = commands ? commands : Object.keys(commandsData);
+  for (var i = 0; i < commands.length; i++) {
+    id = commands[i];
+    if (!commandsData.hasOwnProperty(id)) continue;
+    command = commandsData[id];
     // hide commands requiring an active documents if requested
     if (docRequired && !appDocuments && command.docRequired) continue;
     // hide commands requiring an active selection if requested
@@ -251,9 +254,9 @@ function filterCommands(
     // make sure Ai version meets command requirements
     if (!versionCheck(command)) continue;
     // skip any hidden commands
-    if (!showHidden && hiddenCommands.includes(prop)) continue;
+    if (!showHidden && command.hidden) continue;
     // skip any specific commands name in hideSpecificCommands
-    if (hideSpecificCommands && hideSpecificCommands.includes(prop)) continue;
+    if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
     // then check to see if the command should be included
     if (!types || types.includes(command.type)) filteredCommands.push(command);
   }
@@ -267,9 +270,6 @@ function filterCommands(
  * @returns {Array}           Matching items sorted by score.
  */
 function scoreMatches(query, commands) {
-  var regexEllipsis = /\.\.\.$/;
-  var regexCarrot = /\s>\s/g;
-
   var words = [];
   var matches = [];
   var matchedCommands = [];
@@ -277,33 +277,52 @@ function scoreMatches(query, commands) {
   var maxScore = 0;
   query = query.toLowerCase();
   var words = query.split(" ");
-  var command, commandName, commandType, score, strippedString;
+  var command, name, type, score, strippedString;
   for (var i = 0; i < commands.length; i++) {
     command = commands[i];
-    commandName = command.localizedName.toLowerCase();
-    commandType = command.localizedType.toLowerCase();
-    strippedString = commandName.replace(regexEllipsis, "").replace(regexCarrot, " ");
+    if (command.hasOwnProperty("loc")) {
+      name = localize(command.loc).toLowerCase();
+    } else if (command.hasOwnProperty("name")) {
+      name = command.name.toLowerCase();
+    } else {
+      name = command.id.toLowerCase().replace("_", " "); // FIXME: not sure about this
+    }
+    if (strings.hasOwnProperty(command.type)) {
+      type = localize(strings[command.type]).toLowerCase();
+    } else {
+      type = command.type.toLowerCase();
+    }
+    strippedString = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
     score = 0;
 
     // check for exact match
     if (
-      query == commandName ||
-      query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString ||
-      (data.settings.searchIncludesType && query == commandType)
+      query == name ||
+      query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedString
     ) {
       score += 1;
     }
+
+    // check for type match
+    // FIXME: reenable
+    // if (data.settings.searchIncludesType && query == type) {
+    //   score += 1;
+    // }
 
     // check for singular word matches
     var word;
     for (var n = 0; n < words.length; n++) {
       word = words[n];
       if (!word) continue;
+      // FIXME: reenable
+      // if (
+      //   name.match("\\b" + word, "gi") != null ||
+      //   strippedString.match("\\b" + word, "gi") != null ||
+      //   (data.settings.searchIncludesType && type.match("\\b" + word, "gi") != null)
+      // )
       if (
-        commandName.match("\\b" + word, "gi") != null ||
-        strippedString.match("\\b" + word, "gi") != null ||
-        (data.settings.searchIncludesType &&
-          commandType.match("\\b" + word, "gi") != null)
+        name.match("\\b" + word, "gi") != null ||
+        strippedString.match("\\b" + word, "gi") != null
       )
         score += word.length;
     }
@@ -311,9 +330,10 @@ function scoreMatches(query, commands) {
     // updated scores for matches
     if (score > 0) {
       // increase score if command found in recent commands
-      if (score == maxScore && data.recent.commands.indexOf(command.id) > -1) {
-        score++;
-      }
+      // FIXME: reenable
+      // if (score == maxScore && data.recent.commands.indexOf(command.id) > -1) {
+      //   score++;
+      // }
       scores[command.id] = score;
       matches.push(command);
       if (score > maxScore) maxScore = score;

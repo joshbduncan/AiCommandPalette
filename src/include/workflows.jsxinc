@@ -30,7 +30,7 @@ function buildWorkflow(workflow) {
       actions: workflowActions,
     };
   } catch (e) {
-    alert(localize(locStrings.wf_error_saving, result.name));
+    alert(localize(strings.wf_error_saving, result.name));
   }
 }
 
@@ -46,7 +46,7 @@ function showAllWorkflows() {
   );
   var result = commandPalette(
     (commands = workflows),
-    (title = localize(locStrings.Workflows)),
+    (title = localize(strings.Workflows)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
@@ -66,7 +66,7 @@ function editWorkflow() {
   );
   var result = commandPalette(
     (commands = workflows),
-    (title = localize(locStrings.wf_choose)),
+    (title = localize(strings.wf_choose)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );

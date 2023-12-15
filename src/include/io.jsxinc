@@ -34,7 +34,7 @@ function readJSONData(f) {
     json = f.read();
     f.close();
   } catch (e) {
-    alert(localize(locStrings.fl_error_loading, f));
+    alert(localize(strings.fl_error_loading, f));
   }
   obj = eval(json);
   return obj;
@@ -53,6 +53,6 @@ function writeJSONData(obj, f) {
     f.write(data);
     f.close();
   } catch (e) {
-    alert(localize(locStrings.fl_error_writing, f));
+    alert(localize(strings.fl_error_writing, f));
   }
 }

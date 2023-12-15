@@ -29,9 +29,14 @@ paletteSettings.bounds = [
   paletteSettings.paletteHeight,
 ];
 
-paletteSettings.defaultColumns = {
-  Name: { width: 475, key: "localizedName" },
-  Type: { width: 100, key: "localizedType" },
+paletteSettings.defaultColumns = {};
+paletteSettings.defaultColumns[localize(strings.name_title_case)] = {
+  width: 475,
+  key: "loc",
+};
+paletteSettings.defaultColumns[localize(strings.type_title_case)] = {
+  width: 100,
+  key: "type",
 };
 
 var visibleListItems = 9;
@@ -40,6 +45,8 @@ var recentCommandsCount = 25;
 // MISCELLANEOUS SETTINGS
 
 var namedObjectLimit = 2000;
+var regexEllipsis = /\.\.\.$/;
+var regexCarrot = /\s>\s/g;
 
 //USER SETTINGS
 
@@ -70,7 +77,7 @@ settings.load = function () {
     } catch (e) {
       file.rename(file.name + ".bak");
       this.reveal();
-      Error.runtimeError(1, localize(locStrings.pref_file_loading_error));
+      Error.runtimeError(1, localize(strings.pref_file_loading_error));
     }
   }
 };

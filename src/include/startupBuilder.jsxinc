@@ -1,15 +1,15 @@
 function startupBuilder(commands) {
   // create the dialog
   var win = new Window("dialog");
-  win.text = localize(locStrings.startup_builder);
+  win.text = localize(strings.startup_builder);
   win.alignChildren = "fill";
 
   // setup the query input
-  var pSearch = win.add("panel", undefined, localize(locStrings.cd_search_for));
+  var pSearch = win.add("panel", undefined, localize(strings.cd_search_for));
   pSearch.alignChildren = ["fill", "center"];
   pSearch.margins = 20;
   var q = pSearch.add("edittext");
-  q.helpTip = localize(locStrings.cd_q_helptip);
+  q.helpTip = localize(strings.cd_q_helptip);
 
   // setup the commands listbox
   var list = new ListBoxWrapper(
@@ -19,7 +19,7 @@ function startupBuilder(commands) {
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
     paletteSettings.defaultColumns,
     false,
-    localize(locStrings.startup_helptip),
+    localize(strings.startup_helptip),
     [addToStepsOnDoubleClick, scrollListBoxWithArrows]
   );
 
@@ -30,7 +30,7 @@ function startupBuilder(commands) {
     q.active = true;
   }
 
-  var pSteps = win.add("panel", undefined, localize(locStrings.startup_steps));
+  var pSteps = win.add("panel", undefined, localize(strings.startup_steps));
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
 
@@ -47,29 +47,29 @@ function startupBuilder(commands) {
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
     paletteSettings.defaultColumns,
     true,
-    localize(locStrings.startup_steps_helptip),
+    localize(strings.startup_steps_helptip),
     []
   );
 
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
-  var up = stepButtons.add("button", undefined, localize(locStrings.step_up));
+  var up = stepButtons.add("button", undefined, localize(strings.step_up));
   up.preferredSize.width = 100;
-  var down = stepButtons.add("button", undefined, localize(locStrings.step_down));
+  var down = stepButtons.add("button", undefined, localize(strings.step_down));
   down.preferredSize.width = 100;
-  var del = stepButtons.add("button", undefined, localize(locStrings.step_delete));
+  var del = stepButtons.add("button", undefined, localize(strings.step_delete));
   del.preferredSize.width = 100;
 
   // window buttons
   var winButtons = win.add("group");
   winButtons.orientation = "row";
   winButtons.alignChildren = ["center", "center"];
-  var save = winButtons.add("button", undefined, localize(locStrings.save), {
+  var save = winButtons.add("button", undefined, localize(strings.save), {
     name: "ok",
   });
   save.preferredSize.width = 100;
   save.enabled = editWorkflow ? true : false;
-  var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
+  var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
     name: "cancel",
   });
   cancel.preferredSize.width = 100;

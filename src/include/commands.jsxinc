@@ -64,8 +64,8 @@ function buildCommands(commands, filterOut) {
       commandData.localizedName = commandData.hasOwnProperty("loc")
         ? localize(commandData.loc)
         : command;
-      commandData.localizedType = locStrings.hasOwnProperty(commandData.type)
-        ? localize(locStrings[commandData.type])
+      commandData.localizedType = strings.hasOwnProperty(commandData.type)
+        ? localize(strings[commandData.type])
         : commandData.type;
       commandsData[command] = commandData;
       localizedCommand = commandData.hasOwnProperty("loc")
@@ -125,7 +125,7 @@ function processCommand(command) {
     if (check.deletedActions.length + check.incompatibleActions.length > 0) {
       alert(
         localize(
-          locStrings.wf_needs_attention,
+          strings.wf_needs_attention,
           check.deletedActions,
           check.incompatibleActions
         )
@@ -156,9 +156,9 @@ function executeCommand(command) {
   if (!appDocuments && command.docRequired)
     if (
       !confirm(
-        localize(locStrings.cd_active_document_required, command.action),
+        localize(strings.cd_active_document_required, command.action),
         "noAsDflt",
-        localize(locStrings.cd_exception)
+        localize(strings.cd_exception)
       )
     )
       return;
@@ -166,9 +166,9 @@ function executeCommand(command) {
   if (appDocuments && app.activeDocument.selection.length < 1 && command.selRequired)
     if (
       !confirm(
-        localize(locStrings.cd_active_selection_required, command.action),
+        localize(strings.cd_active_selection_required, command.action),
         "noAsDflt",
-        localize(locStrings.cd_exception)
+        localize(strings.cd_exception)
       )
     )
       return;
@@ -177,35 +177,35 @@ function executeCommand(command) {
       try {
         scriptAction(command.action);
       } catch (e) {
-        alert(localize(locStrings.cd_error_executing, command.localizedName, e));
+        alert(localize(strings.cd_error_executing, command.localizedName, e));
       }
       break;
     case "builtin":
       try {
         builtinAction(command.action);
       } catch (e) {
-        alert(localize(locStrings.cd_error_executing, command.localizedName, e));
+        alert(localize(strings.cd_error_executing, command.localizedName, e));
       }
       break;
     case "menu":
       try {
         app.executeMenuCommand(command.action);
       } catch (e) {
-        alert(localize(locStrings.cd_error_executing, command.localizedName, e));
+        alert(localize(strings.cd_error_executing, command.localizedName, e));
       }
       break;
     case "tool":
       try {
         app.selectTool(command.action);
       } catch (e) {
-        alert(localize(locStrings.tl_error_selecting, command, e));
+        alert(localize(strings.tl_error_selecting, command, e));
       }
       break;
     case "action":
       try {
         app.doScript(command.name, command.set);
       } catch (e) {
-        alert(localize(locStrings.ac_error_execution, command, e));
+        alert(localize(strings.ac_error_execution, command, e));
       }
       break;
     case "bookmark":
@@ -214,7 +214,7 @@ function executeCommand(command) {
           ? new File(command.path)
           : new Folder(command.path);
       if (!f.exists) {
-        alert(localize(locStrings.bm_error_exists, command.path));
+        alert(localize(strings.bm_error_exists, command.path));
         delete data.commands.bookmark[command];
         settings.save();
       } else {
@@ -225,26 +225,26 @@ function executeCommand(command) {
             f.execute();
           }
         } catch (e) {
-          alert(localize(locStrings.sc_error_execution, command.name, e));
+          alert(localize(strings.sc_error_execution, command.name, e));
         }
       }
       break;
     case "script":
       f = new File(command.path);
       if (!f.exists) {
-        alert(localize(locStrings.sc_error_exists, command.path));
+        alert(localize(strings.sc_error_exists, command.path));
         delete data.commands.script[command];
         settings.save();
       } else {
         try {
           $.evalFile(f);
         } catch (e) {
-          alert(localize(locStrings.sc_error_execution, command.name, e));
+          alert(localize(strings.sc_error_execution, command.name, e));
         }
       }
       break;
     default:
-      alert(localize(locStrings.cd_invalid, command.type));
+      alert(localize(strings.cd_invalid, command.type));
   }
   try {
     app.redraw();

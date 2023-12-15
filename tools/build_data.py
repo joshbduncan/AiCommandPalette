@@ -2,7 +2,6 @@ import argparse
 import csv
 import json
 import sys
-from collections import defaultdict
 
 try:
     import httpx
@@ -73,12 +72,6 @@ def main(argv=None):
         action="store_true",
         help="download latest csv data from google",
     )
-    parser.add_argument(
-        "-o",
-        "--output",
-        type=argparse.FileType("w"),
-        help="output build data to a file",
-    )
 
     # capture all cli arguments
     args = parser.parse_args(argv)
@@ -93,9 +86,9 @@ commands from google. Learn more with -h/--help"
         data = get_data() if args.download else args.input.readlines()
 
     # read build data csv file
-    data_dict = defaultdict(dict)
+    commands = {}
+    # localized_lut = {}
     strings = {}
-    # with open(input_file, "r") as f:
     reader = csv.DictReader(data)
     for row in reader:
         # skip any empty rows
@@ -112,32 +105,32 @@ commands from google. Learn more with -h/--help"
             continue
 
         # build a command object
-        command_key = f'{row["type"]}_{row["value"]}'
+        command_id = f"{row['type']}_{row['value'].replace(' ', '_')}"
+        localized_strings = localized_strings_object(row)
         command = {
+            "id": command_id,
             "action": row["value"],
             "type": row["type"],
             "docRequired": row["docRequired"] == "TRUE",
             "selRequired": row["selRequired"] == "TRUE",
-            "loc": localized_strings_object(row),
+            "loc": localized_strings,
+            "hidden": False,
         }
         # only add min and max version if present
         if row["minVersion"]:
             command["minVersion"] = convert_to_num(row["minVersion"])
         if row["maxVersion"]:
             command["maxVersion"] = convert_to_num(row["maxVersion"])
-        # add command to commands object
-        data_dict[row["type"]][command_key] = command
+        # add command to array
+        commands[command_id] = command
 
     output = f"""// ALL BUILT DATA FROM PYTHON SCRIPT
 
-var locStrings = {json.dumps(strings)}
+var strings = {json.dumps(strings)}
 
-var builtCommands = {json.dumps(data_dict)}"""
+var commandsData = {json.dumps(commands)}"""
 
-    if args.output:
-        args.output.write(output.replace("\\\\n", "\\n"))
-    else:
-        print(output.replace("\\\\n", "\\n"))
+    print(output.replace("\\\\n", "\\n"))
 
     return 0
 

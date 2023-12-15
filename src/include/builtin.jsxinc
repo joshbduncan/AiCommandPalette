@@ -50,21 +50,21 @@ function scriptAction(action) {
     case "clearRecentCommands":
       if (
         !confirm(
-          localize(locStrings.cd_clear_recent_confirm),
+          localize(strings.cd_clear_recent_confirm),
           "noAsDflt",
-          localize(locStrings.cd_exception)
+          localize(strings.cd_exception)
         )
       )
         return;
       data.recent.commands = [];
-      alert(localize(locStrings.recent_commands_cleared));
+      alert(localize(strings.recent_commands_cleared));
       break;
     case "revealPrefFile":
       settings.reveal();
       write = false;
       break;
     default:
-      alert(localize(locStrings.cd_invalid, action));
+      alert(localize(strings.cd_invalid, action));
   }
   if (!write) return;
   settings.save();
@@ -123,12 +123,12 @@ function builtinAction(action) {
           var fp = new Folder(app.activeDocument.path.fsName);
           fp.execute();
         } else {
-          alert(localize(locStrings.active_document_not_saved));
+          alert(localize(strings.active_document_not_saved));
         }
       }
       break;
     default:
-      alert(localize(locStrings.cd_invalid, action));
+      alert(localize(strings.cd_invalid, action));
   }
 }
 
@@ -144,7 +144,7 @@ function AiCommandPaletteSettings() {
   );
   var result = commandPalette(
     (commands = configCommands),
-    (title = localize(locStrings.cp_config)),
+    (title = localize(strings.cp_config)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
@@ -155,24 +155,24 @@ function AiCommandPaletteSettings() {
 /** Ai Command Palette About Dialog. */
 function about() {
   var win = new Window("dialog");
-  win.text = localize(locStrings.about);
+  win.text = localize(strings.about);
   win.alignChildren = "fill";
 
   // script info
   var pAbout = win.add("panel");
   pAbout.margins = 20;
   pAbout.alignChildren = "fill";
-  pAbout.add("statictext", [0, 0, 500, 100], localize(locStrings.description), {
+  pAbout.add("statictext", [0, 0, 500, 100], localize(strings.description), {
     multiline: true,
   });
 
   var links = pAbout.add("group");
   links.orientation = "column";
   links.alignChildren = ["center", "center"];
-  links.add("statictext", undefined, localize(locStrings.version, _version));
-  links.add("statictext", undefined, localize(locStrings.copyright));
+  links.add("statictext", undefined, localize(strings.version, _version));
+  links.add("statictext", undefined, localize(strings.copyright));
   var githubText =
-    localize(locStrings.github) + ": https://github.com/joshbduncan/AiCommandPalette";
+    localize(strings.github) + ": https://github.com/joshbduncan/AiCommandPalette";
   var github = links.add("statictext", undefined, githubText);
   // window buttons
   var winButtons = win.add("group");
@@ -217,7 +217,7 @@ function buildStartup() {
     }
     data.settings.startupCommands = startupCommands;
   } catch (e) {
-    alert(localize(locStrings.startup_error_saving));
+    alert(localize(strings.startup_error_saving));
     data.settings.startupCommands = previousStartupCommands;
   }
 }
@@ -227,24 +227,24 @@ function documentReport() {
   // setup the basic document info
   var rulerUnits = app.activeDocument.rulerUnits.toString().split(".").pop();
   var fileInfo =
-    localize(locStrings.dr_header) +
-    localize(locStrings.dr_filename) +
+    localize(strings.dr_header) +
+    localize(strings.dr_filename) +
     app.activeDocument.name +
     "\n" +
-    localize(locStrings.dr_path) +
+    localize(strings.dr_path) +
     (app.activeDocument.path.fsName
       ? app.activeDocument.path.fsName
-      : localize(locStrings.none)) +
+      : localize(strings.none)) +
     "\n" +
-    localize(locStrings.dr_color_space) +
+    localize(strings.dr_color_space) +
     app.activeDocument.documentColorSpace.toString().split(".").pop() +
     "\n" +
-    localize(locStrings.dr_width) +
+    localize(strings.dr_width) +
     convertPointsTo(app.activeDocument.width, rulerUnits) +
     " " +
     rulerUnits +
     "\n" +
-    localize(locStrings.dr_height) +
+    localize(strings.dr_height) +
     convertPointsTo(app.activeDocument.height, rulerUnits) +
     " " +
     rulerUnits;
@@ -283,25 +283,25 @@ function documentReport() {
 
   // build the report from the selected options (active = true)
   function buildReport() {
-    if (!app.activeDocument.saved) alert(localize(locStrings.document_report_warning));
+    if (!app.activeDocument.saved) alert(localize(strings.document_report_warning));
 
-    var infoString = localize(locStrings.dr_info_string) + "\n\n" + fileInfo;
+    var infoString = localize(strings.dr_info_string) + "\n\n" + fileInfo;
     for (var p in reportOptions) {
       if (reportOptions[p].active && reportOptions[p].str) {
         infoString +=
           "\n\n" +
-          localize(locStrings[p.toLowerCase()]) +
+          localize(strings[p.toLowerCase()]) +
           "\n-----\n" +
           reportOptions[p].str;
       }
     }
-    infoString += "\n\n" + localize(locStrings.dr_file_created) + new Date();
+    infoString += "\n\n" + localize(strings.dr_file_created) + new Date();
     return infoString;
   }
 
   // setup the dialog
   var win = new Window("dialog");
-  win.text = localize(locStrings.document_report);
+  win.text = localize(strings.document_report);
   win.orientation = "column";
   win.alignChildren = ["center", "top"];
   win.alignChildren = "fill";
@@ -343,9 +343,9 @@ function documentReport() {
   var winButtons = win.add("group");
   winButtons.orientation = "row";
   winButtons.alignChildren = ["center", "center"];
-  var saveInfo = winButtons.add("button", undefined, localize(locStrings.save));
+  var saveInfo = winButtons.add("button", undefined, localize(strings.save));
   saveInfo.preferredSize.width = 100;
-  var close = winButtons.add("button", undefined, localize(locStrings.close), {
+  var close = winButtons.add("button", undefined, localize(strings.close), {
     name: "ok",
   });
   close.preferredSize.width = 100;
@@ -360,9 +360,9 @@ function documentReport() {
         f.write(info.text);
         f.close();
       } catch (e) {
-        alert(localize(locStrings.fl_error_writing, f));
+        alert(localize(strings.fl_error_writing, f));
       }
-      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
+      if (f.exists) alert(localize(strings.file_saved, f.fsName));
     }
   };
   // show the info dialog
@@ -380,13 +380,13 @@ function imageCapture() {
       try {
         app.activeDocument.imageCapture(f);
       } catch (e) {
-        alert(localize(locStrings.fl_error_writing, f));
+        alert(localize(strings.fl_error_writing, f));
       }
       // if chosen file name doesn't end in ".png" add the
       // correct extension so they captured file open correctly
       if (f.name.indexOf(".png") < f.name.length - 4)
         f.rename(f.name.toString() + ".png");
-      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
+      if (f.exists) alert(localize(strings.file_saved, f.fsName));
     }
   }
 }
@@ -402,12 +402,12 @@ function exportVariables() {
       try {
         app.activeDocument.exportVariables(f);
       } catch (e) {
-        alert(localize(locStrings.fl_error_writing, f));
+        alert(localize(strings.fl_error_writing, f));
       }
-      if (f.exists) alert(localize(locStrings.file_saved, f.fsName));
+      if (f.exists) alert(localize(strings.file_saved, f.fsName));
     }
   } else {
-    alert(localize(locStrings.no_document_variables));
+    alert(localize(strings.no_document_variables));
   }
 }
 
@@ -466,7 +466,7 @@ function loadFileBookmark() {
     ".wmf",
   ]; // file types taken from Ai open dialog
   re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
-  var files = loadFileTypes(localize(locStrings.bm_set_bookmark), true, re);
+  var files = loadFileTypes(localize(strings.bm_set_bookmark), true, re);
   if (files.length > 0) {
     var f, fname;
     for (var i = 0; i < files.length; i++) {
@@ -475,9 +475,9 @@ function loadFileBookmark() {
       if (data.commands.bookmark.hasOwnProperty(fname)) {
         if (
           !confirm(
-            localize(locStrings.bm_already_loaded),
+            localize(strings.bm_already_loaded),
             "noAsDflt",
-            localize(locStrings.bm_already_loaded_title)
+            localize(strings.bm_already_loaded_title)
           )
         )
           continue;
@@ -489,7 +489,7 @@ function loadFileBookmark() {
           bookmarkType: "file",
         };
       } catch (e) {
-        alert(localize(locStrings.bm_error_loading, f.fsName));
+        alert(localize(strings.bm_error_loading, f.fsName));
       }
     }
   }
@@ -498,15 +498,15 @@ function loadFileBookmark() {
 /** Set bookmarked folder to open on system from within Ai Command Palette. */
 function loadFolderBookmark() {
   var f, fname;
-  f = Folder.selectDialog(localize(locStrings.bm_set_bookmark));
+  f = Folder.selectDialog(localize(strings.bm_set_bookmark));
   if (f) {
     fname = decodeURI(f.name);
     if (data.commands.bookmark.hasOwnProperty(fname)) {
       if (
         !confirm(
-          localize(locStrings.bm_already_loaded),
+          localize(strings.bm_already_loaded),
           "noAsDflt",
-          localize(locStrings.bm_already_loaded_title)
+          localize(strings.bm_already_loaded_title)
         )
       )
         return;
@@ -518,7 +518,7 @@ function loadFolderBookmark() {
         bookmarkType: "folder",
       };
     } catch (e) {
-      alert(localize(locStrings.bm_error_loading, f.fsName));
+      alert(localize(strings.bm_error_loading, f.fsName));
     }
   }
 }
@@ -527,7 +527,7 @@ function loadFolderBookmark() {
 function loadScripts() {
   var acceptedTypes = [".jsx", ".js"];
   re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
-  var files = loadFileTypes(localize(locStrings.sc_load_script), true, ".jsx$|.js$");
+  var files = loadFileTypes(localize(strings.sc_load_script), true, ".jsx$|.js$");
   if (files.length > 0) {
     var f, fname;
     for (var i = 0; i < files.length; i++) {
@@ -536,9 +536,9 @@ function loadScripts() {
       if (data.commands.script.hasOwnProperty(fname)) {
         if (
           !confirm(
-            localize(locStrings.sc_already_loaded),
+            localize(strings.sc_already_loaded),
             "noAsDflt",
-            localize(locStrings.sc_already_loaded_title)
+            localize(strings.sc_already_loaded_title)
           )
         )
           continue;
@@ -546,11 +546,11 @@ function loadScripts() {
       try {
         data.commands.script[fname] = { type: "script", path: f.fsName };
       } catch (e) {
-        alert(localize(locStrings.sc_error_loading, f.fsName));
+        alert(localize(strings.sc_error_loading, f.fsName));
       }
     }
   } else {
-    alert(localize(locStrings.sc_none_selected));
+    alert(localize(strings.sc_none_selected));
   }
 }
 
@@ -566,7 +566,7 @@ function showAllScripts() {
   );
   var result = commandPalette(
     (commands = scriptCommands),
-    (title = localize(locStrings.Scripts)),
+    (title = localize(strings.Scripts)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
@@ -586,7 +586,7 @@ function showAllBookmarks() {
   );
   var result = commandPalette(
     (commands = bookmarkCommands),
-    (title = localize(locStrings.Bookmarks)),
+    (title = localize(strings.Bookmarks)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );
@@ -610,7 +610,7 @@ function showAllActions() {
   };
   var result = commandPalette(
     (commands = actionCommands),
-    (title = localize(locStrings.Actions)),
+    (title = localize(strings.Actions)),
     (columns = columns),
     (multiselect = false)
   );
@@ -630,7 +630,7 @@ function hideCommand() {
   );
   var result = commandPalette(
     (commands = hideableCommands),
-    (title = localize(locStrings.cd_hide_select)),
+    (title = localize(strings.cd_hide_select)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = true)
   );
@@ -654,7 +654,7 @@ function unhideCommand() {
   }
   var result = commandPalette(
     (commands = hiddenCommands),
-    (title = localize(locStrings.cd_reveal_menu_select)),
+    (title = localize(strings.cd_reveal_menu_select)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = true)
   );
@@ -676,7 +676,7 @@ function deleteCommand() {
   );
   var result = commandPalette(
     (commands = deletableCommands),
-    (title = localize(locStrings.cd_delete_select)),
+    (title = localize(strings.cd_delete_select)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = true)
   );
@@ -686,16 +686,16 @@ function deleteCommand() {
     names += commandNames.push(result[i].localizedName);
   if (
     confirm(
-      localize(locStrings.cd_delete_confirm, commandNames.join("\n")),
+      localize(strings.cd_delete_confirm, commandNames.join("\n")),
       "noAsDflt",
-      localize(locStrings.cd_delete_confirm_title)
+      localize(strings.cd_delete_confirm_title)
     )
   ) {
     for (var i = 0; i < result.length; i++) {
       try {
         delete data.commands[result[i].type][result[i].id];
       } catch (e) {
-        alert(localize(locStrings.cd_error_delete, command));
+        alert(localize(strings.cd_error_delete, command));
       }
     }
   }
@@ -716,12 +716,12 @@ function goToOpenDocument() {
       curDocument == app.activeDocument
         ? "x " + curDocument.name + " " + colormode
         : "   " + curDocument.name + " " + colormode;
-    openDocuments.push({ name: documentName, type: localize(locStrings.document) });
+    openDocuments.push({ name: documentName, type: localize(strings.document) });
     documentLookup[documentName] = curDocument;
   }
   var result = commandPalette(
     (commands = openDocuments),
-    (title = localize(locStrings.go_to_open_document)),
+    (title = localize(strings.go_to_open_document)),
     (multiselect = false)
   );
   if (!result) return;
@@ -735,12 +735,12 @@ function goToArtboard() {
   var abName;
   for (var i = 0; i < app.activeDocument.artboards.length; i++) {
     abName = "#" + i + "  " + app.activeDocument.artboards[i].name;
-    artboards.push({ name: abName, type: localize(locStrings.artboard) });
+    artboards.push({ name: abName, type: localize(strings.artboard) });
     artboardLookup[abName] = i;
   }
   var result = commandPalette(
     (commands = artboards),
-    (title = localize(locStrings.go_to_artboard)),
+    (title = localize(strings.go_to_artboard)),
     (multiselect = false)
   );
   if (!result) return;
@@ -752,7 +752,7 @@ function goToArtboard() {
 function goToNamedObject() {
   if (app.activeDocument.pageItems.length > namedObjectLimit)
     alert(
-      localize(locStrings.go_to_named_object_limit, app.activeDocument.pageItems.length)
+      localize(strings.go_to_named_object_limit, app.activeDocument.pageItems.length)
     );
   var objectLookup = {};
   var namedObjects = [];
@@ -777,10 +777,10 @@ function goToNamedObject() {
     namedObjects.push({ name: itemName, type: item.typename });
     objectLookup[itemName] = item;
   }
-  if (!namedObjects.length) alert(localize(locStrings.go_to_named_object_no_objects));
+  if (!namedObjects.length) alert(localize(strings.go_to_named_object_no_objects));
   var result = commandPalette(
     (commands = namedObjects),
-    (title = localize(locStrings.go_to_named_object)),
+    (title = localize(strings.go_to_named_object)),
     (multiselect = false)
   );
   if (!result) return;
@@ -831,18 +831,18 @@ function recentFiles() {
     if (!f.exists) continue;
     fname = decodeURI(f.name);
     files[fname] = f;
-    recentFileCommands.push({ name: fname, type: localize(locStrings.file) });
+    recentFileCommands.push({ name: fname, type: localize(strings.file) });
   }
   var result = commandPalette(
     (commands = recentFileCommands),
-    (title = localize(locStrings.open_recent_file)),
+    (title = localize(strings.open_recent_file)),
     (multiselect = false)
   );
   if (!result) return;
   try {
     app.open(files[result]);
   } catch (e) {
-    alert(localize(locStrings.fl_error_loading, result));
+    alert(localize(strings.fl_error_loading, result));
   }
 }
 
@@ -859,7 +859,7 @@ function recentCommands() {
   }
   var result = commandPalette(
     (commands = recentCommands),
-    (title = localize(locStrings.recent_commands)),
+    (title = localize(strings.recent_commands)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false)
   );

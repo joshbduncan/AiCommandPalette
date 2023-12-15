@@ -84,11 +84,11 @@ ListBoxWrapper.prototype = {
     var command, item;
     for (var i = 0; i < commands.length; i++) {
       command = commands[i];
-      item = listbox.add("item", command[columnKeys[0]]);
+      item = listbox.add("item", localize(command[columnKeys[0]]));
       for (var j = 1; j < columnKeys.length; j++) {
-        item.subItems[0].text = command[columnKeys[j]];
+        item.subItems[0].text = localize(strings[command[columnKeys[j]]]);
       }
-      item.commandId = command.id;
+      item.command = command;
     }
   },
   /**
@@ -129,7 +129,7 @@ function addToStepsOnDoubleClick(listbox) {
       command = commandsData[localizedCommandLookup[listbox.selection]];
       newItem = steps.add("item", command.localizedName);
       newItem.subItems[0].text = command.localizedType;
-      newItem.commandId = command.id;
+      newItem.command = command;
       steps.notify("onChange");
     }
   };
@@ -239,7 +239,7 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
 
   // setup the query input
   var q = win.add("edittext");
-  q.helpTip = localize(locStrings.cd_q_helptip);
+  q.helpTip = localize(strings.cd_q_helptip);
 
   // setup the commands listbox
   var matches = showOnly ? showOnly : commands;
@@ -260,7 +260,7 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
   winButtons.alignChildren = ["center", "center"];
   var ok = winButtons.add("button", undefined, "OK");
   ok.preferredSize.width = 100;
-  var cancel = winButtons.add("button", undefined, localize(locStrings.cancel), {
+  var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
     name: "cancel",
   });
   cancel.preferredSize.width = 100;
@@ -314,11 +314,11 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
     if (multiselect) {
       var items = [];
       for (var i = 0; i < list.listbox.selection.length; i++) {
-        items.push(commandsData[list.listbox.selection[i].commandId]);
+        items.push(list.listbox.selection[i].command);
       }
       return items;
     } else {
-      return commandsData[list.listbox.selection.commandId];
+      return list.listbox.selection.command;
     }
   }
   return false;
