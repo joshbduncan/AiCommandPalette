@@ -1,0 +1,70 @@
+//USER PREFERENCES
+
+// keeping around for alerting users of breaking changes
+var settingsFolderName = "JBD";
+var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
+var settingsFileName = "AiCommandPaletteSettings.json";
+
+// new v0.10.0 preferences
+var userPrefsFolderName = "JBD";
+var userPrefsFolder = setupFolderObject(Folder.userData + "/" + userPrefsFolderName);
+var userPrefsFileName = "AiCommandPalette.json";
+
+// setup the base prefs model
+var prefs = {};
+prefs.startupCommands = null;
+prefs.hiddenCommands = [];
+prefs.workflows = [];
+prefs.bookmarks = [];
+prefs.scripts = [];
+prefs.history = [];
+prefs.latches = {};
+prefs.searchIncludesType = false;
+prefs.version = _version;
+prefs.os = os;
+prefs.locale = locale;
+prefs.aiVersion = aiVersion;
+prefs.timestamp = Date.now();
+
+var userPrefs = {};
+// pref functions
+userPrefs.folder = function () {
+  return userPrefsFolder;
+};
+userPrefs.file = function () {
+  var folder = this.folder();
+  var file = setupFileObject(folder, userPrefsFileName);
+  return file;
+};
+userPrefs.load = function () {
+  var file = this.file();
+  if (file.exists) {
+    var loadedData, prop, propsToSkip;
+    try {
+      loadedData = readJSONData(file);
+      if (loadedData == {}) return; // FIXME: add alert
+      // TODO: add alert about prefs file from a different machine
+      propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
+      for (prop in loadedData) {
+        if (propsToSkip.includes(prop)) continue;
+        prefs[prop] = loadedData[prop];
+      }
+    } catch (e) {
+      file.rename(file.name + ".bak");
+      this.reveal();
+      Error.runtimeError(1, localize(strings.pref_file_loading_error));
+    }
+  }
+};
+userPrefs.save = function () {
+  var file = this.file();
+  writeJSONData(prefs, file);
+};
+userPrefs.backup = function () {
+  var backupFile = new File(this.file() + ".bak");
+  this.file().copy(backupFile);
+};
+userPrefs.reveal = function () {
+  var folder = this.folder();
+  folder.execute();
+};

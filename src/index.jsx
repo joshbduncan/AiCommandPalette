@@ -22,6 +22,7 @@ See the LICENSE file for details.
   //@include "polyfills.jsxinc"
   //@include "data.jsxinc"
   //@include "config.jsxinc"
+  //@include "preferences.jsxinc"
   //@include "helpers.jsxinc"
   //@include "builtin.jsxinc"
   //@include "commands.jsxinc"
@@ -31,7 +32,19 @@ See the LICENSE file for details.
   //@include "io.jsxinc"
   //@include "workflows.jsxinc"
 
-  // load user settings
+  // load the user data
+  userPrefs.load();
+  userPrefs.save();
+
+  // var x = Date.now;
+  // alert(Date.now());
+  // alert(Math.floor(Date.now() / 1000));
+
+  // add basic defaults to the startup on a first/fresh install
+  if (!prefs.startupCommands) {
+    prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
+  }
+
   // settings.load();
 
   // load current user actions
@@ -53,10 +66,15 @@ See the LICENSE file for details.
     (selRequired = true)
   );
 
-  // add basic defaults to the startup on a first/fresh install
-  // if (!settings.data) {
-  //   data.settings.startupCommands = ["builtin_recentCommands", "config_settings"];
-  // }
+  var startupCommands = filterCommands(
+    (commands = prefs.startupCommands),
+    (types = null),
+    (showHidden = false),
+    (hideSpecificCommands = null),
+    (docRequired = true),
+    (selRequired = true)
+  );
+
   // var startupCommands = [];
   // for (var i = 0; i < data.settings.startupCommands.length; i++) {
   //   // check to make sure command is available
@@ -70,7 +88,7 @@ See the LICENSE file for details.
     (title = localize(strings.title)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false),
-    (showOnly = null)
+    (showOnly = startupCommands)
   );
   if (!result) return;
   alert(result);

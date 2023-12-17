@@ -9131,72 +9131,6 @@ See the LICENSE file for details.
   var regexEllipsis = /\.\.\.$/;
   var regexCarrot = /\s>\s/g;
 
-  //USER SETTINGS
-
-  var settingsFolderName = "JBD";
-  var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
-  var settingsFileName = "AiCommandPaletteSettings.json";
-
-  var settings = {};
-  settings.folder = function () {
-    return settingsFolder;
-  };
-  settings.file = function () {
-    var folder = this.folder();
-    var file = setupFileObject(folder, settingsFileName);
-    return file;
-  };
-  settings.load = function () {
-    var file = this.file();
-    if (file.exists) {
-      try {
-        var settings = readJSONData(file);
-        if (settings == {}) return; // FIXME: add alert
-        for (var prop in settings) {
-          for (var subProp in settings[prop]) {
-            data[prop][subProp] = settings[prop][subProp];
-          }
-        }
-      } catch (e) {
-        file.rename(file.name + ".bak");
-        this.reveal();
-        Error.runtimeError(1, localize(strings.pref_file_loading_error));
-      }
-    }
-  };
-  settings.save = function () {
-    var file = this.file();
-    var obj = {
-      commands: {
-        bookmark: data.commands.bookmark,
-        script: data.commands.script,
-        workflow: data.commands.workflow,
-      },
-      settings: {
-        hidden: data.settings.hidden,
-        name: _title,
-        version: _version,
-        os: os,
-        locale: locale,
-        aiVersion: aiVersion,
-        searchIncludesType: data.settings.searchIncludesType
-          ? data.settings.searchIncludesType
-          : false,
-        startupCommands: data.settings.startupCommands,
-      },
-      recent: data.recent,
-    };
-    writeJSONData(obj, file);
-  };
-  settings.backup = function () {
-    var backupFile = new File(this.file() + ".bak");
-    this.file().copy(backupFile);
-  };
-  settings.reveal = function () {
-    var folder = this.folder();
-    folder.execute();
-  };
-
   // DEVELOPMENT HELPERS
 
   var devInfo = {};
@@ -9237,6 +9171,76 @@ See the LICENSE file for details.
     }
     alert(s);
   }
+  //USER PREFERENCES
+
+  // keeping around for alerting users of breaking changes
+  var settingsFolderName = "JBD";
+  var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
+  var settingsFileName = "AiCommandPaletteSettings.json";
+
+  // new v0.10.0 preferences
+  var userPrefsFolderName = "JBD";
+  var userPrefsFolder = setupFolderObject(Folder.userData + "/" + userPrefsFolderName);
+  var userPrefsFileName = "AiCommandPalette.json";
+
+  // setup the base prefs model
+  var prefs = {};
+  prefs.startupCommands = null;
+  prefs.hiddenCommands = [];
+  prefs.workflows = [];
+  prefs.bookmarks = [];
+  prefs.scripts = [];
+  prefs.history = [];
+  prefs.latches = {};
+  prefs.searchIncludesType = false;
+  prefs.version = _version;
+  prefs.os = os;
+  prefs.locale = locale;
+  prefs.aiVersion = aiVersion;
+  prefs.timestamp = Date.now();
+
+  var userPrefs = {};
+  // pref functions
+  userPrefs.folder = function () {
+    return userPrefsFolder;
+  };
+  userPrefs.file = function () {
+    var folder = this.folder();
+    var file = setupFileObject(folder, userPrefsFileName);
+    return file;
+  };
+  userPrefs.load = function () {
+    var file = this.file();
+    if (file.exists) {
+      var loadedData, prop, propsToSkip;
+      try {
+        loadedData = readJSONData(file);
+        if (loadedData == {}) return; // FIXME: add alert
+        // TODO: add alert about prefs file from a different machine
+        propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
+        for (prop in loadedData) {
+          if (propsToSkip.includes(prop)) continue;
+          prefs[prop] = loadedData[prop];
+        }
+      } catch (e) {
+        file.rename(file.name + ".bak");
+        this.reveal();
+        Error.runtimeError(1, localize(strings.pref_file_loading_error));
+      }
+    }
+  };
+  userPrefs.save = function () {
+    var file = this.file();
+    writeJSONData(prefs, file);
+  };
+  userPrefs.backup = function () {
+    var backupFile = new File(this.file() + ".bak");
+    this.file().copy(backupFile);
+  };
+  userPrefs.reveal = function () {
+    var folder = this.folder();
+    folder.execute();
+  };
   /**
    * Check to see if there is an active document.
    * @returns Make sure at least one document is open for certain built-in commands.
@@ -11624,7 +11628,19 @@ See the LICENSE file for details.
     };
   }
 
-  // load user settings
+  // load the user data
+  userPrefs.load();
+  userPrefs.save();
+
+  // var x = Date.now;
+  // alert(Date.now());
+  // alert(Math.floor(Date.now() / 1000));
+
+  // add basic defaults to the startup on a first/fresh install
+  if (!prefs.startupCommands) {
+    prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
+  }
+
   // settings.load();
 
   // load current user actions
@@ -11646,10 +11662,15 @@ See the LICENSE file for details.
     (selRequired = true)
   );
 
-  // add basic defaults to the startup on a first/fresh install
-  // if (!settings.data) {
-  //   data.settings.startupCommands = ["builtin_recentCommands", "config_settings"];
-  // }
+  var startupCommands = filterCommands(
+    (commands = prefs.startupCommands),
+    (types = null),
+    (showHidden = false),
+    (hideSpecificCommands = null),
+    (docRequired = true),
+    (selRequired = true)
+  );
+
   // var startupCommands = [];
   // for (var i = 0; i < data.settings.startupCommands.length; i++) {
   //   // check to make sure command is available
@@ -11663,7 +11684,7 @@ See the LICENSE file for details.
     (title = localize(strings.title)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false),
-    (showOnly = null)
+    (showOnly = startupCommands)
   );
   if (!result) return;
   alert(result);
