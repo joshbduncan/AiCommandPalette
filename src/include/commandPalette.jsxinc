@@ -345,3 +345,93 @@ function commandPalette(commands, title, columns, multiselect, showOnly, saveHis
   }
   return false;
 }
+
+/**
+ * Score array items based on regex string match.
+ * @param   {String} query    String to search for.
+ * @param   {Array}  commands Commands to match `query` against.
+ * @returns {Array}           Matching items sorted by score.
+ */
+function scoreMatches(query, commands) {
+  var words = [];
+  var matches = [];
+  var scores = {};
+  var maxScore = 0;
+  query = query.toLowerCase();
+  var words = query.split(" ");
+  var id, command, name, type, score, strippedName;
+
+  // query latching
+  if (latches.hasOwnProperty(query)) {
+    scores[latches[query]] = 1000;
+    matches.push(latches[query]);
+  }
+
+  for (var i = 0; i < commands.length; i++) {
+    id = commands[i];
+    command = commandsData[id];
+    if (command.hasOwnProperty("loc")) {
+      name = localize(command.loc).toLowerCase();
+    } else if (command.hasOwnProperty("name")) {
+      name = command.name.toLowerCase();
+    } else {
+      name = id.toLowerCase().replace("_", " "); // FIXME: not sure about this
+    }
+    if (strings.hasOwnProperty(command.type)) {
+      type = localize(strings[command.type]).toLowerCase();
+    } else {
+      type = command.type.toLowerCase();
+    }
+    strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+    score = 0;
+
+    // check for exact match
+    if (
+      query === name ||
+      query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName
+    ) {
+      score += word.length;
+    }
+
+    // check for exact type match
+    if (prefs.searchIncludesType && query == type) {
+      score += type.length;
+    }
+
+    // check for singular word matches
+    var word, re;
+    for (var n = 0; n < words.length; n++) {
+      word = words[n];
+      if (!word) continue;
+
+      re = new RegExp("\\b" + word, "gi");
+
+      // check for a match at the beginning of a word
+      if (re.test(name) || re.test(strippedName)) score += word.length;
+      // check for a match in command type (if enabled)
+      if (prefs.searchIncludesType && re.test(type) != null) score += word.length;
+    }
+
+    // updated scores for matches
+    if (score > 0) {
+      // increase score if command found in recent commands
+      if (score == maxScore && recentCommands.hasOwnProperty(command.id)) {
+        score += recentCommands[command.id];
+      }
+      if (scores.hasOwnProperty(id)) {
+        scores[id] += score;
+      } else {
+        scores[id] = score;
+        matches.push(id);
+      }
+      if (scores[id] > maxScore) maxScore = scores[id];
+    }
+  }
+
+  // sort the matches by score
+  matches.sort(function (a, b) {
+    return scores[b] - scores[a];
+  });
+
+  return matches;
+}

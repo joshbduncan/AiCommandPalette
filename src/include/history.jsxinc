@@ -5,7 +5,7 @@ var userHistoryFileName = "History.json";
 
 // setup the base prefs model
 var history = [];
-var recentCommands = [];
+var recentCommands = {};
 var latches = {};
 
 var userHistory = {};
@@ -37,9 +37,9 @@ userHistory.load = function () {
           queryCommandsLUT[entry.query][entry.command] = 0;
         queryCommandsLUT[entry.query][entry.command]++;
         // set last 25 recent commands
-        if (recentCommands.includes(entry.command) || recentCommands.length > 25)
-          continue;
-        recentCommands.push(entry.command);
+        if (!recentCommands.hasOwnProperty(entry.command))
+          recentCommands[entry.command] = 0;
+        recentCommands[entry.command]++;
       }
       // build latches with most common command for each query
       var query, command, commands;
@@ -52,7 +52,7 @@ userHistory.load = function () {
         commands.sort(function (a, b) {
           return b[1] - a[1];
         });
-        latches[query] = commands[0];
+        latches[query] = commands[0][0];
       }
     } catch (e) {
       file.rename(file.name + ".bak");

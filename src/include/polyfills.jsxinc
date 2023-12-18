@@ -2,10 +2,6 @@
 
 //ARRAY POLYFILLS
 
-/**
- * Array.prototype.indexOf() polyfill
- * https://stackoverflow.com/questions/1744310/how-to-fix-array-indexof-in-javascript-for-internet-explorer-browsers
- */
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function (obj, start) {
     for (var i = start || 0, j = this.length; i < j; i++) {
@@ -17,17 +13,8 @@ if (!Array.prototype.indexOf) {
   };
 }
 
-/**
- * Array.prototype.includes() polyfill
- * @author Chris Ferdinandi
- * @license MIT
- */
 if (!Array.prototype.includes) {
   Array.prototype.includes = function (search, start) {
-    "use strict";
-    if (search instanceof RegExp) {
-      throw TypeError("first argument must not be a RegExp");
-    }
     if (start === undefined) {
       start = 0;
     }
