@@ -9180,8 +9180,8 @@ See the LICENSE file for details.
 
   // new v0.10.0 preferences
   var userPrefsFolderName = "JBD";
-  var userPrefsFolder = setupFolderObject(Folder.userData + "/" + userPrefsFolderName);
-  var userPrefsFileName = "AiCommandPalette.json";
+  var userPrefsFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
+  var userPrefsFileName = "Preferences.json";
 
   // setup the base prefs model
   var prefs = {};
@@ -9215,7 +9215,11 @@ See the LICENSE file for details.
       var loadedData, prop, propsToSkip;
       try {
         loadedData = readJSONData(file);
-        if (loadedData == {}) return; // FIXME: add alert
+        if (loadedData == {}) {
+          // set default commands on first/fresh run
+          prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
+          return; // FIXME: add alert
+        }
         // TODO: add alert about prefs file from a different machine
         propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
         for (prop in loadedData) {
@@ -9238,6 +9242,82 @@ See the LICENSE file for details.
     this.file().copy(backupFile);
   };
   userPrefs.reveal = function () {
+    var folder = this.folder();
+    folder.execute();
+  };
+  //USER HISTORY
+
+  var userHistoryFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
+  var userHistoryFileName = "History.json";
+
+  // setup the base prefs model
+  var history = [];
+  var recentCommands = [];
+  var latches = {};
+
+  var userHistory = {};
+  // pref functions
+  userHistory.folder = function () {
+    return userHistoryFolder;
+  };
+  userHistory.file = function () {
+    var folder = this.folder();
+    var file = setupFileObject(folder, userHistoryFileName);
+    return file;
+  };
+  userHistory.load = function () {
+    var file = this.file();
+    if (file.exists) {
+      var queryCommandsLUT = {};
+      var loadedData, entry;
+      try {
+        loadedData = readJSONData(file);
+        if (loadedData == {}) return; // FIXME: add alert
+        // TODO: add alert about prefs file from a different machine
+        history = loadedData;
+        for (var i = loadedData.length - 1; i >= 0; i--) {
+          entry = loadedData[i];
+          // track how many times a query ties to a command
+          if (!queryCommandsLUT.hasOwnProperty(entry.query))
+            queryCommandsLUT[entry.query] = {};
+          if (!queryCommandsLUT[entry.query].hasOwnProperty(entry.command))
+            queryCommandsLUT[entry.query][entry.command] = 0;
+          queryCommandsLUT[entry.query][entry.command]++;
+          // set last 25 recent commands
+          if (recentCommands.includes(entry.command) || recentCommands.length > 25)
+            continue;
+          recentCommands.push(entry.command);
+        }
+        // build latches with most common command for each query
+        var query, command, commands;
+        for (query in queryCommandsLUT) {
+          commands = [];
+          for (command in queryCommandsLUT[query]) {
+            commands.push([command, queryCommandsLUT[query][command]]);
+          }
+          // sort by most used
+          commands.sort(function (a, b) {
+            return b[1] - a[1];
+          });
+          latches[query] = commands[0];
+        }
+      } catch (e) {
+        file.rename(file.name + ".bak");
+        this.reveal();
+        Error.runtimeError(1, localize(strings.pref_file_loading_error)); // FIXME: update loc string
+      }
+    }
+  };
+  userHistory.save = function () {
+    var file = this.file();
+    if (history.length > 500) history = history.slice(-500);
+    writeJSONData(history, file);
+  };
+  userHistory.backup = function () {
+    var backupFile = new File(this.file() + ".bak");
+    this.file().copy(backupFile);
+  };
+  userHistory.reveal = function () {
     var folder = this.folder();
     folder.execute();
   };
@@ -9290,6 +9370,51 @@ See the LICENSE file for details.
     if (a_components.length < b_components.length) {
       return -1;
     }
+  }
+
+  /**
+   * Load all user actions as commands.
+   * @returns Count of loaded actions.
+   */
+  function loadActions() {
+    var ct = 0;
+    var currentLocale = locale.split("_")[0];
+    var currentPath, set, actionCount, name;
+    var pref = app.preferences;
+    var path = "plugin/Action/SavedSets/set-";
+
+    for (var i = 1; i <= 100; i++) {
+      currentPath = path + i.toString() + "/";
+      // get action sets
+      set = pref.getStringPreference(currentPath + "name");
+      if (!set) {
+        break;
+      }
+      // get actions in set
+      actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
+      ct += actionCount;
+      var actionName, id, loc, obj;
+      for (var j = 1; j <= actionCount; j++) {
+        loc = {};
+        obj = {};
+        actionName = pref.getStringPreference(
+          currentPath + "action-" + j.toString() + "/name"
+        );
+        id = set + "_" + actionName;
+        loc[currentLocale] = actionName + " [" + set + "]";
+        obj["id"] = id;
+        obj["action"] = "action";
+        obj["type"] = "action";
+        obj["set"] = set;
+        obj["name"] = actionName;
+        obj["docRequired"] = false;
+        obj["selRequired"] = false;
+        obj["loc"] = loc;
+        obj["hidden"] = false;
+        commandsData[id] = obj;
+      }
+    }
+    return ct > 0;
   }
 
   /**
@@ -9467,7 +9592,7 @@ See the LICENSE file for details.
 
   /**
    * Filter the supplied commands by multiple factors.
-   * @param   {Array}   commandIds Command `id`s to filter through.
+   * @param   {Array}   command Command `id`s to filter through.
    * @param   {Array}   types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
    * @param   {Boolean} showHidden Should user-hidden or non-relevant commands be included?
    * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
@@ -9490,20 +9615,58 @@ See the LICENSE file for details.
       id = commands[i];
       if (!commandsData.hasOwnProperty(id)) continue;
       command = commandsData[id];
-      // hide commands requiring an active documents if requested
-      if (docRequired && !appDocuments && command.docRequired) continue;
-      // hide commands requiring an active selection if requested
-      if (selRequired && !docSelection && command.selRequired) continue;
+
       // make sure Ai version meets command requirements
       if (!versionCheck(command)) continue;
+
       // skip any hidden commands
-      if (!showHidden && command.hidden) continue;
+      if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
+
+      // skip any non relevant commands
+      if (!relevantCommand(command)) continue;
+
       // skip any specific commands name in hideSpecificCommands
       if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
+
       // then check to see if the command should be included
       if (!types || types.includes(command.type)) filteredCommands.push(id);
     }
     return filteredCommands;
+  }
+
+  function relevantCommand(command) {
+    // hide commands requiring an active documents if requested
+    if (docRequired && !appDocuments && command.docRequired) return false;
+    // hide commands requiring an active selection if requested
+    if (selRequired && !docSelection && command.selRequired) return false;
+
+    // hide `Edit Workflow...` command if no workflows
+    if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
+    // hide `All Workflows...` command if no workflows
+    if (command.id == "config_allWorkflows" && prefs.workflows.length < 1) return false;
+    // hide `All Scripts...` command if no scripts
+    if (command.id == "config_allScripts" && prefs.scripts.length < 1) return false;
+    // hide `All Bookmarks...` command if no bookmarks
+    if (command.id == "config_allBookmarks" && prefs.bookmarks.length < 1) return false;
+    // hide `All Actions...` command if no actions
+    if (command.id == "config_allActions" && !loadedActions) return false;
+
+    // hide `Enable Searching on Command Type` command if already enabled
+    if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
+      return false;
+    // hide `Disable Searching on Command Type` command if already disabled
+    if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
+      return false;
+
+    // hide `Unhide Commands...` command if no hidden commands
+    if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
+      return false;
+    // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
+    if (command.id == "builtin_recentCommands" && recentCommands == 0) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -10540,124 +10703,11 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-  // COMMANDS SETUP
-
-  /**
-   * Build proper command objects for easy access.
-   * @param commands  Command objects to build.
-   * @param filterOut Command types to ignore.
-   */
-  function buildCommands(commands, filterOut) {
-    var type;
-    for (type in commands) {
-      if (filterOut && filterOut.includes(type)) continue;
-      var command, commandData, hidden;
-      for (command in commands[type]) {
-        commandData = commands[type][command];
-        hidden = false;
-        // hide user hidden commands
-        if (data.settings.hidden.includes(command)) hidden = true;
-        // hide `Edit Workflow...` command if no workflows
-        if (
-          command == "config_editWorkflow" &&
-          Object.keys(data.commands.workflow).length < 1
-        )
-          hidden = true;
-        // hide `All Workflows...` command if no workflows
-        if (
-          command == "config_allWorkflows" &&
-          Object.keys(data.commands.workflow).length < 1
-        )
-          hidden = true;
-        // hide `All Scripts...` command if no scripts
-        if (
-          command == "config_allScripts" &&
-          Object.keys(data.commands.script).length < 1
-        )
-          hidden = true;
-        // hide `All Bookmarks...` command if no bookmarks
-        if (
-          command == "config_allBookmarks" &&
-          Object.keys(data.commands.bookmark).length < 1
-        )
-          hidden = true;
-        // hide `All Actions...` command if no actions
-        if (
-          command == "config_allActions" &&
-          Object.keys(data.commands.action).length < 1
-        )
-          hidden = true;
-        // hide `Enable Searching on Command Type` command if already enabled
-        if (command == "config_enableTypeInSearch" && data.settings.searchIncludesType)
-          hidden = true;
-        // hide `Disable Searching on Command Type` command if already disabled
-        if (command == "config_disableTypeInSearch" && !data.settings.searchIncludesType)
-          hidden = true;
-        // hide `Unhide Commands...` command if no hidden commands
-        if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
-          hidden = true;
-        // // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
-        if (command == "builtin_recentCommands" && data.recent.commands.length == 0) {
-          hidden = true;
-        }
-        if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
-          hidden = true;
-        commandData.id = command;
-        commandData.localizedName = commandData.hasOwnProperty("loc")
-          ? localize(commandData.loc)
-          : command;
-        commandData.localizedType = strings.hasOwnProperty(commandData.type)
-          ? localize(strings[commandData.type])
-          : commandData.type;
-        commandsData[command] = commandData;
-        localizedCommand = commandData.hasOwnProperty("loc")
-          ? localize(commandData.loc)
-          : command;
-        localizedCommandLookup[localizedCommand] = command;
-        if (hidden) hiddenCommands.push(command);
-      }
-    }
-  }
-
-  function loadActions() {
-    var currentPath, set, actionCount, name;
-    var pref = app.preferences;
-    var path = "plugin/Action/SavedSets/set-";
-
-    for (var i = 1; i <= 100; i++) {
-      currentPath = path + i.toString() + "/";
-      // get action sets
-      set = pref.getStringPreference(currentPath + "name");
-      if (!set) {
-        break;
-      }
-      // get actions in set
-      actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
-      var name, key;
-      for (var j = 1; j <= actionCount; j++) {
-        name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
-        key = name + " [" + set + "]";
-        data.commands.action[key] = { name: name, type: "action", set: set };
-      }
-    }
-  }
-
-  function updateRecentCommands(command) {
-    if (command.id == "builtin_recentCommands") return;
-    // make sure command isn't already in the list
-    var idx = data.recent.commands.indexOf(command.id);
-    if (idx > -1) data.recent.commands.splice(idx, 1);
-    data.recent.commands.unshift(command.id);
-    // keep list at 10 items
-    if (data.recent.commands.length > recentCommandsCount) data.recent.commands.pop();
-    settings.save();
-  }
-
   // COMMAND EXECUTION
 
   /**
    * Iterate over each action for chosen command.
-   * @param {Object} id Command id/key to execute.
+   * @param {Object} id Command id to execute.
    */
   function processCommand(id) {
     var command = commandsData[id];
@@ -10675,16 +10725,10 @@ See the LICENSE file for details.
         );
         return;
       }
-      // update recent commands list
-      updateRecentCommands(command);
       // run each action in the workflow
       actions = command.actions;
       for (var i = 0; i < actions.length; i++) processCommand(commandsData[actions[i]]);
     } else {
-      // update recent commands list
-      if (!insideWorkflow) {
-        updateRecentCommands(command);
-      }
       executeCommand(command);
     }
   }
@@ -11042,7 +11086,7 @@ See the LICENSE file for details.
 
   // USER DIALOGS
 
-  function commandPalette(commands, title, columns, multiselect, showOnly) {
+  function commandPalette(commands, title, columns, multiselect, showOnly, saveHistory) {
     // create the dialog
     var win = new Window("dialog");
     win.text = title;
@@ -11093,6 +11137,24 @@ See the LICENSE file for details.
       list.update(matches);
     };
 
+    // save query and command history
+    function updateHistory() {
+      // don't add to history if no query was typed
+      if (q.text === "") return;
+
+      // don't add `Recent Commands` command
+      if (list.listbox.selection.id == "builtin_recentCommands") return;
+
+      history.push({
+        query: q.text,
+        command: list.listbox.selection.id,
+        timestamp: Date.now(),
+      });
+      // limit history entries to 500
+      if (history > 500) history.pop(); // FIXME: add max variable
+      userHistory.save();
+    }
+
     // allow using arrow key from query input by sending a custom keyboard event to the list box
     if (!multiselect) {
       var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
@@ -11129,6 +11191,9 @@ See the LICENSE file for details.
         }
         return items;
       } else {
+        if (saveHistory) {
+          updateHistory();
+        }
         return list.listbox.selection.id;
       }
     }
@@ -11630,25 +11695,19 @@ See the LICENSE file for details.
 
   // load the user data
   userPrefs.load();
-  userPrefs.save();
-
-  // var x = Date.now;
-  // alert(Date.now());
-  // alert(Math.floor(Date.now() / 1000));
+  userHistory.load();
+  loadActions();
 
   // add basic defaults to the startup on a first/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }
 
-  // settings.load();
-
-  // load current user actions
-  // loadActions();
-
   var appDocuments = app.documents.length > 0;
   var docSelection = appDocuments ? app.activeDocument.selection.length : null;
   var insideWorkflow = false;
+
+  // load command for initial start up palette
 
   // SHOW THE COMMAND PALETTE
   // TODO: set hidden property on any user hidden commands
@@ -11671,22 +11730,14 @@ See the LICENSE file for details.
     (selRequired = true)
   );
 
-  // var startupCommands = [];
-  // for (var i = 0; i < data.settings.startupCommands.length; i++) {
-  //   // check to make sure command is available
-  //   if (!commandsData.hasOwnProperty(data.settings.startupCommands[i])) continue; // FIXME: add alert
-  //   // also hide any commands that aren't relevant
-  //   if (hiddenCommands.includes(data.settings.startupCommands[i])) continue;
-  //   startupCommands.push(commandsData[data.settings.startupCommands[i]]);
-  // }
   var result = commandPalette(
     (commands = queryableCommands),
     (title = localize(strings.title)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false),
-    (showOnly = startupCommands)
+    (showOnly = startupCommands),
+    (saveHistory = true)
   );
   if (!result) return;
-  alert(result);
   processCommand(result);
 })();

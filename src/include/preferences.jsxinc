@@ -7,8 +7,8 @@ var settingsFileName = "AiCommandPaletteSettings.json";
 
 // new v0.10.0 preferences
 var userPrefsFolderName = "JBD";
-var userPrefsFolder = setupFolderObject(Folder.userData + "/" + userPrefsFolderName);
-var userPrefsFileName = "AiCommandPalette.json";
+var userPrefsFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
+var userPrefsFileName = "Preferences.json";
 
 // setup the base prefs model
 var prefs = {};
@@ -42,7 +42,11 @@ userPrefs.load = function () {
     var loadedData, prop, propsToSkip;
     try {
       loadedData = readJSONData(file);
-      if (loadedData == {}) return; // FIXME: add alert
+      if (loadedData == {}) {
+        // set default commands on first/fresh run
+        prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
+        return; // FIXME: add alert
+      }
       // TODO: add alert about prefs file from a different machine
       propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
       for (prop in loadedData) {

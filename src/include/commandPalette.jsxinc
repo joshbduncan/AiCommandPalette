@@ -232,7 +232,7 @@ function scrollListBoxWithArrows(listbox) {
 
 // USER DIALOGS
 
-function commandPalette(commands, title, columns, multiselect, showOnly) {
+function commandPalette(commands, title, columns, multiselect, showOnly, saveHistory) {
   // create the dialog
   var win = new Window("dialog");
   win.text = title;
@@ -283,6 +283,24 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
     list.update(matches);
   };
 
+  // save query and command history
+  function updateHistory() {
+    // don't add to history if no query was typed
+    if (q.text === "") return;
+
+    // don't add `Recent Commands` command
+    if (list.listbox.selection.id == "builtin_recentCommands") return;
+
+    history.push({
+      query: q.text,
+      command: list.listbox.selection.id,
+      timestamp: Date.now(),
+    });
+    // limit history entries to 500
+    if (history > 500) history.pop(); // FIXME: add max variable
+    userHistory.save();
+  }
+
   // allow using arrow key from query input by sending a custom keyboard event to the list box
   if (!multiselect) {
     var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
@@ -319,6 +337,9 @@ function commandPalette(commands, title, columns, multiselect, showOnly) {
       }
       return items;
     } else {
+      if (saveHistory) {
+        updateHistory();
+      }
       return list.listbox.selection.id;
     }
   }

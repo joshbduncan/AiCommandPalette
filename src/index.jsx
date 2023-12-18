@@ -23,6 +23,7 @@ See the LICENSE file for details.
   //@include "data.jsxinc"
   //@include "config.jsxinc"
   //@include "preferences.jsxinc"
+  //@include "history.jsxinc"
   //@include "helpers.jsxinc"
   //@include "builtin.jsxinc"
   //@include "commands.jsxinc"
@@ -34,25 +35,19 @@ See the LICENSE file for details.
 
   // load the user data
   userPrefs.load();
-  userPrefs.save();
-
-  // var x = Date.now;
-  // alert(Date.now());
-  // alert(Math.floor(Date.now() / 1000));
+  userHistory.load();
+  loadActions();
 
   // add basic defaults to the startup on a first/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }
 
-  // settings.load();
-
-  // load current user actions
-  // loadActions();
-
   var appDocuments = app.documents.length > 0;
   var docSelection = appDocuments ? app.activeDocument.selection.length : null;
   var insideWorkflow = false;
+
+  // load command for initial start up palette
 
   // SHOW THE COMMAND PALETTE
   // TODO: set hidden property on any user hidden commands
@@ -75,22 +70,14 @@ See the LICENSE file for details.
     (selRequired = true)
   );
 
-  // var startupCommands = [];
-  // for (var i = 0; i < data.settings.startupCommands.length; i++) {
-  //   // check to make sure command is available
-  //   if (!commandsData.hasOwnProperty(data.settings.startupCommands[i])) continue; // FIXME: add alert
-  //   // also hide any commands that aren't relevant
-  //   if (hiddenCommands.includes(data.settings.startupCommands[i])) continue;
-  //   startupCommands.push(commandsData[data.settings.startupCommands[i]]);
-  // }
   var result = commandPalette(
     (commands = queryableCommands),
     (title = localize(strings.title)),
     (columns = paletteSettings.defaultColumns),
     (multiselect = false),
-    (showOnly = startupCommands)
+    (showOnly = startupCommands),
+    (saveHistory = true)
   );
   if (!result) return;
-  alert(result);
   processCommand(result);
 })();

@@ -50,6 +50,51 @@ function semanticVersionComparison(a, b) {
 }
 
 /**
+ * Load all user actions as commands.
+ * @returns Count of loaded actions.
+ */
+function loadActions() {
+  var ct = 0;
+  var currentLocale = locale.split("_")[0];
+  var currentPath, set, actionCount, name;
+  var pref = app.preferences;
+  var path = "plugin/Action/SavedSets/set-";
+
+  for (var i = 1; i <= 100; i++) {
+    currentPath = path + i.toString() + "/";
+    // get action sets
+    set = pref.getStringPreference(currentPath + "name");
+    if (!set) {
+      break;
+    }
+    // get actions in set
+    actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
+    ct += actionCount;
+    var actionName, id, loc, obj;
+    for (var j = 1; j <= actionCount; j++) {
+      loc = {};
+      obj = {};
+      actionName = pref.getStringPreference(
+        currentPath + "action-" + j.toString() + "/name"
+      );
+      id = set + "_" + actionName;
+      loc[currentLocale] = actionName + " [" + set + "]";
+      obj["id"] = id;
+      obj["action"] = "action";
+      obj["type"] = "action";
+      obj["set"] = set;
+      obj["name"] = actionName;
+      obj["docRequired"] = false;
+      obj["selRequired"] = false;
+      obj["loc"] = loc;
+      obj["hidden"] = false;
+      commandsData[id] = obj;
+    }
+  }
+  return ct > 0;
+}
+
+/**
  * Get every font used inside of an the Ai document.
  * @param {Object} doc Ai document.
  */
@@ -224,7 +269,7 @@ DIALOG HELPER FUNCTIONS
 
 /**
  * Filter the supplied commands by multiple factors.
- * @param   {Array}   commandIds Command `id`s to filter through.
+ * @param   {Array}   command Command `id`s to filter through.
  * @param   {Array}   types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
  * @param   {Boolean} showHidden Should user-hidden or non-relevant commands be included?
  * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
@@ -247,20 +292,58 @@ function filterCommands(
     id = commands[i];
     if (!commandsData.hasOwnProperty(id)) continue;
     command = commandsData[id];
-    // hide commands requiring an active documents if requested
-    if (docRequired && !appDocuments && command.docRequired) continue;
-    // hide commands requiring an active selection if requested
-    if (selRequired && !docSelection && command.selRequired) continue;
+
     // make sure Ai version meets command requirements
     if (!versionCheck(command)) continue;
+
     // skip any hidden commands
-    if (!showHidden && command.hidden) continue;
+    if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
+
+    // skip any non relevant commands
+    if (!relevantCommand(command)) continue;
+
     // skip any specific commands name in hideSpecificCommands
     if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
+
     // then check to see if the command should be included
     if (!types || types.includes(command.type)) filteredCommands.push(id);
   }
   return filteredCommands;
+}
+
+function relevantCommand(command) {
+  // hide commands requiring an active documents if requested
+  if (docRequired && !appDocuments && command.docRequired) return false;
+  // hide commands requiring an active selection if requested
+  if (selRequired && !docSelection && command.selRequired) return false;
+
+  // hide `Edit Workflow...` command if no workflows
+  if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
+  // hide `All Workflows...` command if no workflows
+  if (command.id == "config_allWorkflows" && prefs.workflows.length < 1) return false;
+  // hide `All Scripts...` command if no scripts
+  if (command.id == "config_allScripts" && prefs.scripts.length < 1) return false;
+  // hide `All Bookmarks...` command if no bookmarks
+  if (command.id == "config_allBookmarks" && prefs.bookmarks.length < 1) return false;
+  // hide `All Actions...` command if no actions
+  if (command.id == "config_allActions" && !loadedActions) return false;
+
+  // hide `Enable Searching on Command Type` command if already enabled
+  if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
+    return false;
+  // hide `Disable Searching on Command Type` command if already disabled
+  if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
+    return false;
+
+  // hide `Unhide Commands...` command if no hidden commands
+  if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
+    return false;
+  // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
+  if (command.id == "builtin_recentCommands" && recentCommands == 0) {
+    return false;
+  }
+
+  return true;
 }
 
 /**

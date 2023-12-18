@@ -1,0 +1,76 @@
+//USER HISTORY
+
+var userHistoryFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
+var userHistoryFileName = "History.json";
+
+// setup the base prefs model
+var history = [];
+var recentCommands = [];
+var latches = {};
+
+var userHistory = {};
+// pref functions
+userHistory.folder = function () {
+  return userHistoryFolder;
+};
+userHistory.file = function () {
+  var folder = this.folder();
+  var file = setupFileObject(folder, userHistoryFileName);
+  return file;
+};
+userHistory.load = function () {
+  var file = this.file();
+  if (file.exists) {
+    var queryCommandsLUT = {};
+    var loadedData, entry;
+    try {
+      loadedData = readJSONData(file);
+      if (loadedData == {}) return; // FIXME: add alert
+      // TODO: add alert about prefs file from a different machine
+      history = loadedData;
+      for (var i = loadedData.length - 1; i >= 0; i--) {
+        entry = loadedData[i];
+        // track how many times a query ties to a command
+        if (!queryCommandsLUT.hasOwnProperty(entry.query))
+          queryCommandsLUT[entry.query] = {};
+        if (!queryCommandsLUT[entry.query].hasOwnProperty(entry.command))
+          queryCommandsLUT[entry.query][entry.command] = 0;
+        queryCommandsLUT[entry.query][entry.command]++;
+        // set last 25 recent commands
+        if (recentCommands.includes(entry.command) || recentCommands.length > 25)
+          continue;
+        recentCommands.push(entry.command);
+      }
+      // build latches with most common command for each query
+      var query, command, commands;
+      for (query in queryCommandsLUT) {
+        commands = [];
+        for (command in queryCommandsLUT[query]) {
+          commands.push([command, queryCommandsLUT[query][command]]);
+        }
+        // sort by most used
+        commands.sort(function (a, b) {
+          return b[1] - a[1];
+        });
+        latches[query] = commands[0];
+      }
+    } catch (e) {
+      file.rename(file.name + ".bak");
+      this.reveal();
+      Error.runtimeError(1, localize(strings.pref_file_loading_error)); // FIXME: update loc string
+    }
+  }
+};
+userHistory.save = function () {
+  var file = this.file();
+  if (history.length > 500) history = history.slice(-500);
+  writeJSONData(history, file);
+};
+userHistory.backup = function () {
+  var backupFile = new File(this.file() + ".bak");
+  this.file().copy(backupFile);
+};
+userHistory.reveal = function () {
+  var folder = this.folder();
+  folder.execute();
+};

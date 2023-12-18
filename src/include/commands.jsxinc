@@ -1,121 +1,8 @@
-// COMMANDS SETUP
-
-/**
- * Build proper command objects for easy access.
- * @param commands  Command objects to build.
- * @param filterOut Command types to ignore.
- */
-function buildCommands(commands, filterOut) {
-  var type;
-  for (type in commands) {
-    if (filterOut && filterOut.includes(type)) continue;
-    var command, commandData, hidden;
-    for (command in commands[type]) {
-      commandData = commands[type][command];
-      hidden = false;
-      // hide user hidden commands
-      if (data.settings.hidden.includes(command)) hidden = true;
-      // hide `Edit Workflow...` command if no workflows
-      if (
-        command == "config_editWorkflow" &&
-        Object.keys(data.commands.workflow).length < 1
-      )
-        hidden = true;
-      // hide `All Workflows...` command if no workflows
-      if (
-        command == "config_allWorkflows" &&
-        Object.keys(data.commands.workflow).length < 1
-      )
-        hidden = true;
-      // hide `All Scripts...` command if no scripts
-      if (
-        command == "config_allScripts" &&
-        Object.keys(data.commands.script).length < 1
-      )
-        hidden = true;
-      // hide `All Bookmarks...` command if no bookmarks
-      if (
-        command == "config_allBookmarks" &&
-        Object.keys(data.commands.bookmark).length < 1
-      )
-        hidden = true;
-      // hide `All Actions...` command if no actions
-      if (
-        command == "config_allActions" &&
-        Object.keys(data.commands.action).length < 1
-      )
-        hidden = true;
-      // hide `Enable Searching on Command Type` command if already enabled
-      if (command == "config_enableTypeInSearch" && data.settings.searchIncludesType)
-        hidden = true;
-      // hide `Disable Searching on Command Type` command if already disabled
-      if (command == "config_disableTypeInSearch" && !data.settings.searchIncludesType)
-        hidden = true;
-      // hide `Unhide Commands...` command if no hidden commands
-      if (command == "config_unhideCommand" && data.settings.hidden.length < 1)
-        hidden = true;
-      // // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
-      if (command == "builtin_recentCommands" && data.recent.commands.length == 0) {
-        hidden = true;
-      }
-      if (command == "config_clearRecentCommands" && data.recent.commands.length == 0)
-        hidden = true;
-      commandData.id = command;
-      commandData.localizedName = commandData.hasOwnProperty("loc")
-        ? localize(commandData.loc)
-        : command;
-      commandData.localizedType = strings.hasOwnProperty(commandData.type)
-        ? localize(strings[commandData.type])
-        : commandData.type;
-      commandsData[command] = commandData;
-      localizedCommand = commandData.hasOwnProperty("loc")
-        ? localize(commandData.loc)
-        : command;
-      localizedCommandLookup[localizedCommand] = command;
-      if (hidden) hiddenCommands.push(command);
-    }
-  }
-}
-
-function loadActions() {
-  var currentPath, set, actionCount, name;
-  var pref = app.preferences;
-  var path = "plugin/Action/SavedSets/set-";
-
-  for (var i = 1; i <= 100; i++) {
-    currentPath = path + i.toString() + "/";
-    // get action sets
-    set = pref.getStringPreference(currentPath + "name");
-    if (!set) {
-      break;
-    }
-    // get actions in set
-    actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
-    var name, key;
-    for (var j = 1; j <= actionCount; j++) {
-      name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
-      key = name + " [" + set + "]";
-      data.commands.action[key] = { name: name, type: "action", set: set };
-    }
-  }
-}
-
-function updateRecentCommands(command) {
-  if (command.id == "builtin_recentCommands") return;
-  // make sure command isn't already in the list
-  var idx = data.recent.commands.indexOf(command.id);
-  if (idx > -1) data.recent.commands.splice(idx, 1);
-  data.recent.commands.unshift(command.id);
-  // keep list at 10 items
-  if (data.recent.commands.length > recentCommandsCount) data.recent.commands.pop();
-  settings.save();
-}
-
 // COMMAND EXECUTION
 
 /**
  * Iterate over each action for chosen command.
- * @param {Object} id Command id/key to execute.
+ * @param {Object} id Command id to execute.
  */
 function processCommand(id) {
   var command = commandsData[id];
@@ -133,16 +20,10 @@ function processCommand(id) {
       );
       return;
     }
-    // update recent commands list
-    updateRecentCommands(command);
     // run each action in the workflow
     actions = command.actions;
     for (var i = 0; i < actions.length; i++) processCommand(commandsData[actions[i]]);
   } else {
-    // update recent commands list
-    if (!insideWorkflow) {
-      updateRecentCommands(command);
-    }
     executeCommand(command);
   }
 }
