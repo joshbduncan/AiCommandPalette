@@ -339,7 +339,7 @@ function loadFileBookmark() {
   // get all current bookmark paths to ensure no duplicates
   var currentFileBookmarks = [];
   for (var i = 0; i < prefs.bookmarks.length; i++) {
-    if (prefs.bookmarks[i].bookmarkType != "file") continue;
+    if (prefs.bookmarks[i].type != "fileBookmark") continue;
     currentFileBookmarks.push(prefs.bookmarks[i].path);
   }
 
@@ -357,14 +357,14 @@ function loadFileBookmark() {
         )
       )
         continue;
+
     bookmarkName = decodeURI(f.name);
     bookmark = {
       id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
-      name: decodeURI(f.name),
+      name: bookmarkName,
       action: "bookmark",
-      type: "bookmark",
+      type: "fileBookmark",
       path: f.fsName,
-      bookmarkType: "file",
       docRequired: false,
       selRequired: false,
       hidden: false,
@@ -372,45 +372,70 @@ function loadFileBookmark() {
     newBookmarks.push(bookmark);
     newBookmarkIds.push(bookmark.id);
   }
+
+  if (newBookmarks.length == 0) return;
+
   prefs.bookmarks = prefs.bookmarks.concat(newBookmarks);
   // TODO: localize confirmation prompt
   if (
     !confirm(
-      "Add new bookmarks to your startup commands?",
+      "Add new bookmark(s) to your startup commands?",
       "noAsDflt",
       "Add To Startup Commands"
     )
   )
     return;
-  prefs.startupCommands = prefs.startupCommands.concat(newBookmarkIds);
+  prefs.startupCommands = newBookmarkIds.concat(prefs.startupCommands);
 }
 
 /** Set bookmarked folder to open on system from within Ai Command Palette. */
 function loadFolderBookmark() {
-  var f, fname;
+  var f, bookmark, bookmarkName;
   f = Folder.selectDialog(localize(strings.bm_load_bookmark));
-  if (f) {
-    fname = decodeURI(f.name);
-    if (data.commands.bookmark.hasOwnProperty(fname)) {
-      if (
-        !confirm(
-          localize(strings.bm_already_loaded),
-          "noAsDflt",
-          localize(strings.bm_already_loaded_title)
-        )
-      )
-        return;
-    }
-    try {
-      data.commands.bookmark[fname] = {
-        type: "bookmark",
-        path: f.fsName,
-        bookmarkType: "folder",
-      };
-    } catch (e) {
-      alert(localize(strings.bm_error_loading, f.fsName));
-    }
+
+  if (!f) return;
+
+  // get all current bookmark paths to ensure no duplicates
+  var currentFolderBookmarks = [];
+  for (var i = 0; i < prefs.bookmarks.length; i++) {
+    if (prefs.bookmarks[i].type != "folderBookmark") continue;
+    currentFolderBookmarks.push(prefs.bookmarks[i].path);
   }
+
+  if (currentFolderBookmarks.includes(f.fsName)) {
+    if (
+      !confirm(
+        localize(strings.bm_already_loaded),
+        "noAsDflt",
+        localize(strings.bm_already_loaded_title)
+      )
+    )
+      return;
+  }
+
+  bookmarkName = decodeURI(f.name);
+  bookmark = {
+    id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
+    name: bookmarkName,
+    action: "bookmark",
+    type: "folderBookmark",
+    path: f.fsName,
+    docRequired: false,
+    selRequired: false,
+    hidden: false,
+  };
+  prefs.bookmarks.push(bookmark);
+
+  // TODO: localize confirmation prompt
+  if (
+    !confirm(
+      "Add new bookmark(s) to your startup commands?",
+      "noAsDflt",
+      "Add To Startup Commands"
+    )
+  )
+    return;
+  prefs.startupCommands = [bookmark.id].concat(prefs.startupCommands);
 }
 
 /** Load external scripts into Ai Command Palette. */
@@ -469,7 +494,7 @@ function showAllScripts() {
 function showAllBookmarks() {
   var bookmarkCommands = filterCommands(
     (commands = null),
-    (types = ["bookmark"]),
+    (types = ["fileBookmark", "folderBookmark"]),
     (showHidden = true),
     (showNonRelevant = true),
     (hideSpecificCommands = null),

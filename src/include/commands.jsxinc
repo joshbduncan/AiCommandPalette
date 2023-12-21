@@ -73,6 +73,8 @@ function executeAction(command) {
       alertString = strings.ac_error_execution;
       break;
     case "bookmark":
+    case "filebookmark":
+    case "folderbookmark":
       func = bookmarkAction;
       break;
     case "script":
@@ -104,15 +106,15 @@ function actionAction(command) {
 
 function bookmarkAction(command) {
   f =
-    command.bookmarkType == "file" ? new File(command.path) : new Folder(command.path);
+    command.type == "fileBookmark" ? new File(command.path) : new Folder(command.path);
   if (!f.exists) {
     alert(localize(strings.bm_error_exists, command.path));
+    return;
+  }
+  if (command.type == "fileBookmark") {
+    app.open(f);
   } else {
-    if (command.bookmarkType == "file") {
-      app.open(f);
-    } else {
-      f.execute();
-    }
+    f.execute();
   }
 }
 
@@ -152,7 +154,7 @@ function configAction(command) {
     case "loadScript": // TODO
       loadScripts();
       break;
-    case "loadFileBookmark": // TODO
+    case "loadFileBookmark":
       loadFileBookmark();
       write = true;
       break;

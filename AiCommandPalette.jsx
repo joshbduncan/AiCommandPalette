@@ -339,6 +339,7 @@ See the LICENSE file for details.
     dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
     dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
     file: { en: "File", de: "File", ru: "File" },
+    fileBookmark: { en: "File Bookmark", de: "File Bookmark", ru: "File Bookmark" },
     file_saved: {
       en: "File Saved:\n%1",
       de: "Datei gespeichert:\n%1",
@@ -353,6 +354,11 @@ See the LICENSE file for details.
       en: "Error writing file:\n%1",
       de: "Fehler beim Schreiben der Datei:\n%1",
       ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
+    },
+    folderBookmark: {
+      en: "Folder Bookmark",
+      de: "Folder Bookmark",
+      ru: "Folder Bookmark",
     },
     fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
     github: {
@@ -9115,10 +9121,10 @@ See the LICENSE file for details.
   };
 
   paletteSettings.columnSets.actions = {};
-  paletteSettings.columnSets.actions["Name"] = {
+  paletteSettings.columnSets.actions[localize(strings.name_title_case)] = {
     // FIXME: localize
     width: 475,
-    key: "name",
+    key: localize(strings.name_title_case),
   };
   paletteSettings.columnSets.actions["Set"] = {
     // FIXME: localize
@@ -9127,15 +9133,15 @@ See the LICENSE file for details.
   };
 
   paletteSettings.columnSets.bookmarks = {};
-  paletteSettings.columnSets.bookmarks["Name"] = {
+  paletteSettings.columnSets.bookmarks[localize(strings.name_title_case)] = {
     // FIXME: localize
     width: null,
     key: "name",
   };
-  paletteSettings.columnSets.bookmarks["Type"] = {
+  paletteSettings.columnSets.bookmarks[localize(strings.type_title_case)] = {
     // FIXME: localize
     width: 75,
-    key: "bookmarkType",
+    key: "type",
   };
   paletteSettings.columnSets.bookmarks["Path"] = {
     // FIXME: localize
@@ -10141,7 +10147,7 @@ See the LICENSE file for details.
     // get all current bookmark paths to ensure no duplicates
     var currentFileBookmarks = [];
     for (var i = 0; i < prefs.bookmarks.length; i++) {
-      if (prefs.bookmarks[i].bookmarkType != "file") continue;
+      if (prefs.bookmarks[i].type != "fileBookmark") continue;
       currentFileBookmarks.push(prefs.bookmarks[i].path);
     }
 
@@ -10159,14 +10165,14 @@ See the LICENSE file for details.
           )
         )
           continue;
+
       bookmarkName = decodeURI(f.name);
       bookmark = {
         id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
-        name: decodeURI(f.name),
+        name: bookmarkName,
         action: "bookmark",
-        type: "bookmark",
+        type: "fileBookmark",
         path: f.fsName,
-        bookmarkType: "file",
         docRequired: false,
         selRequired: false,
         hidden: false,
@@ -10174,45 +10180,70 @@ See the LICENSE file for details.
       newBookmarks.push(bookmark);
       newBookmarkIds.push(bookmark.id);
     }
+
+    if (newBookmarks.length == 0) return;
+
     prefs.bookmarks = prefs.bookmarks.concat(newBookmarks);
     // TODO: localize confirmation prompt
     if (
       !confirm(
-        "Add new bookmarks to your startup commands?",
+        "Add new bookmark(s) to your startup commands?",
         "noAsDflt",
         "Add To Startup Commands"
       )
     )
       return;
-    prefs.startupCommands = prefs.startupCommands.concat(newBookmarkIds);
+    prefs.startupCommands = newBookmarkIds.concat(prefs.startupCommands);
   }
 
   /** Set bookmarked folder to open on system from within Ai Command Palette. */
   function loadFolderBookmark() {
-    var f, fname;
+    var f, bookmark, bookmarkName;
     f = Folder.selectDialog(localize(strings.bm_load_bookmark));
-    if (f) {
-      fname = decodeURI(f.name);
-      if (data.commands.bookmark.hasOwnProperty(fname)) {
-        if (
-          !confirm(
-            localize(strings.bm_already_loaded),
-            "noAsDflt",
-            localize(strings.bm_already_loaded_title)
-          )
-        )
-          return;
-      }
-      try {
-        data.commands.bookmark[fname] = {
-          type: "bookmark",
-          path: f.fsName,
-          bookmarkType: "folder",
-        };
-      } catch (e) {
-        alert(localize(strings.bm_error_loading, f.fsName));
-      }
+
+    if (!f) return;
+
+    // get all current bookmark paths to ensure no duplicates
+    var currentFolderBookmarks = [];
+    for (var i = 0; i < prefs.bookmarks.length; i++) {
+      if (prefs.bookmarks[i].type != "folderBookmark") continue;
+      currentFolderBookmarks.push(prefs.bookmarks[i].path);
     }
+
+    if (currentFolderBookmarks.includes(f.fsName)) {
+      if (
+        !confirm(
+          localize(strings.bm_already_loaded),
+          "noAsDflt",
+          localize(strings.bm_already_loaded_title)
+        )
+      )
+        return;
+    }
+
+    bookmarkName = decodeURI(f.name);
+    bookmark = {
+      id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
+      name: bookmarkName,
+      action: "bookmark",
+      type: "folderBookmark",
+      path: f.fsName,
+      docRequired: false,
+      selRequired: false,
+      hidden: false,
+    };
+    prefs.bookmarks.push(bookmark);
+
+    // TODO: localize confirmation prompt
+    if (
+      !confirm(
+        "Add new bookmark(s) to your startup commands?",
+        "noAsDflt",
+        "Add To Startup Commands"
+      )
+    )
+      return;
+    prefs.startupCommands = [bookmark.id].concat(prefs.startupCommands);
   }
 
   /** Load external scripts into Ai Command Palette. */
@@ -10271,7 +10302,7 @@ See the LICENSE file for details.
   function showAllBookmarks() {
     var bookmarkCommands = filterCommands(
       (commands = null),
-      (types = ["bookmark"]),
+      (types = ["fileBookmark", "folderBookmark"]),
       (showHidden = true),
       (showNonRelevant = true),
       (hideSpecificCommands = null),
@@ -10622,6 +10653,8 @@ See the LICENSE file for details.
         alertString = strings.ac_error_execution;
         break;
       case "bookmark":
+      case "filebookmark":
+      case "folderbookmark":
         func = bookmarkAction;
         break;
       case "script":
@@ -10653,15 +10686,15 @@ See the LICENSE file for details.
 
   function bookmarkAction(command) {
     f =
-      command.bookmarkType == "file" ? new File(command.path) : new Folder(command.path);
+      command.type == "fileBookmark" ? new File(command.path) : new Folder(command.path);
     if (!f.exists) {
       alert(localize(strings.bm_error_exists, command.path));
+      return;
+    }
+    if (command.type == "fileBookmark") {
+      app.open(f);
     } else {
-      if (command.bookmarkType == "file") {
-        app.open(f);
-      } else {
-        f.execute();
-      }
+      f.execute();
     }
   }
 
@@ -10701,7 +10734,7 @@ See the LICENSE file for details.
       case "loadScript": // TODO
         loadScripts();
         break;
-      case "loadFileBookmark": // TODO
+      case "loadFileBookmark":
         loadFileBookmark();
         write = true;
         break;

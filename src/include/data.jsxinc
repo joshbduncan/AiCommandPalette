@@ -235,6 +235,7 @@ var strings = {
   dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
   dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
   file: { en: "File", de: "File", ru: "File" },
+  fileBookmark: { en: "File Bookmark", de: "File Bookmark", ru: "File Bookmark" },
   file_saved: {
     en: "File Saved:\n%1",
     de: "Datei gespeichert:\n%1",
@@ -249,6 +250,11 @@ var strings = {
     en: "Error writing file:\n%1",
     de: "Fehler beim Schreiben der Datei:\n%1",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
+  },
+  folderBookmark: {
+    en: "Folder Bookmark",
+    de: "Folder Bookmark",
+    ru: "Folder Bookmark",
   },
   fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
   github: {
