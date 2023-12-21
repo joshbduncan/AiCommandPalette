@@ -17,7 +17,7 @@ function startupBuilder(commands) {
     pSearch,
     "commands",
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-    paletteSettings.defaultColumns,
+    paletteSettings.columnSets.default,
     false,
     localize(strings.startup_helptip),
     [addToStepsOnDoubleClick, scrollListBoxWithArrows]
@@ -34,18 +34,18 @@ function startupBuilder(commands) {
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
 
-  var commandSteps = [];
-  for (var i = 0; i < data.settings.startupCommands.length; i++) {
-    commandSteps.push(commandsData[data.settings.startupCommands[i]]);
-  }
+  // var commandSteps = [];
+  // for (var i = 0; i < data.settings.startupCommands.length; i++) {
+  //   commandSteps.push(commandsData[data.settings.startupCommands[i]]);
+  // }
 
   // setup the workflow action steps listbox
   var steps = new ListBoxWrapper(
-    commandSteps,
+    startupCommands,
     pSteps,
     "steps",
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-    paletteSettings.defaultColumns,
+    paletteSettings.columnSets.default,
     true,
     localize(strings.startup_steps_helptip),
     []

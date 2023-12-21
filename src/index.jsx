@@ -38,24 +38,26 @@ See the LICENSE file for details.
   userHistory.load();
   loadActions();
 
+  // inject user commands
+  typesToInject = ["workflows", "bookmarks"];
+  for (var i = 0; i < prefs.bookmarks.length; i++) {
+    commandsData[prefs.bookmarks[i].id] = prefs.bookmarks[i];
+  }
+
   // add basic defaults to the startup on a first/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }
 
   var appDocuments = app.documents.length > 0;
-  var docSelection = appDocuments ? app.activeDocument.selection.length : null;
-  var insideWorkflow = false;
-
-  // load command for initial start up palette
+  var docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
 
   // SHOW THE COMMAND PALETTE
-  // TODO: set hidden property on any user hidden commands
-  // TODO: set hidden property on any non-relevant commands
   var queryableCommands = filterCommands(
     (commands = null),
     (types = null),
     (showHidden = false),
+    (showNonRelevant = false),
     (hideSpecificCommands = null),
     (docRequired = true),
     (selRequired = true)
@@ -65,6 +67,7 @@ See the LICENSE file for details.
     (commands = prefs.startupCommands),
     (types = null),
     (showHidden = false),
+    (showNonRelevant = false),
     (hideSpecificCommands = null),
     (docRequired = true),
     (selRequired = true)
@@ -73,7 +76,7 @@ See the LICENSE file for details.
   var result = commandPalette(
     (commands = queryableCommands),
     (title = localize(strings.title)),
-    (columns = paletteSettings.defaultColumns),
+    (columns = paletteSettings.columnSets.default),
     (multiselect = false),
     (showOnly = startupCommands),
     (saveHistory = true)

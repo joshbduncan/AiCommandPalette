@@ -6,10 +6,10 @@
  */
 function buildWorkflow(workflow) {
   var availableWorkflowCommands = filterCommands(
-    (commands = commandsData),
+    (commands = null),
     (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
     (showHidden = true),
-    (hideCommands = workflow ? [workflow.id] : []),
+    (hideSpecificCommands = workflow ? [workflow.id] : []),
     (docRequired = true),
     (selRequired = true)
   );
@@ -37,17 +37,18 @@ function buildWorkflow(workflow) {
 /** Show all workflows. */
 function showAllWorkflows() {
   var workflows = filterCommands(
-    (commands = commandsData),
+    (commands = null),
     (types = ["workflow"]),
-    (showHidden = false),
-    (hideCommands = null),
+    (showHidden = true),
+    (showNonRelevant = false),
+    (hideSpecificCommands = null),
     (docRequired = false),
     (selRequired = false)
   );
   var result = commandPalette(
     (commands = workflows),
     (title = localize(strings.Workflows)),
-    (columns = paletteSettings.defaultColumns),
+    (columns = paletteSettings.columnSets.default),
     (multiselect = false)
   );
   if (!result) return;
@@ -57,43 +58,20 @@ function showAllWorkflows() {
 /** Choose a workflow to edit. */
 function editWorkflow() {
   var workflows = filterCommands(
-    (commands = commandsData),
+    (commands = null),
     (types = ["workflow"]),
-    (showHidden = false),
-    (hideCommands = null),
+    (showHidden = true),
+    (showNonRelevant = false),
+    (hideSpecificCommands = null),
     (docRequired = false),
     (selRequired = false)
   );
   var result = commandPalette(
     (commands = workflows),
     (title = localize(strings.wf_choose)),
-    (columns = paletteSettings.defaultColumns),
+    (columns = paletteSettings.columnSets.default),
     (multiselect = false)
   );
   if (!result) return;
   buildWorkflow(result);
-}
-
-/**
- * Check to make sure a workflow doesn't contain deleted actions
- * or actions that are not compatible with the current Ai version.
- * @param   {Array} actions Workflow action steps to check.
- * @returns {Object}        Any deleted or incompatible action.
- */
-function checkWorkflowActions(actions) {
-  var deletedActions = [];
-  var incompatibleActions = [];
-  var command;
-  for (var i = 0; i < actions.length; i++) {
-    command = actions[i];
-    if (!allCommands.includes(command)) {
-      deletedActions.push(command);
-    } else if (!versionCheck(command)) {
-      incompatibleActions.push(command);
-    }
-  }
-  return {
-    deletedActions: deletedActions,
-    incompatibleActions: incompatibleActions,
-  };
 }

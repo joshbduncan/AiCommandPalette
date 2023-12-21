@@ -125,9 +125,9 @@ See the LICENSE file for details.
     artboard: { en: "Artboard", de: "Artboard", ru: "Artboard" },
     artboards: { en: "Artboards", de: "Zeichenfl\u00e4chen", ru: "Artboards" },
     bm_already_loaded: {
-      en: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
+      en: "Bookmark already loaded.\nWould you like to replace the previous bookmark with the new one?",
       de: "Dieses Lesezeichen wurde bereits erstellt..\nM\u00f6chten Sie es mit dem neuen Lesezeichen ersetzen?",
-      ru: "Bookmark already set.\nWould you like to replace the previous bookmark with the new one?",
+      ru: "Bookmark already loaded.\nWould you like to replace the previous bookmark with the new one?",
     },
     bm_already_loaded_title: {
       en: "Bookmark Load Conflict",
@@ -149,10 +149,10 @@ See the LICENSE file for details.
       de: "Fehler beim Ladenn des Lesezeichens:\n%1",
       ru: "Error loading bookmark:\n%1",
     },
-    bm_set_bookmark: {
-      en: "Set Bookmark(s)",
+    bm_load_bookmark: {
+      en: "Load Bookmark(s)",
       de: "Lesezeichen erstellen",
-      ru: "Set Bookmark(s)",
+      ru: "Load Bookmark(s)",
     },
     bm_total_loaded: {
       en: "Total bookmarks loaded:\n%1",
@@ -178,10 +178,10 @@ See the LICENSE file for details.
       de: "Alle integrierten Men\u00fcbefehle",
       ru: "\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b \u043c\u0435\u043d\u044e",
     },
-    cd_clear_recent_confirm: {
-      en: "Are you sure you want to clear your recent commands?",
-      de: "Are you sure you want to clear your recent commands?",
-      ru: "Are you sure you want to clear your recent commands?",
+    cd_clear_history_confirm: {
+      en: "Are you sure you want to clear your history?",
+      de: "Are you sure you want to clear your history?",
+      ru: "Are you sure you want to clear your history?",
     },
     cd_delete_confirm: {
       en: "Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n%1",
@@ -385,6 +385,11 @@ See the LICENSE file for details.
       de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen",
       ru: "Go To Open Document",
     },
+    history_cleared: {
+      en: "History cleared!",
+      de: "Zuletzt verwendete Befehle wurden gel\u00f6scht!",
+      ru: "History cleared!",
+    },
     layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
     menu: { en: "Menu", de: "Menu", ru: "Menu" },
     name_title_case: { en: "Name", de: "Name", ru: "Name" },
@@ -424,11 +429,6 @@ See the LICENSE file for details.
       en: "Recent Commands",
       de: "Zuletzt verwendete Befehle",
       ru: "Recent Commands",
-    },
-    recent_commands_cleared: {
-      en: "Recent Commands Cleared!",
-      de: "Zuletzt verwendete Befehle wurden gel\u00f6scht!",
-      ru: "Recent Commands Cleared!",
     },
     save: {
       en: "Save",
@@ -559,9 +559,9 @@ See the LICENSE file for details.
       ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u043d\u0430\u0431\u043e\u0440\u0430:\n%1",
     },
     wf_needs_attention: {
-      en: "Workflow needs attention.\nThe following action steps from your workflow are no longer available.\n\nDeleted Actions:\n%1\n\nIncompatible Actions:\n%2",
-      de: "Achtung!\nDie folgenden Aktionsschritte sind nicht mehr vorhanden\n\nGel\u00f6schte Aktionen:\n%1\n\nInkompatible Aktionen:\n%2",
-      ru: "\u041d\u0430\u0431\u043e\u0440 \u0442\u0440\u0435\u0431\u0443\u0435\u0442 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u044f\n\u0423\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0435 \u0448\u0430\u0433\u0438 \u0432 \u0432\u0430\u0448\u0435\u043c \u043d\u0430\u0431\u043e\u0440\u0435 \u043a\u043e\u043c\u0430\u043d\u0434 \u0431\u043e\u043b\u044c\u0448\u0435 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b.\n\n\u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n%1\n\n\u041d\u0435\u0441\u043e\u0432\u043c\u0435\u0441\u0442\u0438\u043c\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n%2",
+      en: "Workflow needs attention.\nThe following action steps from your workflow are not currently available.\n\n%1",
+      de: "Achtung!\nDie folgenden Aktionsschritte sind nicht mehr vorhanden\n\n%1",
+      ru: "\u041d\u0430\u0431\u043e\u0440 \u0442\u0440\u0435\u0431\u0443\u0435\u0442 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u044f\n\u0423\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0435 \u0448\u0430\u0433\u0438 \u0432 \u0432\u0430\u0448\u0435\u043c \u043d\u0430\u0431\u043e\u0440\u0435 \u043a\u043e\u043c\u0430\u043d\u0434 \u0431\u043e\u043b\u044c\u0448\u0435 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b.\n\n%1",
     },
     wf_none_attention: {
       en: "There are no workflows that need attention.",
@@ -609,7 +609,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > New...",
         de: "Datei > Neu \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u041d\u043e\u0432\u044b\u0439...",
@@ -622,7 +622,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > New from Template...",
         de: "Datei > Neu aus Vorlage \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u041d\u043e\u0432\u044b\u0439 \u0438\u0437 \u0448\u0430\u0431\u043b\u043e\u043d\u0430...",
@@ -635,7 +635,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Open...",
         de: "Datei > \u00d6ffnen \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u041e\u0442\u043a\u0440\u044b\u0442\u044c...",
@@ -648,7 +648,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Browse in Bridge...",
         de: "Datei > Bridge durchsuchen \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u041e\u0431\u0437\u043e\u0440 \u0432 Bridge...",
@@ -661,7 +661,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Close",
         de: "Datei > Schlie\u00dfen",
         ru: "\u0424\u0430\u0439\u043b > \u0417\u0430\u043a\u0440\u044b\u0442\u044c",
@@ -674,7 +674,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Save",
         de: "Datei > Speichern",
         ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c",
@@ -687,7 +687,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Save As...",
         de: "Datei > Speichern unter \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043a\u0430\u043a...",
@@ -700,7 +700,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Save a Copy...",
         de: "Datei > Kopie speichern \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043a\u043e\u043f\u0438\u044e...",
@@ -713,7 +713,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Save as Template...",
         de: "Datei > Als Vorlage speichern \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043a\u0430\u043a \u0448\u0430\u0431\u043b\u043e\u043d...",
@@ -726,7 +726,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "File > Save Selected Slices...",
         de: "Datei > Ausgew\u00e4hlte Slices speichern \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0435 \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b...",
@@ -739,7 +739,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Revert",
         de: "Datei > Zur\u00fcck zur letzten Version",
         ru: "\u0424\u0430\u0439\u043b > \u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c",
@@ -752,7 +752,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Search Adobe Stock",
         de: "Datei > Adobe Stock durchsuchen \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u041f\u043e\u0438\u0441\u043a \u0432 Adobe Stock...",
@@ -766,7 +766,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Place...",
         de: "Datei > Platzieren \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u041f\u043e\u043c\u0435\u0441\u0442\u0438\u0442\u044c...",
@@ -779,7 +779,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "File > Export > Export For Screens...",
         de: "Datei > Exportieren > F\u00fcr Bildschirme exportieren \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u042d\u043a\u0441\u043f\u043e\u0440\u0442 \u0434\u043b\u044f \u044d\u043a\u0440\u0430\u043d\u043e\u0432...",
@@ -793,7 +793,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "File > Export > Export As...",
         de: "Datei > Exportieren \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u042d\u043a\u0441\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043a\u0430\u043a...",
@@ -806,7 +806,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "File > Export > Save for Web (Legacy)...",
         de: "Datei > F\u00fcr Web speichern (Legacy) \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0434\u043b\u044f \u0431\u0440\u0430\u0443\u0437\u0435\u0440\u043e\u0432...",
@@ -819,7 +819,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Export Selection...",
         de: "Datei > Auswahl exportieren \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u042d\u043a\u0441\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0435 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u044b...",
@@ -833,7 +833,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Package",
         de: "Datei > Verpacken \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u0423\u043f\u0430\u043a\u043e\u0432\u0430\u0442\u044c...",
@@ -846,7 +846,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Scripts > Other Script...",
         de: "Datei > Skripten > Anderes Skript \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u0421\u0446\u0435\u043d\u0430\u0440\u0438\u0438 > \u0414\u0440\u0443\u0433\u043e\u0439 \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u0439...",
@@ -859,7 +859,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Document Setup...",
         de: "Datei > Dokument einrichten \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430...",
@@ -872,7 +872,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Document Color Mode > CMYK Color",
         de: "Datei > Dokumentfarbmodus > CMYK-Farbe",
         ru: "\u0424\u0430\u0439\u043b > \u0426\u0432\u0435\u0442\u043e\u0432\u043e\u0439 \u0440\u0435\u0436\u0438\u043c \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 > CMYK",
@@ -885,7 +885,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Document Color Mode > RGB Color",
         de: "Datei > Dokumentfarbmodus > RGB-Farbe",
         ru: "\u0424\u0430\u0439\u043b > \u0426\u0432\u0435\u0442\u043e\u0432\u043e\u0439 \u0440\u0435\u0436\u0438\u043c \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 > RGB",
@@ -898,7 +898,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > File Info...",
         de: "Datei > Dateiinformationen \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u0421\u0432\u0435\u0434\u0435\u043d\u0438\u044f \u043e \u0444\u0430\u0439\u043b\u0435...",
@@ -911,7 +911,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Print...",
         de: "Datei > Drucken \u2026",
         ru: "\u0424\u0430\u0439\u043b > \u041f\u0435\u0447\u0430\u0442\u044c...",
@@ -924,7 +924,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "File > Exit",
         de: "Datei > Illustrator beenden",
         ru: "\u0424\u0430\u0439\u043b > \u0412\u044b\u0445\u043e\u0434",
@@ -937,7 +937,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Undo",
         de: "Bearbeiten > R\u00fcckg\u00e4ngig",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c",
@@ -950,7 +950,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Redo",
         de: "Bearbeiten > Wiederholen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c",
@@ -963,7 +963,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Cut",
         de: "Bearbeiten > Ausschneiden",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u044b\u0440\u0435\u0437\u0430\u0442\u044c",
@@ -976,7 +976,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Copy",
         de: "Bearbeiten > Kopieren",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
@@ -989,7 +989,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Paste",
         de: "Bearbeiten > Einf\u00fcgen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c",
@@ -1002,7 +1002,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Paste in Front",
         de: "Bearbeiten > Davor einf\u00fcgen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u043f\u0435\u0440\u0435\u0434\u043d\u0438\u0439 \u043f\u043b\u0430\u043d",
@@ -1015,7 +1015,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Paste in Back",
         de: "Bearbeiten > Dahinter einf\u00fcgen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u0437\u0430\u0434\u043d\u0438\u0439 \u043f\u043b\u0430\u043d",
@@ -1028,7 +1028,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Paste in Place",
         de: "Bearbeiten > An Originalposition einf\u00fcgen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u0442\u043e \u0436\u0435 \u043c\u0435\u0441\u0442\u043e",
@@ -1041,7 +1041,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Paste on All Artboards",
         de: "Bearbeiten > In alle Zeichenfl\u00e4chen einf\u00fcgen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u0432\u0441\u0435 \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -1054,7 +1054,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Paste without Formatting",
         de: "Bearbeiten > Ohne Formatierung einf\u00fcgen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u0431\u0435\u0437 \u0444\u043e\u0440\u043c\u0430\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f",
@@ -1068,7 +1068,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Clear",
         de: "Bearbeiten > L\u00f6schen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041e\u0447\u0438\u0441\u0442\u0438\u0442\u044c",
@@ -1081,7 +1081,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Find & Replace...",
         de: "Bearbeiten > Suchen und ersetzen \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041d\u0430\u0439\u0442\u0438 \u0438 \u0437\u0430\u043c\u0435\u043d\u0438\u0442\u044c...",
@@ -1094,7 +1094,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Find Next",
         de: "Bearbeiten > Weitersuchen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041d\u0430\u0439\u0442\u0438 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439",
@@ -1107,7 +1107,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Spelling > Auto Spell Check",
         de: "Bearbeiten > Rechtschreibung > Automatische Rechtschreibpr\u00fcfung",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u044f > \u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u0438",
@@ -1121,7 +1121,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Spelling > Check Spelling...",
         de: "Bearbeiten > Rechtschreibung > Rechtschreibpr\u00fcfung \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u044f > \u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u0438\u2026",
@@ -1135,7 +1135,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Edit Custom Dictionary...",
         de: "Bearbeiten > Eigenes W\u00f6rterbuch bearbeiten \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0437\u0430\u043a\u0430\u0437\u043d\u043e\u0439 \u0441\u043b\u043e\u0432\u0430\u0440\u044c...",
@@ -1148,7 +1148,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Recolor Artwork...",
         de: "Bearbeiten > Farben bearbeiten > Bildmaterial neu f\u00e4rben \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0435\u0440\u0435\u043a\u0440\u0430\u0441\u0438\u0442\u044c \u0433\u0440\u0430\u0444\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043e\u0431\u044a\u0435\u043a\u0442...",
@@ -1161,7 +1161,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Adjust Color Balance...",
         de: "Bearbeiten > Farben bearbeiten > Farbbalance einstellen \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041a\u043e\u0440\u0440\u0435\u043a\u0446\u0438\u044f \u0446\u0432\u0435\u0442\u043e\u0432\u043e\u0433\u043e \u0431\u0430\u043b\u0430\u043d\u0441\u0430...",
@@ -1174,7 +1174,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Blend Front to Back",
         de: "Bearbeiten > Farben bearbeiten > Vorne -> Hinten angleichen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 \u043e\u0442 \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u043a \u043d\u0438\u0436\u043d\u0435\u043c\u0443",
@@ -1187,7 +1187,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Blend Horizontally",
         de: "Bearbeiten > Farben bearbeiten > Horizontal angleichen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 \u043f\u043e \u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u0438",
@@ -1200,7 +1200,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Blend Vertically",
         de: "Bearbeiten > Farben bearbeiten > Vertikal angleichen",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 \u043f\u043e \u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u0438",
@@ -1213,7 +1213,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Convert to CMYK",
         de: "Bearbeiten > Farben bearbeiten > In CMYK konvertieren",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 CMYK",
@@ -1226,7 +1226,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Convert to Grayscale",
         de: "Bearbeiten > Farben bearbeiten > In Graustufen konvertieren",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0433\u0440\u0430\u0434\u0430\u0446\u0438\u0438 \u0441\u0435\u0440\u043e\u0433\u043e",
@@ -1239,7 +1239,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Convert to RGB",
         de: "Bearbeiten > Farben bearbeiten > In RGB konvertieren",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 RGB",
@@ -1252,7 +1252,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Generative Recolor (Beta)",
         de: "Bearbeiten > Farben bearbeiten > Generative Neuf\u00e4rbung",
         ru: "Edit > Edit Colors > Generative Recolor (Beta)",
@@ -1266,7 +1266,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Invert Colors",
         de: "Bearbeiten > Farben bearbeiten > Farben invertieren",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041d\u0435\u0433\u0430\u0442\u0438\u0432",
@@ -1279,7 +1279,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Overprint Black...",
         de: "Bearbeiten > Farben bearbeiten > Schwarz \u00fcberdrucken \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041d\u0430\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u0447\u0435\u0440\u043d\u043e\u0433\u043e \u0446\u0432\u0435\u0442\u0430...",
@@ -1292,7 +1292,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Colors > Saturate...",
         de: "Bearbeiten > Farben bearbeiten > S\u00e4ttigung erh\u00f6hen \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043d\u0430\u0441\u044b\u0449\u0435\u043d\u043d\u043e\u0441\u0442\u044c...",
@@ -1305,7 +1305,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Edit > Edit Original",
         de: "Bearbeiten > Original bearbeiten",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043e\u0440\u0438\u0433\u0438\u043d\u0430\u043b",
@@ -1318,7 +1318,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Transparency Flattener Presets...",
         de: "Bearbeiten > Transparenzreduzierungsvorgaben \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0421\u0442\u0438\u043b\u0438 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u0438...",
@@ -1331,7 +1331,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Print Presets...",
         de: "Bearbeiten > Druckvorgaben \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0421\u0442\u0438\u043b\u0438 \u043f\u0435\u0447\u0430\u0442\u0438...",
@@ -1344,7 +1344,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Adobe PDF Presets...",
         de: "Bearbeiten > Adobe PDF-Vorgaben \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0421\u0442\u0438\u043b\u0438 \u043f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u044f \u0432 Adobe PDF...",
@@ -1357,7 +1357,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Perspective Grid Presets...",
         de: "Bearbeiten > Vorgaben f\u00fcr Perspektivenraster \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0421\u0442\u0438\u043b\u0438 \u0441\u0435\u0442\u043a\u0438 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b...",
@@ -1370,7 +1370,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Color Settings...",
         de: "Bearbeiten > Farbeinstellungen \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u0446\u0432\u0435\u0442\u043e\u0432...",
@@ -1383,7 +1383,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Assign Profile...",
         de: "Bearbeiten > Profil zuweisen \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041d\u0430\u0437\u043d\u0430\u0447\u0438\u0442\u044c \u043f\u0440\u043e\u0444\u0438\u043b\u044c...",
@@ -1396,7 +1396,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > Keyboard Shortcuts...",
         de: "Bearbeiten > Tastaturbefehle \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041a\u043e\u043c\u0431\u0438\u043d\u0430\u0446\u0438\u0438 \u043a\u043b\u0430\u0432\u0438\u0448...",
@@ -1409,7 +1409,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit > SWF Presets...",
         de: "Bearbeiten > SWF-Vorgaben \u2026",
         ru: "Edit > SWF Presets...",
@@ -1424,7 +1424,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Transform > Transform Again",
         de: "Objekt > Transformieren > Erneut transformieren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435",
@@ -1437,7 +1437,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Transform > Move...",
         de: "Objekt > Transformieren > Verschieben \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u0435\u0440\u0435\u043c\u0435\u0449\u0435\u043d\u0438\u0435...",
@@ -1450,7 +1450,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Transform > Rotate...",
         de: "Objekt > Transformieren > Drehen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u043e\u0432\u043e\u0440\u043e\u0442...",
@@ -1463,7 +1463,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Transform > Reflect...",
         de: "Objekt > Transformieren > Spiegeln \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0417\u0435\u0440\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u043e\u0442\u0440\u0430\u0436\u0435\u043d\u0438\u0435...",
@@ -1476,7 +1476,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Transform > Scale...",
         de: "Objekt > Transformieren > Skalieren \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041c\u0430\u0441\u0448\u0442\u0430\u0431\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435...",
@@ -1489,7 +1489,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Transform > Shear...",
         de: "Objekt > Transformieren > Verbiegen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041d\u0430\u043a\u043b\u043e\u043d...",
@@ -1502,7 +1502,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Transform Each...",
         de: "Objekt > Transformieren > Einzeln transformieren \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043a\u0430\u0436\u0434\u044b\u0439...",
@@ -1515,7 +1515,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Transform > Reset Bounding Box",
         de: "Objekt > Transform > Begrenzungsrahmen zur\u00fccksetzen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u0440\u0430\u043c\u043a\u0438",
@@ -1528,7 +1528,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Arrange > Bring to Front",
         de: "Objekt > Anordnen > In den Vordergrund",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041d\u0430 \u043f\u0435\u0440\u0435\u0434\u043d\u0438\u0439 \u043f\u043b\u0430\u043d",
@@ -1541,7 +1541,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Arrange > Bring Forward",
         de: "Objekt > Anordnen > Schrittweise nach vorne",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041d\u0430 \u0437\u0430\u0434\u043d\u0438\u0439 \u043f\u043b\u0430\u043d",
@@ -1554,7 +1554,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Arrange > Send Backward",
         de: "Objekt > Anordnen > Schrittweise nach hinten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041f\u0435\u0440\u0435\u043b\u043e\u0436\u0438\u0442\u044c \u0432\u043f\u0435\u0440\u0435\u0434",
@@ -1567,7 +1567,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Arrange > Send to Back",
         de: "Objekt > Anordnen > In den Hintergrund",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041f\u0435\u0440\u0435\u043b\u043e\u0436\u0438\u0442\u044c \u043d\u0430\u0437\u0430\u0434",
@@ -1580,7 +1580,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Arrange > Send to Current Layer",
         de: "Objekt > Anordnen > In aktuelle Ebene verschieben",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u0442\u0435\u043a\u0443\u0449\u0438\u0439 \u0441\u043b\u043e\u0439",
@@ -1593,7 +1593,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Align > Horizontal Align Left",
         de: "Objekt > Ausrichten > Horizontal links ausrichten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0413\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0432\u043b\u0435\u0432\u043e",
@@ -1607,7 +1607,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Align > Horizontal Align Center",
         de: "Objekt > Ausrichten > Horizontal zentriert ausrichten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0413\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0446\u0435\u043d\u0442\u0440",
@@ -1621,7 +1621,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Align > Horizontal Align Right",
         de: "Objekt > Ausrichten > Horizontal rechts ausrichten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0413\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0432\u043f\u0440\u0430\u0432\u043e",
@@ -1635,7 +1635,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Align > Vertical Align Top",
         de: "Objekt > Ausrichten > Vertikal oben ausrichten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0432\u0432\u0435\u0440\u0445",
@@ -1649,7 +1649,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Align > Vertical Align Center",
         de: "Objekt > Ausrichten > Vertikal zentriert ausrichten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0446\u0435\u043d\u0442\u0440",
@@ -1663,7 +1663,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Align > Vertical Align Bottom",
         de: "Objekt > Ausrichten > Vertikal unten ausrichten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0432\u043d\u0438\u0437",
@@ -1677,7 +1677,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Distribute > Vertical Distribute Top",
         de: "Object > Distribute > Vertical Distribute Top",
         ru: "Object > Distribute > Vertical Distribute Top",
@@ -1691,7 +1691,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Distribute > Vertical Distribute Center",
         de: "Object > Distribute > Vertical Distribute Center",
         ru: "Object > Distribute > Vertical Distribute Center",
@@ -1705,7 +1705,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Distribute > Vertical Distribute Bottom",
         de: "Object > Distribute > Vertical Distribute Bottom",
         ru: "Object > Distribute > Vertical Distribute Bottom",
@@ -1719,7 +1719,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Distribute > Horizontal Distribute Left",
         de: "Object > Distribute > Horizontal Distribute Left",
         ru: "Object > Distribute > Horizontal Distribute Left",
@@ -1733,7 +1733,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Distribute > Horizontal Distribute Center",
         de: "Object > Distribute > Horizontal Distribute Center",
         ru: "Object > Distribute > Horizontal Distribute Center",
@@ -1747,7 +1747,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Distribute > Horizontal Distribute Right",
         de: "Object > Distribute > Horizontal Distribute Right",
         ru: "Object > Distribute > Horizontal Distribute Right",
@@ -1761,7 +1761,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Group",
         de: "Objekt > Gruppieren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u0433\u0440\u0443\u043f\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
@@ -1774,7 +1774,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Ungroup",
         de: "Objekt > Gruppierung aufheben",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0420\u0430\u0437\u0433\u0440\u0443\u043f\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
@@ -1787,7 +1787,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Lock > Selection",
         de: "Objekt > Sperren > Auswahl",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c > \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u043e\u0435",
@@ -1800,7 +1800,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Lock > All Artwork Above",
         de: "Objekt > Sperren > S\u00e4mtliches Bildmaterial dar\u00fcber",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c > \u0412\u0441\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0432\u044b\u0448\u0435",
@@ -1813,7 +1813,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Lock > Other Layers",
         de: "Objekt > Sperren > Andere Ebenen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c > \u041e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u0435 \u0441\u043b\u043e\u0438",
@@ -1826,7 +1826,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Unlock All",
         de: "Objekt > Alle entsperren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0441\u0432\u043e\u0431\u043e\u0434\u0438\u0442\u044c \u0432\u0441\u0435",
@@ -1839,7 +1839,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Hide > Selection",
         de: "Objekt > Ausblenden > Auswahl",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043a\u0440\u044b\u0442\u044c > \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u043e\u0435",
@@ -1852,7 +1852,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Hide > All Artwork Above",
         de: "Objekt > Ausblenden > S\u00e4mtliches Bildmaterial dar\u00fcber",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043a\u0440\u044b\u0442\u044c > \u0412\u0441\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0432\u044b\u0448\u0435",
@@ -1865,7 +1865,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Hide > Other Layers",
         de: "Objekt > Ausblenden > Andere Ebenen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043a\u0440\u044b\u0442\u044c > \u041e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u0435 \u0441\u043b\u043e\u0438",
@@ -1878,7 +1878,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Show All",
         de: "Objekt > Alles einblenden",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0432\u0441\u0435",
@@ -1891,7 +1891,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Crop Image",
         de: "Objekt > Bild zuschneiden",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0440\u0435\u0437\u0430\u0442\u044c \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435",
@@ -1905,7 +1905,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Rasterize...",
         de: "Objekt > In Pixelbild umwandeln \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0420\u0430\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c...",
@@ -1918,7 +1918,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Create Gradient Mesh...",
         de: "Objekt > Verlaufsgitter erstellen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0441\u0435\u0442\u0447\u0430\u0442\u044b\u0439 \u0433\u0440\u0430\u0434\u0438\u0435\u043d\u0442...",
@@ -1931,7 +1931,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Create Object Mosaic...",
         de: "Objekt > Objektmosaik erstellen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044e...",
@@ -1944,7 +1944,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Create Trim Marks...",
         de: "Objekt > Schnittmarken erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043c\u0435\u0442\u043a\u0438 \u043e\u0431\u0440\u0435\u0437\u0430",
@@ -1957,7 +1957,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Flatten Transparency...",
         de: "Objekt > Transparenz reduzieren \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u0438...",
@@ -1970,7 +1970,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Make Pixel Perfect",
         de: "Objekt > Pixelgenaue Darstellung anwenden",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u0440\u0440\u0435\u043a\u0446\u0438\u044f \u043d\u0430 \u0443\u0440\u043e\u0432\u043d\u0435 \u043f\u0438\u043a\u0441\u0435\u043b\u043e\u0432",
@@ -1983,7 +1983,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Make",
         de: "Objekt > Slice > Erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
@@ -1996,7 +1996,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Release",
         de: "Objekt > Slice > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0420\u0430\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
@@ -2009,7 +2009,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Slice > Create from Guides",
         de: "Objekt > Slice > Aus Hilfslinien erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u043e \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u043c",
@@ -2022,7 +2022,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Create from Selection",
         de: "Objekt > Slice > Aus Auswahl erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u043e \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -2035,7 +2035,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Duplicate Slice",
         de: "Objekt > Slice > Slice duplizieren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0434\u0443\u0431\u043b\u0438\u043a\u0430\u0442 \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u0430",
@@ -2048,7 +2048,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Combine Slices",
         de: "Objekt > Slice > Slices kombinieren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u041e\u0431\u044a\u0435\u0434\u0438\u043d\u0438\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b",
@@ -2061,7 +2061,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Divide Slices...",
         de: "Objekt > Slice > Slices unterteilen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0420\u0430\u0437\u0434\u0435\u043b\u0438\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b...",
@@ -2074,7 +2074,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Delete All",
         de: "Objekt > Slice > Alle l\u00f6schen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0432\u0441\u0435",
@@ -2087,7 +2087,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Slice Options...",
         de: "Objekt > Slice > Slice-Optionen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u0430...",
@@ -2100,7 +2100,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Slice > Clip to Artboard",
         de: "Objekt > Slice > Ganze Zeichenfl\u00e4che exportieren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u041e\u0431\u0440\u0435\u0437\u0430\u0442\u044c \u043f\u043e \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -2113,7 +2113,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Expand...",
         de: "Objekt > Umwandeln \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c\u2026",
@@ -2126,7 +2126,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Expand Appearance",
         de: "Objekt > Aussehen umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435",
@@ -2139,7 +2139,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Join",
         de: "Objekt > Pfad > Zusammenf\u00fcgen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0435\u0434\u0438\u043d\u0438\u0442\u044c",
@@ -2152,7 +2152,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Average...",
         de: "Objekt > Pfad > Durchschnitt berechnen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0423\u0441\u0440\u0435\u0434\u043d\u0438\u0442\u044c\u2026",
@@ -2165,7 +2165,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Outline Stroke",
         de: "Objekt > Pfad > Konturlinie",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u043e\u0431\u0432\u043e\u0434\u043a\u0443 \u0432 \u043a\u0440\u0438\u0432\u044b\u0435",
@@ -2178,7 +2178,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Offset Path...",
         de: "Objekt > Pfad > Pfad verschieben \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u0430\u0440\u0430\u043b\u043b\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440\u2026",
@@ -2191,7 +2191,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Reverse Path Direction",
         de: "Objekt > Pfad > Pfadrichtung umkehren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0418\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u043a\u043e\u043d\u0442\u0443\u0440\u0430",
@@ -2205,7 +2205,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Simplify...",
         de: "Objekt > Pfad > Vereinfachen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0423\u043f\u0440\u043e\u0441\u0442\u0438\u0442\u044c\u2026",
@@ -2218,7 +2218,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Add Anchor Points",
         de: "Objekt > Pfad > Ankerpunkte hinzuf\u00fcgen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
@@ -2231,7 +2231,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Remove Anchor Points",
         de: "Objekt > Pfad > Ankerpunkte entfernen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
@@ -2244,7 +2244,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Divide Objects Below",
         de: "Objekt > Pfad > Darunter liegende Objekte aufteilen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0420\u0430\u0437\u0434\u0435\u043b\u0438\u0442\u044c \u043d\u0438\u0436\u043d\u0438\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b",
@@ -2257,7 +2257,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Split Into Grid...",
         de: "Objekt > Pfad > In Raster teilen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0441\u0435\u0442\u043a\u0443...",
@@ -2270,7 +2270,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Path > Clean Up...",
         de: "Objekt > Pfad > Aufr\u00e4umen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0412\u044b\u0447\u0438\u0441\u0442\u0438\u0442\u044c\u2026",
@@ -2283,7 +2283,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Path > Smooth",
         de: "Object > Path > Smooth",
         ru: "Object > Path > Smooth",
@@ -2297,7 +2297,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Shape > Convert to Shapes",
         de: "Objekt > Form > In Form umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0438\u0433\u0443\u0440\u0430 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0444\u0438\u0433\u0443\u0440\u044b",
@@ -2311,7 +2311,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Shape > Expand Shapes",
         de: "Objekt > Form > Form umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0438\u0433\u0443\u0440\u0430 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c \u0444\u0438\u0433\u0443\u0440\u0443",
@@ -2325,7 +2325,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Pattern > Make",
         de: "Objekt > Muster > Erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0423\u0437\u043e\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
@@ -2338,7 +2338,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Pattern > Edit Pattern",
         de: "Objekt > Muster > Muster bearbeiten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0423\u0437\u043e\u0440 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0443\u0437\u043e\u0440",
@@ -2351,7 +2351,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Pattern > Tile Edge Color...",
         de: "Objekt > Muster > Farbe f\u00fcr Musterelement-Kante",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0423\u0437\u043e\u0440 > \u0426\u0432\u0435\u0442 \u043a\u0440\u0430\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430...",
@@ -2364,7 +2364,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Pattern > Text to Pattern (Beta)",
         de: "Object > Pattern > Text to Pattern (Beta)",
         ru: "Object > Pattern > Text to Pattern (Beta)",
@@ -2378,7 +2378,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Intertwine > Make",
         de: "Objekt > Verflechtung > Erstellen",
         ru: "Object > Intertwine > Make",
@@ -2392,7 +2392,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Intertwine > Release",
         de: "Objekt > Verflechtung > Zur\u00fcckwandeln",
         ru: "Object > Intertwine > Release",
@@ -2406,7 +2406,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Intertwine > Edit",
         de: "Objekt > Verflechtung > Bearbeiten",
         ru: "Object > Intertwine > Edit",
@@ -2420,7 +2420,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Repeat > Make Radial",
         de: "Objekt > Wiederholen > Radial",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u0420\u0430\u0434\u0438\u0430\u043b\u044c\u043d\u044b\u0439",
@@ -2434,7 +2434,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Repeat > Make Grid",
         de: "Objekt > Wiederholen > Raster",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u0421\u0435\u0442\u043a\u0430",
@@ -2448,7 +2448,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Repeat > Make Symmetry",
         de: "Objekt > Wiederholen > Spiegeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u0417\u0435\u0440\u043a\u0430\u043b\u044c\u043d\u043e",
@@ -2462,7 +2462,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Repeat > Release",
         de: "Objekt > Wiederholen > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u041e\u0441\u0432\u043e\u0431\u043e\u0434\u0438\u0442\u044c",
@@ -2476,7 +2476,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Repeat > Repeat Options...",
         de: "Objekt > Wiederholen > Optionen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b\u2026",
@@ -2490,7 +2490,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Blend > Make",
         de: "Objekt > Angleichen > Erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
@@ -2503,7 +2503,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Blend > Release",
         de: "Objekt > Angleichen > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c",
@@ -2516,7 +2516,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Blend > Blend Options...",
         de: "Objekt > Angleichen > Angleichung-Optionen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043f\u0435\u0440\u0435\u0445\u043e\u0434\u0430\u2026",
@@ -2529,7 +2529,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Blend > Expand",
         de: "Objekt > Angleichen > Umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
@@ -2542,7 +2542,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Blend > Replace Spine",
         de: "Objekt > Angleichen > Achse ersetzen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0417\u0430\u043c\u0435\u043d\u0438\u0442\u044c \u0442\u0440\u0430\u0435\u043a\u0442\u043e\u0440\u0438\u044e",
@@ -2555,7 +2555,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Blend > Reverse Spine",
         de: "Objekt > Angleichen > Achse umkehren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435",
@@ -2568,7 +2568,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Blend > Reverse Front to Back",
         de: "Objekt > Angleichen > Farbrichtung umkehren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043f\u043e\u0440\u044f\u0434\u043e\u043a",
@@ -2581,7 +2581,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Envelope Distort > Make with Warp...",
         de: "Objekt > Verzerrungsh\u00fclle > Mit Verkr\u00fcmmung erstellen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f...",
@@ -2594,7 +2594,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Envelope Distort > Make with Mesh...",
         de: "Objekt > Verzerrungsh\u00fclle > Mit Gitter erstellen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u041f\u043e \u0441\u0435\u0442\u043a\u0435...",
@@ -2607,7 +2607,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Envelope Distort > Make with Top Object",
         de: "Objekt > Verzerrungsh\u00fclle > Mit oberstem Objekt erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u041f\u043e \u0444\u043e\u0440\u043c\u0435 \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u043e\u0431\u044a\u0435\u043a\u0442\u0430",
@@ -2620,7 +2620,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Envelope Distort > Release",
         de: "Objekt > Verzerrungsh\u00fclle > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u041e\u0442\u0434\u0435\u043b\u0438\u0442\u044c",
@@ -2633,7 +2633,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Envelope Distort > Envelope Options...",
         de: "Objekt > Verzerrungsh\u00fclle > H\u00fcllen-Optionen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438...",
@@ -2646,7 +2646,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Envelope Distort > Expand",
         de: "Objekt > Verzerrungsh\u00fclle > Umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
@@ -2659,7 +2659,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Envelope Distort > Edit Contents",
         de: "Objekt > Verzerrungsh\u00fclle > Inhalt bearbeiten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0441\u043e\u0434\u0435\u0440\u0436\u0438\u043c\u043e\u0435",
@@ -2672,7 +2672,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Perspective > Attach to Active Plane",
         de: "Objekt > Perspektive > Aktiver Ebene anh\u00e4ngen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u0430 > \u041f\u0440\u0438\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u043a \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0439 \u043f\u043b\u043e\u0441\u043a\u043e\u0441\u0442\u0438",
@@ -2685,7 +2685,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Perspective > Release with Perspective",
         de: "Objekt > Perspektive > Aus Perspektive freigeben",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u0430 > \u041e\u0442\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0441 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u0435\u043c \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b",
@@ -2698,7 +2698,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Perspective > Move Plane to Match Object",
         de: "Objekt > Perspektive > Ebene an Objekt ausrichten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u0430 > \u041f\u0435\u0440\u0435\u043c\u0435\u0441\u0442\u0438\u0442\u044c \u043f\u043b\u043e\u0441\u043a\u043e\u0441\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0433\u043e\u043d\u043a\u0438 \u043f\u043e \u043e\u0431\u044a\u0435\u043a\u0442\u0443",
@@ -2711,7 +2711,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Perspective > Edit Text",
         de: "Objekt > Perspektive > Text bearbeiten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u0430 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0442\u0435\u043a\u0441\u0442",
@@ -2724,7 +2724,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Live Paint > Make",
         de: "Objekt > Interaktiv malen > Erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
@@ -2737,7 +2737,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Live Paint > Merge",
         de: "Objekt > Interaktiv malen > Zusammenf\u00fcgen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u041e\u0431\u044a\u0435\u0434\u0438\u043d\u0438\u0442\u044c",
@@ -2750,7 +2750,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Live Paint > Release",
         de: "Objekt > Interaktiv malen > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u0420\u0430\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
@@ -2763,7 +2763,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Live Paint > Gap Options...",
         de: "Objekt > Interaktiv malen > L\u00fcckenoptionen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0437\u0430\u0437\u043e\u0440\u043e\u0432\u2026",
@@ -2776,7 +2776,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Live Paint > Expand",
         de: "Objekt > Interaktiv malen > Umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
@@ -2789,7 +2789,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Image Trace > Make",
         de: "Objekt > Bildnachzeichner > Erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
@@ -2802,7 +2802,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Image Trace > Make and Expand",
         de: "Objekt > Bildnachzeichner > Erstellen und umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0438 \u0440\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
@@ -2815,7 +2815,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Image Trace > Release",
         de: "Objekt > Bildnachzeichner > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0420\u0430\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
@@ -2828,7 +2828,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Image Trace > Expand",
         de: "Objekt > Bildnachzeichner > Umwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
@@ -2841,7 +2841,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Mockup (Beta) > Make",
         de: "Object > Mockup (Beta) > Make",
         ru: "Object > Mockup (Beta) > Make",
@@ -2855,7 +2855,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Mockup (Beta) > Release",
         de: "Object > Mockup (Beta) > Release",
         ru: "Object > Mockup (Beta) > Release",
@@ -2869,7 +2869,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Mockup (Beta) > Edit",
         de: "Object > Mockup (Beta) > Edit",
         ru: "Object > Mockup (Beta) > Edit",
@@ -2883,7 +2883,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Text Wrap > Make",
         de: "Objekt > Textumfluss > Erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0435\u043a\u0430\u043d\u0438\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u043c > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
@@ -2896,7 +2896,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Text Wrap > Release",
         de: "Objekt > Textumfluss > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0435\u043a\u0430\u043d\u0438\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u043c > \u041e\u0441\u0432\u043e\u0431\u043e\u0434\u0438\u0442\u044c",
@@ -2909,7 +2909,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Text Wrap > Text Wrap Options...",
         de: "Objekt > Textumfluss > Textumflussoptionen \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0435\u043a\u0430\u043d\u0438\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u043c > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043e\u0431\u0442\u0435\u043a\u0430\u043d\u0438\u044f \u0442\u0435\u043a\u0441\u0442\u043e\u043c...",
@@ -2922,7 +2922,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Clipping Mask > Make",
         de: "Objekt > Schnittmaske > Erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0440\u0430\u0432\u043e\u0447\u043d\u0430\u044f \u043c\u0430\u0441\u043a\u0430 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
@@ -2935,7 +2935,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Clipping Mask > Release",
         de: "Objekt > Schnittmaske > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0440\u0430\u0432\u043e\u0447\u043d\u0430\u044f \u043c\u0430\u0441\u043a\u0430 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c",
@@ -2948,7 +2948,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Clipping Mask > Edit Mask",
         de: "Objekt > Schnittmaske > Maske bearbeiten",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0440\u0430\u0432\u043e\u0447\u043d\u0430\u044f \u043c\u0430\u0441\u043a\u0430 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043c\u0430\u0441\u043a\u0443",
@@ -2961,7 +2961,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Compound Path > Make",
         de: "Objekt > Zusammengesetzter Pfad > Erstellen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0441\u0442\u0430\u0432\u043d\u043e\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
@@ -2974,7 +2974,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Compound Path > Release",
         de: "Objekt > Zusammengesetzter Pfad > Zur\u00fcckwandeln",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0441\u0442\u0430\u0432\u043d\u043e\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c",
@@ -2987,7 +2987,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Artboards > Convert to Artboards",
         de: "Objekt > Zeichenfl\u00e4chen > In Zeichenfl\u00e4chen konvertieren",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -3000,7 +3000,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Artboards > Rearrange All Artboards",
         de: "Objekt > Zeichenfl\u00e4chen > Alle Zeichenfl\u00e4chen neu anordnen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438 > \u041f\u0435\u0440\u0435\u0443\u043f\u043e\u0440\u044f\u0434\u043e\u0447\u0438\u0442\u044c \u0432\u0441\u0435 \u043c\u043e\u043d\u0442. \u043e\u0431\u043b.",
@@ -3013,7 +3013,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Artboards > Fit to Artwork Bounds",
         de: "Objekt > Zeichenfl\u00e4chen > An Bildmaterialbegrenzungen anpassen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438 > \u041f\u043e\u0434\u043e\u0433\u043d\u0430\u0442\u044c \u043f\u043e \u0433\u0440\u0430\u043d\u0438\u0446\u0430\u043c \u0438\u043b\u043b\u044e\u0441\u0442\u0440\u0430\u0446\u0438\u0438",
@@ -3026,7 +3026,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Artboards > Fit to Selected Art",
         de: "Objekt > Zeichenfl\u00e4chen > An ausgew\u00e4hlte Grafik anpassen",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438 > \u041f\u043e\u0434\u043e\u0433\u043d\u0430\u0442\u044c \u043f\u043e \u0433\u0440\u0430\u043d\u0438\u0446\u0430\u043c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u043e\u0439 \u0438\u043b\u043b\u044e\u0441\u0442\u0440\u0430\u0446\u0438\u0438",
@@ -3039,7 +3039,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Object > Graph > Type...",
         de: "Objekt > Diagramm > Art \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u0422\u0438\u043f\u2026",
@@ -3052,7 +3052,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Graph > Data...",
         de: "Objekt > Diagramm > Daten \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u0414\u0430\u043d\u043d\u044b\u0435\u2026",
@@ -3065,7 +3065,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Graph > Design...",
         de: "Objekt > Diagramm > Designs \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435\u2026",
@@ -3078,7 +3078,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Graph > Column...",
         de: "Objekt > Diagramm > Balken \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u0421\u0442\u043e\u043b\u0431\u0435\u0446\u2026",
@@ -3091,7 +3091,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Object > Graph > Marker...",
         de: "Objekt > Diagramm > Punkte \u2026",
         ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u041c\u0430\u0440\u043a\u0435\u0440\u2026",
@@ -3104,7 +3104,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Type > More from Adobe Fonts...",
         de: "Schrift > Mehr bei Adobe Fonts \u2026",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u041d\u0430\u0439\u0442\u0438 \u0431\u043e\u043b\u044c\u0448\u0435 \u0432 Adobe Fonts...",
@@ -3118,7 +3118,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Type > Glyphs",
         de: "Schrift > Glyphen",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0413\u043b\u0438\u0444\u044b",
@@ -3131,7 +3131,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Area Type Options...",
         de: "Schrift > Fl\u00e4chentextoptionen \u2026",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0442\u0435\u043a\u0441\u0442\u0430 \u0432 \u043e\u0431\u043b\u0430\u0441\u0442\u0438\u2026",
@@ -3144,7 +3144,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type on a Path > Rainbow",
         de: "Schrift > Pfadtext > Regenbogen",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u0420\u0430\u0434\u0443\u0433\u0430",
@@ -3157,7 +3157,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type on a Path > Skew",
         de: "Schrift > Pfadtext > Asymmetrie",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041d\u0430\u043a\u043b\u043e\u043d",
@@ -3170,7 +3170,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type on a Path > 3D Ribbon",
         de: "Schrift > Pfadtext > 3D-Band",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041a\u0430\u0441\u043a\u0430\u0434",
@@ -3183,7 +3183,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type on a Path > Stair Step",
         de: "Schrift > Pfadtext > Treppenstufe",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041b\u0435\u0441\u0435\u043d\u043a\u0430",
@@ -3196,7 +3196,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type on a Path > Gravity",
         de: "Schrift > Pfadtext > Schwerkraft",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u0413\u0440\u0430\u0432\u0438\u0442\u0430\u0446\u0438\u044f",
@@ -3209,7 +3209,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type on a Path > Type on a Path Options...",
         de: "Schrift > Pfadtext > Pfadtextoptionen \u2026",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0442\u0435\u043a\u0441\u0442\u0430 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443...",
@@ -3222,7 +3222,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type on a Path > Update Legacy Type on a Path",
         de: "Schrift > Pfadtext > Alten Pfadtext aktualisieren",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c \u043f\u0440\u0435\u0436\u043d\u044e\u044e \u0432\u0435\u0440\u0441\u0438\u044e \u0442\u0435\u043a\u0441\u0442\u0430 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443",
@@ -3235,7 +3235,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Threaded Text > Create",
         de: "Schrift > Verketteter Text > Erstellen",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0421\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0435 \u0431\u043b\u043e\u043a\u0438 > \u0421\u0432\u044f\u0437\u0430\u0442\u044c",
@@ -3248,7 +3248,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Threaded Text > Release Selection",
         de: "Schrift > Verketteter Text > Auswahl zur\u00fcckwandeln",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0421\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0435 \u0431\u043b\u043e\u043a\u0438 > \u0418\u0441\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0435",
@@ -3261,7 +3261,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Threaded Text > Remove Threading",
         de: "Schrift > Verketteter Text > Verkettung entfernen",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0421\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0435 \u0431\u043b\u043e\u043a\u0438 > \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0441\u0432\u044f\u0437\u044c \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0445 \u0431\u043b\u043e\u043a\u043e\u0432",
@@ -3274,7 +3274,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Fit Headline",
         de: "Schrift > \u00dcberschrift einpassen",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0420\u0430\u0437\u043e\u0433\u043d\u0430\u0442\u044c \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a",
@@ -3287,7 +3287,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Type > Resolve Missing Fonts...",
         de: "Schrift > Fehlende Schriftarten aufl\u00f6sen \u2026",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0421\u043e\u043f\u043e\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0435 \u0448\u0440\u0438\u0444\u0442\u044b...",
@@ -3300,7 +3300,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Type > Find/Replace Font...",
         de: "Schrift > Schriftart suchen/ersetzen \u2026",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u041d\u0430\u0439\u0442\u0438/\u0437\u0430\u043c\u0435\u043d\u0438\u0442\u044c \u0448\u0440\u0438\u0444\u0442...",
@@ -3313,7 +3313,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Change Case > UPPERCASE",
         de: "Schrift > Gro\u00df-/Kleinschreibung \u00e4ndern > GROSSBUCHSTABEN",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u0440\u0435\u0433\u0438\u0441\u0442\u0440 > \u0412\u0421\u0415 \u041f\u0420\u041e\u041f\u0418\u0421\u041d\u042b\u0415",
@@ -3326,7 +3326,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Change Case > lowercase",
         de: "Schrift > Gro\u00df-/Kleinschreibung \u00e4ndern > kleinbuchstaben",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u0440\u0435\u0433\u0438\u0441\u0442\u0440 > \u0432\u0441\u0435 \u0441\u0442\u0440\u043e\u0447\u043d\u044b\u0435",
@@ -3339,7 +3339,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Change Case > Title Case",
         de: "Schrift > Gro\u00df-/Kleinschreibung \u00e4ndern > Erster Buchstabe Im Wort Gro\u00df",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u0440\u0435\u0433\u0438\u0441\u0442\u0440 > \u041f\u0440\u043e\u043f\u0438\u0441\u043d\u0430\u044f \u0412 \u041d\u0430\u0447\u0430\u043b\u0435 \u041a\u0430\u0436\u0434\u043e\u0433\u043e \u0421\u043b\u043e\u0432\u0430",
@@ -3352,7 +3352,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Change Case > Sentence case",
         de: "Schrift > Gro\u00df-/Kleinschreibung \u00e4ndern > Erster buchstabe im satz gro\u00df",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u0440\u0435\u0433\u0438\u0441\u0442\u0440 > \u041f\u0440\u043e\u043f\u0438\u0441\u043d\u0430\u044f \u0432 \u043d\u0430\u0447\u0430\u043b\u0435 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u044f",
@@ -3365,7 +3365,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Type > Smart Punctuation...",
         de: "Schrift > Satz-/Sonderzeichen \u2026",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0438\u043f\u043e\u0433\u0440\u0430\u0444\u0441\u043a\u0430\u044f \u043f\u0443\u043d\u043a\u0442\u0443\u0430\u0446\u0438\u044f...",
@@ -3378,7 +3378,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Create Outlines",
         de: "Schrift > In Pfade umwandeln",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u043a\u0440\u0438\u0432\u044b\u0435",
@@ -3391,7 +3391,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Optical Margin Alignment",
         de: "Schrift > Optischer Randausgleich",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u0412\u0438\u0437\u0443\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 \u043f\u043e\u043b\u0435\u0439",
@@ -3404,7 +3404,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Bullets and Numbering > Convert to text",
         de: "Schrift > Aufz\u00e4hlungszeichen und Nummerierung > In Text konvertieren",
         ru: "Type > Bullets and Numbering > Convert to text",
@@ -3418,7 +3418,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Type > Show Hidden Characters",
         de: "Schrift > Verborgene Zeichen einblenden / ausblenden",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0441\u043a\u0440\u044b\u0442\u044b\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u044b",
@@ -3431,7 +3431,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type Orientation > Horizontal",
         de: "Schrift > Textausrichtung > Horizontal",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u041e\u0440\u0438\u0435\u043d\u0442\u0430\u0446\u0438\u044f \u0442\u0435\u043a\u0441\u0442\u0430 > \u0413\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u0430\u044f",
@@ -3444,7 +3444,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Type > Type Orientation > Vertical",
         de: "Schrift > Textausrichtung > Vertikal",
         ru: "\u0422\u0435\u043a\u0441\u0442 > \u041e\u0440\u0438\u0435\u043d\u0442\u0430\u0446\u0438\u044f \u0442\u0435\u043a\u0441\u0442\u0430 > \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u0430\u044f",
@@ -3457,7 +3457,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > All",
         de: "Auswahl > Alles ausw\u00e4hlen",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0412\u0441\u0435",
@@ -3470,7 +3470,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > All on Active Artboard",
         de: "Auswahl > Alles auf der aktiven Zeichenfl\u00e4che",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0412\u0441\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0432 \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0439 \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -3483,7 +3483,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Deselect",
         de: "Auswahl > Auswahl aufheben",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
@@ -3496,7 +3496,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Reselect",
         de: "Auswahl > Erneut ausw\u00e4hlen",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0412\u044b\u0434\u0435\u043b\u0438\u0442\u044c \u0441\u043d\u043e\u0432\u0430",
@@ -3509,7 +3509,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Inverse",
         de: "Auswahl > Auswahl umkehren",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0418\u043d\u0432\u0435\u0440\u0441\u0438\u044f",
@@ -3522,7 +3522,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Next Object Above",
         de: "Auswahl > N\u00e4chstes Objekt dar\u00fcber",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0421\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439 \u043e\u0431\u044a\u0435\u043a\u0442 \u0441\u0432\u0435\u0440\u0445\u0443",
@@ -3535,7 +3535,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Next Object Below",
         de: "Auswahl > N\u00e4chstes Objekt darunter",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0421\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439 \u043e\u0431\u044a\u0435\u043a\u0442 \u0441\u043d\u0438\u0437\u0443",
@@ -3548,7 +3548,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Appearance",
         de: "Auswahl > Gleich > Aussehen",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435",
@@ -3561,7 +3561,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Same > Appearance Attribute",
         de: "Auswahl > Gleich > Aussehensattribute",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044b \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f",
@@ -3574,7 +3574,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Blending Mode",
         de: "Auswahl > Gleich > F\u00fcllmethode",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0440\u0435\u0436\u0438\u043c\u043e\u043c \u043d\u0430\u043b\u043e\u0436\u0435\u043d\u0438\u044f",
@@ -3587,7 +3587,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Fill & Stroke",
         de: "Auswahl > Gleich > Fl\u00e4che und Kontur",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c\u0438 \u0437\u0430\u043b\u0438\u0432\u043a\u043e\u0439 \u0438 \u043e\u0431\u0432\u043e\u0434\u043a\u043e\u0439",
@@ -3600,7 +3600,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Fill Color",
         de: "Auswahl > Gleich > Fl\u00e4chenfarbe",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0446\u0432\u0435\u0442\u043e\u043c \u0437\u0430\u043b\u0438\u0432\u043a\u0438",
@@ -3613,7 +3613,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Opacity",
         de: "Auswahl > Gleich > Deckkraft",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e\u0439 \u043d\u0435\u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c\u044e",
@@ -3626,7 +3626,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Stroke Color",
         de: "Auswahl > Gleich > Konturfarbe",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0446\u0432\u0435\u0442\u043e\u043c \u043e\u0431\u0432\u043e\u0434\u043a\u0438",
@@ -3639,7 +3639,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Stroke Weight",
         de: "Auswahl > Gleich > Konturst\u00e4rke",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e\u0439 \u0442\u043e\u043b\u0449\u0438\u043d\u043e\u0439 \u043e\u0431\u0432\u043e\u0434\u043a\u0438",
@@ -3652,7 +3652,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Same > Graphic Style",
         de: "Auswahl > Gleich > Grafikstil",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0442\u0438\u043b\u044c \u0433\u0440\u0430\u0444\u0438\u043a\u0438",
@@ -3665,7 +3665,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Same > Shape",
         de: "Auswahl > Gleich > Form",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0424\u0438\u0433\u0443\u0440\u0430",
@@ -3678,7 +3678,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Same > Symbol Instance",
         de: "Auswahl > Gleich > Symbolinstanz",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u0435 \u043e\u0431\u0440\u0430\u0437\u0446\u044b \u0441\u0438\u043c\u0432\u043e\u043b\u0430",
@@ -3691,7 +3691,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Same > Link Block Series",
         de: "Auswahl > Gleich > Verkn\u00fcpfungsblockreihen",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041f\u043e\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0445 \u0431\u043b\u043e\u043a\u043e\u0432",
@@ -3704,7 +3704,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Font Family",
         de: "Auswahl > Gleich > Schriftfamilie",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e \u0448\u0440\u0438\u0444\u0442\u043e\u0432",
@@ -3718,7 +3718,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Font Family & Style",
         de: "Auswahl > Gleich > Schriftfamilie und -schnitt",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e \u0438 \u0441\u0442\u0438\u043b\u044c \u0448\u0440\u0438\u0444\u0442\u043e\u0432",
@@ -3732,7 +3732,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Font Family, Style & Size",
         de: "Auswahl > Gleich > Schriftfamilie, -schnitt und -grad",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e, \u0441\u0442\u0438\u043b\u044c \u0438 \u0440\u0430\u0437\u043c\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u043e\u0432",
@@ -3746,7 +3746,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Font Size",
         de: "Auswahl > Gleich > Schriftgrad",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0420\u0430\u0437\u043c\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430",
@@ -3760,7 +3760,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Text Fill Color",
         de: "Auswahl > Gleich > Textfl\u00e4chenfarbe",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0426\u0432\u0435\u0442 \u0437\u0430\u043b\u0438\u0432\u043a\u0438 \u0442\u0435\u043a\u0441\u0442\u0430",
@@ -3774,7 +3774,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Text Stroke Color",
         de: "Auswahl > Gleich > Textkonturfarbe",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0426\u0432\u0435\u0442 \u043e\u0431\u0432\u043e\u0434\u043a\u0438 \u0442\u0435\u043a\u0441\u0442\u0430",
@@ -3788,7 +3788,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Same > Text Fill & Stroke Color",
         de: "Auswahl > Gleich > Textfl\u00e4chen- und -konturfarbe",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0426\u0432\u0435\u0442 \u0437\u0430\u043b\u0438\u0432\u043a\u0438 \u0438 \u043e\u0431\u0432\u043e\u0434\u043a\u0438 \u0442\u0435\u043a\u0441\u0442\u0430",
@@ -3802,7 +3802,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Object > All on Same Layers",
         de: "Auswahl > Objekt > Alles auf denselben Ebenen",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u0412\u0441\u0435 \u043d\u0430 \u044d\u0442\u043e\u043c \u0436\u0435 \u0441\u043b\u043e\u0435",
@@ -3815,7 +3815,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Object > Direction Handles",
         de: "Auswahl > Objekt > Richtungsgriffe",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u0423\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 \u043c\u0430\u043d\u0438\u043f\u0443\u043b\u044f\u0442\u043e\u0440\u044b",
@@ -3828,7 +3828,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Object > Bristle Brush Strokes",
         de: "Auswahl > Objekt > Borstenpinselstriche",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041c\u0430\u0437\u043a\u0438 \u0434\u043b\u044f \u043a\u0438\u0441\u0442\u0438 \u0438\u0437 \u0449\u0435\u0442\u0438\u043d\u044b",
@@ -3841,7 +3841,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Object > Brush Strokes",
         de: "Auswahl > Objekt > Pinselkonturen",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041c\u0430\u0437\u043a\u0438 \u043a\u0438\u0441\u0442\u0438",
@@ -3854,7 +3854,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Object > Clipping Masks",
         de: "Auswahl > Objekt > Schnittmasken",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041e\u0431\u0442\u0440\u0430\u0432\u043e\u0447\u043d\u044b\u0435 \u043c\u0430\u0441\u043a\u0438",
@@ -3867,7 +3867,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Object > Stray Points",
         de: "Auswahl > Objekt > Einzelne Ankerpunkte",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u0418\u0437\u043e\u043b\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
@@ -3880,7 +3880,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Object > All Text Objects",
         de: "Auswahl > Objekt > Alle Textobjekte",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u0412\u0441\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0442\u0435\u043a\u0441\u0442\u0430",
@@ -3893,7 +3893,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Object > Point Text Objects",
         de: "Auswahl > Objekt > Punkttextobjekte",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041e\u0431\u044a\u0435\u043a\u0442\u044b \u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u0437 \u0442\u043e\u0447\u043a\u0438",
@@ -3906,7 +3906,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Select > Object > Area Text Objects",
         de: "Auswahl > Objekt > Fl\u00e4chenttextobjekte",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041e\u0431\u044a\u0435\u043a\u0442\u044b \u0442\u0435\u043a\u0441\u0442\u0430 \u0432 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -3919,7 +3919,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Start/Stop Global Edit",
         de: "Auswahl > Globale Bearbeitung starten/anhalten",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041d\u0430\u0447\u0430\u0442\u044c \u0433\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u043e\u0435 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435",
@@ -3933,7 +3933,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Save Selection...",
         de: "Auswahl > Auswahl speichern \u2026",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c\u2026",
@@ -3946,7 +3946,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Edit Selection...",
         de: "Auswahl > Auswahl bearbeiten \u2026",
         ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c\u2026",
@@ -3959,7 +3959,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "Select > Update Selection",
         de: "Select > Update Selection",
         ru: "Select > Update Selection",
@@ -3973,7 +3973,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Apply Last Effect",
         de: "Effekt > Letzten Effekt anwenden",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0440\u0438\u043c\u0435\u043d\u0438\u0442\u044c \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u044d\u0444\u0444\u0435\u043a\u0442",
@@ -3986,7 +3986,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Last Effect",
         de: "Effekt > Letzter Effekt",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u044d\u0444\u0444\u0435\u043a\u0442",
@@ -3999,7 +3999,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Document Raster Effects Settings...",
         de: "Effekt > Dokument-Rastereffekt-Einstellungen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0440\u0430\u0441\u0442\u0440\u043e\u0432\u044b\u0445 \u044d\u0444\u0444\u0435\u043a\u0442\u043e\u0432 \u0432 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0435...",
@@ -4012,7 +4012,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > 3D and Materials > Extrude & Bevel...",
         de: "Effekt > 3D und Materialien > Extrudieren und abgeflachte Kante \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u0412\u044b\u0442\u044f\u0433\u0438\u0432\u0430\u043d\u0438\u0435 \u0438 \u0444\u0430\u0441\u043a\u0430...",
@@ -4026,7 +4026,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > 3D and Materials > Revolve...",
         de: "Effekt > 3D und Materialien > Kreiseln \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u0412\u0440\u0430\u0449\u0435\u043d\u0438\u0435\u2026",
@@ -4040,7 +4040,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > 3D and Materials > Inflate...",
         de: "Effekt > 3D und Materialien > Aufblasen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u0420\u0430\u0437\u0434\u0443\u0432\u0430\u043d\u0438\u0435\u2026",
@@ -4054,7 +4054,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > 3D and Materials > Rotate...",
         de: "Effekt > 3D und Materialien > Drehen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u041f\u043e\u0432\u043e\u0440\u043e\u0442\u2026",
@@ -4068,7 +4068,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > 3D and Materials > Materials...",
         de: "Effekt > 3D und Materialien > Materialien \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b\u2026",
@@ -4082,7 +4082,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...",
         de: "Effekt > 3D (klassisch) > Extrudieren und abgeflachte Kante (klassisch) \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0435) > \u0412\u044b\u0442\u044f\u0433\u0438\u0432\u0430\u043d\u0438\u0435 \u0438 \u0444\u0430\u0441\u043a\u0430 (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u0438\u0439)\u2026",
@@ -4096,7 +4096,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > 3D and Materials > 3D (Classic) > Revolve (Classic)...",
         de: "Effekt > 3D (klassisch) > Kreiseln (klassisch) \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0435) > \u0412\u0440\u0430\u0449\u0435\u043d\u0438\u0435 (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0435)\u2026",
@@ -4110,7 +4110,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > 3D and Materials > 3D (Classic) > Rotate (Classic)...",
         de: "Effekt > 3D (klassisch) > Drehen (klassisch) \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0435) > \u041f\u043e\u0432\u043e\u0440\u043e\u0442 (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u0438\u0439)\u2026",
@@ -4124,7 +4124,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Convert to Shape > Rectangle...",
         de: "Effekt > In Form umwandeln > Rechteck \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0444\u0438\u0433\u0443\u0440\u0443> \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a\u2026",
@@ -4137,7 +4137,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Convert to Shape > Rounded Rectangle...",
         de: "Effekt > In Form umwandeln > Abgerundetes Rechteck \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0444\u0438\u0433\u0443\u0440\u0443> \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a \u0441\u043e \u0441\u043a\u0440\u0443\u0433\u043b\u0435\u043d\u043d\u044b\u043c\u0438 \u0443\u0433\u043b\u0430\u043c\u0438\u2026",
@@ -4150,7 +4150,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Convert to Shape > Ellipse...",
         de: "Effekt > In Form umwandeln > Ellipse \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0444\u0438\u0433\u0443\u0440\u0443> \u042d\u043b\u043b\u0438\u043f\u0441\u2026",
@@ -4163,7 +4163,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Crop Marks",
         de: "Effekt > Schnittmarken",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041c\u0435\u0442\u043a\u0438 \u043e\u0431\u0440\u0435\u0437\u043a\u0438",
@@ -4176,7 +4176,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort & Transform > Free Distort...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Frei verzerren \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u043b\u044c\u043d\u043e\u0435 \u0438\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435...",
@@ -4189,7 +4189,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort & Transform > Pucker & Bloat...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Zusammenziehen und aufblasen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0412\u0442\u044f\u0433\u0438\u0432\u0430\u043d\u0438\u0435 \u0438 \u0440\u0430\u0437\u0434\u0443\u0432\u0430\u043d\u0438\u0435...",
@@ -4202,7 +4202,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort & Transform > Roughen...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Aufrauen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041e\u0433\u0440\u0443\u0431\u043b\u0435\u043d\u0438\u0435...",
@@ -4215,7 +4215,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort & Transform > Transform...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Transformieren \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c...",
@@ -4228,7 +4228,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort & Transform > Tweak...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Tweak \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u043e\u043c\u0430\u0440\u043a\u0438...",
@@ -4241,7 +4241,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort & Transform > Twist...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Wirbel \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0421\u043a\u0440\u0443\u0447\u0438\u0432\u0430\u043d\u0438\u0435...",
@@ -4254,7 +4254,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort & Transform > Zig Zag...",
         de: "Effekt > Verzerrungs- und Transformationsfilter > Zickzack \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0417\u0438\u0433\u0437\u0430\u0433...",
@@ -4267,7 +4267,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Path > Offset Path...",
         de: "Effekt > Pfad > Pfad verschieben \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u0430\u0440\u0430\u043b\u043b\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440...",
@@ -4280,7 +4280,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Path > Outline Object",
         de: "Effekt > Pfad > Kontur nachzeichnen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u041a\u043e\u043d\u0442\u0443\u0440\u043d\u044b\u0439 \u043e\u0431\u044a\u0435\u043a\u0442",
@@ -4293,7 +4293,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Path > Outline Stroke",
         de: "Effekt > Pfad > Konturlinie",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u043e\u0431\u0432\u043e\u0434\u043a\u0443 \u0432 \u043a\u0440\u0438\u0432\u044b\u0435",
@@ -4306,7 +4306,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Add",
         de: "Effekt > Pathfinder > Hinzuf\u00fcgen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c",
@@ -4319,7 +4319,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Intersect",
         de: "Effekt > Pathfinder > Schnittmenge bilden",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041f\u0435\u0440\u0435\u0441\u0435\u0447\u0435\u043d\u0438\u0435",
@@ -4332,7 +4332,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Exclude",
         de: "Effekt > Pathfinder > Schnittmenge entfernen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0418\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435",
@@ -4345,7 +4345,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Subtract",
         de: "Effekt > Pathfinder > Subtrahieren",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0412\u044b\u0447\u0438\u0442\u0430\u043d\u0438\u0435",
@@ -4358,7 +4358,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Minus Back",
         de: "Effekt > Pathfinder > Hinteres Objekt abziehen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041c\u0438\u043d\u0443\u0441 \u043d\u0438\u0436\u043d\u0438\u0439",
@@ -4371,7 +4371,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Divide",
         de: "Effekt > Pathfinder > Unterteilen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0420\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
@@ -4384,7 +4384,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Trim",
         de: "Effekt > Pathfinder > \u00dcberlappungsbereich entfernen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041e\u0431\u0440\u0435\u0437\u043a\u0430",
@@ -4397,7 +4397,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Merge",
         de: "Effekt > Pathfinder > Verdeckte Fl\u00e4che entfernen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041e\u0431\u044a\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435",
@@ -4410,7 +4410,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Crop",
         de: "Effekt > Pathfinder > Schnittmengenfl\u00e4che",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041a\u0430\u0434\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
@@ -4423,7 +4423,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Outline",
         de: "Effekt > Pathfinder > Kontur aufteilen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041a\u043e\u043d\u0442\u0443\u0440",
@@ -4436,7 +4436,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Hard Mix",
         de: "Effekt > Pathfinder > Hart mischen",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0416\u0435\u0441\u0442\u043a\u043e\u0435 \u0441\u043c\u0435\u0448\u0438\u0432\u0430\u043d\u0438\u0435",
@@ -4449,7 +4449,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Soft Mix...",
         de: "Effekt > Pathfinder > Weich mischen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041d\u0435\u0436\u0435\u0441\u0442\u043a\u043e\u0435 \u0441\u043c\u0435\u0448\u0438\u0432\u0430\u043d\u0438\u0435...",
@@ -4462,7 +4462,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pathfinder > Trap...",
         de: "Effekt > Pathfinder > \u00dcberf\u00fcllen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0422\u0440\u0435\u043f\u043f\u0438\u043d\u0433\u2026",
@@ -4475,7 +4475,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Rasterize...",
         de: "Effekt > In Pixelbild umwandeln \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0420\u0430\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c...",
@@ -4488,7 +4488,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Stylize > Drop Shadow...",
         de: "Effekt > Stilisierungsfilter > Schlagschatten \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0422\u0435\u043d\u044c...",
@@ -4501,7 +4501,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Stylize > Feather...",
         de: "Effekt > Stilisierungsfilter > Weiche Kante \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0420\u0430\u0441\u0442\u0443\u0448\u0435\u0432\u043a\u0430...",
@@ -4514,7 +4514,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Stylize > Inner Glow...",
         de: "Effekt > Stilisierungsfilter > Schein nach innen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0435\u0435 \u0441\u0432\u0435\u0447\u0435\u043d\u0438\u0435...",
@@ -4527,7 +4527,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Stylize > Outer Glow...",
         de: "Effekt > Stilisierungsfilter > Schein nach au\u00dfen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0412\u043d\u0435\u0448\u043d\u0435\u0435 \u0441\u0432\u0435\u0447\u0435\u043d\u0438\u0435...",
@@ -4540,7 +4540,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Stylize > Round Corners...",
         de: "Effekt > Stilisierungsfilter > Ecken abrunden \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0421\u043a\u0440\u0443\u0433\u043b\u0435\u043d\u043d\u044b\u0435 \u0443\u0433\u043b\u044b...",
@@ -4553,7 +4553,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Stylize > Scribble...",
         de: "Effekt > Stilisierungsfilter > Scribble \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u041a\u0430\u0440\u0430\u043a\u0443\u043b\u0438\u2026",
@@ -4566,7 +4566,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > SVG Filters > Apply SVG Filter...",
         de: "Effekt > SVG-Filter > SVG-Filter anwenden \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0424\u0438\u043b\u044c\u0442\u0440\u044b SVG > \u041f\u0440\u0438\u043c\u0435\u043d\u0438\u0442\u044c SVG-\u0444\u0438\u043b\u044c\u0442\u0440...",
@@ -4579,7 +4579,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > SVG Filters > Import SVG Filter...",
         de: "Effekt > SVG-Filter > SVG-Filter importieren \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0424\u0438\u043b\u044c\u0442\u0440\u044b SVG > \u0418\u043c\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0444\u0438\u043b\u044c\u0442\u0440 SVG...",
@@ -4592,7 +4592,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Arc...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Bogen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0414\u0443\u0433\u0430\u2026",
@@ -4605,7 +4605,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Arc Lower...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Bogen unten \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0414\u0443\u0433\u0430 \u0432\u043d\u0438\u0437\u2026",
@@ -4618,7 +4618,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Arc Upper...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Bogen oben \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0414\u0443\u0433\u0430 \u0432\u0432\u0435\u0440\u0445\u2026",
@@ -4631,7 +4631,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Arch...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Torbogen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0410\u0440\u043a\u0430\u2026",
@@ -4644,7 +4644,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Bulge...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Wulst \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0412\u044b\u043f\u0443\u043a\u043b\u043e\u0441\u0442\u044c\u2026",
@@ -4657,7 +4657,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Shell Lower...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Muschel unten \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u041f\u0430\u043d\u0446\u0438\u0440\u044c \u0432\u043d\u0438\u0437\u2026",
@@ -4670,7 +4670,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Shell Upper...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Muschel oben \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u041f\u0430\u043d\u0446\u0438\u0440\u044c \u0432\u0432\u0435\u0440\u0445\u2026",
@@ -4683,7 +4683,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Flag...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Flagge \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0424\u043b\u0430\u0433\u2026",
@@ -4696,7 +4696,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Wave...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Schwingungen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0412\u043e\u043b\u043d\u0430\u2026",
@@ -4709,7 +4709,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Fish...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Fisch \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0420\u044b\u0431\u0430\u2026",
@@ -4722,7 +4722,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Rise...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Ansteigend \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u041f\u043e\u0434\u044a\u0435\u043c\u2026",
@@ -4735,7 +4735,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Fisheye...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Fischauge \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0420\u044b\u0431\u0438\u0439 \u0433\u043b\u0430\u0437\u2026",
@@ -4748,7 +4748,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Inflate...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Aufblasen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0420\u0430\u0437\u0434\u0443\u0432\u0430\u043d\u0438\u0435\u2026",
@@ -4761,7 +4761,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Squeeze...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Stauchen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0421\u0436\u0430\u0442\u0438\u0435\u2026",
@@ -4774,7 +4774,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Warp > Twist...",
         de: "Effekt > Verkr\u00fcmmungsfilter > Wirbel \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0421\u043a\u0440\u0443\u0447\u0438\u0432\u0430\u043d\u0438\u0435\u2026",
@@ -4787,7 +4787,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Effect Gallery...",
         de: "Effekt > Effekte-Galerie \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0413\u0430\u043b\u0435\u0440\u0435\u044f \u044d\u0444\u0444\u0435\u043a\u0442\u043e\u0432\u2026",
@@ -4800,7 +4800,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Colored Pencil...",
         de: "Effekt > Kunstfilter > Buntstiftschraffur \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0426\u0432\u0435\u0442\u043d\u044b\u0435 \u043a\u0430\u0440\u0430\u043d\u0434\u0430\u0448\u0438\u2026",
@@ -4813,7 +4813,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Cutout...",
         de: "Effekt > Kunstfilter > Farbpapier-Collage \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0410\u043f\u043f\u043b\u0438\u043a\u0430\u0446\u0438\u044f\u2026",
@@ -4826,7 +4826,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Dry Brush...",
         de: "Effekt > Kunstfilter > Grobe Malerei \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0421\u0443\u0445\u0430\u044f \u043a\u0438\u0441\u0442\u044c\u2026",
@@ -4839,7 +4839,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Film Grain...",
         de: "Effekt > Kunstfilter > K\u00f6rnung & Aufhellung \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0417\u0435\u0440\u043d\u0438\u0441\u0442\u043e\u0441\u0442\u044c \u043f\u043b\u0435\u043d\u043a\u0438\u2026",
@@ -4852,7 +4852,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Fresco...",
         de: "Effekt > Kunstfilter > Fresko \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0424\u0440\u0435\u0441\u043a\u0430\u2026",
@@ -4865,7 +4865,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Neon Glow...",
         de: "Effekt > Kunstfilter > Neonschein \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u041d\u0435\u043e\u043d\u043e\u0432\u044b\u0439 \u0441\u0432\u0435\u0442\u2026",
@@ -4878,7 +4878,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Paint Daubs...",
         de: "Effekt > Kunstfilter > \u00d6lfarbe getupft \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u041c\u0430\u0441\u043b\u044f\u043d\u0430\u044f \u0436\u0438\u0432\u043e\u043f\u0438\u0441\u044c\u2026",
@@ -4891,7 +4891,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Palette Knife...",
         de: "Effekt > Kunstfilter > Malmesser \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0428\u043f\u0430\u0442\u0435\u043b\u044c\u2026",
@@ -4904,7 +4904,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Plastic Wrap...",
         de: "Effekt > Kunstfilter > Kunststofffolie \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0426\u0435\u043b\u043b\u043e\u0444\u0430\u043d\u043e\u0432\u0430\u044f \u0443\u043f\u0430\u043a\u043e\u0432\u043a\u0430\u2026",
@@ -4917,7 +4917,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Poster Edges...",
         de: "Effekt > Kunstfilter > Tontrennung & Kantenbetonung \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u041e\u0447\u0435\u0440\u0447\u0435\u043d\u043d\u044b\u0435 \u043a\u0440\u0430\u044f\u2026",
@@ -4930,7 +4930,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Rough Pastels...",
         de: "Effekt > Kunstfilter > Grobes Pastell \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u041f\u0430\u0441\u0442\u0435\u043b\u044c\u2026",
@@ -4943,7 +4943,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Smudge Stick...",
         de: "Effekt > Kunstfilter > Diagonal verwischen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0420\u0430\u0441\u0442\u0443\u0448\u0435\u0432\u043a\u0430\u2026",
@@ -4956,7 +4956,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Sponge...",
         de: "Effekt > Kunstfilter > Schwamm \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0413\u0443\u0431\u043a\u0430\u2026",
@@ -4969,7 +4969,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Underpainting...",
         de: "Effekt > Kunstfilter > Malgrund \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0420\u0438\u0441\u043e\u0432\u0430\u043d\u0438\u0435 \u043d\u0430 \u043e\u0431\u043e\u0440\u043e\u0442\u0435\u2026",
@@ -4982,7 +4982,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Artistic > Watercolor...",
         de: "Effekt > Kunstfilter > Aquarell \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0410\u043a\u0432\u0430\u0440\u0435\u043b\u044c\u2026",
@@ -4995,7 +4995,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Blur > Gaussian Blur...",
         de: "Effekt > Weichzeichnungsfilter > Gau\u00dfscher Weichzeichner \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0420\u0430\u0437\u043c\u044b\u0442\u0438\u0435 > \u0420\u0430\u0437\u043c\u044b\u0442\u0438\u0435 \u043f\u043e \u0413\u0430\u0443\u0441\u0441\u0443...",
@@ -5008,7 +5008,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Blur > Radial Blur...",
         de: "Effekt > Weichzeichnungsfilter > Radialer Weichzeichner \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0420\u0430\u0437\u043c\u044b\u0442\u0438\u0435 > \u0420\u0430\u0434\u0438\u0430\u043b\u044c\u043d\u043e\u0435 \u0440\u0430\u0437\u043c\u044b\u0442\u0438\u0435...",
@@ -5021,7 +5021,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Blur > Smart Blur...",
         de: "Effekt > Weichzeichnungsfilter > Selektiver Weichzeichner \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0420\u0430\u0437\u043c\u044b\u0442\u0438\u0435 > \u0423\u043c\u043d\u043e\u0435 \u0440\u0430\u0437\u043c\u044b\u0442\u0438\u0435...",
@@ -5034,7 +5034,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Brush Strokes > Accented Edges...",
         de: "Effekt > Malfilter > Kanten betonen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0410\u043a\u0446\u0435\u043d\u0442 \u043d\u0430 \u043a\u0440\u0430\u044f\u0445\u2026",
@@ -5047,7 +5047,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Brush Strokes > Angled Strokes...",
         de: "Effekt > Malfilter > Gekreuzte Malstriche \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u041d\u0430\u043a\u043b\u043e\u043d\u043d\u044b\u0435 \u0448\u0442\u0440\u0438\u0445\u0438\u2026",
@@ -5060,7 +5060,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Brush Strokes > Crosshatch...",
         de: "Effekt > Malfilter > Kreuzschraffur \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u041f\u0435\u0440\u0435\u043a\u0440\u0435\u0441\u0442\u043d\u044b\u0435 \u0448\u0442\u0440\u0438\u0445\u0438\u2026",
@@ -5073,7 +5073,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Brush Strokes > Dark Strokes...",
         de: "Effekt > Malfilter > Dunkle Malstriche \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0422\u0435\u043c\u043d\u044b\u0435 \u0448\u0442\u0440\u0438\u0445\u0438\u2026",
@@ -5086,7 +5086,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Brush Strokes > Ink Outlines...",
         de: "Effekt > Malfilter > Konturen mit Tinte nachzeichnen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u041e\u0431\u0432\u043e\u0434\u043a\u0430\u2026",
@@ -5099,7 +5099,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Brush Strokes > Spatter...",
         de: "Effekt > Malfilter > Spritzer \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0420\u0430\u0437\u0431\u0440\u044b\u0437\u0433\u0438\u0432\u0430\u043d\u0438\u0435\u2026",
@@ -5112,7 +5112,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Brush Strokes > Sprayed Strokes...",
         de: "Effekt > Malfilter > Verwackelte Striche \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0410\u044d\u0440\u043e\u0433\u0440\u0430\u0444\u2026",
@@ -5125,7 +5125,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Brush Strokes > Sumi-e...",
         de: "Effekt > Malfilter > Sumi-e \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0421\u0443\u043c\u0438-\u044d\u2026",
@@ -5138,7 +5138,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort > Diffuse Glow...",
         de: "Effekt > Verzerrungsfilter > Weiches Licht \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 > \u0420\u0430\u0441\u0441\u0435\u044f\u043d\u043d\u043e\u0435 \u0441\u0432\u0435\u0447\u0435\u043d\u0438\u0435\u2026",
@@ -5151,7 +5151,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort > Glass...",
         de: "Effekt > Verzerrungsfilter > Glas \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 > \u0421\u0442\u0435\u043a\u043b\u043e\u2026",
@@ -5164,7 +5164,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Distort > Ocean Ripple...",
         de: "Effekt > Verzerrungsfilter > Ozeanwellen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 > \u041e\u043a\u0435\u0430\u043d\u0441\u043a\u0438\u0435 \u0432\u043e\u043b\u043d\u044b\u2026",
@@ -5177,7 +5177,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pixelate > Color Halftone...",
         de: "Effekt > Vergr\u00f6berungsfilter > Farbraster \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u0426\u0432\u0435\u0442\u043d\u044b\u0435 \u043f\u043e\u043b\u0443\u0442\u043e\u043d\u0430\u2026",
@@ -5190,7 +5190,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pixelate > Crystallize...",
         de: "Effekt > Vergr\u00f6berungsfilter > Kristallisieren \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u041a\u0440\u0438\u0441\u0442\u0430\u043b\u043b\u0438\u0437\u0430\u0446\u0438\u044f\u2026",
@@ -5203,7 +5203,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pixelate > Mezzotint...",
         de: "Effekt > Vergr\u00f6berungsfilter > Mezzotint \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u041c\u0435\u0446\u0446\u043e-\u0442\u0438\u043d\u0442\u043e\u2026",
@@ -5216,7 +5216,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Pixelate > Pointillize...",
         de: "Effekt > Vergr\u00f6berungsfilter > Punktieren \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u041f\u0443\u0430\u043d\u0442\u0438\u043b\u0438\u0437\u043c\u2026",
@@ -5229,7 +5229,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Bas Relief...",
         de: "Effekt > Zeichenfilter > Basrelief \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0420\u0435\u043b\u044c\u0435\u0444\u2026",
@@ -5242,7 +5242,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Chalk & Charcoal...",
         de: "Effekt > Zeichenfilter > Chalk & Charcoal \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041c\u0435\u043b \u0438 \u0443\u0433\u043e\u043b\u044c\u2026",
@@ -5255,7 +5255,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Charcoal...",
         de: "Effekt > Zeichenfilter > Kohleumsetzung \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0423\u0433\u043e\u043b\u044c\u2026",
@@ -5268,7 +5268,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Chrome...",
         de: "Effekt > Zeichenfilter > Chrom \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0425\u0440\u043e\u043c\u2026",
@@ -5281,7 +5281,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Cont\u00e9 Crayon...",
         de: "Effekt > Zeichenfilter > Cont\\u00E9-Stifte \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0412\u043e\u043b\u0448\u0435\u0431\u043d\u044b\u0439 \u043a\u0430\u0440\u0430\u043d\u0434\u0430\u0448\u2026",
@@ -5294,7 +5294,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Graphic Pen...",
         de: "Effekt > Zeichenfilter > Strichumsetzung \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0422\u0443\u0448\u044c\u2026",
@@ -5307,7 +5307,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Halftone Pattern...",
         de: "Effekt > Zeichenfilter > Rasterungseffekt \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041f\u043e\u043b\u0443\u0442\u043e\u043d\u043e\u0432\u044b\u0439 \u0443\u0437\u043e\u0440\u2026",
@@ -5320,7 +5320,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Note Paper...",
         de: "Effekt > Zeichenfilter > Pr\u00e4gepapier \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041f\u043e\u0447\u0442\u043e\u0432\u0430\u044f \u0431\u0443\u043c\u0430\u0433\u0430\u2026",
@@ -5333,7 +5333,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Photocopy...",
         de: "Effekt > Zeichenfilter > Fotokopie \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041a\u0441\u0435\u0440\u043e\u043a\u043e\u043f\u0438\u044f\u2026",
@@ -5346,7 +5346,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Plaster...",
         de: "Effekt > Zeichenfilter > Stuck \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0413\u0438\u043f\u0441\u2026",
@@ -5359,7 +5359,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Reticulation...",
         de: "Effekt > Zeichenfilter > Punktierstich \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0420\u0435\u0442\u0438\u043a\u0443\u043b\u044f\u0446\u0438\u044f\u2026",
@@ -5372,7 +5372,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Stamp...",
         de: "Effekt > Zeichenfilter > Stempel \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041b\u0438\u043d\u043e\u0433\u0440\u0430\u0432\u044e\u0440\u0430\u2026",
@@ -5385,7 +5385,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Torn Edges...",
         de: "Effekt > Zeichenfilter > Gerissene Kanten \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0420\u0432\u0430\u043d\u044b\u0435 \u043a\u0440\u0430\u044f\u2026",
@@ -5398,7 +5398,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Sketch > Water Paper...",
         de: "Effekt > Zeichenfilter > Feuchtes Papier \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041c\u043e\u043a\u0440\u0430\u044f \u0431\u0443\u043c\u0430\u0433\u0430\u2026",
@@ -5411,7 +5411,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Stylize > Glowing Edges...",
         de: "Effekt > Stilisierungsfilter > Leuchtende Konturen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0421\u0432\u0435\u0447\u0435\u043d\u0438\u0435 \u043a\u0440\u0430\u0435\u0432\u2026",
@@ -5424,7 +5424,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Texture > Craquelure...",
         de: "Effekt > Strukturierungsfilter > Risse \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u041a\u0440\u0430\u043a\u0435\u043b\u044e\u0440\u044b\u2026",
@@ -5437,7 +5437,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Texture > Grain...",
         de: "Effekt > Strukturierungsfilter > K\u00f6rnung \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u0417\u0435\u0440\u043d\u043e\u2026",
@@ -5450,7 +5450,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Texture > Mosaic Tiles...",
         de: "Effekt > Strukturierungsfilter > Kacheln \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u041c\u043e\u0437\u0430\u0438\u0447\u043d\u044b\u0435 \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b\u2026",
@@ -5463,7 +5463,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Texture > Patchwork...",
         de: "Effekt > Strukturierungsfilter > Patchwork \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u0426\u0432\u0435\u0442\u043d\u0430\u044f \u043f\u043b\u0438\u0442\u043a\u0430\u2026",
@@ -5476,7 +5476,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Texture > Stained Glass...",
         de: "Effekt > Strukturierungsfilter > Buntglas-Mosaik \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u0412\u0438\u0442\u0440\u0430\u0436\u2026",
@@ -5489,7 +5489,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Texture > Texturizer...",
         de: "Effekt > Strukturierungsfilter > Mit Struktur versehen \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0438\u0437\u0430\u0442\u043e\u0440\u2026",
@@ -5502,7 +5502,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Video > De-Interlace...",
         de: "Effekt > Videofilter > De-Interlace \u2026",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0412\u0438\u0434\u0435\u043e > \u0423\u0441\u0442\u0440\u0430\u043d\u0435\u043d\u0438\u0435 \u0447\u0435\u0440\u0435\u0441\u0441\u0442\u0440\u043e\u0447\u043d\u043e\u0439 \u0440\u0430\u0437\u0432\u0435\u0440\u0442\u043a\u0438...",
@@ -5515,7 +5515,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Effect > Video > NTSC Colors",
         de: "Effekt > Videofilter > NTSC-Farben",
         ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0412\u0438\u0434\u0435\u043e > \u0426\u0432\u0435\u0442\u0430 NTSC",
@@ -5528,7 +5528,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Outline / Preview",
         de: "Ansicht > Vorschau / Pfadansicht",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041a\u043e\u043d\u0442\u0443\u0440\u044b / \u0418\u043b\u043b\u044e\u0441\u0442\u0440\u0430\u0446\u0438\u044f",
@@ -5541,7 +5541,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > GPU Preview / Preview on CPU",
         de: "Ansicht > Mit GPU anzeigen / Mit CPU anzeigen",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0441 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435\u043c \u0426\u041f / \u0413\u041f",
@@ -5554,7 +5554,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Overprint Preview",
         de: "Ansicht > \u00dcberdruckenvorschau",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u043d\u0430\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0446\u0432\u0435\u0442\u043e\u0432",
@@ -5567,7 +5567,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Pixel Preview",
         de: "Ansicht > Pixelvorschau",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0432 \u0432\u0438\u0434\u0435 \u043f\u0438\u043a\u0441\u0435\u043b\u043e\u0432",
@@ -5580,7 +5580,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Proof Setup > Working CMYK",
         de: "Ansicht > Proof einrichten > Dokument-CMYK",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0420\u0430\u0431\u043e\u0447\u0435\u0435 \u043f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u043e CMYK",
@@ -5593,7 +5593,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Proof Setup > Legacy Macintosh RGB (Gamma 1.8)",
         de: "Ansicht > Proof einrichten > Altes Macintosh-RGB (Gamma 1.8)",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0420\u0430\u043d\u043d\u044f\u044f \u0432\u0435\u0440\u0441\u0438\u044f Macintosh RGB (Gamma 1.8)",
@@ -5606,7 +5606,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Proof Setup > Internet Standard RGB (sRGB)",
         de: "Ansicht > Proof einrichten > Internet-Standard-RGB (sRGB)",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u0430\u044f \u043f\u0430\u043b\u0438\u0442\u0440\u0430 RGB (sRGB) \u0434\u043b\u044f \u0441\u0435\u0442\u0438 \u0418\u043d\u0442\u0435\u0440\u043d\u0435\u0442",
@@ -5619,7 +5619,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Proof Setup > Monitor RGB",
         de: "Ansicht > Proof einrichten > Monitor-RGB",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u041f\u0430\u043b\u0438\u0442\u0440\u0430 RGB \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0430",
@@ -5632,7 +5632,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Proof Setup > Color blindness - Protanopia-type",
         de: "Ansicht > Proof einrichten > Farbenblindheit (Protanopie)",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0414\u0430\u043b\u044c\u0442\u043e\u043d\u0438\u0437\u043c - \u043f\u0440\u043e\u0442\u0430\u043d\u043e\u043f\u0438\u044f",
@@ -5645,7 +5645,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Proof Setup > Color blindness - Deuteranopia-type",
         de: "Ansicht > Proof einrichten > Farbenblindheit (Deuteranopie)",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0414\u0430\u043b\u044c\u0442\u043e\u043d\u0438\u0437\u043c - \u0434\u0435\u0439\u0442\u0435\u0440\u0430\u043d\u043e\u043f\u0438\u044f",
@@ -5658,7 +5658,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Proof Setup > Customize...",
         de: "Ansicht > Proof einrichten > Anpassen \u2026",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0417\u0430\u043a\u0430\u0437\u043d\u044b\u0435 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b\u2026",
@@ -5671,7 +5671,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Proof Colors",
         de: "Ansicht > Farbproof",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0426\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u0430",
@@ -5684,7 +5684,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Zoom In",
         de: "Ansicht > Einzoomen",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0423\u0432\u0435\u043b\u0438\u0447\u0435\u043d\u0438\u0435",
@@ -5697,7 +5697,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Zoom Out",
         de: "Ansicht > Auszoomen",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0423\u043c\u0435\u043d\u044c\u0448\u0435\u043d\u0438\u0435",
@@ -5710,7 +5710,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Fit Artboard in Window",
         de: "Ansicht > Zeichenfl\u00e4che in Fenster einpassen",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u0434\u043e\u0433\u043d\u0430\u0442\u044c \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c \u043f\u043e \u0440\u0430\u0437\u043c\u0435\u0440\u0443 \u043e\u043a\u043d\u0430",
@@ -5723,7 +5723,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Fit All in Window",
         de: "Ansicht > Alle in Fenster einpassen",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u0434\u043e\u0433\u043d\u0430\u0442\u044c \u0432\u0441\u0435 \u043f\u043e \u0440\u0430\u0437\u043c\u0435\u0440\u0443 \u043e\u043a\u043d\u0430",
@@ -5736,7 +5736,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Slices",
         de: "Ansicht > Slices einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b",
@@ -5749,7 +5749,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Lock Slices",
         de: "Ansicht > Slices fixieren",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b",
@@ -5762,7 +5762,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Bounding Box",
         de: "Ansicht > Begrenzungsrahmen einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0438\u0442\u0435\u043b\u044c\u043d\u0443\u044e \u0440\u0430\u043c\u043a\u0443",
@@ -5775,7 +5775,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Transparency Grid",
         de: "Ansicht > Transparenzraster einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0441\u0435\u0442\u043a\u0443 \u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u0438",
@@ -5788,7 +5788,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Actual Size",
         de: "Ansicht > Originalgr\u00f6\u00dfe",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0420\u0435\u0430\u043b\u044c\u043d\u044b\u0439 \u0440\u0430\u0437\u043c\u0435\u0440",
@@ -5801,7 +5801,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Live Paint Gaps",
         de: "Ansicht > Interaktive Mall\u00fccken einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0437\u0430\u0437\u043e\u0440\u044b \u0431\u044b\u0441\u0442\u0440\u044b\u0445 \u0437\u0430\u043b\u0438\u0432\u043e\u043a",
@@ -5814,7 +5814,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Gradient Annotator",
         de: "Ansicht > Verlaufsoptimierer einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0433\u0440\u0430\u0434\u0438\u0435\u043d\u0442\u043d\u044b\u0439 \u0430\u043d\u043d\u043e\u0442\u0430\u0442\u043e\u0440",
@@ -5827,7 +5827,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Corner Widget",
         de: "Ansicht > Ecken-Widget einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u0432\u0438\u0434\u0436\u0435\u0442 \u0443\u0433\u043b\u043e\u0432",
@@ -5841,7 +5841,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Edges",
         de: "Ansicht > Ecken einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0433\u0440\u0430\u043d\u0438\u0446\u044b",
@@ -5854,7 +5854,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Smart Guides",
         de: "Ansicht > Intelligente Hilfslinien",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0411\u044b\u0441\u0442\u0440\u044b\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
@@ -5867,7 +5867,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Perspective Grid > Show / Hide Grid",
         de: "Ansicht > Perspektivenraster > Raster einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u0441\u0435\u0442\u043a\u0443",
@@ -5880,7 +5880,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Perspective Grid > Show / Hide Rulers",
         de: "Ansicht > Perspektivenraster > Lineale einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u043b\u0438\u043d\u0435\u0439\u043a\u0438",
@@ -5893,7 +5893,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Perspective Grid > Snap to Grid",
         de: "Ansicht > Perspektivenraster > Am Raster ausrichten",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u041f\u0440\u0438\u0432\u044f\u0437\u0430\u0442\u044c \u043a \u0441\u0435\u0442\u043a\u0435",
@@ -5906,7 +5906,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Perspective Grid > Lock Grid",
         de: "Ansicht > Perspektivenraster > Raster sperren",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0441\u0435\u0442\u043a\u0443",
@@ -5919,7 +5919,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Perspective Grid > Lock Station Point",
         de: "Ansicht > Perspektivenraster > Bezugspunkt sperren",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0442\u043e\u0447\u043a\u0443 \u043d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u044f",
@@ -5932,7 +5932,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Perspective Grid > Define Grid",
         de: "Ansicht > Perspektivenraster > Raster definieren",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u041e\u043f\u0440\u0435\u0434\u0435\u043b\u0438\u0442\u044c \u0441\u0435\u0442\u043a\u0443...",
@@ -5945,7 +5945,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Perspective Grid > Save Grid as Preset",
         de: "Ansicht > Perspektivenraster > Raster als Vorgabe speichern",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0441\u0435\u0442\u043a\u0443 \u043a\u0430\u043a \u0441\u0442\u0438\u043b\u044c...",
@@ -5958,7 +5958,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Artboards",
         de: "Ansicht > Zeichenfl\u00e4chen einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -5971,7 +5971,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Print Tiling",
         de: "Ansicht > Druckaufteilung einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0440\u0430\u0437\u0431\u0438\u0435\u043d\u0438\u0435 \u0434\u043b\u044f \u043f\u0435\u0447\u0430\u0442\u0438",
@@ -5984,7 +5984,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Template",
         de: "Ansicht > Vorlage einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d",
@@ -5997,7 +5997,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Rulers > Show / Hide Rulers",
         de: "Ansicht > Lineale > Lineale einblende / ausblendenn",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u043b\u0438\u043d\u0435\u0439\u043a\u0438",
@@ -6010,7 +6010,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Rulers > Change to Global Rulers",
         de: "Ansicht > Lineale > In globale Lineale \u00e4ndern",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041b\u0438\u043d\u0435\u0439\u043a\u0438 > \u0421\u043c\u0435\u043d\u0438\u0442\u044c \u043d\u0430 \u043e\u0431\u0449\u0438\u0435 \u043b\u0438\u043d\u0435\u0439\u043a\u0438 / \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -6023,7 +6023,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Rulers > Show / Hide Video Rulers",
         de: "Ansicht > Lineale > Videolineale einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u043b\u0438\u043d\u0435\u0439\u043a\u0438 \u0432\u0438\u0434\u0435\u043e",
@@ -6036,7 +6036,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Text Threads",
         de: "Ansicht > Textverkettungen einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0441\u0432\u044f\u0437\u0438 \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0445 \u0431\u043b\u043e\u043a\u043e\u0432",
@@ -6049,7 +6049,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Guides > Show / Hide Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
@@ -6062,7 +6062,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Guides > Lock Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien sperren",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
@@ -6075,7 +6075,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: true,
-      loc: {
+      name: {
         en: "View > Guides > Make Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien erstellen",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
@@ -6088,7 +6088,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Guides > Release Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien zur\u00fcckwandeln",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u041e\u0441\u0432\u043e\u0431\u043e\u0434\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
@@ -6101,7 +6101,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Guides > Clear Guides",
         de: "Ansicht > Hilfslinien > Hilfslinien l\u00f6schen",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
@@ -6114,7 +6114,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Show / Hide Grid",
         de: "Ansicht > Raster einblenden / ausblenden",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0441\u0435\u0442\u043a\u0443",
@@ -6127,7 +6127,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Snap to Grid",
         de: "Ansicht > Am Raster ausrichten",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u0442\u044c \u043f\u043e \u0441\u0435\u0442\u043a\u0435",
@@ -6140,7 +6140,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Snap to Point",
         de: "Ansicht > An Punkt ausrichten",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u0442\u044c \u043f\u043e \u0442\u043e\u0447\u043a\u0430\u043c",
@@ -6153,7 +6153,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > New View...",
         de: "Ansicht > Neue Ansicht \u2026",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u043e\u0432\u044b\u0439 \u0432\u0438\u0434\u2026",
@@ -6166,7 +6166,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "View > Edit Views...",
         de: "Ansicht > Ansicht bearbeiten \u2026",
         ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432\u0438\u0434\u044b\u2026",
@@ -6179,7 +6179,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > New Window",
         de: "Fenster > Neues Fenster",
         ru: "\u041e\u043a\u043d\u043e > \u041d\u043e\u0432\u043e\u0435 \u043e\u043a\u043d\u043e",
@@ -6192,7 +6192,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Arrange > Cascade",
         de: "Fenster > Anordnen > \u00dcberlappend",
         ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u041a\u0430\u0441\u043a\u0430\u0434\u043e\u043c",
@@ -6205,7 +6205,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Arrange > Tile",
         de: "Fenster > Anordnen > Nebeneinander",
         ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u041c\u043e\u0437\u0430\u0438\u043a\u043e\u0439",
@@ -6218,7 +6218,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Arrange > Float in Window",
         de: "Fenster > Anordnen > In Fenster verschiebbar machen",
         ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u041f\u043b\u0430\u0432\u0430\u044e\u0449\u0435\u0435 \u0432 \u043e\u043a\u043d\u0435",
@@ -6231,7 +6231,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Arrange > Float All in Windows",
         de: "Fenster > Anordnen > Alle in Fenstern verschiebbar machen",
         ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u0412\u0441\u0435 \u043f\u043b\u0430\u0432\u0430\u044e\u0449\u0438\u0435 \u0432 \u043e\u043a\u043d\u0430\u0445",
@@ -6244,7 +6244,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Arrange > Consolidate All Windows",
         de: "Fenster > Anordnen > Alle Fenster zusammenf\u00fchren",
         ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u041e\u0431\u044a\u0435\u0434\u0438\u043d\u0438\u0442\u044c \u0432\u0441\u0435 \u043e\u043a\u043d\u0430",
@@ -6257,7 +6257,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Find Extensions on Exchange...",
         de: "Fenster > Erweiterungen auf Exchange suchen \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u043e\u0438\u0441\u043a \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u0439 \u043d\u0430 Exchange...",
@@ -6271,7 +6271,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Reset Workspace",
         de: "Fenster > Arbeitsbereich > Zur\u00fccksetzen",
         ru: "\u041e\u043a\u043d\u043e > \u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c \u0440\u0430\u0431\u043e\u0447\u0443\u044e \u0441\u0440\u0435\u0434\u0443",
@@ -6284,7 +6284,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Workspace > New Workspace...",
         de: "Fenster > Arbeitsbereich > Neuer Arbeitsbereich \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u0420\u0430\u0431\u043e\u0447\u0430\u044f \u0441\u0440\u0435\u0434\u0430 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0440\u0430\u0431\u043e\u0447\u0443\u044e \u0441\u0440\u0435\u0434\u0443...",
@@ -6297,7 +6297,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Workspace > Manage Workspaces...",
         de: "Fenster > Arbeitsbereich > Arbeitsbereiche verwalten \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u0420\u0430\u0431\u043e\u0447\u0430\u044f \u0441\u0440\u0435\u0434\u0430 > \u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0440\u0430\u0431\u043e\u0447\u0438\u043c\u0438 \u0441\u0440\u0435\u0434\u0430\u043c\u0438...",
@@ -6310,7 +6310,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Control",
         de: "Fenster > Steuerung",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u044c \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f",
@@ -6323,7 +6323,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Toolbars > Advanced",
         de: "Fenster > Werkzeugleisten > Erweitert",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432 > \u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435",
@@ -6337,7 +6337,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Toolbars > Basic",
         de: "Fenster > Werkzeugleisten > Einfach",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432 > \u041e\u0441\u043d\u043e\u0432\u043d\u044b\u0435",
@@ -6351,7 +6351,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Toolbars > New Toolbar...",
         de: "Fenster > Werkzeugleisten > Neue Werkzeugleiste \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432 > \u041d\u043e\u0432\u0430\u044f \u043f\u0430\u043d\u0435\u043b\u044c \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432...",
@@ -6365,7 +6365,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Toolbars > Manage Toolbar...",
         de: "Fenster > Werkzeugleisten > Werkzeugleisten verwalten \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432 > \u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u0430\u043d\u0435\u043b\u044f\u043c\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432...",
@@ -6379,7 +6379,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > 3D and Materials",
         de: "Fenster > 3D und Materialien",
         ru: "\u041e\u043a\u043d\u043e > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
@@ -6393,7 +6393,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Actions",
         de: "Fenster > Aktionen",
         ru: "\u041e\u043a\u043d\u043e > \u041e\u043f\u0435\u0440\u0430\u0446\u0438\u0438",
@@ -6406,7 +6406,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Align",
         de: "Fenster > Ausrichten",
         ru: "\u041e\u043a\u043d\u043e > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435",
@@ -6419,7 +6419,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Appearance",
         de: "Fenster > Aussehen",
         ru: "\u041e\u043a\u043d\u043e > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435",
@@ -6432,7 +6432,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Artboards",
         de: "Fenster > Zeichenfl\u00e4chen",
         ru: "\u041e\u043a\u043d\u043e > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -6445,7 +6445,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Asset Export",
         de: "Fenster > Export von Element",
         ru: "\u041e\u043a\u043d\u043e > \u042d\u043a\u0441\u043f\u043e\u0440\u0442 \u0440\u0435\u0441\u0443\u0440\u0441\u043e\u0432",
@@ -6459,7 +6459,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Attributes",
         de: "Fenster > Attribute",
         ru: "\u041e\u043a\u043d\u043e > \u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044b",
@@ -6472,7 +6472,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Brushes",
         de: "Fenster > Pinsel",
         ru: "\u041e\u043a\u043d\u043e > \u041a\u0438\u0441\u0442\u0438",
@@ -6485,7 +6485,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Color",
         de: "Fenster > Farbe",
         ru: "\u041e\u043a\u043d\u043e > \u0426\u0432\u0435\u0442",
@@ -6498,7 +6498,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Color Guide",
         de: "Fenster > Farbhilfe",
         ru: "\u041e\u043a\u043d\u043e > \u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0446\u0432\u0435\u0442\u043e\u0432",
@@ -6511,7 +6511,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Color Themes",
         de: "Window > Color Themes",
         ru: "Window > Color Themes",
@@ -6526,7 +6526,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Comments",
         de: "Fenster > Kommentare",
         ru: "\u041e\u043a\u043d\u043e > \u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438",
@@ -6540,7 +6540,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > CSS Properties",
         de: "CSS-Eigenschaften",
         ru: "\u041e\u043a\u043d\u043e > \u0421\u0432\u043e\u0439\u0441\u0442\u0432\u0430 CSS",
@@ -6553,7 +6553,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Document Info",
         de: "Fenster > Dokumentinformationen",
         ru: "\u041e\u043a\u043d\u043e > \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043e \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0435",
@@ -6566,7 +6566,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Flattener Preview",
         de: "Fenster > Reduzierungsvorschau",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432 \u0441\u0432\u0435\u0434\u0435\u043d\u0438\u044f",
@@ -6579,7 +6579,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Gradient",
         de: "Fenster > Verlauf",
         ru: "\u041e\u043a\u043d\u043e > \u0413\u0440\u0430\u0434\u0438\u0435\u043d\u0442",
@@ -6592,7 +6592,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Graphic Styles",
         de: "Fenster > Grafikstile",
         ru: "\u041e\u043a\u043d\u043e > \u0421\u0442\u0438\u043b\u0438 \u0433\u0440\u0430\u0444\u0438\u043a\u0438",
@@ -6605,7 +6605,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > History",
         de: "Fenster > Versionsverlauf",
         ru: "\u041e\u043a\u043d\u043e > \u0418\u0441\u0442\u043e\u0440\u0438\u044f",
@@ -6620,7 +6620,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > History",
         de: "Fenster > Versionsverlauf",
         ru: "\u041e\u043a\u043d\u043e > \u0418\u0441\u0442\u043e\u0440\u0438\u044f",
@@ -6634,7 +6634,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Image Trace",
         de: "Fenster > Bildnachzeichner",
         ru: "Window > Image Trace",
@@ -6647,7 +6647,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Info",
         de: "Fenster > Info",
         ru: "\u041e\u043a\u043d\u043e > \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f",
@@ -6660,7 +6660,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Layers",
         de: "Fenster > Ebenen",
         ru: "\u041e\u043a\u043d\u043e > \u0421\u043b\u043e\u0438",
@@ -6673,7 +6673,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Window > Learn", de: "Window > Learn", ru: "Window > Learn" },
+      name: { en: "Window > Learn", de: "Window > Learn", ru: "Window > Learn" },
       hidden: false,
       minVersion: 22,
       maxVersion: 25.9,
@@ -6684,7 +6684,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Libraries",
         de: "Fenster > Bibliotheken",
         ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438",
@@ -6697,7 +6697,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Links",
         de: "Fenster > Verkn\u00fcpfungen",
         ru: "\u041e\u043a\u043d\u043e > \u0421\u0432\u044f\u0437\u0438",
@@ -6710,7 +6710,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Magic Wand",
         de: "Fenster > Zauberstab",
         ru: "\u041e\u043a\u043d\u043e > \u0412\u043e\u043b\u0448\u0435\u0431\u043d\u0430\u044f \u043f\u0430\u043b\u043e\u0447\u043a\u0430",
@@ -6723,7 +6723,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Mockup (Beta)",
         de: "Window > Mockup (Beta)",
         ru: "Window > Mockup (Beta)",
@@ -6737,7 +6737,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Navigator",
         de: "Fenster > Navigator",
         ru: "\u041e\u043a\u043d\u043e > \u041d\u0430\u0432\u0438\u0433\u0430\u0442\u043e\u0440",
@@ -6750,7 +6750,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Pathfinder",
         de: "Fenster > Pathfinder",
         ru: "\u041e\u043a\u043d\u043e > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432",
@@ -6763,7 +6763,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Pattern Options",
         de: "Fenster > Musteroptionen",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0443\u0437\u043e\u0440\u0430",
@@ -6776,7 +6776,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Retype (Beta)",
         de: "Fenster > Retype (Beta)",
         ru: "Window > Retype (Beta)",
@@ -6790,7 +6790,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Separations Preview",
         de: "Fenster > Separationenvorschau",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0446\u0432\u0435\u0442\u043e\u0434\u0435\u043b\u0435\u043d\u0438\u0439",
@@ -6803,7 +6803,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Stroke",
         de: "Fenster > Kontur",
         ru: "\u041e\u043a\u043d\u043e > \u041e\u0431\u0432\u043e\u0434\u043a\u0430",
@@ -6816,7 +6816,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > SVG Interactivity",
         de: "Fenster > SVG-Interaktivit\u00e4t",
         ru: "\u041e\u043a\u043d\u043e > \u0418\u043d\u0442\u0435\u0440\u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c SVG",
@@ -6829,7 +6829,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Swatches",
         de: "Fenster > Farbfelder",
         ru: "\u041e\u043a\u043d\u043e > \u041e\u0431\u0440\u0430\u0437\u0446\u044b",
@@ -6842,7 +6842,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Symbols",
         de: "Fenster > Symbole",
         ru: "\u041e\u043a\u043d\u043e > \u0421\u0438\u043c\u0432\u043e\u043b\u044b",
@@ -6855,7 +6855,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Text to Vector Graphic (Beta)",
         de: "Window > Text to Vector Graphic (Beta)",
         ru: "Window > Text to Vector Graphic (Beta)",
@@ -6869,7 +6869,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Transform",
         de: "Fenster > Transformieren",
         ru: "\u041e\u043a\u043d\u043e > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435",
@@ -6882,7 +6882,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Transparency",
         de: "Fenster > Transparenz",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c",
@@ -6895,7 +6895,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Type > Character",
         de: "Fenster > Schrift > Zeichen",
         ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0421\u0438\u043c\u0432\u043e\u043b",
@@ -6908,7 +6908,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Type > Character Styles",
         de: "Fenster > Schrift > Zeichenformate",
         ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0421\u0442\u0438\u043b\u0438 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -6921,7 +6921,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Type > Glyphs",
         de: "Fenster > Schrift > Glyphen",
         ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0413\u043b\u0438\u0444\u044b",
@@ -6934,7 +6934,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Type > OpenType",
         de: "Fenster > Schrift > OpenType",
         ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > OpenType",
@@ -6947,7 +6947,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Type > Paragraph",
         de: "Fenster > Schrift > Absatz",
         ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0410\u0431\u0437\u0430\u0446",
@@ -6960,7 +6960,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Type > Paragraph Styles",
         de: "Fenster > Schrift > Absatzformate",
         ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0421\u0442\u0438\u043b\u0438 \u0430\u0431\u0437\u0430\u0446\u0435\u0432",
@@ -6973,7 +6973,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Type > Tabs",
         de: "Fenster > Schrift > Tabulatoren",
         ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0422\u0430\u0431\u0443\u043b\u044f\u0446\u0438\u044f",
@@ -6986,7 +6986,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Variables",
         de: "Fenster > Variablen",
         ru: "\u041e\u043a\u043d\u043e > \u041f\u0435\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0435",
@@ -6999,7 +6999,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Version History",
         de: "Fenster > Versionsverlauf",
         ru: "\u041e\u043a\u043d\u043e > \u0416\u0443\u0440\u043d\u0430\u043b \u0432\u0435\u0440\u0441\u0438\u0439",
@@ -7013,7 +7013,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Brush Libraries > Other Library",
         de: "Fenster > Pinsel-Bibliotheken > Andere Bibliothek \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438 \u043a\u0438\u0441\u0442\u0435\u0439 > \u0414\u0440\u0443\u0433\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430...",
@@ -7026,7 +7026,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Graphic Style Libraries > Other Library...",
         de: "Fenster > Grafikstil-Bibliotheken > Andere Bibliothek \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438 \u0441\u0442\u0438\u043b\u0435\u0439 \u0433\u0440\u0430\u0444\u0438\u043a\u0438 > \u0414\u0440\u0443\u0433\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430...",
@@ -7039,7 +7039,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Swatch Libraries > Other Library...",
         de: "Fenster > Farbfeld-Bibliotheken > Andere Bibliothek \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438 \u043e\u0431\u0440\u0430\u0437\u0446\u043e\u0432 > \u0414\u0440\u0443\u0433\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430...",
@@ -7052,7 +7052,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Window > Symbol Libraries > Other Library...",
         de: "Fenster > Symbol-Bibliotheken > Andere Bibliothek \u2026",
         ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432 > \u0414\u0440\u0443\u0433\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430...",
@@ -7065,7 +7065,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Help > Illustrator Help...",
         de: "Hilfe > Illustrator-Hilfe \u2026",
         ru: "\u0421\u043f\u0440\u0430\u0432\u043a\u0430 > \u0421\u043f\u0440\u0430\u0432\u043a\u0430 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u044b Illustrator...",
@@ -7078,7 +7078,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Help > Support Community",
         de: "Hilfe > Support-Community",
         ru: "\u0421\u043f\u0440\u0430\u0432\u043a\u0430 > \u0421\u043e\u043e\u0431\u0449\u0435\u0441\u0442\u0432\u043e \u0441\u043b\u0443\u0436\u0431\u044b \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0438",
@@ -7092,7 +7092,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Help > Submit Bug/Feature Request...",
         de: "Hilfe > Fehlermeldung / Funktionswunsch senden \u2026",
         ru: "\u0421\u043f\u0440\u0430\u0432\u043a\u0430 > \u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u043e\u0431 \u043e\u0448\u0438\u0431\u043a\u0435/\u0437\u0430\u043f\u0440\u043e\u0441 \u043d\u0430 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043d\u043e\u0432\u044b\u0445 \u0444\u0443\u043d\u043a\u0446\u0438\u0439...",
@@ -7106,7 +7106,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Help > System Info...",
         de: "Hilfe > Systeminformationen \u2026",
         ru: "\u0421\u043f\u0440\u0430\u0432\u043a\u0430 > \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043e \u0441\u0438\u0441\u0442\u0435\u043c\u0435\u2026",
@@ -7119,7 +7119,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Actions > Batch...",
         de: "Anderes Bedienfeld > Aktionsstapel \u2026",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u041e\u043f\u0435\u0440\u0430\u0446\u0438\u0438 > \u041f\u0430\u043a\u0435\u0442\u043d\u0430\u044f \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u2026",
@@ -7132,7 +7132,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Appearance > Add New Fill",
         de: "Anderes Bedienfeld > Neue Fl\u00e4che hinzuf\u00fcgen",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043d\u043e\u0432\u0443\u044e \u0437\u0430\u043b\u0438\u0432\u043a\u0443",
@@ -7145,7 +7145,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Appearance > Add New Stroke",
         de: "Anderes Bedienfeld > Neue Kontur hinzuf\u00fcgen",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043d\u043e\u0432\u0443\u044e \u043e\u0431\u0432\u043e\u0434\u043a\u0443",
@@ -7158,7 +7158,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Graphic Styles > New Graphic Style...",
         de: "Anderes Bedienfeld > Neuer Grafikstil \u2026",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u0442\u0438\u043b\u0438 \u0433\u0440\u0430\u0444\u0438\u043a\u0438 > \u041d\u043e\u0432\u044b\u0439 \u0441\u0442\u0438\u043b\u044c \u0433\u0440\u0430\u0444\u0438\u043a\u0438",
@@ -7171,7 +7171,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Layers > New Layer",
         de: "Anderes Bedienfeld > Neue Ebene",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u043b\u043e\u0438 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u044b\u0439 \u0441\u043b\u043e\u0439",
@@ -7184,7 +7184,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Layers > New Layer with Dialog...",
         de: "Anderes Bedienfeld > Neue Ebene mit Dialog \u2026",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u043b\u043e\u0438 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u044b\u0439 \u0441 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u0430\u043c\u0438...",
@@ -7197,7 +7197,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Links > Update Link",
         de: "Anderes Bedienfeld > Verkn\u00fcpfung aktualisieren",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u0432\u044f\u0437\u0438 > \u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c \u0441\u0432\u044f\u0437\u044c",
@@ -7210,7 +7210,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Swatches > New Swatch...",
         de: "Anderes Bedienfeld > Neues Farbfeld \u2026",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u041e\u0431\u0440\u0430\u0437\u0446\u044b > \u041d\u043e\u0432\u044b\u0439 \u043e\u0431\u0440\u0430\u0437\u0435\u0446",
@@ -7223,7 +7223,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Palette > Symbols > New Symbol...",
         de: "Anderes Bedienfeld > Neues Symbol \u2026",
         ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u0438\u043c\u0432\u043e\u043b\u044b > \u041d\u043e\u0432\u044b\u0439 \u0441\u0438\u043c\u0432\u043e\u043b",
@@ -7236,7 +7236,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "About Illustrator...",
         de: "\u00dcber Illustrator \u2026",
         ru: "\u041e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435 Illustrator\u2026",
@@ -7249,7 +7249,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > General...",
         de: "Voreinstellungen > Allgemein \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041e\u0441\u043d\u043e\u0432\u043d\u044b\u0435\u2026",
@@ -7262,7 +7262,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Selection & Anchor Display...",
         de: "Voreinstellungen > Auswahl und Ankerpunkt-Anzeige \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041e\u0442\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435 \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u044f \u0438 \u043e\u043f\u043e\u0440\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a\u2026",
@@ -7275,7 +7275,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Type...",
         de: "Voreinstellungen > Schrift \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0422\u0435\u043a\u0441\u0442\u2026",
@@ -7288,7 +7288,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Units...",
         de: "Voreinstellungen > Einheit \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0415\u0434\u0438\u043d\u0438\u0446\u044b \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0438\u044f\u2026",
@@ -7301,7 +7301,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Guides & Grid...",
         de: "Voreinstellungen > Hilfslinien und Raster \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 \u0438 \u0441\u0435\u0442\u043a\u0430\u2026",
@@ -7314,7 +7314,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Smart Guides...",
         de: "Voreinstellungen > Intelligente Hilfslinien \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0411\u044b\u0441\u0442\u0440\u044b\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435\u2026",
@@ -7327,7 +7327,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Slices...",
         de: "Voreinstellungen > Slices \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b\u2026",
@@ -7340,7 +7340,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Hyphenation...",
         de: "Voreinstellungen > Silbentrennung \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0420\u0430\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0430 \u043f\u0435\u0440\u0435\u043d\u043e\u0441\u043e\u0432\u2026",
@@ -7353,7 +7353,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Plug-ins & Scratch Disks...",
         de: "Voreinstellungen > Zusatzmodule und virtueller Speicher \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0412\u043d\u0435\u0448\u043d\u0438\u0435 \u043c\u043e\u0434\u0443\u043b\u0438 \u0438 \u0440\u0430\u0431\u043e\u0447\u0438\u0435 \u0434\u0438\u0441\u043a\u0438\u2026",
@@ -7366,7 +7366,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > User Interface...",
         de: "Voreinstellungen > Benutzeroberfl\u00e4che \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0418\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f\u2026",
@@ -7379,7 +7379,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Performance",
         de: "Voreinstellungen > Leistung \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c\u2026",
@@ -7393,7 +7393,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > File Handling...",
         de: "Voreinstellungen > Dateihandhabung\u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u0444\u0430\u0439\u043b\u043e\u0432\u2026",
@@ -7406,7 +7406,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Clipboard Handling",
         de: "Voreinstellungen > Zwischenablageoptionen \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u0431\u0443\u0444\u0435\u0440\u0430\u2026",
@@ -7420,7 +7420,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Appearance of Black...",
         de: "Bearbeiten > Voreinstellungen > Aussehen von Schwarz \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0412\u043e\u0441\u043f\u0440\u043e\u0438\u0437\u0432\u0435\u0434\u0435\u043d\u0438\u0435 \u0447\u0435\u0440\u043d\u043e\u0433\u043e \u0446\u0432\u0435\u0442\u0430...",
@@ -7433,7 +7433,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Preferences > Devices",
         de: "Voreinstellungen > Ger\u00e4te \u2026",
         ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0423\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u0430\u2026",
@@ -7447,7 +7447,7 @@ See the LICENSE file for details.
       type: "menu",
       docRequired: false,
       selRequired: false,
-      loc: { en: "Debug Panel", de: "Debug Panel", ru: "Debug Panel" },
+      name: { en: "Debug Panel", de: "Debug Panel", ru: "Debug Panel" },
       hidden: false,
     },
     tool_Adobe_Add_Anchor_Point_Tool: {
@@ -7456,7 +7456,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Add Anchor Point Tool",
         de: "Ankerpunkt-hinzuf\u00fcgen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u0443\u044e \u0442\u043e\u0447\u043a\u0443",
@@ -7470,7 +7470,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Anchor Point Tool",
         de: "Ankerpunkt-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041e\u043f\u043e\u0440\u043d\u0430\u044f \u0442\u043e\u0447\u043a\u0430",
@@ -7484,7 +7484,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Arc Tool",
         de: "Bogen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0443\u0433\u0430",
@@ -7498,7 +7498,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Area Graph Tool",
         de: "Fl\u00e4chendiagramm",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0441 \u043e\u0431\u043b\u0430\u0441\u0442\u044f\u043c\u0438",
@@ -7512,7 +7512,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Area Type Tool",
         de: "Fl\u00e4chentext-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0422\u0435\u043a\u0441\u0442 \u0432 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -7526,7 +7526,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Artboard Tool",
         de: "Zeichenfl\u00e4chen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
@@ -7540,7 +7540,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Bar Graph Tool",
         de: "Horizontales Balkendiagramm",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043b\u043e\u0441\u044b",
@@ -7554,7 +7554,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Blend Tool",
         de: "Angleichen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0435\u0440\u0435\u0445\u043e\u0434",
@@ -7568,7 +7568,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Bloat Tool",
         de: "Aufblasen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0430\u0437\u0434\u0443\u0432\u0430\u043d\u0438\u0435",
@@ -7582,7 +7582,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Blob Brush Tool",
         de: "Tropfenpinsel-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0438\u0441\u0442\u044c-\u043a\u043b\u044f\u043a\u0441\u0430",
@@ -7596,7 +7596,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Column Graph Tool",
         de: "Vertikales Balkendiagramm",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043b\u043e\u0441\u044b",
@@ -7610,7 +7610,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Crystallize Tool",
         de: "Kristallisieren-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0440\u0438\u0441\u0442\u0430\u043b\u043b\u0438\u0437\u0430\u0446\u0438\u044f",
@@ -7624,7 +7624,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Curvature Tool",
         de: "Kurvenzeichner",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0440\u0438\u0432\u0438\u0437\u043d\u0430",
@@ -7638,7 +7638,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Delete Anchor Point Tool",
         de: "Ankerpunkt-l\u00f6schen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u0443\u044e \u0442\u043e\u0447\u043a\u0443",
@@ -7652,7 +7652,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Dimension Tool", de: "Dimension Tool", ru: "Dimension Tool" },
+      name: { en: "Dimension Tool", de: "Dimension Tool", ru: "Dimension Tool" },
       hidden: false,
       minVersion: 28.1,
     },
@@ -7662,7 +7662,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Direct Selection Tool",
         de: "Direktauswahl-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u044f\u043c\u043e\u0435 \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
@@ -7676,7 +7676,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Ellipse Tool",
         de: "Ellipse-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u042d\u043b\u043b\u0438\u043f\u0441",
@@ -7690,7 +7690,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Eraser Tool",
         de: "Radiergummi-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041b\u0430\u0441\u0442\u0438\u043a",
@@ -7704,7 +7704,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Eyedropper Tool",
         de: "Pipette-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0438\u043f\u0435\u0442\u043a\u0430",
@@ -7718,7 +7718,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Flare Tool",
         de: "Blendenflecke-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0411\u043b\u0438\u043a",
@@ -7732,7 +7732,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Free Transform Tool",
         de: "Frei-transformieren-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0432\u043e\u0431\u043e\u0434\u043d\u043e\u0435 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435",
@@ -7746,7 +7746,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Gradient Tool",
         de: "Verlauf-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0413\u0440\u0430\u0434\u0438\u0435\u043d\u0442",
@@ -7760,7 +7760,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Group Selection Tool",
         de: "Gruppenauswahl-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0413\u0440\u0443\u043f\u043f\u043e\u0432\u043e\u0435 \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
@@ -7774,7 +7774,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Hand Tool",
         de: "Hand-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0443\u043a\u0430",
@@ -7788,7 +7788,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Intertwine Tool", de: "Intertwine Tool", ru: "Intertwine Tool" },
+      name: { en: "Intertwine Tool", de: "Intertwine Tool", ru: "Intertwine Tool" },
       hidden: false,
       minVersion: 27,
     },
@@ -7798,7 +7798,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Join Tool",
         de: "Zusammenf\u00fcgen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435",
@@ -7812,7 +7812,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Knife Tool",
         de: "Messer-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041d\u043e\u0436",
@@ -7826,7 +7826,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Lasso Tool",
         de: "Lasso-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041b\u0430\u0441\u0441\u043e",
@@ -7840,7 +7840,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Line Graph Tool",
         de: "Liniendiagramm",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041b\u0438\u043d\u0435\u0439\u043d\u0430\u044f \u0434\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430",
@@ -7854,7 +7854,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Line Segment Tool",
         de: "Liniensegment-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041e\u0442\u0440\u0435\u0437\u043e\u043a \u043b\u0438\u043d\u0438\u0438",
@@ -7868,7 +7868,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Live Paint Bucket Tool",
         de: "Interaktiv-malen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430",
@@ -7882,7 +7882,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Live Paint Selection Tool",
         de: "Interaktiv-malen-Auswahlwerkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0431\u044b\u0441\u0442\u0440\u044b\u0445 \u0437\u0430\u043b\u0438\u0432\u043e\u043a",
@@ -7896,7 +7896,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Magic Wand Tool",
         de: "Zauberstab-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u043e\u043b\u0448\u0435\u0431\u043d\u0430\u044f \u043f\u0430\u043b\u043e\u0447\u043a\u0430",
@@ -7910,7 +7910,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Measure Tool",
         de: "Mess-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041b\u0438\u043d\u0435\u0439\u043a\u0430",
@@ -7924,7 +7924,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Mesh Tool",
         de: "Gitter-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0435\u0442\u043a\u0430",
@@ -7938,7 +7938,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Paintbrush Tool",
         de: "Pinsel-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0438\u0441\u0442\u044c",
@@ -7952,7 +7952,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Path Eraser Tool",
         de: "L\u00f6schen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0442\u0438\u0440\u0430\u043d\u0438\u0435 \u043a\u043e\u043d\u0442\u0443\u0440\u0430",
@@ -7966,7 +7966,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Pattern Tile Tool",
         de: "Musterelement-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u042d\u043b\u0435\u043c\u0435\u043d\u0442 \u0443\u0437\u043e\u0440\u0430",
@@ -7980,7 +7980,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Pen Tool",
         de: "Zeichenstift-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0435\u0440\u043e",
@@ -7994,7 +7994,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Pencil Tool",
         de: "Buntstift-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0430\u0440\u0430\u043d\u0434\u0430\u0448",
@@ -8008,7 +8008,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Perspective Grid Tool",
         de: "Perspektivenraster-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b",
@@ -8022,7 +8022,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Perspective Selection Tool",
         de: "Perspektivenauswahl-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u044b\u0431\u043e\u0440 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b",
@@ -8036,7 +8036,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Pie Graph Tool",
         de: "Kreisdiagramm-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0440\u0443\u0433\u043e\u0432\u0430\u044f \u0434\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430",
@@ -8050,7 +8050,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Polar Grid Tool",
         de: "Radiales-Raster-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u043e\u043b\u044f\u0440\u043d\u0430\u044f \u0441\u0435\u0442\u043a\u0430",
@@ -8064,7 +8064,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Polygon Tool",
         de: "Polygon-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u043d\u043e\u0433\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a",
@@ -8078,7 +8078,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Print Tiling Tool",
         de: "Druckaufteilungs-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0430\u0437\u0431\u0438\u0435\u043d\u0438\u0435 \u0434\u043b\u044f \u043f\u0435\u0447\u0430\u0442\u0438",
@@ -8092,7 +8092,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Pucker Tool",
         de: "Zusammenziehen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0442\u044f\u0433\u0438\u0432\u0430\u043d\u0438\u0435",
@@ -8106,7 +8106,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Puppet Warp Tool",
         de: "Formgitter-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u0430\u0440\u0438\u043e\u043d\u0435\u0442\u043e\u0447\u043d\u0430\u044f \u0434\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f",
@@ -8120,7 +8120,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Radar Graph Tool",
         de: "Netzdiagramm",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0440\u0430\u0434\u0430\u0440",
@@ -8134,7 +8134,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Rectangle Tool",
         de: "Rechteck-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a",
@@ -8148,7 +8148,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Rectangular Grid Tool",
         de: "Rechteckiges-Raster-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0430\u044f \u0441\u0435\u0442\u043a\u0430",
@@ -8162,7 +8162,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Reflect Tool",
         de: "Spiegeln-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0417\u0435\u0440\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u043e\u0442\u0440\u0430\u0436\u0435\u043d\u0438\u0435",
@@ -8176,7 +8176,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Reshape Tool",
         de: "Form-\u00e4ndern-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0435\u0440\u0435\u0440\u0438\u0441\u043e\u0432\u043a\u0430",
@@ -8190,7 +8190,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Rotate Tool",
         de: "Drehen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u043e\u0432\u043e\u0440\u043e\u0442",
@@ -8204,7 +8204,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Rotate View Tool",
         de: "Ansichtdrehung-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u043e\u0432\u043e\u0440\u043e\u0442 \u0432\u0438\u0434\u0430",
@@ -8218,7 +8218,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Rounded Rectangle Tool",
         de: "Abgerundetes-Rechteck-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a \u0441\u043e \u0441\u043a\u0440\u0443\u0433\u043b\u0435\u043d\u043d\u044b\u043c\u0438 \u0443\u0433\u043b\u0430\u043c\u0438",
@@ -8232,7 +8232,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Scale Tool",
         de: "Skalieren-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u0430\u0441\u0448\u0442\u0430\u0431",
@@ -8246,7 +8246,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Scallop Tool",
         de: "Ausbuchten-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0417\u0443\u0431\u0446\u044b",
@@ -8260,7 +8260,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Scatter Graph Tool",
         de: "Streudiagramm",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0422\u043e\u0447\u0435\u0447\u043d\u0430\u044f \u0434\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430",
@@ -8274,7 +8274,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Scissors Tool",
         de: "Schere-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041d\u043e\u0436\u043d\u0438\u0446\u044b",
@@ -8288,7 +8288,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Selection Tool",
         de: "Auswahl-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
@@ -8302,7 +8302,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Shape Builder Tool",
         de: "Formerstellungs-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u043e\u0437\u0434\u0430\u043d\u0438\u0435 \u0444\u0438\u0433\u0443\u0440",
@@ -8316,7 +8316,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Shaper Tool",
         de: "Shaper-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u043b\u044c\u043d\u0430\u044f \u043a\u0440\u0438\u0432\u0430\u044f",
@@ -8330,7 +8330,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Shear Tool",
         de: "Verbiegen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041d\u0430\u043a\u043b\u043e\u043d",
@@ -8344,7 +8344,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Slice Tool",
         de: "Slice-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b",
@@ -8358,7 +8358,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Slice Selection Tool",
         de: "Slice-Auswahl-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u0430",
@@ -8372,7 +8372,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Smooth Tool",
         de: "Gl\u00e4tten-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0433\u043b\u0430\u0436\u0438\u0432\u0430\u043d\u0438\u0435",
@@ -8386,7 +8386,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Spiral Tool",
         de: "Spirale-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u043f\u0438\u0440\u0430\u043b\u044c",
@@ -8400,7 +8400,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Stacked Bar Graph Tool",
         de: "Gestapeltes horizontales Balkendiagramm",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u044b\u0439 \u0441\u0442\u0435\u043a",
@@ -8414,7 +8414,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Stacked Column Graph Tool",
         de: "Gestapeltes vertikales Balkendiagramm",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0441\u0442\u0435\u043a",
@@ -8428,7 +8428,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Star Tool",
         de: "Stern-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0417\u0432\u0435\u0437\u0434\u0430",
@@ -8442,7 +8442,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Symbol Screener Tool",
         de: "Symbol-transparent-gestalten-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -8456,7 +8456,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Symbol Scruncher Tool",
         de: "Symbol-stauchen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0423\u043f\u043b\u043e\u0442\u043d\u0435\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -8470,7 +8470,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Symbol Shifter Tool",
         de: "Symbol-verschieben-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u043c\u0435\u0449\u0435\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -8484,7 +8484,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Symbol Sizer Tool",
         de: "Symbol-skalieren-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0430\u0437\u043c\u0435\u0440 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -8498,7 +8498,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Symbol Spinner Tool",
         de: "Symbol-drehen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0440\u0430\u0449\u0435\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -8512,7 +8512,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Symbol Sprayer Tool",
         de: "Symbol-aufspr\u00fchen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0430\u0441\u043f\u044b\u043b\u0435\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -8526,7 +8526,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Symbol Stainer Tool",
         de: "Symbol-f\u00e4rben-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041e\u0431\u0435\u0441\u0446\u0432\u0435\u0447\u0438\u0432\u0430\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -8540,7 +8540,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Symbol Styler Tool",
         de: "Symbol-gestalten-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0442\u0438\u043b\u0438 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
@@ -8554,7 +8554,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Touch Type Tool",
         de: "Touch-Type-Textwerkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0418\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u0442\u0435\u043a\u0441\u0442\u0430",
@@ -8568,7 +8568,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Twirl Tool",
         de: "Strudel-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u043e\u0440\u043e\u043d\u043a\u0430",
@@ -8582,7 +8582,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Type Tool",
         de: "Text-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0422\u0435\u043a\u0441\u0442",
@@ -8596,7 +8596,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Type on a Path Tool",
         de: "Pfadtext-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443",
@@ -8610,7 +8610,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Vertical Area Type Tool",
         de: "Vertikaler-Fl\u00e4chentext-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442 \u0432 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
@@ -8624,7 +8624,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Vertical Type Tool",
         de: "Vertikaler-Text-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442",
@@ -8638,7 +8638,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Vertical Type on a Path Tool",
         de: "Vertikaler-Pfadtext-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443",
@@ -8652,7 +8652,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Warp Tool",
         de: "Verkr\u00fcmmen-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f",
@@ -8666,7 +8666,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Width Tool",
         de: "Breiten-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0428\u0438\u0440\u0438\u043d\u0430",
@@ -8680,7 +8680,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Wrinkle Tool",
         de: "Zerknittern-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u043e\u0440\u0449\u0438\u043d\u044b",
@@ -8694,7 +8694,7 @@ See the LICENSE file for details.
       type: "tool",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Zoom Tool",
         de: "Zoom-Werkzeug",
         ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u0430\u0441\u0448\u0442\u0430\u0431",
@@ -8708,7 +8708,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "About Ai Command Palette...",
         de: "\u00dcber Kurzbefehle \u2026",
         ru: "\u041e\u0431 Ai Command Palette",
@@ -8721,7 +8721,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Startup Commands...",
         de: "Startup Commands...",
         ru: "Startup Commands...",
@@ -8734,7 +8734,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Build Workflow...",
         de: "Arbeitsablauf erstellen \u2026",
         ru: "\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
@@ -8747,7 +8747,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Edit Workflow...",
         de: "Arbeitsablauf bearbeiten \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
@@ -8760,7 +8760,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "All Workflows...",
         de: "Alle Arbeitsabl\u00e4ufe \u2026",
         ru: "All Workflows...",
@@ -8773,7 +8773,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Load Script(s)...",
         de: "Skripte laden \u2026",
         ru: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0441\u043a\u0440\u0438\u043f\u0442\u044b",
@@ -8786,32 +8786,32 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
+      name: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
       hidden: false,
     },
-    config_setFileBookmark: {
-      id: "config_setFileBookmark",
-      action: "setFileBookmark",
+    config_loadFileBookmark: {
+      id: "config_loadFileBookmark",
+      action: "loadFileBookmark",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
-        en: "Set File Bookmark(s)...",
+      name: {
+        en: "Load File Bookmark(s)...",
         de: "Lesezeichen erstellen \u2026",
-        ru: "Set File Bookmark(s)...",
+        ru: "Load File Bookmark(s)...",
       },
       hidden: false,
     },
-    config_setFolderBookmark: {
-      id: "config_setFolderBookmark",
-      action: "setFolderBookmark",
+    config_loadFolderBookmark: {
+      id: "config_loadFolderBookmark",
+      action: "loadFolderBookmark",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
-        en: "Set Folder Bookmark...",
+      name: {
+        en: "Load Folder Bookmark...",
         de: "Lesezeichen-Ordner erstellen \u2026",
-        ru: "Set Folder Bookmark...",
+        ru: "Load Folder Bookmark...",
       },
       hidden: false,
     },
@@ -8821,7 +8821,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "All Bookmarks...",
         de: "Alle Lesezeichen \u2026",
         ru: "All Bookmarks...",
@@ -8834,7 +8834,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: { en: "All Actions...", de: "Alle Aktionen \u2026", ru: "All Actions..." },
+      name: { en: "All Actions...", de: "Alle Aktionen \u2026", ru: "All Actions..." },
       hidden: false,
     },
     config_hideCommand: {
@@ -8843,7 +8843,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Hide Commands...",
         de: "Befehle ausblenden \u2026",
         ru: "\u0421\u043a\u0440\u044b\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
@@ -8856,7 +8856,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Unhide Commands...",
         de: "Befehle einblenden \u2026",
         ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
@@ -8869,7 +8869,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Delete Commands...",
         de: "Befehle l\u00f6schen \u2026",
         ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
@@ -8882,7 +8882,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Enable Searching on Command Type",
         de: "Enable Searching on Command Type",
         ru: "Enable Searching on Command Type",
@@ -8895,21 +8895,21 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Disable Searching on Command Type",
         de: "Disable Searching on Command Type",
         ru: "Disable Searching on Command Type",
       },
       hidden: false,
     },
-    config_clearRecentCommands: {
-      id: "config_clearRecentCommands",
-      action: "clearRecentCommands",
+    config_clearHistory: {
+      id: "config_clearHistory",
+      action: "clearHistory",
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
-        en: "Clear Recent Commands",
+      name: {
+        en: "Clear History",
         de: "Die letzten Befehle l\u00f6schen",
         ru: "Clear Recent Comands",
       },
@@ -8921,7 +8921,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Reveal Preferences File",
         de: "Einstellungen-Datei anzeigen",
         ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0444\u0430\u0439\u043b \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043a",
@@ -8934,7 +8934,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Go To Artboard...",
         de: "Zeichenfl\u00e4chen ausw\u00e4hlen \u2026",
         ru: "Gehen Sie zur Zeichenfl\u00e4che...",
@@ -8947,7 +8947,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Go To Open Document",
         de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen \u2026",
         ru: "Go To Open Document",
@@ -8960,7 +8960,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Go To Named Object...",
         de: "Benannte Objekte ausw\u00e4hlen \u2026",
         ru: "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u043e\u043c\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u0443...",
@@ -8973,7 +8973,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: { en: "Redraw Windows", de: "Fenster aktualisieren", ru: "Redraw Windows" },
+      name: { en: "Redraw Windows", de: "Fenster aktualisieren", ru: "Redraw Windows" },
       hidden: false,
     },
     builtin_revealActiveDocument: {
@@ -8982,7 +8982,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Reveal Active Document On System",
         de: "Aktuelles Dokument im Dateimanager anzeigen",
         ru: "Reveal Active Document On System",
@@ -8995,7 +8995,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Active Document Report",
         de: "Dokumentinformationen",
         ru: "Active Document Report",
@@ -9008,7 +9008,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Export Active Artboard As PNG",
         de: "Ausgew\u00e4hlte Zeichenfl\u00e4che als PNG exportieren",
         ru: "Export Active Artboard As PNG",
@@ -9021,7 +9021,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: true,
       selRequired: false,
-      loc: {
+      name: {
         en: "Export Document Variables As XML",
         de: "Variablen als XML exportieren",
         ru: "Export Document Variables As XML",
@@ -9034,7 +9034,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Open Recent File...",
         de: "Letzte Datei \u00f6ffnen \u2026",
         ru: "Open Recent File...",
@@ -9047,7 +9047,7 @@ See the LICENSE file for details.
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Recent Commands...",
         de: "Letzte Befehle \u2026",
         ru: "Recent Commands...",
@@ -9060,7 +9060,7 @@ See the LICENSE file for details.
       type: "config",
       docRequired: false,
       selRequired: false,
-      loc: {
+      name: {
         en: "Ai Command Palette Settings...",
         de: "Kurzbefehle \u2013 Einstellungen \u2026",
         ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
@@ -9074,6 +9074,7 @@ See the LICENSE file for details.
 
   var aiVersion = parseFloat(app.version);
   var locale = $.locale;
+  var currentLocale = locale.split("_")[0];
   var os = $.os;
   var sysOS = /mac/i.test(os) ? "mac" : "win";
   var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
@@ -9099,14 +9100,47 @@ See the LICENSE file for details.
     paletteSettings.paletteHeight,
   ];
 
-  paletteSettings.defaultColumns = {};
-  paletteSettings.defaultColumns[localize(strings.name_title_case)] = {
+  // COMMAND PALETTE COLUMN SETS
+
+  paletteSettings.columnSets = {};
+
+  paletteSettings.columnSets.default = {};
+  paletteSettings.columnSets.default[localize(strings.name_title_case)] = {
     width: 475,
-    key: "loc",
+    key: "name",
   };
-  paletteSettings.defaultColumns[localize(strings.type_title_case)] = {
+  paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
     width: 100,
     key: "type",
+  };
+
+  paletteSettings.columnSets.actions = {};
+  paletteSettings.columnSets.actions["Name"] = {
+    // FIXME: localize
+    width: 475,
+    key: "name",
+  };
+  paletteSettings.columnSets.actions["Set"] = {
+    // FIXME: localize
+    width: 100,
+    key: "set",
+  };
+
+  paletteSettings.columnSets.bookmarks = {};
+  paletteSettings.columnSets.bookmarks["Name"] = {
+    // FIXME: localize
+    width: null,
+    key: "name",
+  };
+  paletteSettings.columnSets.bookmarks["Type"] = {
+    // FIXME: localize
+    width: 75,
+    key: "bookmarkType",
+  };
+  paletteSettings.columnSets.bookmarks["Path"] = {
+    // FIXME: localize
+    width: null,
+    key: "path",
   };
 
   var visibleListItems = 9;
@@ -9140,20 +9174,20 @@ See the LICENSE file for details.
   };
 
   /**
-   * Show an alert with all object data for a command.
-   * @param command Command to show data about.
+   * Show an alert with object data.
+   * @param obj Command to show data about.
    */
-  function alertCommandData(command) {
+  function alertObject(obj) {
     var s = "";
-    for (var prop in command) {
+    for (var prop in obj) {
       var subS = "";
-      if (typeof command[prop] == "object") {
-        for (var subProp in command[prop]) {
-          subS += "> " + subProp + ": " + command[prop][subProp] + "\n";
+      if (obj[prop] != null && typeof obj[prop] == "object") {
+        for (var subProp in obj[prop]) {
+          subS += "> " + subProp + ": " + obj[prop][subProp] + "\n";
         }
         s += prop + ":\n" + subS;
       } else {
-        s += prop + ": " + command[prop] + "\n";
+        s += prop + ": " + obj[prop] + "\n";
       }
     }
     alert(s);
@@ -9259,7 +9293,7 @@ See the LICENSE file for details.
       var loadedData, entry;
       try {
         loadedData = readJSONData(file);
-        if (loadedData == {}) return; // FIXME: add alert
+        if (loadedData == []) return; // FIXME: add alert
         // TODO: add alert about prefs file from a different machine
         history = loadedData;
         for (var i = loadedData.length - 1; i >= 0; i--) {
@@ -9295,6 +9329,10 @@ See the LICENSE file for details.
       }
     }
   };
+  userHistory.clear = function () {
+    var file = this.file();
+    file.remove();
+  };
   userHistory.save = function () {
     var file = this.file();
     if (history.length > 500) history = history.slice(-500);
@@ -9318,6 +9356,35 @@ See the LICENSE file for details.
       return false;
     }
     return true;
+  }
+
+  /**
+   * Check to make sure the command is available in the system Ai version.
+   * @param command Command to check.
+   * @returns       True if command is available in the current Ai version or false if not.
+   */
+  function commandVersionCheck(command) {
+    if (
+      (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
+      (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
+    )
+      return false;
+    return true;
+  }
+
+  /**
+   * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
+   * @param   {Array} actions Workflow action steps to check.
+   * @returns {Array}         Non-active workflow action.
+   */
+  function checkWorkflowActions(actions) {
+    var badActions = [];
+    for (var i = 0; i < actions.length; i++) {
+      command = actions[i];
+      if (!commandsData.hasOwnProperty(actions[i]) || !versionCheck(actions[i]))
+        badActions.push(actions[i]);
+    }
+    return badActions;
   }
 
   /**
@@ -9365,7 +9432,6 @@ See the LICENSE file for details.
    */
   function loadActions() {
     var ct = 0;
-    var currentLocale = locale.split("_")[0];
     var currentPath, set, actionCount, name;
     var pref = app.preferences;
     var path = "plugin/Action/SavedSets/set-";
@@ -9380,20 +9446,18 @@ See the LICENSE file for details.
       // get actions in set
       actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
       ct += actionCount;
-      var actionName, id, loc, obj;
+      var name, id, loc, obj;
       for (var j = 1; j <= actionCount; j++) {
         loc = {};
         obj = {};
-        actionName = pref.getStringPreference(
-          currentPath + "action-" + j.toString() + "/name"
-        );
-        id = set + "_" + actionName;
-        loc[currentLocale] = actionName + " [" + set + "]";
+        name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
+        id = set + "_" + name;
+        loc[currentLocale] = name + " [" + set + "]";
         obj["id"] = id;
         obj["action"] = "action";
         obj["type"] = "action";
         obj["set"] = set;
-        obj["name"] = actionName;
+        obj["name"] = name;
         obj["docRequired"] = false;
         obj["selRequired"] = false;
         obj["loc"] = loc;
@@ -9579,18 +9643,20 @@ See the LICENSE file for details.
 
   /**
    * Filter the supplied commands by multiple factors.
-   * @param   {Array}   command Command `id`s to filter through.
-   * @param   {Array}   types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
-   * @param   {Boolean} showHidden Should user-hidden or non-relevant commands be included?
+   * @param   {Array}   commands             Command `id`s to filter through.
+   * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+   * @param   {Boolean} showHidden           Should user-hidden commands be included?
+   * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
    * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
-   * @param   {Boolean} docRequired Should commands requiring an active document be included.
-   * @param   {Boolean} selRequired Should commands requiring an active selection be included.
-   * @returns {Array}   Filtered commands objects.
+   * @param   {Boolean} docRequired          Should commands requiring an active document be included.
+   * @param   {Boolean} selRequired          Should commands requiring an active selection be included.
+   * @returns {Array}                        Filtered commands objects.
    */
   function filterCommands(
     commands,
     types,
     showHidden,
+    showNonRelevant,
     hideSpecificCommands,
     docRequired,
     selRequired
@@ -9604,13 +9670,13 @@ See the LICENSE file for details.
       command = commandsData[id];
 
       // make sure Ai version meets command requirements
-      if (!versionCheck(command)) continue;
+      if (!commandVersionCheck(command)) continue;
 
       // skip any hidden commands
       if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
 
       // skip any non relevant commands
-      if (!relevantCommand(command)) continue;
+      if (!showNonRelevant && !relevantCommand(command)) continue;
 
       // skip any specific commands name in hideSpecificCommands
       if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
@@ -9648,8 +9714,11 @@ See the LICENSE file for details.
     // hide `Unhide Commands...` command if no hidden commands
     if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
       return false;
-    // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
-    if (command.id == "builtin_recentCommands" && recentCommands == 0) {
+    // hide `Recent Commands...` and `Clear History` if no recent commands
+    if (
+      command.id == "builtin_recentCommands" &&
+      Object.keys(recentCommands).length === 0
+    ) {
       return false;
     }
 
@@ -9733,152 +9802,19 @@ See the LICENSE file for details.
   }
   // AI COMMAND PALETTE OPERATIONS
 
-  /**
-   * Execute script actions.
-   * @param {Object} action Script action to execute.
-   */
-  function scriptAction(action) {
-    var write = true;
-    switch (action) {
-      case "settings":
-        AiCommandPaletteSettings();
-        write = false;
-        break;
-      case "about":
-        about();
-        write = false;
-        break;
-      case "buildStartup":
-        buildStartup();
-        break;
-      case "buildWorkflow":
-        buildWorkflow();
-        break;
-      case "editWorkflow":
-        editWorkflow();
-        break;
-      case "loadScript":
-        loadScripts();
-        break;
-      case "setFileBookmark":
-        loadFileBookmark();
-        write = true;
-        break;
-      case "setFolderBookmark":
-        loadFolderBookmark();
-        break;
-      case "hideCommand":
-        hideCommand();
-        break;
-      case "unhideCommand":
-        unhideCommand();
-        break;
-      case "deleteCommand":
-        deleteCommand();
-        break;
-      case "enableTypeInSearch":
-      case "disableTypeInSearch":
-        data.settings.searchIncludesType = !data.settings.searchIncludesType;
-        break;
-      case "clearRecentCommands":
-        if (
-          !confirm(
-            localize(strings.cd_clear_recent_confirm),
-            "noAsDflt",
-            localize(strings.cd_exception)
-          )
-        )
-          return;
-        data.recent.commands = [];
-        alert(localize(strings.recent_commands_cleared));
-        break;
-      case "revealPrefFile":
-        settings.reveal();
-        write = false;
-        break;
-      default:
-        alert(localize(strings.cd_invalid, action));
-    }
-    if (!write) return;
-    settings.save();
-  }
-
-  /**
-   * Execute built-in actions.
-   * @param {Object} action Built-in action to execute.
-   */
-  function builtinAction(action) {
-    switch (action) {
-      case "recentCommands":
-        recentCommands();
-        break;
-      case "allWorkflows":
-        showAllWorkflows();
-        break;
-      case "allScripts":
-        showAllScripts();
-        break;
-      case "allBookmarks":
-        showAllBookmarks();
-        break;
-      case "allActions":
-        showAllActions();
-        break;
-      case "documentReport":
-        if (activeDocument) documentReport();
-        break;
-      case "exportVariables":
-        if (activeDocument) exportVariables();
-        break;
-      case "goToArtboard":
-        if (activeDocument) goToArtboard();
-        break;
-      case "goToDocument":
-        if (app.documents.length > 1) {
-          goToOpenDocument();
-        }
-        break;
-      case "goToNamedObject":
-        if (activeDocument) goToNamedObject();
-        break;
-      case "imageCapture":
-        imageCapture();
-        break;
-      case "recentFiles":
-        recentFiles();
-        break;
-      case "redrawWindows":
-        app.redraw();
-        break;
-      case "revealActiveDocument":
-        if (activeDocument) {
-          if (app.activeDocument.path.fsName) {
-            var fp = new Folder(app.activeDocument.path.fsName);
-            fp.execute();
-          } else {
-            alert(localize(strings.active_document_not_saved));
-          }
-        }
-        break;
-      default:
-        alert(localize(strings.cd_invalid, action));
-    }
-  }
-
   /** Ai Command Palette configuration commands. */
   function AiCommandPaletteSettings() {
     var configCommands = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["config"]),
-      (showHidden = false),
-      (hideCommands = null),
-      (docRequired = false),
-      (selRequired = false)
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = ["config_settings"])
     );
     var result = commandPalette(
       (commands = configCommands),
       (title = localize(strings.cp_config)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
     if (!result) return;
@@ -9923,7 +9859,7 @@ See the LICENSE file for details.
 
   function buildStartup() {
     var availableStartupCommands = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = [
         "bookmark",
         "script",
@@ -9934,24 +9870,23 @@ See the LICENSE file for details.
         "builtin",
         "config",
       ]),
-      (showHidden = false),
-      (hideCommands = []),
-      (docRequired = true),
-      (selRequired = true)
+      (showHidden = true),
+      (showNonRelevant = true),
+      (hideSpecificCommands = [])
     );
     // show the workflow builder dialog
     var result = startupBuilder(availableStartupCommands);
     if (!result) return;
-    var previousStartupCommands = data.settings.startupCommands;
+    var previousStartupCommands = prefs.startupCommands;
     try {
       var startupCommands = [];
       for (var i = 0; i < result.length; i++) {
         startupCommands.push(result[i].commandId);
       }
-      data.settings.startupCommands = startupCommands;
+      prefs.startupCommands = startupCommands;
     } catch (e) {
       alert(localize(strings.startup_error_saving));
-      data.settings.startupCommands = previousStartupCommands;
+      prefs.startupCommands = previousStartupCommands;
     }
   }
 
@@ -10199,39 +10134,63 @@ See the LICENSE file for details.
       ".wmf",
     ]; // file types taken from Ai open dialog
     re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
-    var files = loadFileTypes(localize(strings.bm_set_bookmark), true, re);
-    if (files.length > 0) {
-      var f, fname;
-      for (var i = 0; i < files.length; i++) {
-        f = files[i];
-        fname = decodeURI(f.name);
-        if (data.commands.bookmark.hasOwnProperty(fname)) {
-          if (
-            !confirm(
-              localize(strings.bm_already_loaded),
-              "noAsDflt",
-              localize(strings.bm_already_loaded_title)
-            )
-          )
-            continue;
-        }
-        try {
-          data.commands.bookmark[fname] = {
-            type: "bookmark",
-            path: f.fsName,
-            bookmarkType: "file",
-          };
-        } catch (e) {
-          alert(localize(strings.bm_error_loading, f.fsName));
-        }
-      }
+    var files = loadFileTypes(localize(strings.bm_load_bookmark), true, re);
+
+    if (files.length == 0) return;
+
+    // get all current bookmark paths to ensure no duplicates
+    var currentFileBookmarks = [];
+    for (var i = 0; i < prefs.bookmarks.length; i++) {
+      if (prefs.bookmarks[i].bookmarkType != "file") continue;
+      currentFileBookmarks.push(prefs.bookmarks[i].path);
     }
+
+    var f, bookmark, bookmarkName;
+    var newBookmarks = [];
+    var newBookmarkIds = [];
+    for (var j = 0; j < files.length; j++) {
+      f = files[j];
+      if (currentFileBookmarks.includes(f.fsName))
+        if (
+          !confirm(
+            localize(strings.bm_already_loaded),
+            "noAsDflt",
+            localize(strings.bm_already_loaded_title)
+          )
+        )
+          continue;
+      bookmarkName = decodeURI(f.name);
+      bookmark = {
+        id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
+        name: decodeURI(f.name),
+        action: "bookmark",
+        type: "bookmark",
+        path: f.fsName,
+        bookmarkType: "file",
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      newBookmarks.push(bookmark);
+      newBookmarkIds.push(bookmark.id);
+    }
+    prefs.bookmarks = prefs.bookmarks.concat(newBookmarks);
+    // TODO: localize confirmation prompt
+    if (
+      !confirm(
+        "Add new bookmarks to your startup commands?",
+        "noAsDflt",
+        "Add To Startup Commands"
+      )
+    )
+      return;
+    prefs.startupCommands = prefs.startupCommands.concat(newBookmarkIds);
   }
 
   /** Set bookmarked folder to open on system from within Ai Command Palette. */
   function loadFolderBookmark() {
     var f, fname;
-    f = Folder.selectDialog(localize(strings.bm_set_bookmark));
+    f = Folder.selectDialog(localize(strings.bm_load_bookmark));
     if (f) {
       fname = decodeURI(f.name);
       if (data.commands.bookmark.hasOwnProperty(fname)) {
@@ -10290,17 +10249,18 @@ See the LICENSE file for details.
   /** Show all scripts. */
   function showAllScripts() {
     var scriptCommands = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["script"]),
-      (showHidden = false),
-      (hideCommands = null),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null),
       (docRequired = false),
       (selRequired = false)
     );
     var result = commandPalette(
       (commands = scriptCommands),
       (title = localize(strings.Scripts)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
     if (!result) return;
@@ -10310,17 +10270,18 @@ See the LICENSE file for details.
   /** Show all bookmarks. */
   function showAllBookmarks() {
     var bookmarkCommands = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["bookmark"]),
-      (showHidden = false),
-      (hideCommands = null),
+      (showHidden = true),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null),
       (docRequired = false),
       (selRequired = false)
     );
     var result = commandPalette(
       (commands = bookmarkCommands),
       (title = localize(strings.Bookmarks)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.bookmarks),
       (multiselect = false)
     );
     if (!result) return;
@@ -10330,21 +10291,18 @@ See the LICENSE file for details.
   /** Show all actions. */
   function showAllActions() {
     var actionCommands = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["action"]),
-      (showHidden = false),
-      (hideCommands = null),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null),
       (docRequired = false),
       (selRequired = false)
     );
-    var columns = {
-      Name: { width: 475, key: "localizedName" },
-      "Action Set": { width: 100, key: "set" },
-    };
     var result = commandPalette(
       (commands = actionCommands),
       (title = localize(strings.Actions)),
-      (columns = columns),
+      (columns = paletteSettings.columnSets.actions),
       (multiselect = false)
     );
     if (!result) return;
@@ -10354,63 +10312,53 @@ See the LICENSE file for details.
   /** Hide commands from Ai Command Palette. */
   function hideCommand() {
     var hideableCommands = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
       (showHidden = false),
-      (hideCommands = null),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null),
       (docRequired = false),
       (selRequired = false)
     );
     var result = commandPalette(
       (commands = hideableCommands),
       (title = localize(strings.cd_hide_select)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = true)
     );
     if (!result) return;
-    for (var i = 0; i < result.length; i++) {
-      if (hiddenCommands.includes(result[i].id)) continue;
-      data.settings.hidden.push(result[i].id);
-    }
+    prefs.hiddenCommands = prefs.hiddenCommands.concat(result);
   }
 
   /** Unhide hidden commands. */
   function unhideCommand() {
-    var hiddenCommands = [];
-    for (var i = 0; i < data.settings.hidden.length; i++) {
-      if (!commandsData.hasOwnProperty(data.settings.hidden[i])) {
-        // FIXME: add alert
-        data.settings.hidden.splice(i, 1);
-        continue;
-      }
-      hiddenCommands.push(commandsData[data.settings.hidden[i]]);
-    }
     var result = commandPalette(
-      (commands = hiddenCommands),
+      (commands = prefs.hiddenCommands),
       (title = localize(strings.cd_reveal_menu_select)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = true)
     );
     if (!result) return;
     for (var i = 0; i < result.length; i++) {
-      data.settings.hidden.splice(data.settings.hidden.indexOf(result[i].id), 1);
+      prefs.hiddenCommands.splice(prefs.hiddenCommands.indexOf(result[i]), 1);
     }
   }
 
   /** Delete commands from Ai Command Palette. */
   function deleteCommand() {
     var deletableCommands = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["bookmark", "script", "workflow"]),
       (showHidden = false),
-      (hideCommands = null),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null),
       (docRequired = false),
       (selRequired = false)
     );
     var result = commandPalette(
       (commands = deletableCommands),
       (title = localize(strings.cd_delete_select)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = true)
     );
     if (!result) return;
@@ -10593,7 +10541,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = recentCommands),
       (title = localize(strings.recent_commands)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
     if (!result) return;
@@ -10602,30 +10550,23 @@ See the LICENSE file for details.
   // COMMAND EXECUTION
 
   /**
-   * Iterate over each action for chosen command.
-   * @param {Object} id Command id to execute.
+   * Process command actions.
+   * @param {String} id Command id to process.
    */
   function processCommand(id) {
     var command = commandsData[id];
     if (command.type == "workflow") {
-      insideWorkflow = true;
       // check to make sure all workflow commands are valid
-      check = checkWorkflowActions(command.actions);
-      if (check.deletedActions.length + check.incompatibleActions.length > 0) {
-        alert(
-          localize(
-            strings.wf_needs_attention,
-            check.deletedActions,
-            check.incompatibleActions
-          )
-        );
+      badActions = checkWorkflowActions(command.actions);
+      if (check.length) {
+        alert(localize(strings.wf_needs_attention, badActions.join("\n")));
         return;
       }
       // run each action in the workflow
-      actions = command.actions;
-      for (var i = 0; i < actions.length; i++) processCommand(commandsData[actions[i]]);
+      for (var i = 0; i < command.actions.length; i++)
+        processCommand(commandsData[command.actions[i]]);
     } else {
-      executeCommand(command);
+      executeAction(command);
     }
   }
 
@@ -10633,10 +10574,12 @@ See the LICENSE file for details.
    * Execute command action.
    * @param {Object} command Command to execute.
    */
-  function executeCommand(command) {
-    // check command to see if an active document is required
+  function executeAction(command) {
+    // recheck active document and selection incase previous workflow action changed them
     appDocuments = app.documents.length > 0;
-    if (!appDocuments && command.docRequired)
+    docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
+    // check command to see if an active document is required
+    if (command.docRequired && !appDocuments)
       if (
         !confirm(
           localize(strings.cd_active_document_required, command.action),
@@ -10645,8 +10588,9 @@ See the LICENSE file for details.
         )
       )
         return;
+
     // check command to see if an active selection is required
-    if (appDocuments && app.activeDocument.selection.length < 1 && command.selRequired)
+    if (command.selRequired && !docSelection)
       if (
         !confirm(
           localize(strings.cd_active_selection_required, command.action),
@@ -10655,98 +10599,211 @@ See the LICENSE file for details.
         )
       )
         return;
+
+    // execute action based on the command type
+    var func;
+    var alertString = strings.cd_error_executing;
     switch (command.type.toLowerCase()) {
       case "config":
-        try {
-          scriptAction(command.action);
-        } catch (e) {
-          alert(localize(strings.cd_error_executing, command.localizedName, e));
-        }
+        func = configAction;
         break;
       case "builtin":
-        try {
-          builtinAction(command.action);
-        } catch (e) {
-          alert(localize(strings.cd_error_executing, command.localizedName, e));
-        }
+        func = builtinAction;
         break;
       case "menu":
-        try {
-          app.executeMenuCommand(command.action);
-        } catch (e) {
-          alert(localize(strings.cd_error_executing, command.localizedName, e));
-        }
+        func = menuAction;
         break;
       case "tool":
-        try {
-          app.selectTool(command.action);
-        } catch (e) {
-          alert(localize(strings.tl_error_selecting, command, e));
-        }
+        func = toolAction;
+        alertString = strings.tl_error_selecting;
         break;
       case "action":
-        try {
-          app.doScript(command.name, command.set);
-        } catch (e) {
-          alert(localize(strings.ac_error_execution, command, e));
-        }
+        func = actionAction;
+        alertString = strings.ac_error_execution;
         break;
       case "bookmark":
-        f =
-          command.bookmarkType == "file"
-            ? new File(command.path)
-            : new Folder(command.path);
-        if (!f.exists) {
-          alert(localize(strings.bm_error_exists, command.path));
-          delete data.commands.bookmark[command];
-          settings.save();
-        } else {
-          try {
-            if (command.bookmarkType == "file") {
-              app.open(f);
-            } else {
-              f.execute();
-            }
-          } catch (e) {
-            alert(localize(strings.sc_error_execution, command.name, e));
-          }
-        }
+        func = bookmarkAction;
         break;
       case "script":
-        f = new File(command.path);
-        if (!f.exists) {
-          alert(localize(strings.sc_error_exists, command.path));
-          delete data.commands.script[command];
-          settings.save();
-        } else {
-          try {
-            $.evalFile(f);
-          } catch (e) {
-            alert(localize(strings.sc_error_execution, command.name, e));
-          }
-        }
+        func = scriptAction;
+        alertString = strings.sc_error_execution;
         break;
       default:
         alert(localize(strings.cd_invalid, command.type));
     }
+
     try {
-      app.redraw();
+      func(command);
     } catch (e) {
-      $.writeln(e);
+      alert(localize(alertString, localize(command.name), e));
     }
   }
 
-  /**************************************************
-  SUPPLEMENTAL COMMAND FUNCTIONS
-  **************************************************/
+  function menuAction(command) {
+    app.executeMenuCommand(command.action);
+  }
 
-  function versionCheck(command) {
-    if (
-      (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
-      (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
-    )
-      return false;
-    return true;
+  function toolAction(command) {
+    app.selectTool(command.action);
+  }
+
+  function actionAction(command) {
+    app.doScript(command.name, command.set);
+  }
+
+  function bookmarkAction(command) {
+    f =
+      command.bookmarkType == "file" ? new File(command.path) : new Folder(command.path);
+    if (!f.exists) {
+      alert(localize(strings.bm_error_exists, command.path));
+    } else {
+      if (command.bookmarkType == "file") {
+        app.open(f);
+      } else {
+        f.execute();
+      }
+    }
+  }
+
+  function scriptAction(command) {
+    f = new File(command.path);
+    if (!f.exists) {
+      alert(localize(strings.sc_error_exists, command.path));
+    } else {
+      $.evalFile(f);
+    }
+  }
+
+  /**
+   * Execute script actions.
+   * @param {Object} command Command to execute.
+   */
+  function configAction(command) {
+    var write = true;
+    switch (command.action) {
+      case "settings":
+        AiCommandPaletteSettings();
+        write = false;
+        break;
+      case "about":
+        about();
+        write = false;
+        break;
+      case "buildStartup": // TODO
+        buildStartup();
+        break;
+      case "buildWorkflow": // TODO
+        buildWorkflow();
+        break;
+      case "editWorkflow": // TODO
+        editWorkflow();
+        break;
+      case "loadScript": // TODO
+        loadScripts();
+        break;
+      case "loadFileBookmark": // TODO
+        loadFileBookmark();
+        write = true;
+        break;
+      case "loadFolderBookmark": // TODO
+        loadFolderBookmark();
+        break;
+      case "hideCommand":
+        hideCommand();
+        break;
+      case "unhideCommand":
+        unhideCommand();
+        break;
+      case "deleteCommand": // TODO
+        deleteCommand();
+        break;
+      case "enableTypeInSearch":
+      case "disableTypeInSearch":
+        prefs.searchIncludesType = !prefs.searchIncludesType;
+        break;
+      case "clearHistory": // FIXME: Update alert to include warning about latches
+        if (
+          !confirm(
+            localize(strings.cd_clear_history_confirm),
+            "noAsDflt",
+            localize(strings.cd_exception)
+          )
+        )
+          return;
+        userHistory.clear();
+        alert(localize(strings.history_cleared));
+        break;
+      case "revealPrefFile":
+        userPrefs.reveal();
+        write = false;
+        break;
+      default:
+        alert(localize(strings.cd_invalid, action));
+    }
+    if (!write) return;
+    userPrefs.save();
+  }
+
+  /**
+   * Execute built-in commands.
+   * @param {Object} command Command to execute.
+   */
+  function builtinAction(command) {
+    switch (command.action) {
+      case "recentCommands":
+        recentCommands();
+        break;
+      case "allWorkflows":
+        showAllWorkflows();
+        break;
+      case "allScripts":
+        showAllScripts();
+        break;
+      case "allBookmarks":
+        showAllBookmarks();
+        break;
+      case "allActions":
+        showAllActions();
+        break;
+      case "documentReport":
+        if (activeDocument) documentReport();
+        break;
+      case "exportVariables":
+        if (activeDocument) exportVariables();
+        break;
+      case "goToArtboard":
+        if (activeDocument) goToArtboard();
+        break;
+      case "goToDocument":
+        if (app.documents.length > 1) {
+          goToOpenDocument();
+        }
+        break;
+      case "goToNamedObject":
+        if (activeDocument) goToNamedObject();
+        break;
+      case "imageCapture":
+        imageCapture();
+        break;
+      case "recentFiles":
+        recentFiles();
+        break;
+      case "redrawWindows":
+        app.redraw();
+        break;
+      case "revealActiveDocument":
+        if (activeDocument) {
+          if (app.activeDocument.path.fsName) {
+            var fp = new Folder(app.activeDocument.path.fsName);
+            fp.execute();
+          } else {
+            alert(localize(strings.active_document_not_saved));
+          }
+        }
+        break;
+      default:
+        alert(localize(strings.cd_invalid, action));
+    }
   }
   // CUSTOM SCRIPTUI FILTERABLE LISTBOX
 
@@ -10835,9 +10892,12 @@ See the LICENSE file for details.
       for (var i = 0; i < commands.length; i++) {
         id = commands[i];
         command = commandsData[id];
-        item = listbox.add("item", localize(command[columnKeys[0]]));
-        for (var j = 1; j < columnKeys.length; j++) {
-          item.subItems[0].text = localize(strings[command[columnKeys[j]]]);
+        for (var j = 0; j < columnKeys.length; j++) {
+          if (j === 0) {
+            item = listbox.add("item", determineCorrectString(command, columnKeys[j]));
+            continue;
+          }
+          item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);
         }
         item.id = id;
       }
@@ -11046,8 +11106,6 @@ See the LICENSE file for details.
         command: list.listbox.selection.id,
         timestamp: Date.now(),
       });
-      // limit history entries to 500
-      if (history > 500) history.pop(); // FIXME: add max variable
       userHistory.save();
     }
 
@@ -11097,6 +11155,24 @@ See the LICENSE file for details.
   }
 
   /**
+   * Try and determine which if a localized string should be used or just the value.
+   * @param command Command in question.
+   * @param prop    Command property to localize
+   * @returns       Correct string.
+   */
+  function determineCorrectString(command, prop) {
+    var s;
+    if (typeof command[prop] == "object") {
+      s = localize(command[prop]);
+    } else if (strings.hasOwnProperty(command[prop])) {
+      s = localize(strings[command[prop]]);
+    } else {
+      s = command[prop];
+    }
+    return s;
+  }
+
+  /**
    * Score array items based on regex string match.
    * @param   {String} query    String to search for.
    * @param   {Array}  commands Commands to match `query` against.
@@ -11112,7 +11188,7 @@ See the LICENSE file for details.
     var id, command, name, type, score, strippedName;
 
     // query latching
-    if (latches.hasOwnProperty(query)) {
+    if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
       scores[latches[query]] = 1000;
       matches.push(latches[query]);
     }
@@ -11120,33 +11196,31 @@ See the LICENSE file for details.
     for (var i = 0; i < commands.length; i++) {
       id = commands[i];
       command = commandsData[id];
-      if (command.hasOwnProperty("loc")) {
-        name = localize(command.loc).toLowerCase();
-      } else if (command.hasOwnProperty("name")) {
-        name = command.name.toLowerCase();
-      } else {
-        name = id.toLowerCase().replace("_", " "); // FIXME: not sure about this
-      }
-      if (strings.hasOwnProperty(command.type)) {
-        type = localize(strings[command.type]).toLowerCase();
-      } else {
-        type = command.type.toLowerCase();
-      }
-      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
       score = 0;
+      name = determineCorrectString(command, "name").toLowerCase();
+
+      // escape hatch
+      if (name === "") name = id.toLowerCase().replace("_", " "); // FIXME: not sure about this
+
+      type = strings.hasOwnProperty(command.type)
+        ? localize(strings[command.type]).toLowerCase()
+        : command.type.toLowerCase();
 
       // check for exact match
       if (
         query === name ||
-        query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName
+        query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName ||
+        query === type
       ) {
         score += word.length;
       }
 
-      // check for exact type match
-      if (prefs.searchIncludesType && query == type) {
-        score += type.length;
-      }
+      // strip junk from command name
+      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+
+      // add the command type to the name if user requested searching type
+      if (prefs.searchIncludesType) name = name.concat(" ", type);
+      // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
 
       // check for singular word matches
       var word, re;
@@ -11158,14 +11232,12 @@ See the LICENSE file for details.
 
         // check for a match at the beginning of a word
         if (re.test(name) || re.test(strippedName)) score += word.length;
-        // check for a match in command type (if enabled)
-        if (prefs.searchIncludesType && re.test(type) != null) score += word.length;
       }
 
       // updated scores for matches
       if (score > 0) {
         // increase score if command found in recent commands
-        if (score == maxScore && recentCommands.hasOwnProperty(command.id)) {
+        if (score >= maxScore && recentCommands.hasOwnProperty(command.id)) {
           score += recentCommands[command.id];
         }
         if (scores.hasOwnProperty(id)) {
@@ -11178,12 +11250,21 @@ See the LICENSE file for details.
       }
     }
 
-    // sort the matches by score
-    matches.sort(function (a, b) {
-      return scores[b] - scores[a];
-    });
+    /* Sort matched by their respective score */
+    function sortByScore(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        for (var j = 0; j < arr.length - i - 1; j++) {
+          if (scores[arr[j + 1]] > scores[arr[j]]) {
+            var temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+          }
+        }
+      }
+      return arr;
+    }
 
-    return matches;
+    return sortByScore(matches);
   }
   function workflowBuilder(commands, editWorkflow) {
     // create the dialog
@@ -11204,7 +11285,7 @@ See the LICENSE file for details.
       pSearch,
       "commands",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-      paletteSettings.defaultColumns,
+      paletteSettings.columnSets.default,
       false,
       localize(strings.cd_helptip),
       [addToStepsOnDoubleClick, scrollListBoxWithArrows]
@@ -11234,7 +11315,7 @@ See the LICENSE file for details.
       pSteps,
       "steps",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-      paletteSettings.defaultColumns,
+      paletteSettings.columnSets.default,
       true,
       localize(strings.wf_steps_helptip),
       []
@@ -11389,7 +11470,7 @@ See the LICENSE file for details.
       pSearch,
       "commands",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-      paletteSettings.defaultColumns,
+      paletteSettings.columnSets.default,
       false,
       localize(strings.startup_helptip),
       [addToStepsOnDoubleClick, scrollListBoxWithArrows]
@@ -11406,18 +11487,18 @@ See the LICENSE file for details.
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
 
-    var commandSteps = [];
-    for (var i = 0; i < data.settings.startupCommands.length; i++) {
-      commandSteps.push(commandsData[data.settings.startupCommands[i]]);
-    }
+    // var commandSteps = [];
+    // for (var i = 0; i < data.settings.startupCommands.length; i++) {
+    //   commandSteps.push(commandsData[data.settings.startupCommands[i]]);
+    // }
 
     // setup the workflow action steps listbox
     var steps = new ListBoxWrapper(
-      commandSteps,
+      startupCommands,
       pSteps,
       "steps",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-      paletteSettings.defaultColumns,
+      paletteSettings.columnSets.default,
       true,
       localize(strings.startup_steps_helptip),
       []
@@ -11587,10 +11668,10 @@ See the LICENSE file for details.
    */
   function buildWorkflow(workflow) {
     var availableWorkflowCommands = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
       (showHidden = true),
-      (hideCommands = workflow ? [workflow.id] : []),
+      (hideSpecificCommands = workflow ? [workflow.id] : []),
       (docRequired = true),
       (selRequired = true)
     );
@@ -11618,17 +11699,18 @@ See the LICENSE file for details.
   /** Show all workflows. */
   function showAllWorkflows() {
     var workflows = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["workflow"]),
-      (showHidden = false),
-      (hideCommands = null),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null),
       (docRequired = false),
       (selRequired = false)
     );
     var result = commandPalette(
       (commands = workflows),
       (title = localize(strings.Workflows)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
     if (!result) return;
@@ -11638,45 +11720,22 @@ See the LICENSE file for details.
   /** Choose a workflow to edit. */
   function editWorkflow() {
     var workflows = filterCommands(
-      (commands = commandsData),
+      (commands = null),
       (types = ["workflow"]),
-      (showHidden = false),
-      (hideCommands = null),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null),
       (docRequired = false),
       (selRequired = false)
     );
     var result = commandPalette(
       (commands = workflows),
       (title = localize(strings.wf_choose)),
-      (columns = paletteSettings.defaultColumns),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
     if (!result) return;
     buildWorkflow(result);
-  }
-
-  /**
-   * Check to make sure a workflow doesn't contain deleted actions
-   * or actions that are not compatible with the current Ai version.
-   * @param   {Array} actions Workflow action steps to check.
-   * @returns {Object}        Any deleted or incompatible action.
-   */
-  function checkWorkflowActions(actions) {
-    var deletedActions = [];
-    var incompatibleActions = [];
-    var command;
-    for (var i = 0; i < actions.length; i++) {
-      command = actions[i];
-      if (!allCommands.includes(command)) {
-        deletedActions.push(command);
-      } else if (!versionCheck(command)) {
-        incompatibleActions.push(command);
-      }
-    }
-    return {
-      deletedActions: deletedActions,
-      incompatibleActions: incompatibleActions,
-    };
   }
 
   // load the user data
@@ -11684,24 +11743,26 @@ See the LICENSE file for details.
   userHistory.load();
   loadActions();
 
+  // inject user commands
+  typesToInject = ["workflows", "bookmarks"];
+  for (var i = 0; i < prefs.bookmarks.length; i++) {
+    commandsData[prefs.bookmarks[i].id] = prefs.bookmarks[i];
+  }
+
   // add basic defaults to the startup on a first/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }
 
   var appDocuments = app.documents.length > 0;
-  var docSelection = appDocuments ? app.activeDocument.selection.length : null;
-  var insideWorkflow = false;
-
-  // load command for initial start up palette
+  var docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
 
   // SHOW THE COMMAND PALETTE
-  // TODO: set hidden property on any user hidden commands
-  // TODO: set hidden property on any non-relevant commands
   var queryableCommands = filterCommands(
     (commands = null),
     (types = null),
     (showHidden = false),
+    (showNonRelevant = false),
     (hideSpecificCommands = null),
     (docRequired = true),
     (selRequired = true)
@@ -11711,6 +11772,7 @@ See the LICENSE file for details.
     (commands = prefs.startupCommands),
     (types = null),
     (showHidden = false),
+    (showNonRelevant = false),
     (hideSpecificCommands = null),
     (docRequired = true),
     (selRequired = true)
@@ -11719,7 +11781,7 @@ See the LICENSE file for details.
   var result = commandPalette(
     (commands = queryableCommands),
     (title = localize(strings.title)),
-    (columns = paletteSettings.defaultColumns),
+    (columns = paletteSettings.columnSets.default),
     (multiselect = false),
     (showOnly = startupCommands),
     (saveHistory = true)

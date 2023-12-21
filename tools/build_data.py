@@ -87,7 +87,6 @@ commands from google. Learn more with -h/--help"
 
     # read build data csv file
     commands = {}
-    # localized_lut = {}
     strings = {}
     reader = csv.DictReader(data)
     for row in reader:
@@ -113,7 +112,7 @@ commands from google. Learn more with -h/--help"
             "type": row["type"],
             "docRequired": row["docRequired"] == "TRUE",
             "selRequired": row["selRequired"] == "TRUE",
-            "loc": localized_strings,
+            "name": localized_strings,
             "hidden": False,
         }
         # only add min and max version if present

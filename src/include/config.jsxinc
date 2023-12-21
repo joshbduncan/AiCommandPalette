@@ -4,6 +4,7 @@
 
 var aiVersion = parseFloat(app.version);
 var locale = $.locale;
+var currentLocale = locale.split("_")[0];
 var os = $.os;
 var sysOS = /mac/i.test(os) ? "mac" : "win";
 var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
@@ -29,14 +30,47 @@ paletteSettings.bounds = [
   paletteSettings.paletteHeight,
 ];
 
-paletteSettings.defaultColumns = {};
-paletteSettings.defaultColumns[localize(strings.name_title_case)] = {
+// COMMAND PALETTE COLUMN SETS
+
+paletteSettings.columnSets = {};
+
+paletteSettings.columnSets.default = {};
+paletteSettings.columnSets.default[localize(strings.name_title_case)] = {
   width: 475,
-  key: "loc",
+  key: "name",
 };
-paletteSettings.defaultColumns[localize(strings.type_title_case)] = {
+paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
   width: 100,
   key: "type",
+};
+
+paletteSettings.columnSets.actions = {};
+paletteSettings.columnSets.actions["Name"] = {
+  // FIXME: localize
+  width: 475,
+  key: "name",
+};
+paletteSettings.columnSets.actions["Set"] = {
+  // FIXME: localize
+  width: 100,
+  key: "set",
+};
+
+paletteSettings.columnSets.bookmarks = {};
+paletteSettings.columnSets.bookmarks["Name"] = {
+  // FIXME: localize
+  width: null,
+  key: "name",
+};
+paletteSettings.columnSets.bookmarks["Type"] = {
+  // FIXME: localize
+  width: 75,
+  key: "bookmarkType",
+};
+paletteSettings.columnSets.bookmarks["Path"] = {
+  // FIXME: localize
+  width: null,
+  key: "path",
 };
 
 var visibleListItems = 9;
@@ -70,20 +104,20 @@ devInfo.save = function () {
 };
 
 /**
- * Show an alert with all object data for a command.
- * @param command Command to show data about.
+ * Show an alert with object data.
+ * @param obj Command to show data about.
  */
-function alertCommandData(command) {
+function alertObject(obj) {
   var s = "";
-  for (var prop in command) {
+  for (var prop in obj) {
     var subS = "";
-    if (typeof command[prop] == "object") {
-      for (var subProp in command[prop]) {
-        subS += "> " + subProp + ": " + command[prop][subProp] + "\n";
+    if (obj[prop] != null && typeof obj[prop] == "object") {
+      for (var subProp in obj[prop]) {
+        subS += "> " + subProp + ": " + obj[prop][subProp] + "\n";
       }
       s += prop + ":\n" + subS;
     } else {
-      s += prop + ": " + command[prop] + "\n";
+      s += prop + ": " + obj[prop] + "\n";
     }
   }
   alert(s);

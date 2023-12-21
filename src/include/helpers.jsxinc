@@ -11,6 +11,35 @@ function activeDocument() {
 }
 
 /**
+ * Check to make sure the command is available in the system Ai version.
+ * @param command Command to check.
+ * @returns       True if command is available in the current Ai version or false if not.
+ */
+function commandVersionCheck(command) {
+  if (
+    (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
+    (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
+  )
+    return false;
+  return true;
+}
+
+/**
+ * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
+ * @param   {Array} actions Workflow action steps to check.
+ * @returns {Array}         Non-active workflow action.
+ */
+function checkWorkflowActions(actions) {
+  var badActions = [];
+  for (var i = 0; i < actions.length; i++) {
+    command = actions[i];
+    if (!commandsData.hasOwnProperty(actions[i]) || !versionCheck(actions[i]))
+      badActions.push(actions[i]);
+  }
+  return badActions;
+}
+
+/**
  * Compare semantic version numbers.
  * @param {String} a Semantic version number.
  * @param {String} b Semantic version number.
@@ -55,7 +84,6 @@ function semanticVersionComparison(a, b) {
  */
 function loadActions() {
   var ct = 0;
-  var currentLocale = locale.split("_")[0];
   var currentPath, set, actionCount, name;
   var pref = app.preferences;
   var path = "plugin/Action/SavedSets/set-";
@@ -70,20 +98,18 @@ function loadActions() {
     // get actions in set
     actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
     ct += actionCount;
-    var actionName, id, loc, obj;
+    var name, id, loc, obj;
     for (var j = 1; j <= actionCount; j++) {
       loc = {};
       obj = {};
-      actionName = pref.getStringPreference(
-        currentPath + "action-" + j.toString() + "/name"
-      );
-      id = set + "_" + actionName;
-      loc[currentLocale] = actionName + " [" + set + "]";
+      name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
+      id = set + "_" + name;
+      loc[currentLocale] = name + " [" + set + "]";
       obj["id"] = id;
       obj["action"] = "action";
       obj["type"] = "action";
       obj["set"] = set;
-      obj["name"] = actionName;
+      obj["name"] = name;
       obj["docRequired"] = false;
       obj["selRequired"] = false;
       obj["loc"] = loc;
@@ -269,18 +295,20 @@ DIALOG HELPER FUNCTIONS
 
 /**
  * Filter the supplied commands by multiple factors.
- * @param   {Array}   command Command `id`s to filter through.
- * @param   {Array}   types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
- * @param   {Boolean} showHidden Should user-hidden or non-relevant commands be included?
+ * @param   {Array}   commands             Command `id`s to filter through.
+ * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+ * @param   {Boolean} showHidden           Should user-hidden commands be included?
+ * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
  * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
- * @param   {Boolean} docRequired Should commands requiring an active document be included.
- * @param   {Boolean} selRequired Should commands requiring an active selection be included.
- * @returns {Array}   Filtered commands objects.
+ * @param   {Boolean} docRequired          Should commands requiring an active document be included.
+ * @param   {Boolean} selRequired          Should commands requiring an active selection be included.
+ * @returns {Array}                        Filtered commands objects.
  */
 function filterCommands(
   commands,
   types,
   showHidden,
+  showNonRelevant,
   hideSpecificCommands,
   docRequired,
   selRequired
@@ -294,13 +322,13 @@ function filterCommands(
     command = commandsData[id];
 
     // make sure Ai version meets command requirements
-    if (!versionCheck(command)) continue;
+    if (!commandVersionCheck(command)) continue;
 
     // skip any hidden commands
     if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
 
     // skip any non relevant commands
-    if (!relevantCommand(command)) continue;
+    if (!showNonRelevant && !relevantCommand(command)) continue;
 
     // skip any specific commands name in hideSpecificCommands
     if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
@@ -338,8 +366,11 @@ function relevantCommand(command) {
   // hide `Unhide Commands...` command if no hidden commands
   if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
     return false;
-  // hide `Recent Commands...` and `Clear Recent Commands` if no recent commands
-  if (command.id == "builtin_recentCommands" && recentCommands == 0) {
+  // hide `Recent Commands...` and `Clear History` if no recent commands
+  if (
+    command.id == "builtin_recentCommands" &&
+    Object.keys(recentCommands).length === 0
+  ) {
     return false;
   }
 

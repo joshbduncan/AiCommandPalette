@@ -1,30 +1,23 @@
 // COMMAND EXECUTION
 
 /**
- * Iterate over each action for chosen command.
- * @param {Object} id Command id to execute.
+ * Process command actions.
+ * @param {String} id Command id to process.
  */
 function processCommand(id) {
   var command = commandsData[id];
   if (command.type == "workflow") {
-    insideWorkflow = true;
     // check to make sure all workflow commands are valid
-    check = checkWorkflowActions(command.actions);
-    if (check.deletedActions.length + check.incompatibleActions.length > 0) {
-      alert(
-        localize(
-          strings.wf_needs_attention,
-          check.deletedActions,
-          check.incompatibleActions
-        )
-      );
+    badActions = checkWorkflowActions(command.actions);
+    if (check.length) {
+      alert(localize(strings.wf_needs_attention, badActions.join("\n")));
       return;
     }
     // run each action in the workflow
-    actions = command.actions;
-    for (var i = 0; i < actions.length; i++) processCommand(commandsData[actions[i]]);
+    for (var i = 0; i < command.actions.length; i++)
+      processCommand(commandsData[command.actions[i]]);
   } else {
-    executeCommand(command);
+    executeAction(command);
   }
 }
 
@@ -32,10 +25,12 @@ function processCommand(id) {
  * Execute command action.
  * @param {Object} command Command to execute.
  */
-function executeCommand(command) {
-  // check command to see if an active document is required
+function executeAction(command) {
+  // recheck active document and selection incase previous workflow action changed them
   appDocuments = app.documents.length > 0;
-  if (!appDocuments && command.docRequired)
+  docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
+  // check command to see if an active document is required
+  if (command.docRequired && !appDocuments)
     if (
       !confirm(
         localize(strings.cd_active_document_required, command.action),
@@ -44,8 +39,9 @@ function executeCommand(command) {
       )
     )
       return;
+
   // check command to see if an active selection is required
-  if (appDocuments && app.activeDocument.selection.length < 1 && command.selRequired)
+  if (command.selRequired && !docSelection)
     if (
       !confirm(
         localize(strings.cd_active_selection_required, command.action),
@@ -54,96 +50,209 @@ function executeCommand(command) {
       )
     )
       return;
+
+  // execute action based on the command type
+  var func;
+  var alertString = strings.cd_error_executing;
   switch (command.type.toLowerCase()) {
     case "config":
-      try {
-        scriptAction(command.action);
-      } catch (e) {
-        alert(localize(strings.cd_error_executing, command.localizedName, e));
-      }
+      func = configAction;
       break;
     case "builtin":
-      try {
-        builtinAction(command.action);
-      } catch (e) {
-        alert(localize(strings.cd_error_executing, command.localizedName, e));
-      }
+      func = builtinAction;
       break;
     case "menu":
-      try {
-        app.executeMenuCommand(command.action);
-      } catch (e) {
-        alert(localize(strings.cd_error_executing, command.localizedName, e));
-      }
+      func = menuAction;
       break;
     case "tool":
-      try {
-        app.selectTool(command.action);
-      } catch (e) {
-        alert(localize(strings.tl_error_selecting, command, e));
-      }
+      func = toolAction;
+      alertString = strings.tl_error_selecting;
       break;
     case "action":
-      try {
-        app.doScript(command.name, command.set);
-      } catch (e) {
-        alert(localize(strings.ac_error_execution, command, e));
-      }
+      func = actionAction;
+      alertString = strings.ac_error_execution;
       break;
     case "bookmark":
-      f =
-        command.bookmarkType == "file"
-          ? new File(command.path)
-          : new Folder(command.path);
-      if (!f.exists) {
-        alert(localize(strings.bm_error_exists, command.path));
-        delete data.commands.bookmark[command];
-        settings.save();
-      } else {
-        try {
-          if (command.bookmarkType == "file") {
-            app.open(f);
-          } else {
-            f.execute();
-          }
-        } catch (e) {
-          alert(localize(strings.sc_error_execution, command.name, e));
-        }
-      }
+      func = bookmarkAction;
       break;
     case "script":
-      f = new File(command.path);
-      if (!f.exists) {
-        alert(localize(strings.sc_error_exists, command.path));
-        delete data.commands.script[command];
-        settings.save();
-      } else {
-        try {
-          $.evalFile(f);
-        } catch (e) {
-          alert(localize(strings.sc_error_execution, command.name, e));
-        }
-      }
+      func = scriptAction;
+      alertString = strings.sc_error_execution;
       break;
     default:
       alert(localize(strings.cd_invalid, command.type));
   }
+
   try {
-    app.redraw();
+    func(command);
   } catch (e) {
-    $.writeln(e);
+    alert(localize(alertString, localize(command.name), e));
   }
 }
 
-/**************************************************
-SUPPLEMENTAL COMMAND FUNCTIONS
-**************************************************/
+function menuAction(command) {
+  app.executeMenuCommand(command.action);
+}
 
-function versionCheck(command) {
-  if (
-    (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
-    (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
-  )
-    return false;
-  return true;
+function toolAction(command) {
+  app.selectTool(command.action);
+}
+
+function actionAction(command) {
+  app.doScript(command.name, command.set);
+}
+
+function bookmarkAction(command) {
+  f =
+    command.bookmarkType == "file" ? new File(command.path) : new Folder(command.path);
+  if (!f.exists) {
+    alert(localize(strings.bm_error_exists, command.path));
+  } else {
+    if (command.bookmarkType == "file") {
+      app.open(f);
+    } else {
+      f.execute();
+    }
+  }
+}
+
+function scriptAction(command) {
+  f = new File(command.path);
+  if (!f.exists) {
+    alert(localize(strings.sc_error_exists, command.path));
+  } else {
+    $.evalFile(f);
+  }
+}
+
+/**
+ * Execute script actions.
+ * @param {Object} command Command to execute.
+ */
+function configAction(command) {
+  var write = true;
+  switch (command.action) {
+    case "settings":
+      AiCommandPaletteSettings();
+      write = false;
+      break;
+    case "about":
+      about();
+      write = false;
+      break;
+    case "buildStartup": // TODO
+      buildStartup();
+      break;
+    case "buildWorkflow": // TODO
+      buildWorkflow();
+      break;
+    case "editWorkflow": // TODO
+      editWorkflow();
+      break;
+    case "loadScript": // TODO
+      loadScripts();
+      break;
+    case "loadFileBookmark": // TODO
+      loadFileBookmark();
+      write = true;
+      break;
+    case "loadFolderBookmark": // TODO
+      loadFolderBookmark();
+      break;
+    case "hideCommand":
+      hideCommand();
+      break;
+    case "unhideCommand":
+      unhideCommand();
+      break;
+    case "deleteCommand": // TODO
+      deleteCommand();
+      break;
+    case "enableTypeInSearch":
+    case "disableTypeInSearch":
+      prefs.searchIncludesType = !prefs.searchIncludesType;
+      break;
+    case "clearHistory": // FIXME: Update alert to include warning about latches
+      if (
+        !confirm(
+          localize(strings.cd_clear_history_confirm),
+          "noAsDflt",
+          localize(strings.cd_exception)
+        )
+      )
+        return;
+      userHistory.clear();
+      alert(localize(strings.history_cleared));
+      break;
+    case "revealPrefFile":
+      userPrefs.reveal();
+      write = false;
+      break;
+    default:
+      alert(localize(strings.cd_invalid, action));
+  }
+  if (!write) return;
+  userPrefs.save();
+}
+
+/**
+ * Execute built-in commands.
+ * @param {Object} command Command to execute.
+ */
+function builtinAction(command) {
+  switch (command.action) {
+    case "recentCommands":
+      recentCommands();
+      break;
+    case "allWorkflows":
+      showAllWorkflows();
+      break;
+    case "allScripts":
+      showAllScripts();
+      break;
+    case "allBookmarks":
+      showAllBookmarks();
+      break;
+    case "allActions":
+      showAllActions();
+      break;
+    case "documentReport":
+      if (activeDocument) documentReport();
+      break;
+    case "exportVariables":
+      if (activeDocument) exportVariables();
+      break;
+    case "goToArtboard":
+      if (activeDocument) goToArtboard();
+      break;
+    case "goToDocument":
+      if (app.documents.length > 1) {
+        goToOpenDocument();
+      }
+      break;
+    case "goToNamedObject":
+      if (activeDocument) goToNamedObject();
+      break;
+    case "imageCapture":
+      imageCapture();
+      break;
+    case "recentFiles":
+      recentFiles();
+      break;
+    case "redrawWindows":
+      app.redraw();
+      break;
+    case "revealActiveDocument":
+      if (activeDocument) {
+        if (app.activeDocument.path.fsName) {
+          var fp = new Folder(app.activeDocument.path.fsName);
+          fp.execute();
+        } else {
+          alert(localize(strings.active_document_not_saved));
+        }
+      }
+      break;
+    default:
+      alert(localize(strings.cd_invalid, action));
+  }
 }
