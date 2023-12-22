@@ -1,6 +1,7 @@
 import argparse
 import csv
 import json
+import re
 import sys
 
 try:
@@ -85,6 +86,9 @@ commands from google. Learn more with -h/--help"
     if args.download:
         data = get_data() if args.download else args.input.readlines()
 
+    # regex for cleaning up command ids
+    regex = re.compile(r"\s|\.")
+
     # read build data csv file
     commands = {}
     strings = {}
@@ -104,7 +108,7 @@ commands from google. Learn more with -h/--help"
             continue
 
         # build a command object
-        command_id = f"{row['type']}_{row['value'].replace(' ', '_')}"
+        command_id = regex.sub("_", f"{row['type']}_{row['value']}")
         localized_strings = localized_strings_object(row)
         command = {
             "id": command_id,

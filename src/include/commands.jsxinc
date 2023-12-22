@@ -73,8 +73,8 @@ function executeAction(command) {
       alertString = strings.ac_error_execution;
       break;
     case "bookmark":
-    case "filebookmark":
-    case "folderbookmark":
+    case "file":
+    case "folder":
       func = bookmarkAction;
       break;
     case "script":
@@ -105,13 +105,12 @@ function actionAction(command) {
 }
 
 function bookmarkAction(command) {
-  f =
-    command.type == "fileBookmark" ? new File(command.path) : new Folder(command.path);
+  f = command.type == "file" ? new File(command.path) : new Folder(command.path);
   if (!f.exists) {
     alert(localize(strings.bm_error_exists, command.path));
     return;
   }
-  if (command.type == "fileBookmark") {
+  if (command.type == "file") {
     app.open(f);
   } else {
     f.execute();
@@ -151,14 +150,14 @@ function configAction(command) {
     case "editWorkflow": // TODO
       editWorkflow();
       break;
-    case "loadScript": // TODO
+    case "loadScript":
       loadScripts();
       break;
     case "loadFileBookmark":
       loadFileBookmark();
       write = true;
       break;
-    case "loadFolderBookmark": // TODO
+    case "loadFolderBookmark":
       loadFolderBookmark();
       break;
     case "hideCommand":

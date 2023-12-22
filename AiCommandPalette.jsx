@@ -102,6 +102,24 @@ See the LICENSE file for details.
       return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
     };
   }
+
+  /**
+   * String.prototype.replaceAll() polyfill
+   * https://gomakethings.com/how-to-replace-a-section-of-a-string-with-another-one-with-vanilla-js/
+   * @author Chris Ferdinandi
+   * @license MIT
+   */
+  if (!String.prototype.replaceAll) {
+    String.prototype.replaceAll = function (str, newStr) {
+      // If a regex pattern
+      if (Object.prototype.toString.call(str).toLowerCase() === "[object regexp]") {
+        return this.replace(str, newStr);
+      }
+
+      // If a string
+      return this.replace(new RegExp(str, "g"), newStr);
+    };
+  }
   // ALL BUILT DATA FROM PYTHON SCRIPT
 
   var strings = {
@@ -339,7 +357,6 @@ See the LICENSE file for details.
     dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
     dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
     file: { en: "File", de: "File", ru: "File" },
-    fileBookmark: { en: "File Bookmark", de: "File Bookmark", ru: "File Bookmark" },
     file_saved: {
       en: "File Saved:\n%1",
       de: "Datei gespeichert:\n%1",
@@ -355,11 +372,7 @@ See the LICENSE file for details.
       de: "Fehler beim Schreiben der Datei:\n%1",
       ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
     },
-    folderBookmark: {
-      en: "Folder Bookmark",
-      de: "Folder Bookmark",
-      ru: "Folder Bookmark",
-    },
+    folder: { en: "Folder", de: "Folder", ru: "Folder" },
     fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
     github: {
       en: "Click here to learn more",
@@ -1135,8 +1148,8 @@ See the LICENSE file for details.
       hidden: false,
       minVersion: 24,
     },
-    "menu_Edit_Custom_Dictionary...": {
-      id: "menu_Edit_Custom_Dictionary...",
+    menu_Edit_Custom_Dictionary___: {
+      id: "menu_Edit_Custom_Dictionary___",
       action: "Edit Custom Dictionary...",
       type: "menu",
       docRequired: true,
@@ -2257,8 +2270,8 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    "menu_Rows_and_Columns....": {
-      id: "menu_Rows_and_Columns....",
+    menu_Rows_and_Columns____: {
+      id: "menu_Rows_and_Columns____",
       action: "Rows and Columns....",
       type: "menu",
       docRequired: true,
@@ -2909,8 +2922,8 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    "menu_Text_Wrap_Options...": {
-      id: "menu_Text_Wrap_Options...",
+    menu_Text_Wrap_Options___: {
+      id: "menu_Text_Wrap_Options___",
       action: "Text Wrap Options...",
       type: "menu",
       docRequired: false,
@@ -6684,8 +6697,8 @@ See the LICENSE file for details.
       minVersion: 22,
       maxVersion: 25.9,
     },
-    "menu_Adobe_CSXS_Extension_com.adobe.DesignLibraries.angularLibraries": {
-      id: "menu_Adobe_CSXS_Extension_com.adobe.DesignLibraries.angularLibraries",
+    menu_Adobe_CSXS_Extension_com_adobe_DesignLibraries_angularLibraries: {
+      id: "menu_Adobe_CSXS_Extension_com_adobe_DesignLibraries_angularLibraries",
       action: "Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries",
       type: "menu",
       docRequired: false,
@@ -9112,23 +9125,23 @@ See the LICENSE file for details.
 
   paletteSettings.columnSets.default = {};
   paletteSettings.columnSets.default[localize(strings.name_title_case)] = {
-    width: 475,
+    width: 450,
     key: "name",
   };
   paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
-    width: 100,
+    width: null,
     key: "type",
   };
 
   paletteSettings.columnSets.actions = {};
   paletteSettings.columnSets.actions[localize(strings.name_title_case)] = {
     // FIXME: localize
-    width: 475,
-    key: localize(strings.name_title_case),
+    width: null,
+    key: "name",
   };
   paletteSettings.columnSets.actions["Set"] = {
     // FIXME: localize
-    width: 100,
+    width: null,
     key: "set",
   };
 
@@ -9140,7 +9153,7 @@ See the LICENSE file for details.
   };
   paletteSettings.columnSets.bookmarks[localize(strings.type_title_case)] = {
     // FIXME: localize
-    width: 75,
+    width: 50,
     key: "type",
   };
   paletteSettings.columnSets.bookmarks["Path"] = {
@@ -9217,7 +9230,6 @@ See the LICENSE file for details.
   prefs.workflows = [];
   prefs.bookmarks = [];
   prefs.scripts = [];
-  prefs.history = [];
   prefs.latches = {};
   prefs.searchIncludesType = false;
   prefs.version = _version;
@@ -9433,8 +9445,51 @@ See the LICENSE file for details.
   }
 
   /**
+   * Remove bad characters from a command id.
+   * @param id Original command id.
+   * @returns  Cleaned command id.
+   */
+  function cleanupCommandId(id) {
+    var re = new RegExp("\\s|\\.", "gi");
+    return uniqueCommandId(id.replaceAll(re, "_"));
+  }
+
+  /**
+   * Generate a unique command id for user commands (workflows, bookmarks, scripts).
+   * @param id Original command id.
+   * @returns  Unique command id.
+   */
+  function uniqueCommandId(id) {
+    var n = 0;
+    var uniqueId = id;
+    while (commandsData.hasOwnProperty(uniqueId)) {
+      n++;
+      uniqueId = id + n.toString();
+    }
+    return uniqueId;
+  }
+
+  /**
+   * Ask the user if they want to add their new commands to their startup screen.
+   * @param newCommandIds Ids of the new commands.
+   * @returns             If commands were added to their startup screen.
+   */
+  function addToStartup(newCommandIds) {
+    // TODO: localize confirmation prompt
+    if (
+      !confirm(
+        "Add new command(s) to your startup commands?",
+        "noAsDflt",
+        "Add To Startup Commands"
+      )
+    )
+      return false;
+    prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
+  }
+
+  /**
    * Load all user actions as commands.
-   * @returns Count of loaded actions.
+   * @returns {Boolean} If any actions were successfully loaded.
    */
   function loadActions() {
     var ct = 0;
@@ -9693,6 +9748,11 @@ See the LICENSE file for details.
     return filteredCommands;
   }
 
+  /**
+   * Determine is a command is relevant at the current moment.
+   * @param   {Object}  command Command object to check.
+   * @returns {Boolean}         If command is relevant.
+   */
   function relevantCommand(command) {
     // hide commands requiring an active documents if requested
     if (docRequired && !appDocuments && command.docRequired) return false;
@@ -9702,13 +9762,13 @@ See the LICENSE file for details.
     // hide `Edit Workflow...` command if no workflows
     if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
     // hide `All Workflows...` command if no workflows
-    if (command.id == "config_allWorkflows" && prefs.workflows.length < 1) return false;
+    if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
     // hide `All Scripts...` command if no scripts
-    if (command.id == "config_allScripts" && prefs.scripts.length < 1) return false;
+    if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
     // hide `All Bookmarks...` command if no bookmarks
-    if (command.id == "config_allBookmarks" && prefs.bookmarks.length < 1) return false;
+    if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
     // hide `All Actions...` command if no actions
-    if (command.id == "config_allActions" && !loadedActions) return false;
+    if (command.id == "builtin_allActions" && !loadedActions) return false;
 
     // hide `Enable Searching on Command Type` command if already enabled
     if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
@@ -10139,7 +10199,7 @@ See the LICENSE file for details.
       ".webp",
       ".wmf",
     ]; // file types taken from Ai open dialog
-    re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
+    var re = new RegExp(acceptedTypes.join("|") + "$", "i");
     var files = loadFileTypes(localize(strings.bm_load_bookmark), true, re);
 
     if (files.length == 0) return;
@@ -10147,11 +10207,11 @@ See the LICENSE file for details.
     // get all current bookmark paths to ensure no duplicates
     var currentFileBookmarks = [];
     for (var i = 0; i < prefs.bookmarks.length; i++) {
-      if (prefs.bookmarks[i].type != "fileBookmark") continue;
+      if (prefs.bookmarks[i].type != "file") continue;
       currentFileBookmarks.push(prefs.bookmarks[i].path);
     }
 
-    var f, bookmark, bookmarkName;
+    var f, bookmark, bookmarkName, id;
     var newBookmarks = [];
     var newBookmarkIds = [];
     for (var j = 0; j < files.length; j++) {
@@ -10167,11 +10227,12 @@ See the LICENSE file for details.
           continue;
 
       bookmarkName = decodeURI(f.name);
+      id = cleanupCommandId("bookmark_" + bookmarkName.toLowerCase());
       bookmark = {
-        id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
+        id: id,
         name: bookmarkName,
         action: "bookmark",
-        type: "fileBookmark",
+        type: "file",
         path: f.fsName,
         docRequired: false,
         selRequired: false,
@@ -10184,16 +10245,7 @@ See the LICENSE file for details.
     if (newBookmarks.length == 0) return;
 
     prefs.bookmarks = prefs.bookmarks.concat(newBookmarks);
-    // TODO: localize confirmation prompt
-    if (
-      !confirm(
-        "Add new bookmark(s) to your startup commands?",
-        "noAsDflt",
-        "Add To Startup Commands"
-      )
-    )
-      return;
-    prefs.startupCommands = newBookmarkIds.concat(prefs.startupCommands);
+    addToStartup(newBookmarkIds);
   }
 
   /** Set bookmarked folder to open on system from within Ai Command Palette. */
@@ -10206,7 +10258,7 @@ See the LICENSE file for details.
     // get all current bookmark paths to ensure no duplicates
     var currentFolderBookmarks = [];
     for (var i = 0; i < prefs.bookmarks.length; i++) {
-      if (prefs.bookmarks[i].type != "folderBookmark") continue;
+      if (prefs.bookmarks[i].type != "folder") continue;
       currentFolderBookmarks.push(prefs.bookmarks[i].path);
     }
 
@@ -10226,55 +10278,66 @@ See the LICENSE file for details.
       id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
       name: bookmarkName,
       action: "bookmark",
-      type: "folderBookmark",
+      type: "folder",
       path: f.fsName,
       docRequired: false,
       selRequired: false,
       hidden: false,
     };
     prefs.bookmarks.push(bookmark);
-
-    // TODO: localize confirmation prompt
-    if (
-      !confirm(
-        "Add new bookmark(s) to your startup commands?",
-        "noAsDflt",
-        "Add To Startup Commands"
-      )
-    )
-      return;
-    prefs.startupCommands = [bookmark.id].concat(prefs.startupCommands);
+    addToStartup([bookmark.id]);
   }
 
   /** Load external scripts into Ai Command Palette. */
   function loadScripts() {
     var acceptedTypes = [".jsx", ".js"];
-    re = new RegExp(acceptedTypes.toString().replace(/,/g, "|") + "$", "i");
-    var files = loadFileTypes(localize(strings.sc_load_script), true, ".jsx$|.js$");
-    if (files.length > 0) {
-      var f, fname;
-      for (var i = 0; i < files.length; i++) {
-        f = files[i];
-        fname = decodeURI(f.name);
-        if (data.commands.script.hasOwnProperty(fname)) {
-          if (
-            !confirm(
-              localize(strings.sc_already_loaded),
-              "noAsDflt",
-              localize(strings.sc_already_loaded_title)
-            )
-          )
-            continue;
-        }
-        try {
-          data.commands.script[fname] = { type: "script", path: f.fsName };
-        } catch (e) {
-          alert(localize(strings.sc_error_loading, f.fsName));
-        }
-      }
-    } else {
-      alert(localize(strings.sc_none_selected));
+    var re = new RegExp(acceptedTypes.join("|") + "$", "i");
+    var files = loadFileTypes(localize(strings.sc_load_script), true, re);
+
+    if (files.length == 0) return;
+
+    // get all current script paths to ensure no duplicates
+    var currentScripts = [];
+    for (var i = 0; i < prefs.scripts.length; i++) {
+      currentScripts.push(prefs.scripts[i].path);
     }
+
+    var f, script, scriptName, id;
+    var newScripts = [];
+    var newScriptIds = [];
+    for (var j = 0; j < files.length; j++) {
+      f = files[j];
+      if (currentScripts.hasOwnProperty(f.fsName)) {
+        if (
+          !confirm(
+            localize(strings.sc_already_loaded),
+            "noAsDflt",
+            localize(strings.sc_already_loaded_title)
+          )
+        )
+          continue;
+      }
+
+      scriptName = decodeURI(f.name);
+      id = cleanupCommandId("script_" + scriptName.toLowerCase());
+      script = {
+        id: id,
+        name: scriptName,
+        action: "script",
+        type: "script",
+        path: f.fsName,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      newScripts.push(script);
+      newScriptIds.push(script.id);
+    }
+
+    if (newScripts.length == 0) return;
+
+    prefs.scripts = prefs.scripts.concat(newScripts);
+    addToStartup(newScriptIds);
   }
 
   /** Show all scripts. */
@@ -10291,7 +10354,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = scriptCommands),
       (title = localize(strings.Scripts)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.bookmarks),
       (multiselect = false)
     );
     if (!result) return;
@@ -10302,7 +10365,7 @@ See the LICENSE file for details.
   function showAllBookmarks() {
     var bookmarkCommands = filterCommands(
       (commands = null),
-      (types = ["fileBookmark", "folderBookmark"]),
+      (types = ["file", "folder"]),
       (showHidden = true),
       (showNonRelevant = true),
       (hideSpecificCommands = null),
@@ -10653,8 +10716,8 @@ See the LICENSE file for details.
         alertString = strings.ac_error_execution;
         break;
       case "bookmark":
-      case "filebookmark":
-      case "folderbookmark":
+      case "file":
+      case "folder":
         func = bookmarkAction;
         break;
       case "script":
@@ -10685,13 +10748,12 @@ See the LICENSE file for details.
   }
 
   function bookmarkAction(command) {
-    f =
-      command.type == "fileBookmark" ? new File(command.path) : new Folder(command.path);
+    f = command.type == "file" ? new File(command.path) : new Folder(command.path);
     if (!f.exists) {
       alert(localize(strings.bm_error_exists, command.path));
       return;
     }
-    if (command.type == "fileBookmark") {
+    if (command.type == "file") {
       app.open(f);
     } else {
       f.execute();
@@ -10731,14 +10793,14 @@ See the LICENSE file for details.
       case "editWorkflow": // TODO
         editWorkflow();
         break;
-      case "loadScript": // TODO
+      case "loadScript":
         loadScripts();
         break;
       case "loadFileBookmark":
         loadFileBookmark();
         write = true;
         break;
-      case "loadFolderBookmark": // TODO
+      case "loadFolderBookmark":
         loadFolderBookmark();
         break;
       case "hideCommand":
@@ -11774,12 +11836,14 @@ See the LICENSE file for details.
   // load the user data
   userPrefs.load();
   userHistory.load();
-  loadActions();
+  var loadedActions = loadActions();
 
   // inject user commands
-  typesToInject = ["workflows", "bookmarks"];
-  for (var i = 0; i < prefs.bookmarks.length; i++) {
-    commandsData[prefs.bookmarks[i].id] = prefs.bookmarks[i];
+  typesToInject = ["workflows", "bookmarks", "scripts"];
+  for (var i = 0; i < typesToInject.length; i++) {
+    for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
+      commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
+    }
   }
 
   // add basic defaults to the startup on a first/fresh install

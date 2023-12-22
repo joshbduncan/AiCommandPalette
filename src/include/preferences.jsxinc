@@ -17,7 +17,6 @@ prefs.hiddenCommands = [];
 prefs.workflows = [];
 prefs.bookmarks = [];
 prefs.scripts = [];
-prefs.history = [];
 prefs.latches = {};
 prefs.searchIncludesType = false;
 prefs.version = _version;

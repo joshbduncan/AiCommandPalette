@@ -79,8 +79,51 @@ function semanticVersionComparison(a, b) {
 }
 
 /**
+ * Remove bad characters from a command id.
+ * @param id Original command id.
+ * @returns  Cleaned command id.
+ */
+function cleanupCommandId(id) {
+  var re = new RegExp("\\s|\\.", "gi");
+  return uniqueCommandId(id.replaceAll(re, "_"));
+}
+
+/**
+ * Generate a unique command id for user commands (workflows, bookmarks, scripts).
+ * @param id Original command id.
+ * @returns  Unique command id.
+ */
+function uniqueCommandId(id) {
+  var n = 0;
+  var uniqueId = id;
+  while (commandsData.hasOwnProperty(uniqueId)) {
+    n++;
+    uniqueId = id + n.toString();
+  }
+  return uniqueId;
+}
+
+/**
+ * Ask the user if they want to add their new commands to their startup screen.
+ * @param newCommandIds Ids of the new commands.
+ * @returns             If commands were added to their startup screen.
+ */
+function addToStartup(newCommandIds) {
+  // TODO: localize confirmation prompt
+  if (
+    !confirm(
+      "Add new command(s) to your startup commands?",
+      "noAsDflt",
+      "Add To Startup Commands"
+    )
+  )
+    return false;
+  prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
+}
+
+/**
  * Load all user actions as commands.
- * @returns Count of loaded actions.
+ * @returns {Boolean} If any actions were successfully loaded.
  */
 function loadActions() {
   var ct = 0;
@@ -339,6 +382,11 @@ function filterCommands(
   return filteredCommands;
 }
 
+/**
+ * Determine is a command is relevant at the current moment.
+ * @param   {Object}  command Command object to check.
+ * @returns {Boolean}         If command is relevant.
+ */
 function relevantCommand(command) {
   // hide commands requiring an active documents if requested
   if (docRequired && !appDocuments && command.docRequired) return false;
@@ -348,13 +396,13 @@ function relevantCommand(command) {
   // hide `Edit Workflow...` command if no workflows
   if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
   // hide `All Workflows...` command if no workflows
-  if (command.id == "config_allWorkflows" && prefs.workflows.length < 1) return false;
+  if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
   // hide `All Scripts...` command if no scripts
-  if (command.id == "config_allScripts" && prefs.scripts.length < 1) return false;
+  if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
   // hide `All Bookmarks...` command if no bookmarks
-  if (command.id == "config_allBookmarks" && prefs.bookmarks.length < 1) return false;
+  if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
   // hide `All Actions...` command if no actions
-  if (command.id == "config_allActions" && !loadedActions) return false;
+  if (command.id == "builtin_allActions" && !loadedActions) return false;
 
   // hide `Enable Searching on Command Type` command if already enabled
   if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)

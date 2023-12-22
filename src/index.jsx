@@ -36,12 +36,14 @@ See the LICENSE file for details.
   // load the user data
   userPrefs.load();
   userHistory.load();
-  loadActions();
+  var loadedActions = loadActions();
 
   // inject user commands
-  typesToInject = ["workflows", "bookmarks"];
-  for (var i = 0; i < prefs.bookmarks.length; i++) {
-    commandsData[prefs.bookmarks[i].id] = prefs.bookmarks[i];
+  typesToInject = ["workflows", "bookmarks", "scripts"];
+  for (var i = 0; i < typesToInject.length; i++) {
+    for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
+      commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
+    }
   }
 
   // add basic defaults to the startup on a first/fresh install

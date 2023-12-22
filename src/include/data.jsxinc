@@ -235,7 +235,6 @@ var strings = {
   dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
   dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
   file: { en: "File", de: "File", ru: "File" },
-  fileBookmark: { en: "File Bookmark", de: "File Bookmark", ru: "File Bookmark" },
   file_saved: {
     en: "File Saved:\n%1",
     de: "Datei gespeichert:\n%1",
@@ -251,11 +250,7 @@ var strings = {
     de: "Fehler beim Schreiben der Datei:\n%1",
     ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
   },
-  folderBookmark: {
-    en: "Folder Bookmark",
-    de: "Folder Bookmark",
-    ru: "Folder Bookmark",
-  },
+  folder: { en: "Folder", de: "Folder", ru: "Folder" },
   fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
   github: {
     en: "Click here to learn more",
@@ -1031,8 +1026,8 @@ var commandsData = {
     hidden: false,
     minVersion: 24,
   },
-  "menu_Edit_Custom_Dictionary...": {
-    id: "menu_Edit_Custom_Dictionary...",
+  menu_Edit_Custom_Dictionary___: {
+    id: "menu_Edit_Custom_Dictionary___",
     action: "Edit Custom Dictionary...",
     type: "menu",
     docRequired: true,
@@ -2153,8 +2148,8 @@ var commandsData = {
     },
     hidden: false,
   },
-  "menu_Rows_and_Columns....": {
-    id: "menu_Rows_and_Columns....",
+  menu_Rows_and_Columns____: {
+    id: "menu_Rows_and_Columns____",
     action: "Rows and Columns....",
     type: "menu",
     docRequired: true,
@@ -2805,8 +2800,8 @@ var commandsData = {
     },
     hidden: false,
   },
-  "menu_Text_Wrap_Options...": {
-    id: "menu_Text_Wrap_Options...",
+  menu_Text_Wrap_Options___: {
+    id: "menu_Text_Wrap_Options___",
     action: "Text Wrap Options...",
     type: "menu",
     docRequired: false,
@@ -6580,8 +6575,8 @@ var commandsData = {
     minVersion: 22,
     maxVersion: 25.9,
   },
-  "menu_Adobe_CSXS_Extension_com.adobe.DesignLibraries.angularLibraries": {
-    id: "menu_Adobe_CSXS_Extension_com.adobe.DesignLibraries.angularLibraries",
+  menu_Adobe_CSXS_Extension_com_adobe_DesignLibraries_angularLibraries: {
+    id: "menu_Adobe_CSXS_Extension_com_adobe_DesignLibraries_angularLibraries",
     action: "Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries",
     type: "menu",
     docRequired: false,
