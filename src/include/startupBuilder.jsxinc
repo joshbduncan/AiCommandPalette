@@ -34,11 +34,6 @@ function startupBuilder(commands) {
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
 
-  // var commandSteps = [];
-  // for (var i = 0; i < data.settings.startupCommands.length; i++) {
-  //   commandSteps.push(commandsData[data.settings.startupCommands[i]]);
-  // }
-
   // setup the workflow action steps listbox
   var steps = new ListBoxWrapper(
     startupCommands,
@@ -95,7 +90,10 @@ function startupBuilder(commands) {
     var selected = sortIndexes(steps.listbox.selection);
     if (selected[i] == 0 || !contiguous(selected)) return;
     for (var i = 0; i < selected.length; i++)
-      swap(steps.listbox.items[selected[i] - 1], steps.listbox.items[selected[i]]);
+      swapListboxItems(
+        steps.listbox.items[selected[i] - 1],
+        steps.listbox.items[selected[i]]
+      );
     steps.listbox.selection = null;
     for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
   };
@@ -108,7 +106,10 @@ function startupBuilder(commands) {
     )
       return;
     for (var i = steps.listbox.selection.length - 1; i > -1; i--)
-      swap(steps.listbox.items[selected[i]], steps.listbox.items[selected[i] + 1]);
+      swapListboxItems(
+        steps.listbox.items[selected[i]],
+        steps.listbox.items[selected[i] + 1]
+      );
     steps.listbox.selection = null;
     for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
   };
@@ -128,13 +129,6 @@ function startupBuilder(commands) {
     return sel.length == sel[sel.length - 1] - sel[0] + 1;
   }
 
-  /** swap listbox items in place */
-  function swap(x, y) {
-    var t = x.text;
-    x.text = y.text;
-    y.text = t;
-  }
-
   del.onClick = function () {
     var selected = sortIndexes(steps.listbox.selection);
     for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
@@ -145,7 +139,11 @@ function startupBuilder(commands) {
   };
 
   if (win.show() == 1) {
-    return steps.listbox.items;
+    var items = [];
+    for (var i = 0; i < steps.listbox.items.length; i++) {
+      items.push(steps.listbox.items[i].id);
+    }
+    return items;
   }
   return false;
 }

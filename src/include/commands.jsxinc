@@ -141,7 +141,7 @@ function configAction(command) {
       about();
       write = false;
       break;
-    case "buildStartup": // TODO
+    case "buildStartup":
       buildStartup();
       break;
     case "buildWorkflow": // TODO

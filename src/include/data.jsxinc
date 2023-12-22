@@ -8619,9 +8619,9 @@ var commandsData = {
     docRequired: false,
     selRequired: false,
     name: {
-      en: "Startup Commands...",
-      de: "Startup Commands...",
-      ru: "Startup Commands...",
+      en: "Customize Startup Commands...",
+      de: "Customize Startup Commands...",
+      ru: "Customize Startup Commands...",
     },
     hidden: false,
   },

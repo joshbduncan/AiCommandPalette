@@ -72,20 +72,10 @@ function buildStartup() {
     (showNonRelevant = true),
     (hideSpecificCommands = [])
   );
-  // show the workflow builder dialog
+  // show the startup builder dialog
   var result = startupBuilder(availableStartupCommands);
   if (!result) return;
-  var previousStartupCommands = prefs.startupCommands;
-  try {
-    var startupCommands = [];
-    for (var i = 0; i < result.length; i++) {
-      startupCommands.push(result[i].commandId);
-    }
-    prefs.startupCommands = startupCommands;
-  } catch (e) {
-    alert(localize(strings.startup_error_saving));
-    prefs.startupCommands = previousStartupCommands;
-  }
+  prefs.startupCommands = result;
 }
 
 /** Document Info Dialog */

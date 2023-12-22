@@ -8741,9 +8741,9 @@ See the LICENSE file for details.
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Startup Commands...",
-        de: "Startup Commands...",
-        ru: "Startup Commands...",
+        en: "Customize Startup Commands...",
+        de: "Customize Startup Commands...",
+        ru: "Customize Startup Commands...",
       },
       hidden: false,
     },
@@ -9940,20 +9940,10 @@ See the LICENSE file for details.
       (showNonRelevant = true),
       (hideSpecificCommands = [])
     );
-    // show the workflow builder dialog
+    // show the startup builder dialog
     var result = startupBuilder(availableStartupCommands);
     if (!result) return;
-    var previousStartupCommands = prefs.startupCommands;
-    try {
-      var startupCommands = [];
-      for (var i = 0; i < result.length; i++) {
-        startupCommands.push(result[i].commandId);
-      }
-      prefs.startupCommands = startupCommands;
-    } catch (e) {
-      alert(localize(strings.startup_error_saving));
-      prefs.startupCommands = previousStartupCommands;
-    }
+    prefs.startupCommands = result;
   }
 
   /** Document Info Dialog */
@@ -10784,7 +10774,7 @@ See the LICENSE file for details.
         about();
         write = false;
         break;
-      case "buildStartup": // TODO
+      case "buildStartup":
         buildStartup();
         break;
       case "buildWorkflow": // TODO
@@ -11032,13 +11022,30 @@ See the LICENSE file for details.
       if (listbox.selection) {
         win = listbox.window;
         steps = win.findElement("steps");
-        command = commandsData[localizedCommandLookup[listbox.selection]];
-        newItem = steps.add("item", command.localizedName);
-        newItem.subItems[0].text = command.localizedType;
+        command = commandsData[listbox.selection.id];
+        newItem = steps.add("item", determineCorrectString(command, "name"));
+        newItem.subItems[0].text = determineCorrectString(command, "type");
         newItem.id = command.id;
         steps.notify("onChange");
       }
     };
+  }
+
+  /**
+   * Swap listbox items in place (along with their corresponding id).
+   * @param {Object} x Listbox item.
+   * @param {Object} y Listbox item.
+   */
+  function swapListboxItems(x, y) {
+    var t = x.text;
+    var subT = x.subItems[0].text;
+    var id = x.id;
+    x.text = y.text;
+    x.subItems[0].text = y.subItems[0].text;
+    x.id = y.id;
+    y.text = t;
+    y.subItems[0].text = subT;
+    y.id = id;
   }
 
   /**
@@ -11582,11 +11589,6 @@ See the LICENSE file for details.
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
 
-    // var commandSteps = [];
-    // for (var i = 0; i < data.settings.startupCommands.length; i++) {
-    //   commandSteps.push(commandsData[data.settings.startupCommands[i]]);
-    // }
-
     // setup the workflow action steps listbox
     var steps = new ListBoxWrapper(
       startupCommands,
@@ -11643,7 +11645,10 @@ See the LICENSE file for details.
       var selected = sortIndexes(steps.listbox.selection);
       if (selected[i] == 0 || !contiguous(selected)) return;
       for (var i = 0; i < selected.length; i++)
-        swap(steps.listbox.items[selected[i] - 1], steps.listbox.items[selected[i]]);
+        swapListboxItems(
+          steps.listbox.items[selected[i] - 1],
+          steps.listbox.items[selected[i]]
+        );
       steps.listbox.selection = null;
       for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
     };
@@ -11656,7 +11661,10 @@ See the LICENSE file for details.
       )
         return;
       for (var i = steps.listbox.selection.length - 1; i > -1; i--)
-        swap(steps.listbox.items[selected[i]], steps.listbox.items[selected[i] + 1]);
+        swapListboxItems(
+          steps.listbox.items[selected[i]],
+          steps.listbox.items[selected[i] + 1]
+        );
       steps.listbox.selection = null;
       for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
     };
@@ -11676,13 +11684,6 @@ See the LICENSE file for details.
       return sel.length == sel[sel.length - 1] - sel[0] + 1;
     }
 
-    /** swap listbox items in place */
-    function swap(x, y) {
-      var t = x.text;
-      x.text = y.text;
-      y.text = t;
-    }
-
     del.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);
       for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
@@ -11693,7 +11694,11 @@ See the LICENSE file for details.
     };
 
     if (win.show() == 1) {
-      return steps.listbox.items;
+      var items = [];
+      for (var i = 0; i < steps.listbox.items.length; i++) {
+        items.push(steps.listbox.items[i].id);
+      }
+      return items;
     }
     return false;
   }

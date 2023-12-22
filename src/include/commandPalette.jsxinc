@@ -130,13 +130,30 @@ function addToStepsOnDoubleClick(listbox) {
     if (listbox.selection) {
       win = listbox.window;
       steps = win.findElement("steps");
-      command = commandsData[localizedCommandLookup[listbox.selection]];
-      newItem = steps.add("item", command.localizedName);
-      newItem.subItems[0].text = command.localizedType;
+      command = commandsData[listbox.selection.id];
+      newItem = steps.add("item", determineCorrectString(command, "name"));
+      newItem.subItems[0].text = determineCorrectString(command, "type");
       newItem.id = command.id;
       steps.notify("onChange");
     }
   };
+}
+
+/**
+ * Swap listbox items in place (along with their corresponding id).
+ * @param {Object} x Listbox item.
+ * @param {Object} y Listbox item.
+ */
+function swapListboxItems(x, y) {
+  var t = x.text;
+  var subT = x.subItems[0].text;
+  var id = x.id;
+  x.text = y.text;
+  x.subItems[0].text = y.subItems[0].text;
+  x.id = y.id;
+  y.text = t;
+  y.subItems[0].text = subT;
+  y.id = id;
 }
 
 /**
