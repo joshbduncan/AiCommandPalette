@@ -1,4 +1,4 @@
-function workflowBuilder(commands, editWorkflow) {
+function workflowBuilder(commands, editWorkflowId) {
   // create the dialog
   var win = new Window("dialog");
   win.text = localize(strings.wf_builder);
@@ -34,10 +34,12 @@ function workflowBuilder(commands, editWorkflow) {
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
 
+  var editWorkflow;
   var actionSteps = [];
-  if (editWorkflow) {
+  if (editWorkflowId) {
+    editWorkflow = commandsData[editWorkflowId];
     for (var i = 0; i < editWorkflow.actions.length; i++) {
-      actionSteps.push(commandsData[editWorkflow.actions[i]]);
+      actionSteps.push(editWorkflow.actions[i]);
     }
   }
 
@@ -66,7 +68,7 @@ function workflowBuilder(commands, editWorkflow) {
   var pName = win.add("panel", undefined, localize(strings.wf_save_as));
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;
-  var workflowNameText = editWorkflow ? editWorkflow.localizedName : "";
+  var workflowNameText = editWorkflow ? editWorkflow.name : "";
   var workflowName = pName.add("edittext", undefined, workflowNameText);
   workflowName.enabled = editWorkflow ? true : false;
 
@@ -111,7 +113,10 @@ function workflowBuilder(commands, editWorkflow) {
     var selected = sortIndexes(steps.listbox.selection);
     if (selected[i] == 0 || !contiguous(selected)) return;
     for (var i = 0; i < selected.length; i++)
-      swap(steps.listbox.items[selected[i] - 1], steps.listbox.items[selected[i]]);
+      swapListboxItems(
+        steps.listbox.items[selected[i] - 1],
+        steps.listbox.items[selected[i]]
+      );
     steps.listbox.selection = null;
     for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
   };
@@ -124,7 +129,10 @@ function workflowBuilder(commands, editWorkflow) {
     )
       return;
     for (var i = steps.listbox.selection.length - 1; i > -1; i--)
-      swap(steps.listbox.items[selected[i]], steps.listbox.items[selected[i] + 1]);
+      swapListboxItems(
+        steps.listbox.items[selected[i]],
+        steps.listbox.items[selected[i] + 1]
+      );
     steps.listbox.selection = null;
     for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
   };
@@ -142,13 +150,6 @@ function workflowBuilder(commands, editWorkflow) {
   // check to make sure selection is contiguous
   function contiguous(sel) {
     return sel.length == sel[sel.length - 1] - sel[0] + 1;
-  }
-
-  /** swap listbox items in place */
-  function swap(x, y) {
-    var t = x.text;
-    x.text = y.text;
-    y.text = t;
   }
 
   del.onClick = function () {
@@ -179,7 +180,11 @@ function workflowBuilder(commands, editWorkflow) {
   };
 
   if (win.show() == 1) {
-    return { name: workflowName.text.trim(), actions: steps.listbox.items };
+    var actions = [];
+    for (var i = 0; i < steps.listbox.items.length; i++) {
+      actions.push(steps.listbox.items[i].id);
+    }
+    return { name: workflowName.text.trim(), actions: actions };
   }
   return false;
 }

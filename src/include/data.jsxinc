@@ -675,7 +675,7 @@ var commandsData = {
     action: "exportForScreens",
     type: "menu",
     docRequired: true,
-    selRequired: true,
+    selRequired: false,
     name: {
       en: "File > Export > Export For Screens...",
       de: "Datei > Exportieren > F\u00fcr Bildschirme exportieren \u2026",
@@ -689,7 +689,7 @@ var commandsData = {
     action: "export",
     type: "menu",
     docRequired: true,
-    selRequired: true,
+    selRequired: false,
     name: {
       en: "File > Export > Export As...",
       de: "Datei > Exportieren \u2026",
@@ -702,7 +702,7 @@ var commandsData = {
     action: "Adobe AI Save For Web",
     type: "menu",
     docRequired: true,
-    selRequired: true,
+    selRequired: false,
     name: {
       en: "File > Export > Save for Web (Legacy)...",
       de: "Datei > F\u00fcr Web speichern (Legacy) \u2026",

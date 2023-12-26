@@ -59,7 +59,8 @@ function buildStartup() {
   var availableStartupCommands = filterCommands(
     (commands = null),
     (types = [
-      "bookmark",
+      "file",
+      "folder",
       "script",
       "workflow",
       "menu",
@@ -70,7 +71,7 @@ function buildStartup() {
     ]),
     (showHidden = true),
     (showNonRelevant = true),
-    (hideSpecificCommands = [])
+    (hideSpecificCommands = prefs.startupCommands)
   );
   // show the startup builder dialog
   var result = startupBuilder(availableStartupCommands);
@@ -372,7 +373,7 @@ function loadFileBookmark() {
 
 /** Set bookmarked folder to open on system from within Ai Command Palette. */
 function loadFolderBookmark() {
-  var f, bookmark, bookmarkName;
+  var f;
   f = Folder.selectDialog(localize(strings.bm_load_bookmark));
 
   if (!f) return;
@@ -395,8 +396,8 @@ function loadFolderBookmark() {
       return;
   }
 
-  bookmarkName = decodeURI(f.name);
-  bookmark = {
+  var bookmarkName = decodeURI(f.name);
+  var bookmark = {
     id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
     name: bookmarkName,
     action: "bookmark",
@@ -469,9 +470,7 @@ function showAllScripts() {
     (types = ["script"]),
     (showHidden = true),
     (showNonRelevant = false),
-    (hideSpecificCommands = null),
-    (docRequired = false),
-    (selRequired = false)
+    (hideSpecificCommands = null)
   );
   var result = commandPalette(
     (commands = scriptCommands),
@@ -490,9 +489,7 @@ function showAllBookmarks() {
     (types = ["file", "folder"]),
     (showHidden = true),
     (showNonRelevant = true),
-    (hideSpecificCommands = null),
-    (docRequired = false),
-    (selRequired = false)
+    (hideSpecificCommands = null)
   );
   var result = commandPalette(
     (commands = bookmarkCommands),
@@ -511,9 +508,7 @@ function showAllActions() {
     (types = ["action"]),
     (showHidden = true),
     (showNonRelevant = false),
-    (hideSpecificCommands = null),
-    (docRequired = false),
-    (selRequired = false)
+    (hideSpecificCommands = null)
   );
   var result = commandPalette(
     (commands = actionCommands),
@@ -532,9 +527,7 @@ function hideCommand() {
     (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
     (showHidden = false),
     (showNonRelevant = true),
-    (hideSpecificCommands = null),
-    (docRequired = false),
-    (selRequired = false)
+    (hideSpecificCommands = null)
   );
   var result = commandPalette(
     (commands = hideableCommands),
@@ -567,9 +560,7 @@ function deleteCommand() {
     (types = ["bookmark", "script", "workflow"]),
     (showHidden = false),
     (showNonRelevant = true),
-    (hideSpecificCommands = null),
-    (docRequired = false),
-    (selRequired = false)
+    (hideSpecificCommands = null)
   );
   var result = commandPalette(
     (commands = deletableCommands),
@@ -578,22 +569,29 @@ function deleteCommand() {
     (multiselect = true)
   );
   if (!result) return;
+
+  // get all of the actual command names for the confirmation dialog
   var commandNames = [];
-  for (var i = 0; i < result.length; i++)
-    names += commandNames.push(result[i].localizedName);
+  for (var i = 0; i < result.length; i++) {
+    commandNames.push(commandsData[result[i]].name);
+  }
+
+  // confirm command deletion
   if (
-    confirm(
+    !confirm(
       localize(strings.cd_delete_confirm, commandNames.join("\n")),
       "noAsDflt",
       localize(strings.cd_delete_confirm_title)
     )
-  ) {
-    for (var i = 0; i < result.length; i++) {
-      try {
-        delete data.commands[result[i].type][result[i].id];
-      } catch (e) {
-        alert(localize(strings.cd_error_delete, command));
-      }
+  )
+    return;
+
+  // go through each deletable command type and remove them from user prefs
+  // searching through `typesToInject` which is defined in `index.jsx`
+  for (var i = 0; i < typesToInject.length; i++) {
+    for (var j = prefs[typesToInject[i]].length - 1; j >= 0; j--) {
+      if (result.includes(prefs[typesToInject[i]][j].id))
+        prefs[typesToInject[i]].splice(j, 1);
     }
   }
 }

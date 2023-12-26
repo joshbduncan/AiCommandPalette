@@ -3,7 +3,7 @@
 /**
  * Custom wrapper for a ScriptUI Listbox.
  * @param {Array}   commands    Commands to load into the list box.
- * @param {Object}  container   ScriptUI window the listbox should be attached to.
+ * @param {Object}  container   ScriptUI container the listbox should be attached to.
  * @param {String}  name        Lookup name for the listbox.
  * @param {Array}   bounds      Bounds array for the listbox.
  * @param {Object}  columns     Listbox column information.
@@ -62,7 +62,6 @@ ListBoxWrapper.prototype = {
     this.addListeners(listbox);
     if (this.helptip) listbox.helpTip = this.helptip;
     listbox.frameStart = 0;
-
     return listbox;
   },
   /**
@@ -410,7 +409,7 @@ function scoreMatches(query, commands) {
     name = determineCorrectString(command, "name").toLowerCase();
 
     // escape hatch
-    if (name === "") name = id.toLowerCase().replace("_", " "); // FIXME: not sure about this
+    if (name == "") name = id.toLowerCase().replace("_", " ");
 
     type = strings.hasOwnProperty(command.type)
       ? localize(strings[command.type]).toLowerCase()

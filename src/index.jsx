@@ -39,7 +39,7 @@ See the LICENSE file for details.
   var loadedActions = loadActions();
 
   // inject user commands
-  typesToInject = ["workflows", "bookmarks", "scripts"];
+  var typesToInject = ["workflows", "bookmarks", "scripts"];
   for (var i = 0; i < typesToInject.length; i++) {
     for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
       commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
@@ -60,9 +60,7 @@ See the LICENSE file for details.
     (types = null),
     (showHidden = false),
     (showNonRelevant = false),
-    (hideSpecificCommands = null),
-    (docRequired = true),
-    (selRequired = true)
+    (hideSpecificCommands = null)
   );
 
   var startupCommands = filterCommands(
@@ -70,9 +68,7 @@ See the LICENSE file for details.
     (types = null),
     (showHidden = false),
     (showNonRelevant = false),
-    (hideSpecificCommands = null),
-    (docRequired = true),
-    (selRequired = true)
+    (hideSpecificCommands = null)
   );
 
   var result = commandPalette(

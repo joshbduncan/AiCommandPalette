@@ -2,36 +2,44 @@
 
 /**
  * Build or Edit workflows.
- * @param {String} workflow Workflow to edit.
+ * @param {String} editWorkflowId Id of a workflow to edit.
  */
-function buildWorkflow(workflow) {
+function buildWorkflow(editWorkflowId) {
   var availableWorkflowCommands = filterCommands(
     (commands = null),
-    (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+    (types = [
+      "file",
+      "folder",
+      "script",
+      "workflow",
+      "menu",
+      "tool",
+      "action",
+      "builtin",
+    ]),
     (showHidden = true),
-    (hideSpecificCommands = workflow ? [workflow.id] : []),
-    (docRequired = true),
-    (selRequired = true)
+    (showNonRelevant = true),
+    (hideSpecificCommands = workflow ? [workflow.id] : []) // hide current workflow when editing to prevent recursive loop
   );
   // show the workflow builder dialog
-  var result = workflowBuilder(
-    (commands = availableWorkflowCommands),
-    (editWorkflow = workflow)
-  );
+  var result = workflowBuilder(availableWorkflowCommands, editWorkflowId);
 
   if (!result) return;
-  var workflowActions = [];
-  try {
-    for (var i = 0; i < result.actions.length; i++) {
-      workflowActions.push(result.actions[i].commandId);
-    }
-    data.commands.workflow[result.name] = {
-      type: "workflow",
-      actions: workflowActions,
-    };
-  } catch (e) {
-    alert(localize(strings.wf_error_saving, result.name));
-  }
+
+  var workflow = {
+    id: "workflow" + "_" + result.name.toLowerCase().replace(" ", "_"),
+    name: result.name,
+    actions: result.actions,
+    type: "workflow",
+    docRequired: false,
+    selRequired: false,
+    hidden: false,
+  };
+  prefs.workflows.push(workflow);
+
+  // no need to add to startup if editing a previous workflow
+  if (editWorkflowId) return;
+  addToStartup([workflow.id]);
 }
 
 /** Show all workflows. */
@@ -41,9 +49,7 @@ function showAllWorkflows() {
     (types = ["workflow"]),
     (showHidden = true),
     (showNonRelevant = false),
-    (hideSpecificCommands = null),
-    (docRequired = false),
-    (selRequired = false)
+    (hideSpecificCommands = null)
   );
   var result = commandPalette(
     (commands = workflows),
@@ -62,9 +68,7 @@ function editWorkflow() {
     (types = ["workflow"]),
     (showHidden = true),
     (showNonRelevant = false),
-    (hideSpecificCommands = null),
-    (docRequired = false),
-    (selRequired = false)
+    (hideSpecificCommands = null)
   );
   var result = commandPalette(
     (commands = workflows),

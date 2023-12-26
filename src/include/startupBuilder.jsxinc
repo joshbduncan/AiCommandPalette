@@ -34,9 +34,17 @@ function startupBuilder(commands) {
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
 
+  var currentStartupCommands = filterCommands(
+    (commands = prefs.startupCommands),
+    (types = null),
+    (showHidden = true),
+    (showNonRelevant = true),
+    (hideSpecificCommands = null)
+  );
+
   // setup the workflow action steps listbox
   var steps = new ListBoxWrapper(
-    startupCommands,
+    currentStartupCommands,
     pSteps,
     "steps",
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],

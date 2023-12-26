@@ -797,7 +797,7 @@ See the LICENSE file for details.
       action: "exportForScreens",
       type: "menu",
       docRequired: true,
-      selRequired: true,
+      selRequired: false,
       name: {
         en: "File > Export > Export For Screens...",
         de: "Datei > Exportieren > F\u00fcr Bildschirme exportieren \u2026",
@@ -811,7 +811,7 @@ See the LICENSE file for details.
       action: "export",
       type: "menu",
       docRequired: true,
-      selRequired: true,
+      selRequired: false,
       name: {
         en: "File > Export > Export As...",
         de: "Datei > Exportieren \u2026",
@@ -824,7 +824,7 @@ See the LICENSE file for details.
       action: "Adobe AI Save For Web",
       type: "menu",
       docRequired: true,
-      selRequired: true,
+      selRequired: false,
       name: {
         en: "File > Export > Save for Web (Legacy)...",
         de: "Datei > F\u00fcr Web speichern (Legacy) \u2026",
@@ -9399,7 +9399,7 @@ See the LICENSE file for details.
     var badActions = [];
     for (var i = 0; i < actions.length; i++) {
       command = actions[i];
-      if (!commandsData.hasOwnProperty(actions[i]) || !versionCheck(actions[i]))
+      if (!commandsData.hasOwnProperty(actions[i]) || !commandVersionCheck(actions[i]))
         badActions.push(actions[i]);
     }
     return badActions;
@@ -9709,8 +9709,6 @@ See the LICENSE file for details.
    * @param   {Boolean} showHidden           Should user-hidden commands be included?
    * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
    * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
-   * @param   {Boolean} docRequired          Should commands requiring an active document be included.
-   * @param   {Boolean} selRequired          Should commands requiring an active selection be included.
    * @returns {Array}                        Filtered commands objects.
    */
   function filterCommands(
@@ -9718,9 +9716,7 @@ See the LICENSE file for details.
     types,
     showHidden,
     showNonRelevant,
-    hideSpecificCommands,
-    docRequired,
-    selRequired
+    hideSpecificCommands
   ) {
     var filteredCommands = [];
     var id, command;
@@ -9755,9 +9751,9 @@ See the LICENSE file for details.
    */
   function relevantCommand(command) {
     // hide commands requiring an active documents if requested
-    if (docRequired && !appDocuments && command.docRequired) return false;
+    if (command.docRequired && !appDocuments) return false;
     // hide commands requiring an active selection if requested
-    if (selRequired && !docSelection && command.selRequired) return false;
+    if (command.selRequired && !docSelection) return false;
 
     // hide `Edit Workflow...` command if no workflows
     if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
@@ -9927,7 +9923,8 @@ See the LICENSE file for details.
     var availableStartupCommands = filterCommands(
       (commands = null),
       (types = [
-        "bookmark",
+        "file",
+        "folder",
         "script",
         "workflow",
         "menu",
@@ -9938,7 +9935,7 @@ See the LICENSE file for details.
       ]),
       (showHidden = true),
       (showNonRelevant = true),
-      (hideSpecificCommands = [])
+      (hideSpecificCommands = prefs.startupCommands)
     );
     // show the startup builder dialog
     var result = startupBuilder(availableStartupCommands);
@@ -10240,7 +10237,7 @@ See the LICENSE file for details.
 
   /** Set bookmarked folder to open on system from within Ai Command Palette. */
   function loadFolderBookmark() {
-    var f, bookmark, bookmarkName;
+    var f;
     f = Folder.selectDialog(localize(strings.bm_load_bookmark));
 
     if (!f) return;
@@ -10263,8 +10260,8 @@ See the LICENSE file for details.
         return;
     }
 
-    bookmarkName = decodeURI(f.name);
-    bookmark = {
+    var bookmarkName = decodeURI(f.name);
+    var bookmark = {
       id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
       name: bookmarkName,
       action: "bookmark",
@@ -10337,9 +10334,7 @@ See the LICENSE file for details.
       (types = ["script"]),
       (showHidden = true),
       (showNonRelevant = false),
-      (hideSpecificCommands = null),
-      (docRequired = false),
-      (selRequired = false)
+      (hideSpecificCommands = null)
     );
     var result = commandPalette(
       (commands = scriptCommands),
@@ -10358,9 +10353,7 @@ See the LICENSE file for details.
       (types = ["file", "folder"]),
       (showHidden = true),
       (showNonRelevant = true),
-      (hideSpecificCommands = null),
-      (docRequired = false),
-      (selRequired = false)
+      (hideSpecificCommands = null)
     );
     var result = commandPalette(
       (commands = bookmarkCommands),
@@ -10379,9 +10372,7 @@ See the LICENSE file for details.
       (types = ["action"]),
       (showHidden = true),
       (showNonRelevant = false),
-      (hideSpecificCommands = null),
-      (docRequired = false),
-      (selRequired = false)
+      (hideSpecificCommands = null)
     );
     var result = commandPalette(
       (commands = actionCommands),
@@ -10400,9 +10391,7 @@ See the LICENSE file for details.
       (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
       (showHidden = false),
       (showNonRelevant = true),
-      (hideSpecificCommands = null),
-      (docRequired = false),
-      (selRequired = false)
+      (hideSpecificCommands = null)
     );
     var result = commandPalette(
       (commands = hideableCommands),
@@ -10435,9 +10424,7 @@ See the LICENSE file for details.
       (types = ["bookmark", "script", "workflow"]),
       (showHidden = false),
       (showNonRelevant = true),
-      (hideSpecificCommands = null),
-      (docRequired = false),
-      (selRequired = false)
+      (hideSpecificCommands = null)
     );
     var result = commandPalette(
       (commands = deletableCommands),
@@ -10446,22 +10433,29 @@ See the LICENSE file for details.
       (multiselect = true)
     );
     if (!result) return;
+
+    // get all of the actual command names for the confirmation dialog
     var commandNames = [];
-    for (var i = 0; i < result.length; i++)
-      names += commandNames.push(result[i].localizedName);
+    for (var i = 0; i < result.length; i++) {
+      commandNames.push(commandsData[result[i]].name);
+    }
+
+    // confirm command deletion
     if (
-      confirm(
+      !confirm(
         localize(strings.cd_delete_confirm, commandNames.join("\n")),
         "noAsDflt",
         localize(strings.cd_delete_confirm_title)
       )
-    ) {
-      for (var i = 0; i < result.length; i++) {
-        try {
-          delete data.commands[result[i].type][result[i].id];
-        } catch (e) {
-          alert(localize(strings.cd_error_delete, command));
-        }
+    )
+      return;
+
+    // go through each deletable command type and remove them from user prefs
+    // searching through `typesToInject` which is defined in `index.jsx`
+    for (var i = 0; i < typesToInject.length; i++) {
+      for (var j = prefs[typesToInject[i]].length - 1; j >= 0; j--) {
+        if (result.includes(prefs[typesToInject[i]][j].id))
+          prefs[typesToInject[i]].splice(j, 1);
       }
     }
   }
@@ -10642,13 +10636,12 @@ See the LICENSE file for details.
     if (command.type == "workflow") {
       // check to make sure all workflow commands are valid
       badActions = checkWorkflowActions(command.actions);
-      if (check.length) {
+      if (badActions.length) {
         alert(localize(strings.wf_needs_attention, badActions.join("\n")));
         return;
       }
       // run each action in the workflow
-      for (var i = 0; i < command.actions.length; i++)
-        processCommand(commandsData[command.actions[i]]);
+      for (var i = 0; i < command.actions.length; i++) processCommand(command.actions[i]);
     } else {
       executeAction(command);
     }
@@ -10777,10 +10770,10 @@ See the LICENSE file for details.
       case "buildStartup":
         buildStartup();
         break;
-      case "buildWorkflow": // TODO
+      case "buildWorkflow":
         buildWorkflow();
         break;
-      case "editWorkflow": // TODO
+      case "editWorkflow":
         editWorkflow();
         break;
       case "loadScript":
@@ -10799,7 +10792,7 @@ See the LICENSE file for details.
       case "unhideCommand":
         unhideCommand();
         break;
-      case "deleteCommand": // TODO
+      case "deleteCommand":
         deleteCommand();
         break;
       case "enableTypeInSearch":
@@ -10895,7 +10888,7 @@ See the LICENSE file for details.
   /**
    * Custom wrapper for a ScriptUI Listbox.
    * @param {Array}   commands    Commands to load into the list box.
-   * @param {Object}  container   ScriptUI window the listbox should be attached to.
+   * @param {Object}  container   ScriptUI container the listbox should be attached to.
    * @param {String}  name        Lookup name for the listbox.
    * @param {Array}   bounds      Bounds array for the listbox.
    * @param {Object}  columns     Listbox column information.
@@ -10954,7 +10947,6 @@ See the LICENSE file for details.
       this.addListeners(listbox);
       if (this.helptip) listbox.helpTip = this.helptip;
       listbox.frameStart = 0;
-
       return listbox;
     },
     /**
@@ -11302,7 +11294,7 @@ See the LICENSE file for details.
       name = determineCorrectString(command, "name").toLowerCase();
 
       // escape hatch
-      if (name === "") name = id.toLowerCase().replace("_", " "); // FIXME: not sure about this
+      if (name == "") name = id.toLowerCase().replace("_", " ");
 
       type = strings.hasOwnProperty(command.type)
         ? localize(strings[command.type]).toLowerCase()
@@ -11368,7 +11360,7 @@ See the LICENSE file for details.
 
     return sortByScore(matches);
   }
-  function workflowBuilder(commands, editWorkflow) {
+  function workflowBuilder(commands, editWorkflowId) {
     // create the dialog
     var win = new Window("dialog");
     win.text = localize(strings.wf_builder);
@@ -11404,10 +11396,12 @@ See the LICENSE file for details.
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
 
+    var editWorkflow;
     var actionSteps = [];
-    if (editWorkflow) {
+    if (editWorkflowId) {
+      editWorkflow = commandsData[editWorkflowId];
       for (var i = 0; i < editWorkflow.actions.length; i++) {
-        actionSteps.push(commandsData[editWorkflow.actions[i]]);
+        actionSteps.push(editWorkflow.actions[i]);
       }
     }
 
@@ -11436,7 +11430,7 @@ See the LICENSE file for details.
     var pName = win.add("panel", undefined, localize(strings.wf_save_as));
     pName.alignChildren = ["fill", "center"];
     pName.margins = 20;
-    var workflowNameText = editWorkflow ? editWorkflow.localizedName : "";
+    var workflowNameText = editWorkflow ? editWorkflow.name : "";
     var workflowName = pName.add("edittext", undefined, workflowNameText);
     workflowName.enabled = editWorkflow ? true : false;
 
@@ -11481,7 +11475,10 @@ See the LICENSE file for details.
       var selected = sortIndexes(steps.listbox.selection);
       if (selected[i] == 0 || !contiguous(selected)) return;
       for (var i = 0; i < selected.length; i++)
-        swap(steps.listbox.items[selected[i] - 1], steps.listbox.items[selected[i]]);
+        swapListboxItems(
+          steps.listbox.items[selected[i] - 1],
+          steps.listbox.items[selected[i]]
+        );
       steps.listbox.selection = null;
       for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
     };
@@ -11494,7 +11491,10 @@ See the LICENSE file for details.
       )
         return;
       for (var i = steps.listbox.selection.length - 1; i > -1; i--)
-        swap(steps.listbox.items[selected[i]], steps.listbox.items[selected[i] + 1]);
+        swapListboxItems(
+          steps.listbox.items[selected[i]],
+          steps.listbox.items[selected[i] + 1]
+        );
       steps.listbox.selection = null;
       for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
     };
@@ -11512,13 +11512,6 @@ See the LICENSE file for details.
     // check to make sure selection is contiguous
     function contiguous(sel) {
       return sel.length == sel[sel.length - 1] - sel[0] + 1;
-    }
-
-    /** swap listbox items in place */
-    function swap(x, y) {
-      var t = x.text;
-      x.text = y.text;
-      y.text = t;
     }
 
     del.onClick = function () {
@@ -11549,7 +11542,11 @@ See the LICENSE file for details.
     };
 
     if (win.show() == 1) {
-      return { name: workflowName.text.trim(), actions: steps.listbox.items };
+      var actions = [];
+      for (var i = 0; i < steps.listbox.items.length; i++) {
+        actions.push(steps.listbox.items[i].id);
+      }
+      return { name: workflowName.text.trim(), actions: actions };
     }
     return false;
   }
@@ -11589,9 +11586,17 @@ See the LICENSE file for details.
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
 
+    var currentStartupCommands = filterCommands(
+      (commands = prefs.startupCommands),
+      (types = null),
+      (showHidden = true),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null)
+    );
+
     // setup the workflow action steps listbox
     var steps = new ListBoxWrapper(
-      startupCommands,
+      currentStartupCommands,
       pSteps,
       "steps",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
@@ -11764,36 +11769,44 @@ See the LICENSE file for details.
 
   /**
    * Build or Edit workflows.
-   * @param {String} workflow Workflow to edit.
+   * @param {String} editWorkflowId Id of a workflow to edit.
    */
-  function buildWorkflow(workflow) {
+  function buildWorkflow(editWorkflowId) {
     var availableWorkflowCommands = filterCommands(
       (commands = null),
-      (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+      (types = [
+        "file",
+        "folder",
+        "script",
+        "workflow",
+        "menu",
+        "tool",
+        "action",
+        "builtin",
+      ]),
       (showHidden = true),
-      (hideSpecificCommands = workflow ? [workflow.id] : []),
-      (docRequired = true),
-      (selRequired = true)
+      (showNonRelevant = true),
+      (hideSpecificCommands = workflow ? [workflow.id] : []) // hide current workflow when editing to prevent recursive loop
     );
     // show the workflow builder dialog
-    var result = workflowBuilder(
-      (commands = availableWorkflowCommands),
-      (editWorkflow = workflow)
-    );
+    var result = workflowBuilder(availableWorkflowCommands, editWorkflowId);
 
     if (!result) return;
-    var workflowActions = [];
-    try {
-      for (var i = 0; i < result.actions.length; i++) {
-        workflowActions.push(result.actions[i].commandId);
-      }
-      data.commands.workflow[result.name] = {
-        type: "workflow",
-        actions: workflowActions,
-      };
-    } catch (e) {
-      alert(localize(strings.wf_error_saving, result.name));
-    }
+
+    var workflow = {
+      id: "workflow" + "_" + result.name.toLowerCase().replace(" ", "_"),
+      name: result.name,
+      actions: result.actions,
+      type: "workflow",
+      docRequired: false,
+      selRequired: false,
+      hidden: false,
+    };
+    prefs.workflows.push(workflow);
+
+    // no need to add to startup if editing a previous workflow
+    if (editWorkflowId) return;
+    addToStartup([workflow.id]);
   }
 
   /** Show all workflows. */
@@ -11803,9 +11816,7 @@ See the LICENSE file for details.
       (types = ["workflow"]),
       (showHidden = true),
       (showNonRelevant = false),
-      (hideSpecificCommands = null),
-      (docRequired = false),
-      (selRequired = false)
+      (hideSpecificCommands = null)
     );
     var result = commandPalette(
       (commands = workflows),
@@ -11824,9 +11835,7 @@ See the LICENSE file for details.
       (types = ["workflow"]),
       (showHidden = true),
       (showNonRelevant = false),
-      (hideSpecificCommands = null),
-      (docRequired = false),
-      (selRequired = false)
+      (hideSpecificCommands = null)
     );
     var result = commandPalette(
       (commands = workflows),
@@ -11844,7 +11853,7 @@ See the LICENSE file for details.
   var loadedActions = loadActions();
 
   // inject user commands
-  typesToInject = ["workflows", "bookmarks", "scripts"];
+  var typesToInject = ["workflows", "bookmarks", "scripts"];
   for (var i = 0; i < typesToInject.length; i++) {
     for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
       commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
@@ -11865,9 +11874,7 @@ See the LICENSE file for details.
     (types = null),
     (showHidden = false),
     (showNonRelevant = false),
-    (hideSpecificCommands = null),
-    (docRequired = true),
-    (selRequired = true)
+    (hideSpecificCommands = null)
   );
 
   var startupCommands = filterCommands(
@@ -11875,9 +11882,7 @@ See the LICENSE file for details.
     (types = null),
     (showHidden = false),
     (showNonRelevant = false),
-    (hideSpecificCommands = null),
-    (docRequired = true),
-    (selRequired = true)
+    (hideSpecificCommands = null)
   );
 
   var result = commandPalette(

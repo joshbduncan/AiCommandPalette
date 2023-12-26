@@ -9,13 +9,12 @@ function processCommand(id) {
   if (command.type == "workflow") {
     // check to make sure all workflow commands are valid
     badActions = checkWorkflowActions(command.actions);
-    if (check.length) {
+    if (badActions.length) {
       alert(localize(strings.wf_needs_attention, badActions.join("\n")));
       return;
     }
     // run each action in the workflow
-    for (var i = 0; i < command.actions.length; i++)
-      processCommand(commandsData[command.actions[i]]);
+    for (var i = 0; i < command.actions.length; i++) processCommand(command.actions[i]);
   } else {
     executeAction(command);
   }
@@ -144,10 +143,10 @@ function configAction(command) {
     case "buildStartup":
       buildStartup();
       break;
-    case "buildWorkflow": // TODO
+    case "buildWorkflow":
       buildWorkflow();
       break;
-    case "editWorkflow": // TODO
+    case "editWorkflow":
       editWorkflow();
       break;
     case "loadScript":
@@ -166,7 +165,7 @@ function configAction(command) {
     case "unhideCommand":
       unhideCommand();
       break;
-    case "deleteCommand": // TODO
+    case "deleteCommand":
       deleteCommand();
       break;
     case "enableTypeInSearch":

@@ -33,7 +33,7 @@ function checkWorkflowActions(actions) {
   var badActions = [];
   for (var i = 0; i < actions.length; i++) {
     command = actions[i];
-    if (!commandsData.hasOwnProperty(actions[i]) || !versionCheck(actions[i]))
+    if (!commandsData.hasOwnProperty(actions[i]) || !commandVersionCheck(actions[i]))
       badActions.push(actions[i]);
   }
   return badActions;
@@ -343,8 +343,6 @@ DIALOG HELPER FUNCTIONS
  * @param   {Boolean} showHidden           Should user-hidden commands be included?
  * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
  * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
- * @param   {Boolean} docRequired          Should commands requiring an active document be included.
- * @param   {Boolean} selRequired          Should commands requiring an active selection be included.
  * @returns {Array}                        Filtered commands objects.
  */
 function filterCommands(
@@ -352,9 +350,7 @@ function filterCommands(
   types,
   showHidden,
   showNonRelevant,
-  hideSpecificCommands,
-  docRequired,
-  selRequired
+  hideSpecificCommands
 ) {
   var filteredCommands = [];
   var id, command;
@@ -389,9 +385,9 @@ function filterCommands(
  */
 function relevantCommand(command) {
   // hide commands requiring an active documents if requested
-  if (docRequired && !appDocuments && command.docRequired) return false;
+  if (command.docRequired && !appDocuments) return false;
   // hide commands requiring an active selection if requested
-  if (selRequired && !docSelection && command.selRequired) return false;
+  if (command.selRequired && !docSelection) return false;
 
   // hide `Edit Workflow...` command if no workflows
   if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
