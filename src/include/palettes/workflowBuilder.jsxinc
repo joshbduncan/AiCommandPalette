@@ -1,4 +1,6 @@
 function workflowBuilder(commands, editWorkflowId) {
+  var overwrite = false;
+
   // create the dialog
   var win = new Window("dialog");
   win.text = localize(strings.wf_builder);
@@ -165,16 +167,21 @@ function workflowBuilder(commands, editWorkflowId) {
 
   save.onClick = function () {
     // check for workflow overwrite
-    if (
-      !editWorkflow &&
-      data.commands.workflow.hasOwnProperty(workflowName.text.trim()) &&
-      !confirm(
-        localize(strings.wf_already_exists) + "\n" + workflowName.text.trim(),
-        "noAsDflt",
-        localize(strings.wf_already_exists_title)
-      )
-    ) {
-      return;
+    var currentWorkflows = [];
+    for (var i = 0; i < prefs.workflows.length; i++) {
+      currentWorkflows.push(prefs.workflows[i].name);
+    }
+    if (currentWorkflows.includes(workflowName.text.trim())) {
+      overwrite = true;
+      if (
+        !confirm(
+          localize(strings.wf_already_exists) + "\n" + workflowName.text.trim(),
+          "noAsDflt",
+          localize(strings.wf_already_exists_title)
+        )
+      ) {
+        return;
+      }
     }
     win.close(1);
   };
@@ -184,7 +191,7 @@ function workflowBuilder(commands, editWorkflowId) {
     for (var i = 0; i < steps.listbox.items.length; i++) {
       actions.push(steps.listbox.items[i].id);
     }
-    return { name: workflowName.text.trim(), actions: actions };
+    return { name: workflowName.text.trim(), actions: actions, overwrite: overwrite };
   }
   return false;
 }

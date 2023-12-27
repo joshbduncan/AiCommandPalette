@@ -6,10 +6,10 @@ var userHistoryFileName = "History.json";
 // setup the base prefs model
 var history = [];
 var recentCommands = {};
+var mostRecentCommands = [];
 var latches = {};
 
 var userHistory = {};
-// pref functions
 userHistory.folder = function () {
   return userHistoryFolder;
 };
@@ -25,8 +25,7 @@ userHistory.load = function () {
     var loadedData, entry;
     try {
       loadedData = readJSONData(file);
-      if (loadedData == []) return; // FIXME: add alert
-      // TODO: add alert about prefs file from a different machine
+      if (loadedData == []) return;
       history = loadedData;
       for (var i = loadedData.length - 1; i >= 0; i--) {
         entry = loadedData[i];
@@ -36,10 +35,17 @@ userHistory.load = function () {
         if (!queryCommandsLUT[entry.query].hasOwnProperty(entry.command))
           queryCommandsLUT[entry.query][entry.command] = 0;
         queryCommandsLUT[entry.query][entry.command]++;
-        // set last 25 recent commands
+        // track how often recent command have been ran
         if (!recentCommands.hasOwnProperty(entry.command))
           recentCommands[entry.command] = 0;
         recentCommands[entry.command]++;
+        // track the past 25 most recent commands
+        if (
+          mostRecentCommands.length <= mostRecentCommandsCount &&
+          commandsData.hasOwnProperty(entry.command) &&
+          !mostRecentCommands.includes(entry.command)
+        )
+          mostRecentCommands.push(entry.command);
       }
       // build latches with most common command for each query
       var query, command, commands;
@@ -57,7 +63,7 @@ userHistory.load = function () {
     } catch (e) {
       file.rename(file.name + ".bak");
       this.reveal();
-      Error.runtimeError(1, localize(strings.pref_file_loading_error)); // FIXME: update loc string
+      Error.runtimeError(1, localize(strings.history_file_loading_error));
     }
   }
 };

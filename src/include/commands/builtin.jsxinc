@@ -328,18 +328,22 @@ function loadFileBookmark() {
   if (files.length == 0) return;
 
   // get all current bookmark paths to ensure no duplicates
-  var currentFileBookmarks = [];
+  var currentFileBookmarkIds = [];
+  var currentFileBookmarkPaths = [];
   for (var i = 0; i < prefs.bookmarks.length; i++) {
     if (prefs.bookmarks[i].type != "file") continue;
-    currentFileBookmarks.push(prefs.bookmarks[i].path);
+    currentFileBookmarkIds.push(prefs.bookmarks[i].id);
+    currentFileBookmarkPaths.push(prefs.bookmarks[i].path);
   }
 
-  var f, bookmark, bookmarkName, id;
+  var f, bookmark, bookmarkName, id, idx, oldId;
   var newBookmarks = [];
   var newBookmarkIds = [];
+  var oldBookmarksToRemoveFromStartup = [];
   for (var j = 0; j < files.length; j++) {
     f = files[j];
-    if (currentFileBookmarks.includes(f.fsName))
+    if (currentFileBookmarkPaths.includes(f.fsName)) {
+      idx = currentFileBookmarkPaths.indexOf(f.fsName);
       if (
         !confirm(
           localize(strings.bm_already_loaded),
@@ -348,6 +352,12 @@ function loadFileBookmark() {
         )
       )
         continue;
+      oldId = prefs.startupCommands.splice(
+        prefs.startupCommands.indexOf(currentFileBookmarkIds[idx]),
+        1
+      );
+      delete commandsData[oldId];
+    }
 
     bookmarkName = decodeURI(f.name);
     id = cleanupCommandId("bookmark_" + bookmarkName.toLowerCase());
@@ -557,7 +567,7 @@ function unhideCommand() {
 function deleteCommand() {
   var deletableCommands = filterCommands(
     (commands = null),
-    (types = ["bookmark", "script", "workflow"]),
+    (types = ["file", "folder", "script", "workflow"]),
     (showHidden = false),
     (showNonRelevant = true),
     (hideSpecificCommands = null)
@@ -587,11 +597,11 @@ function deleteCommand() {
     return;
 
   // go through each deletable command type and remove them from user prefs
-  // searching through `typesToInject` which is defined in `index.jsx`
-  for (var i = 0; i < typesToInject.length; i++) {
-    for (var j = prefs[typesToInject[i]].length - 1; j >= 0; j--) {
-      if (result.includes(prefs[typesToInject[i]][j].id))
-        prefs[typesToInject[i]].splice(j, 1);
+  var typesToCheck = ["workflows", "bookmarks", "scripts"];
+  for (var i = 0; i < typesToCheck.length; i++) {
+    for (var j = prefs[typesToCheck[i]].length - 1; j >= 0; j--) {
+      if (result.includes(prefs[typesToCheck[i]][j].id))
+        prefs[typesToCheck[i]].splice(j, 1);
     }
   }
 }
@@ -599,6 +609,7 @@ function deleteCommand() {
 // BUILT-IN COMMANDS
 
 /** Present a command palette with all open documents and goto the chosen one. */
+// TODO
 function goToOpenDocument() {
   var documentLookup = {};
   var openDocuments = [];
@@ -624,6 +635,7 @@ function goToOpenDocument() {
 }
 
 /** Present a command palette with all artboards and zoom to the chosen one. */
+// TODO
 function goToArtboard() {
   var artboardLookup = {};
   var artboards = [];
@@ -644,6 +656,7 @@ function goToArtboard() {
 }
 
 /** Present a command palette with all named objects and zoom to and select the chosen one. */
+// TODO
 function goToNamedObject() {
   if (app.activeDocument.pageItems.length > namedObjectLimit)
     alert(
@@ -715,6 +728,7 @@ function goToNamedObject() {
 }
 
 /** Present a command palette with all recently open files and open the chosen one. */
+// TODO
 function recentFiles() {
   var f, path;
   var filePaths = getRecentFilePaths();
@@ -742,18 +756,9 @@ function recentFiles() {
 }
 
 /** Present a command palette with more recent commands and process the selected one. */
-function recentCommands() {
-  var recentCommands = [];
-  for (var i = 0; i < data.recent.commands.length; i++) {
-    if (!commandsData.hasOwnProperty(data.recent.commands[i])) {
-      // FIXME: add alert
-      data.recent.commands.splice(i, 1);
-      continue;
-    }
-    recentCommands.push(commandsData[data.recent.commands[i]]);
-  }
+function showRecentCommands() {
   var result = commandPalette(
-    (commands = recentCommands),
+    (commands = mostRecentCommands),
     (title = localize(strings.recent_commands)),
     (columns = paletteSettings.columnSets.default),
     (multiselect = false)

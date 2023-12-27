@@ -26,20 +26,30 @@ function buildWorkflow(editWorkflowId) {
 
   if (!result) return;
 
-  var workflow = {
-    id: "workflow" + "_" + result.name.toLowerCase().replace(" ", "_"),
-    name: result.name,
-    actions: result.actions,
-    type: "workflow",
-    docRequired: false,
-    selRequired: false,
-    hidden: false,
-  };
-  prefs.workflows.push(workflow);
+  var id;
+  // when overwriting delete previous version and update prefs
+  if (result.overwrite) {
+    for (var i = prefs.workflows.length - 1; i >= 0; i--) {
+      if (prefs.workflows[i].name == result.name) {
+        prefs.workflows[i].actions = result.actions;
+        id = prefs.workflows[i].id;
+      }
+    }
+  } else {
+    id = cleanupCommandId("workflow_" + result.name.toLowerCase());
+    var workflow = {
+      id: id,
+      name: result.name,
+      actions: result.actions,
+      type: "workflow",
+      docRequired: false,
+      selRequired: false,
+      hidden: false,
+    };
+    prefs.workflows.push(workflow);
+  }
 
-  // no need to add to startup if editing a previous workflow
-  if (editWorkflowId) return;
-  addToStartup([workflow.id]);
+  addToStartup([id]);
 }
 
 /** Show all workflows. */

@@ -201,8 +201,8 @@ function configAction(command) {
  */
 function builtinAction(command) {
   switch (command.action) {
-    case "recentCommands":
-      recentCommands();
+    case "recentCommands": // TODO
+      showRecentCommands();
       break;
     case "allWorkflows":
       showAllWorkflows();

@@ -1,0 +1,41 @@
+//USER ACTIONS
+
+var userActions = {};
+userActions.loadedActions = false;
+userActions.load = function () {
+  var ct = 0;
+  var currentPath, set, actionCount, name;
+  var pref = app.preferences;
+  var path = "plugin/Action/SavedSets/set-";
+
+  for (var i = 1; i <= 100; i++) {
+    currentPath = path + i.toString() + "/";
+    // get action sets
+    set = pref.getStringPreference(currentPath + "name");
+    if (!set) {
+      break;
+    }
+    // get actions in set
+    actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
+    ct += actionCount;
+    var name, id, loc, obj;
+    for (var j = 1; j <= actionCount; j++) {
+      loc = {};
+      obj = {};
+      name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
+      id = set + "_" + name;
+      loc[currentLocale] = name + " [" + set + "]";
+      obj["id"] = id;
+      obj["action"] = "action";
+      obj["type"] = "action";
+      obj["set"] = set;
+      obj["name"] = name;
+      obj["docRequired"] = false;
+      obj["selRequired"] = false;
+      obj["loc"] = loc;
+      obj["hidden"] = false;
+      commandsData[id] = obj;
+    }
+  }
+  this.loadedActions = ct > 0;
+};

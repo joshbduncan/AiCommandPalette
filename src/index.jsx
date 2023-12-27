@@ -19,34 +19,27 @@ See the LICENSE file for details.
   var _github = "https://github.com/joshbduncan";
 
   //@includepath "include"
+  //@includepath "include/user"
+  //@includepath "include/palettes"
+  //@includepath "include/commands"
+
   //@include "polyfills.jsxinc"
+  //@include "helpers.jsxinc"
+  //@include "io.jsxinc"
   //@include "data.jsxinc"
   //@include "config.jsxinc"
-  //@include "preferences.jsxinc"
-  //@include "history.jsxinc"
-  //@include "helpers.jsxinc"
-  //@include "builtin.jsxinc"
+
+  //@include "user.jsxinc"
+  //@include "palettes.jsxinc"
   //@include "commands.jsxinc"
-  //@include "commandPalette.jsxinc"
-  //@include "workflowBuilder.jsxinc"
-  //@include "startupBuilder.jsxinc"
-  //@include "io.jsxinc"
-  //@include "workflows.jsxinc"
 
   // load the user data
   userPrefs.load();
+  userPrefs.inject();
+  userActions.load();
   userHistory.load();
-  var loadedActions = loadActions();
 
-  // inject user commands
-  var typesToInject = ["workflows", "bookmarks", "scripts"];
-  for (var i = 0; i < typesToInject.length; i++) {
-    for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
-      commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
-    }
-  }
-
-  // add basic defaults to the startup on a first/fresh install
+  // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }

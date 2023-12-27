@@ -109,58 +109,25 @@ function uniqueCommandId(id) {
  * @returns             If commands were added to their startup screen.
  */
 function addToStartup(newCommandIds) {
-  // TODO: localize confirmation prompt
+  // remove any command already in startup commands
+  var newCommandId;
+  for (var i = newCommandIds.length - 1; i >= 0; i--) {
+    if (prefs.startupCommands.includes(newCommandIds[i])) {
+      newCommandIds.splice(i, 1);
+    }
+  }
+
+  if (!newCommandIds.length) return;
+
   if (
     !confirm(
-      "Add new command(s) to your startup commands?",
+      localize(strings.cd_add_to_startup),
       "noAsDflt",
-      "Add To Startup Commands"
+      localize(strings.cd_add_to_startup_title)
     )
   )
     return false;
   prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
-}
-
-/**
- * Load all user actions as commands.
- * @returns {Boolean} If any actions were successfully loaded.
- */
-function loadActions() {
-  var ct = 0;
-  var currentPath, set, actionCount, name;
-  var pref = app.preferences;
-  var path = "plugin/Action/SavedSets/set-";
-
-  for (var i = 1; i <= 100; i++) {
-    currentPath = path + i.toString() + "/";
-    // get action sets
-    set = pref.getStringPreference(currentPath + "name");
-    if (!set) {
-      break;
-    }
-    // get actions in set
-    actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
-    ct += actionCount;
-    var name, id, loc, obj;
-    for (var j = 1; j <= actionCount; j++) {
-      loc = {};
-      obj = {};
-      name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
-      id = set + "_" + name;
-      loc[currentLocale] = name + " [" + set + "]";
-      obj["id"] = id;
-      obj["action"] = "action";
-      obj["type"] = "action";
-      obj["set"] = set;
-      obj["name"] = name;
-      obj["docRequired"] = false;
-      obj["selRequired"] = false;
-      obj["loc"] = loc;
-      obj["hidden"] = false;
-      commandsData[id] = obj;
-    }
-  }
-  return ct > 0;
 }
 
 /**
@@ -343,7 +310,7 @@ DIALOG HELPER FUNCTIONS
  * @param   {Boolean} showHidden           Should user-hidden commands be included?
  * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
  * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
- * @returns {Array}                        Filtered commands objects.
+ * @returns {Array}                        Filtered command ids.
  */
 function filterCommands(
   commands,
@@ -398,7 +365,7 @@ function relevantCommand(command) {
   // hide `All Bookmarks...` command if no bookmarks
   if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
   // hide `All Actions...` command if no actions
-  if (command.id == "builtin_allActions" && !loadedActions) return false;
+  if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
 
   // hide `Enable Searching on Command Type` command if already enabled
   if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)

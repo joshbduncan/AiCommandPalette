@@ -46,7 +46,6 @@ paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
 
 paletteSettings.columnSets.actions = {};
 paletteSettings.columnSets.actions[localize(strings.name_title_case)] = {
-  // FIXME: localize
   width: null,
   key: "name",
 };
@@ -58,12 +57,10 @@ paletteSettings.columnSets.actions["Set"] = {
 
 paletteSettings.columnSets.bookmarks = {};
 paletteSettings.columnSets.bookmarks[localize(strings.name_title_case)] = {
-  // FIXME: localize
   width: null,
   key: "name",
 };
 paletteSettings.columnSets.bookmarks[localize(strings.type_title_case)] = {
-  // FIXME: localize
   width: 50,
   key: "type",
 };
@@ -74,7 +71,7 @@ paletteSettings.columnSets.bookmarks["Path"] = {
 };
 
 var visibleListItems = 9;
-var recentCommandsCount = 25;
+var mostRecentCommandsCount = 25;
 
 // MISCELLANEOUS SETTINGS
 

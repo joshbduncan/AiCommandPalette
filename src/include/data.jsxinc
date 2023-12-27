@@ -79,6 +79,16 @@ var strings = {
     de: "Are you sure you want to clear your history?",
     ru: "Are you sure you want to clear your history?",
   },
+  cd_add_to_startup: {
+    en: "Add new command(s) to your startup?",
+    de: "Add new command(s) to your startup?",
+    ru: "Add new command(s) to your startup?",
+  },
+  cd_add_to_startup_title: {
+    en: "Add To Startup Commands",
+    de: "Add To Startup Commands",
+    ru: "Add To Startup Commands",
+  },
   cd_delete_confirm: {
     en: "Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n%1",
     de: "Befehle l\u00f6schen?\nGel\u00f6schte Befehle werden in bestehenden Arbeitsabl\u00e4ufen nicht mehr funktionieren.\n\n%1",
@@ -307,6 +317,11 @@ var strings = {
     ru: "Open Recent File",
   },
   placed_items: { en: "Placed Items", de: "Platzierte Objecte", ru: "Placed Items" },
+  history_file_loading_error: {
+    en: "Error Loading History\nA backup copy of your history has been created.",
+    de: "Error Loading History\nA backup copy of your history has been created.",
+    ru: "Error Loading History\nA backup copy of your history has been created.",
+  },
   pref_file_loading_error: {
     en: "Error Loading Preferences\nA backup copy of your settings has been created.",
     de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",

@@ -18,6 +18,7 @@ See the LICENSE file for details.
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
 
+
   // JAVASCRIPT POLYFILLS
 
   //ARRAY POLYFILLS
@@ -120,6 +121,529 @@ See the LICENSE file for details.
       return this.replace(new RegExp(str, "g"), newStr);
     };
   }
+  /**
+   * Check to see if there is an active document.
+   * @returns Make sure at least one document is open for certain built-in commands.
+   */
+  function activeDocument() {
+    if (app.documents.length < 1) {
+      alert(localize(strings.no_active_document));
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Check to make sure the command is available in the system Ai version.
+   * @param command Command to check.
+   * @returns       True if command is available in the current Ai version or false if not.
+   */
+  function commandVersionCheck(command) {
+    if (
+      (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
+      (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
+    )
+      return false;
+    return true;
+  }
+
+  /**
+   * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
+   * @param   {Array} actions Workflow action steps to check.
+   * @returns {Array}         Non-active workflow action.
+   */
+  function checkWorkflowActions(actions) {
+    var badActions = [];
+    for (var i = 0; i < actions.length; i++) {
+      command = actions[i];
+      if (!commandsData.hasOwnProperty(actions[i]) || !commandVersionCheck(actions[i]))
+        badActions.push(actions[i]);
+    }
+    return badActions;
+  }
+
+  /**
+   * Compare semantic version numbers.
+   * @param {String} a Semantic version number.
+   * @param {String} b Semantic version number.
+   * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
+   */
+  function semanticVersionComparison(a, b) {
+    if (a === b) {
+      return 0;
+    }
+
+    var a_components = a.split(".");
+    var b_components = b.split(".");
+
+    var len = Math.min(a_components.length, b_components.length);
+
+    // loop while the components are equal
+    for (var i = 0; i < len; i++) {
+      // A bigger than B
+      if (parseInt(a_components[i]) > parseInt(b_components[i])) {
+        return 1;
+      }
+
+      // B bigger than A
+      if (parseInt(a_components[i]) < parseInt(b_components[i])) {
+        return -1;
+      }
+    }
+
+    // If one's a prefix of the other, the longer one is greater.
+    if (a_components.length > b_components.length) {
+      return 1;
+    }
+
+    if (a_components.length < b_components.length) {
+      return -1;
+    }
+  }
+
+  /**
+   * Remove bad characters from a command id.
+   * @param id Original command id.
+   * @returns  Cleaned command id.
+   */
+  function cleanupCommandId(id) {
+    var re = new RegExp("\\s|\\.", "gi");
+    return uniqueCommandId(id.replaceAll(re, "_"));
+  }
+
+  /**
+   * Generate a unique command id for user commands (workflows, bookmarks, scripts).
+   * @param id Original command id.
+   * @returns  Unique command id.
+   */
+  function uniqueCommandId(id) {
+    var n = 0;
+    var uniqueId = id;
+    while (commandsData.hasOwnProperty(uniqueId)) {
+      n++;
+      uniqueId = id + n.toString();
+    }
+    return uniqueId;
+  }
+
+  /**
+   * Ask the user if they want to add their new commands to their startup screen.
+   * @param newCommandIds Ids of the new commands.
+   * @returns             If commands were added to their startup screen.
+   */
+  function addToStartup(newCommandIds) {
+    // remove any command already in startup commands
+    var newCommandId;
+    for (var i = newCommandIds.length - 1; i >= 0; i--) {
+      if (prefs.startupCommands.includes(newCommandIds[i])) {
+        newCommandIds.splice(i, 1);
+      }
+    }
+
+    if (!newCommandIds.length) return;
+
+    if (
+      !confirm(
+        localize(strings.cd_add_to_startup),
+        "noAsDflt",
+        localize(strings.cd_add_to_startup_title)
+      )
+    )
+      return false;
+    prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
+  }
+
+  /**
+   * Get every font used inside of an the Ai document.
+   * @param {Object} doc Ai document.
+   */
+  function getDocumentFonts(doc) {
+    var fonts = [];
+    for (var i = 0; i < doc.textFrames.length; i++) {
+      for (var j = 0; j < doc.textFrames[i].textRanges.length; j++) {
+        if (!fonts.includes(doc.textFrames[i].textRanges[j].textFont)) {
+          fonts.push(doc.textFrames[i].textRanges[j].textFont);
+        }
+      }
+    }
+    return fonts;
+  }
+
+  /**
+   * Convert Ai points unit to another api ruler constant.
+   * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
+   * @param   {Number} points Point value to convert.
+   * @param   {String} unit   RulerUnit to convert `points` to.
+   * @returns {Number}        Converted number.
+   */
+  function convertPointsTo(points, unit) {
+    var conversions = {
+      Centimeters: 28.346,
+      Qs: 0.709,
+      Inches: 72.0,
+      Pixels: 1.0,
+      Millimeters: 2.834645,
+      Unknown: 1.0,
+      Picas: 12.0,
+      Points: 1.0,
+    };
+    return points / conversions[unit];
+  }
+
+  /**
+   * Get info for all placed files for the current document.
+   * @returns {Array} Placed file information.
+   */
+  function getPlacedFileInfoForReport() {
+    if (ExternalObject.AdobeXMPScript == undefined)
+      ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
+    //Read xmp string - You can see document XMP in Illustrator -> File-> File Info -> Raw Data
+    var xmp = new XMPMeta(app.activeDocument.XMPString);
+
+    var names = [];
+    var allFilePaths = getAllPlacedFilePaths(xmp);
+    // var brokenFilePaths = getBrokenFilePaths(xmp);
+
+    // convert path to file object for property access
+    var fileObjects = [];
+    for (var i = 0; i < allFilePaths.length; i++) {
+      fileObjects.push(new File(allFilePaths[i]));
+    }
+    // sort the files by name
+    fileObjects.sort(function (a, b) {
+      return a.name - b.name;
+    });
+    // build string with file info for the report
+    var f;
+    for (var i = 0; i < fileObjects.length; i++) {
+      f = fileObjects[i];
+      names.push(
+        localize(strings.dr_name) +
+          decodeURI(f.name) +
+          "\n" +
+          localize(strings.dr_path) +
+          f.fsName.replace(f.name, "") +
+          "\n" +
+          localize(strings.dr_file_found) +
+          f.exists.toString().toUpperCase() +
+          (i == fileObjects.length - 1 ? "" : "\n")
+      );
+    }
+    return names;
+  }
+
+  /**
+   * Great trick to get all placed files (linked and embeded) @pixxxelschubser
+   * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
+   *
+   * If you try to do this using the placedItems collection from the API you will have issues.
+   */
+
+  /**
+   * Great trick to get all placed files (linked and embeded) @pixxxelschubser
+   * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
+   *
+   * If you try to do this using the placedItems collection from the API you will have issues.
+   * @param   {String} xmp Document xml data.
+   * @returns {Array}      Placed file paths.
+   */
+  function getAllPlacedFilePaths(xmp) {
+    //Read file paths from XMP - this returns file paths of both embedded and linked images
+    var paths = [];
+    var xpath;
+    for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
+      xpath = "xmpMM:Manifest[" + i + "]/stMfs:reference/stRef:filePath";
+      paths.push(xmp.getProperty(XMPConst.NS_XMP_MM, xpath).value);
+    }
+    return paths;
+  }
+
+  /**
+   * Check for any placed files with broken links in the current document.
+   * @param   {String} xmp Document xml data.
+   * @returns {Array}      Broken placed file paths.
+   */
+  function getBrokenFilePaths(xmp) {
+    //Read file paths from XMP - this returns file paths of both embedded and linked images
+    var paths = [];
+    var xpath;
+    for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
+      xpath = "xmpMM:Ingredients[" + i + "]/stRef:filePath";
+      paths.push(xmp.getProperty(XMPConst.NS_XMP_MM, xpath).value);
+    }
+    return paths;
+  }
+
+  /**
+   * Return the names of each object in an Ai collection object.
+   * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
+   * @param   {Object} collection Ai collection object.
+   * @returns {Array}             Names of each object inside of `collection`.
+   */
+
+  /**
+   * Return the names of each object in an Ai collection object.
+   * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
+   * @param {Object}  collection Ai collection object.
+   * @param {Boolean} sorted     Should the results be sorted.
+   * @returns {Array}            Names of each object inside of `collection`.
+   */
+  function getCollectionObjectNames(collection, sorted) {
+    sorted = typeof sorted !== "undefined" ? sorted : false;
+    names = [];
+    if (collection.length > 0) {
+      for (var i = 0; i < collection.length; i++) {
+        if (collection.typename == "Spots") {
+          if (collection[i].name != "[Registration]") {
+            names.push(collection[i].name);
+          }
+        } else {
+          names.push(collection[i].name);
+        }
+      }
+    }
+    return sorted ? names.sort() : names;
+  }
+
+  /**
+   * Return recently opened files as file objects (also found in File > Open Recent Files).
+   * @returns {Array} Recent file paths.
+   */
+  function getRecentFilePaths() {
+    var path;
+    var paths = [];
+    var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
+    for (var i = 0; i < fileCount; i++) {
+      path = app.preferences.getStringPreference(
+        "plugin/MixedFileList/file" + i + "/path"
+      );
+      paths.push(path);
+    }
+    return paths;
+  }
+
+  /**************************************************
+  DIALOG HELPER FUNCTIONS
+  **************************************************/
+
+  /**
+   * Filter the supplied commands by multiple factors.
+   * @param   {Array}   commands             Command `id`s to filter through.
+   * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+   * @param   {Boolean} showHidden           Should user-hidden commands be included?
+   * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
+   * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
+   * @returns {Array}                        Filtered command ids.
+   */
+  function filterCommands(
+    commands,
+    types,
+    showHidden,
+    showNonRelevant,
+    hideSpecificCommands
+  ) {
+    var filteredCommands = [];
+    var id, command;
+    commands = commands ? commands : Object.keys(commandsData);
+    for (var i = 0; i < commands.length; i++) {
+      id = commands[i];
+      if (!commandsData.hasOwnProperty(id)) continue;
+      command = commandsData[id];
+
+      // make sure Ai version meets command requirements
+      if (!commandVersionCheck(command)) continue;
+
+      // skip any hidden commands
+      if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
+
+      // skip any non relevant commands
+      if (!showNonRelevant && !relevantCommand(command)) continue;
+
+      // skip any specific commands name in hideSpecificCommands
+      if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
+
+      // then check to see if the command should be included
+      if (!types || types.includes(command.type)) filteredCommands.push(id);
+    }
+    return filteredCommands;
+  }
+
+  /**
+   * Determine is a command is relevant at the current moment.
+   * @param   {Object}  command Command object to check.
+   * @returns {Boolean}         If command is relevant.
+   */
+  function relevantCommand(command) {
+    // hide commands requiring an active documents if requested
+    if (command.docRequired && !appDocuments) return false;
+    // hide commands requiring an active selection if requested
+    if (command.selRequired && !docSelection) return false;
+
+    // hide `Edit Workflow...` command if no workflows
+    if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
+    // hide `All Workflows...` command if no workflows
+    if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
+    // hide `All Scripts...` command if no scripts
+    if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
+    // hide `All Bookmarks...` command if no bookmarks
+    if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
+    // hide `All Actions...` command if no actions
+    if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
+
+    // hide `Enable Searching on Command Type` command if already enabled
+    if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
+      return false;
+    // hide `Disable Searching on Command Type` command if already disabled
+    if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
+      return false;
+
+    // hide `Unhide Commands...` command if no hidden commands
+    if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
+      return false;
+    // hide `Recent Commands...` and `Clear History` if no recent commands
+    if (
+      command.id == "builtin_recentCommands" &&
+      Object.keys(recentCommands).length === 0
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Present File.openDialog() for user to select files to load.
+   * @param   {String}  prompt        Prompt for dialog.
+   * @param   {Boolean} multiselect   Can multiple files be selected.
+   * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
+   * @returns {Array}                 Selected file(s).
+   */
+  function loadFileTypes(prompt, multiselect, fileTypeRegex) {
+    var results = [];
+    var files = File.openDialog(prompt, "", multiselect);
+    if (files) {
+      for (var i = 0; i < files.length; i++) {
+        f = files[i];
+        fname = decodeURI(f.name);
+        if (f.name.search(fileTypeRegex) >= 0) {
+          results.push(f);
+        }
+      }
+    }
+    return results;
+  }
+
+  /**
+   * Simulate a key press for Windows users.
+   *
+   * This function is in response to a known ScriptUI bug on Windows.
+   * You can read more about it in the GitHub issue linked below.
+   * https://github.com/joshbduncan/AiCommandPalette/issues/8
+   *
+   * Basically, on some Windows Ai versions, when a ScriptUI dialog is
+   * presented and the active attribute is set to true on a field, Windows
+   * will flash the Windows Explorer app quickly and then bring Ai back
+   * in focus with the dialog front and center. This is a terrible user
+   * experience so Sergey and I attempted to fix it the best we could.
+   *
+   * This clever solution was created by Sergey Osokin (https://github.com/creold)
+   *
+   * @param {String} k Key to simulate.
+   * @param {Number} n Number of times to simulate the keypress.
+   */
+  function simulateKeypress(k, n) {
+    if (!n) n = 1;
+    try {
+      var f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
+      if (!f.exists) {
+        var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
+        while (n--) {
+          data += 'WshShell.SendKeys "{' + k + '}"\n';
+        }
+        f.encoding = "UTF-8";
+        f.open("w");
+        f.write(data);
+        f.close();
+      }
+      f.execute();
+    } catch (e) {
+      $.writeln(e);
+    }
+  }
+
+  /**
+   * Open a url in the system browser.
+   * @param {String} url URL to open.
+   */
+  function openURL(url) {
+    var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
+    html.open("w");
+    var htmlBody =
+      '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' +
+      url +
+      '"></head><body> <p></body></html>';
+    html.write(htmlBody);
+    html.close();
+    html.execute();
+  }
+  // FILE/FOLDER OPERATIONS
+
+  /**
+   * Setup folder object or create if doesn't exist.
+   * @param   {String} path System folder path.
+   * @returns {Object}      Folder object.
+   */
+  function setupFolderObject(path) {
+    var folder = new Folder(path);
+    if (!folder.exists) folder.create();
+    return folder;
+  }
+
+  /**
+   * Setup file object.
+   * @param   {Object} path Folder object where file should exist,
+   * @param   {String} name File name.
+   * @returns {Object}      File object.
+   */
+  function setupFileObject(path, name) {
+    return new File(path + "/" + name);
+  }
+
+  /**
+   * Read ExtendScript "json-like" data from file.
+   * @param   {Object} f File object to read.
+   * @returns {Object}   Evaluated JSON data.
+   */
+  function readJSONData(f) {
+    var json, obj;
+    try {
+      f.encoding = "UTF-8";
+      f.open("r");
+      json = f.read();
+      f.close();
+    } catch (e) {
+      alert(localize(strings.fl_error_loading, f));
+    }
+    obj = eval(json);
+    return obj;
+  }
+
+  /**
+   * Write ExtendScript "json-like" data to disk.
+   * @param {Object} obj Data to be written.
+   * @param {Object} f   File object to write to.
+   */
+  function writeJSONData(obj, f) {
+    var data = obj.toSource();
+    try {
+      f.encoding = "UTF-8";
+      f.open("w");
+      f.write(data);
+      f.close();
+    } catch (e) {
+      alert(localize(strings.fl_error_writing, f));
+    }
+  }
   // ALL BUILT DATA FROM PYTHON SCRIPT
 
   var strings = {
@@ -200,6 +724,16 @@ See the LICENSE file for details.
       en: "Are you sure you want to clear your history?",
       de: "Are you sure you want to clear your history?",
       ru: "Are you sure you want to clear your history?",
+    },
+    cd_add_to_startup: {
+      en: "Add new command(s) to your startup?",
+      de: "Add new command(s) to your startup?",
+      ru: "Add new command(s) to your startup?",
+    },
+    cd_add_to_startup_title: {
+      en: "Add To Startup Commands",
+      de: "Add To Startup Commands",
+      ru: "Add To Startup Commands",
     },
     cd_delete_confirm: {
       en: "Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n%1",
@@ -429,6 +963,11 @@ See the LICENSE file for details.
       ru: "Open Recent File",
     },
     placed_items: { en: "Placed Items", de: "Platzierte Objecte", ru: "Placed Items" },
+    history_file_loading_error: {
+      en: "Error Loading History\nA backup copy of your history has been created.",
+      de: "Error Loading History\nA backup copy of your history has been created.",
+      ru: "Error Loading History\nA backup copy of your history has been created.",
+    },
     pref_file_loading_error: {
       en: "Error Loading Preferences\nA backup copy of your settings has been created.",
       de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
@@ -9135,7 +9674,6 @@ See the LICENSE file for details.
 
   paletteSettings.columnSets.actions = {};
   paletteSettings.columnSets.actions[localize(strings.name_title_case)] = {
-    // FIXME: localize
     width: null,
     key: "name",
   };
@@ -9147,12 +9685,10 @@ See the LICENSE file for details.
 
   paletteSettings.columnSets.bookmarks = {};
   paletteSettings.columnSets.bookmarks[localize(strings.name_title_case)] = {
-    // FIXME: localize
     width: null,
     key: "name",
   };
   paletteSettings.columnSets.bookmarks[localize(strings.type_title_case)] = {
-    // FIXME: localize
     width: 50,
     key: "type",
   };
@@ -9163,7 +9699,7 @@ See the LICENSE file for details.
   };
 
   var visibleListItems = 9;
-  var recentCommandsCount = 25;
+  var mostRecentCommandsCount = 25;
 
   // MISCELLANEOUS SETTINGS
 
@@ -9211,6 +9747,7 @@ See the LICENSE file for details.
     }
     alert(s);
   }
+
   //USER PREFERENCES
 
   // keeping around for alerting users of breaking changes
@@ -9239,7 +9776,6 @@ See the LICENSE file for details.
   prefs.timestamp = Date.now();
 
   var userPrefs = {};
-  // pref functions
   userPrefs.folder = function () {
     return userPrefsFolder;
   };
@@ -9255,9 +9791,7 @@ See the LICENSE file for details.
       try {
         loadedData = readJSONData(file);
         if (loadedData == {}) {
-          // set default commands on first/fresh run
-          prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
-          return; // FIXME: add alert
+          return;
         }
         // TODO: add alert about prefs file from a different machine
         propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
@@ -9269,6 +9803,14 @@ See the LICENSE file for details.
         file.rename(file.name + ".bak");
         this.reveal();
         Error.runtimeError(1, localize(strings.pref_file_loading_error));
+      }
+    }
+  };
+  userPrefs.inject = function () {
+    var typesToInject = ["workflows", "bookmarks", "scripts"];
+    for (var i = 0; i < typesToInject.length; i++) {
+      for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
+        commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
       }
     }
   };
@@ -9292,10 +9834,10 @@ See the LICENSE file for details.
   // setup the base prefs model
   var history = [];
   var recentCommands = {};
+  var mostRecentCommands = [];
   var latches = {};
 
   var userHistory = {};
-  // pref functions
   userHistory.folder = function () {
     return userHistoryFolder;
   };
@@ -9311,8 +9853,7 @@ See the LICENSE file for details.
       var loadedData, entry;
       try {
         loadedData = readJSONData(file);
-        if (loadedData == []) return; // FIXME: add alert
-        // TODO: add alert about prefs file from a different machine
+        if (loadedData == []) return;
         history = loadedData;
         for (var i = loadedData.length - 1; i >= 0; i--) {
           entry = loadedData[i];
@@ -9322,10 +9863,17 @@ See the LICENSE file for details.
           if (!queryCommandsLUT[entry.query].hasOwnProperty(entry.command))
             queryCommandsLUT[entry.query][entry.command] = 0;
           queryCommandsLUT[entry.query][entry.command]++;
-          // set last 25 recent commands
+          // track how often recent command have been ran
           if (!recentCommands.hasOwnProperty(entry.command))
             recentCommands[entry.command] = 0;
           recentCommands[entry.command]++;
+          // track the past 25 most recent commands
+          if (
+            mostRecentCommands.length <= mostRecentCommandsCount &&
+            commandsData.hasOwnProperty(entry.command) &&
+            !mostRecentCommands.includes(entry.command)
+          )
+            mostRecentCommands.push(entry.command);
         }
         // build latches with most common command for each query
         var query, command, commands;
@@ -9343,7 +9891,7 @@ See the LICENSE file for details.
       } catch (e) {
         file.rename(file.name + ".bak");
         this.reveal();
-        Error.runtimeError(1, localize(strings.pref_file_loading_error)); // FIXME: update loc string
+        Error.runtimeError(1, localize(strings.history_file_loading_error));
       }
     }
   };
@@ -9364,134 +9912,11 @@ See the LICENSE file for details.
     var folder = this.folder();
     folder.execute();
   };
-  /**
-   * Check to see if there is an active document.
-   * @returns Make sure at least one document is open for certain built-in commands.
-   */
-  function activeDocument() {
-    if (app.documents.length < 1) {
-      alert(localize(strings.no_active_document));
-      return false;
-    }
-    return true;
-  }
+  //USER ACTIONS
 
-  /**
-   * Check to make sure the command is available in the system Ai version.
-   * @param command Command to check.
-   * @returns       True if command is available in the current Ai version or false if not.
-   */
-  function commandVersionCheck(command) {
-    if (
-      (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
-      (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
-    )
-      return false;
-    return true;
-  }
-
-  /**
-   * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
-   * @param   {Array} actions Workflow action steps to check.
-   * @returns {Array}         Non-active workflow action.
-   */
-  function checkWorkflowActions(actions) {
-    var badActions = [];
-    for (var i = 0; i < actions.length; i++) {
-      command = actions[i];
-      if (!commandsData.hasOwnProperty(actions[i]) || !commandVersionCheck(actions[i]))
-        badActions.push(actions[i]);
-    }
-    return badActions;
-  }
-
-  /**
-   * Compare semantic version numbers.
-   * @param {String} a Semantic version number.
-   * @param {String} b Semantic version number.
-   * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
-   */
-  function semanticVersionComparison(a, b) {
-    if (a === b) {
-      return 0;
-    }
-
-    var a_components = a.split(".");
-    var b_components = b.split(".");
-
-    var len = Math.min(a_components.length, b_components.length);
-
-    // loop while the components are equal
-    for (var i = 0; i < len; i++) {
-      // A bigger than B
-      if (parseInt(a_components[i]) > parseInt(b_components[i])) {
-        return 1;
-      }
-
-      // B bigger than A
-      if (parseInt(a_components[i]) < parseInt(b_components[i])) {
-        return -1;
-      }
-    }
-
-    // If one's a prefix of the other, the longer one is greater.
-    if (a_components.length > b_components.length) {
-      return 1;
-    }
-
-    if (a_components.length < b_components.length) {
-      return -1;
-    }
-  }
-
-  /**
-   * Remove bad characters from a command id.
-   * @param id Original command id.
-   * @returns  Cleaned command id.
-   */
-  function cleanupCommandId(id) {
-    var re = new RegExp("\\s|\\.", "gi");
-    return uniqueCommandId(id.replaceAll(re, "_"));
-  }
-
-  /**
-   * Generate a unique command id for user commands (workflows, bookmarks, scripts).
-   * @param id Original command id.
-   * @returns  Unique command id.
-   */
-  function uniqueCommandId(id) {
-    var n = 0;
-    var uniqueId = id;
-    while (commandsData.hasOwnProperty(uniqueId)) {
-      n++;
-      uniqueId = id + n.toString();
-    }
-    return uniqueId;
-  }
-
-  /**
-   * Ask the user if they want to add their new commands to their startup screen.
-   * @param newCommandIds Ids of the new commands.
-   * @returns             If commands were added to their startup screen.
-   */
-  function addToStartup(newCommandIds) {
-    // TODO: localize confirmation prompt
-    if (
-      !confirm(
-        "Add new command(s) to your startup commands?",
-        "noAsDflt",
-        "Add To Startup Commands"
-      )
-    )
-      return false;
-    prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
-  }
-
-  /**
-   * Load all user actions as commands.
-   * @returns {Boolean} If any actions were successfully loaded.
-   */
-  function loadActions() {
+  var userActions = {};
+  userActions.loadedActions = false;
+  userActions.load = function () {
     var ct = 0;
     var currentPath, set, actionCount, name;
     var pref = app.preferences;
@@ -9526,1363 +9951,8 @@ See the LICENSE file for details.
         commandsData[id] = obj;
       }
     }
-    return ct > 0;
-  }
-
-  /**
-   * Get every font used inside of an the Ai document.
-   * @param {Object} doc Ai document.
-   */
-  function getDocumentFonts(doc) {
-    var fonts = [];
-    for (var i = 0; i < doc.textFrames.length; i++) {
-      for (var j = 0; j < doc.textFrames[i].textRanges.length; j++) {
-        if (!fonts.includes(doc.textFrames[i].textRanges[j].textFont)) {
-          fonts.push(doc.textFrames[i].textRanges[j].textFont);
-        }
-      }
-    }
-    return fonts;
-  }
-
-  /**
-   * Convert Ai points unit to another api ruler constant.
-   * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
-   * @param   {Number} points Point value to convert.
-   * @param   {String} unit   RulerUnit to convert `points` to.
-   * @returns {Number}        Converted number.
-   */
-  function convertPointsTo(points, unit) {
-    var conversions = {
-      Centimeters: 28.346,
-      Qs: 0.709,
-      Inches: 72.0,
-      Pixels: 1.0,
-      Millimeters: 2.834645,
-      Unknown: 1.0,
-      Picas: 12.0,
-      Points: 1.0,
-    };
-    return points / conversions[unit];
-  }
-
-  /**
-   * Get info for all placed files for the current document.
-   * @returns {Array} Placed file information.
-   */
-  function getPlacedFileInfoForReport() {
-    if (ExternalObject.AdobeXMPScript == undefined)
-      ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
-    //Read xmp string - You can see document XMP in Illustrator -> File-> File Info -> Raw Data
-    var xmp = new XMPMeta(app.activeDocument.XMPString);
-
-    var names = [];
-    var allFilePaths = getAllPlacedFilePaths(xmp);
-    // var brokenFilePaths = getBrokenFilePaths(xmp);
-
-    // convert path to file object for property access
-    var fileObjects = [];
-    for (var i = 0; i < allFilePaths.length; i++) {
-      fileObjects.push(new File(allFilePaths[i]));
-    }
-    // sort the files by name
-    fileObjects.sort(function (a, b) {
-      return a.name - b.name;
-    });
-    // build string with file info for the report
-    var f;
-    for (var i = 0; i < fileObjects.length; i++) {
-      f = fileObjects[i];
-      names.push(
-        localize(strings.dr_name) +
-          decodeURI(f.name) +
-          "\n" +
-          localize(strings.dr_path) +
-          f.fsName.replace(f.name, "") +
-          "\n" +
-          localize(strings.dr_file_found) +
-          f.exists.toString().toUpperCase() +
-          (i == fileObjects.length - 1 ? "" : "\n")
-      );
-    }
-    return names;
-  }
-
-  /**
-   * Great trick to get all placed files (linked and embeded) @pixxxelschubser
-   * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
-   *
-   * If you try to do this using the placedItems collection from the API you will have issues.
-   */
-
-  /**
-   * Great trick to get all placed files (linked and embeded) @pixxxelschubser
-   * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
-   *
-   * If you try to do this using the placedItems collection from the API you will have issues.
-   * @param   {String} xmp Document xml data.
-   * @returns {Array}      Placed file paths.
-   */
-  function getAllPlacedFilePaths(xmp) {
-    //Read file paths from XMP - this returns file paths of both embedded and linked images
-    var paths = [];
-    var xpath;
-    for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
-      xpath = "xmpMM:Manifest[" + i + "]/stMfs:reference/stRef:filePath";
-      paths.push(xmp.getProperty(XMPConst.NS_XMP_MM, xpath).value);
-    }
-    return paths;
-  }
-
-  /**
-   * Check for any placed files with broken links in the current document.
-   * @param   {String} xmp Document xml data.
-   * @returns {Array}      Broken placed file paths.
-   */
-  function getBrokenFilePaths(xmp) {
-    //Read file paths from XMP - this returns file paths of both embedded and linked images
-    var paths = [];
-    var xpath;
-    for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
-      xpath = "xmpMM:Ingredients[" + i + "]/stRef:filePath";
-      paths.push(xmp.getProperty(XMPConst.NS_XMP_MM, xpath).value);
-    }
-    return paths;
-  }
-
-  /**
-   * Return the names of each object in an Ai collection object.
-   * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
-   * @param   {Object} collection Ai collection object.
-   * @returns {Array}             Names of each object inside of `collection`.
-   */
-
-  /**
-   * Return the names of each object in an Ai collection object.
-   * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
-   * @param {Object}  collection Ai collection object.
-   * @param {Boolean} sorted     Should the results be sorted.
-   * @returns {Array}            Names of each object inside of `collection`.
-   */
-  function getCollectionObjectNames(collection, sorted) {
-    sorted = typeof sorted !== "undefined" ? sorted : false;
-    names = [];
-    if (collection.length > 0) {
-      for (var i = 0; i < collection.length; i++) {
-        if (collection.typename == "Spots") {
-          if (collection[i].name != "[Registration]") {
-            names.push(collection[i].name);
-          }
-        } else {
-          names.push(collection[i].name);
-        }
-      }
-    }
-    return sorted ? names.sort() : names;
-  }
-
-  /**
-   * Return recently opened files as file objects (also found in File > Open Recent Files).
-   * @returns {Array} Recent file paths.
-   */
-  function getRecentFilePaths() {
-    var path;
-    var paths = [];
-    var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
-    for (var i = 0; i < fileCount; i++) {
-      path = app.preferences.getStringPreference(
-        "plugin/MixedFileList/file" + i + "/path"
-      );
-      paths.push(path);
-    }
-    return paths;
-  }
-
-  /**************************************************
-  DIALOG HELPER FUNCTIONS
-  **************************************************/
-
-  /**
-   * Filter the supplied commands by multiple factors.
-   * @param   {Array}   commands             Command `id`s to filter through.
-   * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
-   * @param   {Boolean} showHidden           Should user-hidden commands be included?
-   * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
-   * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
-   * @returns {Array}                        Filtered commands objects.
-   */
-  function filterCommands(
-    commands,
-    types,
-    showHidden,
-    showNonRelevant,
-    hideSpecificCommands
-  ) {
-    var filteredCommands = [];
-    var id, command;
-    commands = commands ? commands : Object.keys(commandsData);
-    for (var i = 0; i < commands.length; i++) {
-      id = commands[i];
-      if (!commandsData.hasOwnProperty(id)) continue;
-      command = commandsData[id];
-
-      // make sure Ai version meets command requirements
-      if (!commandVersionCheck(command)) continue;
-
-      // skip any hidden commands
-      if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
-
-      // skip any non relevant commands
-      if (!showNonRelevant && !relevantCommand(command)) continue;
-
-      // skip any specific commands name in hideSpecificCommands
-      if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
-
-      // then check to see if the command should be included
-      if (!types || types.includes(command.type)) filteredCommands.push(id);
-    }
-    return filteredCommands;
-  }
-
-  /**
-   * Determine is a command is relevant at the current moment.
-   * @param   {Object}  command Command object to check.
-   * @returns {Boolean}         If command is relevant.
-   */
-  function relevantCommand(command) {
-    // hide commands requiring an active documents if requested
-    if (command.docRequired && !appDocuments) return false;
-    // hide commands requiring an active selection if requested
-    if (command.selRequired && !docSelection) return false;
-
-    // hide `Edit Workflow...` command if no workflows
-    if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
-    // hide `All Workflows...` command if no workflows
-    if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
-    // hide `All Scripts...` command if no scripts
-    if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
-    // hide `All Bookmarks...` command if no bookmarks
-    if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
-    // hide `All Actions...` command if no actions
-    if (command.id == "builtin_allActions" && !loadedActions) return false;
-
-    // hide `Enable Searching on Command Type` command if already enabled
-    if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
-      return false;
-    // hide `Disable Searching on Command Type` command if already disabled
-    if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
-      return false;
-
-    // hide `Unhide Commands...` command if no hidden commands
-    if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
-      return false;
-    // hide `Recent Commands...` and `Clear History` if no recent commands
-    if (
-      command.id == "builtin_recentCommands" &&
-      Object.keys(recentCommands).length === 0
-    ) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Present File.openDialog() for user to select files to load.
-   * @param   {String}  prompt        Prompt for dialog.
-   * @param   {Boolean} multiselect   Can multiple files be selected.
-   * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
-   * @returns {Array}                 Selected file(s).
-   */
-  function loadFileTypes(prompt, multiselect, fileTypeRegex) {
-    var results = [];
-    var files = File.openDialog(prompt, "", multiselect);
-    if (files) {
-      for (var i = 0; i < files.length; i++) {
-        f = files[i];
-        fname = decodeURI(f.name);
-        if (f.name.search(fileTypeRegex) >= 0) {
-          results.push(f);
-        }
-      }
-    }
-    return results;
-  }
-
-  /**
-   * Simulate a key press for Windows users.
-   *
-   * This function is in response to a known ScriptUI bug on Windows.
-   * You can read more about it in the GitHub issue linked below.
-   * https://github.com/joshbduncan/AiCommandPalette/issues/8
-   *
-   * Basically, on some Windows Ai versions, when a ScriptUI dialog is
-   * presented and the active attribute is set to true on a field, Windows
-   * will flash the Windows Explorer app quickly and then bring Ai back
-   * in focus with the dialog front and center. This is a terrible user
-   * experience so Sergey and I attempted to fix it the best we could.
-   *
-   * This clever solution was created by Sergey Osokin (https://github.com/creold)
-   *
-   * @param {String} k Key to simulate.
-   * @param {Number} n Number of times to simulate the keypress.
-   */
-  function simulateKeypress(k, n) {
-    if (!n) n = 1;
-    try {
-      var f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
-      if (!f.exists) {
-        var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
-        while (n--) {
-          data += 'WshShell.SendKeys "{' + k + '}"\n';
-        }
-        f.encoding = "UTF-8";
-        f.open("w");
-        f.write(data);
-        f.close();
-      }
-      f.execute();
-    } catch (e) {
-      $.writeln(e);
-    }
-  }
-
-  /**
-   * Open a url in the system browser.
-   * @param {String} url URL to open.
-   */
-  function openURL(url) {
-    var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
-    html.open("w");
-    var htmlBody =
-      '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' +
-      url +
-      '"></head><body> <p></body></html>';
-    html.write(htmlBody);
-    html.close();
-    html.execute();
-  }
-  // AI COMMAND PALETTE OPERATIONS
-
-  /** Ai Command Palette configuration commands. */
-  function AiCommandPaletteSettings() {
-    var configCommands = filterCommands(
-      (commands = null),
-      (types = ["config"]),
-      (showHidden = true),
-      (showNonRelevant = false),
-      (hideSpecificCommands = ["config_settings"])
-    );
-    var result = commandPalette(
-      (commands = configCommands),
-      (title = localize(strings.cp_config)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-
-  /** Ai Command Palette About Dialog. */
-  function about() {
-    var win = new Window("dialog");
-    win.text = localize(strings.about);
-    win.alignChildren = "fill";
-
-    // script info
-    var pAbout = win.add("panel");
-    pAbout.margins = 20;
-    pAbout.alignChildren = "fill";
-    pAbout.add("statictext", [0, 0, 500, 100], localize(strings.description), {
-      multiline: true,
-    });
-
-    var links = pAbout.add("group");
-    links.orientation = "column";
-    links.alignChildren = ["center", "center"];
-    links.add("statictext", undefined, localize(strings.version, _version));
-    links.add("statictext", undefined, localize(strings.copyright));
-    var githubText =
-      localize(strings.github) + ": https://github.com/joshbduncan/AiCommandPalette";
-    var github = links.add("statictext", undefined, githubText);
-    // window buttons
-    var winButtons = win.add("group");
-    winButtons.orientation = "row";
-    winButtons.alignChildren = ["center", "center"];
-    var ok = winButtons.add("button", undefined, "OK");
-    ok.preferredSize.width = 100;
-
-    github.addEventListener("mousedown", function () {
-      openURL("https://github.com/joshbduncan/AiCommandPalette");
-    });
-
-    win.show();
-  }
-
-  function buildStartup() {
-    var availableStartupCommands = filterCommands(
-      (commands = null),
-      (types = [
-        "file",
-        "folder",
-        "script",
-        "workflow",
-        "menu",
-        "tool",
-        "action",
-        "builtin",
-        "config",
-      ]),
-      (showHidden = true),
-      (showNonRelevant = true),
-      (hideSpecificCommands = prefs.startupCommands)
-    );
-    // show the startup builder dialog
-    var result = startupBuilder(availableStartupCommands);
-    if (!result) return;
-    prefs.startupCommands = result;
-  }
-
-  /** Document Info Dialog */
-  function documentReport() {
-    // setup the basic document info
-    var rulerUnits = app.activeDocument.rulerUnits.toString().split(".").pop();
-    var fileInfo =
-      localize(strings.dr_header) +
-      localize(strings.dr_filename) +
-      app.activeDocument.name +
-      "\n" +
-      localize(strings.dr_path) +
-      (app.activeDocument.path.fsName
-        ? app.activeDocument.path.fsName
-        : localize(strings.none)) +
-      "\n" +
-      localize(strings.dr_color_space) +
-      app.activeDocument.documentColorSpace.toString().split(".").pop() +
-      "\n" +
-      localize(strings.dr_width) +
-      convertPointsTo(app.activeDocument.width, rulerUnits) +
-      " " +
-      rulerUnits +
-      "\n" +
-      localize(strings.dr_height) +
-      convertPointsTo(app.activeDocument.height, rulerUnits) +
-      " " +
-      rulerUnits;
-
-    // generate all optional report information (all included by default)
-    var reportOptions = {
-      artboards: {
-        str: getCollectionObjectNames(app.activeDocument.artboards)
-          .toString()
-          .replace(/,/g, "\n"),
-        active: true,
-      },
-      fonts: {
-        str: getCollectionObjectNames(getDocumentFonts(app.activeDocument), true)
-          .toString()
-          .replace(/,/g, "\n"),
-        active: true,
-      },
-      layers: {
-        str: getCollectionObjectNames(app.activeDocument.layers)
-          .toString()
-          .replace(/,/g, "\n"),
-        active: true,
-      },
-      placed_items: {
-        str: getPlacedFileInfoForReport().toString().replace(/,/g, "\n"),
-        active: true,
-      },
-      spot_colors: {
-        str: getCollectionObjectNames(app.activeDocument.spots, true)
-          .toString()
-          .replace(/,/g, "\n"),
-        active: true,
-      },
-    };
-
-    // build the report from the selected options (active = true)
-    function buildReport() {
-      if (!app.activeDocument.saved) alert(localize(strings.document_report_warning));
-
-      var infoString = localize(strings.dr_info_string) + "\n\n" + fileInfo;
-      for (var p in reportOptions) {
-        if (reportOptions[p].active && reportOptions[p].str) {
-          infoString +=
-            "\n\n" +
-            localize(strings[p.toLowerCase()]) +
-            "\n-----\n" +
-            reportOptions[p].str;
-        }
-      }
-      infoString += "\n\n" + localize(strings.dr_file_created) + new Date();
-      return infoString;
-    }
-
-    // setup the dialog
-    var win = new Window("dialog");
-    win.text = localize(strings.document_report);
-    win.orientation = "column";
-    win.alignChildren = ["center", "top"];
-    win.alignChildren = "fill";
-
-    // panel - options
-    var pOptions = win.add("panel", undefined, "Include?");
-    pOptions.orientation = "row";
-    pOptions.margins = 20;
-
-    // add checkboxes for each report option
-    var cb;
-    for (var p in reportOptions) {
-      cb = pOptions.add("checkbox", undefined, p);
-      if (reportOptions[p].str) {
-        cb.value = true;
-        // add onClick function for each cb to update rebuild report
-        cb.onClick = function () {
-          if (this.value) {
-            reportOptions[this.text].active = true;
-          } else {
-            reportOptions[this.text].active = false;
-          }
-          info.text = buildReport();
-        };
-      } else {
-        cb.value = false;
-        cb.enabled = false;
-      }
-    }
-
-    // script info
-    var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
-      multiline: true,
-      scrollable: true,
-      readonly: true,
-    });
-
-    // window buttons
-    var winButtons = win.add("group");
-    winButtons.orientation = "row";
-    winButtons.alignChildren = ["center", "center"];
-    var saveInfo = winButtons.add("button", undefined, localize(strings.save));
-    saveInfo.preferredSize.width = 100;
-    var close = winButtons.add("button", undefined, localize(strings.close), {
-      name: "ok",
-    });
-    close.preferredSize.width = 100;
-
-    // save document info to selected file
-    saveInfo.onClick = function () {
-      var f = File.saveDialog();
-      if (f) {
-        try {
-          f.encoding = "UTF-8";
-          f.open("w");
-          f.write(info.text);
-          f.close();
-        } catch (e) {
-          alert(localize(strings.fl_error_writing, f));
-        }
-        if (f.exists) alert(localize(strings.file_saved, f.fsName));
-      }
-    };
-    // show the info dialog
-    win.show();
-  }
-
-  /**
-   * Export the active artboard as a png file using the api `Document.imageCapture()` method.
-   * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html?#document-imagecapture
-   */
-  function imageCapture() {
-    if (activeDocument) {
-      var f = File.saveDialog();
-      if (f) {
-        try {
-          app.activeDocument.imageCapture(f);
-        } catch (e) {
-          alert(localize(strings.fl_error_writing, f));
-        }
-        // if chosen file name doesn't end in ".png" add the
-        // correct extension so they captured file open correctly
-        if (f.name.indexOf(".png") < f.name.length - 4)
-          f.rename(f.name.toString() + ".png");
-        if (f.exists) alert(localize(strings.file_saved, f.fsName));
-      }
-    }
-  }
-
-  /**
-   *
-   * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-exportvariables
-   */
-  function exportVariables() {
-    if (app.activeDocument.variables.length > 0) {
-      var f = File.saveDialog();
-      if (f) {
-        try {
-          app.activeDocument.exportVariables(f);
-        } catch (e) {
-          alert(localize(strings.fl_error_writing, f));
-        }
-        if (f.exists) alert(localize(strings.file_saved, f.fsName));
-      }
-    } else {
-      alert(localize(strings.no_document_variables));
-    }
-  }
-
-  /** Set bookmarked file to open in Ai from within Ai Command Palette. */
-  function loadFileBookmark() {
-    var acceptedTypes = [
-      ".ai",
-      ".ait",
-      ".pdf",
-      ".dxf",
-      ".avif",
-      ".BMP",
-      ".RLE",
-      ".DIB",
-      ".cgm",
-      ".cdr",
-      ".eps",
-      ".epsf",
-      ".ps",
-      ".emf",
-      ".gif",
-      ".heic",
-      ".heif",
-      ".eps",
-      ".epsf",
-      ".ps",
-      ".jpg",
-      ".jpe",
-      ".jpeg",
-      ".jpf",
-      ".jpx",
-      ".jp2",
-      ".j2k",
-      ".j2c",
-      ".jpc",
-      ".rtf",
-      ".doc",
-      ".docx",
-      ".PCX",
-      ".psd",
-      ".psb",
-      ".pdd",
-      ".PXR",
-      ".png",
-      ".pns",
-      ".svg",
-      ".svgz",
-      ".TGA",
-      ".VDA",
-      ".ICB",
-      ".VST",
-      ".txt",
-      ".tif",
-      ".tiff",
-      ".webp",
-      ".wmf",
-    ]; // file types taken from Ai open dialog
-    var re = new RegExp(acceptedTypes.join("|") + "$", "i");
-    var files = loadFileTypes(localize(strings.bm_load_bookmark), true, re);
-
-    if (files.length == 0) return;
-
-    // get all current bookmark paths to ensure no duplicates
-    var currentFileBookmarks = [];
-    for (var i = 0; i < prefs.bookmarks.length; i++) {
-      if (prefs.bookmarks[i].type != "file") continue;
-      currentFileBookmarks.push(prefs.bookmarks[i].path);
-    }
-
-    var f, bookmark, bookmarkName, id;
-    var newBookmarks = [];
-    var newBookmarkIds = [];
-    for (var j = 0; j < files.length; j++) {
-      f = files[j];
-      if (currentFileBookmarks.includes(f.fsName))
-        if (
-          !confirm(
-            localize(strings.bm_already_loaded),
-            "noAsDflt",
-            localize(strings.bm_already_loaded_title)
-          )
-        )
-          continue;
-
-      bookmarkName = decodeURI(f.name);
-      id = cleanupCommandId("bookmark_" + bookmarkName.toLowerCase());
-      bookmark = {
-        id: id,
-        name: bookmarkName,
-        action: "bookmark",
-        type: "file",
-        path: f.fsName,
-        docRequired: false,
-        selRequired: false,
-        hidden: false,
-      };
-      newBookmarks.push(bookmark);
-      newBookmarkIds.push(bookmark.id);
-    }
-
-    if (newBookmarks.length == 0) return;
-
-    prefs.bookmarks = prefs.bookmarks.concat(newBookmarks);
-    addToStartup(newBookmarkIds);
-  }
-
-  /** Set bookmarked folder to open on system from within Ai Command Palette. */
-  function loadFolderBookmark() {
-    var f;
-    f = Folder.selectDialog(localize(strings.bm_load_bookmark));
-
-    if (!f) return;
-
-    // get all current bookmark paths to ensure no duplicates
-    var currentFolderBookmarks = [];
-    for (var i = 0; i < prefs.bookmarks.length; i++) {
-      if (prefs.bookmarks[i].type != "folder") continue;
-      currentFolderBookmarks.push(prefs.bookmarks[i].path);
-    }
-
-    if (currentFolderBookmarks.includes(f.fsName)) {
-      if (
-        !confirm(
-          localize(strings.bm_already_loaded),
-          "noAsDflt",
-          localize(strings.bm_already_loaded_title)
-        )
-      )
-        return;
-    }
-
-    var bookmarkName = decodeURI(f.name);
-    var bookmark = {
-      id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
-      name: bookmarkName,
-      action: "bookmark",
-      type: "folder",
-      path: f.fsName,
-      docRequired: false,
-      selRequired: false,
-      hidden: false,
-    };
-    prefs.bookmarks.push(bookmark);
-    addToStartup([bookmark.id]);
-  }
-
-  /** Load external scripts into Ai Command Palette. */
-  function loadScripts() {
-    var acceptedTypes = [".jsx", ".js"];
-    var re = new RegExp(acceptedTypes.join("|") + "$", "i");
-    var files = loadFileTypes(localize(strings.sc_load_script), true, re);
-
-    if (files.length == 0) return;
-
-    // get all current script paths to ensure no duplicates
-    var currentScripts = [];
-    for (var i = 0; i < prefs.scripts.length; i++) {
-      currentScripts.push(prefs.scripts[i].path);
-    }
-
-    var f, script, scriptName, id;
-    var newScripts = [];
-    var newScriptIds = [];
-    for (var j = 0; j < files.length; j++) {
-      f = files[j];
-      if (currentScripts.hasOwnProperty(f.fsName)) {
-        if (
-          !confirm(
-            localize(strings.sc_already_loaded),
-            "noAsDflt",
-            localize(strings.sc_already_loaded_title)
-          )
-        )
-          continue;
-      }
-
-      scriptName = decodeURI(f.name);
-      id = cleanupCommandId("script_" + scriptName.toLowerCase());
-      script = {
-        id: id,
-        name: scriptName,
-        action: "script",
-        type: "script",
-        path: f.fsName,
-        docRequired: false,
-        selRequired: false,
-        hidden: false,
-      };
-      newScripts.push(script);
-      newScriptIds.push(script.id);
-    }
-
-    if (newScripts.length == 0) return;
-
-    prefs.scripts = prefs.scripts.concat(newScripts);
-    addToStartup(newScriptIds);
-  }
-
-  /** Show all scripts. */
-  function showAllScripts() {
-    var scriptCommands = filterCommands(
-      (commands = null),
-      (types = ["script"]),
-      (showHidden = true),
-      (showNonRelevant = false),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = scriptCommands),
-      (title = localize(strings.Scripts)),
-      (columns = paletteSettings.columnSets.bookmarks),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-
-  /** Show all bookmarks. */
-  function showAllBookmarks() {
-    var bookmarkCommands = filterCommands(
-      (commands = null),
-      (types = ["file", "folder"]),
-      (showHidden = true),
-      (showNonRelevant = true),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = bookmarkCommands),
-      (title = localize(strings.Bookmarks)),
-      (columns = paletteSettings.columnSets.bookmarks),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-
-  /** Show all actions. */
-  function showAllActions() {
-    var actionCommands = filterCommands(
-      (commands = null),
-      (types = ["action"]),
-      (showHidden = true),
-      (showNonRelevant = false),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = actionCommands),
-      (title = localize(strings.Actions)),
-      (columns = paletteSettings.columnSets.actions),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-
-  /** Hide commands from Ai Command Palette. */
-  function hideCommand() {
-    var hideableCommands = filterCommands(
-      (commands = null),
-      (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
-      (showHidden = false),
-      (showNonRelevant = true),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = hideableCommands),
-      (title = localize(strings.cd_hide_select)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = true)
-    );
-    if (!result) return;
-    prefs.hiddenCommands = prefs.hiddenCommands.concat(result);
-  }
-
-  /** Unhide hidden commands. */
-  function unhideCommand() {
-    var result = commandPalette(
-      (commands = prefs.hiddenCommands),
-      (title = localize(strings.cd_reveal_menu_select)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = true)
-    );
-    if (!result) return;
-    for (var i = 0; i < result.length; i++) {
-      prefs.hiddenCommands.splice(prefs.hiddenCommands.indexOf(result[i]), 1);
-    }
-  }
-
-  /** Delete commands from Ai Command Palette. */
-  function deleteCommand() {
-    var deletableCommands = filterCommands(
-      (commands = null),
-      (types = ["bookmark", "script", "workflow"]),
-      (showHidden = false),
-      (showNonRelevant = true),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = deletableCommands),
-      (title = localize(strings.cd_delete_select)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = true)
-    );
-    if (!result) return;
-
-    // get all of the actual command names for the confirmation dialog
-    var commandNames = [];
-    for (var i = 0; i < result.length; i++) {
-      commandNames.push(commandsData[result[i]].name);
-    }
-
-    // confirm command deletion
-    if (
-      !confirm(
-        localize(strings.cd_delete_confirm, commandNames.join("\n")),
-        "noAsDflt",
-        localize(strings.cd_delete_confirm_title)
-      )
-    )
-      return;
-
-    // go through each deletable command type and remove them from user prefs
-    // searching through `typesToInject` which is defined in `index.jsx`
-    for (var i = 0; i < typesToInject.length; i++) {
-      for (var j = prefs[typesToInject[i]].length - 1; j >= 0; j--) {
-        if (result.includes(prefs[typesToInject[i]][j].id))
-          prefs[typesToInject[i]].splice(j, 1);
-      }
-    }
-  }
-
-  // BUILT-IN COMMANDS
-
-  /** Present a command palette with all open documents and goto the chosen one. */
-  function goToOpenDocument() {
-    var documentLookup = {};
-    var openDocuments = [];
-    var curDocument, documentName;
-    for (var i = 0; i < app.documents.length; i++) {
-      curDocument = app.documents[i];
-      var colormode =
-        " (" + curDocument.documentColorSpace.toString().split(".").pop() + ")";
-      documentName =
-        curDocument == app.activeDocument
-          ? "x " + curDocument.name + " " + colormode
-          : "   " + curDocument.name + " " + colormode;
-      openDocuments.push({ name: documentName, type: localize(strings.document) });
-      documentLookup[documentName] = curDocument;
-    }
-    var result = commandPalette(
-      (commands = openDocuments),
-      (title = localize(strings.go_to_open_document)),
-      (multiselect = false)
-    );
-    if (!result) return;
-    documentLookup[result].activate();
-  }
-
-  /** Present a command palette with all artboards and zoom to the chosen one. */
-  function goToArtboard() {
-    var artboardLookup = {};
-    var artboards = [];
-    var abName;
-    for (var i = 0; i < app.activeDocument.artboards.length; i++) {
-      abName = "#" + i + "  " + app.activeDocument.artboards[i].name;
-      artboards.push({ name: abName, type: localize(strings.artboard) });
-      artboardLookup[abName] = i;
-    }
-    var result = commandPalette(
-      (commands = artboards),
-      (title = localize(strings.go_to_artboard)),
-      (multiselect = false)
-    );
-    if (!result) return;
-    app.activeDocument.artboards.setActiveArtboardIndex(artboardLookup[result]);
-    app.executeMenuCommand("fitin");
-  }
-
-  /** Present a command palette with all named objects and zoom to and select the chosen one. */
-  function goToNamedObject() {
-    if (app.activeDocument.pageItems.length > namedObjectLimit)
-      alert(
-        localize(strings.go_to_named_object_limit, app.activeDocument.pageItems.length)
-      );
-    var objectLookup = {};
-    var namedObjects = [];
-    var item, itemName, itemType;
-    for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
-      item = app.activeDocument.pageItems[i];
-      if (
-        item.name ||
-        item.name.length ||
-        item.typename == "PlacedItem" ||
-        item.typename == "SymbolItem"
-      ) {
-        if (item.typename == "PlacedItem") {
-          itemName = item.file.name;
-        } else if (item.typename == "SymbolItem") {
-          itemName = item.name || item.name.length ? item.name : item.symbol.name;
-        } else {
-          itemName = item.name;
-        }
-      }
-      itemName += " (" + item.layer.name + ")";
-      namedObjects.push({ name: itemName, type: item.typename });
-      objectLookup[itemName] = item;
-    }
-    if (!namedObjects.length) alert(localize(strings.go_to_named_object_no_objects));
-    var result = commandPalette(
-      (commands = namedObjects),
-      (title = localize(strings.go_to_named_object)),
-      (multiselect = false)
-    );
-    if (!result) return;
-    app.activeDocument.selection = null;
-    item = objectLookup[result];
-    item.selected = true;
-
-    // reset zoom for current document
-    app.activeDocument.views[0].zoom = 1;
-
-    // get screen information
-    var screenBounds = app.activeDocument.views[0].bounds;
-    var screenW = screenBounds[2] - screenBounds[0];
-    var screenH = screenBounds[1] - screenBounds[3];
-
-    // get the (true) visible bounds of the returned object
-    var bounds = item.visibleBounds;
-    var itemW = bounds[2] - bounds[0];
-    var itemH = bounds[1] - bounds[3];
-    var itemCX = bounds[0] + itemW / 2;
-    var itemCY = bounds[1] - itemH / 2;
-
-    // reset the current view to center of selected object
-    app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
-
-    // calculate new zoom ratio to fit view to selected object
-    var zoomRatio;
-    if (itemW * (screenH / screenW) >= itemH) {
-      zoomRatio = screenW / itemW;
-    } else {
-      zoomRatio = screenH / itemH;
-    }
-
-    // set zoom to fit selected object plus a bit of padding
-    var padding = 0.9;
-    app.activeDocument.views[0].zoom = zoomRatio * padding;
-  }
-
-  /** Present a command palette with all recently open files and open the chosen one. */
-  function recentFiles() {
-    var f, path;
-    var filePaths = getRecentFilePaths();
-    var files = {};
-    var recentFileCommands = [];
-    for (var i = 0; i < filePaths.length; i++) {
-      path = filePaths[i];
-      f = File(path);
-      if (!f.exists) continue;
-      fname = decodeURI(f.name);
-      files[fname] = f;
-      recentFileCommands.push({ name: fname, type: localize(strings.file) });
-    }
-    var result = commandPalette(
-      (commands = recentFileCommands),
-      (title = localize(strings.open_recent_file)),
-      (multiselect = false)
-    );
-    if (!result) return;
-    try {
-      app.open(files[result]);
-    } catch (e) {
-      alert(localize(strings.fl_error_loading, result));
-    }
-  }
-
-  /** Present a command palette with more recent commands and process the selected one. */
-  function recentCommands() {
-    var recentCommands = [];
-    for (var i = 0; i < data.recent.commands.length; i++) {
-      if (!commandsData.hasOwnProperty(data.recent.commands[i])) {
-        // FIXME: add alert
-        data.recent.commands.splice(i, 1);
-        continue;
-      }
-      recentCommands.push(commandsData[data.recent.commands[i]]);
-    }
-    var result = commandPalette(
-      (commands = recentCommands),
-      (title = localize(strings.recent_commands)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-  // COMMAND EXECUTION
-
-  /**
-   * Process command actions.
-   * @param {String} id Command id to process.
-   */
-  function processCommand(id) {
-    var command = commandsData[id];
-    if (command.type == "workflow") {
-      // check to make sure all workflow commands are valid
-      badActions = checkWorkflowActions(command.actions);
-      if (badActions.length) {
-        alert(localize(strings.wf_needs_attention, badActions.join("\n")));
-        return;
-      }
-      // run each action in the workflow
-      for (var i = 0; i < command.actions.length; i++) processCommand(command.actions[i]);
-    } else {
-      executeAction(command);
-    }
-  }
-
-  /**
-   * Execute command action.
-   * @param {Object} command Command to execute.
-   */
-  function executeAction(command) {
-    // recheck active document and selection incase previous workflow action changed them
-    appDocuments = app.documents.length > 0;
-    docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
-    // check command to see if an active document is required
-    if (command.docRequired && !appDocuments)
-      if (
-        !confirm(
-          localize(strings.cd_active_document_required, command.action),
-          "noAsDflt",
-          localize(strings.cd_exception)
-        )
-      )
-        return;
-
-    // check command to see if an active selection is required
-    if (command.selRequired && !docSelection)
-      if (
-        !confirm(
-          localize(strings.cd_active_selection_required, command.action),
-          "noAsDflt",
-          localize(strings.cd_exception)
-        )
-      )
-        return;
-
-    // execute action based on the command type
-    var func;
-    var alertString = strings.cd_error_executing;
-    switch (command.type.toLowerCase()) {
-      case "config":
-        func = configAction;
-        break;
-      case "builtin":
-        func = builtinAction;
-        break;
-      case "menu":
-        func = menuAction;
-        break;
-      case "tool":
-        func = toolAction;
-        alertString = strings.tl_error_selecting;
-        break;
-      case "action":
-        func = actionAction;
-        alertString = strings.ac_error_execution;
-        break;
-      case "bookmark":
-      case "file":
-      case "folder":
-        func = bookmarkAction;
-        break;
-      case "script":
-        func = scriptAction;
-        alertString = strings.sc_error_execution;
-        break;
-      default:
-        alert(localize(strings.cd_invalid, command.type));
-    }
-
-    try {
-      func(command);
-    } catch (e) {
-      alert(localize(alertString, localize(command.name), e));
-    }
-  }
-
-  function menuAction(command) {
-    app.executeMenuCommand(command.action);
-  }
-
-  function toolAction(command) {
-    app.selectTool(command.action);
-  }
-
-  function actionAction(command) {
-    app.doScript(command.name, command.set);
-  }
-
-  function bookmarkAction(command) {
-    f = command.type == "file" ? new File(command.path) : new Folder(command.path);
-    if (!f.exists) {
-      alert(localize(strings.bm_error_exists, command.path));
-      return;
-    }
-    if (command.type == "file") {
-      app.open(f);
-    } else {
-      f.execute();
-    }
-  }
-
-  function scriptAction(command) {
-    f = new File(command.path);
-    if (!f.exists) {
-      alert(localize(strings.sc_error_exists, command.path));
-    } else {
-      $.evalFile(f);
-    }
-  }
-
-  /**
-   * Execute script actions.
-   * @param {Object} command Command to execute.
-   */
-  function configAction(command) {
-    var write = true;
-    switch (command.action) {
-      case "settings":
-        AiCommandPaletteSettings();
-        write = false;
-        break;
-      case "about":
-        about();
-        write = false;
-        break;
-      case "buildStartup":
-        buildStartup();
-        break;
-      case "buildWorkflow":
-        buildWorkflow();
-        break;
-      case "editWorkflow":
-        editWorkflow();
-        break;
-      case "loadScript":
-        loadScripts();
-        break;
-      case "loadFileBookmark":
-        loadFileBookmark();
-        write = true;
-        break;
-      case "loadFolderBookmark":
-        loadFolderBookmark();
-        break;
-      case "hideCommand":
-        hideCommand();
-        break;
-      case "unhideCommand":
-        unhideCommand();
-        break;
-      case "deleteCommand":
-        deleteCommand();
-        break;
-      case "enableTypeInSearch":
-      case "disableTypeInSearch":
-        prefs.searchIncludesType = !prefs.searchIncludesType;
-        break;
-      case "clearHistory": // FIXME: Update alert to include warning about latches
-        if (
-          !confirm(
-            localize(strings.cd_clear_history_confirm),
-            "noAsDflt",
-            localize(strings.cd_exception)
-          )
-        )
-          return;
-        userHistory.clear();
-        alert(localize(strings.history_cleared));
-        break;
-      case "revealPrefFile":
-        userPrefs.reveal();
-        write = false;
-        break;
-      default:
-        alert(localize(strings.cd_invalid, action));
-    }
-    if (!write) return;
-    userPrefs.save();
-  }
-
-  /**
-   * Execute built-in commands.
-   * @param {Object} command Command to execute.
-   */
-  function builtinAction(command) {
-    switch (command.action) {
-      case "recentCommands":
-        recentCommands();
-        break;
-      case "allWorkflows":
-        showAllWorkflows();
-        break;
-      case "allScripts":
-        showAllScripts();
-        break;
-      case "allBookmarks":
-        showAllBookmarks();
-        break;
-      case "allActions":
-        showAllActions();
-        break;
-      case "documentReport":
-        if (activeDocument) documentReport();
-        break;
-      case "exportVariables":
-        if (activeDocument) exportVariables();
-        break;
-      case "goToArtboard":
-        if (activeDocument) goToArtboard();
-        break;
-      case "goToDocument":
-        if (app.documents.length > 1) {
-          goToOpenDocument();
-        }
-        break;
-      case "goToNamedObject":
-        if (activeDocument) goToNamedObject();
-        break;
-      case "imageCapture":
-        imageCapture();
-        break;
-      case "recentFiles":
-        recentFiles();
-        break;
-      case "redrawWindows":
-        app.redraw();
-        break;
-      case "revealActiveDocument":
-        if (activeDocument) {
-          if (app.activeDocument.path.fsName) {
-            var fp = new Folder(app.activeDocument.path.fsName);
-            fp.execute();
-          } else {
-            alert(localize(strings.active_document_not_saved));
-          }
-        }
-        break;
-      default:
-        alert(localize(strings.cd_invalid, action));
-    }
-  }
+    this.loadedActions = ct > 0;
+  };
   // CUSTOM SCRIPTUI FILTERABLE LISTBOX
 
   /**
@@ -11361,6 +10431,8 @@ See the LICENSE file for details.
     return sortByScore(matches);
   }
   function workflowBuilder(commands, editWorkflowId) {
+    var overwrite = false;
+
     // create the dialog
     var win = new Window("dialog");
     win.text = localize(strings.wf_builder);
@@ -11527,16 +10599,21 @@ See the LICENSE file for details.
 
     save.onClick = function () {
       // check for workflow overwrite
-      if (
-        !editWorkflow &&
-        data.commands.workflow.hasOwnProperty(workflowName.text.trim()) &&
-        !confirm(
-          localize(strings.wf_already_exists) + "\n" + workflowName.text.trim(),
-          "noAsDflt",
-          localize(strings.wf_already_exists_title)
-        )
-      ) {
-        return;
+      var currentWorkflows = [];
+      for (var i = 0; i < prefs.workflows.length; i++) {
+        currentWorkflows.push(prefs.workflows[i].name);
+      }
+      if (currentWorkflows.includes(workflowName.text.trim())) {
+        overwrite = true;
+        if (
+          !confirm(
+            localize(strings.wf_already_exists) + "\n" + workflowName.text.trim(),
+            "noAsDflt",
+            localize(strings.wf_already_exists_title)
+          )
+        ) {
+          return;
+        }
       }
       win.close(1);
     };
@@ -11546,7 +10623,7 @@ See the LICENSE file for details.
       for (var i = 0; i < steps.listbox.items.length; i++) {
         actions.push(steps.listbox.items[i].id);
       }
-      return { name: workflowName.text.trim(), actions: actions };
+      return { name: workflowName.text.trim(), actions: actions, overwrite: overwrite };
     }
     return false;
   }
@@ -11707,63 +10784,1031 @@ See the LICENSE file for details.
     }
     return false;
   }
-  // FILE/FOLDER OPERATIONS
+  // COMMAND EXECUTION
 
   /**
-   * Setup folder object or create if doesn't exist.
-   * @param   {String} path System folder path.
-   * @returns {Object}      Folder object.
+   * Process command actions.
+   * @param {String} id Command id to process.
    */
-  function setupFolderObject(path) {
-    var folder = new Folder(path);
-    if (!folder.exists) folder.create();
-    return folder;
-  }
-
-  /**
-   * Setup file object.
-   * @param   {Object} path Folder object where file should exist,
-   * @param   {String} name File name.
-   * @returns {Object}      File object.
-   */
-  function setupFileObject(path, name) {
-    return new File(path + "/" + name);
-  }
-
-  /**
-   * Read ExtendScript "json-like" data from file.
-   * @param   {Object} f File object to read.
-   * @returns {Object}   Evaluated JSON data.
-   */
-  function readJSONData(f) {
-    var json, obj;
-    try {
-      f.encoding = "UTF-8";
-      f.open("r");
-      json = f.read();
-      f.close();
-    } catch (e) {
-      alert(localize(strings.fl_error_loading, f));
+  function processCommand(id) {
+    var command = commandsData[id];
+    if (command.type == "workflow") {
+      // check to make sure all workflow commands are valid
+      badActions = checkWorkflowActions(command.actions);
+      if (badActions.length) {
+        alert(localize(strings.wf_needs_attention, badActions.join("\n")));
+        return;
+      }
+      // run each action in the workflow
+      for (var i = 0; i < command.actions.length; i++) processCommand(command.actions[i]);
+    } else {
+      executeAction(command);
     }
-    obj = eval(json);
-    return obj;
   }
 
   /**
-   * Write ExtendScript "json-like" data to disk.
-   * @param {Object} obj Data to be written.
-   * @param {Object} f   File object to write to.
+   * Execute command action.
+   * @param {Object} command Command to execute.
    */
-  function writeJSONData(obj, f) {
-    var data = obj.toSource();
-    try {
-      f.encoding = "UTF-8";
-      f.open("w");
-      f.write(data);
-      f.close();
-    } catch (e) {
-      alert(localize(strings.fl_error_writing, f));
+  function executeAction(command) {
+    // recheck active document and selection incase previous workflow action changed them
+    appDocuments = app.documents.length > 0;
+    docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
+    // check command to see if an active document is required
+    if (command.docRequired && !appDocuments)
+      if (
+        !confirm(
+          localize(strings.cd_active_document_required, command.action),
+          "noAsDflt",
+          localize(strings.cd_exception)
+        )
+      )
+        return;
+
+    // check command to see if an active selection is required
+    if (command.selRequired && !docSelection)
+      if (
+        !confirm(
+          localize(strings.cd_active_selection_required, command.action),
+          "noAsDflt",
+          localize(strings.cd_exception)
+        )
+      )
+        return;
+
+    // execute action based on the command type
+    var func;
+    var alertString = strings.cd_error_executing;
+    switch (command.type.toLowerCase()) {
+      case "config":
+        func = configAction;
+        break;
+      case "builtin":
+        func = builtinAction;
+        break;
+      case "menu":
+        func = menuAction;
+        break;
+      case "tool":
+        func = toolAction;
+        alertString = strings.tl_error_selecting;
+        break;
+      case "action":
+        func = actionAction;
+        alertString = strings.ac_error_execution;
+        break;
+      case "bookmark":
+      case "file":
+      case "folder":
+        func = bookmarkAction;
+        break;
+      case "script":
+        func = scriptAction;
+        alertString = strings.sc_error_execution;
+        break;
+      default:
+        alert(localize(strings.cd_invalid, command.type));
     }
+
+    try {
+      func(command);
+    } catch (e) {
+      alert(localize(alertString, localize(command.name), e));
+    }
+  }
+
+  function menuAction(command) {
+    app.executeMenuCommand(command.action);
+  }
+
+  function toolAction(command) {
+    app.selectTool(command.action);
+  }
+
+  function actionAction(command) {
+    app.doScript(command.name, command.set);
+  }
+
+  function bookmarkAction(command) {
+    f = command.type == "file" ? new File(command.path) : new Folder(command.path);
+    if (!f.exists) {
+      alert(localize(strings.bm_error_exists, command.path));
+      return;
+    }
+    if (command.type == "file") {
+      app.open(f);
+    } else {
+      f.execute();
+    }
+  }
+
+  function scriptAction(command) {
+    f = new File(command.path);
+    if (!f.exists) {
+      alert(localize(strings.sc_error_exists, command.path));
+    } else {
+      $.evalFile(f);
+    }
+  }
+
+  /**
+   * Execute script actions.
+   * @param {Object} command Command to execute.
+   */
+  function configAction(command) {
+    var write = true;
+    switch (command.action) {
+      case "settings":
+        AiCommandPaletteSettings();
+        write = false;
+        break;
+      case "about":
+        about();
+        write = false;
+        break;
+      case "buildStartup":
+        buildStartup();
+        break;
+      case "buildWorkflow":
+        buildWorkflow();
+        break;
+      case "editWorkflow":
+        editWorkflow();
+        break;
+      case "loadScript":
+        loadScripts();
+        break;
+      case "loadFileBookmark":
+        loadFileBookmark();
+        write = true;
+        break;
+      case "loadFolderBookmark":
+        loadFolderBookmark();
+        break;
+      case "hideCommand":
+        hideCommand();
+        break;
+      case "unhideCommand":
+        unhideCommand();
+        break;
+      case "deleteCommand":
+        deleteCommand();
+        break;
+      case "enableTypeInSearch":
+      case "disableTypeInSearch":
+        prefs.searchIncludesType = !prefs.searchIncludesType;
+        break;
+      case "clearHistory": // FIXME: Update alert to include warning about latches
+        if (
+          !confirm(
+            localize(strings.cd_clear_history_confirm),
+            "noAsDflt",
+            localize(strings.cd_exception)
+          )
+        )
+          return;
+        userHistory.clear();
+        alert(localize(strings.history_cleared));
+        break;
+      case "revealPrefFile":
+        userPrefs.reveal();
+        write = false;
+        break;
+      default:
+        alert(localize(strings.cd_invalid, action));
+    }
+    if (!write) return;
+    userPrefs.save();
+  }
+
+  /**
+   * Execute built-in commands.
+   * @param {Object} command Command to execute.
+   */
+  function builtinAction(command) {
+    switch (command.action) {
+      case "recentCommands": // TODO
+        showRecentCommands();
+        break;
+      case "allWorkflows":
+        showAllWorkflows();
+        break;
+      case "allScripts":
+        showAllScripts();
+        break;
+      case "allBookmarks":
+        showAllBookmarks();
+        break;
+      case "allActions":
+        showAllActions();
+        break;
+      case "documentReport":
+        if (activeDocument) documentReport();
+        break;
+      case "exportVariables":
+        if (activeDocument) exportVariables();
+        break;
+      case "goToArtboard":
+        if (activeDocument) goToArtboard();
+        break;
+      case "goToDocument":
+        if (app.documents.length > 1) {
+          goToOpenDocument();
+        }
+        break;
+      case "goToNamedObject":
+        if (activeDocument) goToNamedObject();
+        break;
+      case "imageCapture":
+        imageCapture();
+        break;
+      case "recentFiles":
+        recentFiles();
+        break;
+      case "redrawWindows":
+        app.redraw();
+        break;
+      case "revealActiveDocument":
+        if (activeDocument) {
+          if (app.activeDocument.path.fsName) {
+            var fp = new Folder(app.activeDocument.path.fsName);
+            fp.execute();
+          } else {
+            alert(localize(strings.active_document_not_saved));
+          }
+        }
+        break;
+      default:
+        alert(localize(strings.cd_invalid, action));
+    }
+  }
+  // AI COMMAND PALETTE OPERATIONS
+
+  /** Ai Command Palette configuration commands. */
+  function AiCommandPaletteSettings() {
+    var configCommands = filterCommands(
+      (commands = null),
+      (types = ["config"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = ["config_settings"])
+    );
+    var result = commandPalette(
+      (commands = configCommands),
+      (title = localize(strings.cp_config)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /** Ai Command Palette About Dialog. */
+  function about() {
+    var win = new Window("dialog");
+    win.text = localize(strings.about);
+    win.alignChildren = "fill";
+
+    // script info
+    var pAbout = win.add("panel");
+    pAbout.margins = 20;
+    pAbout.alignChildren = "fill";
+    pAbout.add("statictext", [0, 0, 500, 100], localize(strings.description), {
+      multiline: true,
+    });
+
+    var links = pAbout.add("group");
+    links.orientation = "column";
+    links.alignChildren = ["center", "center"];
+    links.add("statictext", undefined, localize(strings.version, _version));
+    links.add("statictext", undefined, localize(strings.copyright));
+    var githubText =
+      localize(strings.github) + ": https://github.com/joshbduncan/AiCommandPalette";
+    var github = links.add("statictext", undefined, githubText);
+    // window buttons
+    var winButtons = win.add("group");
+    winButtons.orientation = "row";
+    winButtons.alignChildren = ["center", "center"];
+    var ok = winButtons.add("button", undefined, "OK");
+    ok.preferredSize.width = 100;
+
+    github.addEventListener("mousedown", function () {
+      openURL("https://github.com/joshbduncan/AiCommandPalette");
+    });
+
+    win.show();
+  }
+
+  function buildStartup() {
+    var availableStartupCommands = filterCommands(
+      (commands = null),
+      (types = [
+        "file",
+        "folder",
+        "script",
+        "workflow",
+        "menu",
+        "tool",
+        "action",
+        "builtin",
+        "config",
+      ]),
+      (showHidden = true),
+      (showNonRelevant = true),
+      (hideSpecificCommands = prefs.startupCommands)
+    );
+    // show the startup builder dialog
+    var result = startupBuilder(availableStartupCommands);
+    if (!result) return;
+    prefs.startupCommands = result;
+  }
+
+  /** Document Info Dialog */
+  function documentReport() {
+    // setup the basic document info
+    var rulerUnits = app.activeDocument.rulerUnits.toString().split(".").pop();
+    var fileInfo =
+      localize(strings.dr_header) +
+      localize(strings.dr_filename) +
+      app.activeDocument.name +
+      "\n" +
+      localize(strings.dr_path) +
+      (app.activeDocument.path.fsName
+        ? app.activeDocument.path.fsName
+        : localize(strings.none)) +
+      "\n" +
+      localize(strings.dr_color_space) +
+      app.activeDocument.documentColorSpace.toString().split(".").pop() +
+      "\n" +
+      localize(strings.dr_width) +
+      convertPointsTo(app.activeDocument.width, rulerUnits) +
+      " " +
+      rulerUnits +
+      "\n" +
+      localize(strings.dr_height) +
+      convertPointsTo(app.activeDocument.height, rulerUnits) +
+      " " +
+      rulerUnits;
+
+    // generate all optional report information (all included by default)
+    var reportOptions = {
+      artboards: {
+        str: getCollectionObjectNames(app.activeDocument.artboards)
+          .toString()
+          .replace(/,/g, "\n"),
+        active: true,
+      },
+      fonts: {
+        str: getCollectionObjectNames(getDocumentFonts(app.activeDocument), true)
+          .toString()
+          .replace(/,/g, "\n"),
+        active: true,
+      },
+      layers: {
+        str: getCollectionObjectNames(app.activeDocument.layers)
+          .toString()
+          .replace(/,/g, "\n"),
+        active: true,
+      },
+      placed_items: {
+        str: getPlacedFileInfoForReport().toString().replace(/,/g, "\n"),
+        active: true,
+      },
+      spot_colors: {
+        str: getCollectionObjectNames(app.activeDocument.spots, true)
+          .toString()
+          .replace(/,/g, "\n"),
+        active: true,
+      },
+    };
+
+    // build the report from the selected options (active = true)
+    function buildReport() {
+      if (!app.activeDocument.saved) alert(localize(strings.document_report_warning));
+
+      var infoString = localize(strings.dr_info_string) + "\n\n" + fileInfo;
+      for (var p in reportOptions) {
+        if (reportOptions[p].active && reportOptions[p].str) {
+          infoString +=
+            "\n\n" +
+            localize(strings[p.toLowerCase()]) +
+            "\n-----\n" +
+            reportOptions[p].str;
+        }
+      }
+      infoString += "\n\n" + localize(strings.dr_file_created) + new Date();
+      return infoString;
+    }
+
+    // setup the dialog
+    var win = new Window("dialog");
+    win.text = localize(strings.document_report);
+    win.orientation = "column";
+    win.alignChildren = ["center", "top"];
+    win.alignChildren = "fill";
+
+    // panel - options
+    var pOptions = win.add("panel", undefined, "Include?");
+    pOptions.orientation = "row";
+    pOptions.margins = 20;
+
+    // add checkboxes for each report option
+    var cb;
+    for (var p in reportOptions) {
+      cb = pOptions.add("checkbox", undefined, p);
+      if (reportOptions[p].str) {
+        cb.value = true;
+        // add onClick function for each cb to update rebuild report
+        cb.onClick = function () {
+          if (this.value) {
+            reportOptions[this.text].active = true;
+          } else {
+            reportOptions[this.text].active = false;
+          }
+          info.text = buildReport();
+        };
+      } else {
+        cb.value = false;
+        cb.enabled = false;
+      }
+    }
+
+    // script info
+    var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
+      multiline: true,
+      scrollable: true,
+      readonly: true,
+    });
+
+    // window buttons
+    var winButtons = win.add("group");
+    winButtons.orientation = "row";
+    winButtons.alignChildren = ["center", "center"];
+    var saveInfo = winButtons.add("button", undefined, localize(strings.save));
+    saveInfo.preferredSize.width = 100;
+    var close = winButtons.add("button", undefined, localize(strings.close), {
+      name: "ok",
+    });
+    close.preferredSize.width = 100;
+
+    // save document info to selected file
+    saveInfo.onClick = function () {
+      var f = File.saveDialog();
+      if (f) {
+        try {
+          f.encoding = "UTF-8";
+          f.open("w");
+          f.write(info.text);
+          f.close();
+        } catch (e) {
+          alert(localize(strings.fl_error_writing, f));
+        }
+        if (f.exists) alert(localize(strings.file_saved, f.fsName));
+      }
+    };
+    // show the info dialog
+    win.show();
+  }
+
+  /**
+   * Export the active artboard as a png file using the api `Document.imageCapture()` method.
+   * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html?#document-imagecapture
+   */
+  function imageCapture() {
+    if (activeDocument) {
+      var f = File.saveDialog();
+      if (f) {
+        try {
+          app.activeDocument.imageCapture(f);
+        } catch (e) {
+          alert(localize(strings.fl_error_writing, f));
+        }
+        // if chosen file name doesn't end in ".png" add the
+        // correct extension so they captured file open correctly
+        if (f.name.indexOf(".png") < f.name.length - 4)
+          f.rename(f.name.toString() + ".png");
+        if (f.exists) alert(localize(strings.file_saved, f.fsName));
+      }
+    }
+  }
+
+  /**
+   *
+   * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-exportvariables
+   */
+  function exportVariables() {
+    if (app.activeDocument.variables.length > 0) {
+      var f = File.saveDialog();
+      if (f) {
+        try {
+          app.activeDocument.exportVariables(f);
+        } catch (e) {
+          alert(localize(strings.fl_error_writing, f));
+        }
+        if (f.exists) alert(localize(strings.file_saved, f.fsName));
+      }
+    } else {
+      alert(localize(strings.no_document_variables));
+    }
+  }
+
+  /** Set bookmarked file to open in Ai from within Ai Command Palette. */
+  function loadFileBookmark() {
+    var acceptedTypes = [
+      ".ai",
+      ".ait",
+      ".pdf",
+      ".dxf",
+      ".avif",
+      ".BMP",
+      ".RLE",
+      ".DIB",
+      ".cgm",
+      ".cdr",
+      ".eps",
+      ".epsf",
+      ".ps",
+      ".emf",
+      ".gif",
+      ".heic",
+      ".heif",
+      ".eps",
+      ".epsf",
+      ".ps",
+      ".jpg",
+      ".jpe",
+      ".jpeg",
+      ".jpf",
+      ".jpx",
+      ".jp2",
+      ".j2k",
+      ".j2c",
+      ".jpc",
+      ".rtf",
+      ".doc",
+      ".docx",
+      ".PCX",
+      ".psd",
+      ".psb",
+      ".pdd",
+      ".PXR",
+      ".png",
+      ".pns",
+      ".svg",
+      ".svgz",
+      ".TGA",
+      ".VDA",
+      ".ICB",
+      ".VST",
+      ".txt",
+      ".tif",
+      ".tiff",
+      ".webp",
+      ".wmf",
+    ]; // file types taken from Ai open dialog
+    var re = new RegExp(acceptedTypes.join("|") + "$", "i");
+    var files = loadFileTypes(localize(strings.bm_load_bookmark), true, re);
+
+    if (files.length == 0) return;
+
+    // get all current bookmark paths to ensure no duplicates
+    var currentFileBookmarkIds = [];
+    var currentFileBookmarkPaths = [];
+    for (var i = 0; i < prefs.bookmarks.length; i++) {
+      if (prefs.bookmarks[i].type != "file") continue;
+      currentFileBookmarkIds.push(prefs.bookmarks[i].id);
+      currentFileBookmarkPaths.push(prefs.bookmarks[i].path);
+    }
+
+    var f, bookmark, bookmarkName, id, idx, oldId;
+    var newBookmarks = [];
+    var newBookmarkIds = [];
+    var oldBookmarksToRemoveFromStartup = [];
+    for (var j = 0; j < files.length; j++) {
+      f = files[j];
+      if (currentFileBookmarkPaths.includes(f.fsName)) {
+        idx = currentFileBookmarkPaths.indexOf(f.fsName);
+        if (
+          !confirm(
+            localize(strings.bm_already_loaded),
+            "noAsDflt",
+            localize(strings.bm_already_loaded_title)
+          )
+        )
+          continue;
+        oldId = prefs.startupCommands.splice(
+          prefs.startupCommands.indexOf(currentFileBookmarkIds[idx]),
+          1
+        );
+        delete commandsData[oldId];
+      }
+
+      bookmarkName = decodeURI(f.name);
+      id = cleanupCommandId("bookmark_" + bookmarkName.toLowerCase());
+      bookmark = {
+        id: id,
+        name: bookmarkName,
+        action: "bookmark",
+        type: "file",
+        path: f.fsName,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      newBookmarks.push(bookmark);
+      newBookmarkIds.push(bookmark.id);
+    }
+
+    if (newBookmarks.length == 0) return;
+
+    prefs.bookmarks = prefs.bookmarks.concat(newBookmarks);
+    addToStartup(newBookmarkIds);
+  }
+
+  /** Set bookmarked folder to open on system from within Ai Command Palette. */
+  function loadFolderBookmark() {
+    var f;
+    f = Folder.selectDialog(localize(strings.bm_load_bookmark));
+
+    if (!f) return;
+
+    // get all current bookmark paths to ensure no duplicates
+    var currentFolderBookmarks = [];
+    for (var i = 0; i < prefs.bookmarks.length; i++) {
+      if (prefs.bookmarks[i].type != "folder") continue;
+      currentFolderBookmarks.push(prefs.bookmarks[i].path);
+    }
+
+    if (currentFolderBookmarks.includes(f.fsName)) {
+      if (
+        !confirm(
+          localize(strings.bm_already_loaded),
+          "noAsDflt",
+          localize(strings.bm_already_loaded_title)
+        )
+      )
+        return;
+    }
+
+    var bookmarkName = decodeURI(f.name);
+    var bookmark = {
+      id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
+      name: bookmarkName,
+      action: "bookmark",
+      type: "folder",
+      path: f.fsName,
+      docRequired: false,
+      selRequired: false,
+      hidden: false,
+    };
+    prefs.bookmarks.push(bookmark);
+    addToStartup([bookmark.id]);
+  }
+
+  /** Load external scripts into Ai Command Palette. */
+  function loadScripts() {
+    var acceptedTypes = [".jsx", ".js"];
+    var re = new RegExp(acceptedTypes.join("|") + "$", "i");
+    var files = loadFileTypes(localize(strings.sc_load_script), true, re);
+
+    if (files.length == 0) return;
+
+    // get all current script paths to ensure no duplicates
+    var currentScripts = [];
+    for (var i = 0; i < prefs.scripts.length; i++) {
+      currentScripts.push(prefs.scripts[i].path);
+    }
+
+    var f, script, scriptName, id;
+    var newScripts = [];
+    var newScriptIds = [];
+    for (var j = 0; j < files.length; j++) {
+      f = files[j];
+      if (currentScripts.hasOwnProperty(f.fsName)) {
+        if (
+          !confirm(
+            localize(strings.sc_already_loaded),
+            "noAsDflt",
+            localize(strings.sc_already_loaded_title)
+          )
+        )
+          continue;
+      }
+
+      scriptName = decodeURI(f.name);
+      id = cleanupCommandId("script_" + scriptName.toLowerCase());
+      script = {
+        id: id,
+        name: scriptName,
+        action: "script",
+        type: "script",
+        path: f.fsName,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      newScripts.push(script);
+      newScriptIds.push(script.id);
+    }
+
+    if (newScripts.length == 0) return;
+
+    prefs.scripts = prefs.scripts.concat(newScripts);
+    addToStartup(newScriptIds);
+  }
+
+  /** Show all scripts. */
+  function showAllScripts() {
+    var scriptCommands = filterCommands(
+      (commands = null),
+      (types = ["script"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = scriptCommands),
+      (title = localize(strings.Scripts)),
+      (columns = paletteSettings.columnSets.bookmarks),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /** Show all bookmarks. */
+  function showAllBookmarks() {
+    var bookmarkCommands = filterCommands(
+      (commands = null),
+      (types = ["file", "folder"]),
+      (showHidden = true),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = bookmarkCommands),
+      (title = localize(strings.Bookmarks)),
+      (columns = paletteSettings.columnSets.bookmarks),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /** Show all actions. */
+  function showAllActions() {
+    var actionCommands = filterCommands(
+      (commands = null),
+      (types = ["action"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = actionCommands),
+      (title = localize(strings.Actions)),
+      (columns = paletteSettings.columnSets.actions),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /** Hide commands from Ai Command Palette. */
+  function hideCommand() {
+    var hideableCommands = filterCommands(
+      (commands = null),
+      (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+      (showHidden = false),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = hideableCommands),
+      (title = localize(strings.cd_hide_select)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = true)
+    );
+    if (!result) return;
+    prefs.hiddenCommands = prefs.hiddenCommands.concat(result);
+  }
+
+  /** Unhide hidden commands. */
+  function unhideCommand() {
+    var result = commandPalette(
+      (commands = prefs.hiddenCommands),
+      (title = localize(strings.cd_reveal_menu_select)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = true)
+    );
+    if (!result) return;
+    for (var i = 0; i < result.length; i++) {
+      prefs.hiddenCommands.splice(prefs.hiddenCommands.indexOf(result[i]), 1);
+    }
+  }
+
+  /** Delete commands from Ai Command Palette. */
+  function deleteCommand() {
+    var deletableCommands = filterCommands(
+      (commands = null),
+      (types = ["file", "folder", "script", "workflow"]),
+      (showHidden = false),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = deletableCommands),
+      (title = localize(strings.cd_delete_select)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = true)
+    );
+    if (!result) return;
+
+    // get all of the actual command names for the confirmation dialog
+    var commandNames = [];
+    for (var i = 0; i < result.length; i++) {
+      commandNames.push(commandsData[result[i]].name);
+    }
+
+    // confirm command deletion
+    if (
+      !confirm(
+        localize(strings.cd_delete_confirm, commandNames.join("\n")),
+        "noAsDflt",
+        localize(strings.cd_delete_confirm_title)
+      )
+    )
+      return;
+
+    // go through each deletable command type and remove them from user prefs
+    var typesToCheck = ["workflows", "bookmarks", "scripts"];
+    for (var i = 0; i < typesToCheck.length; i++) {
+      for (var j = prefs[typesToCheck[i]].length - 1; j >= 0; j--) {
+        if (result.includes(prefs[typesToCheck[i]][j].id))
+          prefs[typesToCheck[i]].splice(j, 1);
+      }
+    }
+  }
+
+  // BUILT-IN COMMANDS
+
+  /** Present a command palette with all open documents and goto the chosen one. */
+  // TODO
+  function goToOpenDocument() {
+    var documentLookup = {};
+    var openDocuments = [];
+    var curDocument, documentName;
+    for (var i = 0; i < app.documents.length; i++) {
+      curDocument = app.documents[i];
+      var colormode =
+        " (" + curDocument.documentColorSpace.toString().split(".").pop() + ")";
+      documentName =
+        curDocument == app.activeDocument
+          ? "x " + curDocument.name + " " + colormode
+          : "   " + curDocument.name + " " + colormode;
+      openDocuments.push({ name: documentName, type: localize(strings.document) });
+      documentLookup[documentName] = curDocument;
+    }
+    var result = commandPalette(
+      (commands = openDocuments),
+      (title = localize(strings.go_to_open_document)),
+      (multiselect = false)
+    );
+    if (!result) return;
+    documentLookup[result].activate();
+  }
+
+  /** Present a command palette with all artboards and zoom to the chosen one. */
+  // TODO
+  function goToArtboard() {
+    var artboardLookup = {};
+    var artboards = [];
+    var abName;
+    for (var i = 0; i < app.activeDocument.artboards.length; i++) {
+      abName = "#" + i + "  " + app.activeDocument.artboards[i].name;
+      artboards.push({ name: abName, type: localize(strings.artboard) });
+      artboardLookup[abName] = i;
+    }
+    var result = commandPalette(
+      (commands = artboards),
+      (title = localize(strings.go_to_artboard)),
+      (multiselect = false)
+    );
+    if (!result) return;
+    app.activeDocument.artboards.setActiveArtboardIndex(artboardLookup[result]);
+    app.executeMenuCommand("fitin");
+  }
+
+  /** Present a command palette with all named objects and zoom to and select the chosen one. */
+  // TODO
+  function goToNamedObject() {
+    if (app.activeDocument.pageItems.length > namedObjectLimit)
+      alert(
+        localize(strings.go_to_named_object_limit, app.activeDocument.pageItems.length)
+      );
+    var objectLookup = {};
+    var namedObjects = [];
+    var item, itemName, itemType;
+    for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
+      item = app.activeDocument.pageItems[i];
+      if (
+        item.name ||
+        item.name.length ||
+        item.typename == "PlacedItem" ||
+        item.typename == "SymbolItem"
+      ) {
+        if (item.typename == "PlacedItem") {
+          itemName = item.file.name;
+        } else if (item.typename == "SymbolItem") {
+          itemName = item.name || item.name.length ? item.name : item.symbol.name;
+        } else {
+          itemName = item.name;
+        }
+      }
+      itemName += " (" + item.layer.name + ")";
+      namedObjects.push({ name: itemName, type: item.typename });
+      objectLookup[itemName] = item;
+    }
+    if (!namedObjects.length) alert(localize(strings.go_to_named_object_no_objects));
+    var result = commandPalette(
+      (commands = namedObjects),
+      (title = localize(strings.go_to_named_object)),
+      (multiselect = false)
+    );
+    if (!result) return;
+    app.activeDocument.selection = null;
+    item = objectLookup[result];
+    item.selected = true;
+
+    // reset zoom for current document
+    app.activeDocument.views[0].zoom = 1;
+
+    // get screen information
+    var screenBounds = app.activeDocument.views[0].bounds;
+    var screenW = screenBounds[2] - screenBounds[0];
+    var screenH = screenBounds[1] - screenBounds[3];
+
+    // get the (true) visible bounds of the returned object
+    var bounds = item.visibleBounds;
+    var itemW = bounds[2] - bounds[0];
+    var itemH = bounds[1] - bounds[3];
+    var itemCX = bounds[0] + itemW / 2;
+    var itemCY = bounds[1] - itemH / 2;
+
+    // reset the current view to center of selected object
+    app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
+
+    // calculate new zoom ratio to fit view to selected object
+    var zoomRatio;
+    if (itemW * (screenH / screenW) >= itemH) {
+      zoomRatio = screenW / itemW;
+    } else {
+      zoomRatio = screenH / itemH;
+    }
+
+    // set zoom to fit selected object plus a bit of padding
+    var padding = 0.9;
+    app.activeDocument.views[0].zoom = zoomRatio * padding;
+  }
+
+  /** Present a command palette with all recently open files and open the chosen one. */
+  // TODO
+  function recentFiles() {
+    var f, path;
+    var filePaths = getRecentFilePaths();
+    var files = {};
+    var recentFileCommands = [];
+    for (var i = 0; i < filePaths.length; i++) {
+      path = filePaths[i];
+      f = File(path);
+      if (!f.exists) continue;
+      fname = decodeURI(f.name);
+      files[fname] = f;
+      recentFileCommands.push({ name: fname, type: localize(strings.file) });
+    }
+    var result = commandPalette(
+      (commands = recentFileCommands),
+      (title = localize(strings.open_recent_file)),
+      (multiselect = false)
+    );
+    if (!result) return;
+    try {
+      app.open(files[result]);
+    } catch (e) {
+      alert(localize(strings.fl_error_loading, result));
+    }
+  }
+
+  /** Present a command palette with more recent commands and process the selected one. */
+  function showRecentCommands() {
+    var result = commandPalette(
+      (commands = mostRecentCommands),
+      (title = localize(strings.recent_commands)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
   }
   // WORKFLOW AUTOMATION
 
@@ -11793,20 +11838,30 @@ See the LICENSE file for details.
 
     if (!result) return;
 
-    var workflow = {
-      id: "workflow" + "_" + result.name.toLowerCase().replace(" ", "_"),
-      name: result.name,
-      actions: result.actions,
-      type: "workflow",
-      docRequired: false,
-      selRequired: false,
-      hidden: false,
-    };
-    prefs.workflows.push(workflow);
+    var id;
+    // when overwriting delete previous version and update prefs
+    if (result.overwrite) {
+      for (var i = prefs.workflows.length - 1; i >= 0; i--) {
+        if (prefs.workflows[i].name == result.name) {
+          prefs.workflows[i].actions = result.actions;
+          id = prefs.workflows[i].id;
+        }
+      }
+    } else {
+      id = cleanupCommandId("workflow_" + result.name.toLowerCase());
+      var workflow = {
+        id: id,
+        name: result.name,
+        actions: result.actions,
+        type: "workflow",
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      prefs.workflows.push(workflow);
+    }
 
-    // no need to add to startup if editing a previous workflow
-    if (editWorkflowId) return;
-    addToStartup([workflow.id]);
+    addToStartup([id]);
   }
 
   /** Show all workflows. */
@@ -11849,18 +11904,11 @@ See the LICENSE file for details.
 
   // load the user data
   userPrefs.load();
+  userPrefs.inject();
+  userActions.load();
   userHistory.load();
-  var loadedActions = loadActions();
 
-  // inject user commands
-  var typesToInject = ["workflows", "bookmarks", "scripts"];
-  for (var i = 0; i < typesToInject.length; i++) {
-    for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
-      commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
-    }
-  }
-
-  // add basic defaults to the startup on a first/fresh install
+  // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }
