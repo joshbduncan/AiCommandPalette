@@ -70,6 +70,27 @@ paletteSettings.columnSets.bookmarks["Path"] = {
   key: "path",
 };
 
+paletteSettings.columnSets.documents = {};
+paletteSettings.columnSets.documents[localize(strings.name_title_case)] = {
+  width: null,
+  key: "name",
+};
+paletteSettings.columnSets.documents["Color Space"] = {
+  // FIXME: localize
+  width: 100,
+  key: "colorSpace",
+};
+paletteSettings.columnSets.documents["Ruler Units"] = {
+  // FIXME: localize
+  width: 100,
+  key: "rulerUnits",
+};
+paletteSettings.columnSets.documents["Path"] = {
+  // FIXME: localize
+  width: null,
+  key: "path",
+};
+
 var visibleListItems = 9;
 var mostRecentCommandsCount = 25;
 

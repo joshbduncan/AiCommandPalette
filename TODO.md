@@ -6,9 +6,6 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ### Todo
 
-- [ ] startup screens customization: Allow the user to set what shows up when the command palette is first opened. Could be favorite commands, workflows, etc.
-- [ ] update hidden commands to now use command id in setting file instead of name
-- [ ] ask if new scripts, workflows, and bookmarks should be added to the start screen
 - [ ] validate all startup screen items on launch
 - [ ] when deleting a command, check to see if included in any workflows
 - [ ] fix and reenable old prefs version check
@@ -16,8 +13,13 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ### Doing
 
+- [ ] fix overwriting bookmarks, scripts, and workflows
+
 ### Done ✓
 
+- [x] ask if new scripts, workflows, and bookmarks should be added to the start screen
+- [x] startup screens customization: Allow the user to set what shows up when the command palette is first opened. Could be favorite commands, workflows, etc.
+- [x] update hidden commands to now use command id in setting file instead of name
 - [x] removal deletion of missing workflow commands, instead alert user of how to remove them
 - [x] sort filtered items by most used: Track command usage counts in the user settings file, and use that count in the scoring algorithm for sorting the palette items.
 - [x] store recent command history and make accessible via command palette

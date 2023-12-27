@@ -43,7 +43,7 @@ ListBoxWrapper.prototype = {
     var columnWidths = [];
     var columnKeys = [];
     for (column in this.columns) {
-      columnTitles.push(column);
+      columnTitles.push(this.columns[column].hideTitle ? "" : column);
       columnWidths.push(this.columns[column].width);
       columnKeys.push(this.columns[column].key);
     }

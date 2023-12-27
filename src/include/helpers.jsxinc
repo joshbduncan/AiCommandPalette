@@ -79,28 +79,19 @@ function semanticVersionComparison(a, b) {
 }
 
 /**
- * Remove bad characters from a command id.
- * @param id Original command id.
- * @returns  Cleaned command id.
+ * Generate a unique command id for the data model.
+ * @param   s Base string to generate the id from.
+ * @returns    Valid command id.
  */
-function cleanupCommandId(id) {
+function generateCommandId(s) {
   var re = new RegExp("\\s|\\.", "gi");
-  return uniqueCommandId(id.replaceAll(re, "_"));
-}
-
-/**
- * Generate a unique command id for user commands (workflows, bookmarks, scripts).
- * @param id Original command id.
- * @returns  Unique command id.
- */
-function uniqueCommandId(id) {
+  var id = s.replaceAll(re, "_");
   var n = 0;
-  var uniqueId = id;
-  while (commandsData.hasOwnProperty(uniqueId)) {
+  while (commandsData.hasOwnProperty(id)) {
     n++;
-    uniqueId = id + n.toString();
+    id = s + n.toString();
   }
-  return uniqueId;
+  return id;
 }
 
 /**

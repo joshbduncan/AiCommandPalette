@@ -202,28 +202,19 @@ See the LICENSE file for details.
   }
 
   /**
-   * Remove bad characters from a command id.
-   * @param id Original command id.
-   * @returns  Cleaned command id.
+   * Generate a unique command id for the data model.
+   * @param   s Base string to generate the id from.
+   * @returns    Valid command id.
    */
-  function cleanupCommandId(id) {
+  function generateCommandId(s) {
     var re = new RegExp("\\s|\\.", "gi");
-    return uniqueCommandId(id.replaceAll(re, "_"));
-  }
-
-  /**
-   * Generate a unique command id for user commands (workflows, bookmarks, scripts).
-   * @param id Original command id.
-   * @returns  Unique command id.
-   */
-  function uniqueCommandId(id) {
+    var id = s.replaceAll(re, "_");
     var n = 0;
-    var uniqueId = id;
-    while (commandsData.hasOwnProperty(uniqueId)) {
+    while (commandsData.hasOwnProperty(id)) {
       n++;
-      uniqueId = id + n.toString();
+      id = s + n.toString();
     }
-    return uniqueId;
+    return id;
   }
 
   /**
@@ -890,6 +881,7 @@ See the LICENSE file for details.
     dr_name: { en: "Name: ", de: "Name: ", ru: "Name: " },
     dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
     dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
+    empty_string: { en: "", de: "", ru: "" },
     file: { en: "File", de: "File", ru: "File" },
     file_saved: {
       en: "File Saved:\n%1",
@@ -9698,6 +9690,27 @@ See the LICENSE file for details.
     key: "path",
   };
 
+  paletteSettings.columnSets.documents = {};
+  paletteSettings.columnSets.documents[localize(strings.name_title_case)] = {
+    width: null,
+    key: "name",
+  };
+  paletteSettings.columnSets.documents["Color Space"] = {
+    // FIXME: localize
+    width: 100,
+    key: "colorSpace",
+  };
+  paletteSettings.columnSets.documents["Ruler Units"] = {
+    // FIXME: localize
+    width: 100,
+    key: "rulerUnits",
+  };
+  paletteSettings.columnSets.documents["Path"] = {
+    // FIXME: localize
+    width: null,
+    key: "path",
+  };
+
   var visibleListItems = 9;
   var mostRecentCommandsCount = 25;
 
@@ -9998,7 +10011,7 @@ See the LICENSE file for details.
       var columnWidths = [];
       var columnKeys = [];
       for (column in this.columns) {
-        columnTitles.push(column);
+        columnTitles.push(this.columns[column].hideTitle ? "" : column);
         columnWidths.push(this.columns[column].width);
         columnKeys.push(this.columns[column].key);
       }
@@ -11404,7 +11417,7 @@ See the LICENSE file for details.
       }
 
       bookmarkName = decodeURI(f.name);
-      id = cleanupCommandId("bookmark_" + bookmarkName.toLowerCase());
+      id = generateCommandId("bookmark_" + bookmarkName.toLowerCase());
       bookmark = {
         id: id,
         name: bookmarkName,
@@ -11496,7 +11509,7 @@ See the LICENSE file for details.
       }
 
       scriptName = decodeURI(f.name);
-      id = cleanupCommandId("script_" + scriptName.toLowerCase());
+      id = generateCommandId("script_" + scriptName.toLowerCase());
       script = {
         id: id,
         name: scriptName,
@@ -11653,49 +11666,78 @@ See the LICENSE file for details.
   // BUILT-IN COMMANDS
 
   /** Present a command palette with all open documents and goto the chosen one. */
-  // TODO
   function goToOpenDocument() {
-    var documentLookup = {};
-    var openDocuments = [];
-    var curDocument, documentName;
+    var arr = [];
+    var cur, obj;
     for (var i = 0; i < app.documents.length; i++) {
-      curDocument = app.documents[i];
-      var colormode =
-        " (" + curDocument.documentColorSpace.toString().split(".").pop() + ")";
-      documentName =
-        curDocument == app.activeDocument
-          ? "x " + curDocument.name + " " + colormode
-          : "   " + curDocument.name + " " + colormode;
-      openDocuments.push({ name: documentName, type: localize(strings.document) });
-      documentLookup[documentName] = curDocument;
+      cur = app.documents[i];
+      id = generateCommandId("document_" + cur.name.toLowerCase());
+      obj = {
+        id: id,
+        name: cur.name,
+        action: "document",
+        type: "document",
+        document: cur,
+        rulerUnits: cur.rulerUnits.toString().split(".").pop(),
+        colorSpace: cur.documentColorSpace.toString().split(".").pop(),
+        path: cur.path,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      arr.push(id);
+      commandsData[id] = obj;
     }
     var result = commandPalette(
-      (commands = openDocuments),
+      (commands = arr),
       (title = localize(strings.go_to_open_document)),
+      (columns = paletteSettings.columnSets.documents),
       (multiselect = false)
     );
     if (!result) return;
-    documentLookup[result].activate();
+    commandsData[result].document.activate();
   }
 
   /** Present a command palette with all artboards and zoom to the chosen one. */
   // TODO
   function goToArtboard() {
-    var artboardLookup = {};
-    var artboards = [];
-    var abName;
+    var arr = [];
+    var cur, obj;
     for (var i = 0; i < app.activeDocument.artboards.length; i++) {
-      abName = "#" + i + "  " + app.activeDocument.artboards[i].name;
-      artboards.push({ name: abName, type: localize(strings.artboard) });
-      artboardLookup[abName] = i;
+      cur = app.activeDocument.artboards[i];
+      id = generateCommandId("artboard_" + i.toString());
+      obj = {
+        id: id,
+        name: cur.name,
+        action: "artboard",
+        type: "artboard",
+        idx: i,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      arr.push(id);
+      commandsData[id] = obj;
     }
+    var columns = {};
+    columns["Index"] = {
+      // FIXME: localize
+      width: 35,
+      key: "idx",
+      hideTitle: true,
+    };
+    columns[localize(strings.name_title_case)] = {
+      width: null,
+      key: "name",
+    };
     var result = commandPalette(
-      (commands = artboards),
+      (commands = arr),
       (title = localize(strings.go_to_artboard)),
+      (columns = columns),
       (multiselect = false)
     );
     if (!result) return;
-    app.activeDocument.artboards.setActiveArtboardIndex(artboardLookup[result]);
+    app.activeDocument.artboards.setActiveArtboardIndex(commandsData[result].idx);
     app.executeMenuCommand("fitin");
   }
 

@@ -244,6 +244,7 @@ var strings = {
   dr_name: { en: "Name: ", de: "Name: ", ru: "Name: " },
   dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
   dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
+  empty_string: { en: "", de: "", ru: "" },
   file: { en: "File", de: "File", ru: "File" },
   file_saved: {
     en: "File Saved:\n%1",
