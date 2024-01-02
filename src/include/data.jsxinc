@@ -298,6 +298,7 @@ var strings = {
     de: "Zuletzt verwendete Befehle wurden gel\u00f6scht!",
     ru: "History cleared!",
   },
+  layer_title_case: { en: "Layer", de: "Layer", ru: "Layer" },
   layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
   menu: { en: "Menu", de: "Menu", ru: "Menu" },
   name_title_case: { en: "Name", de: "Name", ru: "Name" },

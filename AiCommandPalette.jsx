@@ -134,74 +134,6 @@ See the LICENSE file for details.
   }
 
   /**
-   * Check to make sure the command is available in the system Ai version.
-   * @param command Command to check.
-   * @returns       True if command is available in the current Ai version or false if not.
-   */
-  function commandVersionCheck(command) {
-    if (
-      (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
-      (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
-    )
-      return false;
-    return true;
-  }
-
-  /**
-   * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
-   * @param   {Array} actions Workflow action steps to check.
-   * @returns {Array}         Non-active workflow action.
-   */
-  function checkWorkflowActions(actions) {
-    var badActions = [];
-    for (var i = 0; i < actions.length; i++) {
-      command = actions[i];
-      if (!commandsData.hasOwnProperty(actions[i]) || !commandVersionCheck(actions[i]))
-        badActions.push(actions[i]);
-    }
-    return badActions;
-  }
-
-  /**
-   * Compare semantic version numbers.
-   * @param {String} a Semantic version number.
-   * @param {String} b Semantic version number.
-   * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
-   */
-  function semanticVersionComparison(a, b) {
-    if (a === b) {
-      return 0;
-    }
-
-    var a_components = a.split(".");
-    var b_components = b.split(".");
-
-    var len = Math.min(a_components.length, b_components.length);
-
-    // loop while the components are equal
-    for (var i = 0; i < len; i++) {
-      // A bigger than B
-      if (parseInt(a_components[i]) > parseInt(b_components[i])) {
-        return 1;
-      }
-
-      // B bigger than A
-      if (parseInt(a_components[i]) < parseInt(b_components[i])) {
-        return -1;
-      }
-    }
-
-    // If one's a prefix of the other, the longer one is greater.
-    if (a_components.length > b_components.length) {
-      return 1;
-    }
-
-    if (a_components.length < b_components.length) {
-      return -1;
-    }
-  }
-
-  /**
    * Generate a unique command id for the data model.
    * @param   s Base string to generate the id from.
    * @returns    Valid command id.
@@ -261,24 +193,36 @@ See the LICENSE file for details.
   }
 
   /**
-   * Convert Ai points unit to another api ruler constant.
-   * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
-   * @param   {Number} points Point value to convert.
-   * @param   {String} unit   RulerUnit to convert `points` to.
-   * @returns {Number}        Converted number.
+   * Reset view and zoom in on a specific page item.
+   * @param pageItem Page item to focus on.
    */
-  function convertPointsTo(points, unit) {
-    var conversions = {
-      Centimeters: 28.346,
-      Qs: 0.709,
-      Inches: 72.0,
-      Pixels: 1.0,
-      Millimeters: 2.834645,
-      Unknown: 1.0,
-      Picas: 12.0,
-      Points: 1.0,
-    };
-    return points / conversions[unit];
+  function zoomIntoPageItem(pageItem) {
+    // get screen information
+    var screenBounds = app.activeDocument.views[0].bounds;
+    var screenW = screenBounds[2] - screenBounds[0];
+    var screenH = screenBounds[1] - screenBounds[3];
+
+    // get the (true) visible bounds of the returned object
+    var bounds = pageItem.visibleBounds;
+    var itemW = bounds[2] - bounds[0];
+    var itemH = bounds[1] - bounds[3];
+    var itemCX = bounds[0] + itemW / 2;
+    var itemCY = bounds[1] - itemH / 2;
+
+    // reset the current view to center of selected object
+    app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
+
+    // calculate new zoom ratio to fit view to selected object
+    var zoomRatio;
+    if (itemW * (screenH / screenW) >= itemH) {
+      zoomRatio = screenW / itemW;
+    } else {
+      zoomRatio = screenH / itemH;
+    }
+
+    // set zoom to fit selected object plus a bit of padding
+    var padding = 0.9;
+    app.activeDocument.views[0].zoom = zoomRatio * padding;
   }
 
   /**
@@ -328,13 +272,6 @@ See the LICENSE file for details.
    * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
    *
    * If you try to do this using the placedItems collection from the API you will have issues.
-   */
-
-  /**
-   * Great trick to get all placed files (linked and embeded) @pixxxelschubser
-   * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
-   *
-   * If you try to do this using the placedItems collection from the API you will have issues.
    * @param   {String} xmp Document xml data.
    * @returns {Array}      Placed file paths.
    */
@@ -366,11 +303,78 @@ See the LICENSE file for details.
   }
 
   /**
-   * Return the names of each object in an Ai collection object.
-   * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
-   * @param   {Object} collection Ai collection object.
-   * @returns {Array}             Names of each object inside of `collection`.
+   * Check to make sure the command is available in the system Ai version.
+   * @param command Command to check.
+   * @returns       True if command is available in the current Ai version or false if not.
    */
+  function commandVersionCheck(command) {
+    if (
+      (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
+      (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
+    )
+      return false;
+    return true;
+  }
+
+  /**
+   * Compare semantic version numbers.
+   * @param {String} a Semantic version number.
+   * @param {String} b Semantic version number.
+   * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
+   */
+  function semanticVersionComparison(a, b) {
+    if (a === b) {
+      return 0;
+    }
+
+    var a_components = a.split(".");
+    var b_components = b.split(".");
+
+    var len = Math.min(a_components.length, b_components.length);
+
+    // loop while the components are equal
+    for (var i = 0; i < len; i++) {
+      // A bigger than B
+      if (parseInt(a_components[i]) > parseInt(b_components[i])) {
+        return 1;
+      }
+
+      // B bigger than A
+      if (parseInt(a_components[i]) < parseInt(b_components[i])) {
+        return -1;
+      }
+    }
+
+    // If one's a prefix of the other, the longer one is greater.
+    if (a_components.length > b_components.length) {
+      return 1;
+    }
+
+    if (a_components.length < b_components.length) {
+      return -1;
+    }
+  }
+
+  /**
+   * Convert Ai points unit to another api ruler constant.
+   * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
+   * @param   {Number} points Point value to convert.
+   * @param   {String} unit   RulerUnit to convert `points` to.
+   * @returns {Number}        Converted number.
+   */
+  function convertPointsTo(points, unit) {
+    var conversions = {
+      Centimeters: 28.346,
+      Qs: 0.709,
+      Inches: 72.0,
+      Pixels: 1.0,
+      Millimeters: 2.834645,
+      Unknown: 1.0,
+      Picas: 12.0,
+      Points: 1.0,
+    };
+    return points / conversions[unit];
+  }
 
   /**
    * Return the names of each object in an Ai collection object.
@@ -394,112 +398,6 @@ See the LICENSE file for details.
       }
     }
     return sorted ? names.sort() : names;
-  }
-
-  /**
-   * Return recently opened files as file objects (also found in File > Open Recent Files).
-   * @returns {Array} Recent file paths.
-   */
-  function getRecentFilePaths() {
-    var path;
-    var paths = [];
-    var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
-    for (var i = 0; i < fileCount; i++) {
-      path = app.preferences.getStringPreference(
-        "plugin/MixedFileList/file" + i + "/path"
-      );
-      paths.push(path);
-    }
-    return paths;
-  }
-
-  /**************************************************
-  DIALOG HELPER FUNCTIONS
-  **************************************************/
-
-  /**
-   * Filter the supplied commands by multiple factors.
-   * @param   {Array}   commands             Command `id`s to filter through.
-   * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
-   * @param   {Boolean} showHidden           Should user-hidden commands be included?
-   * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
-   * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
-   * @returns {Array}                        Filtered command ids.
-   */
-  function filterCommands(
-    commands,
-    types,
-    showHidden,
-    showNonRelevant,
-    hideSpecificCommands
-  ) {
-    var filteredCommands = [];
-    var id, command;
-    commands = commands ? commands : Object.keys(commandsData);
-    for (var i = 0; i < commands.length; i++) {
-      id = commands[i];
-      if (!commandsData.hasOwnProperty(id)) continue;
-      command = commandsData[id];
-
-      // make sure Ai version meets command requirements
-      if (!commandVersionCheck(command)) continue;
-
-      // skip any hidden commands
-      if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
-
-      // skip any non relevant commands
-      if (!showNonRelevant && !relevantCommand(command)) continue;
-
-      // skip any specific commands name in hideSpecificCommands
-      if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
-
-      // then check to see if the command should be included
-      if (!types || types.includes(command.type)) filteredCommands.push(id);
-    }
-    return filteredCommands;
-  }
-
-  /**
-   * Determine is a command is relevant at the current moment.
-   * @param   {Object}  command Command object to check.
-   * @returns {Boolean}         If command is relevant.
-   */
-  function relevantCommand(command) {
-    // hide commands requiring an active documents if requested
-    if (command.docRequired && !appDocuments) return false;
-    // hide commands requiring an active selection if requested
-    if (command.selRequired && !docSelection) return false;
-
-    // hide `Edit Workflow...` command if no workflows
-    if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
-    // hide `All Workflows...` command if no workflows
-    if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
-    // hide `All Scripts...` command if no scripts
-    if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
-    // hide `All Bookmarks...` command if no bookmarks
-    if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
-    // hide `All Actions...` command if no actions
-    if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
-
-    // hide `Enable Searching on Command Type` command if already enabled
-    if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
-      return false;
-    // hide `Disable Searching on Command Type` command if already disabled
-    if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
-      return false;
-
-    // hide `Unhide Commands...` command if no hidden commands
-    if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
-      return false;
-    // hide `Recent Commands...` and `Clear History` if no recent commands
-    if (
-      command.id == "builtin_recentCommands" &&
-      Object.keys(recentCommands).length === 0
-    ) {
-      return false;
-    }
-
-    return true;
   }
 
   /**
@@ -935,6 +833,7 @@ See the LICENSE file for details.
       de: "Zuletzt verwendete Befehle wurden gel\u00f6scht!",
       ru: "History cleared!",
     },
+    layer_title_case: { en: "Layer", de: "Layer", ru: "Layer" },
     layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
     menu: { en: "Menu", de: "Menu", ru: "Menu" },
     name_title_case: { en: "Name", de: "Name", ru: "Name" },
@@ -9660,55 +9559,8 @@ See the LICENSE file for details.
     key: "name",
   };
   paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
-    width: null,
-    key: "type",
-  };
-
-  paletteSettings.columnSets.actions = {};
-  paletteSettings.columnSets.actions[localize(strings.name_title_case)] = {
-    width: null,
-    key: "name",
-  };
-  paletteSettings.columnSets.actions["Set"] = {
-    // FIXME: localize
-    width: null,
-    key: "set",
-  };
-
-  paletteSettings.columnSets.bookmarks = {};
-  paletteSettings.columnSets.bookmarks[localize(strings.name_title_case)] = {
-    width: null,
-    key: "name",
-  };
-  paletteSettings.columnSets.bookmarks[localize(strings.type_title_case)] = {
-    width: 50,
-    key: "type",
-  };
-  paletteSettings.columnSets.bookmarks["Path"] = {
-    // FIXME: localize
-    width: null,
-    key: "path",
-  };
-
-  paletteSettings.columnSets.documents = {};
-  paletteSettings.columnSets.documents[localize(strings.name_title_case)] = {
-    width: null,
-    key: "name",
-  };
-  paletteSettings.columnSets.documents["Color Space"] = {
-    // FIXME: localize
     width: 100,
-    key: "colorSpace",
-  };
-  paletteSettings.columnSets.documents["Ruler Units"] = {
-    // FIXME: localize
-    width: 100,
-    key: "rulerUnits",
-  };
-  paletteSettings.columnSets.documents["Path"] = {
-    // FIXME: localize
-    width: null,
-    key: "path",
+    key: "type",
   };
 
   var visibleListItems = 9;
@@ -10797,6 +10649,91 @@ See the LICENSE file for details.
     }
     return false;
   }
+
+  /**
+   * Filter the supplied commands by multiple factors.
+   * @param   {Array}   commands             Command `id`s to filter through.
+   * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+   * @param   {Boolean} showHidden           Should user-hidden commands be included?
+   * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
+   * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
+   * @returns {Array}                        Filtered command ids.
+   */
+  function filterCommands(
+    commands,
+    types,
+    showHidden,
+    showNonRelevant,
+    hideSpecificCommands
+  ) {
+    var filteredCommands = [];
+    var id, command;
+    commands = commands ? commands : Object.keys(commandsData);
+    for (var i = 0; i < commands.length; i++) {
+      id = commands[i];
+      if (!commandsData.hasOwnProperty(id)) continue;
+      command = commandsData[id];
+
+      // make sure Ai version meets command requirements
+      if (!commandVersionCheck(command)) continue;
+
+      // skip any hidden commands
+      if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
+
+      // skip any non relevant commands
+      if (!showNonRelevant && !relevantCommand(command)) continue;
+
+      // skip any specific commands name in hideSpecificCommands
+      if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
+
+      // then check to see if the command should be included
+      if (!types || types.includes(command.type)) filteredCommands.push(id);
+    }
+    return filteredCommands;
+  }
+
+  /**
+   * Determine is a command is relevant at the current moment.
+   * @param   {Object}  command Command object to check.
+   * @returns {Boolean}         If command is relevant.
+   */
+  function relevantCommand(command) {
+    // hide commands requiring an active documents if requested
+    if (command.docRequired && !appDocuments) return false;
+    // hide commands requiring an active selection if requested
+    if (command.selRequired && !docSelection) return false;
+
+    // hide `Edit Workflow...` command if no workflows
+    if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
+    // hide `All Workflows...` command if no workflows
+    if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
+    // hide `All Scripts...` command if no scripts
+    if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
+    // hide `All Bookmarks...` command if no bookmarks
+    if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
+    // hide `All Actions...` command if no actions
+    if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
+
+    // hide `Enable Searching on Command Type` command if already enabled
+    if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
+      return false;
+    // hide `Disable Searching on Command Type` command if already disabled
+    if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
+      return false;
+
+    // hide `Unhide Commands...` command if no hidden commands
+    if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
+      return false;
+    // hide `Recent Commands...` and `Clear History` if no recent commands
+    if (
+      command.id == "builtin_recentCommands" &&
+      Object.keys(recentCommands).length === 0
+    ) {
+      return false;
+    }
+
+    return true;
+  }
   // COMMAND EXECUTION
 
   /**
@@ -11539,10 +11476,24 @@ See the LICENSE file for details.
       (showNonRelevant = false),
       (hideSpecificCommands = null)
     );
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns[localize(strings.type_title_case)] = {
+      width: 100,
+      key: "type",
+    };
+    columns["Path"] = {
+      // FIXME: localize
+      width: 100,
+      key: "path",
+    };
     var result = commandPalette(
       (commands = scriptCommands),
       (title = localize(strings.Scripts)),
-      (columns = paletteSettings.columnSets.bookmarks),
+      (columns = columns),
       (multiselect = false)
     );
     if (!result) return;
@@ -11558,10 +11509,24 @@ See the LICENSE file for details.
       (showNonRelevant = true),
       (hideSpecificCommands = null)
     );
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns[localize(strings.type_title_case)] = {
+      width: 100,
+      key: "type",
+    };
+    columns["Path"] = {
+      // FIXME: localize
+      width: 100,
+      key: "path",
+    };
     var result = commandPalette(
       (commands = bookmarkCommands),
       (title = localize(strings.Bookmarks)),
-      (columns = paletteSettings.columnSets.bookmarks),
+      (columns = columns),
       (multiselect = false)
     );
     if (!result) return;
@@ -11577,10 +11542,20 @@ See the LICENSE file for details.
       (showNonRelevant = false),
       (hideSpecificCommands = null)
     );
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns["Set"] = {
+      // FIXME: localize
+      width: 100,
+      key: "set",
+    };
     var result = commandPalette(
       (commands = actionCommands),
       (title = localize(strings.Actions)),
-      (columns = paletteSettings.columnSets.actions),
+      (columns = columns),
       (multiselect = false)
     );
     if (!result) return;
@@ -11665,8 +11640,11 @@ See the LICENSE file for details.
 
   // BUILT-IN COMMANDS
 
-  /** Present a command palette with all open documents and goto the chosen one. */
-  function goToOpenDocument() {
+  /**
+   * Load all open documents from the current document as objects into the data model.
+   * @returns Loaded command ids.
+   */
+  function loadOpenDocuments() {
     var arr = [];
     var cur, obj;
     for (var i = 0; i < app.documents.length; i++) {
@@ -11688,21 +11666,49 @@ See the LICENSE file for details.
       arr.push(id);
       commandsData[id] = obj;
     }
+    return arr;
+  }
+
+  /** Present a command palette with all open documents and goto the chosen one. */
+  function goToOpenDocument() {
+    var arr = loadOpenDocuments();
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns["Color Space"] = {
+      // FIXME: localize
+      width: 100,
+      key: "colorSpace",
+    };
+    columns["Ruler Units"] = {
+      // FIXME: localize
+      width: 100,
+      key: "rulerUnits",
+    };
+    columns["Path"] = {
+      // FIXME: localize
+      width: 100,
+      key: "path",
+    };
     var result = commandPalette(
       (commands = arr),
       (title = localize(strings.go_to_open_document)),
-      (columns = paletteSettings.columnSets.documents),
+      (columns = columns),
       (multiselect = false)
     );
     if (!result) return;
     commandsData[result].document.activate();
   }
 
-  /** Present a command palette with all artboards and zoom to the chosen one. */
-  // TODO
-  function goToArtboard() {
+  /**
+   * Load all artboards from the current document as objects into the data model.
+   * @returns Loaded command ids.
+   */
+  function loadActiveDocumentArtboards() {
     var arr = [];
-    var cur, obj;
+    var cur, id, obj;
     for (var i = 0; i < app.activeDocument.artboards.length; i++) {
       cur = app.activeDocument.artboards[i];
       id = generateCommandId("artboard_" + i.toString());
@@ -11719,15 +11725,20 @@ See the LICENSE file for details.
       arr.push(id);
       commandsData[id] = obj;
     }
+  }
+
+  /** Present a command palette with all artboards and zoom to the chosen one. */
+  function goToArtboard() {
+    var arr = loadActiveDocumentArtboards();
+
     var columns = {};
     columns["Index"] = {
-      // FIXME: localize
       width: 35,
       key: "idx",
       hideTitle: true,
     };
     columns[localize(strings.name_title_case)] = {
-      width: null,
+      width: 100,
       key: "name",
     };
     var result = commandPalette(
@@ -11736,106 +11747,152 @@ See the LICENSE file for details.
       (columns = columns),
       (multiselect = false)
     );
+
     if (!result) return;
     app.activeDocument.artboards.setActiveArtboardIndex(commandsData[result].idx);
     app.executeMenuCommand("fitin");
   }
 
+  /**
+   * Load all page items from the current document as objects into the data model.
+   * @returns Loaded command ids.
+   */
+  function loadActiveDocumentPageItems() {
+    var arr = [];
+    var cur, name, id, obj;
+    for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
+      cur = app.activeDocument.pageItems[i];
+      if (
+        cur.name ||
+        cur.name.length ||
+        cur.typename == "PlacedItem" ||
+        cur.typename == "SymbolItem"
+      ) {
+        if (cur.typename == "PlacedItem") {
+          name = cur.file.name;
+        } else if (cur.typename == "SymbolItem") {
+          name = cur.name || cur.name.length ? cur.name : cur.symbol.name;
+        } else {
+          name = cur.name;
+        }
+      }
+      id = generateCommandId("pageItem_" + i.toString());
+      obj = {
+        id: id,
+        name: name,
+        action: "pageItem",
+        type: cur.typename,
+        pageItem: cur,
+        layer: cur.layer.name,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      arr.push(id);
+      commandsData[id] = obj;
+    }
+    return arr;
+  }
+
   /** Present a command palette with all named objects and zoom to and select the chosen one. */
-  // TODO
   function goToNamedObject() {
     if (app.activeDocument.pageItems.length > namedObjectLimit)
       alert(
         localize(strings.go_to_named_object_limit, app.activeDocument.pageItems.length)
       );
-    var objectLookup = {};
-    var namedObjects = [];
-    var item, itemName, itemType;
-    for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
-      item = app.activeDocument.pageItems[i];
-      if (
-        item.name ||
-        item.name.length ||
-        item.typename == "PlacedItem" ||
-        item.typename == "SymbolItem"
-      ) {
-        if (item.typename == "PlacedItem") {
-          itemName = item.file.name;
-        } else if (item.typename == "SymbolItem") {
-          itemName = item.name || item.name.length ? item.name : item.symbol.name;
-        } else {
-          itemName = item.name;
-        }
-      }
-      itemName += " (" + item.layer.name + ")";
-      namedObjects.push({ name: itemName, type: item.typename });
-      objectLookup[itemName] = item;
+
+    var arr = loadActiveDocumentPageItems();
+    if (!arr.length) {
+      alert(localize(strings.go_to_named_object_no_objects));
+      return;
     }
-    if (!namedObjects.length) alert(localize(strings.go_to_named_object_no_objects));
+
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns[localize(strings.type_title_case)] = {
+      width: 100,
+      key: "type",
+    };
+    columns[localize(strings.layer_title_case)] = {
+      width: 100,
+      key: "layer",
+    };
     var result = commandPalette(
-      (commands = namedObjects),
+      (commands = arr),
       (title = localize(strings.go_to_named_object)),
+      (columns = columns),
       (multiselect = false)
     );
+
     if (!result) return;
+    var pageItem = commandsData[result].pageItem;
     app.activeDocument.selection = null;
-    item = objectLookup[result];
-    item.selected = true;
+    pageItem.selected = true;
 
     // reset zoom for current document
     app.activeDocument.views[0].zoom = 1;
 
-    // get screen information
-    var screenBounds = app.activeDocument.views[0].bounds;
-    var screenW = screenBounds[2] - screenBounds[0];
-    var screenH = screenBounds[1] - screenBounds[3];
-
-    // get the (true) visible bounds of the returned object
-    var bounds = item.visibleBounds;
-    var itemW = bounds[2] - bounds[0];
-    var itemH = bounds[1] - bounds[3];
-    var itemCX = bounds[0] + itemW / 2;
-    var itemCY = bounds[1] - itemH / 2;
-
-    // reset the current view to center of selected object
-    app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
-
-    // calculate new zoom ratio to fit view to selected object
-    var zoomRatio;
-    if (itemW * (screenH / screenW) >= itemH) {
-      zoomRatio = screenW / itemW;
-    } else {
-      zoomRatio = screenH / itemH;
-    }
-
-    // set zoom to fit selected object plus a bit of padding
-    var padding = 0.9;
-    app.activeDocument.views[0].zoom = zoomRatio * padding;
+    zoomIntoPageItem(pageItem);
   }
 
-  /** Present a command palette with all recently open files and open the chosen one. */
-  // TODO
-  function recentFiles() {
-    var f, path;
-    var filePaths = getRecentFilePaths();
-    var files = {};
-    var recentFileCommands = [];
-    for (var i = 0; i < filePaths.length; i++) {
-      path = filePaths[i];
-      f = File(path);
-      if (!f.exists) continue;
-      fname = decodeURI(f.name);
-      files[fname] = f;
-      recentFileCommands.push({ name: fname, type: localize(strings.file) });
+  /**
+   * Load recently opened files as objects into the data model.
+   * @returns Loaded command ids.
+   */
+  function loadRecentFiles() {
+    var arr = [];
+    var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
+    var path, cur, id, obj;
+    for (var i = 0; i < fileCount; i++) {
+      path = app.preferences.getStringPreference(
+        "plugin/MixedFileList/file" + i + "/path"
+      );
+      cur = File(path);
+      if (!cur.exists) continue;
+      id = generateCommandId("recentFile_" + i.toString());
+      obj = {
+        id: id,
+        name: decodeURI(cur.name),
+        action: "document",
+        type: "document",
+        document: cur,
+        path: cur.fsName,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      arr.push(id);
+      commandsData[id] = obj;
     }
+    return arr;
+  }
+
+  /** Present a command palette with all recently opened files and open the chosen one. */
+  function recentFiles() {
+    var arr = loadRecentFiles();
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns["Path"] = {
+      // FIXME: localize
+      width: 100,
+      key: "path",
+    };
     var result = commandPalette(
-      (commands = recentFileCommands),
+      (commands = arr),
       (title = localize(strings.open_recent_file)),
+      (columns = columns),
       (multiselect = false)
     );
     if (!result) return;
+
     try {
-      app.open(files[result]);
+      app.open(commandsData[result].document);
     } catch (e) {
       alert(localize(strings.fl_error_loading, result));
     }
@@ -11852,6 +11909,21 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
+  /**
+   * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
+   * @param   {Array} actions Workflow action steps to check.
+   * @returns {Array}         Non-active workflow action.
+   */
+  function checkWorkflowActions(actions) {
+    var badActions = [];
+    for (var i = 0; i < actions.length; i++) {
+      command = actions[i];
+      if (!commandsData.hasOwnProperty(actions[i]) || !commandVersionCheck(actions[i]))
+        badActions.push(actions[i]);
+    }
+    return badActions;
+  }
+
   // WORKFLOW AUTOMATION
 
   /**

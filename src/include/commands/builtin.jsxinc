@@ -482,10 +482,24 @@ function showAllScripts() {
     (showNonRelevant = false),
     (hideSpecificCommands = null)
   );
+  var columns = {};
+  columns[localize(strings.name_title_case)] = {
+    width: 100,
+    key: "name",
+  };
+  columns[localize(strings.type_title_case)] = {
+    width: 100,
+    key: "type",
+  };
+  columns["Path"] = {
+    // FIXME: localize
+    width: 100,
+    key: "path",
+  };
   var result = commandPalette(
     (commands = scriptCommands),
     (title = localize(strings.Scripts)),
-    (columns = paletteSettings.columnSets.bookmarks),
+    (columns = columns),
     (multiselect = false)
   );
   if (!result) return;
@@ -501,10 +515,24 @@ function showAllBookmarks() {
     (showNonRelevant = true),
     (hideSpecificCommands = null)
   );
+  var columns = {};
+  columns[localize(strings.name_title_case)] = {
+    width: 100,
+    key: "name",
+  };
+  columns[localize(strings.type_title_case)] = {
+    width: 100,
+    key: "type",
+  };
+  columns["Path"] = {
+    // FIXME: localize
+    width: 100,
+    key: "path",
+  };
   var result = commandPalette(
     (commands = bookmarkCommands),
     (title = localize(strings.Bookmarks)),
-    (columns = paletteSettings.columnSets.bookmarks),
+    (columns = columns),
     (multiselect = false)
   );
   if (!result) return;
@@ -520,10 +548,20 @@ function showAllActions() {
     (showNonRelevant = false),
     (hideSpecificCommands = null)
   );
+  var columns = {};
+  columns[localize(strings.name_title_case)] = {
+    width: 100,
+    key: "name",
+  };
+  columns["Set"] = {
+    // FIXME: localize
+    width: 100,
+    key: "set",
+  };
   var result = commandPalette(
     (commands = actionCommands),
     (title = localize(strings.Actions)),
-    (columns = paletteSettings.columnSets.actions),
+    (columns = columns),
     (multiselect = false)
   );
   if (!result) return;
@@ -608,8 +646,11 @@ function deleteCommand() {
 
 // BUILT-IN COMMANDS
 
-/** Present a command palette with all open documents and goto the chosen one. */
-function goToOpenDocument() {
+/**
+ * Load all open documents from the current document as objects into the data model.
+ * @returns Loaded command ids.
+ */
+function loadOpenDocuments() {
   var arr = [];
   var cur, obj;
   for (var i = 0; i < app.documents.length; i++) {
@@ -631,21 +672,49 @@ function goToOpenDocument() {
     arr.push(id);
     commandsData[id] = obj;
   }
+  return arr;
+}
+
+/** Present a command palette with all open documents and goto the chosen one. */
+function goToOpenDocument() {
+  var arr = loadOpenDocuments();
+  var columns = {};
+  columns[localize(strings.name_title_case)] = {
+    width: 100,
+    key: "name",
+  };
+  columns["Color Space"] = {
+    // FIXME: localize
+    width: 100,
+    key: "colorSpace",
+  };
+  columns["Ruler Units"] = {
+    // FIXME: localize
+    width: 100,
+    key: "rulerUnits",
+  };
+  columns["Path"] = {
+    // FIXME: localize
+    width: 100,
+    key: "path",
+  };
   var result = commandPalette(
     (commands = arr),
     (title = localize(strings.go_to_open_document)),
-    (columns = paletteSettings.columnSets.documents),
+    (columns = columns),
     (multiselect = false)
   );
   if (!result) return;
   commandsData[result].document.activate();
 }
 
-/** Present a command palette with all artboards and zoom to the chosen one. */
-// TODO
-function goToArtboard() {
+/**
+ * Load all artboards from the current document as objects into the data model.
+ * @returns Loaded command ids.
+ */
+function loadActiveDocumentArtboards() {
   var arr = [];
-  var cur, obj;
+  var cur, id, obj;
   for (var i = 0; i < app.activeDocument.artboards.length; i++) {
     cur = app.activeDocument.artboards[i];
     id = generateCommandId("artboard_" + i.toString());
@@ -662,15 +731,20 @@ function goToArtboard() {
     arr.push(id);
     commandsData[id] = obj;
   }
+}
+
+/** Present a command palette with all artboards and zoom to the chosen one. */
+function goToArtboard() {
+  var arr = loadActiveDocumentArtboards();
+
   var columns = {};
   columns["Index"] = {
-    // FIXME: localize
     width: 35,
     key: "idx",
     hideTitle: true,
   };
   columns[localize(strings.name_title_case)] = {
-    width: null,
+    width: 100,
     key: "name",
   };
   var result = commandPalette(
@@ -679,106 +753,152 @@ function goToArtboard() {
     (columns = columns),
     (multiselect = false)
   );
+
   if (!result) return;
   app.activeDocument.artboards.setActiveArtboardIndex(commandsData[result].idx);
   app.executeMenuCommand("fitin");
 }
 
+/**
+ * Load all page items from the current document as objects into the data model.
+ * @returns Loaded command ids.
+ */
+function loadActiveDocumentPageItems() {
+  var arr = [];
+  var cur, name, id, obj;
+  for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
+    cur = app.activeDocument.pageItems[i];
+    if (
+      cur.name ||
+      cur.name.length ||
+      cur.typename == "PlacedItem" ||
+      cur.typename == "SymbolItem"
+    ) {
+      if (cur.typename == "PlacedItem") {
+        name = cur.file.name;
+      } else if (cur.typename == "SymbolItem") {
+        name = cur.name || cur.name.length ? cur.name : cur.symbol.name;
+      } else {
+        name = cur.name;
+      }
+    }
+    id = generateCommandId("pageItem_" + i.toString());
+    obj = {
+      id: id,
+      name: name,
+      action: "pageItem",
+      type: cur.typename,
+      pageItem: cur,
+      layer: cur.layer.name,
+      docRequired: false,
+      selRequired: false,
+      hidden: false,
+    };
+    arr.push(id);
+    commandsData[id] = obj;
+  }
+  return arr;
+}
+
 /** Present a command palette with all named objects and zoom to and select the chosen one. */
-// TODO
 function goToNamedObject() {
   if (app.activeDocument.pageItems.length > namedObjectLimit)
     alert(
       localize(strings.go_to_named_object_limit, app.activeDocument.pageItems.length)
     );
-  var objectLookup = {};
-  var namedObjects = [];
-  var item, itemName, itemType;
-  for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
-    item = app.activeDocument.pageItems[i];
-    if (
-      item.name ||
-      item.name.length ||
-      item.typename == "PlacedItem" ||
-      item.typename == "SymbolItem"
-    ) {
-      if (item.typename == "PlacedItem") {
-        itemName = item.file.name;
-      } else if (item.typename == "SymbolItem") {
-        itemName = item.name || item.name.length ? item.name : item.symbol.name;
-      } else {
-        itemName = item.name;
-      }
-    }
-    itemName += " (" + item.layer.name + ")";
-    namedObjects.push({ name: itemName, type: item.typename });
-    objectLookup[itemName] = item;
+
+  var arr = loadActiveDocumentPageItems();
+  if (!arr.length) {
+    alert(localize(strings.go_to_named_object_no_objects));
+    return;
   }
-  if (!namedObjects.length) alert(localize(strings.go_to_named_object_no_objects));
+
+  var columns = {};
+  columns[localize(strings.name_title_case)] = {
+    width: 100,
+    key: "name",
+  };
+  columns[localize(strings.type_title_case)] = {
+    width: 100,
+    key: "type",
+  };
+  columns[localize(strings.layer_title_case)] = {
+    width: 100,
+    key: "layer",
+  };
   var result = commandPalette(
-    (commands = namedObjects),
+    (commands = arr),
     (title = localize(strings.go_to_named_object)),
+    (columns = columns),
     (multiselect = false)
   );
+
   if (!result) return;
+  var pageItem = commandsData[result].pageItem;
   app.activeDocument.selection = null;
-  item = objectLookup[result];
-  item.selected = true;
+  pageItem.selected = true;
 
   // reset zoom for current document
   app.activeDocument.views[0].zoom = 1;
 
-  // get screen information
-  var screenBounds = app.activeDocument.views[0].bounds;
-  var screenW = screenBounds[2] - screenBounds[0];
-  var screenH = screenBounds[1] - screenBounds[3];
-
-  // get the (true) visible bounds of the returned object
-  var bounds = item.visibleBounds;
-  var itemW = bounds[2] - bounds[0];
-  var itemH = bounds[1] - bounds[3];
-  var itemCX = bounds[0] + itemW / 2;
-  var itemCY = bounds[1] - itemH / 2;
-
-  // reset the current view to center of selected object
-  app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
-
-  // calculate new zoom ratio to fit view to selected object
-  var zoomRatio;
-  if (itemW * (screenH / screenW) >= itemH) {
-    zoomRatio = screenW / itemW;
-  } else {
-    zoomRatio = screenH / itemH;
-  }
-
-  // set zoom to fit selected object plus a bit of padding
-  var padding = 0.9;
-  app.activeDocument.views[0].zoom = zoomRatio * padding;
+  zoomIntoPageItem(pageItem);
 }
 
-/** Present a command palette with all recently open files and open the chosen one. */
-// TODO
-function recentFiles() {
-  var f, path;
-  var filePaths = getRecentFilePaths();
-  var files = {};
-  var recentFileCommands = [];
-  for (var i = 0; i < filePaths.length; i++) {
-    path = filePaths[i];
-    f = File(path);
-    if (!f.exists) continue;
-    fname = decodeURI(f.name);
-    files[fname] = f;
-    recentFileCommands.push({ name: fname, type: localize(strings.file) });
+/**
+ * Load recently opened files as objects into the data model.
+ * @returns Loaded command ids.
+ */
+function loadRecentFiles() {
+  var arr = [];
+  var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
+  var path, cur, id, obj;
+  for (var i = 0; i < fileCount; i++) {
+    path = app.preferences.getStringPreference(
+      "plugin/MixedFileList/file" + i + "/path"
+    );
+    cur = File(path);
+    if (!cur.exists) continue;
+    id = generateCommandId("recentFile_" + i.toString());
+    obj = {
+      id: id,
+      name: decodeURI(cur.name),
+      action: "document",
+      type: "document",
+      document: cur,
+      path: cur.fsName,
+      docRequired: false,
+      selRequired: false,
+      hidden: false,
+    };
+    arr.push(id);
+    commandsData[id] = obj;
   }
+  return arr;
+}
+
+/** Present a command palette with all recently opened files and open the chosen one. */
+function recentFiles() {
+  var arr = loadRecentFiles();
+  var columns = {};
+  columns[localize(strings.name_title_case)] = {
+    width: 100,
+    key: "name",
+  };
+  columns["Path"] = {
+    // FIXME: localize
+    width: 100,
+    key: "path",
+  };
   var result = commandPalette(
-    (commands = recentFileCommands),
+    (commands = arr),
     (title = localize(strings.open_recent_file)),
+    (columns = columns),
     (multiselect = false)
   );
   if (!result) return;
+
   try {
-    app.open(files[result]);
+    app.open(commandsData[result].document);
   } catch (e) {
     alert(localize(strings.fl_error_loading, result));
   }

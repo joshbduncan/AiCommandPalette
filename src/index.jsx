@@ -19,9 +19,9 @@ See the LICENSE file for details.
   var _github = "https://github.com/joshbduncan";
 
   //@includepath "include"
-  //@includepath "include/user"
-  //@includepath "include/palettes"
   //@includepath "include/commands"
+  //@includepath "include/palettes"
+  //@includepath "include/user"
 
   //@include "polyfills.jsxinc"
   //@include "helpers.jsxinc"

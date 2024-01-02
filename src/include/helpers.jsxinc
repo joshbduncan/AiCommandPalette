@@ -11,74 +11,6 @@ function activeDocument() {
 }
 
 /**
- * Check to make sure the command is available in the system Ai version.
- * @param command Command to check.
- * @returns       True if command is available in the current Ai version or false if not.
- */
-function commandVersionCheck(command) {
-  if (
-    (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
-    (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
-  )
-    return false;
-  return true;
-}
-
-/**
- * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
- * @param   {Array} actions Workflow action steps to check.
- * @returns {Array}         Non-active workflow action.
- */
-function checkWorkflowActions(actions) {
-  var badActions = [];
-  for (var i = 0; i < actions.length; i++) {
-    command = actions[i];
-    if (!commandsData.hasOwnProperty(actions[i]) || !commandVersionCheck(actions[i]))
-      badActions.push(actions[i]);
-  }
-  return badActions;
-}
-
-/**
- * Compare semantic version numbers.
- * @param {String} a Semantic version number.
- * @param {String} b Semantic version number.
- * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
- */
-function semanticVersionComparison(a, b) {
-  if (a === b) {
-    return 0;
-  }
-
-  var a_components = a.split(".");
-  var b_components = b.split(".");
-
-  var len = Math.min(a_components.length, b_components.length);
-
-  // loop while the components are equal
-  for (var i = 0; i < len; i++) {
-    // A bigger than B
-    if (parseInt(a_components[i]) > parseInt(b_components[i])) {
-      return 1;
-    }
-
-    // B bigger than A
-    if (parseInt(a_components[i]) < parseInt(b_components[i])) {
-      return -1;
-    }
-  }
-
-  // If one's a prefix of the other, the longer one is greater.
-  if (a_components.length > b_components.length) {
-    return 1;
-  }
-
-  if (a_components.length < b_components.length) {
-    return -1;
-  }
-}
-
-/**
  * Generate a unique command id for the data model.
  * @param   s Base string to generate the id from.
  * @returns    Valid command id.
@@ -138,24 +70,36 @@ function getDocumentFonts(doc) {
 }
 
 /**
- * Convert Ai points unit to another api ruler constant.
- * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
- * @param   {Number} points Point value to convert.
- * @param   {String} unit   RulerUnit to convert `points` to.
- * @returns {Number}        Converted number.
+ * Reset view and zoom in on a specific page item.
+ * @param pageItem Page item to focus on.
  */
-function convertPointsTo(points, unit) {
-  var conversions = {
-    Centimeters: 28.346,
-    Qs: 0.709,
-    Inches: 72.0,
-    Pixels: 1.0,
-    Millimeters: 2.834645,
-    Unknown: 1.0,
-    Picas: 12.0,
-    Points: 1.0,
-  };
-  return points / conversions[unit];
+function zoomIntoPageItem(pageItem) {
+  // get screen information
+  var screenBounds = app.activeDocument.views[0].bounds;
+  var screenW = screenBounds[2] - screenBounds[0];
+  var screenH = screenBounds[1] - screenBounds[3];
+
+  // get the (true) visible bounds of the returned object
+  var bounds = pageItem.visibleBounds;
+  var itemW = bounds[2] - bounds[0];
+  var itemH = bounds[1] - bounds[3];
+  var itemCX = bounds[0] + itemW / 2;
+  var itemCY = bounds[1] - itemH / 2;
+
+  // reset the current view to center of selected object
+  app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
+
+  // calculate new zoom ratio to fit view to selected object
+  var zoomRatio;
+  if (itemW * (screenH / screenW) >= itemH) {
+    zoomRatio = screenW / itemW;
+  } else {
+    zoomRatio = screenH / itemH;
+  }
+
+  // set zoom to fit selected object plus a bit of padding
+  var padding = 0.9;
+  app.activeDocument.views[0].zoom = zoomRatio * padding;
 }
 
 /**
@@ -205,13 +149,6 @@ function getPlacedFileInfoForReport() {
  * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
  *
  * If you try to do this using the placedItems collection from the API you will have issues.
- */
-
-/**
- * Great trick to get all placed files (linked and embeded) @pixxxelschubser
- * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
- *
- * If you try to do this using the placedItems collection from the API you will have issues.
  * @param   {String} xmp Document xml data.
  * @returns {Array}      Placed file paths.
  */
@@ -243,11 +180,78 @@ function getBrokenFilePaths(xmp) {
 }
 
 /**
- * Return the names of each object in an Ai collection object.
- * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
- * @param   {Object} collection Ai collection object.
- * @returns {Array}             Names of each object inside of `collection`.
+ * Check to make sure the command is available in the system Ai version.
+ * @param command Command to check.
+ * @returns       True if command is available in the current Ai version or false if not.
  */
+function commandVersionCheck(command) {
+  if (
+    (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
+    (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
+  )
+    return false;
+  return true;
+}
+
+/**
+ * Compare semantic version numbers.
+ * @param {String} a Semantic version number.
+ * @param {String} b Semantic version number.
+ * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
+ */
+function semanticVersionComparison(a, b) {
+  if (a === b) {
+    return 0;
+  }
+
+  var a_components = a.split(".");
+  var b_components = b.split(".");
+
+  var len = Math.min(a_components.length, b_components.length);
+
+  // loop while the components are equal
+  for (var i = 0; i < len; i++) {
+    // A bigger than B
+    if (parseInt(a_components[i]) > parseInt(b_components[i])) {
+      return 1;
+    }
+
+    // B bigger than A
+    if (parseInt(a_components[i]) < parseInt(b_components[i])) {
+      return -1;
+    }
+  }
+
+  // If one's a prefix of the other, the longer one is greater.
+  if (a_components.length > b_components.length) {
+    return 1;
+  }
+
+  if (a_components.length < b_components.length) {
+    return -1;
+  }
+}
+
+/**
+ * Convert Ai points unit to another api ruler constant.
+ * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
+ * @param   {Number} points Point value to convert.
+ * @param   {String} unit   RulerUnit to convert `points` to.
+ * @returns {Number}        Converted number.
+ */
+function convertPointsTo(points, unit) {
+  var conversions = {
+    Centimeters: 28.346,
+    Qs: 0.709,
+    Inches: 72.0,
+    Pixels: 1.0,
+    Millimeters: 2.834645,
+    Unknown: 1.0,
+    Picas: 12.0,
+    Points: 1.0,
+  };
+  return points / conversions[unit];
+}
 
 /**
  * Return the names of each object in an Ai collection object.
@@ -271,112 +275,6 @@ function getCollectionObjectNames(collection, sorted) {
     }
   }
   return sorted ? names.sort() : names;
-}
-
-/**
- * Return recently opened files as file objects (also found in File > Open Recent Files).
- * @returns {Array} Recent file paths.
- */
-function getRecentFilePaths() {
-  var path;
-  var paths = [];
-  var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
-  for (var i = 0; i < fileCount; i++) {
-    path = app.preferences.getStringPreference(
-      "plugin/MixedFileList/file" + i + "/path"
-    );
-    paths.push(path);
-  }
-  return paths;
-}
-
-/**************************************************
-DIALOG HELPER FUNCTIONS
-**************************************************/
-
-/**
- * Filter the supplied commands by multiple factors.
- * @param   {Array}   commands             Command `id`s to filter through.
- * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
- * @param   {Boolean} showHidden           Should user-hidden commands be included?
- * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
- * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
- * @returns {Array}                        Filtered command ids.
- */
-function filterCommands(
-  commands,
-  types,
-  showHidden,
-  showNonRelevant,
-  hideSpecificCommands
-) {
-  var filteredCommands = [];
-  var id, command;
-  commands = commands ? commands : Object.keys(commandsData);
-  for (var i = 0; i < commands.length; i++) {
-    id = commands[i];
-    if (!commandsData.hasOwnProperty(id)) continue;
-    command = commandsData[id];
-
-    // make sure Ai version meets command requirements
-    if (!commandVersionCheck(command)) continue;
-
-    // skip any hidden commands
-    if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
-
-    // skip any non relevant commands
-    if (!showNonRelevant && !relevantCommand(command)) continue;
-
-    // skip any specific commands name in hideSpecificCommands
-    if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
-
-    // then check to see if the command should be included
-    if (!types || types.includes(command.type)) filteredCommands.push(id);
-  }
-  return filteredCommands;
-}
-
-/**
- * Determine is a command is relevant at the current moment.
- * @param   {Object}  command Command object to check.
- * @returns {Boolean}         If command is relevant.
- */
-function relevantCommand(command) {
-  // hide commands requiring an active documents if requested
-  if (command.docRequired && !appDocuments) return false;
-  // hide commands requiring an active selection if requested
-  if (command.selRequired && !docSelection) return false;
-
-  // hide `Edit Workflow...` command if no workflows
-  if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
-  // hide `All Workflows...` command if no workflows
-  if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
-  // hide `All Scripts...` command if no scripts
-  if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
-  // hide `All Bookmarks...` command if no bookmarks
-  if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
-  // hide `All Actions...` command if no actions
-  if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
-
-  // hide `Enable Searching on Command Type` command if already enabled
-  if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
-    return false;
-  // hide `Disable Searching on Command Type` command if already disabled
-  if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
-    return false;
-
-  // hide `Unhide Commands...` command if no hidden commands
-  if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
-    return false;
-  // hide `Recent Commands...` and `Clear History` if no recent commands
-  if (
-    command.id == "builtin_recentCommands" &&
-    Object.keys(recentCommands).length === 0
-  ) {
-    return false;
-  }
-
-  return true;
 }
 
 /**

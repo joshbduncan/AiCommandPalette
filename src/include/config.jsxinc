@@ -40,55 +40,8 @@ paletteSettings.columnSets.default[localize(strings.name_title_case)] = {
   key: "name",
 };
 paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
-  width: null,
-  key: "type",
-};
-
-paletteSettings.columnSets.actions = {};
-paletteSettings.columnSets.actions[localize(strings.name_title_case)] = {
-  width: null,
-  key: "name",
-};
-paletteSettings.columnSets.actions["Set"] = {
-  // FIXME: localize
-  width: null,
-  key: "set",
-};
-
-paletteSettings.columnSets.bookmarks = {};
-paletteSettings.columnSets.bookmarks[localize(strings.name_title_case)] = {
-  width: null,
-  key: "name",
-};
-paletteSettings.columnSets.bookmarks[localize(strings.type_title_case)] = {
-  width: 50,
-  key: "type",
-};
-paletteSettings.columnSets.bookmarks["Path"] = {
-  // FIXME: localize
-  width: null,
-  key: "path",
-};
-
-paletteSettings.columnSets.documents = {};
-paletteSettings.columnSets.documents[localize(strings.name_title_case)] = {
-  width: null,
-  key: "name",
-};
-paletteSettings.columnSets.documents["Color Space"] = {
-  // FIXME: localize
   width: 100,
-  key: "colorSpace",
-};
-paletteSettings.columnSets.documents["Ruler Units"] = {
-  // FIXME: localize
-  width: 100,
-  key: "rulerUnits",
-};
-paletteSettings.columnSets.documents["Path"] = {
-  // FIXME: localize
-  width: null,
-  key: "path",
+  key: "type",
 };
 
 var visibleListItems = 9;
