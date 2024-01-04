@@ -15,10 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete rebuild of command palette, goto palette, and workflow builder (ScriptUI dialog)
 - Better sorting with recent command showing higher in results list
 - Query now also uses the command type when searching (can be toggled)
+- Split `config` and `builtin` command types in [CSV Builder Sheet](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=800918162)
 
 ## Fixed
 
 - Correct number of (full) table rows (commands) show on Windows (Issue #22)
+- Added back missing Document Report command
 
 ## [0.9.3] 2023-11-27
 

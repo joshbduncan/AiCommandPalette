@@ -119,7 +119,21 @@ I recommend installing this action into your scripts folder ([how-to](https://ww
 
 ℹ️ I like to use the keyboard shortcut Command-Shift-P since it is somewhat mnemonic for "palette".
 
-## ‼️ Warning ‼️
+## Known Issues 🤦‍♂️
+
+### Keyboard Use
+
+Ai Command Palette was created to allow users to stay away from the mouse and do actions and operations via the keyboard. Funnily enough, there is a bug in ExtendScript that will delay/send the `Enter` key event after the palette is dismissed using the enter key.
+
+This issue doesn't effect very many actions and you may naver notice it, but if you run the `About Illusatrator...` command, you'll notice it appears and immediately disappears. This is because ExtendScript essentially "presses" the enter key after showing the about splash screen.
+
+I have tried lots of work-a-rounds to fix this but haven't found a solution yet.
+
+### Running Actions 
+
+There is a known ExtendScript issue when running actions from a script (e.g. Ai Command Palette). Some action steps **WILL NOT** work properly. I haven't tested all possible action but I know for sure most operations modifying the document selection are definitely broken. Let me know if you find others and I will file/update a bug report with Adobe.
+
+## Warning ‼️
 
 Using Ai Command Palette requires some basic knowledge of Illustrator. The script doesn't know which commands can or can't be run at the time of execution so tread carefully. I've included error checking where possible, so in most cases you should get an explanation when something breaks.
 

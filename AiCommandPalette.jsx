@@ -1,6 +1,6 @@
 /*
 Ai Command Palette
-Copyright 2022 Josh Duncan
+Copyright 2024 Josh Duncan
 https://joshbduncan.com
 
 This script is distributed under the MIT License.
@@ -14,7 +14,7 @@ See the LICENSE file for details.
 
   var _title = "Ai Command Palette";
   var _version = "0.10.0";
-  var _copyright = "Copyright 2022 Josh Duncan";
+  var _copyright = "Copyright 2024 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
 
@@ -726,9 +726,9 @@ See the LICENSE file for details.
     },
     config: { en: "Configuration", de: "Configuration", ru: "Configuration" },
     copyright: {
-      en: "Copyright 2022 Josh Duncan",
-      de: "Copyright 2022 Josh Duncan",
-      ru: "Copyright 2022 Josh Duncan",
+      en: "Copyright 2024 Josh Duncan",
+      de: "Copyright 2024 Josh Duncan",
+      ru: "Copyright 2024 Josh Duncan",
     },
     cp_config: {
       en: "Palette Settings and Configuration",
@@ -753,10 +753,11 @@ See the LICENSE file for details.
       ru: "Active Document Report",
     },
     document_report_warning: {
-      en: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
-      de: "Achtung:\nSeit dem letzen Speichern des Dokuments wurden \u00c4nderungen vorgenommen. Daher k\u00f6nnten einige Informationen falsch sein.\n\nSpeichern Sie das Dokument, bevor Sie die Dokumentinformationen erneut abrufen.",
-      ru: "Document Report Warning:\nChanges were made to the documents since the last save so some report information may be incorrect.\n\nPlease save the document before running the report.",
+      en: "FILE NOT SAVED. Save and rerun report for updated information.",
+      de: "FILE NOT SAVED. Save and rerun report for updated information.",
+      ru: "FILE NOT SAVED. Save and rerun report for updated information.",
     },
+    color_space_title_case: { en: "Color Space", de: "Color Space", ru: "Color Space" },
     dr_color_space: { en: "Color Space: ", de: "Farbmodus: ", ru: "Color Space: " },
     dr_file_created: {
       en: "File Created: ",
@@ -859,6 +860,7 @@ See the LICENSE file for details.
       de: "Error Loading History\nA backup copy of your history has been created.",
       ru: "Error Loading History\nA backup copy of your history has been created.",
     },
+    path_title_case: { en: "Path", de: "Path", ru: "Path" },
     pref_file_loading_error: {
       en: "Error Loading Preferences\nA backup copy of your settings has been created.",
       de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
@@ -879,10 +881,20 @@ See the LICENSE file for details.
       de: "Zuletzt verwendete Befehle",
       ru: "Recent Commands",
     },
+    ruler_units_title_case: {
+      en: "Ruler Units",
+      de: "ruler_units_title_case",
+      ru: "ruler_units_title_case",
+    },
     save: {
       en: "Save",
       de: "Speichern",
       ru: "\u0421\u043e\u0445\u0440\u0430\u043d\u044f\u0442\u044c",
+    },
+    save_active_document_report: {
+      en: "Save Active Document Report",
+      de: "Save Active Document Report",
+      ru: "Save Active Document Report",
     },
     sc_already_loaded: {
       en: "Script already loaded.\nWould you like to replace the previous script with the new one?",
@@ -922,6 +934,7 @@ See the LICENSE file for details.
     },
     script: { en: "Script", de: "Skript", ru: "\u0421\u043a\u0440\u0438\u043f\u0442" },
     Scripts: { en: "Scripts", de: "Skripte laden", ru: "Scripts" },
+    set_title_case: { en: "Set", de: "Set", ru: "Set" },
     spot_colors: { en: "Spot Colors", de: "Volltonfarben", ru: "Spot Colors" },
     startup_builder: {
       en: "Startup Screen Customizer",
@@ -9151,117 +9164,13 @@ See the LICENSE file for details.
       hidden: false,
       minVersion: 24,
     },
-    config_about: {
-      id: "config_about",
-      action: "about",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "About Ai Command Palette...",
-        de: "\u00dcber Kurzbefehle \u2026",
-        ru: "\u041e\u0431 Ai Command Palette",
-      },
-      hidden: false,
-    },
-    config_buildStartup: {
-      id: "config_buildStartup",
-      action: "buildStartup",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Customize Startup Commands...",
-        de: "Customize Startup Commands...",
-        ru: "Customize Startup Commands...",
-      },
-      hidden: false,
-    },
-    config_buildWorkflow: {
-      id: "config_buildWorkflow",
-      action: "buildWorkflow",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Build Workflow...",
-        de: "Arbeitsablauf erstellen \u2026",
-        ru: "\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
-      },
-      hidden: false,
-    },
-    config_editWorkflow: {
-      id: "config_editWorkflow",
-      action: "editWorkflow",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Edit Workflow...",
-        de: "Arbeitsablauf bearbeiten \u2026",
-        ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
-      },
-      hidden: false,
-    },
-    builtin_allWorkflows: {
-      id: "builtin_allWorkflows",
-      action: "allWorkflows",
+    builtin_allActions: {
+      id: "builtin_allActions",
+      action: "allActions",
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      name: {
-        en: "All Workflows...",
-        de: "Alle Arbeitsabl\u00e4ufe \u2026",
-        ru: "All Workflows...",
-      },
-      hidden: false,
-    },
-    config_loadScript: {
-      id: "config_loadScript",
-      action: "loadScript",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Load Script(s)...",
-        de: "Skripte laden \u2026",
-        ru: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0441\u043a\u0440\u0438\u043f\u0442\u044b",
-      },
-      hidden: false,
-    },
-    builtin_allScripts: {
-      id: "builtin_allScripts",
-      action: "allScripts",
-      type: "builtin",
-      docRequired: false,
-      selRequired: false,
-      name: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
-      hidden: false,
-    },
-    config_loadFileBookmark: {
-      id: "config_loadFileBookmark",
-      action: "loadFileBookmark",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Load File Bookmark(s)...",
-        de: "Lesezeichen erstellen \u2026",
-        ru: "Load File Bookmark(s)...",
-      },
-      hidden: false,
-    },
-    config_loadFolderBookmark: {
-      id: "config_loadFolderBookmark",
-      action: "loadFolderBookmark",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Load Folder Bookmark...",
-        de: "Lesezeichen-Ordner erstellen \u2026",
-        ru: "Load Folder Bookmark...",
-      },
+      name: { en: "All Actions...", de: "Alle Aktionen \u2026", ru: "All Actions..." },
       hidden: false,
     },
     builtin_allBookmarks: {
@@ -9277,103 +9186,64 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    builtin_allActions: {
-      id: "builtin_allActions",
-      action: "allActions",
+    builtin_allScripts: {
+      id: "builtin_allScripts",
+      action: "allScripts",
       type: "builtin",
       docRequired: false,
       selRequired: false,
-      name: { en: "All Actions...", de: "Alle Aktionen \u2026", ru: "All Actions..." },
+      name: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
       hidden: false,
     },
-    config_hideCommand: {
-      id: "config_hideCommand",
-      action: "hideCommand",
-      type: "config",
+    builtin_allWorkflows: {
+      id: "builtin_allWorkflows",
+      action: "allWorkflows",
+      type: "builtin",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Hide Commands...",
-        de: "Befehle ausblenden \u2026",
-        ru: "\u0421\u043a\u0440\u044b\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+        en: "All Workflows...",
+        de: "Alle Arbeitsabl\u00e4ufe \u2026",
+        ru: "All Workflows...",
       },
       hidden: false,
     },
-    config_unhideCommand: {
-      id: "config_unhideCommand",
-      action: "unhideCommand",
-      type: "config",
+    builtin_buildWorkflow: {
+      id: "builtin_buildWorkflow",
+      action: "buildWorkflow",
+      type: "builtin",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Unhide Commands...",
-        de: "Befehle einblenden \u2026",
-        ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+        en: "Build Workflow...",
+        de: "Arbeitsablauf erstellen \u2026",
+        ru: "\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
       },
       hidden: false,
     },
-    config_deleteCommand: {
-      id: "config_deleteCommand",
-      action: "deleteCommand",
-      type: "config",
+    builtin_editWorkflow: {
+      id: "builtin_editWorkflow",
+      action: "editWorkflow",
+      type: "builtin",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Delete Commands...",
-        de: "Befehle l\u00f6schen \u2026",
-        ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+        en: "Edit Workflow...",
+        de: "Arbeitsablauf bearbeiten \u2026",
+        ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
       },
       hidden: false,
     },
-    config_enableTypeInSearch: {
-      id: "config_enableTypeInSearch",
-      action: "enableTypeInSearch",
-      type: "config",
-      docRequired: false,
+    builtin_exportVariables: {
+      id: "builtin_exportVariables",
+      action: "exportVariables",
+      type: "builtin",
+      docRequired: true,
       selRequired: false,
       name: {
-        en: "Enable Searching on Command Type",
-        de: "Enable Searching on Command Type",
-        ru: "Enable Searching on Command Type",
-      },
-      hidden: false,
-    },
-    config_disableTypeInSearch: {
-      id: "config_disableTypeInSearch",
-      action: "disableTypeInSearch",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Disable Searching on Command Type",
-        de: "Disable Searching on Command Type",
-        ru: "Disable Searching on Command Type",
-      },
-      hidden: false,
-    },
-    config_clearHistory: {
-      id: "config_clearHistory",
-      action: "clearHistory",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Clear History",
-        de: "Die letzten Befehle l\u00f6schen",
-        ru: "Clear Recent Comands",
-      },
-      hidden: false,
-    },
-    config_revealPrefFile: {
-      id: "config_revealPrefFile",
-      action: "revealPrefFile",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Reveal Preferences File",
-        de: "Einstellungen-Datei anzeigen",
-        ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0444\u0430\u0439\u043b \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043a",
+        en: "Export Document Variables As XML",
+        de: "Variablen als XML exportieren",
+        ru: "Export Document Variables As XML",
       },
       hidden: false,
     },
@@ -9416,6 +9286,84 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    builtin_imageCapture: {
+      id: "builtin_imageCapture",
+      action: "imageCapture",
+      type: "builtin",
+      docRequired: true,
+      selRequired: false,
+      name: {
+        en: "Export Active Artboard As PNG",
+        de: "Ausgew\u00e4hlte Zeichenfl\u00e4che als PNG exportieren",
+        ru: "Export Active Artboard As PNG",
+      },
+      hidden: false,
+    },
+    builtin_loadFileBookmark: {
+      id: "builtin_loadFileBookmark",
+      action: "loadFileBookmark",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Load File Bookmark(s)...",
+        de: "Lesezeichen erstellen \u2026",
+        ru: "Load File Bookmark(s)...",
+      },
+      hidden: false,
+    },
+    builtin_loadFolderBookmark: {
+      id: "builtin_loadFolderBookmark",
+      action: "loadFolderBookmark",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Load Folder Bookmark...",
+        de: "Lesezeichen-Ordner erstellen \u2026",
+        ru: "Load Folder Bookmark...",
+      },
+      hidden: false,
+    },
+    builtin_loadScript: {
+      id: "builtin_loadScript",
+      action: "loadScript",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Load Script(s)...",
+        de: "Skripte laden \u2026",
+        ru: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0441\u043a\u0440\u0438\u043f\u0442\u044b",
+      },
+      hidden: false,
+    },
+    builtin_recentCommands: {
+      id: "builtin_recentCommands",
+      action: "recentCommands",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Recent Commands...",
+        de: "Letzte Befehle \u2026",
+        ru: "Recent Commands...",
+      },
+      hidden: false,
+    },
+    builtin_recentFiles: {
+      id: "builtin_recentFiles",
+      action: "recentFiles",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Open Recent File...",
+        de: "Letzte Datei \u00f6ffnen \u2026",
+        ru: "Open Recent File...",
+      },
+      hidden: false,
+    },
     builtin_redrawWindows: {
       id: "builtin_redrawWindows",
       action: "redrawWindows",
@@ -9438,68 +9386,133 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    builtin_documentReport: {
-      id: "builtin_documentReport",
-      action: "documentReport",
-      type: "builtin",
-      docRequired: true,
-      selRequired: false,
-      name: {
-        en: "Active Document Report",
-        de: "Dokumentinformationen",
-        ru: "Active Document Report",
-      },
-      hidden: false,
-    },
-    builtin_imageCapture: {
-      id: "builtin_imageCapture",
-      action: "imageCapture",
-      type: "builtin",
-      docRequired: true,
-      selRequired: false,
-      name: {
-        en: "Export Active Artboard As PNG",
-        de: "Ausgew\u00e4hlte Zeichenfl\u00e4che als PNG exportieren",
-        ru: "Export Active Artboard As PNG",
-      },
-      hidden: false,
-    },
-    builtin_exportVariables: {
-      id: "builtin_exportVariables",
-      action: "exportVariables",
-      type: "builtin",
-      docRequired: true,
-      selRequired: false,
-      name: {
-        en: "Export Document Variables As XML",
-        de: "Variablen als XML exportieren",
-        ru: "Export Document Variables As XML",
-      },
-      hidden: false,
-    },
-    builtin_recentFiles: {
-      id: "builtin_recentFiles",
-      action: "recentFiles",
-      type: "builtin",
+    config_about: {
+      id: "config_about",
+      action: "about",
+      type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Open Recent File...",
-        de: "Letzte Datei \u00f6ffnen \u2026",
-        ru: "Open Recent File...",
+        en: "About Ai Command Palette...",
+        de: "\u00dcber Kurzbefehle \u2026",
+        ru: "\u041e\u0431 Ai Command Palette",
       },
       hidden: false,
     },
-    builtin_recentCommands: {
-      id: "builtin_recentCommands",
-      action: "recentCommands",
-      type: "builtin",
+    config_clearHistory: {
+      id: "config_clearHistory",
+      action: "clearHistory",
+      type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Recent Commands...",
-        de: "Letzte Befehle \u2026",
-        ru: "Recent Commands...",
+        en: "Clear History",
+        de: "Die letzten Befehle l\u00f6schen",
+        ru: "Clear Recent Comands",
+      },
+      hidden: false,
+    },
+    config_customizeStartup: {
+      id: "config_customizeStartup",
+      action: "customizeStartup",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Customize Startup Commands...",
+        de: "Customize Startup Commands...",
+        ru: "Customize Startup Commands...",
+      },
+      hidden: false,
+    },
+    config_deleteCommand: {
+      id: "config_deleteCommand",
+      action: "deleteCommand",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Delete Commands...",
+        de: "Befehle l\u00f6schen \u2026",
+        ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+      },
+      hidden: false,
+    },
+    config_hideCommand: {
+      id: "config_hideCommand",
+      action: "hideCommand",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Hide Commands...",
+        de: "Befehle ausblenden \u2026",
+        ru: "\u0421\u043a\u0440\u044b\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+      },
+      hidden: false,
+    },
+    config_unhideCommand: {
+      id: "config_unhideCommand",
+      action: "unhideCommand",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Unhide Commands...",
+        de: "Befehle einblenden \u2026",
+        ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+      },
+      hidden: false,
+    },
+    config_disableTypeInSearch: {
+      id: "config_disableTypeInSearch",
+      action: "disableTypeInSearch",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Disable Searching on Command Type",
+        de: "Disable Searching on Command Type",
+        ru: "Disable Searching on Command Type",
+      },
+      hidden: false,
+    },
+    config_enableTypeInSearch: {
+      id: "config_enableTypeInSearch",
+      action: "enableTypeInSearch",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Enable Searching on Command Type",
+        de: "Enable Searching on Command Type",
+        ru: "Enable Searching on Command Type",
+      },
+      hidden: false,
+    },
+    config_revealPrefFile: {
+      id: "config_revealPrefFile",
+      action: "revealPrefFile",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Reveal Preferences File",
+        de: "Einstellungen-Datei anzeigen",
+        ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0444\u0430\u0439\u043b \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043a",
+      },
+      hidden: false,
+    },
+    config_showAllBuiltinCommands: {
+      id: "config_showAllBuiltinCommands",
+      action: "showAllBuiltinCommands",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Show All Builtin Commands...",
+        de: "Show All Builtin Commands...",
+        ru: "Show All Builtin Commands...",
       },
       hidden: false,
     },
@@ -10791,10 +10804,8 @@ See the LICENSE file for details.
     var alertString = strings.cd_error_executing;
     switch (command.type.toLowerCase()) {
       case "config":
-        func = configAction;
-        break;
       case "builtin":
-        func = builtinAction;
+        func = internalAction;
         break;
       case "menu":
         func = menuAction;
@@ -10865,35 +10876,22 @@ See the LICENSE file for details.
    * Execute script actions.
    * @param {Object} command Command to execute.
    */
-  function configAction(command) {
+  function internalAction(command) {
     var write = true;
     switch (command.action) {
-      case "settings":
-        AiCommandPaletteSettings();
-        write = false;
-        break;
+      // config commands
       case "about":
-        about();
         write = false;
+        about();
         break;
-      case "buildStartup":
-        buildStartup();
+      case "clearHistory": // FIXME: Update alert to include warning about latches
+        clearHistory();
         break;
-      case "buildWorkflow":
-        buildWorkflow();
+      case "customizeStartup":
+        customizeStartup();
         break;
-      case "editWorkflow":
-        editWorkflow();
-        break;
-      case "loadScript":
-        loadScripts();
-        break;
-      case "loadFileBookmark":
-        loadFileBookmark();
-        write = true;
-        break;
-      case "loadFolderBookmark":
-        loadFolderBookmark();
+      case "deleteCommand":
+        deleteCommand();
         break;
       case "hideCommand":
         hideCommand();
@@ -10901,119 +10899,107 @@ See the LICENSE file for details.
       case "unhideCommand":
         unhideCommand();
         break;
-      case "deleteCommand":
-        deleteCommand();
-        break;
       case "enableTypeInSearch":
       case "disableTypeInSearch":
-        prefs.searchIncludesType = !prefs.searchIncludesType;
-        break;
-      case "clearHistory": // FIXME: Update alert to include warning about latches
-        if (
-          !confirm(
-            localize(strings.cd_clear_history_confirm),
-            "noAsDflt",
-            localize(strings.cd_exception)
-          )
-        )
-          return;
-        userHistory.clear();
-        alert(localize(strings.history_cleared));
+        toggleTypeInSearch();
         break;
       case "revealPrefFile":
-        userPrefs.reveal();
         write = false;
+        revealPrefFile();
         break;
+      case "showAllBuiltinCommands":
+        write = false;
+        showAllBuiltinCommands();
+        break;
+      case "settings":
+        write = false;
+        settings();
+        break;
+
+      // builtin commands
+      case "allActions":
+        write = false;
+        showAllActions();
+        break;
+      case "allBookmarks":
+        write = false;
+        showAllBookmarks();
+        break;
+      case "allScripts":
+        write = false;
+        showAllScripts();
+        break;
+      case "allWorkflows":
+        write = false;
+        showAllWorkflows();
+        break;
+      case "buildWorkflow":
+        buildWorkflow();
+        break;
+      case "editWorkflow":
+        editWorkflow();
+        break;
+      case "documentReport":
+        write = false;
+        documentReport();
+        break;
+      case "exportVariables":
+        write = false;
+        exportVariables();
+        break;
+      case "goToArtboard":
+        write = false;
+        goToArtboard();
+        break;
+      case "goToDocument":
+        write = false;
+        goToOpenDocument();
+        break;
+      case "goToNamedObject":
+        write = false;
+        goToNamedObject();
+        break;
+      case "imageCapture":
+        write = false;
+        imageCapture();
+        break;
+      case "loadFileBookmark":
+        loadFileBookmark();
+        break;
+      case "loadFolderBookmark":
+        loadFolderBookmark();
+        break;
+      case "loadScript":
+        loadScripts();
+        break;
+      case "recentCommands":
+        write = false;
+        recentUserCommands();
+        break;
+      case "recentFiles":
+        write = false;
+        recentFiles();
+        break;
+      case "redrawWindows":
+        write = false;
+        redrawWindows();
+        break;
+      case "revealActiveDocument":
+        write = false;
+        revealActiveDocument();
+        break;
+
       default:
         alert(localize(strings.cd_invalid, action));
     }
     if (!write) return;
     userPrefs.save();
   }
+  // AI COMMAND PALETTE CONFIGURATION COMMANDS
 
   /**
-   * Execute built-in commands.
-   * @param {Object} command Command to execute.
+   * Ai Command Palette About Dialog.
    */
-  function builtinAction(command) {
-    switch (command.action) {
-      case "recentCommands": // TODO
-        showRecentCommands();
-        break;
-      case "allWorkflows":
-        showAllWorkflows();
-        break;
-      case "allScripts":
-        showAllScripts();
-        break;
-      case "allBookmarks":
-        showAllBookmarks();
-        break;
-      case "allActions":
-        showAllActions();
-        break;
-      case "documentReport":
-        if (activeDocument) documentReport();
-        break;
-      case "exportVariables":
-        if (activeDocument) exportVariables();
-        break;
-      case "goToArtboard":
-        if (activeDocument) goToArtboard();
-        break;
-      case "goToDocument":
-        if (app.documents.length > 1) {
-          goToOpenDocument();
-        }
-        break;
-      case "goToNamedObject":
-        if (activeDocument) goToNamedObject();
-        break;
-      case "imageCapture":
-        imageCapture();
-        break;
-      case "recentFiles":
-        recentFiles();
-        break;
-      case "redrawWindows":
-        app.redraw();
-        break;
-      case "revealActiveDocument":
-        if (activeDocument) {
-          if (app.activeDocument.path.fsName) {
-            var fp = new Folder(app.activeDocument.path.fsName);
-            fp.execute();
-          } else {
-            alert(localize(strings.active_document_not_saved));
-          }
-        }
-        break;
-      default:
-        alert(localize(strings.cd_invalid, action));
-    }
-  }
-  // AI COMMAND PALETTE OPERATIONS
-
-  /** Ai Command Palette configuration commands. */
-  function AiCommandPaletteSettings() {
-    var configCommands = filterCommands(
-      (commands = null),
-      (types = ["config"]),
-      (showHidden = true),
-      (showNonRelevant = false),
-      (hideSpecificCommands = ["config_settings"])
-    );
-    var result = commandPalette(
-      (commands = configCommands),
-      (title = localize(strings.cp_config)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-
-  /** Ai Command Palette About Dialog. */
   function about() {
     var win = new Window("dialog");
     win.text = localize(strings.about);
@@ -11049,7 +11035,47 @@ See the LICENSE file for details.
     win.show();
   }
 
-  function buildStartup() {
+  /**
+   * Present a palette with Ai Command Palette configuration commands.
+   */
+  function settings() {
+    var configCommands = filterCommands(
+      (commands = null),
+      (types = ["config"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = ["config_settings"])
+    );
+    var result = commandPalette(
+      (commands = configCommands),
+      (title = localize(strings.cp_config)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Clear all user history
+   */
+  function clearHistory() {
+    if (
+      confirm(
+        localize(strings.cd_clear_history_confirm),
+        "noAsDflt",
+        localize(strings.cd_exception)
+      )
+    ) {
+      userHistory.clear();
+      alert(localize(strings.history_cleared));
+    }
+  }
+
+  /**
+   * Present the Ai Command Palette startup configurator dialog.
+   */
+  function customizeStartup() {
     var availableStartupCommands = filterCommands(
       (commands = null),
       (types = [
@@ -11073,7 +11099,132 @@ See the LICENSE file for details.
     prefs.startupCommands = result;
   }
 
-  /** Document Info Dialog */
+  /**
+   * Present a palette with all user created commands (e.g. bookmarks, scripts, workflows).
+   * The selected command will be deleted.
+   */
+  function deleteCommand() {
+    var deletableCommands = filterCommands(
+      (commands = null),
+      (types = ["file", "folder", "script", "workflow"]),
+      (showHidden = false),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = deletableCommands),
+      (title = localize(strings.cd_delete_select)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = true)
+    );
+    if (!result) return;
+
+    // get all of the actual command names for the confirmation dialog
+    var commandNames = [];
+    for (var i = 0; i < result.length; i++) {
+      commandNames.push(commandsData[result[i]].name);
+    }
+
+    // confirm command deletion
+    if (
+      !confirm(
+        localize(strings.cd_delete_confirm, commandNames.join("\n")),
+        "noAsDflt",
+        localize(strings.cd_delete_confirm_title)
+      )
+    )
+      return;
+
+    // go through each deletable command type and remove them from user prefs
+    var typesToCheck = ["workflows", "bookmarks", "scripts"];
+    for (var i = 0; i < typesToCheck.length; i++) {
+      for (var j = prefs[typesToCheck[i]].length - 1; j >= 0; j--) {
+        if (result.includes(prefs[typesToCheck[i]][j].id))
+          prefs[typesToCheck[i]].splice(j, 1);
+      }
+    }
+  }
+
+  /**
+   * Enable/Disable searching on command type as well as command name.
+   */
+  function toggleTypeInSearch() {
+    // TODO: add alert
+    prefs.searchIncludesType = !prefs.searchIncludesType;
+  }
+
+  /**
+   * Present a palette with all possible command (less config commands).
+   * The selected command will be hidden from the palette.
+   */
+  function hideCommand() {
+    var hideableCommands = filterCommands(
+      (commands = null),
+      (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+      (showHidden = false),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = hideableCommands),
+      (title = localize(strings.cd_hide_select)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = true)
+    );
+    if (!result) return;
+    prefs.hiddenCommands = prefs.hiddenCommands.concat(result);
+  }
+
+  /**
+   * Reveal the user preference file within file system.
+   */
+  function revealPrefFile() {
+    userPrefs.reveal();
+  }
+
+  /**
+   * Present a palette with all built-in commands.
+   */
+  function showAllBuiltinCommands() {
+    var builtins = filterCommands(
+      (commands = null),
+      (types = ["builtin"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = builtins),
+      (title = "All Built-In Commands"), // FIXME: localize
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Present a palette with all hidden commands.
+   * The selected command will be unhidden.
+   */
+  function unhideCommand() {
+    var result = commandPalette(
+      (commands = prefs.hiddenCommands),
+      (title = localize(strings.cd_reveal_menu_select)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = true)
+    );
+    if (!result) return;
+    for (var i = 0; i < result.length; i++) {
+      prefs.hiddenCommands.splice(prefs.hiddenCommands.indexOf(result[i]), 1);
+    }
+  }
+
+  // AI COMMAND PALETTE BUILT-IN OPERATIONS
+
+  /**
+   * Present a document report dialog with the ability to save the report as a text document.
+   */
   function documentReport() {
     // setup the basic document info
     var rulerUnits = app.activeDocument.rulerUnits.toString().split(".").pop();
@@ -11134,8 +11285,6 @@ See the LICENSE file for details.
 
     // build the report from the selected options (active = true)
     function buildReport() {
-      if (!app.activeDocument.saved) alert(localize(strings.document_report_warning));
-
       var infoString = localize(strings.dr_info_string) + "\n\n" + fileInfo;
       for (var p in reportOptions) {
         if (reportOptions[p].active && reportOptions[p].str) {
@@ -11156,6 +11305,21 @@ See the LICENSE file for details.
     win.orientation = "column";
     win.alignChildren = ["center", "top"];
     win.alignChildren = "fill";
+
+    // show a warning about stale info if document is not saved
+    if (!app.activeDocument.saved) {
+      var warning = win.add(
+        "statictext",
+        undefined,
+        localize(strings.document_report_warning)
+      );
+      warning.justify = "center";
+      warning.graphics.foregroundColor = warning.graphics.newPen(
+        win.graphics.PenType.SOLID_COLOR,
+        [1, 0, 0],
+        1
+      );
+    }
 
     // panel - options
     var pOptions = win.add("panel", undefined, "Include?");
@@ -11203,7 +11367,7 @@ See the LICENSE file for details.
 
     // save document info to selected file
     saveInfo.onClick = function () {
-      var f = File.saveDialog();
+      var f = File.saveDialog(localize(strings.save_active_document_report));
       if (f) {
         try {
           f.encoding = "UTF-8";
@@ -11218,6 +11382,200 @@ See the LICENSE file for details.
     };
     // show the info dialog
     win.show();
+  }
+
+  /**
+   * Present a palette with all user loaded actions. NOTE, if you add new actions,
+   * Illustrator must be restarted for them to be available.
+   */
+  function showAllActions() {
+    var actionCommands = filterCommands(
+      (commands = null),
+      (types = ["action"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns[localize(strings.set_title_case)] = {
+      width: 100,
+      key: "set",
+    };
+    var result = commandPalette(
+      (commands = actionCommands),
+      (title = localize(strings.Actions)),
+      (columns = columns),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Present a palette with all user loaded file and folder bookmarks.
+   */
+  function showAllBookmarks() {
+    var bookmarkCommands = filterCommands(
+      (commands = null),
+      (types = ["file", "folder"]),
+      (showHidden = true),
+      (showNonRelevant = true),
+      (hideSpecificCommands = null)
+    );
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns[localize(strings.type_title_case)] = {
+      width: 100,
+      key: "type",
+    };
+    columns[localize(strings.path_title_case)] = {
+      width: 100,
+      key: "path",
+    };
+    var result = commandPalette(
+      (commands = bookmarkCommands),
+      (title = localize(strings.Bookmarks)),
+      (columns = columns),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Present a palette with all user loaded scripts.
+   */
+  function showAllScripts() {
+    var scriptCommands = filterCommands(
+      (commands = null),
+      (types = ["script"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns[localize(strings.type_title_case)] = {
+      width: 100,
+      key: "type",
+    };
+    columns[localize(strings.path_title_case)] = {
+      width: 100,
+      key: "path",
+    };
+    var result = commandPalette(
+      (commands = scriptCommands),
+      (title = localize(strings.Scripts)),
+      (columns = columns),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Present a palette with all user created workflows.
+   */
+  function showAllWorkflows() {
+    var workflows = filterCommands(
+      (commands = null),
+      (types = ["workflow"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = workflows),
+      (title = localize(strings.Workflows)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Present the Workflow Builder dialog for building/editing user workflows.
+   * @param {String} editWorkflowId Id of a current user workflow to edit.
+   */
+  function buildWorkflow(editWorkflowId) {
+    var availableWorkflowCommands = filterCommands(
+      (commands = null),
+      (types = [
+        "file",
+        "folder",
+        "script",
+        "workflow",
+        "menu",
+        "tool",
+        "action",
+        "builtin",
+      ]),
+      (showHidden = true),
+      (showNonRelevant = true),
+      (hideSpecificCommands = workflow ? [workflow.id] : []) // hide current workflow when editing to prevent recursive loop
+    );
+    // show the workflow builder dialog
+    var result = workflowBuilder(availableWorkflowCommands, editWorkflowId);
+
+    if (!result) return;
+
+    var id;
+    // when overwriting delete previous version and update prefs
+    if (result.overwrite) {
+      for (var i = prefs.workflows.length - 1; i >= 0; i--) {
+        if (prefs.workflows[i].name == result.name) {
+          prefs.workflows[i].actions = result.actions;
+          id = prefs.workflows[i].id;
+        }
+      }
+    } else {
+      id = generateCommandId("workflow_" + result.name.toLowerCase());
+      var workflow = {
+        id: id,
+        name: result.name,
+        actions: result.actions,
+        type: "workflow",
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      prefs.workflows.push(workflow);
+    }
+
+    addToStartup([id]);
+  }
+
+  /**
+   * Present a palette with all user created workflows. The selected workflow will
+   * be opened in the workflow builder.
+   */
+  function editWorkflow() {
+    var workflows = filterCommands(
+      (commands = null),
+      (types = ["workflow"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = workflows),
+      (title = localize(strings.wf_choose)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    buildWorkflow(result);
   }
 
   /**
@@ -11243,7 +11601,7 @@ See the LICENSE file for details.
   }
 
   /**
-   *
+   * Export active document dataset variables to a file.
    * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-exportvariables
    */
   function exportVariables() {
@@ -11262,7 +11620,200 @@ See the LICENSE file for details.
     }
   }
 
-  /** Set bookmarked file to open in Ai from within Ai Command Palette. */
+  /**
+   * Load all artboards from the active document as objects into the data model.
+   * @returns Artboard command ids.
+   */
+  function loadActiveDocumentArtboards() {
+    var arr = [];
+    var cur, id, obj;
+    for (var i = 0; i < app.activeDocument.artboards.length; i++) {
+      cur = app.activeDocument.artboards[i];
+      alert(cur.name);
+      id = generateCommandId("artboard_" + i.toString());
+      obj = {
+        id: id,
+        name: cur.name,
+        action: "artboard",
+        type: "artboard",
+        idx: i,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      arr.push(id);
+      commandsData[id] = obj;
+    }
+  }
+
+  /**
+   * Present a goto palette with artboards from the active document.
+   * The selected artboard is made active and brought into view.
+   */
+  function goToArtboard() {
+    var arr = loadActiveDocumentArtboards();
+    var columns = {};
+    columns["Index"] = {
+      width: 35,
+      key: "idx",
+      hideTitle: true,
+    };
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    var result = commandPalette(
+      (commands = arr),
+      (title = localize(strings.go_to_artboard)),
+      (columns = columns),
+      (multiselect = false)
+    );
+
+    if (!result) return;
+    app.activeDocument.artboards.setActiveArtboardIndex(commandsData[result].idx);
+    app.executeMenuCommand("fitin");
+  }
+
+  /**
+   * Load all page items from the active document as objects into the data model.
+   * @returns Object command ids.
+   */
+  function loadActiveDocumentPageItems() {
+    var arr = [];
+    var cur, id, obj;
+    for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
+      cur = app.activeDocument.pageItems[i];
+      if (!cur.name || cur.name.length <= 0) continue;
+      id = generateCommandId("pageItem_" + i.toString());
+      obj = {
+        id: id,
+        name: cur.name,
+        action: "pageItem",
+        type: cur.typename,
+        pageItem: cur,
+        layer: cur.layer.name,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      arr.push(id);
+      commandsData[id] = obj;
+    }
+    return arr;
+  }
+
+  /**
+   * Present a goto palette with named objects from the active document.
+   * The selected object is selected within the ui and brought into view.
+   */
+  function goToNamedObject() {
+    if (app.activeDocument.pageItems.length > namedObjectLimit)
+      alert(
+        localize(strings.go_to_named_object_limit, app.activeDocument.pageItems.length)
+      );
+
+    var arr = loadActiveDocumentPageItems();
+    if (!arr.length) {
+      alert(localize(strings.go_to_named_object_no_objects));
+      return;
+    }
+
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns[localize(strings.type_title_case)] = {
+      width: 100,
+      key: "type",
+    };
+    columns[localize(strings.layer_title_case)] = {
+      width: 100,
+      key: "layer",
+    };
+    var result = commandPalette(
+      (commands = arr),
+      (title = localize(strings.go_to_named_object)),
+      (columns = columns),
+      (multiselect = false)
+    );
+
+    if (!result) return;
+    var pageItem = commandsData[result].pageItem;
+    app.activeDocument.selection = null;
+    pageItem.selected = true;
+
+    // reset zoom for current document
+    app.activeDocument.views[0].zoom = 1;
+
+    zoomIntoPageItem(pageItem);
+  }
+
+  /**
+   * Load all open documents objects into the data model.
+   * @returns Document command ids.
+   */
+  function loadOpenDocuments() {
+    var arr = [];
+    var cur, obj;
+    for (var i = 0; i < app.documents.length; i++) {
+      cur = app.documents[i];
+      id = generateCommandId("document_" + cur.name.toLowerCase());
+      obj = {
+        id: id,
+        name: cur.name,
+        action: "document",
+        type: "document",
+        document: cur,
+        rulerUnits: cur.rulerUnits.toString().split(".").pop(),
+        colorSpace: cur.documentColorSpace.toString().split(".").pop(),
+        path: cur.path,
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      arr.push(id);
+      commandsData[id] = obj;
+    }
+    return arr;
+  }
+
+  /**
+   * Present a goto palette with currently open documents.
+   * The selected document is activated.
+   */
+  function goToOpenDocument() {
+    var arr = loadOpenDocuments();
+    var columns = {};
+    columns[localize(strings.name_title_case)] = {
+      width: 100,
+      key: "name",
+    };
+    columns[localize(strings.color_space_title_case)] = {
+      width: 100,
+      key: "colorSpace",
+    };
+    columns[localize(strings.ruler_units_title_case)] = {
+      width: 100,
+      key: "rulerUnits",
+    };
+    columns[localize(strings.path_title_case)] = {
+      width: 100,
+      key: "path",
+    };
+    var result = commandPalette(
+      (commands = arr),
+      (title = localize(strings.go_to_open_document)),
+      (columns = columns),
+      (multiselect = false)
+    );
+    if (!result) return;
+    commandsData[result].document.activate();
+  }
+
+  /**
+   * Load file bookmarks from the users system into the command palette.
+   */
   function loadFileBookmark() {
     var acceptedTypes = [
       ".ai",
@@ -11375,7 +11926,9 @@ See the LICENSE file for details.
     addToStartup(newBookmarkIds);
   }
 
-  /** Set bookmarked folder to open on system from within Ai Command Palette. */
+  /**
+   * Load folder bookmarks from the users system into the command palette.
+   */
   function loadFolderBookmark() {
     var f;
     f = Folder.selectDialog(localize(strings.bm_load_bookmark));
@@ -11415,7 +11968,9 @@ See the LICENSE file for details.
     addToStartup([bookmark.id]);
   }
 
-  /** Load external scripts into Ai Command Palette. */
+  /**
+   * Load ExtendScript (.jsx and .js) scripts into the command palette.
+   */
   function loadScripts() {
     var acceptedTypes = [".jsx", ".js"];
     var re = new RegExp(acceptedTypes.join("|") + "$", "i");
@@ -11467,380 +12022,24 @@ See the LICENSE file for details.
     addToStartup(newScriptIds);
   }
 
-  /** Show all scripts. */
-  function showAllScripts() {
-    var scriptCommands = filterCommands(
-      (commands = null),
-      (types = ["script"]),
-      (showHidden = true),
-      (showNonRelevant = false),
-      (hideSpecificCommands = null)
-    );
-    var columns = {};
-    columns[localize(strings.name_title_case)] = {
-      width: 100,
-      key: "name",
-    };
-    columns[localize(strings.type_title_case)] = {
-      width: 100,
-      key: "type",
-    };
-    columns["Path"] = {
-      // FIXME: localize
-      width: 100,
-      key: "path",
-    };
+  /**
+   * Present a palette with the most recent user commands.
+   * The selected is executed.
+   */
+  function recentUserCommands() {
     var result = commandPalette(
-      (commands = scriptCommands),
-      (title = localize(strings.Scripts)),
-      (columns = columns),
+      (commands = mostRecentCommands),
+      (title = localize(strings.recent_commands)),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
     if (!result) return;
     processCommand(result);
-  }
-
-  /** Show all bookmarks. */
-  function showAllBookmarks() {
-    var bookmarkCommands = filterCommands(
-      (commands = null),
-      (types = ["file", "folder"]),
-      (showHidden = true),
-      (showNonRelevant = true),
-      (hideSpecificCommands = null)
-    );
-    var columns = {};
-    columns[localize(strings.name_title_case)] = {
-      width: 100,
-      key: "name",
-    };
-    columns[localize(strings.type_title_case)] = {
-      width: 100,
-      key: "type",
-    };
-    columns["Path"] = {
-      // FIXME: localize
-      width: 100,
-      key: "path",
-    };
-    var result = commandPalette(
-      (commands = bookmarkCommands),
-      (title = localize(strings.Bookmarks)),
-      (columns = columns),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-
-  /** Show all actions. */
-  function showAllActions() {
-    var actionCommands = filterCommands(
-      (commands = null),
-      (types = ["action"]),
-      (showHidden = true),
-      (showNonRelevant = false),
-      (hideSpecificCommands = null)
-    );
-    var columns = {};
-    columns[localize(strings.name_title_case)] = {
-      width: 100,
-      key: "name",
-    };
-    columns["Set"] = {
-      // FIXME: localize
-      width: 100,
-      key: "set",
-    };
-    var result = commandPalette(
-      (commands = actionCommands),
-      (title = localize(strings.Actions)),
-      (columns = columns),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-
-  /** Hide commands from Ai Command Palette. */
-  function hideCommand() {
-    var hideableCommands = filterCommands(
-      (commands = null),
-      (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
-      (showHidden = false),
-      (showNonRelevant = true),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = hideableCommands),
-      (title = localize(strings.cd_hide_select)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = true)
-    );
-    if (!result) return;
-    prefs.hiddenCommands = prefs.hiddenCommands.concat(result);
-  }
-
-  /** Unhide hidden commands. */
-  function unhideCommand() {
-    var result = commandPalette(
-      (commands = prefs.hiddenCommands),
-      (title = localize(strings.cd_reveal_menu_select)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = true)
-    );
-    if (!result) return;
-    for (var i = 0; i < result.length; i++) {
-      prefs.hiddenCommands.splice(prefs.hiddenCommands.indexOf(result[i]), 1);
-    }
-  }
-
-  /** Delete commands from Ai Command Palette. */
-  function deleteCommand() {
-    var deletableCommands = filterCommands(
-      (commands = null),
-      (types = ["file", "folder", "script", "workflow"]),
-      (showHidden = false),
-      (showNonRelevant = true),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = deletableCommands),
-      (title = localize(strings.cd_delete_select)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = true)
-    );
-    if (!result) return;
-
-    // get all of the actual command names for the confirmation dialog
-    var commandNames = [];
-    for (var i = 0; i < result.length; i++) {
-      commandNames.push(commandsData[result[i]].name);
-    }
-
-    // confirm command deletion
-    if (
-      !confirm(
-        localize(strings.cd_delete_confirm, commandNames.join("\n")),
-        "noAsDflt",
-        localize(strings.cd_delete_confirm_title)
-      )
-    )
-      return;
-
-    // go through each deletable command type and remove them from user prefs
-    var typesToCheck = ["workflows", "bookmarks", "scripts"];
-    for (var i = 0; i < typesToCheck.length; i++) {
-      for (var j = prefs[typesToCheck[i]].length - 1; j >= 0; j--) {
-        if (result.includes(prefs[typesToCheck[i]][j].id))
-          prefs[typesToCheck[i]].splice(j, 1);
-      }
-    }
-  }
-
-  // BUILT-IN COMMANDS
-
-  /**
-   * Load all open documents from the current document as objects into the data model.
-   * @returns Loaded command ids.
-   */
-  function loadOpenDocuments() {
-    var arr = [];
-    var cur, obj;
-    for (var i = 0; i < app.documents.length; i++) {
-      cur = app.documents[i];
-      id = generateCommandId("document_" + cur.name.toLowerCase());
-      obj = {
-        id: id,
-        name: cur.name,
-        action: "document",
-        type: "document",
-        document: cur,
-        rulerUnits: cur.rulerUnits.toString().split(".").pop(),
-        colorSpace: cur.documentColorSpace.toString().split(".").pop(),
-        path: cur.path,
-        docRequired: false,
-        selRequired: false,
-        hidden: false,
-      };
-      arr.push(id);
-      commandsData[id] = obj;
-    }
-    return arr;
-  }
-
-  /** Present a command palette with all open documents and goto the chosen one. */
-  function goToOpenDocument() {
-    var arr = loadOpenDocuments();
-    var columns = {};
-    columns[localize(strings.name_title_case)] = {
-      width: 100,
-      key: "name",
-    };
-    columns["Color Space"] = {
-      // FIXME: localize
-      width: 100,
-      key: "colorSpace",
-    };
-    columns["Ruler Units"] = {
-      // FIXME: localize
-      width: 100,
-      key: "rulerUnits",
-    };
-    columns["Path"] = {
-      // FIXME: localize
-      width: 100,
-      key: "path",
-    };
-    var result = commandPalette(
-      (commands = arr),
-      (title = localize(strings.go_to_open_document)),
-      (columns = columns),
-      (multiselect = false)
-    );
-    if (!result) return;
-    commandsData[result].document.activate();
-  }
-
-  /**
-   * Load all artboards from the current document as objects into the data model.
-   * @returns Loaded command ids.
-   */
-  function loadActiveDocumentArtboards() {
-    var arr = [];
-    var cur, id, obj;
-    for (var i = 0; i < app.activeDocument.artboards.length; i++) {
-      cur = app.activeDocument.artboards[i];
-      id = generateCommandId("artboard_" + i.toString());
-      obj = {
-        id: id,
-        name: cur.name,
-        action: "artboard",
-        type: "artboard",
-        idx: i,
-        docRequired: false,
-        selRequired: false,
-        hidden: false,
-      };
-      arr.push(id);
-      commandsData[id] = obj;
-    }
-  }
-
-  /** Present a command palette with all artboards and zoom to the chosen one. */
-  function goToArtboard() {
-    var arr = loadActiveDocumentArtboards();
-
-    var columns = {};
-    columns["Index"] = {
-      width: 35,
-      key: "idx",
-      hideTitle: true,
-    };
-    columns[localize(strings.name_title_case)] = {
-      width: 100,
-      key: "name",
-    };
-    var result = commandPalette(
-      (commands = arr),
-      (title = localize(strings.go_to_artboard)),
-      (columns = columns),
-      (multiselect = false)
-    );
-
-    if (!result) return;
-    app.activeDocument.artboards.setActiveArtboardIndex(commandsData[result].idx);
-    app.executeMenuCommand("fitin");
-  }
-
-  /**
-   * Load all page items from the current document as objects into the data model.
-   * @returns Loaded command ids.
-   */
-  function loadActiveDocumentPageItems() {
-    var arr = [];
-    var cur, name, id, obj;
-    for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
-      cur = app.activeDocument.pageItems[i];
-      if (
-        cur.name ||
-        cur.name.length ||
-        cur.typename == "PlacedItem" ||
-        cur.typename == "SymbolItem"
-      ) {
-        if (cur.typename == "PlacedItem") {
-          name = cur.file.name;
-        } else if (cur.typename == "SymbolItem") {
-          name = cur.name || cur.name.length ? cur.name : cur.symbol.name;
-        } else {
-          name = cur.name;
-        }
-      }
-      id = generateCommandId("pageItem_" + i.toString());
-      obj = {
-        id: id,
-        name: name,
-        action: "pageItem",
-        type: cur.typename,
-        pageItem: cur,
-        layer: cur.layer.name,
-        docRequired: false,
-        selRequired: false,
-        hidden: false,
-      };
-      arr.push(id);
-      commandsData[id] = obj;
-    }
-    return arr;
-  }
-
-  /** Present a command palette with all named objects and zoom to and select the chosen one. */
-  function goToNamedObject() {
-    if (app.activeDocument.pageItems.length > namedObjectLimit)
-      alert(
-        localize(strings.go_to_named_object_limit, app.activeDocument.pageItems.length)
-      );
-
-    var arr = loadActiveDocumentPageItems();
-    if (!arr.length) {
-      alert(localize(strings.go_to_named_object_no_objects));
-      return;
-    }
-
-    var columns = {};
-    columns[localize(strings.name_title_case)] = {
-      width: 100,
-      key: "name",
-    };
-    columns[localize(strings.type_title_case)] = {
-      width: 100,
-      key: "type",
-    };
-    columns[localize(strings.layer_title_case)] = {
-      width: 100,
-      key: "layer",
-    };
-    var result = commandPalette(
-      (commands = arr),
-      (title = localize(strings.go_to_named_object)),
-      (columns = columns),
-      (multiselect = false)
-    );
-
-    if (!result) return;
-    var pageItem = commandsData[result].pageItem;
-    app.activeDocument.selection = null;
-    pageItem.selected = true;
-
-    // reset zoom for current document
-    app.activeDocument.views[0].zoom = 1;
-
-    zoomIntoPageItem(pageItem);
   }
 
   /**
    * Load recently opened files as objects into the data model.
-   * @returns Loaded command ids.
+   * @returns File command ids.
    */
   function loadRecentFiles() {
     var arr = [];
@@ -11870,7 +12069,10 @@ See the LICENSE file for details.
     return arr;
   }
 
-  /** Present a command palette with all recently opened files and open the chosen one. */
+  /**
+   * Present a palette with recently opened files.
+   * The selected file is opened.
+   */
   function recentFiles() {
     var arr = loadRecentFiles();
     var columns = {};
@@ -11878,8 +12080,7 @@ See the LICENSE file for details.
       width: 100,
       key: "name",
     };
-    columns["Path"] = {
-      // FIXME: localize
+    columns[localize(strings.path_title_case)] = {
       width: 100,
       key: "path",
     };
@@ -11898,16 +12099,25 @@ See the LICENSE file for details.
     }
   }
 
-  /** Present a command palette with more recent commands and process the selected one. */
-  function showRecentCommands() {
-    var result = commandPalette(
-      (commands = mostRecentCommands),
-      (title = localize(strings.recent_commands)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
+  /**
+   * Redraw all application windows.
+   */
+  function redrawWindows() {
+    app.redraw();
+  }
+
+  /**
+   * Reveal the active document on the users system by opening it's parent folder.
+   */
+  function revealActiveDocument() {
+    if (activeDocument) {
+      if (app.activeDocument.path.fsName) {
+        var fp = new Folder(app.activeDocument.path.fsName);
+        fp.execute();
+      } else {
+        alert(localize(strings.active_document_not_saved));
+      }
+    }
   }
   /**
    * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
@@ -11922,98 +12132,6 @@ See the LICENSE file for details.
         badActions.push(actions[i]);
     }
     return badActions;
-  }
-
-  // WORKFLOW AUTOMATION
-
-  /**
-   * Build or Edit workflows.
-   * @param {String} editWorkflowId Id of a workflow to edit.
-   */
-  function buildWorkflow(editWorkflowId) {
-    var availableWorkflowCommands = filterCommands(
-      (commands = null),
-      (types = [
-        "file",
-        "folder",
-        "script",
-        "workflow",
-        "menu",
-        "tool",
-        "action",
-        "builtin",
-      ]),
-      (showHidden = true),
-      (showNonRelevant = true),
-      (hideSpecificCommands = workflow ? [workflow.id] : []) // hide current workflow when editing to prevent recursive loop
-    );
-    // show the workflow builder dialog
-    var result = workflowBuilder(availableWorkflowCommands, editWorkflowId);
-
-    if (!result) return;
-
-    var id;
-    // when overwriting delete previous version and update prefs
-    if (result.overwrite) {
-      for (var i = prefs.workflows.length - 1; i >= 0; i--) {
-        if (prefs.workflows[i].name == result.name) {
-          prefs.workflows[i].actions = result.actions;
-          id = prefs.workflows[i].id;
-        }
-      }
-    } else {
-      id = cleanupCommandId("workflow_" + result.name.toLowerCase());
-      var workflow = {
-        id: id,
-        name: result.name,
-        actions: result.actions,
-        type: "workflow",
-        docRequired: false,
-        selRequired: false,
-        hidden: false,
-      };
-      prefs.workflows.push(workflow);
-    }
-
-    addToStartup([id]);
-  }
-
-  /** Show all workflows. */
-  function showAllWorkflows() {
-    var workflows = filterCommands(
-      (commands = null),
-      (types = ["workflow"]),
-      (showHidden = true),
-      (showNonRelevant = false),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = workflows),
-      (title = localize(strings.Workflows)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = false)
-    );
-    if (!result) return;
-    processCommand(result);
-  }
-
-  /** Choose a workflow to edit. */
-  function editWorkflow() {
-    var workflows = filterCommands(
-      (commands = null),
-      (types = ["workflow"]),
-      (showHidden = true),
-      (showNonRelevant = false),
-      (hideSpecificCommands = null)
-    );
-    var result = commandPalette(
-      (commands = workflows),
-      (title = localize(strings.wf_choose)),
-      (columns = paletteSettings.columnSets.default),
-      (multiselect = false)
-    );
-    if (!result) return;
-    buildWorkflow(result);
   }
 
   // load the user data

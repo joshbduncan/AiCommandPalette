@@ -55,10 +55,8 @@ function executeAction(command) {
   var alertString = strings.cd_error_executing;
   switch (command.type.toLowerCase()) {
     case "config":
-      func = configAction;
-      break;
     case "builtin":
-      func = builtinAction;
+      func = internalAction;
       break;
     case "menu":
       func = menuAction;
@@ -129,35 +127,22 @@ function scriptAction(command) {
  * Execute script actions.
  * @param {Object} command Command to execute.
  */
-function configAction(command) {
+function internalAction(command) {
   var write = true;
   switch (command.action) {
-    case "settings":
-      AiCommandPaletteSettings();
-      write = false;
-      break;
+    // config commands
     case "about":
-      about();
       write = false;
+      about();
       break;
-    case "buildStartup":
-      buildStartup();
+    case "clearHistory": // FIXME: Update alert to include warning about latches
+      clearHistory();
       break;
-    case "buildWorkflow":
-      buildWorkflow();
+    case "customizeStartup":
+      customizeStartup();
       break;
-    case "editWorkflow":
-      editWorkflow();
-      break;
-    case "loadScript":
-      loadScripts();
-      break;
-    case "loadFileBookmark":
-      loadFileBookmark();
-      write = true;
-      break;
-    case "loadFolderBookmark":
-      loadFolderBookmark();
+    case "deleteCommand":
+      deleteCommand();
       break;
     case "hideCommand":
       hideCommand();
@@ -165,94 +150,99 @@ function configAction(command) {
     case "unhideCommand":
       unhideCommand();
       break;
-    case "deleteCommand":
-      deleteCommand();
-      break;
     case "enableTypeInSearch":
     case "disableTypeInSearch":
-      prefs.searchIncludesType = !prefs.searchIncludesType;
-      break;
-    case "clearHistory": // FIXME: Update alert to include warning about latches
-      if (
-        !confirm(
-          localize(strings.cd_clear_history_confirm),
-          "noAsDflt",
-          localize(strings.cd_exception)
-        )
-      )
-        return;
-      userHistory.clear();
-      alert(localize(strings.history_cleared));
+      toggleTypeInSearch();
       break;
     case "revealPrefFile":
-      userPrefs.reveal();
       write = false;
+      revealPrefFile();
       break;
+    case "showAllBuiltinCommands":
+      write = false;
+      showAllBuiltinCommands();
+      break;
+    case "settings":
+      write = false;
+      settings();
+      break;
+
+    // builtin commands
+    case "allActions":
+      write = false;
+      showAllActions();
+      break;
+    case "allBookmarks":
+      write = false;
+      showAllBookmarks();
+      break;
+    case "allScripts":
+      write = false;
+      showAllScripts();
+      break;
+    case "allWorkflows":
+      write = false;
+      showAllWorkflows();
+      break;
+    case "buildWorkflow":
+      buildWorkflow();
+      break;
+    case "editWorkflow":
+      editWorkflow();
+      break;
+    case "documentReport":
+      write = false;
+      documentReport();
+      break;
+    case "exportVariables":
+      write = false;
+      exportVariables();
+      break;
+    case "goToArtboard":
+      write = false;
+      goToArtboard();
+      break;
+    case "goToDocument":
+      write = false;
+      goToOpenDocument();
+      break;
+    case "goToNamedObject":
+      write = false;
+      goToNamedObject();
+      break;
+    case "imageCapture":
+      write = false;
+      imageCapture();
+      break;
+    case "loadFileBookmark":
+      loadFileBookmark();
+      break;
+    case "loadFolderBookmark":
+      loadFolderBookmark();
+      break;
+    case "loadScript":
+      loadScripts();
+      break;
+    case "recentCommands":
+      write = false;
+      recentUserCommands();
+      break;
+    case "recentFiles":
+      write = false;
+      recentFiles();
+      break;
+    case "redrawWindows":
+      write = false;
+      redrawWindows();
+      break;
+    case "revealActiveDocument":
+      write = false;
+      revealActiveDocument();
+      break;
+
     default:
       alert(localize(strings.cd_invalid, action));
   }
   if (!write) return;
   userPrefs.save();
-}
-
-/**
- * Execute built-in commands.
- * @param {Object} command Command to execute.
- */
-function builtinAction(command) {
-  switch (command.action) {
-    case "recentCommands": // TODO
-      showRecentCommands();
-      break;
-    case "allWorkflows":
-      showAllWorkflows();
-      break;
-    case "allScripts":
-      showAllScripts();
-      break;
-    case "allBookmarks":
-      showAllBookmarks();
-      break;
-    case "allActions":
-      showAllActions();
-      break;
-    case "documentReport":
-      if (activeDocument) documentReport();
-      break;
-    case "exportVariables":
-      if (activeDocument) exportVariables();
-      break;
-    case "goToArtboard":
-      if (activeDocument) goToArtboard();
-      break;
-    case "goToDocument":
-      if (app.documents.length > 1) {
-        goToOpenDocument();
-      }
-      break;
-    case "goToNamedObject":
-      if (activeDocument) goToNamedObject();
-      break;
-    case "imageCapture":
-      imageCapture();
-      break;
-    case "recentFiles":
-      recentFiles();
-      break;
-    case "redrawWindows":
-      app.redraw();
-      break;
-    case "revealActiveDocument":
-      if (activeDocument) {
-        if (app.activeDocument.path.fsName) {
-          var fp = new Folder(app.activeDocument.path.fsName);
-          fp.execute();
-        } else {
-          alert(localize(strings.active_document_not_saved));
-        }
-      }
-      break;
-    default:
-      alert(localize(strings.cd_invalid, action));
-  }
 }
