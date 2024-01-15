@@ -6,17 +6,16 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ### Todo
 
-- [ ] validate all startup screen items on launch
-- [ ] when deleting a command, check to see if included in any workflows
 - [ ] fix and reenable old prefs version check
-- [ ] add check and alert before presenting a possible empty command palette
+- [ ] documentation command
+- [ ] use gh wiki for documentation
 
 ### Doing
 
-- [ ] fix overwriting bookmarks, scripts, and workflows
 
 ### Done ✓
 
+- [x] fix overwriting bookmarks, scripts, and workflows
 - [x] ask if new scripts, workflows, and bookmarks should be added to the start screen
 - [x] startup screens customization: Allow the user to set what shows up when the command palette is first opened. Could be favorite commands, workflows, etc.
 - [x] update hidden commands to now use command id in setting file instead of name

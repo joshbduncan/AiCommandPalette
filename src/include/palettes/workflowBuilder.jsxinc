@@ -36,12 +36,19 @@ function workflowBuilder(commands, editWorkflowId) {
   pSteps.alignChildren = ["fill", "center"];
   pSteps.margins = 20;
 
-  var editWorkflow;
+  // if editing a workflow check to make sure all of it's actions are still valid
+  var editWorkflow, step;
   var actionSteps = [];
   if (editWorkflowId) {
     editWorkflow = commandsData[editWorkflowId];
     for (var i = 0; i < editWorkflow.actions.length; i++) {
-      actionSteps.push(editWorkflow.actions[i]);
+      step = editWorkflow.actions[i];
+      if (!commandsData.hasOwnProperty(editWorkflow.actions[i])) {
+        step += " [NOT FOUND]";
+      } else if (!commandVersionCheck(editWorkflow.actions[i])) {
+        step += " [INCOMPATIBLE AI VERSION]";
+      }
+      actionSteps.push(step);
     }
   }
 

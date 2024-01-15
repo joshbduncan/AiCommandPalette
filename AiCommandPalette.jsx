@@ -556,14 +556,9 @@ See the LICENSE file for details.
     artboard: { en: "Artboard", de: "Artboard", ru: "Artboard" },
     artboards: { en: "Artboards", de: "Zeichenfl\u00e4chen", ru: "Artboards" },
     bm_already_loaded: {
-      en: "Bookmark already loaded.\nWould you like to replace the previous bookmark with the new one?",
-      de: "Dieses Lesezeichen wurde bereits erstellt..\nM\u00f6chten Sie es mit dem neuen Lesezeichen ersetzen?",
-      ru: "Bookmark already loaded.\nWould you like to replace the previous bookmark with the new one?",
-    },
-    bm_already_loaded_title: {
-      en: "Bookmark Load Conflict",
-      de: "Konflikt beim Laden des Lesezeichens",
-      ru: "Bookmark Load Conflict",
+      en: "Bookmark already loaded.",
+      de: "Dieses Lesezeichen wurde bereits erstellt.",
+      ru: "Bookmark already loaded.",
     },
     bm_error_execution: {
       en: "Error opening bookmark:\n%1\n\n%2",
@@ -605,14 +600,14 @@ See the LICENSE file for details.
       ru: "Command '%1' requires an active selection. Continue Anyway?",
     },
     cd_all: {
-      en: "All Built-In Menu Commands",
-      de: "Alle integrierten Men\u00fcbefehle",
-      ru: "\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b \u043c\u0435\u043d\u044e",
+      en: "All Built-In Commands",
+      de: "All Built-In Commands",
+      ru: "All Built-In Commands",
     },
     cd_clear_history_confirm: {
-      en: "Are you sure you want to clear your history?",
-      de: "Are you sure you want to clear your history?",
-      ru: "Are you sure you want to clear your history?",
+      en: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
+      de: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
+      ru: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
     },
     cd_add_to_startup: {
       en: "Add new command(s) to your startup?",
@@ -895,11 +890,6 @@ See the LICENSE file for details.
       en: "Save Active Document Report",
       de: "Save Active Document Report",
       ru: "Save Active Document Report",
-    },
-    sc_already_loaded: {
-      en: "Script already loaded.\nWould you like to replace the previous script with the new one?",
-      de: "Skript bereits geladen.\nM\u00f6chten Sie es ersetzen?",
-      ru: "\u0421\u043a\u0440\u0438\u043f\u0442 \u0443\u0436\u0435 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\n\u0425\u043e\u0442\u0438\u0442\u0435 \u0435\u0433\u043e \u0437\u0430\u043c\u0435\u043d\u0438\u0442\u044c?",
     },
     sc_already_loaded_title: {
       en: "Script Load Conflict",
@@ -2560,7 +2550,7 @@ See the LICENSE file for details.
       id: "menu_AISlice_Clip_to_Artboard",
       action: "AISlice Clip to Artboard",
       type: "menu",
-      docRequired: false,
+      docRequired: true,
       selRequired: true,
       name: {
         en: "Object > Slice > Clip to Artboard",
@@ -9234,6 +9224,19 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    builtin_imageCapture: {
+      id: "builtin_imageCapture",
+      action: "imageCapture",
+      type: "builtin",
+      docRequired: true,
+      selRequired: false,
+      name: {
+        en: "Export Active Artboard As PNG",
+        de: "Ausgew\u00e4hlte Zeichenfl\u00e4che als PNG exportieren",
+        ru: "Export Active Artboard As PNG",
+      },
+      hidden: false,
+    },
     builtin_exportVariables: {
       id: "builtin_exportVariables",
       action: "exportVariables",
@@ -9260,19 +9263,6 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    builtin_goToDocument: {
-      id: "builtin_goToDocument",
-      action: "goToDocument",
-      type: "builtin",
-      docRequired: true,
-      selRequired: false,
-      name: {
-        en: "Go To Open Document",
-        de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen \u2026",
-        ru: "Go To Open Document",
-      },
-      hidden: false,
-    },
     builtin_goToNamedObject: {
       id: "builtin_goToNamedObject",
       action: "goToNamedObject",
@@ -9286,16 +9276,16 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    builtin_imageCapture: {
-      id: "builtin_imageCapture",
-      action: "imageCapture",
+    builtin_goToDocument: {
+      id: "builtin_goToDocument",
+      action: "goToDocument",
       type: "builtin",
       docRequired: true,
       selRequired: false,
       name: {
-        en: "Export Active Artboard As PNG",
-        de: "Ausgew\u00e4hlte Zeichenfl\u00e4che als PNG exportieren",
-        ru: "Export Active Artboard As PNG",
+        en: "Go To Open Document",
+        de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen \u2026",
+        ru: "Go To Open Document",
       },
       hidden: false,
     },
@@ -9338,19 +9328,6 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    builtin_recentCommands: {
-      id: "builtin_recentCommands",
-      action: "recentCommands",
-      type: "builtin",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Recent Commands...",
-        de: "Letzte Befehle \u2026",
-        ru: "Recent Commands...",
-      },
-      hidden: false,
-    },
     builtin_recentFiles: {
       id: "builtin_recentFiles",
       action: "recentFiles",
@@ -9361,6 +9338,19 @@ See the LICENSE file for details.
         en: "Open Recent File...",
         de: "Letzte Datei \u00f6ffnen \u2026",
         ru: "Open Recent File...",
+      },
+      hidden: false,
+    },
+    builtin_recentCommands: {
+      id: "builtin_recentCommands",
+      action: "recentCommands",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Recent Commands...",
+        de: "Letzte Befehle \u2026",
+        ru: "Recent Commands...",
       },
       hidden: false,
     },
@@ -9396,6 +9386,19 @@ See the LICENSE file for details.
         en: "About Ai Command Palette...",
         de: "\u00dcber Kurzbefehle \u2026",
         ru: "\u041e\u0431 Ai Command Palette",
+      },
+      hidden: false,
+    },
+    config_settings: {
+      id: "config_settings",
+      action: "settings",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Ai Command Palette Settings...",
+        de: "Kurzbefehle \u2013 Einstellungen \u2026",
+        ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
       },
       hidden: false,
     },
@@ -9438,32 +9441,6 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    config_hideCommand: {
-      id: "config_hideCommand",
-      action: "hideCommand",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Hide Commands...",
-        de: "Befehle ausblenden \u2026",
-        ru: "\u0421\u043a\u0440\u044b\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
-      },
-      hidden: false,
-    },
-    config_unhideCommand: {
-      id: "config_unhideCommand",
-      action: "unhideCommand",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Unhide Commands...",
-        de: "Befehle einblenden \u2026",
-        ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
-      },
-      hidden: false,
-    },
     config_disableTypeInSearch: {
       id: "config_disableTypeInSearch",
       action: "disableTypeInSearch",
@@ -9487,6 +9464,19 @@ See the LICENSE file for details.
         en: "Enable Searching on Command Type",
         de: "Enable Searching on Command Type",
         ru: "Enable Searching on Command Type",
+      },
+      hidden: false,
+    },
+    config_hideCommand: {
+      id: "config_hideCommand",
+      action: "hideCommand",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Hide Commands...",
+        de: "Befehle ausblenden \u2026",
+        ru: "\u0421\u043a\u0440\u044b\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
       },
       hidden: false,
     },
@@ -9516,16 +9506,16 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    config_settings: {
-      id: "config_settings",
-      action: "settings",
+    config_unhideCommand: {
+      id: "config_unhideCommand",
+      action: "unhideCommand",
       type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Ai Command Palette Settings...",
-        de: "Kurzbefehle \u2013 Einstellungen \u2026",
-        ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+        en: "Unhide Commands...",
+        de: "Befehle einblenden \u2026",
+        ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
       },
       hidden: false,
     },
@@ -9662,7 +9652,7 @@ See the LICENSE file for details.
     var file = setupFileObject(folder, userPrefsFileName);
     return file;
   };
-  userPrefs.load = function () {
+  userPrefs.load = function (inject) {
     var file = this.file();
     if (file.exists) {
       var loadedData, prop, propsToSkip;
@@ -9677,6 +9667,7 @@ See the LICENSE file for details.
           if (propsToSkip.includes(prop)) continue;
           prefs[prop] = loadedData[prop];
         }
+        if (inject) this.inject();
       } catch (e) {
         file.rename(file.name + ".bak");
         this.reveal();
@@ -9913,13 +9904,20 @@ See the LICENSE file for details.
      * @param {Array}  columnKeys Command lookup key for each column.
      */
     loadCommands: function (listbox, commands, columnKeys) {
-      var id, command, item;
+      var id, command, str, item;
       for (var i = 0; i < commands.length; i++) {
         id = commands[i];
+        // if command is no longer available just show the id
+        if (!commandsData.hasOwnProperty(id)) {
+          item = listbox.add("item", id);
+          continue;
+        }
         command = commandsData[id];
         for (var j = 0; j < columnKeys.length; j++) {
+          str = determineCorrectString(command, columnKeys[j]);
+          if (str == null) alert(id);
           if (j === 0) {
-            item = listbox.add("item", determineCorrectString(command, columnKeys[j]));
+            item = listbox.add("item", str);
             continue;
           }
           item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);
@@ -10346,12 +10344,19 @@ See the LICENSE file for details.
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
 
-    var editWorkflow;
+    // if editing a workflow check to make sure all of it's actions are still valid
+    var editWorkflow, step;
     var actionSteps = [];
     if (editWorkflowId) {
       editWorkflow = commandsData[editWorkflowId];
       for (var i = 0; i < editWorkflow.actions.length; i++) {
-        actionSteps.push(editWorkflow.actions[i]);
+        step = editWorkflow.actions[i];
+        if (!commandsData.hasOwnProperty(editWorkflow.actions[i])) {
+          step += " [NOT FOUND]";
+        } else if (!commandVersionCheck(editWorkflow.actions[i])) {
+          step += " [INCOMPATIBLE AI VERSION]";
+        }
+        actionSteps.push(step);
       }
     }
 
@@ -10541,17 +10546,9 @@ See the LICENSE file for details.
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
 
-    var currentStartupCommands = filterCommands(
-      (commands = prefs.startupCommands),
-      (types = null),
-      (showHidden = true),
-      (showNonRelevant = true),
-      (hideSpecificCommands = null)
-    );
-
     // setup the workflow action steps listbox
     var steps = new ListBoxWrapper(
-      currentStartupCommands,
+      prefs.startupCommands,
       pSteps,
       "steps",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
@@ -10712,9 +10709,9 @@ See the LICENSE file for details.
    */
   function relevantCommand(command) {
     // hide commands requiring an active documents if requested
-    if (command.docRequired && !appDocuments) return false;
+    if (command.docRequired && app.documents.length < 1) return false;
     // hide commands requiring an active selection if requested
-    if (command.selRequired && !docSelection) return false;
+    if (command.selRequired && app.activeDocument.selection.length < 1) return false;
 
     // hide `Edit Workflow...` command if no workflows
     if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
@@ -10758,8 +10755,10 @@ See the LICENSE file for details.
     if (command.type == "workflow") {
       // check to make sure all workflow commands are valid
       badActions = checkWorkflowActions(command.actions);
-      if (badActions.length) {
+      if (badActions.length > 0) {
         alert(localize(strings.wf_needs_attention, badActions.join("\n")));
+        buildWorkflow(id, badActions);
+        userPrefs.save();
         return;
       }
       // run each action in the workflow
@@ -10774,11 +10773,8 @@ See the LICENSE file for details.
    * @param {Object} command Command to execute.
    */
   function executeAction(command) {
-    // recheck active document and selection incase previous workflow action changed them
-    appDocuments = app.documents.length > 0;
-    docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
     // check command to see if an active document is required
-    if (command.docRequired && !appDocuments)
+    if (command.docRequired && app.documents.length < 1)
       if (
         !confirm(
           localize(strings.cd_active_document_required, command.action),
@@ -10789,7 +10785,7 @@ See the LICENSE file for details.
         return;
 
     // check command to see if an active selection is required
-    if (command.selRequired && !docSelection)
+    if (command.selRequired && app.activeDocument.selection.length < 1)
       if (
         !confirm(
           localize(strings.cd_active_selection_required, command.action),
@@ -10884,7 +10880,7 @@ See the LICENSE file for details.
         write = false;
         about();
         break;
-      case "clearHistory": // FIXME: Update alert to include warning about latches
+      case "clearHistory":
         clearHistory();
         break;
       case "customizeStartup":
@@ -11143,13 +11139,17 @@ See the LICENSE file for details.
           prefs[typesToCheck[i]].splice(j, 1);
       }
     }
+
+    // also remove the commands from startup if included there
+    for (var i = prefs.startupCommands.length - 1; i >= 0; i--) {
+      if (result.includes(prefs.startupCommands[i])) prefs.startupCommands.splice(i, 1);
+    }
   }
 
   /**
    * Enable/Disable searching on command type as well as command name.
    */
   function toggleTypeInSearch() {
-    // TODO: add alert
     prefs.searchIncludesType = !prefs.searchIncludesType;
   }
 
@@ -11195,7 +11195,7 @@ See the LICENSE file for details.
     );
     var result = commandPalette(
       (commands = builtins),
-      (title = "All Built-In Commands"), // FIXME: localize
+      (title = localize(strings.cd_all)),
       (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
@@ -11873,36 +11873,20 @@ See the LICENSE file for details.
     if (files.length == 0) return;
 
     // get all current bookmark paths to ensure no duplicates
-    var currentFileBookmarkIds = [];
     var currentFileBookmarkPaths = [];
     for (var i = 0; i < prefs.bookmarks.length; i++) {
       if (prefs.bookmarks[i].type != "file") continue;
-      currentFileBookmarkIds.push(prefs.bookmarks[i].id);
       currentFileBookmarkPaths.push(prefs.bookmarks[i].path);
     }
 
     var f, bookmark, bookmarkName, id, idx, oldId;
     var newBookmarks = [];
     var newBookmarkIds = [];
-    var oldBookmarksToRemoveFromStartup = [];
     for (var j = 0; j < files.length; j++) {
       f = files[j];
-      if (currentFileBookmarkPaths.includes(f.fsName)) {
-        idx = currentFileBookmarkPaths.indexOf(f.fsName);
-        if (
-          !confirm(
-            localize(strings.bm_already_loaded),
-            "noAsDflt",
-            localize(strings.bm_already_loaded_title)
-          )
-        )
-          continue;
-        oldId = prefs.startupCommands.splice(
-          prefs.startupCommands.indexOf(currentFileBookmarkIds[idx]),
-          1
-        );
-        delete commandsData[oldId];
-      }
+
+      // check if already loaded and skip if so
+      if (currentFileBookmarkPaths.includes(f.fsName)) continue;
 
       bookmarkName = decodeURI(f.name);
       id = generateCommandId("bookmark_" + bookmarkName.toLowerCase());
@@ -11942,15 +11926,10 @@ See the LICENSE file for details.
       currentFolderBookmarks.push(prefs.bookmarks[i].path);
     }
 
+    // check if already loaded and skip if so
     if (currentFolderBookmarks.includes(f.fsName)) {
-      if (
-        !confirm(
-          localize(strings.bm_already_loaded),
-          "noAsDflt",
-          localize(strings.bm_already_loaded_title)
-        )
-      )
-        return;
+      alert(localize(strings.bm_already_loaded));
+      return;
     }
 
     var bookmarkName = decodeURI(f.name);
@@ -11989,16 +11968,9 @@ See the LICENSE file for details.
     var newScriptIds = [];
     for (var j = 0; j < files.length; j++) {
       f = files[j];
-      if (currentScripts.hasOwnProperty(f.fsName)) {
-        if (
-          !confirm(
-            localize(strings.sc_already_loaded),
-            "noAsDflt",
-            localize(strings.sc_already_loaded_title)
-          )
-        )
-          continue;
-      }
+
+      // check if already loaded and skip if so
+      if (currentScripts.includes(f.fsName)) continue;
 
       scriptName = decodeURI(f.name);
       id = generateCommandId("script_" + scriptName.toLowerCase());
@@ -12135,8 +12107,7 @@ See the LICENSE file for details.
   }
 
   // load the user data
-  userPrefs.load();
-  userPrefs.inject();
+  userPrefs.load(true);
   userActions.load();
   userHistory.load();
 
@@ -12144,9 +12115,6 @@ See the LICENSE file for details.
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }
-
-  var appDocuments = app.documents.length > 0;
-  var docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
 
   // SHOW THE COMMAND PALETTE
   var queryableCommands = filterCommands(

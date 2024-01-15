@@ -34,8 +34,7 @@ See the LICENSE file for details.
   //@include "commands.jsxinc"
 
   // load the user data
-  userPrefs.load();
-  userPrefs.inject();
+  userPrefs.load(true);
   userActions.load();
   userHistory.load();
 
@@ -43,9 +42,6 @@ See the LICENSE file for details.
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }
-
-  var appDocuments = app.documents.length > 0;
-  var docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
 
   // SHOW THE COMMAND PALETTE
   var queryableCommands = filterCommands(

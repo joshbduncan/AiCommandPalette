@@ -80,13 +80,20 @@ ListBoxWrapper.prototype = {
    * @param {Array}  columnKeys Command lookup key for each column.
    */
   loadCommands: function (listbox, commands, columnKeys) {
-    var id, command, item;
+    var id, command, str, item;
     for (var i = 0; i < commands.length; i++) {
       id = commands[i];
+      // if command is no longer available just show the id
+      if (!commandsData.hasOwnProperty(id)) {
+        item = listbox.add("item", id);
+        continue;
+      }
       command = commandsData[id];
       for (var j = 0; j < columnKeys.length; j++) {
+        str = determineCorrectString(command, columnKeys[j]);
+        if (str == null) alert(id);
         if (j === 0) {
-          item = listbox.add("item", determineCorrectString(command, columnKeys[j]));
+          item = listbox.add("item", str);
           continue;
         }
         item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);

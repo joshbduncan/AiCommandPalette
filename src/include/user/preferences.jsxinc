@@ -34,7 +34,7 @@ userPrefs.file = function () {
   var file = setupFileObject(folder, userPrefsFileName);
   return file;
 };
-userPrefs.load = function () {
+userPrefs.load = function (inject) {
   var file = this.file();
   if (file.exists) {
     var loadedData, prop, propsToSkip;
@@ -49,6 +49,7 @@ userPrefs.load = function () {
         if (propsToSkip.includes(prop)) continue;
         prefs[prop] = loadedData[prop];
       }
+      if (inject) this.inject();
     } catch (e) {
       file.rename(file.name + ".bak");
       this.reveal();

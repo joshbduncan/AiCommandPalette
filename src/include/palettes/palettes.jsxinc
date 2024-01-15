@@ -51,9 +51,9 @@ function filterCommands(
  */
 function relevantCommand(command) {
   // hide commands requiring an active documents if requested
-  if (command.docRequired && !appDocuments) return false;
+  if (command.docRequired && app.documents.length < 1) return false;
   // hide commands requiring an active selection if requested
-  if (command.selRequired && !docSelection) return false;
+  if (command.selRequired && app.activeDocument.selection.length < 1) return false;
 
   // hide `Edit Workflow...` command if no workflows
   if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;

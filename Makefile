@@ -1,5 +1,6 @@
 SHELL := /bin/bash
 PWD := $(realpath $(dir $(abspath $(firstword $(MAKEFILE_LIST)))))
+CSV_URL = https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA
 
 .DEFAULT_GOAL := help
 .PHONY: help
@@ -12,6 +13,9 @@ help: ## Display this help section
 commands:  ## download latest command data
 	@echo "⬇️ download commands..."
 	venv/bin/python tools/build_data.py -d | prettier > src/include/data.jsxinc
+
+sheet:  ## open the csv builder google sheet
+	open ${CSV_URL}
 
 copy:  ## copy compiled script to Ai scripts folder
 	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2024/Presets.localized/en_US/Scripts

@@ -9,8 +9,10 @@ function processCommand(id) {
   if (command.type == "workflow") {
     // check to make sure all workflow commands are valid
     badActions = checkWorkflowActions(command.actions);
-    if (badActions.length) {
+    if (badActions.length > 0) {
       alert(localize(strings.wf_needs_attention, badActions.join("\n")));
+      buildWorkflow(id, badActions);
+      userPrefs.save();
       return;
     }
     // run each action in the workflow
@@ -25,11 +27,8 @@ function processCommand(id) {
  * @param {Object} command Command to execute.
  */
 function executeAction(command) {
-  // recheck active document and selection incase previous workflow action changed them
-  appDocuments = app.documents.length > 0;
-  docSelection = appDocuments ? app.activeDocument.selection.length > 0 : false;
   // check command to see if an active document is required
-  if (command.docRequired && !appDocuments)
+  if (command.docRequired && app.documents.length < 1)
     if (
       !confirm(
         localize(strings.cd_active_document_required, command.action),
@@ -40,7 +39,7 @@ function executeAction(command) {
       return;
 
   // check command to see if an active selection is required
-  if (command.selRequired && !docSelection)
+  if (command.selRequired && app.activeDocument.selection.length < 1)
     if (
       !confirm(
         localize(strings.cd_active_selection_required, command.action),
@@ -135,7 +134,7 @@ function internalAction(command) {
       write = false;
       about();
       break;
-    case "clearHistory": // FIXME: Update alert to include warning about latches
+    case "clearHistory":
       clearHistory();
       break;
     case "customizeStartup":

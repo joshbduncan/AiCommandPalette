@@ -146,13 +146,17 @@ function deleteCommand() {
         prefs[typesToCheck[i]].splice(j, 1);
     }
   }
+
+  // also remove the commands from startup if included there
+  for (var i = prefs.startupCommands.length - 1; i >= 0; i--) {
+    if (result.includes(prefs.startupCommands[i])) prefs.startupCommands.splice(i, 1);
+  }
 }
 
 /**
  * Enable/Disable searching on command type as well as command name.
  */
 function toggleTypeInSearch() {
-  // TODO: add alert
   prefs.searchIncludesType = !prefs.searchIncludesType;
 }
 
@@ -198,7 +202,7 @@ function showAllBuiltinCommands() {
   );
   var result = commandPalette(
     (commands = builtins),
-    (title = "All Built-In Commands"), // FIXME: localize
+    (title = localize(strings.cd_all)),
     (columns = paletteSettings.columnSets.default),
     (multiselect = false)
   );
@@ -876,36 +880,20 @@ function loadFileBookmark() {
   if (files.length == 0) return;
 
   // get all current bookmark paths to ensure no duplicates
-  var currentFileBookmarkIds = [];
   var currentFileBookmarkPaths = [];
   for (var i = 0; i < prefs.bookmarks.length; i++) {
     if (prefs.bookmarks[i].type != "file") continue;
-    currentFileBookmarkIds.push(prefs.bookmarks[i].id);
     currentFileBookmarkPaths.push(prefs.bookmarks[i].path);
   }
 
   var f, bookmark, bookmarkName, id, idx, oldId;
   var newBookmarks = [];
   var newBookmarkIds = [];
-  var oldBookmarksToRemoveFromStartup = [];
   for (var j = 0; j < files.length; j++) {
     f = files[j];
-    if (currentFileBookmarkPaths.includes(f.fsName)) {
-      idx = currentFileBookmarkPaths.indexOf(f.fsName);
-      if (
-        !confirm(
-          localize(strings.bm_already_loaded),
-          "noAsDflt",
-          localize(strings.bm_already_loaded_title)
-        )
-      )
-        continue;
-      oldId = prefs.startupCommands.splice(
-        prefs.startupCommands.indexOf(currentFileBookmarkIds[idx]),
-        1
-      );
-      delete commandsData[oldId];
-    }
+
+    // check if already loaded and skip if so
+    if (currentFileBookmarkPaths.includes(f.fsName)) continue;
 
     bookmarkName = decodeURI(f.name);
     id = generateCommandId("bookmark_" + bookmarkName.toLowerCase());
@@ -945,15 +933,10 @@ function loadFolderBookmark() {
     currentFolderBookmarks.push(prefs.bookmarks[i].path);
   }
 
+  // check if already loaded and skip if so
   if (currentFolderBookmarks.includes(f.fsName)) {
-    if (
-      !confirm(
-        localize(strings.bm_already_loaded),
-        "noAsDflt",
-        localize(strings.bm_already_loaded_title)
-      )
-    )
-      return;
+    alert(localize(strings.bm_already_loaded));
+    return;
   }
 
   var bookmarkName = decodeURI(f.name);
@@ -992,16 +975,9 @@ function loadScripts() {
   var newScriptIds = [];
   for (var j = 0; j < files.length; j++) {
     f = files[j];
-    if (currentScripts.hasOwnProperty(f.fsName)) {
-      if (
-        !confirm(
-          localize(strings.sc_already_loaded),
-          "noAsDflt",
-          localize(strings.sc_already_loaded_title)
-        )
-      )
-        continue;
-    }
+
+    // check if already loaded and skip if so
+    if (currentScripts.includes(f.fsName)) continue;
 
     scriptName = decodeURI(f.name);
     id = generateCommandId("script_" + scriptName.toLowerCase());
