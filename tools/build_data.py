@@ -108,7 +108,8 @@ commands from google. Learn more with -h/--help"
             continue
 
         # build a command object
-        command_id = regex.sub("_", f"{row['type']}_{row['value']}")
+        stripped_command = row["value"].replace(".", "", -1)
+        command_id = regex.sub("_", f"{row['type']}_{stripped_command}")
         localized_strings = localized_strings_object(row)
         command = {
             "id": command_id,

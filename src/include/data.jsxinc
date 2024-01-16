@@ -327,9 +327,9 @@ var strings = {
     ru: "Error Loading Preferences\nA backup copy of your settings has been created.",
   },
   pref_file_non_compatible: {
-    en: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
-    de: "Fehler beim Laden der Voreinstellungen\nIhre Voreinstellungen sind nicht kompatibel mit der aktuellen Version der Kurzbefehle. Ihre Voreinstellungen werden zur\u00fcckgesetzt.\n\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
-    ru: "Error Loading Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be reset.\n\nA backup copy of your settings has been created.",
+    en: "Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.",
+    de: "Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.",
+    ru: "Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.",
   },
   pref_update_complete: {
     en: "Preferences Update Complete.",
@@ -1046,8 +1046,8 @@ var commandsData = {
     hidden: false,
     minVersion: 24,
   },
-  menu_Edit_Custom_Dictionary___: {
-    id: "menu_Edit_Custom_Dictionary___",
+  menu_Edit_Custom_Dictionary: {
+    id: "menu_Edit_Custom_Dictionary",
     action: "Edit Custom Dictionary...",
     type: "menu",
     docRequired: true,
@@ -2168,8 +2168,8 @@ var commandsData = {
     },
     hidden: false,
   },
-  menu_Rows_and_Columns____: {
-    id: "menu_Rows_and_Columns____",
+  menu_Rows_and_Columns: {
+    id: "menu_Rows_and_Columns",
     action: "Rows and Columns....",
     type: "menu",
     docRequired: true,
@@ -2820,8 +2820,8 @@ var commandsData = {
     },
     hidden: false,
   },
-  menu_Text_Wrap_Options___: {
-    id: "menu_Text_Wrap_Options___",
+  menu_Text_Wrap_Options: {
+    id: "menu_Text_Wrap_Options",
     action: "Text Wrap Options...",
     type: "menu",
     docRequired: false,
@@ -6595,8 +6595,8 @@ var commandsData = {
     minVersion: 22,
     maxVersion: 25.9,
   },
-  menu_Adobe_CSXS_Extension_com_adobe_DesignLibraries_angularLibraries: {
-    id: "menu_Adobe_CSXS_Extension_com_adobe_DesignLibraries_angularLibraries",
+  menu_Adobe_CSXS_Extension_comadobeDesignLibrariesangularLibraries: {
+    id: "menu_Adobe_CSXS_Extension_comadobeDesignLibrariesangularLibraries",
     action: "Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries",
     type: "menu",
     docRequired: false,
@@ -8618,6 +8618,19 @@ var commandsData = {
     },
     hidden: false,
     minVersion: 24,
+  },
+  builtin_documentReport: {
+    id: "builtin_documentReport",
+    action: "documentReport",
+    type: "builtin",
+    docRequired: true,
+    selRequired: false,
+    name: {
+      en: "Active Document Report",
+      de: "Active Document Report",
+      ru: "Active Document Report",
+    },
+    hidden: false,
   },
   builtin_allActions: {
     id: "builtin_allActions",

@@ -56,7 +56,7 @@ function relevantCommand(command) {
   if (command.selRequired && app.activeDocument.selection.length < 1) return false;
 
   // hide `Edit Workflow...` command if no workflows
-  if (command.id == "config_editWorkflow" && prefs.workflows.length < 1) return false;
+  if (command.id == "builtin_editWorkflow" && prefs.workflows.length < 1) return false;
   // hide `All Workflows...` command if no workflows
   if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
   // hide `All Scripts...` command if no scripts
