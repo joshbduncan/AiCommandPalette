@@ -550,6 +550,7 @@ function buildWorkflow(editWorkflowId) {
     id = generateCommandId("workflow_" + result.name.toLowerCase());
     var workflow = {
       id: id,
+      action: "workflow",
       name: result.name,
       actions: result.actions,
       type: "workflow",

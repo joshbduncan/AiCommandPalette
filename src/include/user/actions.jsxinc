@@ -23,8 +23,8 @@ userActions.load = function () {
       loc = {};
       obj = {};
       name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
+      id = generateCommandId("action_" + set + "_" + name.toLowerCase());
       id = set + "_" + name;
-      loc[currentLocale] = name + " [" + set + "]";
       obj["id"] = id;
       obj["action"] = "action";
       obj["type"] = "action";
@@ -32,7 +32,6 @@ userActions.load = function () {
       obj["name"] = name;
       obj["docRequired"] = false;
       obj["selRequired"] = false;
-      obj["loc"] = loc;
       obj["hidden"] = false;
       commandsData[id] = obj;
     }

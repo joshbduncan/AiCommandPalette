@@ -10022,8 +10022,8 @@ See the LICENSE file for details.
         loc = {};
         obj = {};
         name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
+        id = generateCommandId("action_" + set + "_" + name.toLowerCase());
         id = set + "_" + name;
-        loc[currentLocale] = name + " [" + set + "]";
         obj["id"] = id;
         obj["action"] = "action";
         obj["type"] = "action";
@@ -10031,7 +10031,6 @@ See the LICENSE file for details.
         obj["name"] = name;
         obj["docRequired"] = false;
         obj["selRequired"] = false;
-        obj["loc"] = loc;
         obj["hidden"] = false;
         commandsData[id] = obj;
       }
@@ -11759,6 +11758,7 @@ See the LICENSE file for details.
       id = generateCommandId("workflow_" + result.name.toLowerCase());
       var workflow = {
         id: id,
+        action: "workflow",
         name: result.name,
         actions: result.actions,
         type: "workflow",
