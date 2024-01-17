@@ -1,5 +1,12 @@
 // CONFIGURATION
 
+// DEVELOPMENT SETTINGS
+
+// localization testing
+// $.locale = false;
+// $.locale = "de";
+// $.locale = "ru";
+
 // ENVIRONMENT VARIABLES
 
 var aiVersion = parseFloat(app.version);
@@ -9,13 +16,6 @@ var os = $.os;
 var sysOS = /mac/i.test(os) ? "mac" : "win";
 var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 var settingsRequiredUpdateVersion = "0.10.0";
-
-// DEVELOPMENT SETTINGS
-
-// localization testing
-// $.locale = false;
-// $.locale = "de";
-// $.locale = "ru";
 
 // DIALOG SETTINGS
 

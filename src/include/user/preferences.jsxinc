@@ -64,7 +64,11 @@ userPrefs.load = function (inject) {
       if (loadedData == {}) {
         return;
       }
-      // TODO: add alert about prefs file from a different machine
+
+      // alert user if locale or os of current machine doesn't match loaded prefs
+      if (locale != loadedData.locale || os != loadedData.os)
+        alert(localize(strings.user_prefs_inconsistency));
+
       propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
       for (prop in loadedData) {
         if (propsToSkip.includes(prop)) continue;

@@ -996,6 +996,11 @@ See the LICENSE file for details.
     },
     tool: { en: "Tool", de: "Tool", ru: "Tool" },
     type_title_case: { en: "Type", de: "Type", ru: "Type" },
+    user_prefs_inconsistency: {
+      en: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
+      de: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
+      ru: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
+    },
     version: {
       en: "Version %1",
       de: "Ausf\u00fchrung %1",
@@ -9551,6 +9556,13 @@ See the LICENSE file for details.
   };
   // CONFIGURATION
 
+  // DEVELOPMENT SETTINGS
+
+  // localization testing
+  // $.locale = false;
+  // $.locale = "de";
+  // $.locale = "ru";
+
   // ENVIRONMENT VARIABLES
 
   var aiVersion = parseFloat(app.version);
@@ -9560,13 +9572,6 @@ See the LICENSE file for details.
   var sysOS = /mac/i.test(os) ? "mac" : "win";
   var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
   var settingsRequiredUpdateVersion = "0.10.0";
-
-  // DEVELOPMENT SETTINGS
-
-  // localization testing
-  // $.locale = false;
-  // $.locale = "de";
-  // $.locale = "ru";
 
   // DIALOG SETTINGS
 
@@ -9711,7 +9716,11 @@ See the LICENSE file for details.
         if (loadedData == {}) {
           return;
         }
-        // TODO: add alert about prefs file from a different machine
+
+        // alert user if locale or os of current machine doesn't match loaded prefs
+        if (locale != loadedData.locale || os != loadedData.os)
+          alert(localize(strings.user_prefs_inconsistency));
+
         propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
         for (prop in loadedData) {
           if (propsToSkip.includes(prop)) continue;

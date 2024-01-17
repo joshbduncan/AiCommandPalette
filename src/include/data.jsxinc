@@ -445,6 +445,11 @@ var strings = {
   },
   tool: { en: "Tool", de: "Tool", ru: "Tool" },
   type_title_case: { en: "Type", de: "Type", ru: "Type" },
+  user_prefs_inconsistency: {
+    en: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
+    de: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
+    ru: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
+  },
   version: {
     en: "Version %1",
     de: "Ausf\u00fchrung %1",
