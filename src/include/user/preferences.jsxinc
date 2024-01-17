@@ -143,21 +143,16 @@ function updateOldPreferences(oldFile) {
     updatedWorkflows = {};
     updatedActions = [];
     for (var workflow in data.commands.workflow) {
-      var cur;
+      var cur, updatedAction;
       for (var i = 0; i < data.commands.workflow[workflow].actions.length; i++) {
         cur = data.commands.workflow[workflow].actions[i];
+        // if the action can't be found in the LUT, just leave it as user will be prompted when they attempt to run it
         if (!commandsLUT.hasOwnProperty(cur)) {
-          alert(
-            "Workflow Update Error\n" +
-              "Workflow command '" +
-              cur +
-              "' couldn't be updated.\n\nThe command has been removed from your '" +
-              workflow.replace("Workflow: ", "") +
-              "' workflow."
-          ); // TODO: localize
-          continue;
+          updatedAction = cur;
+        } else {
+          updatedAction = commandsLUT[cur];
         }
-        updatedActions.push(commandsLUT[cur]);
+        updatedActions.push(updatedAction);
       }
       updatedWorkflows[data.commands.workflow[workflow].name] = {
         type: "workflow",
@@ -275,8 +270,6 @@ function updateOldPreferences(oldFile) {
     // update hidden commands
     var hiddenCommands = data.settings.hidden;
     prefs.hiddenCommands = hiddenCommands;
-
-    // FIXME: rename any commands that changed names (workflow action, hidden commands)
 
     userPrefs.save();
   }

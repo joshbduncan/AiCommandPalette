@@ -6,7 +6,6 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ### Todo
 
-- [ ] fix and reenable old prefs version check
 - [ ] documentation command
 - [ ] use gh wiki for documentation
 
@@ -15,6 +14,7 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 ### Done ✓
 
+- [x] fix and reenable old prefs version check
 - [x] fix overwriting bookmarks, scripts, and workflows
 - [x] ask if new scripts, workflows, and bookmarks should be added to the start screen
 - [x] startup screens customization: Allow the user to set what shows up when the command palette is first opened. Could be favorite commands, workflows, etc.
