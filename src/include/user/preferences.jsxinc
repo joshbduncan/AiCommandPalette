@@ -51,8 +51,9 @@ userPrefs.load = function (inject) {
     try {
       updateOldPreferences(oldFile);
     } catch (e) {
-      alert(localize(strings.pref_file_loading_error) + "\n" + e);
-      settingsFolder.reveal();
+      alert(localize(strings.pref_file_loading_error) + "\n\n" + e);
+      settingsFolder.execute();
+      return;
     }
     alert(localize(strings.pref_update_complete));
   }
@@ -236,12 +237,24 @@ function updateOldPreferences(oldFile) {
 
     // update workflows
     var workflows = [];
-    var workflow;
+    var workflow, actions, action;
     for (var prop in data.commands.workflow) {
+      // make sure actions are using the new command id format
+      actions = [];
+      for (var i = 0; i < data.commands.workflow[prop].actions.length; i++) {
+        action = data.commands.workflow[prop].actions[i];
+        if (
+          !commandsData.hasOwnProperty(action) &&
+          oldCommandIdsLUT.hasOwnProperty(action)
+        )
+          action = oldCommandIdsLUT[action];
+        actions.push(action);
+      }
+
       var workflow = {
         id: prop,
         name: prop,
-        actions: data.commands.workflow[prop].actions,
+        actions: actions,
         type: "workflow",
         docRequired: false,
         selRequired: false,
