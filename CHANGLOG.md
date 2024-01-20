@@ -8,13 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Added
 
+- Startup builder/customizer to set exactly what displays when Ai Command Palette first opens
 - Confirmation dialog when clearing recent commands
 
 ## Changed
 
 - Complete rebuild of command palette, goto palette, and workflow builder (ScriptUI dialog)
-- Better sorting with recent command showing higher in results list
-- Query now also uses the command type when searching (can be toggled)
+- Better sorting with recent commands showing higher in results list (Issue #24)
+- Query now also uses the command type when searching (can be toggled on/off)
+- Rebuilt preferences updater to keep old prefs working with new versions and functions
 - Split `config` and `builtin` command types in [CSV Builder Sheet](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=800918162)
     - The above change affected the following commands
         - `config_buildWorkflow` -> `builtin_buildWorkflow`
