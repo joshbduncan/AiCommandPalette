@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] 2024-01-25
+
+## Added
+
+- Startup builder/customizer to set exactly what displays when Ai Command Palette first opens
+- Confirmation dialog when clearing recent commands
+
+## Changed
+
+- Complete rebuild of command palette, goto palette, and workflow builder (ScriptUI dialog)
+- Better sorting with recent commands showing higher in results list (Issue #24)
+- Query now also uses the command type when searching (can be toggled on/off)
+- Rebuilt preferences updater to keep old prefs working with new versions and functions
+- Split `config` and `builtin` command types in [CSV Builder Sheet](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=800918162)
+    - The above change affected the following commands
+        - `config_buildWorkflow` -> `builtin_buildWorkflow`
+        - `config_editWorkflow` -> `builtin_editWorkflow`
+        - `config_allWorkflows` -> `builtin_allWorkflows`
+        - `config_loadScript` -> `builtin_loadScript`
+        - `config_allScripts` -> `builtin_allScripts`
+        - `config_setFileBookmark` -> `builtin_loadFileBookmark`
+        - `config_setFolderBookmark` -> `builtin_loadFolderBookmark`
+        - `config_allBookmarks` -> `builtin_allBookmarks`
+        - `config_allActions` -> `builtin_allActions`
+        - `config_clearRecentCommands` -> `config_clearHistory`
+        - `defaults_recentCommands` -> `builtin_recentCommands`
+        - `defaults_settings` -> `config_settings`
+
+## Fixed
+
+- Correct number of (full) table rows (commands) show on Windows (Issue #22)
+- Added back missing Document Report command
+
 ## [0.9.3] 2023-11-27
 
 ## Fixed

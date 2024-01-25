@@ -7,3 +7,4 @@ repos:
         language: system
         types: [bash]
         always_run: true
+        verbose: true

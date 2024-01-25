@@ -22,6 +22,22 @@ function setupFileObject(path, name) {
 }
 
 /**
+ * Write string data to disk.
+ * @param {String} data Data to be written.
+ * @param {Object} f    File object to write to.
+ */
+function writeData(data, f) {
+  try {
+    f.encoding = "UTF-8";
+    f.open("w");
+    f.write(data);
+    f.close();
+  } catch (e) {
+    alert(localize(strings.fl_error_writing, f));
+  }
+}
+
+/**
  * Read ExtendScript "json-like" data from file.
  * @param   {Object} f File object to read.
  * @returns {Object}   Evaluated JSON data.
@@ -34,7 +50,7 @@ function readJSONData(f) {
     json = f.read();
     f.close();
   } catch (e) {
-    alert(localize(locStrings.fl_error_loading, f));
+    alert(localize(strings.fl_error_loading, f));
   }
   obj = eval(json);
   return obj;
@@ -53,6 +69,6 @@ function writeJSONData(obj, f) {
     f.write(data);
     f.close();
   } catch (e) {
-    alert(localize(locStrings.fl_error_writing, f));
+    alert(localize(strings.fl_error_writing, f));
   }
 }

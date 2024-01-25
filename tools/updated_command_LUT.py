@@ -91,46 +91,28 @@ commands from google. Learn more with -h/--help"
 
     # read build data csv file
     commands = {}
-    strings = {}
     reader = csv.DictReader(data)
     for row in reader:
         # skip any empty rows
         if not row:
             continue
 
-        # check to see if command should be ignored
-        if row["ignore"].upper() == "TRUE":
-            continue
-
         # a string just for localization
         if row["type"].upper() == "STRING":
-            strings[row["value"]] = localized_strings_object(row)
             continue
 
         # build a command object
+        old_command_id = f'{row["type"]}_{row["value"]}'
         stripped_command = row["value"].replace(".", "", -1)
-        command_id = regex.sub("_", f"{row['type']}_{stripped_command}")
-        localized_strings = localized_strings_object(row)
-        command = {
-            "id": command_id,
-            "action": row["value"],
-            "type": row["type"],
-            "docRequired": row["docRequired"] == "TRUE",
-            "selRequired": row["selRequired"] == "TRUE",
-            "name": localized_strings,
-            "hidden": False,
-        }
-        # only add min and max version if present
-        if row["minVersion"]:
-            command["minVersion"] = convert_to_num(row["minVersion"])
-        if row["maxVersion"]:
-            command["maxVersion"] = convert_to_num(row["maxVersion"])
-        # add command to array
-        commands[command_id] = command
+        new_command_id = regex.sub("_", f"{row['type']}_{stripped_command}")
+
+        # skip if same
+        if old_command_id == new_command_id:
+            continue
+
+        commands[old_command_id] = new_command_id
 
     output = f"""// ALL BUILT DATA FROM PYTHON SCRIPT
-
-var strings = {json.dumps(strings)}
 
 var commandsData = {json.dumps(commands)}"""
 

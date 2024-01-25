@@ -4,3 +4,4 @@ venv
 working
 .prettierignore
 scratchpad.*
+node_modules

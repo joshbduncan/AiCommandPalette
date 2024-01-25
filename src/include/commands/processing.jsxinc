@@ -1,0 +1,247 @@
+// COMMAND EXECUTION
+
+/**
+ * Process command actions.
+ * @param {String} id Command id to process.
+ */
+function processCommand(id) {
+  var command = commandsData[id];
+  if (command.type == "workflow") {
+    // check to make sure all workflow commands are valid
+    badActions = checkWorkflowActions(command.actions);
+    if (badActions.length > 0) {
+      alert(localize(strings.wf_needs_attention, badActions.join("\n")));
+      buildWorkflow(id, badActions);
+      userPrefs.save();
+      return;
+    }
+    // run each action in the workflow
+    for (var i = 0; i < command.actions.length; i++) processCommand(command.actions[i]);
+  } else {
+    executeAction(command);
+  }
+}
+
+/**
+ * Execute command action.
+ * @param {Object} command Command to execute.
+ */
+function executeAction(command) {
+  // check command to see if an active document is required
+  if (command.docRequired && app.documents.length < 1)
+    if (
+      !confirm(
+        localize(strings.cd_active_document_required, command.action),
+        "noAsDflt",
+        localize(strings.cd_exception)
+      )
+    )
+      return;
+
+  // check command to see if an active selection is required
+  if (command.selRequired && app.activeDocument.selection.length < 1)
+    if (
+      !confirm(
+        localize(strings.cd_active_selection_required, command.action),
+        "noAsDflt",
+        localize(strings.cd_exception)
+      )
+    )
+      return;
+
+  // execute action based on the command type
+  var func;
+  var alertString = strings.cd_error_executing;
+  switch (command.type.toLowerCase()) {
+    case "config":
+    case "builtin":
+      func = internalAction;
+      break;
+    case "menu":
+      func = menuAction;
+      break;
+    case "tool":
+      func = toolAction;
+      alertString = strings.tl_error_selecting;
+      break;
+    case "action":
+      func = actionAction;
+      alertString = strings.ac_error_execution;
+      break;
+    case "bookmark":
+    case "file":
+    case "folder":
+      func = bookmarkAction;
+      break;
+    case "script":
+      func = scriptAction;
+      alertString = strings.sc_error_execution;
+      break;
+    default:
+      alert(localize(strings.cd_invalid, command.type));
+  }
+
+  try {
+    func(command);
+  } catch (e) {
+    alert(localize(alertString, localize(command.name), e));
+  }
+}
+
+function menuAction(command) {
+  app.executeMenuCommand(command.action);
+}
+
+function toolAction(command) {
+  app.selectTool(command.action);
+}
+
+function actionAction(command) {
+  app.doScript(command.name, command.set);
+}
+
+function bookmarkAction(command) {
+  f = command.type == "file" ? new File(command.path) : new Folder(command.path);
+  if (!f.exists) {
+    alert(localize(strings.bm_error_exists, command.path));
+    return;
+  }
+  if (command.type == "file") {
+    app.open(f);
+  } else {
+    f.execute();
+  }
+}
+
+function scriptAction(command) {
+  f = new File(command.path);
+  if (!f.exists) {
+    alert(localize(strings.sc_error_exists, command.path));
+  } else {
+    $.evalFile(f);
+  }
+}
+
+/**
+ * Execute script actions.
+ * @param {Object} command Command to execute.
+ */
+function internalAction(command) {
+  var write = true;
+  switch (command.action) {
+    // config commands
+    case "about":
+      write = false;
+      about();
+      break;
+    case "clearHistory":
+      clearHistory();
+      break;
+    case "customizeStartup":
+      customizeStartup();
+      break;
+    case "deleteCommand":
+      deleteCommand();
+      break;
+    case "hideCommand":
+      hideCommand();
+      break;
+    case "unhideCommand":
+      unhideCommand();
+      break;
+    case "enableTypeInSearch":
+    case "disableTypeInSearch":
+      toggleTypeInSearch();
+      break;
+    case "revealPrefFile":
+      write = false;
+      revealPrefFile();
+      break;
+    case "showAllBuiltinCommands":
+      write = false;
+      showAllBuiltinCommands();
+      break;
+    case "settings":
+      write = false;
+      settings();
+      break;
+
+    // builtin commands
+    case "allActions":
+      write = false;
+      showAllActions();
+      break;
+    case "allBookmarks":
+      write = false;
+      showAllBookmarks();
+      break;
+    case "allScripts":
+      write = false;
+      showAllScripts();
+      break;
+    case "allWorkflows":
+      write = false;
+      showAllWorkflows();
+      break;
+    case "buildWorkflow":
+      buildWorkflow();
+      break;
+    case "editWorkflow":
+      editWorkflow();
+      break;
+    case "documentReport":
+      write = false;
+      documentReport();
+      break;
+    case "exportVariables":
+      write = false;
+      exportVariables();
+      break;
+    case "goToArtboard":
+      write = false;
+      goToArtboard();
+      break;
+    case "goToDocument":
+      write = false;
+      goToOpenDocument();
+      break;
+    case "goToNamedObject":
+      write = false;
+      goToNamedObject();
+      break;
+    case "imageCapture":
+      write = false;
+      imageCapture();
+      break;
+    case "loadFileBookmark":
+      loadFileBookmark();
+      break;
+    case "loadFolderBookmark":
+      loadFolderBookmark();
+      break;
+    case "loadScript":
+      loadScripts();
+      break;
+    case "recentCommands":
+      write = false;
+      recentUserCommands();
+      break;
+    case "recentFiles":
+      write = false;
+      recentFiles();
+      break;
+    case "redrawWindows":
+      write = false;
+      redrawWindows();
+      break;
+    case "revealActiveDocument":
+      write = false;
+      revealActiveDocument();
+      break;
+
+    default:
+      alert(localize(strings.cd_invalid, action));
+  }
+  if (!write) return;
+  userPrefs.save();
+}

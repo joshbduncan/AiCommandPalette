@@ -1,66 +1,76 @@
+// Test every tool command known to Ai Command Palette
+
 (function () {
-  //@include "../src/include/commands.jsxinc"
+  //@include "../src/include/polyfills.jsxinc"
+  //@include "../src/include/helpers.jsxinc"
+  //@include "../src/include/io.jsxinc"
+  //@include "../src/include/palettes/palettes.jsxinc"
   //@include "../src/include/data.jsxinc"
 
-  // sample tool object
-  // {
-  //   "tool_Adobe Add Anchor Point Tool": {
-  //     action: "Adobe Add Anchor Point Tool",
-  //     type: "tool",
-  //     docRequired: true,
-  //     loc: {
-  //       en: "Add Anchor Point Tool",
-  //       de: "Ankerpunkt-hinzufügen-Werkzeug",
-  //       ru: "Инструмент: Добавить опорную точку",
-  //     },
-  //     minVersion: 24,
-  //   }
+  var f = new File(Folder.desktop + "/tool_test_results.txt");
 
   var aiVersion = parseFloat(app.version);
-  var commands = builtCommands.tool;
 
   // make sure an active document is open
   if (app.documents.length == 0) app.documents.add();
 
-  var command;
+  var toolCommands = filterCommands(
+    (commands = null),
+    (types = ["tool"]),
+    (showHidden = true),
+    (showNonRelevant = true),
+    (hideSpecificCommands = null)
+  );
+
+  if (
+    !confirm(
+      toolCommands.length +
+        " tool commands found.\n\nWARNING: This script tends to crash Illustrator on subsequent runs!\n\nProceed with tests?",
+      "noAsDflt",
+      "Proceed with tests?"
+    )
+  )
+    return;
+
+  // setup counters and strings to hold results
   var skipped = 0;
   var passed = 0;
   var failed = 0;
-  for (tool in commands) {
-    commandData = commands[tool];
-    command = commands[tool].action;
+  var s = "Ai Tool Command Tests\n\n";
+  var results = "";
 
-    // make sure Ai version meets command requirements
-    if (!versionCheck(commandData)) {
+  var tool, toolData;
+  for (var i = 0; i < toolCommands.length; i++) {
+    tool = toolCommands[i];
+    toolData = commandsData[tool];
+
+    // skip tool if not version compatible
+    if (!commandVersionCheck(toolData)) {
       skipped++;
+      results += localize(toolData.name) + " (" + toolData.action + "): SKIPPED\n";
       continue;
     }
 
     // try activating the tool
     try {
-      app.selectTool(command);
+      app.selectTool(tool);
       passed++;
-      $.writeln("✅ " + command);
+      results += localize(toolData.name) + " (" + toolData.action + "): PASSED\n";
     } catch (e) {
       failed++;
-      $.writeln("⚠️ " + command);
-      $.writeln("ERROR: " + e);
+      results +=
+        localize(toolData.name) + " (" + toolData.action + "): FAILED (" + e + ")\n";
     }
   }
 
   // report
-  $.writeln("TESTING AI TOOL COMMANDS");
-  $.writeln("TOTAL TESTS: " + (passed + failed));
-  $.writeln("PASSED: " + passed);
-  $.writeln("FAILED: " + failed);
-  $.writeln("SKIPPED (VERSION): " + skipped);
+  s += "Total Tests: " + (passed + failed) + "\n";
+  s += "Passed: " + passed + "\n";
+  s += "Failed: " + failed + "\n";
+  s += "Skipped (version): " + skipped + "\n\n";
+  s += results + "\n\n";
+  s += "File Created: " + new Date();
 
-  function versionCheck(commandData) {
-    if (
-      (commandData.minVersion && commandData.minVersion > aiVersion) ||
-      (commandData.maxVersion && commandData.maxVersion < aiVersion)
-    )
-      return false;
-    return true;
-  }
+  writeData(s, f);
+  f.execute();
 })();

@@ -1,13 +1,5 @@
 // CONFIGURATION
 
-// ENVIRONMENT VARIABLES
-
-var aiVersion = parseFloat(app.version);
-var locale = $.locale;
-var os = $.os;
-var sysOS = /mac/i.test(os) ? "mac" : "win";
-var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
-
 // DEVELOPMENT SETTINGS
 
 // localization testing
@@ -15,88 +7,51 @@ var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 // $.locale = "de";
 // $.locale = "ru";
 
+// ENVIRONMENT VARIABLES
+
+var aiVersion = parseFloat(app.version);
+var locale = $.locale;
+var currentLocale = locale.split("_")[0];
+var os = $.os;
+var sysOS = /mac/i.test(os) ? "mac" : "win";
+var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
+var settingsRequiredUpdateVersion = "0.10.0";
+
 // DIALOG SETTINGS
 
-var paletteSettings = {
-  paletteWidth: 600,
-  paletteHeight: 201,
-  listboxProperties: {
-    numberOfColumns: 2,
-    showHeaders: true,
-    columnTitles: ["Name", "Type"],
-    columnWidths: [475, 100],
-  },
+var paletteSettings = {};
+paletteSettings.paletteWidth = 600;
+// was informed windows and mac have different listbox row hights so this makes sure exactly 9 rows show
+paletteSettings.paletteHeight = sysOS === "win" ? 211 : 201;
+paletteSettings.bounds = [
+  0,
+  0,
+  paletteSettings.paletteWidth,
+  paletteSettings.paletteHeight,
+];
+
+// COMMAND PALETTE COLUMN SETS
+
+paletteSettings.columnSets = {};
+
+paletteSettings.columnSets.default = {};
+paletteSettings.columnSets.default[localize(strings.name_title_case)] = {
+  width: 450,
+  key: "name",
+};
+paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
+  width: 100,
+  key: "type",
 };
 
 var visibleListItems = 9;
-var recentCommandsCount = 25;
+var mostRecentCommandsCount = 25;
 
 // MISCELLANEOUS SETTINGS
 
 var namedObjectLimit = 2000;
-
-//USER SETTINGS
-
-var settingsFolderName = "JBD";
-var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
-var settingsFileName = "AiCommandPaletteSettings.json";
-
-var settings = {};
-settings.folder = function () {
-  return settingsFolder;
-};
-settings.file = function () {
-  var folder = this.folder();
-  var file = setupFileObject(folder, settingsFileName);
-  return file;
-};
-settings.load = function () {
-  var file = this.file();
-  if (file.exists) {
-    try {
-      var settings = readJSONData(file);
-      if (settings != {}) {
-        for (var prop in settings) {
-          for (var subProp in settings[prop]) {
-            data[prop][subProp] = settings[prop][subProp];
-          }
-        }
-      }
-    } catch (e) {
-      file.rename(file.name + ".bak");
-      this.reveal();
-      Error.runtimeError(1, localize(locStrings.pref_file_loading_error));
-    }
-  }
-};
-settings.save = function () {
-  var file = this.file();
-  var obj = {
-    commands: {
-      bookmark: data.commands.bookmark,
-      script: data.commands.script,
-      workflow: data.commands.workflow,
-    },
-    settings: {
-      hidden: data.settings.hidden,
-      name: _title,
-      version: _version,
-      os: os,
-      locale: locale,
-      aiVersion: aiVersion,
-    },
-    recent: data.recent,
-  };
-  writeJSONData(obj, file);
-};
-settings.backup = function () {
-  var backupFile = new File(this.file() + ".bak");
-  this.file().copy(backupFile);
-};
-settings.reveal = function () {
-  var folder = this.folder();
-  folder.execute();
-};
+var regexEllipsis = /\.\.\.$/;
+var regexCarrot = /\s>\s/g;
 
 // DEVELOPMENT HELPERS
 
@@ -118,3 +73,23 @@ devInfo.save = function () {
   writeJSONData(data, this.dataFile());
   writeJSONData(commandsData, this.commandsFile());
 };
+
+/**
+ * Show an alert with object data.
+ * @param obj Command to show data about.
+ */
+function alertObject(obj) {
+  var s = "";
+  for (var prop in obj) {
+    var subS = "";
+    if (obj[prop] != null && typeof obj[prop] == "object") {
+      for (var subProp in obj[prop]) {
+        subS += "> " + subProp + ": " + obj[prop][subProp] + "\n";
+      }
+      s += prop + ":\n" + subS;
+    } else {
+      s += prop + ": " + obj[prop] + "\n";
+    }
+  }
+  alert(s);
+}

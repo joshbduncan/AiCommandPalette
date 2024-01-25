@@ -2,10 +2,6 @@
 
 //ARRAY POLYFILLS
 
-/**
- * Array.prototype.indexOf() polyfill
- * https://stackoverflow.com/questions/1744310/how-to-fix-array-indexof-in-javascript-for-internet-explorer-browsers
- */
 if (!Array.prototype.indexOf) {
   Array.prototype.indexOf = function (obj, start) {
     for (var i = start || 0, j = this.length; i < j; i++) {
@@ -17,17 +13,8 @@ if (!Array.prototype.indexOf) {
   };
 }
 
-/**
- * Array.prototype.includes() polyfill
- * @author Chris Ferdinandi
- * @license MIT
- */
 if (!Array.prototype.includes) {
   Array.prototype.includes = function (search, start) {
-    "use strict";
-    if (search instanceof RegExp) {
-      throw TypeError("first argument must not be a RegExp");
-    }
     if (start === undefined) {
       start = 0;
     }
@@ -93,5 +80,23 @@ if (!Object.keys) {
 if (!String.prototype.trim) {
   String.prototype.trim = function () {
     return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+  };
+}
+
+/**
+ * String.prototype.replaceAll() polyfill
+ * https://gomakethings.com/how-to-replace-a-section-of-a-string-with-another-one-with-vanilla-js/
+ * @author Chris Ferdinandi
+ * @license MIT
+ */
+if (!String.prototype.replaceAll) {
+  String.prototype.replaceAll = function (str, newStr) {
+    // If a regex pattern
+    if (Object.prototype.toString.call(str).toLowerCase() === "[object regexp]") {
+      return this.replace(str, newStr);
+    }
+
+    // If a string
+    return this.replace(new RegExp(str, "g"), newStr);
   };
 }

@@ -1,0 +1,484 @@
+// CUSTOM SCRIPTUI FILTERABLE LISTBOX
+
+/**
+ * Custom wrapper for a ScriptUI Listbox.
+ * @param {Array}   commands    Commands to load into the list box.
+ * @param {Object}  container   ScriptUI container the listbox should be attached to.
+ * @param {String}  name        Lookup name for the listbox.
+ * @param {Array}   bounds      Bounds array for the listbox.
+ * @param {Object}  columns     Listbox column information.
+ * @param {Boolean} multiselect Should the listbox allow multiple selections (disable some features).
+ * @param {String}  helptip     Listbox helptip/tooltip pop-up.
+ * @param {Array}   listeners   ScriptUI listeners to add to the listbox.
+ */
+function ListBoxWrapper(
+  commands,
+  container,
+  name,
+  bounds,
+  columns,
+  multiselect,
+  helptip,
+  listeners
+) {
+  this.container = container;
+  this.name = name;
+  this.columns = columns;
+  this.multiselect = multiselect;
+  this.helptip = helptip;
+  this.listeners = listeners;
+  this.listbox = this.make(commands, bounds);
+}
+
+ListBoxWrapper.prototype = {
+  /**
+   * Initialize a new ScriptUI listbox, load the initial commands, and attach event listeners.
+   * @param commands Item to load into the listbox.
+   * @param bounds   ScriptUI bounds array.
+   * @returns        ScriptUI listbox.
+   */
+  make: function (commands, bounds) {
+    var column;
+    var columnTitles = [];
+    var columnWidths = [];
+    var columnKeys = [];
+    for (column in this.columns) {
+      columnTitles.push(this.columns[column].hideTitle ? "" : column);
+      columnWidths.push(this.columns[column].width);
+      columnKeys.push(this.columns[column].key);
+    }
+    listbox = this.container.add("listbox", bounds, undefined, {
+      name: this.name,
+      numberOfColumns: columnTitles.length,
+      showHeaders: true,
+      columnTitles: columnTitles,
+      columnWidths: columnWidths,
+      multiselect: this.multiselect,
+    });
+    if (commands.length) {
+      this.loadCommands(listbox, commands, columnKeys);
+      listbox.selection = 0;
+    }
+    this.addListeners(listbox);
+    if (this.helptip) listbox.helpTip = this.helptip;
+    listbox.frameStart = 0;
+    return listbox;
+  },
+  /**
+   * Update the listbox with new items.
+   * @param {Array} matches Update listbox with new commands.
+   */
+  update: function (matches) {
+    temp = this.make(matches, this.listbox.bounds);
+    this.listbox.window.remove(this.listbox);
+    this.listbox = temp;
+  },
+  /**
+   * Load command items in a ScriptUI listbox.
+   * @param {Array}  listbox    ScriptUI listbox to load the command item in to.
+   * @param {Array}  commands   Commands to load into the list box.
+   * @param {Array}  columnKeys Command lookup key for each column.
+   */
+  loadCommands: function (listbox, commands, columnKeys) {
+    var id, command, str, item;
+    for (var i = 0; i < commands.length; i++) {
+      id = commands[i];
+      // if command is no longer available just show the id
+      if (!commandsData.hasOwnProperty(id)) {
+        item = listbox.add("item", id);
+        continue;
+      }
+      command = commandsData[id];
+      for (var j = 0; j < columnKeys.length; j++) {
+        str = determineCorrectString(command, columnKeys[j]);
+        if (str == null) alert(id);
+        if (j === 0) {
+          item = listbox.add("item", str);
+          continue;
+        }
+        item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);
+      }
+      item.id = id;
+    }
+  },
+  /**
+   * Attach event listeners to the specified listbox.
+   * @param {Object} listbox ScriptUI listbox to attach the listeners to.
+   */
+  addListeners: function (listbox) {
+    var listener;
+    for (var i = 0; i < this.listeners.length; i++) {
+      listener = this.listeners[i];
+      listener(listbox);
+    }
+  },
+};
+
+// LISTBOXWRAPPER LISTENERS
+
+/**
+ * Close listbox when double-clicking a command.
+ * @param {Object} listbox ScriptUI listbox.
+ */
+function selectOnDoubleClick(listbox) {
+  listbox.onDoubleClick = function () {
+    if (listbox.selection) listbox.window.close(1);
+  };
+}
+
+/**
+ * Add listbox command to Workflow when double-clicking.
+ * @param {Object}  listbox  ScriptUI listbox.
+ */
+function addToStepsOnDoubleClick(listbox) {
+  listbox.onDoubleClick = function () {
+    var win, steps, command;
+    if (listbox.selection) {
+      win = listbox.window;
+      steps = win.findElement("steps");
+      command = commandsData[listbox.selection.id];
+      newItem = steps.add("item", determineCorrectString(command, "name"));
+      newItem.subItems[0].text = determineCorrectString(command, "type");
+      newItem.id = command.id;
+      steps.notify("onChange");
+    }
+  };
+}
+
+/**
+ * Swap listbox items in place (along with their corresponding id).
+ * @param {Object} x Listbox item.
+ * @param {Object} y Listbox item.
+ */
+function swapListboxItems(x, y) {
+  var t = x.text;
+  var subT = x.subItems[0].text;
+  var id = x.id;
+  x.text = y.text;
+  x.subItems[0].text = y.subItems[0].text;
+  x.id = y.id;
+  y.text = t;
+  y.subItems[0].text = subT;
+  y.id = id;
+}
+
+/**
+ * Allow end-to-end scrolling from within a listbox.
+ * @param {Object}  listbox  ScriptUI listbox.
+ */
+function scrollListBoxWithArrows(listbox) {
+  listbox.addEventListener("keydown", function (e) {
+    if (e.fromQuery) {
+      if (e.fromQueryShiftKey) {
+        if (e.keyName == "Up") {
+          if (this.selection.index == 0) {
+            this.selection = this.items.length - 1;
+            e.preventDefault();
+          } else {
+            this.selection--;
+          }
+        }
+        if (e.keyName == "Down") {
+          if (this.selection.index == this.items.length - 1) {
+            this.selection = 0;
+            e.preventDefault();
+          } else {
+            if (e.keyName == "Down") this.selection++;
+          }
+        }
+      } else {
+        if (e.keyName == "Up" || e.keyName == "Down") {
+          if (e.keyName == "Up") {
+            e.preventDefault();
+            if (!this.selection) {
+              this.selection = 0;
+            } else if (this.selection.index == 0) {
+              // jump to the bottom if at top
+              this.selection = this.items.length - 1;
+              this.frameStart = this.items.length - 1 - visibleListItems;
+            } else {
+              if (this.selection.index > 0) {
+                this.selection = this.selection.index - 1;
+                if (this.selection.index < this.frameStart) this.frameStart--;
+              }
+            }
+          } else if (e.keyName == "Down") {
+            e.preventDefault();
+            if (!this.selection) {
+              this.selection = 0;
+            } else if (this.selection.index === this.items.length - 1) {
+              // jump to the top if at the bottom
+              this.selection = 0;
+              this.frameStart = 0;
+            } else {
+              if (this.selection.index < this.items.length) {
+                this.selection = this.selection.index + 1;
+                if (this.selection.index > this.frameStart + visibleListItems - 1) {
+                  if (this.frameStart < this.items.length - visibleListItems) {
+                    this.frameStart++;
+                  } else {
+                    this.frameStart = this.frameStart;
+                  }
+                }
+              }
+            }
+          }
+          /*
+        If a selection is made inside of the actual listbox frame by the user,
+        the API doesn't offer any way to know which part of the list is currently
+        visible in the listbox "frame". If the user was to re-enter the `q` edittext
+        and then hit an arrow key the above event listener will not work correctly so
+        I just move the next selection (be it up or down) to the middle of the "frame".
+        */
+          if (this.selection) {
+            if (
+              this.selection.index < this.frameStart ||
+              this.selection.index > this.frameStart + visibleListItems - 1
+            )
+              this.frameStart = this.selection.index - Math.floor(visibleListItems / 2);
+            // don't move the frame if list items don't fill the available rows
+            if (this.items.length <= visibleListItems) return;
+            // move the frame by revealing the calculated `this.frameStart`
+            this.revealItem(this.frameStart);
+          }
+        }
+      }
+    } else {
+      if (e.keyName == "Up" && this.selection.index == 0) {
+        this.selection = this.items.length - 1;
+        e.preventDefault();
+      }
+      if (e.keyName == "Down" && this.selection.index == this.items.length - 1) {
+        this.selection = 0;
+        e.preventDefault();
+      }
+    }
+  });
+}
+
+// USER DIALOGS
+
+function commandPalette(commands, title, columns, multiselect, showOnly, saveHistory) {
+  // create the dialog
+  var win = new Window("dialog");
+  win.text = title;
+  win.alignChildren = "fill";
+
+  // setup the query input
+  var q = win.add("edittext");
+  q.helpTip = localize(strings.cd_q_helptip);
+
+  // setup the commands listbox
+  var matches = showOnly ? showOnly : commands;
+  var list = new ListBoxWrapper(
+    matches,
+    win,
+    "commands",
+    paletteSettings.bounds,
+    columns,
+    multiselect,
+    null,
+    [selectOnDoubleClick, scrollListBoxWithArrows]
+  );
+
+  // window buttons
+  var winButtons = win.add("group");
+  winButtons.orientation = "row";
+  winButtons.alignChildren = ["center", "center"];
+  var ok = winButtons.add("button", undefined, "OK");
+  ok.preferredSize.width = 100;
+  var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
+    name: "cancel",
+  });
+  cancel.preferredSize.width = 100;
+
+  // work-around to stop windows from flickering/flashing explorer
+  if (windowsFlickerFix) {
+    simulateKeypress("TAB", 1);
+  } else {
+    q.active = true;
+  }
+
+  // as a query is typed update the listbox
+  q.onChanging = function () {
+    if (this.text === "") {
+      matches = showOnly ? showOnly : commands;
+    } else {
+      matches = scoreMatches(this.text, commands);
+    }
+    list.update(matches);
+  };
+
+  // save query and command history
+  function updateHistory() {
+    // don't add to history if no query was typed
+    if (q.text === "") return;
+
+    // don't add `Recent Commands` command
+    if (list.listbox.selection.id == "builtin_recentCommands") return;
+
+    history.push({
+      query: q.text,
+      command: list.listbox.selection.id,
+      timestamp: Date.now(),
+    });
+    userHistory.save();
+  }
+
+  // allow using arrow key from query input by sending a custom keyboard event to the list box
+  if (!multiselect) {
+    var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
+    q.addEventListener("keydown", function (e) {
+      // hack to keep original commands from reloading before closing command palette when hitting the escape key while within the query box
+      if (e.keyName == "Escape") {
+        e.preventDefault();
+        win.close();
+      }
+      if (e.keyName == "Up" || e.keyName == "Down") {
+        kbEvent.initKeyboardEvent(
+          "keydown",
+          true,
+          true,
+          list.listbox,
+          e.keyName,
+          0,
+          ""
+        );
+        kbEvent.fromQuery = true;
+        kbEvent.fromQueryShiftKey = e.getModifierState("shift");
+        list.listbox.dispatchEvent(kbEvent);
+        e.preventDefault();
+      }
+    });
+  }
+
+  if (win.show() == 1) {
+    if (!list.listbox.selection) return;
+    if (multiselect) {
+      var items = [];
+      for (var i = 0; i < list.listbox.selection.length; i++) {
+        items.push(list.listbox.selection[i].id);
+      }
+      return items;
+    } else {
+      if (saveHistory) {
+        updateHistory();
+      }
+      return list.listbox.selection.id;
+    }
+  }
+  return false;
+}
+
+/**
+ * Try and determine which if a localized string should be used or just the value.
+ * @param command Command in question.
+ * @param prop    Command property to localize
+ * @returns       Correct string.
+ */
+function determineCorrectString(command, prop) {
+  var s;
+  if (typeof command[prop] == "object") {
+    s = localize(command[prop]);
+  } else if (strings.hasOwnProperty(command[prop])) {
+    s = localize(strings[command[prop]]);
+  } else {
+    s = command[prop];
+  }
+  return s;
+}
+
+/**
+ * Score array items based on regex string match.
+ * @param   {String} query    String to search for.
+ * @param   {Array}  commands Commands to match `query` against.
+ * @returns {Array}           Matching items sorted by score.
+ */
+function scoreMatches(query, commands) {
+  var words = [];
+  var matches = [];
+  var scores = {};
+  var maxScore = 0;
+  query = query.toLowerCase();
+  var words = query.split(" ");
+  var id, command, name, type, score, strippedName;
+
+  // query latching
+  if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
+    scores[latches[query]] = 1000;
+    matches.push(latches[query]);
+  }
+
+  for (var i = 0; i < commands.length; i++) {
+    id = commands[i];
+    command = commandsData[id];
+    score = 0;
+    name = determineCorrectString(command, "name").toLowerCase();
+
+    // escape hatch
+    if (name == "") name = id.toLowerCase().replace("_", " ");
+
+    type = strings.hasOwnProperty(command.type)
+      ? localize(strings[command.type]).toLowerCase()
+      : command.type.toLowerCase();
+
+    // check for exact match
+    if (
+      query === name ||
+      query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName ||
+      query === type
+    ) {
+      score += word.length;
+    }
+
+    // strip junk from command name
+    strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+
+    // add the command type to the name if user requested searching type
+    if (prefs.searchIncludesType) name = name.concat(" ", type);
+    // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
+
+    // check for singular word matches
+    var word, re;
+    for (var n = 0; n < words.length; n++) {
+      word = words[n];
+      if (!word) continue;
+
+      re = new RegExp("\\b" + word, "gi");
+
+      // check for a match at the beginning of a word
+      if (re.test(name) || re.test(strippedName)) score += word.length;
+    }
+
+    // updated scores for matches
+    if (score > 0) {
+      // increase score if command found in recent commands
+      if (score >= maxScore && recentCommands.hasOwnProperty(command.id)) {
+        score += recentCommands[command.id];
+      }
+      if (scores.hasOwnProperty(id)) {
+        scores[id] += score;
+      } else {
+        scores[id] = score;
+        matches.push(id);
+      }
+      if (scores[id] > maxScore) maxScore = scores[id];
+    }
+  }
+
+  /* Sort matched by their respective score */
+  function sortByScore(arr) {
+    for (var i = 0; i < arr.length; i++) {
+      for (var j = 0; j < arr.length - i - 1; j++) {
+        if (scores[arr[j + 1]] > scores[arr[j]]) {
+          var temp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = temp;
+        }
+      }
+    }
+    return arr;
+  }
+
+  return sortByScore(matches);
+}

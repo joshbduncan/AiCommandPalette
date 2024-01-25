@@ -2,231 +2,123 @@
 
 Just some notes to help me remember how things work...
 
-## Data Object
+## Command Objects
 
-Simplified version of the base `data` object.
+Every command is a simple object like below.
 
 ```json
 {
-  "commands": {
-    "bookmark": {
-      "Bookmark: Awesome Vector Goodness.aI": {
-        "name": "Awesome Vector Goodness.aI",
-        "type": "bookmark",
-        "path": "/Users/jbd/Desktop/Awesome Vector Goodness.aI",
-        "bookmarkType": "file"
-      },
-      "Bookmark: Mockup Layout Files": {
-        "name": "Mockup Layout Files",
-        "type": "bookmark",
-        "path": "/Users/jbd/Desktop/Mockup Layout Files",
-        "bookmarkType": "folder"
-      }
-    },
-    "script": {
-      "Script: Time Saving Ai Script.jsx": {
-        "name": "Time Saving Ai Script.jsx",
-        "type": "script",
-        "path": "/Users/jbd/Desktop/Time Saving Ai Script.jsx"
-      },
-      "workflow": {
-        "Workflow: Cool Automation Workflow": {
-          "name": "Cool Automation Workflow",
-          "type": "workflow",
-          "actions": [
-            "Bookmark: Awesome Vector Goodness.aI"
-          ]
-        }
-      },
-      "defaults": {
-        "defaults_settings": {
-          "action": "settings",
-          "type": "defaults",
-          "docRequired": false,
-          "loc": {
-            "en": "Ai Command Palette Settings...",
-            "de": "Kurzbefehle – Einstellungen …",
-            "ru": "Настройки"
-          }
-        }
-      },
-      "menu": {
-        "menu_new": {
-          "action": "new",
-          "type": "menu",
-          "docRequired": false,
-          "loc": {
-            "en": "File > New...",
-            "de": "Datei > Neu …",
-            "ru": "Файл > Новый..."
-          }
-        }
-      },
-      "tool": {
-        "tool_Adobe Add Anchor Point Tool": {
-          "action": "Adobe Add Anchor Point Tool",
-          "type": "tool",
-          "docRequired": true,
-          "loc": {
-            "en": "Add Anchor Point Tool",
-            "de": "Ankerpunkt-hinzufügen-Werkzeug",
-            "ru": "Инструмент: Добавить опорную точку"
-          },
-          "minVersion": 24
-        }
-      },
-      "action": {
-        "Action: Blend dat [JBD]": {
-          "name": "Blend dat",
-          "type": "action",
-          "set": "JBD"
-        }
-      },
-      "builtin": {
-        "builtin_goToArtboard": {
-          "action": "goToArtboard",
-          "type": "builtin",
-          "docRequired": true,
-          "loc": {
-            "en": "Go To Artboard...",
-            "de": "Gehen Sie zur Zeichenfläche...",
-            "ru": "Gehen Sie zur Zeichenfläche..."
-          }
-        }
-      },
-      "config": {
-        "config_about": {
-          "action": "about",
-          "type": "config",
-          "docRequired": false,
-          "loc": {
-            "en": "About Ai Command Palette...",
-            "de": "Über Kurzbefehle …",
-            "ru": "Об Ai Command Palette"
-          }
-        }
-      }
-    },
-    "settings": {
-      "hidden": [],
-      "name": "Ai Command Palette",
-      "version": "0.6.1",
-      "os": "Macintosh OS 12.6.0/64",
-      "locale": "en_US",
-      "aiVersion": 27.4
-    },
-    "recent": {
-      "commands": [
-        "File > New..."
-      ]
-    }
-  }
+  "id": "menu_new",
+  "action": "new",
+  "type": "menu",
+  "name": {
+    "en": "File > New...",
+    "de": "Datei > Neu...",
+    "ru": "Файл > Новый...",
+  },
+  "docRequired": false,
+  "selRequired": false,
+  "hidden": false,
 }
 ```
 
-## Data Object Samples
+### Command Object Examples
 
-Object samples from `commandsData`.
+All commands object have a standard set of properties, but different types of commands may also have extra properties.
 
 ### Action
 
 ```json
-"Action: Blend dat [JBD]": {
-  "name": "Blend dat",
+{
+  "id": "action_sample_action",
+  "action": "action",
   "type": "action",
-  "set": "JBD"
-}
-```
-
-### Bookmark (File)
-
-```json
-"Bookmark: Awesome Vector Goodness.aI": {
-  "name": "Awesome Vector Goodness.aI",
-  "type": "bookmark",
-  "path": "/Users/jbd/Desktop/Awesome Vector Goodness.aI",
-  "bookmarkType": "file"
-}
-```
-
-### Bookmark (Folder)
-
-```json
-"Bookmark: Mockup Layout Files": {
-  "name": "Mockup Layout Files",
-  "type": "bookmark",
-  "path": "/Users/jbd/Desktop/Mockup Layout Files",
-  "bookmarkType": "folder"
-}
-```
-
-### Built-In/Config/Settings
-
-```json
-"Ai Command Palette Settings...": {
-  "action": "settings",
-  "type": "defaults",
+  "set": "Sample Action Set",
+  "name": "Sample Action",
   "docRequired": false,
   "selRequired": false,
-  "loc": {
-    "en": "Ai Command Palette Settings...",
-    "de": "Kurzbefehle – Einstellungen …",
-    "ru": "Настройки"
-  }
+  "hidden": false,
+}
+```
+
+### Bookmark (File or Folder)
+
+```json
+{
+  "id": "bookmark_Awesome_Vectors_ai",
+  "action": "bookmark",
+  "type": "file", // or "folder"
+  "path": "/path/to/awesome/vectors/Awesome Vectors.ai",
+  "name": "Awesome Vectors.ai",
+  "docRequired": false,
+  "selRequired": false,
+  "hidden": false,
 }
 ```
 
 ### Menu
 
 ```json
-"File > New...": {
+{
+  "id": "menu_new",
   "action": "new",
   "type": "menu",
+  "name": {
+    "en": "File > New...",
+    "de": "Datei > Neu...",
+    "ru": "Файл > Новый...",
+  },
   "docRequired": false,
   "selRequired": false,
-  "loc": {
-    "en": "File > New...",
-    "de": "Datei > Neu …",
-    "ru": "Файл > Новый..."
-  }
+  "hidden": false,
 }
 ```
 
 ### Script
 
 ```json
-"Script: Time Saving Ai Script.jsx": {
-  "name": "Time Saving Ai Script.jsx",
+{
+  "id": "script_Automate_Something_jsx",
+  "action": "script",
   "type": "script",
-  "path": "/Users/jbd/Desktop/Time Saving Ai Script.jsx"
+  "path": "/path/to/automation/scripts/Automate Something.jsx",
+  "name": "Automate Something.jsx",
+  "docRequired": false,
+  "selRequired": false,
+  "hidden": false,
 }
 ```
 
 ### Tool
 
 ```json
-"Add Anchor Point Tool": {
-  "action": "Adobe Add Anchor Point Tool",
+{
+  "id": "tool_Adobe_Direct_Select_Tool",
+  "action": "Adobe Direct Select Tool",
   "type": "tool",
+  "name": {
+    "en": "Direct Selection Tool",
+    "de": "Direktauswahl-Werkzeug",
+    "ru": "Инструмент: Прямое выделение",
+  },
+  "minVersion": 24,
   "docRequired": true,
   "selRequired": false,
-  "loc": {
-    "en": "Add Anchor Point Tool",
-    "de": "Ankerpunkt-hinzufügen-Werkzeug",
-    "ru": "Инструмент: Добавить опорную точку"
-  },
-  "minVersion": 24
+  "hidden": false,
 }
 ```
 
 ### Workflow
 
 ```json
-"Workflow: Cool Automation Workflow": {
-  "name": "Cool Automation Workflow",
+{
+  "id": "workflow_time_saving_workflow",
+  "action": "workflow",
   "type": "workflow",
-  "actions": [
-    "Bookmark: Awesome Vector Goodness.aI"
-  ]
+  "actions": ["menu_command", "tool_command", "script", "other_workflow"],
+  "name": "Time Saving Workflow",
+  "docRequired": false,
+  "selRequired": false,
+  "hidden": false,
 }
 ```
