@@ -9719,8 +9719,9 @@ See the LICENSE file for details.
         }
 
         // alert user if locale or os of current machine doesn't match loaded prefs
-        if (locale != loadedData.locale || os != loadedData.os)
-          alert(localize(strings.user_prefs_inconsistency));
+        // TODO: break when OS is updated, check for better machine identifier
+        // if (locale != loadedData.locale || os != loadedData.os)
+        //   alert(localize(strings.user_prefs_inconsistency));
 
         propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
         for (prop in loadedData) {

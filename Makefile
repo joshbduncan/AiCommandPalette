@@ -27,4 +27,4 @@ watch:  ## watch for file changes and compile
 	watchman-make -p 'src/**/*.jsx*' -t reset
 
 compile:  ## compile script using escompile
-	/Users/jbd/Dropbox/DEV/projects/extend-script-compiler/escompile.sh src/index.jsx > AiCommandPalette.jsx
+	/Users/jbd/Dropbox/DEV/projects/escompile/escompile.sh src/index.jsx > AiCommandPalette.jsx
