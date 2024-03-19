@@ -10444,25 +10444,54 @@ See the LICENSE file for details.
   }
 
   /**
+   * Calculate the Levenshtein Distance between two strings.
+   */
+  function levenshteinDistance(s1, s2) {
+    var len1 = s1.length;
+    var len2 = s2.length;
+
+    var matrix = Array(len1 + 1);
+    for (var i = 0; i <= len1; i++) {
+      matrix[i] = Array(len2 + 1);
+    }
+
+    for (var i = 0; i <= len1; i++) {
+      matrix[i][0] = i;
+    }
+
+    for (var j = 0; j <= len2; j++) {
+      matrix[0][j] = j;
+    }
+
+    for (var i = 1; i <= len1; i++) {
+      for (var j = 1; j <= len2; j++) {
+        if (s1[i - 1] === s2[j - 1]) {
+          matrix[i][j] = matrix[i - 1][j - 1];
+        } else {
+          matrix[i][j] = Math.min(
+            matrix[i - 1][j] + 1,
+            matrix[i][j - 1] + 1,
+            matrix[i - 1][j - 1] + 1
+          );
+        }
+      }
+    }
+
+    return matrix[len1][len2];
+  }
+
+  /**
    * Score array items based on regex string match.
    * @param   {String} query    String to search for.
    * @param   {Array}  commands Commands to match `query` against.
    * @returns {Array}           Matching items sorted by score.
    */
   function scoreMatches(query, commands) {
-    var words = [];
     var matches = [];
     var scores = {};
-    var maxScore = 0;
+    var minScore = 0;
     query = query.toLowerCase();
-    var words = query.split(" ");
     var id, command, name, type, score, strippedName;
-
-    // query latching
-    if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
-      scores[latches[query]] = 1000;
-      matches.push(latches[query]);
-    }
 
     for (var i = 0; i < commands.length; i++) {
       id = commands[i];
@@ -10473,59 +10502,62 @@ See the LICENSE file for details.
       // escape hatch
       if (name == "") name = id.toLowerCase().replace("_", " ");
 
+      // strip junk from command name and query
+      strippedQuery = query.replace(regexEllipsis, "").replace(regexCarrot, " ");
+      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+
       type = strings.hasOwnProperty(command.type)
         ? localize(strings[command.type]).toLowerCase()
         : command.type.toLowerCase();
-
-      // check for exact match
-      if (
-        query === name ||
-        query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName ||
-        query === type
-      ) {
-        score += word.length;
-      }
-
-      // strip junk from command name
-      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
 
       // add the command type to the name if user requested searching type
       if (prefs.searchIncludesType) name = name.concat(" ", type);
       // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
 
-      // check for singular word matches
-      var word, re;
-      for (var n = 0; n < words.length; n++) {
-        word = words[n];
-        if (!word) continue;
+      // calculate Levenshtein distance for each combination of query and name words
+      var qWords = strippedQuery.split(" ");
+      var nWords = strippedName.split(" ");
+      var qWord, nWord, match;
+      for (var q = 0; q < qWords.length; q++) {
+        qWord = qWords[q];
+        match = false;
+        for (var n = 0; n < nWords.length; n++) {
+          nWord = nWords[n];
 
-        re = new RegExp("\\b" + word, "gi");
+          if (!qWord || !nWord) continue;
 
-        // check for a match at the beginning of a word
-        if (re.test(name) || re.test(strippedName)) score += word.length;
+          // check if change distance is within allowance
+          dist = levenshteinDistance(qWord, nWord);
+
+          if (dist <= 3) {
+            score += dist + 1;
+          }
+        }
       }
 
       // updated scores for matches
       if (score > 0) {
-        // increase score if command found in recent commands
-        if (score >= maxScore && recentCommands.hasOwnProperty(command.id)) {
-          score += recentCommands[command.id];
+        // query latching
+        if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
+          scores[latches[query]] = -10;
         }
-        if (scores.hasOwnProperty(id)) {
-          scores[id] += score;
-        } else {
-          scores[id] = score;
-          matches.push(id);
+
+        // recent commands
+        if (score <= minScore && recentCommands.hasOwnProperty(command.id)) {
+          score -= 5;
         }
-        if (scores[id] > maxScore) maxScore = scores[id];
+
+        scores[id] = score;
+        matches.push(id);
+        if (scores[id] < minScore) minScore = scores[id];
       }
     }
 
-    /* Sort matched by their respective score */
+    /* Sort matches by their respective score */
     function sortByScore(arr) {
       for (var i = 0; i < arr.length; i++) {
         for (var j = 0; j < arr.length - i - 1; j++) {
-          if (scores[arr[j + 1]] > scores[arr[j]]) {
+          if (scores[arr[j + 1]] < scores[arr[j]]) {
             var temp = arr[j];
             arr[j] = arr[j + 1];
             arr[j + 1] = temp;
