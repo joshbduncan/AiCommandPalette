@@ -80,7 +80,7 @@ ListBoxWrapper.prototype = {
    * @param {Array}  columnKeys Command lookup key for each column.
    */
   loadCommands: function (listbox, commands, columnKeys) {
-    var id, command, str, item;
+    var id, command, name, str, item;
     for (var i = 0; i < commands.length; i++) {
       id = commands[i];
       // if command is no longer available just show the id
@@ -89,6 +89,7 @@ ListBoxWrapper.prototype = {
         continue;
       }
       command = commandsData[id];
+      name = determineCorrectString(command, "name");
       for (var j = 0; j < columnKeys.length; j++) {
         str = determineCorrectString(command, columnKeys[j]);
         if (str == null) alert(id);
@@ -389,43 +390,6 @@ function determineCorrectString(command, prop) {
 }
 
 /**
- * Calculate the Levenshtein Distance between two strings.
- */
-function levenshteinDistance(s1, s2) {
-  var len1 = s1.length;
-  var len2 = s2.length;
-
-  var matrix = Array(len1 + 1);
-  for (var i = 0; i <= len1; i++) {
-    matrix[i] = Array(len2 + 1);
-  }
-
-  for (var i = 0; i <= len1; i++) {
-    matrix[i][0] = i;
-  }
-
-  for (var j = 0; j <= len2; j++) {
-    matrix[0][j] = j;
-  }
-
-  for (var i = 1; i <= len1; i++) {
-    for (var j = 1; j <= len2; j++) {
-      if (s1[i - 1] === s2[j - 1]) {
-        matrix[i][j] = matrix[i - 1][j - 1];
-      } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j - 1] + 1
-        );
-      }
-    }
-  }
-
-  return matrix[len1][len2];
-}
-
-/**
  * Score array items based on regex string match.
  * @param   {String} query    String to search for.
  * @param   {Array}  commands Commands to match `query` against.
@@ -434,68 +398,96 @@ function levenshteinDistance(s1, s2) {
 function scoreMatches(query, commands) {
   var matches = [];
   var scores = {};
-  var minScore = 0;
-  query = query.toLowerCase();
-  var id, command, name, type, score, strippedName;
+  var minScore = -1;
+  OFFSET = -fzy.getScoreFloor();
 
+  function getFzyScore(prompt, line) {
+    // check for actual matches before running the scoring algorithm
+    if (!fzy.hasMatch(prompt, line)) {
+      return -1;
+    }
+
+    var fzyScore = fzy.score(prompt, line);
+    // alert(line + "\n" + fzyScore);
+
+    // convert fzy score to a suitable range (0, 1)
+    if (fzyScore === fzy.getScoreMin()) {
+      return 1;
+    }
+
+    // offset the score and invert so "smaller is better"
+    // Note: for exact matches, fzy returns +inf, which when inverted becomes 0
+    return 1 / (fzyScore + OFFSET);
+  }
+
+  var log = {};
+
+  var id,
+    command,
+    name,
+    type,
+    fzyScore,
+    extras,
+    score,
+    includeType,
+    latch,
+    recent,
+    logInfo;
   for (var i = 0; i < commands.length; i++) {
     id = commands[i];
     command = commandsData[id];
-    score = 0;
-    name = determineCorrectString(command, "name").toLowerCase();
+    name = determineCorrectString(command, "name");
+    extras = 0;
+    includeType = false;
+    latch = false;
+    recent = false;
+    logInfo = {};
 
     // escape hatch
     if (name == "") name = id.toLowerCase().replace("_", " ");
-
-    // strip junk from command name and query
-    strippedQuery = query.replace(regexEllipsis, "").replace(regexCarrot, " ");
-    strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+    logInfo["name"] = name;
 
     type = strings.hasOwnProperty(command.type)
       ? localize(strings[command.type]).toLowerCase()
       : command.type.toLowerCase();
+    logInfo["type"] = type;
 
     // add the command type to the name if user requested searching type
-    if (prefs.searchIncludesType) name = name.concat(" ", type);
+    if (prefs.searchIncludesType) {
+      includeType = true;
+      name = name.concat(" ", type);
+    }
     // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
 
-    // calculate Levenshtein distance for each combination of query and name words
-    var qWords = strippedQuery.split(" ");
-    var nWords = strippedName.split(" ");
-    var qWord, nWord, match;
-    for (var q = 0; q < qWords.length; q++) {
-      qWord = qWords[q];
-      match = false;
-      for (var n = 0; n < nWords.length; n++) {
-        nWord = nWords[n];
+    fzyScore = getFzyScore(query, name);
 
-        if (!qWord || !nWord) continue;
+    // skip any non matches
+    if (fzyScore === -1) continue;
+    logInfo["fzyScore"] = fzyScore;
 
-        // check if change distance is within allowance
-        dist = levenshteinDistance(qWord, nWord);
-
-        if (dist <= 3) {
-          score += dist + 1;
-        }
-      }
+    // query latching
+    if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
+      latch = true;
+      extras += 0.1;
     }
 
-    // updated scores for matches
-    if (score > 0) {
-      // query latching
-      if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
-        scores[latches[query]] = -10;
-      }
-
-      // recent commands
-      if (score <= minScore && recentCommands.hasOwnProperty(command.id)) {
-        score -= 5;
-      }
-
-      scores[id] = score;
-      matches.push(id);
-      if (scores[id] < minScore) minScore = scores[id];
+    // recent commands
+    if (score >= minScore && recentCommands.hasOwnProperty(id)) {
+      recent = true;
+      extras += 0.05;
     }
+
+    var score = fzyScore - extras;
+
+    logInfo["latch"] = latch;
+    logInfo["recent"] = recent;
+    logInfo["extras"] = extras > 0 ? "-" + extras.toString() : 0;
+    logInfo["score"] = score;
+
+    scores[id] = score;
+    matches.push(id);
+    if (score < minScore) minScore = score;
+    log[id] = logInfo;
   }
 
   /* Sort matches by their respective score */
@@ -512,5 +504,22 @@ function scoreMatches(query, commands) {
     return arr;
   }
 
-  return sortByScore(matches);
+  var sortedMatches = sortByScore(matches);
+
+  // write dev log of scoring
+  // var f = new File(Folder.desktop + "/icp_command_scoring.txt");
+  // f.encoding = "UTF-8";
+  // f.open("w");
+  // f.writeln("query=" + query);
+  // var arr;
+  // for (var i = 0; i < matches.length; i++) {
+  //   arr = ["id=" + matches[i]];
+  //   for (prop in log[matches[i]]) {
+  //     arr.push(prop + "=" + log[matches[i]][prop]);
+  //   }
+  //   f.writeln(arr.join(", "));
+  // }
+  // f.close();
+
+  return sortedMatches;
 }

@@ -10053,6 +10053,190 @@ See the LICENSE file for details.
     }
     this.loadedActions = ct > 0;
   };
+  // fzy matching algorithm
+  //
+  // ExtendScript port of a lua port by Seth Warn <https://github.com/swarn>
+  // of John Hawthorn's fzy <https://github.com/jhawthorn/fzy>
+
+  var fzy = {};
+
+  // setup scoring defaults
+  scoreGapLeading = -0.005;
+  scoreGapTrailing = -0.005;
+  scoreGapInner = -0.01;
+  scoreMatchConsecutive = 1.0;
+  scoreMatchWord = 0.8;
+  scoreMatchCapital = 0.7;
+  scoreMatchDot = 0.6;
+  scoreMax = Number.POSITIVE_INFINITY;
+  scoreMin = Number.NEGATIVE_INFINITY;
+  matchMaxLength = 1024;
+
+  fzy.hasMatch = function (needle, haystack) {
+    needle = needle.toLowerCase();
+    haystack = haystack.toLowerCase();
+
+    var j = 0;
+    for (var i = 0; i < needle.length; i++) {
+      j = haystack.indexOf(needle.charAt(i), j);
+      if (j === -1) {
+        return false;
+      } else {
+        j++;
+      }
+    }
+
+    return true;
+  };
+
+  function isLower(c) {
+    return c === c.toLowerCase();
+  }
+
+  function isUpper(c) {
+    return c === c.toUpperCase();
+  }
+
+  function precomputeBonus(haystack) {
+    var matchBonus = {};
+
+    var lastChar = "";
+    for (var i = 0; i < haystack.length; i++) {
+      var thisChar = haystack.charAt(i);
+      if (lastChar === " ") {
+        matchBonus[i] = scoreMatchWord;
+      } else if (lastChar === ".") {
+        matchBonus[i] = scoreMatchDot;
+      } else if (isLower(lastChar) && isUpper(thisChar)) {
+        matchBonus[i] = scoreMatchCapital;
+      } else {
+        matchBonus[i] = 0;
+      }
+
+      lastChar = thisChar;
+    }
+
+    return matchBonus;
+  }
+
+  function compute(needle, haystack, D, M) {
+    var matchBonus = precomputeBonus(haystack);
+    var n = needle.length;
+    var m = haystack.length;
+    var lowerNeedle = needle.toLowerCase();
+    var lowerHaystack = haystack.toLowerCase();
+
+    var haystackChars = [];
+    for (var i = 0; i < m; i++) {
+      haystackChars[i] = lowerHaystack.charAt(i);
+    }
+
+    for (var i = 0; i < n; i++) {
+      D[i] = [];
+      M[i] = [];
+
+      var prevScore = scoreMin;
+      var gapScore = i === n - 1 ? scoreGapTrailing : scoreGapInner;
+      var needleChar = lowerNeedle.charAt(i);
+
+      for (var j = 0; j < m; j++) {
+        if (needleChar === haystackChars[j]) {
+          var score = scoreMin;
+          if (i === 0) {
+            score = j * scoreGapLeading + matchBonus[j];
+          } else if (j > 0) {
+            var a = M[i - 1][j - 1] + matchBonus[j];
+            var b = D[i - 1][j - 1] + scoreMatchConsecutive;
+            score = Math.max(a, b);
+          }
+          D[i][j] = score;
+          prevScore = Math.max(score, prevScore + gapScore);
+          M[i][j] = prevScore;
+        } else {
+          D[i][j] = scoreMin;
+          prevScore += gapScore;
+          M[i][j] = prevScore;
+        }
+      }
+    }
+  }
+
+  fzy.score = function (needle, haystack) {
+    var n = needle.length;
+    var m = haystack.length;
+
+    if (n === 0 || m === 0 || m > matchMaxLength || n > matchMaxLength) {
+      return scoreMin;
+    } else if (n === m) {
+      return scoreMax;
+    } else {
+      var D = [];
+      var M = [];
+      compute(needle, haystack, D, M);
+      return M[n - 1][m - 1];
+    }
+  };
+
+  fzy.positions = function (needle, haystack) {
+    var n = needle.length;
+    var m = haystack.length;
+
+    if (n === 0 || m === 0 || m > matchMaxLength || n > matchMaxLength) {
+      return [];
+    } else if (n === m) {
+      var consecutive = [];
+      for (var i = 1; i <= n; i++) {
+        consecutive[i - 1] = i;
+      }
+      return consecutive;
+    }
+
+    var D = [];
+    var M = [];
+    compute(needle, haystack, D, M);
+
+    var positions = [];
+    var matchRequired = false;
+    var j = m;
+    for (var i = n; i > 0; i--) {
+      while (j > 0) {
+        if (
+          D[i - 1][j - 1] !== scoreMin &&
+          (matchRequired || M[i - 1][j - 1] === D[i - 1][j - 1] + scoreMatchConsecutive)
+        ) {
+          matchRequired =
+            i !== 1 &&
+            j !== 1 &&
+            M[i - 1][j - 1] === D[i - 2][j - 2] + scoreMatchConsecutive;
+          positions[i - 1] = j;
+          j--;
+          break;
+        } else {
+          j--;
+        }
+      }
+    }
+
+    return positions;
+  };
+
+  fzy.getScoreMin = function () {
+    // if strings a or b are empty or too long, `fzy.score(a, b) == fzy.get_score_min()`
+    return scoreMin;
+  };
+
+  fzy.getScoreMax = function () {
+    // for exact matches, `fzy.score(s, s) == fzy.get_score_max()`
+    return scoreMax;
+  };
+
+  fzy.getScoreFloor = function () {
+    // for all strings a and b that
+    //  - are not covered by either `fzy.get_score_min()` or fzy.get_score_max()`, and
+    //  - are matched, such that `fzy.has_match(a, b) == true`
+    // then `fzy.score(a, b) > fzy.get_score_floor()` will be true
+    return (matchMaxLength + 1) * scoreGapInner;
+  };
   // CUSTOM SCRIPTUI FILTERABLE LISTBOX
 
   /**
@@ -10135,7 +10319,7 @@ See the LICENSE file for details.
      * @param {Array}  columnKeys Command lookup key for each column.
      */
     loadCommands: function (listbox, commands, columnKeys) {
-      var id, command, str, item;
+      var id, command, name, str, item;
       for (var i = 0; i < commands.length; i++) {
         id = commands[i];
         // if command is no longer available just show the id
@@ -10144,6 +10328,7 @@ See the LICENSE file for details.
           continue;
         }
         command = commandsData[id];
+        name = determineCorrectString(command, "name");
         for (var j = 0; j < columnKeys.length; j++) {
           str = determineCorrectString(command, columnKeys[j]);
           if (str == null) alert(id);
@@ -10444,43 +10629,6 @@ See the LICENSE file for details.
   }
 
   /**
-   * Calculate the Levenshtein Distance between two strings.
-   */
-  function levenshteinDistance(s1, s2) {
-    var len1 = s1.length;
-    var len2 = s2.length;
-
-    var matrix = Array(len1 + 1);
-    for (var i = 0; i <= len1; i++) {
-      matrix[i] = Array(len2 + 1);
-    }
-
-    for (var i = 0; i <= len1; i++) {
-      matrix[i][0] = i;
-    }
-
-    for (var j = 0; j <= len2; j++) {
-      matrix[0][j] = j;
-    }
-
-    for (var i = 1; i <= len1; i++) {
-      for (var j = 1; j <= len2; j++) {
-        if (s1[i - 1] === s2[j - 1]) {
-          matrix[i][j] = matrix[i - 1][j - 1];
-        } else {
-          matrix[i][j] = Math.min(
-            matrix[i - 1][j] + 1,
-            matrix[i][j - 1] + 1,
-            matrix[i - 1][j - 1] + 1
-          );
-        }
-      }
-    }
-
-    return matrix[len1][len2];
-  }
-
-  /**
    * Score array items based on regex string match.
    * @param   {String} query    String to search for.
    * @param   {Array}  commands Commands to match `query` against.
@@ -10489,68 +10637,96 @@ See the LICENSE file for details.
   function scoreMatches(query, commands) {
     var matches = [];
     var scores = {};
-    var minScore = 0;
-    query = query.toLowerCase();
-    var id, command, name, type, score, strippedName;
+    var minScore = -1;
+    OFFSET = -fzy.getScoreFloor();
 
+    function getFzyScore(prompt, line) {
+      // check for actual matches before running the scoring algorithm
+      if (!fzy.hasMatch(prompt, line)) {
+        return -1;
+      }
+
+      var fzyScore = fzy.score(prompt, line);
+      // alert(line + "\n" + fzyScore);
+
+      // convert fzy score to a suitable range (0, 1)
+      if (fzyScore === fzy.getScoreMin()) {
+        return 1;
+      }
+
+      // offset the score and invert so "smaller is better"
+      // Note: for exact matches, fzy returns +inf, which when inverted becomes 0
+      return 1 / (fzyScore + OFFSET);
+    }
+
+    var log = {};
+
+    var id,
+      command,
+      name,
+      type,
+      fzyScore,
+      extras,
+      score,
+      includeType,
+      latch,
+      recent,
+      logInfo;
     for (var i = 0; i < commands.length; i++) {
       id = commands[i];
       command = commandsData[id];
-      score = 0;
-      name = determineCorrectString(command, "name").toLowerCase();
+      name = determineCorrectString(command, "name");
+      extras = 0;
+      includeType = false;
+      latch = false;
+      recent = false;
+      logInfo = {};
 
       // escape hatch
       if (name == "") name = id.toLowerCase().replace("_", " ");
-
-      // strip junk from command name and query
-      strippedQuery = query.replace(regexEllipsis, "").replace(regexCarrot, " ");
-      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+      logInfo["name"] = name;
 
       type = strings.hasOwnProperty(command.type)
         ? localize(strings[command.type]).toLowerCase()
         : command.type.toLowerCase();
+      logInfo["type"] = type;
 
       // add the command type to the name if user requested searching type
-      if (prefs.searchIncludesType) name = name.concat(" ", type);
+      if (prefs.searchIncludesType) {
+        includeType = true;
+        name = name.concat(" ", type);
+      }
       // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
 
-      // calculate Levenshtein distance for each combination of query and name words
-      var qWords = strippedQuery.split(" ");
-      var nWords = strippedName.split(" ");
-      var qWord, nWord, match;
-      for (var q = 0; q < qWords.length; q++) {
-        qWord = qWords[q];
-        match = false;
-        for (var n = 0; n < nWords.length; n++) {
-          nWord = nWords[n];
+      fzyScore = getFzyScore(query, name);
 
-          if (!qWord || !nWord) continue;
+      // skip any non matches
+      if (fzyScore === -1) continue;
+      logInfo["fzyScore"] = fzyScore;
 
-          // check if change distance is within allowance
-          dist = levenshteinDistance(qWord, nWord);
-
-          if (dist <= 3) {
-            score += dist + 1;
-          }
-        }
+      // query latching
+      if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
+        latch = true;
+        extras += 0.1;
       }
 
-      // updated scores for matches
-      if (score > 0) {
-        // query latching
-        if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
-          scores[latches[query]] = -10;
-        }
-
-        // recent commands
-        if (score <= minScore && recentCommands.hasOwnProperty(command.id)) {
-          score -= 5;
-        }
-
-        scores[id] = score;
-        matches.push(id);
-        if (scores[id] < minScore) minScore = scores[id];
+      // recent commands
+      if (score >= minScore && recentCommands.hasOwnProperty(id)) {
+        recent = true;
+        extras += 0.05;
       }
+
+      var score = fzyScore - extras;
+
+      logInfo["latch"] = latch;
+      logInfo["recent"] = recent;
+      logInfo["extras"] = extras > 0 ? "-" + extras.toString() : 0;
+      logInfo["score"] = score;
+
+      scores[id] = score;
+      matches.push(id);
+      if (score < minScore) minScore = score;
+      log[id] = logInfo;
     }
 
     /* Sort matches by their respective score */
@@ -10567,7 +10743,24 @@ See the LICENSE file for details.
       return arr;
     }
 
-    return sortByScore(matches);
+    var sortedMatches = sortByScore(matches);
+
+    // write dev log of scoring
+    // var f = new File(Folder.desktop + "/icp_command_scoring.txt");
+    // f.encoding = "UTF-8";
+    // f.open("w");
+    // f.writeln("query=" + query);
+    // var arr;
+    // for (var i = 0; i < matches.length; i++) {
+    //   arr = ["id=" + matches[i]];
+    //   for (prop in log[matches[i]]) {
+    //     arr.push(prop + "=" + log[matches[i]][prop]);
+    //   }
+    //   f.writeln(arr.join(", "));
+    // }
+    // f.close();
+
+    return sortedMatches;
   }
   function workflowBuilder(commands, editWorkflowId) {
     var overwrite = false;

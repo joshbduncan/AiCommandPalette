@@ -1,0 +1,184 @@
+// fzy matching algorithm
+//
+// ExtendScript port of a lua port by Seth Warn <https://github.com/swarn>
+// of John Hawthorn's fzy <https://github.com/jhawthorn/fzy>
+
+var fzy = {};
+
+// setup scoring defaults
+scoreGapLeading = -0.005;
+scoreGapTrailing = -0.005;
+scoreGapInner = -0.01;
+scoreMatchConsecutive = 1.0;
+scoreMatchWord = 0.8;
+scoreMatchCapital = 0.7;
+scoreMatchDot = 0.6;
+scoreMax = Number.POSITIVE_INFINITY;
+scoreMin = Number.NEGATIVE_INFINITY;
+matchMaxLength = 1024;
+
+fzy.hasMatch = function (needle, haystack) {
+  needle = needle.toLowerCase();
+  haystack = haystack.toLowerCase();
+
+  var j = 0;
+  for (var i = 0; i < needle.length; i++) {
+    j = haystack.indexOf(needle.charAt(i), j);
+    if (j === -1) {
+      return false;
+    } else {
+      j++;
+    }
+  }
+
+  return true;
+};
+
+function isLower(c) {
+  return c === c.toLowerCase();
+}
+
+function isUpper(c) {
+  return c === c.toUpperCase();
+}
+
+function precomputeBonus(haystack) {
+  var matchBonus = {};
+
+  var lastChar = "";
+  for (var i = 0; i < haystack.length; i++) {
+    var thisChar = haystack.charAt(i);
+    if (lastChar === " ") {
+      matchBonus[i] = scoreMatchWord;
+    } else if (lastChar === ".") {
+      matchBonus[i] = scoreMatchDot;
+    } else if (isLower(lastChar) && isUpper(thisChar)) {
+      matchBonus[i] = scoreMatchCapital;
+    } else {
+      matchBonus[i] = 0;
+    }
+
+    lastChar = thisChar;
+  }
+
+  return matchBonus;
+}
+
+function compute(needle, haystack, D, M) {
+  var matchBonus = precomputeBonus(haystack);
+  var n = needle.length;
+  var m = haystack.length;
+  var lowerNeedle = needle.toLowerCase();
+  var lowerHaystack = haystack.toLowerCase();
+
+  var haystackChars = [];
+  for (var i = 0; i < m; i++) {
+    haystackChars[i] = lowerHaystack.charAt(i);
+  }
+
+  for (var i = 0; i < n; i++) {
+    D[i] = [];
+    M[i] = [];
+
+    var prevScore = scoreMin;
+    var gapScore = i === n - 1 ? scoreGapTrailing : scoreGapInner;
+    var needleChar = lowerNeedle.charAt(i);
+
+    for (var j = 0; j < m; j++) {
+      if (needleChar === haystackChars[j]) {
+        var score = scoreMin;
+        if (i === 0) {
+          score = j * scoreGapLeading + matchBonus[j];
+        } else if (j > 0) {
+          var a = M[i - 1][j - 1] + matchBonus[j];
+          var b = D[i - 1][j - 1] + scoreMatchConsecutive;
+          score = Math.max(a, b);
+        }
+        D[i][j] = score;
+        prevScore = Math.max(score, prevScore + gapScore);
+        M[i][j] = prevScore;
+      } else {
+        D[i][j] = scoreMin;
+        prevScore += gapScore;
+        M[i][j] = prevScore;
+      }
+    }
+  }
+}
+
+fzy.score = function (needle, haystack) {
+  var n = needle.length;
+  var m = haystack.length;
+
+  if (n === 0 || m === 0 || m > matchMaxLength || n > matchMaxLength) {
+    return scoreMin;
+  } else if (n === m) {
+    return scoreMax;
+  } else {
+    var D = [];
+    var M = [];
+    compute(needle, haystack, D, M);
+    return M[n - 1][m - 1];
+  }
+};
+
+fzy.positions = function (needle, haystack) {
+  var n = needle.length;
+  var m = haystack.length;
+
+  if (n === 0 || m === 0 || m > matchMaxLength || n > matchMaxLength) {
+    return [];
+  } else if (n === m) {
+    var consecutive = [];
+    for (var i = 1; i <= n; i++) {
+      consecutive[i - 1] = i;
+    }
+    return consecutive;
+  }
+
+  var D = [];
+  var M = [];
+  compute(needle, haystack, D, M);
+
+  var positions = [];
+  var matchRequired = false;
+  var j = m;
+  for (var i = n; i > 0; i--) {
+    while (j > 0) {
+      if (
+        D[i - 1][j - 1] !== scoreMin &&
+        (matchRequired || M[i - 1][j - 1] === D[i - 1][j - 1] + scoreMatchConsecutive)
+      ) {
+        matchRequired =
+          i !== 1 &&
+          j !== 1 &&
+          M[i - 1][j - 1] === D[i - 2][j - 2] + scoreMatchConsecutive;
+        positions[i - 1] = j;
+        j--;
+        break;
+      } else {
+        j--;
+      }
+    }
+  }
+
+  return positions;
+};
+
+fzy.getScoreMin = function () {
+  // if strings a or b are empty or too long, `fzy.score(a, b) == fzy.get_score_min()`
+  return scoreMin;
+};
+
+fzy.getScoreMax = function () {
+  // for exact matches, `fzy.score(s, s) == fzy.get_score_max()`
+  return scoreMax;
+};
+
+fzy.getScoreFloor = function () {
+  // for all strings a and b that
+  //  - are not covered by either `fzy.get_score_min()` or fzy.get_score_max()`, and
+  //  - are matched, such that `fzy.has_match(a, b) == true`
+  // then `fzy.score(a, b) > fzy.get_score_floor()` will be true
+  return (matchMaxLength + 1) * scoreGapInner;
+};

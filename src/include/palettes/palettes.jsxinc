@@ -1,3 +1,4 @@
+//@include "fzy.jsxinc"
 //@include "commandPalette.jsxinc"
 //@include "workflowBuilder.jsxinc"
 //@include "startupBuilder.jsxinc"
