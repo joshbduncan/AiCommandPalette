@@ -10103,13 +10103,17 @@ See the LICENSE file for details.
     var scores = {};
     var matches = [];
 
-    var id, command, commandName, spans, score, latch, recent, bonus;
+    var id, command, commandName, type, spans, score, latch, recent, bonus;
     for (var i = 0; i < commands.length; i++) {
       // get command info
       id = commands[i];
       command = commandsData[id];
       commandName = determineCorrectString(command, "name").toLowerCase();
       if (commandName == "") commandName = id.toLowerCase().replace("_", " ");
+
+      type = strings.hasOwnProperty(command.type)
+        ? localize(strings[command.type]).toLowerCase()
+        : command.type.toLowerCase();
 
       // find fuzzy matches
       spans = findMatches(q, commandName);
@@ -10120,6 +10124,12 @@ See the LICENSE file for details.
       // calculate the command score
       bonus = 0;
       score = calculateScore(commandName, spans);
+
+      // add the command type to the name if user requested searching type
+      if (prefs.searchIncludesType) {
+        bonus += 10;
+      }
+      // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
 
       // // increase score if latched query
       if (latches.hasOwnProperty(q) && commands.includes(latches[q])) {
