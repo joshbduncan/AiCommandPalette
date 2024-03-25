@@ -24,12 +24,15 @@ function setupFileObject(path, name) {
 /**
  * Write string data to disk.
  * @param {String} data Data to be written.
- * @param {Object} f    File object to write to.
+ * @param {Object} fp   File path.
+ * @param {string} mode File access mode.
  */
-function writeData(data, f) {
+function writeData(data, fp, mode) {
+  mode = typeof mode !== "undefined" ? mode : "w";
+  f = new File(fp);
   try {
     f.encoding = "UTF-8";
-    f.open("w");
+    f.open(mode);
     f.write(data);
     f.close();
   } catch (e) {
