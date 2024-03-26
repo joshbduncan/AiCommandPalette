@@ -10148,7 +10148,7 @@ See the LICENSE file for details.
 
       // check for full word
       wordStart = s == 0 || command.charAt(s - 1) == " " ? true : false;
-      wordEnd = e == command.length - 1 || command.charAt(e + 1) == " " ? true : false;
+      wordEnd = e == command.length || command.charAt(e) == " " ? true : false;
       if (wordStart && wordEnd) {
         score += (e - s) * 3;
       } else if (wordStart) {
