@@ -154,13 +154,6 @@ function deleteCommand() {
 }
 
 /**
- * Enable/Disable searching on command type as well as command name.
- */
-function toggleTypeInSearch() {
-  prefs.searchIncludesType = !prefs.searchIncludesType;
-}
-
-/**
  * Present a palette with all possible command (less config commands).
  * The selected command will be hidden from the palette.
  */
@@ -192,7 +185,7 @@ function revealPrefFile() {
 /**
  * Present a palette with all built-in commands.
  */
-function showAllBuiltinCommands() {
+function builtinCommands() {
   var builtins = filterCommands(
     (commands = null),
     (types = ["builtin"]),
@@ -457,6 +450,27 @@ function showAllBookmarks() {
 }
 
 /**
+ * Present a palette with all menu commands.
+ */
+function showAllMenus() {
+  var workflows = filterCommands(
+    (commands = null),
+    (types = ["menu"]),
+    (showHidden = true),
+    (showNonRelevant = false),
+    (hideSpecificCommands = null)
+  );
+  var result = commandPalette(
+    (commands = workflows),
+    (title = localize(strings.menu_commands)),
+    (columns = paletteSettings.columnSets.default),
+    (multiselect = false)
+  );
+  if (!result) return;
+  processCommand(result);
+}
+
+/**
  * Present a palette with all user loaded scripts.
  */
 function showAllScripts() {
@@ -484,6 +498,27 @@ function showAllScripts() {
     (commands = scriptCommands),
     (title = localize(strings.Scripts)),
     (columns = columns),
+    (multiselect = false)
+  );
+  if (!result) return;
+  processCommand(result);
+}
+
+/**
+ * Present a palette with all tools.
+ */
+function showAllTools() {
+  var workflows = filterCommands(
+    (commands = null),
+    (types = ["tool"]),
+    (showHidden = true),
+    (showNonRelevant = false),
+    (hideSpecificCommands = null)
+  );
+  var result = commandPalette(
+    (commands = workflows),
+    (title = localize(strings.tl_all)),
+    (columns = paletteSettings.columnSets.default),
     (multiselect = false)
   );
   if (!result) return;

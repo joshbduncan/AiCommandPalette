@@ -67,13 +67,6 @@ function relevantCommand(command) {
   // hide `All Actions...` command if no actions
   if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
 
-  // hide `Enable Searching on Command Type` command if already enabled
-  if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
-    return false;
-  // hide `Disable Searching on Command Type` command if already disabled
-  if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
-    return false;
-
   // hide `Unhide Commands...` command if no hidden commands
   if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
     return false;

@@ -18,7 +18,6 @@ prefs.workflows = [];
 prefs.bookmarks = [];
 prefs.scripts = [];
 prefs.latches = {};
-prefs.searchIncludesType = false;
 prefs.version = _version;
 prefs.os = os;
 prefs.locale = locale;

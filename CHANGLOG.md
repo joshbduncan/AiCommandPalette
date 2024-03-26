@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## Added
+
+- fuzzy matching (e.g. looking for 'Outline Stroke', queries 'oust', 'ou st', 'st ou' will all work)
+- query cache to speed things up a bit (especially when backspacing/clearing characters)
+
+## Changes
+
+- removed searching on type command (added back 'all menu commands', 'all tools')
+
 ## [0.10.0] 2024-01-25
 
 ## Added

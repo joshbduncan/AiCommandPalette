@@ -4,7 +4,7 @@ function fuzzy(q, commands) {
   var scores = {};
   var matches = [];
 
-  var id, command, commandName, type, spans, score, latch, recent, bonus;
+  var id, command, commandName, spans, score, latch, recent, bonus;
   for (var i = 0; i < commands.length; i++) {
     // get command info
     id = commands[i];
@@ -12,12 +12,8 @@ function fuzzy(q, commands) {
     commandName = determineCorrectString(command, "name").toLowerCase();
     if (commandName == "") commandName = id.toLowerCase().replace("_", " ");
 
-    type = strings.hasOwnProperty(command.type)
-      ? localize(strings[command.type]).toLowerCase()
-      : command.type.toLowerCase();
-
     // find fuzzy matches
-    spans = findMatches(q, commandName);
+    spans = findMatches(q.split(" "), commandName);
 
     // no need to track scores of commands without matches
     if (!spans.length) continue;
@@ -25,12 +21,6 @@ function fuzzy(q, commands) {
     // calculate the command score
     bonus = 0;
     score = calculateScore(commandName, spans);
-
-    // add the command type to the name if user requested searching type
-    if (prefs.searchIncludesType) {
-      bonus += 10;
-    }
-    // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
 
     // // increase score if latched query
     if (latches.hasOwnProperty(q) && commands.includes(latches[q])) {
@@ -60,12 +50,17 @@ function calculateScore(command, spans) {
   var lastCarrot = findLastCarrot(command);
 
   var score = 0;
-  var s, e;
+  var s, e, wordStart, wordEnd;
   for (var i = 0; i < spans.length; i++) {
-    var s = spans[i][0];
-    var e = spans[i][1];
+    s = spans[i][0];
+    e = spans[i][1];
 
-    if (s === 0 || command.charAt(s - 1) === " ") {
+    // check for full word
+    wordStart = s == 0 || command.charAt(s - 1) == " " ? true : false;
+    wordEnd = e == command.length - 1 || command.charAt(e + 1) == " " ? true : false;
+    if (wordStart && wordEnd) {
+      score += (e - s) * 3;
+    } else if (wordStart) {
       score += (e - s) * 2;
     } else {
       score += e - s;
@@ -78,10 +73,9 @@ function calculateScore(command, spans) {
   return score;
 }
 
-function findMatches(q, str) {
+function findMatches(chunks, str) {
   var spans = [];
 
-  var chunks = q.split(" ");
   var chunk, s, e, offset, lastSpan;
   for (var i = 0; i < chunks.length; i++) {
     var chunk = chunks[i];

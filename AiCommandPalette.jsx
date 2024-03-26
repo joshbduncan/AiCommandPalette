@@ -653,11 +653,7 @@ See the LICENSE file for details.
       de: "Der Befehl '%1' erfordert eine Auswahl. Trotzdem fortfahren?",
       ru: "Command '%1' requires an active selection. Continue Anyway?",
     },
-    cd_all: {
-      en: "All Built-In Commands",
-      de: "All Built-In Commands",
-      ru: "All Built-In Commands",
-    },
+    cd_all: { en: "Built-In Commands", de: "Built-In Commands", ru: "Built-In Commands" },
     cd_clear_history_confirm: {
       en: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
       de: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
@@ -886,6 +882,7 @@ See the LICENSE file for details.
     layer_title_case: { en: "Layer", de: "Layer", ru: "Layer" },
     layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
     menu: { en: "Menu", de: "Menu", ru: "Menu" },
+    menu_commands: { en: "Menu Commands", de: "Menu Commands", ru: "Menu Commands" },
     name_title_case: { en: "Name", de: "Name", ru: "Name" },
     no_active_document: {
       en: "No active documents.",
@@ -1018,7 +1015,7 @@ See the LICENSE file for details.
     },
     title: { en: "Ai Command Palette", de: "Kurzbefehle", ru: "Ai Command Palette" },
     tl_all: {
-      en: "All Built-In Tools",
+      en: "Tools",
       de: "Alle integrierten Werkzeuge",
       ru: "\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u044b\u0435 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b",
     },
@@ -9248,6 +9245,19 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    builtin_allMenus: {
+      id: "builtin_allMenus",
+      action: "allMenus",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "All Menu Commands...",
+        de: "All Menu Commands...",
+        ru: "All Menu Commands...",
+      },
+      hidden: false,
+    },
     builtin_allScripts: {
       id: "builtin_allScripts",
       action: "allScripts",
@@ -9255,6 +9265,15 @@ See the LICENSE file for details.
       docRequired: false,
       selRequired: false,
       name: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
+      hidden: false,
+    },
+    builtin_allTools: {
+      id: "builtin_allTools",
+      action: "allTools",
+      type: "builtin",
+      docRequired: true,
+      selRequired: false,
+      name: { en: "All Tools...", de: "All Tools...", ru: "All Tools..." },
       hidden: false,
     },
     builtin_allWorkflows: {
@@ -9461,16 +9480,16 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    config_settings: {
-      id: "config_settings",
-      action: "settings",
+    config_builtinCommands: {
+      id: "config_builtinCommands",
+      action: "builtinCommands",
       type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Ai Command Palette Settings...",
-        de: "Kurzbefehle \u2013 Einstellungen \u2026",
-        ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+        en: "Show All Builtin Commands...",
+        de: "Show All Builtin Commands...",
+        ru: "Show All Builtin Commands...",
       },
       hidden: false,
     },
@@ -9513,32 +9532,6 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    config_disableTypeInSearch: {
-      id: "config_disableTypeInSearch",
-      action: "disableTypeInSearch",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Disable Searching on Command Type",
-        de: "Disable Searching on Command Type",
-        ru: "Disable Searching on Command Type",
-      },
-      hidden: false,
-    },
-    config_enableTypeInSearch: {
-      id: "config_enableTypeInSearch",
-      action: "enableTypeInSearch",
-      type: "config",
-      docRequired: false,
-      selRequired: false,
-      name: {
-        en: "Enable Searching on Command Type",
-        de: "Enable Searching on Command Type",
-        ru: "Enable Searching on Command Type",
-      },
-      hidden: false,
-    },
     config_hideCommand: {
       id: "config_hideCommand",
       action: "hideCommand",
@@ -9565,16 +9558,16 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    config_showAllBuiltinCommands: {
-      id: "config_showAllBuiltinCommands",
-      action: "showAllBuiltinCommands",
+    config_settings: {
+      id: "config_settings",
+      action: "settings",
       type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Show All Builtin Commands...",
-        de: "Show All Builtin Commands...",
-        ru: "Show All Builtin Commands...",
+        en: "Ai Command Palette Settings...",
+        de: "Kurzbefehle \u2013 Einstellungen \u2026",
+        ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
       },
       hidden: false,
     },
@@ -9714,7 +9707,6 @@ See the LICENSE file for details.
   prefs.bookmarks = [];
   prefs.scripts = [];
   prefs.latches = {};
-  prefs.searchIncludesType = false;
   prefs.version = _version;
   prefs.os = os;
   prefs.locale = locale;
@@ -10103,7 +10095,7 @@ See the LICENSE file for details.
     var scores = {};
     var matches = [];
 
-    var id, command, commandName, type, spans, score, latch, recent, bonus;
+    var id, command, commandName, spans, score, latch, recent, bonus;
     for (var i = 0; i < commands.length; i++) {
       // get command info
       id = commands[i];
@@ -10111,12 +10103,8 @@ See the LICENSE file for details.
       commandName = determineCorrectString(command, "name").toLowerCase();
       if (commandName == "") commandName = id.toLowerCase().replace("_", " ");
 
-      type = strings.hasOwnProperty(command.type)
-        ? localize(strings[command.type]).toLowerCase()
-        : command.type.toLowerCase();
-
       // find fuzzy matches
-      spans = findMatches(q, commandName);
+      spans = findMatches(q.split(" "), commandName);
 
       // no need to track scores of commands without matches
       if (!spans.length) continue;
@@ -10124,12 +10112,6 @@ See the LICENSE file for details.
       // calculate the command score
       bonus = 0;
       score = calculateScore(commandName, spans);
-
-      // add the command type to the name if user requested searching type
-      if (prefs.searchIncludesType) {
-        bonus += 10;
-      }
-      // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
 
       // // increase score if latched query
       if (latches.hasOwnProperty(q) && commands.includes(latches[q])) {
@@ -10159,12 +10141,17 @@ See the LICENSE file for details.
     var lastCarrot = findLastCarrot(command);
 
     var score = 0;
-    var s, e;
+    var s, e, wordStart, wordEnd;
     for (var i = 0; i < spans.length; i++) {
-      var s = spans[i][0];
-      var e = spans[i][1];
+      s = spans[i][0];
+      e = spans[i][1];
 
-      if (s === 0 || command.charAt(s - 1) === " ") {
+      // check for full word
+      wordStart = s == 0 || command.charAt(s - 1) == " " ? true : false;
+      wordEnd = e == command.length - 1 || command.charAt(e + 1) == " " ? true : false;
+      if (wordStart && wordEnd) {
+        score += (e - s) * 3;
+      } else if (wordStart) {
         score += (e - s) * 2;
       } else {
         score += e - s;
@@ -10177,10 +10164,9 @@ See the LICENSE file for details.
     return score;
   }
 
-  function findMatches(q, str) {
+  function findMatches(chunks, str) {
     var spans = [];
 
-    var chunks = q.split(" ");
     var chunk, s, e, offset, lastSpan;
     for (var i = 0; i < chunks.length; i++) {
       var chunk = chunks[i];
@@ -10495,6 +10481,8 @@ See the LICENSE file for details.
   // USER DIALOGS
 
   function commandPalette(commands, title, columns, multiselect, showOnly, saveHistory) {
+    var qCache = {};
+
     // create the dialog
     var win = new Window("dialog");
     win.text = title;
@@ -10539,8 +10527,11 @@ See the LICENSE file for details.
     q.onChanging = function () {
       if (this.text === "") {
         matches = showOnly ? showOnly : commands;
+      } else if (qCache.hasOwnProperty(this.text)) {
+        matches = qCache[this.text];
       } else {
         matches = fuzzy(this.text, commands);
+        qCache[this.text] = matches;
       }
       list.update(matches);
     };
@@ -11023,13 +11014,6 @@ See the LICENSE file for details.
     // hide `All Actions...` command if no actions
     if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
 
-    // hide `Enable Searching on Command Type` command if already enabled
-    if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
-      return false;
-    // hide `Disable Searching on Command Type` command if already disabled
-    if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
-      return false;
-
     // hide `Unhide Commands...` command if no hidden commands
     if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
       return false;
@@ -11194,17 +11178,13 @@ See the LICENSE file for details.
       case "unhideCommand":
         unhideCommand();
         break;
-      case "enableTypeInSearch":
-      case "disableTypeInSearch":
-        toggleTypeInSearch();
-        break;
       case "revealPrefFile":
         write = false;
         revealPrefFile();
         break;
-      case "showAllBuiltinCommands":
+      case "builtinCommands":
         write = false;
-        showAllBuiltinCommands();
+        builtinCommands();
         break;
       case "settings":
         write = false;
@@ -11220,9 +11200,17 @@ See the LICENSE file for details.
         write = false;
         showAllBookmarks();
         break;
+      case "allMenus":
+        write = false;
+        showAllMenus();
+        break;
       case "allScripts":
         write = false;
         showAllScripts();
+        break;
+      case "allTools":
+        write = false;
+        showAllTools();
         break;
       case "allWorkflows":
         write = false;
@@ -11446,13 +11434,6 @@ See the LICENSE file for details.
   }
 
   /**
-   * Enable/Disable searching on command type as well as command name.
-   */
-  function toggleTypeInSearch() {
-    prefs.searchIncludesType = !prefs.searchIncludesType;
-  }
-
-  /**
    * Present a palette with all possible command (less config commands).
    * The selected command will be hidden from the palette.
    */
@@ -11484,7 +11465,7 @@ See the LICENSE file for details.
   /**
    * Present a palette with all built-in commands.
    */
-  function showAllBuiltinCommands() {
+  function builtinCommands() {
     var builtins = filterCommands(
       (commands = null),
       (types = ["builtin"]),
@@ -11749,6 +11730,27 @@ See the LICENSE file for details.
   }
 
   /**
+   * Present a palette with all menu commands.
+   */
+  function showAllMenus() {
+    var workflows = filterCommands(
+      (commands = null),
+      (types = ["menu"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = workflows),
+      (title = localize(strings.menu_commands)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
    * Present a palette with all user loaded scripts.
    */
   function showAllScripts() {
@@ -11776,6 +11778,27 @@ See the LICENSE file for details.
       (commands = scriptCommands),
       (title = localize(strings.Scripts)),
       (columns = columns),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Present a palette with all tools.
+   */
+  function showAllTools() {
+    var workflows = filterCommands(
+      (commands = null),
+      (types = ["tool"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = workflows),
+      (title = localize(strings.tl_all)),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
     if (!result) return;

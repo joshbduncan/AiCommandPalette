@@ -260,6 +260,8 @@ function scrollListBoxWithArrows(listbox) {
 // USER DIALOGS
 
 function commandPalette(commands, title, columns, multiselect, showOnly, saveHistory) {
+  var qCache = {};
+
   // create the dialog
   var win = new Window("dialog");
   win.text = title;
@@ -304,8 +306,11 @@ function commandPalette(commands, title, columns, multiselect, showOnly, saveHis
   q.onChanging = function () {
     if (this.text === "") {
       matches = showOnly ? showOnly : commands;
+    } else if (qCache.hasOwnProperty(this.text)) {
+      matches = qCache[this.text];
     } else {
       matches = fuzzy(this.text, commands);
+      qCache[this.text] = matches;
     }
     list.update(matches);
   };
