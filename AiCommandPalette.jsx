@@ -10117,7 +10117,6 @@ See the LICENSE file for details.
     this.loadedActions = ct > 0;
   };
   function fuzzy(q, commands) {
-    alert("hey from fuzzy");
     q = q.toLowerCase();
 
     var scores = {};
@@ -10257,7 +10256,6 @@ See the LICENSE file for details.
    * @returns {Array}           Matching items sorted by score.
    */
   function scoreMatches(query, commands) {
-    alert("hey from scoreMatches");
     var words = [];
     var matches = [];
     var scores = {};

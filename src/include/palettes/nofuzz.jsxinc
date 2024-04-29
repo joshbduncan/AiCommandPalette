@@ -5,7 +5,6 @@
  * @returns {Array}           Matching items sorted by score.
  */
 function scoreMatches(query, commands) {
-  alert("hey from scoreMatches");
   var words = [];
   var matches = [];
   var scores = {};

@@ -1,5 +1,4 @@
 function fuzzy(q, commands) {
-  alert("hey from fuzzy");
   q = q.toLowerCase();
 
   var scores = {};
