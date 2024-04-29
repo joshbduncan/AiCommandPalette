@@ -10140,6 +10140,9 @@ See the LICENSE file for details.
   function calculateScore(command, spans) {
     var lastCarrot = findLastCarrot(command);
 
+    // strip out ellipsis for correct full word check
+    command = command.replace(regexEllipsis, "")
+
     var score = 0;
     var s, e, wordStart, wordEnd;
     for (var i = 0; i < spans.length; i++) {
@@ -10597,6 +10600,7 @@ See the LICENSE file for details.
     return false;
   }
   function workflowBuilder(commands, editWorkflowId) {
+    var qCache = {};
     var overwrite = false;
 
     // create the dialog
@@ -10698,8 +10702,11 @@ See the LICENSE file for details.
     q.onChanging = function () {
       if (this.text === "") {
         matches = commands;
+      } else if (qCache.hasOwnProperty(this.text)) {
+        matches = qCache[this.text];
       } else {
-        matches = scoreMatches(this.text, commands);
+        matches = fuzzy(this.text, commands);
+        qCache[this.text] = matches;
       }
       if (matches.length > 0) {
         list.update(matches);
@@ -10801,6 +10808,8 @@ See the LICENSE file for details.
     return false;
   }
   function startupBuilder(commands) {
+    var qCache = {};
+
     // create the dialog
     var win = new Window("dialog");
     win.text = localize(strings.startup_builder);
@@ -10876,8 +10885,11 @@ See the LICENSE file for details.
     q.onChanging = function () {
       if (this.text === "") {
         matches = commands;
+      } else if (qCache.hasOwnProperty(this.text)) {
+        matches = qCache[this.text];
       } else {
-        matches = scoreMatches(this.text, commands);
+        matches = fuzzy(this.text, commands);
+        qCache[this.text] = matches;
       }
       if (matches.length > 0) {
         list.update(matches);

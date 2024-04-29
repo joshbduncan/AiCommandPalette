@@ -49,6 +49,9 @@ function fuzzy(q, commands) {
 function calculateScore(command, spans) {
   var lastCarrot = findLastCarrot(command);
 
+  // strip out ellipsis for correct full word check
+  command = command.replace(regexEllipsis, "")
+
   var score = 0;
   var s, e, wordStart, wordEnd;
   for (var i = 0; i < spans.length; i++) {

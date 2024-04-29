@@ -1,4 +1,5 @@
 function workflowBuilder(commands, editWorkflowId) {
+  var qCache = {};
   var overwrite = false;
 
   // create the dialog
@@ -100,8 +101,11 @@ function workflowBuilder(commands, editWorkflowId) {
   q.onChanging = function () {
     if (this.text === "") {
       matches = commands;
+    } else if (qCache.hasOwnProperty(this.text)) {
+      matches = qCache[this.text];
     } else {
-      matches = scoreMatches(this.text, commands);
+      matches = fuzzy(this.text, commands);
+      qCache[this.text] = matches;
     }
     if (matches.length > 0) {
       list.update(matches);
