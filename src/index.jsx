@@ -38,6 +38,9 @@ See the LICENSE file for details.
   userActions.load();
   userHistory.load();
 
+  // set command palette matching algo
+  var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
+
   // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];

@@ -309,7 +309,7 @@ function commandPalette(commands, title, columns, multiselect, showOnly, saveHis
     } else if (qCache.hasOwnProperty(this.text)) {
       matches = qCache[this.text];
     } else {
-      matches = fuzzy(this.text, commands);
+      matches = matcher(this.text, commands);
       qCache[this.text] = matches;
     }
     list.update(matches);

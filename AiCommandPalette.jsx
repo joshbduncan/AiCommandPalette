@@ -9487,9 +9487,9 @@ See the LICENSE file for details.
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Show All Builtin Commands...",
-        de: "Show All Builtin Commands...",
-        ru: "Show All Builtin Commands...",
+        en: "Built-in Commands...",
+        de: "Built-in Commands...",
+        ru: "Built-in Commands...",
       },
       hidden: false,
     },
@@ -9529,6 +9529,32 @@ See the LICENSE file for details.
         en: "Delete Commands...",
         de: "Befehle l\u00f6schen \u2026",
         ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+      },
+      hidden: false,
+    },
+    config_enableFuzzyMatching: {
+      id: "config_enableFuzzyMatching",
+      action: "enableFuzzyMatching",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Enable Fuzzy Matching",
+        de: "Enable Fuzzy Matching",
+        ru: "Enable Fuzzy Matching",
+      },
+      hidden: false,
+    },
+    config_disableFuzzyMatching: {
+      id: "config_disableFuzzyMatching",
+      action: "disableFuzzyMatching",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Disable Fuzzy Matching",
+        de: "Disable Fuzzy Matching",
+        ru: "Disable Fuzzy Matching",
       },
       hidden: false,
     },
@@ -9706,6 +9732,7 @@ See the LICENSE file for details.
   prefs.workflows = [];
   prefs.bookmarks = [];
   prefs.scripts = [];
+  prefs.fuzzy = true; // set to new fuzzy matcher as default
   prefs.latches = {};
   prefs.version = _version;
   prefs.os = os;
@@ -10090,6 +10117,7 @@ See the LICENSE file for details.
     this.loadedActions = ct > 0;
   };
   function fuzzy(q, commands) {
+    alert("hey from fuzzy");
     q = q.toLowerCase();
 
     var scores = {};
@@ -10141,7 +10169,7 @@ See the LICENSE file for details.
     var lastCarrot = findLastCarrot(command);
 
     // strip out ellipsis for correct full word check
-    command = command.replace(regexEllipsis, "")
+    command = command.replace(regexEllipsis, "");
 
     var score = 0;
     var s, e, wordStart, wordEnd;
@@ -10221,6 +10249,101 @@ See the LICENSE file for details.
       }
     }
     return spans;
+  }
+  /**
+   * Score array items based on regex string match.
+   * @param   {String} query    String to search for.
+   * @param   {Array}  commands Commands to match `query` against.
+   * @returns {Array}           Matching items sorted by score.
+   */
+  function scoreMatches(query, commands) {
+    alert("hey from scoreMatches");
+    var words = [];
+    var matches = [];
+    var scores = {};
+    var maxScore = 0;
+    query = query.toLowerCase();
+    var words = query.split(" ");
+    var id, command, name, type, score, strippedName;
+
+    // query latching
+    if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
+      scores[latches[query]] = 1000;
+      matches.push(latches[query]);
+    }
+
+    for (var i = 0; i < commands.length; i++) {
+      id = commands[i];
+      command = commandsData[id];
+      score = 0;
+      name = determineCorrectString(command, "name").toLowerCase();
+
+      // escape hatch
+      if (name == "") name = id.toLowerCase().replace("_", " ");
+
+      type = strings.hasOwnProperty(command.type)
+        ? localize(strings[command.type]).toLowerCase()
+        : command.type.toLowerCase();
+
+      // check for exact match
+      if (
+        query === name ||
+        query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName ||
+        query === type
+      ) {
+        score += word.length;
+      }
+
+      // strip junk from command name
+      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+
+      // add the command type to the name if user requested searching type
+      if (prefs.searchIncludesType) name = name.concat(" ", type);
+      // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
+
+      // check for singular word matches
+      var word, re;
+      for (var n = 0; n < words.length; n++) {
+        word = words[n];
+        if (!word) continue;
+
+        re = new RegExp("\\b" + word, "gi");
+
+        // check for a match at the beginning of a word
+        if (re.test(name) || re.test(strippedName)) score += word.length;
+      }
+
+      // updated scores for matches
+      if (score > 0) {
+        // increase score if command found in recent commands
+        if (score >= maxScore && recentCommands.hasOwnProperty(command.id)) {
+          score += recentCommands[command.id];
+        }
+        if (scores.hasOwnProperty(id)) {
+          scores[id] += score;
+        } else {
+          scores[id] = score;
+          matches.push(id);
+        }
+        if (scores[id] > maxScore) maxScore = scores[id];
+      }
+    }
+
+    /* Sort matched by their respective score */
+    function sortByScore(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        for (var j = 0; j < arr.length - i - 1; j++) {
+          if (scores[arr[j + 1]] > scores[arr[j]]) {
+            var temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+          }
+        }
+      }
+      return arr;
+    }
+
+    return sortByScore(matches);
   }
   // CUSTOM SCRIPTUI FILTERABLE LISTBOX
 
@@ -10533,7 +10656,7 @@ See the LICENSE file for details.
       } else if (qCache.hasOwnProperty(this.text)) {
         matches = qCache[this.text];
       } else {
-        matches = fuzzy(this.text, commands);
+        matches = matcher(this.text, commands);
         qCache[this.text] = matches;
       }
       list.update(matches);
@@ -10705,7 +10828,7 @@ See the LICENSE file for details.
       } else if (qCache.hasOwnProperty(this.text)) {
         matches = qCache[this.text];
       } else {
-        matches = fuzzy(this.text, commands);
+        matches = matcher(this.text, commands);
         qCache[this.text] = matches;
       }
       if (matches.length > 0) {
@@ -10888,7 +11011,7 @@ See the LICENSE file for details.
       } else if (qCache.hasOwnProperty(this.text)) {
         matches = qCache[this.text];
       } else {
-        matches = fuzzy(this.text, commands);
+        matches = matcher(this.text, commands);
         qCache[this.text] = matches;
       }
       if (matches.length > 0) {
@@ -11025,6 +11148,11 @@ See the LICENSE file for details.
     if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
     // hide `All Actions...` command if no actions
     if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
+
+    // hide `Enable Fuzzy Matching` command if already enabled
+    if (command.id == "config_enableFuzzyMatching" && prefs.fuzzy) return false;
+    // hide `Disable Fuzzy Matching` command if already disabled
+    if (command.id == "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
 
     // hide `Unhide Commands...` command if no hidden commands
     if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
@@ -11183,6 +11311,10 @@ See the LICENSE file for details.
         break;
       case "deleteCommand":
         deleteCommand();
+        break;
+      case "enableFuzzyMatching":
+      case "disableFuzzyMatching":
+        toggleFuzzyMatching();
         break;
       case "hideCommand":
         hideCommand();
@@ -11443,6 +11575,13 @@ See the LICENSE file for details.
     for (var i = prefs.startupCommands.length - 1; i >= 0; i--) {
       if (result.includes(prefs.startupCommands[i])) prefs.startupCommands.splice(i, 1);
     }
+  }
+
+  /**
+   * Toggle fuzzy command matching
+   */
+  function toggleFuzzyMatching() {
+    prefs.fuzzy = !prefs.fuzzy;
   }
 
   /**
@@ -12445,6 +12584,9 @@ See the LICENSE file for details.
   userPrefs.load(true);
   userActions.load();
   userHistory.load();
+
+  // set command palette matching algo
+  var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
 
   // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {

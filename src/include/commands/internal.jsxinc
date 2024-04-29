@@ -154,6 +154,13 @@ function deleteCommand() {
 }
 
 /**
+ * Toggle fuzzy command matching
+ */
+function toggleFuzzyMatching() {
+  prefs.fuzzy = !prefs.fuzzy;
+}
+
+/**
  * Present a palette with all possible command (less config commands).
  * The selected command will be hidden from the palette.
  */

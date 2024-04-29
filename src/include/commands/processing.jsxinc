@@ -143,6 +143,10 @@ function internalAction(command) {
     case "deleteCommand":
       deleteCommand();
       break;
+    case "enableFuzzyMatching":
+    case "disableFuzzyMatching":
+      toggleFuzzyMatching();
+      break;
     case "hideCommand":
       hideCommand();
       break;

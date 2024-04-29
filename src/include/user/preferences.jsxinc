@@ -17,6 +17,7 @@ prefs.hiddenCommands = [];
 prefs.workflows = [];
 prefs.bookmarks = [];
 prefs.scripts = [];
+prefs.fuzzy = true; // set to new fuzzy matcher as default
 prefs.latches = {};
 prefs.version = _version;
 prefs.os = os;

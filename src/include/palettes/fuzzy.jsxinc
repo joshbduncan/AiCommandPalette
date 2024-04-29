@@ -1,4 +1,5 @@
 function fuzzy(q, commands) {
+  alert("hey from fuzzy");
   q = q.toLowerCase();
 
   var scores = {};
@@ -50,7 +51,7 @@ function calculateScore(command, spans) {
   var lastCarrot = findLastCarrot(command);
 
   // strip out ellipsis for correct full word check
-  command = command.replace(regexEllipsis, "")
+  command = command.replace(regexEllipsis, "");
 
   var score = 0;
   var s, e, wordStart, wordEnd;

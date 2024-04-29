@@ -104,7 +104,7 @@ function workflowBuilder(commands, editWorkflowId) {
     } else if (qCache.hasOwnProperty(this.text)) {
       matches = qCache[this.text];
     } else {
-      matches = fuzzy(this.text, commands);
+      matches = matcher(this.text, commands);
       qCache[this.text] = matches;
     }
     if (matches.length > 0) {
