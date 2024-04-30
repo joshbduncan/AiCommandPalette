@@ -60,103 +60,10 @@ function settings() {
 }
 
 /**
- * Build a custom command picker.
- * @param   {Array} commands Custom command to choose from.
- */
-
-/**
- * Build a custom command picker.
+ * Present the Picker Builder dialog for building/editing user picker.
+ * @param {String} editWorkflowId Id of a current user picker to edit.
  */
 function buildPicker(editPickerId) {
-  function pickerBuilder(editPickerId) {
-    var overwrite = false;
-
-    // create the dialog
-    var win = new Window("dialog");
-    win.text = localize("Custom Picker Builder"); // TODO: localize
-    win.alignChildren = "fill";
-
-    // picker name
-    var pName = win.add("panel", undefined, "Custom Picker Name"); // TODO: localize
-    pName.alignChildren = ["fill", "center"];
-    pName.margins = 20;
-    var pickerNameText = editPickerId ? commandsData[editPickerId].name : "";
-    var pickerName = pName.add("edittext", undefined, pickerNameText);
-    pickerName.enabled = editPickerId ? true : false;
-
-    // picker commands
-    var pCommands = win.add(
-      "panel",
-      undefined,
-      "Custom Picker Commands (separated by newlines)"
-    ); // TODO: localize
-    var pickerCommands = win.add("edittext", [0, 0, 300, 300], "", { multiline: true });
-    pickerCommands.text = editPickerId
-      ? commandsData[editPickerId].commands.join("\n")
-      : "";
-
-    // window buttons
-    var winButtons = win.add("group");
-    winButtons.orientation = "row";
-    winButtons.alignChildren = ["center", "center"];
-    var save = winButtons.add("button", undefined, localize(strings.save), {
-      name: "ok",
-    });
-    save.preferredSize.width = 100;
-    save.enabled = editPickerId ? true : false;
-    var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
-      name: "cancel",
-    });
-    cancel.preferredSize.width = 100;
-
-    pickerCommands.onChange = function () {
-      pickerName.enabled = pickerCommands.text.length > 0 ? true : false;
-      save.enabled =
-        steps.listbox.items.length > 0 && pickerName.text.length > 0 ? true : false;
-    };
-
-    pickerName.onChanging = function () {
-      save.enabled = pickerCommands.text.length > 0 ? true : false;
-    };
-
-    save.onClick = function () {
-      // check for picker overwrite
-      var currentPickers = [];
-      for (var i = 0; i < prefs.pickers.length; i++) {
-        currentPickers.push(prefs.pickers[i].name);
-      }
-      if (currentPickers.includes(pickerName.text.trim())) {
-        overwrite = true;
-        if (
-          !confirm(
-            "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?" +
-              "\n" +
-              pickerName.text.trim(),
-            "noAsDflt",
-            "Save Custom Picker Conflict"
-          ) // TODO: localize
-        ) {
-          return;
-        }
-      }
-      win.close(1);
-    };
-
-    if (win.show() == 1) {
-      var commands = [];
-      var lines = pickerCommands.text.split(/\r\n|\r|\n/);
-      for (var i = 0; i < lines.length; i++) {
-        commands.push(lines[i].trim());
-      }
-      return {
-        name: pickerName.text.trim(),
-        commands: commands,
-        overwrite: overwrite,
-      };
-    }
-    return false;
-  }
-
   var result = pickerBuilder(editPickerId);
 
   if (!result) return;
@@ -167,6 +74,7 @@ function buildPicker(editPickerId) {
     for (var i = prefs.pickers.length - 1; i >= 0; i--) {
       if (prefs.pickers[i].name == result.name) {
         prefs.pickers[i].commands = result.commands;
+        prefs.pickers[i].multiselect = result.multiselect;
         id = prefs.pickers[i].id;
       }
     }
@@ -181,6 +89,7 @@ function buildPicker(editPickerId) {
       docRequired: false,
       selRequired: false,
       hidden: false,
+      multiselect: result.multiselect,
     };
     prefs.pickers.push(picker);
   }

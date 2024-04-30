@@ -116,14 +116,46 @@ function bookmarkAction(command) {
   }
 }
 
-function runCustomPicker(command) {
+function runCustomPicker(picker) {
+  // create custom adhoc commands from provided picker options
+  var commands = [];
+  var id, command;
+  for (var i = 0; i < picker.commands.length; i++) {
+    id = "picker_option_" + i.toString();
+    command = {
+      id: id,
+      action: "picker_option",
+      type: "Option",
+      docRequired: false,
+      selRequired: false,
+      name: picker.commands[i],
+      hidden: false,
+    };
+    commandsData[id] = command;
+    commands.push(id);
+  }
+
+  // present the custom picker
   var result = commandPalette(
-    (commands = command.commands),
-    (title = command.name),
-    (multiselect = false)
+    (commands = commands),
+    (title = picker.name),
+    (columns = paletteSettings.columnSets.default),
+    (multiselect = picker.multiselect)
   );
-  if (!result) result == null;
-  $.setenv("aic_picker_last", result);
+  if (!result) return false;
+
+  // grab the correct name data from the selected commands
+  var args = [];
+  if (!picker.multiselect) {
+    args.push(commandsData[result].name);
+  } else {
+    for (var i = 0; i < result.length; i++) {
+      args.push(commandsData[result[i]].name);
+    }
+  }
+
+  // encode the array data into an environment variable for later use
+  $.setenv("aic_picker_last", args.toSource());
 }
 
 function scriptAction(command) {

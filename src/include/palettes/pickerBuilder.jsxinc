@@ -1,0 +1,92 @@
+function pickerBuilder(editPickerId) {
+  var overwrite = false;
+
+  // create the dialog
+  var win = new Window("dialog");
+  win.text = localize("Custom Picker Builder"); // TODO: localize
+  win.alignChildren = "fill";
+
+  // picker commands
+  var pCommands = win.add(
+    "panel",
+    undefined,
+    "Custom Picker Commands (separated by newlines)"
+  ); // TODO: localize
+  var pickerCommands = win.add("edittext", [0, 0, 300, 300], "", { multiline: true });
+  pickerCommands.text = editPickerId
+    ? commandsData[editPickerId].commands.join("\n")
+    : "";
+
+  var cbMultiselect = win.add("checkbox", undefined, "Multi-Select Enabled?");
+  cbMultiselect.value = editPickerId ? commandsData[editPickerId].multiselect : false;
+
+  // picker name
+  var pName = win.add("panel", undefined, "Custom Picker Name"); // TODO: localize
+  pName.alignChildren = ["fill", "center"];
+  pName.margins = 20;
+  var pickerNameText = editPickerId ? commandsData[editPickerId].name : "";
+  var pickerName = pName.add("edittext", undefined, pickerNameText);
+  pickerName.enabled = editPickerId ? true : false;
+
+  // window buttons
+  var winButtons = win.add("group");
+  winButtons.orientation = "row";
+  winButtons.alignChildren = ["center", "center"];
+  var save = winButtons.add("button", undefined, localize(strings.save), {
+    name: "ok",
+  });
+  save.preferredSize.width = 100;
+  save.enabled = editPickerId ? true : false;
+  var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
+    name: "cancel",
+  });
+  cancel.preferredSize.width = 100;
+
+  pickerCommands.onChange = function () {
+    pickerName.enabled = pickerCommands.text.length > 0 ? true : false;
+    save.enabled =
+      steps.listbox.items.length > 0 && pickerName.text.length > 0 ? true : false;
+  };
+
+  pickerName.onChanging = function () {
+    save.enabled = pickerCommands.text.length > 0 ? true : false;
+  };
+
+  save.onClick = function () {
+    // check for picker overwrite
+    var currentPickers = [];
+    for (var i = 0; i < prefs.pickers.length; i++) {
+      currentPickers.push(prefs.pickers[i].name);
+    }
+    if (currentPickers.includes(pickerName.text.trim())) {
+      overwrite = true;
+      if (
+        !confirm(
+          "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?" +
+            "\n" +
+            pickerName.text.trim(),
+          "noAsDflt",
+          "Save Custom Picker Conflict"
+        ) // TODO: localize
+      ) {
+        return;
+      }
+    }
+    win.close(1);
+  };
+
+  if (win.show() == 1) {
+    var commands = [];
+    var lines = pickerCommands.text.split(/\r\n|\r|\n/);
+    for (var i = 0; i < lines.length; i++) {
+      commands.push(lines[i].trim());
+    }
+    return {
+      name: pickerName.text.trim(),
+      commands: commands,
+      multiselect: cbMultiselect.value,
+      overwrite: overwrite,
+    };
+  }
+  return false;
+}

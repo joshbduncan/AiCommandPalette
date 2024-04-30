@@ -89,14 +89,15 @@ ListBoxWrapper.prototype = {
       } else {
         command = commandsData[id];
         name = determineCorrectString(command, "name");
-        for (var j = 0; j < columnKeys.length; j++) {
+
+        // add base item with info from first column
+        str = determineCorrectString(command, columnKeys[0]);
+        item = listbox.add("item", str ? str : name);
+
+        // add remaining columns as subItems
+        for (var j = 1; j < columnKeys.length; j++) {
           str = determineCorrectString(command, columnKeys[j]);
-          if (str == null) alert(id);
-          if (j === 0) {
-            item = listbox.add("item", str);
-            continue;
-          }
-          item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);
+          item.subItems[j - 1].text = str ? str : "<missing>";
         }
       }
       item.id = id;

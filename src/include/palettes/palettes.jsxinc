@@ -1,6 +1,7 @@
 //@include "fuzzy.jsxinc"
 //@include "nofuzz.jsxinc"
 //@include "commandPalette.jsxinc"
+//@include "pickerBuilder.jsxinc"
 //@include "workflowBuilder.jsxinc"
 //@include "startupBuilder.jsxinc"
 
