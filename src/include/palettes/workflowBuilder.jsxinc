@@ -74,7 +74,7 @@ function workflowBuilder(commands, editWorkflowId) {
   var del = stepButtons.add("button", undefined, localize(strings.step_delete));
   del.preferredSize.width = 100;
 
-  // command name
+  // workflow name
   var pName = win.add("panel", undefined, localize(strings.wf_save_as));
   pName.alignChildren = ["fill", "center"];
   pName.margins = 20;

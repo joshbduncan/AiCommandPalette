@@ -9258,6 +9258,15 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    builtin_allPickers: {
+      id: "builtin_allPickers",
+      action: "allPickers",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: { en: "All Pickers...", de: "All Pickers...", ru: "All Pickers..." },
+      hidden: false,
+    },
     builtin_allScripts: {
       id: "builtin_allScripts",
       action: "allScripts",
@@ -9313,6 +9322,24 @@ See the LICENSE file for details.
         de: "Arbeitsablauf bearbeiten \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
       },
+      hidden: false,
+    },
+    builtin_buildPicker: {
+      id: "builtin_buildPicker",
+      action: "buildPicker",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: { en: "Build Picker...", de: "Build Picker...", ru: "Build Picker..." },
+      hidden: false,
+    },
+    builtin_editPicker: {
+      id: "builtin_editPicker",
+      action: "editPicker",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: { en: "Edit Picker...", de: "Edit Picker...", ru: "Edit Picker..." },
       hidden: false,
     },
     builtin_imageCapture: {
@@ -9732,6 +9759,7 @@ See the LICENSE file for details.
   prefs.workflows = [];
   prefs.bookmarks = [];
   prefs.scripts = [];
+  prefs.pickers = [];
   prefs.fuzzy = true; // set to new fuzzy matcher as default
   prefs.latches = {};
   prefs.version = _version;
@@ -9800,7 +9828,7 @@ See the LICENSE file for details.
     }
   };
   userPrefs.inject = function () {
-    var typesToInject = ["workflows", "bookmarks", "scripts"];
+    var typesToInject = ["workflows", "bookmarks", "scripts", "pickers"];
     for (var i = 0; i < typesToInject.length; i++) {
       for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
         commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
@@ -10431,18 +10459,18 @@ See the LICENSE file for details.
         // if command is no longer available just show the id
         if (!commandsData.hasOwnProperty(id)) {
           item = listbox.add("item", id);
-          continue;
-        }
-        command = commandsData[id];
-        name = determineCorrectString(command, "name");
-        for (var j = 0; j < columnKeys.length; j++) {
-          str = determineCorrectString(command, columnKeys[j]);
-          if (str == null) alert(id);
-          if (j === 0) {
-            item = listbox.add("item", str);
-            continue;
+        } else {
+          command = commandsData[id];
+          name = determineCorrectString(command, "name");
+          for (var j = 0; j < columnKeys.length; j++) {
+            str = determineCorrectString(command, columnKeys[j]);
+            if (str == null) alert(id);
+            if (j === 0) {
+              item = listbox.add("item", str);
+              continue;
+            }
+            item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);
           }
-          item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);
         }
         item.id = id;
       }
@@ -10715,7 +10743,11 @@ See the LICENSE file for details.
         if (saveHistory) {
           updateHistory();
         }
-        return list.listbox.selection.id;
+        if (list.listbox.selection.hasOwnProperty("id")) {
+          return list.listbox.selection.id;
+        } else {
+          return list.listbox.selection.name;
+        }
       }
     }
     return false;
@@ -10796,7 +10828,7 @@ See the LICENSE file for details.
     var del = stepButtons.add("button", undefined, localize(strings.step_delete));
     del.preferredSize.width = 100;
 
-    // command name
+    // workflow name
     var pName = win.add("panel", undefined, localize(strings.wf_save_as));
     pName.alignChildren = ["fill", "center"];
     pName.margins = 20;
@@ -11241,6 +11273,9 @@ See the LICENSE file for details.
       case "folder":
         func = bookmarkAction;
         break;
+      case "picker":
+        func = runCustomPicker;
+        break;
       case "script":
         func = scriptAction;
         alertString = strings.sc_error_execution;
@@ -11279,6 +11314,16 @@ See the LICENSE file for details.
     } else {
       f.execute();
     }
+  }
+
+  function runCustomPicker(command) {
+    var result = commandPalette(
+      (commands = command.commands),
+      (title = command.name),
+      (multiselect = false)
+    );
+    if (!result) result == null;
+    $.setenv("aic_picker_last", result);
   }
 
   function scriptAction(command) {
@@ -11347,6 +11392,10 @@ See the LICENSE file for details.
         write = false;
         showAllMenus();
         break;
+      case "allPickers":
+        write = false;
+        showAllPickers();
+        break;
       case "allScripts":
         write = false;
         showAllScripts();
@@ -11364,6 +11413,12 @@ See the LICENSE file for details.
         break;
       case "editWorkflow":
         editWorkflow();
+        break;
+      case "buildPicker":
+        buildPicker();
+        break;
+      case "editPicker":
+        editPicker();
         break;
       case "documentReport":
         write = false;
@@ -11414,7 +11469,6 @@ See the LICENSE file for details.
         write = false;
         revealActiveDocument();
         break;
-
       default:
         alert(localize(strings.cd_invalid, action));
     }
@@ -11480,6 +11534,157 @@ See the LICENSE file for details.
     );
     if (!result) return;
     processCommand(result);
+  }
+
+  /**
+   * Build a custom command picker.
+   * @param   {Array} commands Custom command to choose from.
+   */
+
+  /**
+   * Build a custom command picker.
+   */
+  function buildPicker(editPickerId) {
+    function pickerBuilder(editPickerId) {
+      var overwrite = false;
+
+      // create the dialog
+      var win = new Window("dialog");
+      win.text = localize("Custom Picker Builder"); // TODO: localize
+      win.alignChildren = "fill";
+
+      // picker name
+      var pName = win.add("panel", undefined, "Custom Picker Name"); // TODO: localize
+      pName.alignChildren = ["fill", "center"];
+      pName.margins = 20;
+      var pickerNameText = editPickerId ? commandsData[editPickerId].name : "";
+      var pickerName = pName.add("edittext", undefined, pickerNameText);
+      pickerName.enabled = editPickerId ? true : false;
+
+      // picker commands
+      var pCommands = win.add(
+        "panel",
+        undefined,
+        "Custom Picker Commands (separated by newlines)"
+      ); // TODO: localize
+      var pickerCommands = win.add("edittext", [0, 0, 300, 300], "", { multiline: true });
+      pickerCommands.text = editPickerId
+        ? commandsData[editPickerId].commands.join("\n")
+        : "";
+
+      // window buttons
+      var winButtons = win.add("group");
+      winButtons.orientation = "row";
+      winButtons.alignChildren = ["center", "center"];
+      var save = winButtons.add("button", undefined, localize(strings.save), {
+        name: "ok",
+      });
+      save.preferredSize.width = 100;
+      save.enabled = editPickerId ? true : false;
+      var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
+        name: "cancel",
+      });
+      cancel.preferredSize.width = 100;
+
+      pickerCommands.onChange = function () {
+        pickerName.enabled = pickerCommands.text.length > 0 ? true : false;
+        save.enabled =
+          steps.listbox.items.length > 0 && pickerName.text.length > 0 ? true : false;
+      };
+
+      pickerName.onChanging = function () {
+        save.enabled = pickerCommands.text.length > 0 ? true : false;
+      };
+
+      save.onClick = function () {
+        // check for picker overwrite
+        var currentPickers = [];
+        for (var i = 0; i < prefs.pickers.length; i++) {
+          currentPickers.push(prefs.pickers[i].name);
+        }
+        if (currentPickers.includes(pickerName.text.trim())) {
+          overwrite = true;
+          if (
+            !confirm(
+              "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?" +
+                "\n" +
+                pickerName.text.trim(),
+              "noAsDflt",
+              "Save Custom Picker Conflict"
+            ) // TODO: localize
+          ) {
+            return;
+          }
+        }
+        win.close(1);
+      };
+
+      if (win.show() == 1) {
+        var commands = [];
+        var lines = pickerCommands.text.split(/\r\n|\r|\n/);
+        for (var i = 0; i < lines.length; i++) {
+          commands.push(lines[i].trim());
+        }
+        return {
+          name: pickerName.text.trim(),
+          commands: commands,
+          overwrite: overwrite,
+        };
+      }
+      return false;
+    }
+
+    var result = pickerBuilder(editPickerId);
+
+    if (!result) return;
+
+    var id;
+    // when overwriting delete previous version and update prefs
+    if (result.overwrite) {
+      for (var i = prefs.pickers.length - 1; i >= 0; i--) {
+        if (prefs.pickers[i].name == result.name) {
+          prefs.pickers[i].commands = result.commands;
+          id = prefs.pickers[i].id;
+        }
+      }
+    } else {
+      id = generateCommandId("picker_" + result.name.toLowerCase());
+      var picker = {
+        id: id,
+        action: "picker",
+        name: result.name,
+        commands: result.commands,
+        type: "picker",
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+      };
+      prefs.pickers.push(picker);
+    }
+
+    addToStartup([id]);
+  }
+
+  /**
+   * Present a palette with all user created picker. The selected picker will
+   * be opened in the picker builder.
+   */
+  function editPicker() {
+    var pickers = filterCommands(
+      (commands = null),
+      (types = ["picker"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = pickers),
+      (title = "Choose a custom picker to edit."), // TODO: localize
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    buildPicker(result);
   }
 
   /**
@@ -11901,6 +12106,27 @@ See the LICENSE file for details.
   }
 
   /**
+   * Present a palette with all user created pickers.
+   */
+  function showAllPickers() {
+    var pickers = filterCommands(
+      (commands = null),
+      (types = ["picker"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = pickers),
+      (title = "All Pickers"), // TODO: localize
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
    * Present a palette with all user loaded scripts.
    */
   function showAllScripts() {
@@ -11981,6 +12207,8 @@ See the LICENSE file for details.
    * @param {String} editWorkflowId Id of a current user workflow to edit.
    */
   function buildWorkflow(editWorkflowId) {
+    commandsToHide = ["builtin_buildPicker"];
+    if (editWorkflowId) commandsToHide.push(editWorkflowId);
     var availableWorkflowCommands = filterCommands(
       (commands = null),
       (types = [
@@ -11992,10 +12220,11 @@ See the LICENSE file for details.
         "tool",
         "action",
         "builtin",
+        "picker",
       ]),
       (showHidden = true),
       (showNonRelevant = true),
-      (hideSpecificCommands = workflow ? [workflow.id] : []) // hide current workflow when editing to prevent recursive loop
+      (hideSpecificCommands = commandsToHide) // hide current workflow when editing to prevent recursive loop
     );
     // show the workflow builder dialog
     var result = workflowBuilder(availableWorkflowCommands, editWorkflowId);
@@ -12586,6 +12815,7 @@ See the LICENSE file for details.
 
   // set command palette matching algo
   var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
+  // TODO: allow disable keyword latching
 
   // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {

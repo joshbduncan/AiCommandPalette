@@ -73,6 +73,9 @@ function executeAction(command) {
     case "folder":
       func = bookmarkAction;
       break;
+    case "picker":
+      func = runCustomPicker;
+      break;
     case "script":
       func = scriptAction;
       alertString = strings.sc_error_execution;
@@ -111,6 +114,16 @@ function bookmarkAction(command) {
   } else {
     f.execute();
   }
+}
+
+function runCustomPicker(command) {
+  var result = commandPalette(
+    (commands = command.commands),
+    (title = command.name),
+    (multiselect = false)
+  );
+  if (!result) result == null;
+  $.setenv("aic_picker_last", result);
 }
 
 function scriptAction(command) {
@@ -179,6 +192,10 @@ function internalAction(command) {
       write = false;
       showAllMenus();
       break;
+    case "allPickers":
+      write = false;
+      showAllPickers();
+      break;
     case "allScripts":
       write = false;
       showAllScripts();
@@ -196,6 +213,12 @@ function internalAction(command) {
       break;
     case "editWorkflow":
       editWorkflow();
+      break;
+    case "buildPicker":
+      buildPicker();
+      break;
+    case "editPicker":
+      editPicker();
       break;
     case "documentReport":
       write = false;
@@ -246,7 +269,6 @@ function internalAction(command) {
       write = false;
       revealActiveDocument();
       break;
-
     default:
       alert(localize(strings.cd_invalid, action));
   }
