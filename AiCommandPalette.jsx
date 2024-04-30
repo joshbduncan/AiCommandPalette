@@ -11065,6 +11065,7 @@ See the LICENSE file for details.
     }
 
     del.onClick = function () {
+      // TODO: add removed item back to listbox and re-index matches
       var selected = sortIndexes(steps.listbox.selection);
       for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
         steps.listbox.remove(selected[i]);
