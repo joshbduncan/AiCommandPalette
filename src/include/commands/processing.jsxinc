@@ -143,23 +143,23 @@ function internalAction(command) {
     case "deleteCommand":
       deleteCommand();
       break;
+    case "enableFuzzyMatching":
+    case "disableFuzzyMatching":
+      toggleFuzzyMatching();
+      break;
     case "hideCommand":
       hideCommand();
       break;
     case "unhideCommand":
       unhideCommand();
       break;
-    case "enableTypeInSearch":
-    case "disableTypeInSearch":
-      toggleTypeInSearch();
-      break;
     case "revealPrefFile":
       write = false;
       revealPrefFile();
       break;
-    case "showAllBuiltinCommands":
+    case "builtinCommands":
       write = false;
-      showAllBuiltinCommands();
+      builtinCommands();
       break;
     case "settings":
       write = false;
@@ -175,9 +175,17 @@ function internalAction(command) {
       write = false;
       showAllBookmarks();
       break;
+    case "allMenus":
+      write = false;
+      showAllMenus();
+      break;
     case "allScripts":
       write = false;
       showAllScripts();
+      break;
+    case "allTools":
+      write = false;
+      showAllTools();
       break;
     case "allWorkflows":
       write = false;

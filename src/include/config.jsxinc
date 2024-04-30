@@ -59,9 +59,9 @@ var devInfo = {};
 devInfo.folder = function () {
   return settingsFolder;
 };
-devInfo.dataFile = function () {
+devInfo.prefsFile = function () {
   var folder = this.folder();
-  var file = setupFileObject(folder, "data.json");
+  var file = setupFileObject(folder, "prefs.json");
   return file;
 };
 devInfo.commandsFile = function () {
@@ -70,8 +70,14 @@ devInfo.commandsFile = function () {
   return file;
 };
 devInfo.save = function () {
-  writeJSONData(data, this.dataFile());
+  writeJSONData(prefs, this.prefsFile());
   writeJSONData(commandsData, this.commandsFile());
+};
+devInfo.log = function (data, fileName) {
+  fileName = typeof fileName !== "undefined" ? fileName : "log_" + Date.now() + ".txt";
+  var folder = this.folder();
+  var file = setupFileObject(folder, fileName);
+  writeData(data, file.fsName);
 };
 
 /**

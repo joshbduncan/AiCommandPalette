@@ -4,14 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+<<<<<<< Updated upstream
+## Added
+
+- fuzzy matching (e.g. looking for 'Outline Stroke', queries 'oust', 'ou st', 'st ou' will all work)
+- query cache to speed things up a bit (especially when backspacing/clearing characters)
+
+## Changes
+
+- removed searching on type command (added back 'all menu commands', 'all tools')
+=======
+### Added
+
+- Fuzzy matching for command search (option to use original matcher)
+>>>>>>> Stashed changes
+
 ## [0.10.0] 2024-01-25
 
-## Added
+### Added
 
 - Startup builder/customizer to set exactly what displays when Ai Command Palette first opens
 - Confirmation dialog when clearing recent commands
 
-## Changed
+### Changed
 
 - Complete rebuild of command palette, goto palette, and workflow builder (ScriptUI dialog)
 - Better sorting with recent commands showing higher in results list (Issue #24)
@@ -32,18 +49,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
         - `defaults_recentCommands` -> `builtin_recentCommands`
         - `defaults_settings` -> `config_settings`
 
-## Fixed
+### Fixed
 
 - Correct number of (full) table rows (commands) show on Windows (Issue #22)
 - Added back missing Document Report command
 
 ## [0.9.3] 2023-11-27
 
-## Fixed
+### Fixed
 
 - Bug that caused an error when cycling from the top to the bottom of the commands when there is less than 9 items.
 
-## Changed
+### Changed
 
 - `Recent Commands` changed to a default command so it quicker to access (shows up on start-up). (Issue #20)
 

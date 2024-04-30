@@ -1,4 +1,39 @@
 /**
+ * Try and determine which if a localized string should be used or just the value.
+ * @param command Command in question.
+ * @param prop    Command property to localize
+ * @returns       Correct string.
+ */
+function determineCorrectString(command, prop) {
+  var s;
+  if (typeof command[prop] == "object") {
+    s = localize(command[prop]);
+  } else if (strings.hasOwnProperty(command[prop])) {
+    s = localize(strings[command[prop]]);
+  } else {
+    s = command[prop];
+  }
+  return s;
+}
+
+function findLastCarrot(s) {
+  var p = 0;
+  var re = / > /g;
+
+  if (re.test(s)) {
+    var match = s.search(re);
+    while (true) {
+      p += match + 3;
+      match = s.substring(p).search(re);
+
+      if (match == -1) break;
+    }
+  }
+
+  return p;
+}
+
+/**
  * Check to see if there is an active document.
  * @returns Make sure at least one document is open for certain built-in commands.
  */

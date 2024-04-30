@@ -1,4 +1,6 @@
 function startupBuilder(commands) {
+  var qCache = {};
+
   // create the dialog
   var win = new Window("dialog");
   win.text = localize(strings.startup_builder);
@@ -74,8 +76,11 @@ function startupBuilder(commands) {
   q.onChanging = function () {
     if (this.text === "") {
       matches = commands;
+    } else if (qCache.hasOwnProperty(this.text)) {
+      matches = qCache[this.text];
     } else {
-      matches = scoreMatches(this.text, commands);
+      matches = matcher(this.text, commands);
+      qCache[this.text] = matches;
     }
     if (matches.length > 0) {
       list.update(matches);
@@ -130,6 +135,7 @@ function startupBuilder(commands) {
   }
 
   del.onClick = function () {
+    // TODO: add removed item back to listbox and re-index matches
     var selected = sortIndexes(steps.listbox.selection);
     for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
       steps.listbox.remove(selected[i]);

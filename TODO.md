@@ -8,6 +8,8 @@ The format is based on [TODO.md](https://github.com/todomd/todo.md)
 
 - [ ] documentation command
 - [ ] use gh wiki for documentation
+- [ ] build prefs screen
+    - [ ] toggle for including actions in default search (actions, bookmarks, scripts, workflows)
 
 ### Doing
 

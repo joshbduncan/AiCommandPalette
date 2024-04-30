@@ -122,6 +122,41 @@ See the LICENSE file for details.
     };
   }
   /**
+   * Try and determine which if a localized string should be used or just the value.
+   * @param command Command in question.
+   * @param prop    Command property to localize
+   * @returns       Correct string.
+   */
+  function determineCorrectString(command, prop) {
+    var s;
+    if (typeof command[prop] == "object") {
+      s = localize(command[prop]);
+    } else if (strings.hasOwnProperty(command[prop])) {
+      s = localize(strings[command[prop]]);
+    } else {
+      s = command[prop];
+    }
+    return s;
+  }
+
+  function findLastCarrot(s) {
+    var p = 0;
+    var re = / > /g;
+
+    if (re.test(s)) {
+      var match = s.search(re);
+      while (true) {
+        p += match + 3;
+        match = s.substring(p).search(re);
+
+        if (match == -1) break;
+      }
+    }
+
+    return p;
+  }
+
+  /**
    * Check to see if there is an active document.
    * @returns Make sure at least one document is open for certain built-in commands.
    */
@@ -501,12 +536,15 @@ See the LICENSE file for details.
   /**
    * Write string data to disk.
    * @param {String} data Data to be written.
-   * @param {Object} f    File object to write to.
+   * @param {Object} fp   File path.
+   * @param {string} mode File access mode.
    */
-  function writeData(data, f) {
+  function writeData(data, fp, mode) {
+    mode = typeof mode !== "undefined" ? mode : "w";
+    f = new File(fp);
     try {
       f.encoding = "UTF-8";
-      f.open("w");
+      f.open(mode);
       f.write(data);
       f.close();
     } catch (e) {
@@ -615,11 +653,7 @@ See the LICENSE file for details.
       de: "Der Befehl '%1' erfordert eine Auswahl. Trotzdem fortfahren?",
       ru: "Command '%1' requires an active selection. Continue Anyway?",
     },
-    cd_all: {
-      en: "All Built-In Commands",
-      de: "All Built-In Commands",
-      ru: "All Built-In Commands",
-    },
+    cd_all: { en: "Built-In Commands", de: "Built-In Commands", ru: "Built-In Commands" },
     cd_clear_history_confirm: {
       en: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
       de: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
@@ -848,6 +882,7 @@ See the LICENSE file for details.
     layer_title_case: { en: "Layer", de: "Layer", ru: "Layer" },
     layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
     menu: { en: "Menu", de: "Menu", ru: "Menu" },
+    menu_commands: { en: "Menu Commands", de: "Menu Commands", ru: "Menu Commands" },
     name_title_case: { en: "Name", de: "Name", ru: "Name" },
     no_active_document: {
       en: "No active documents.",
@@ -980,7 +1015,7 @@ See the LICENSE file for details.
     },
     title: { en: "Ai Command Palette", de: "Kurzbefehle", ru: "Ai Command Palette" },
     tl_all: {
-      en: "All Built-In Tools",
+      en: "Tools",
       de: "Alle integrierten Werkzeuge",
       ru: "\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u044b\u0435 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b",
     },
@@ -9210,6 +9245,19 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    builtin_allMenus: {
+      id: "builtin_allMenus",
+      action: "allMenus",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "All Menu Commands...",
+        de: "All Menu Commands...",
+        ru: "All Menu Commands...",
+      },
+      hidden: false,
+    },
     builtin_allScripts: {
       id: "builtin_allScripts",
       action: "allScripts",
@@ -9217,6 +9265,15 @@ See the LICENSE file for details.
       docRequired: false,
       selRequired: false,
       name: { en: "All Scripts...", de: "Alle Skripte \u2026", ru: "All Scripts..." },
+      hidden: false,
+    },
+    builtin_allTools: {
+      id: "builtin_allTools",
+      action: "allTools",
+      type: "builtin",
+      docRequired: true,
+      selRequired: false,
+      name: { en: "All Tools...", de: "All Tools...", ru: "All Tools..." },
       hidden: false,
     },
     builtin_allWorkflows: {
@@ -9423,16 +9480,16 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    config_settings: {
-      id: "config_settings",
-      action: "settings",
+    config_builtinCommands: {
+      id: "config_builtinCommands",
+      action: "builtinCommands",
       type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Ai Command Palette Settings...",
-        de: "Kurzbefehle \u2013 Einstellungen \u2026",
-        ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+        en: "Built-in Commands...",
+        de: "Built-in Commands...",
+        ru: "Built-in Commands...",
       },
       hidden: false,
     },
@@ -9475,29 +9532,29 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    config_disableTypeInSearch: {
-      id: "config_disableTypeInSearch",
-      action: "disableTypeInSearch",
+    config_enableFuzzyMatching: {
+      id: "config_enableFuzzyMatching",
+      action: "enableFuzzyMatching",
       type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Disable Searching on Command Type",
-        de: "Disable Searching on Command Type",
-        ru: "Disable Searching on Command Type",
+        en: "Enable Fuzzy Matching",
+        de: "Enable Fuzzy Matching",
+        ru: "Enable Fuzzy Matching",
       },
       hidden: false,
     },
-    config_enableTypeInSearch: {
-      id: "config_enableTypeInSearch",
-      action: "enableTypeInSearch",
+    config_disableFuzzyMatching: {
+      id: "config_disableFuzzyMatching",
+      action: "disableFuzzyMatching",
       type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Enable Searching on Command Type",
-        de: "Enable Searching on Command Type",
-        ru: "Enable Searching on Command Type",
+        en: "Disable Fuzzy Matching",
+        de: "Disable Fuzzy Matching",
+        ru: "Disable Fuzzy Matching",
       },
       hidden: false,
     },
@@ -9527,16 +9584,16 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
-    config_showAllBuiltinCommands: {
-      id: "config_showAllBuiltinCommands",
-      action: "showAllBuiltinCommands",
+    config_settings: {
+      id: "config_settings",
+      action: "settings",
       type: "config",
       docRequired: false,
       selRequired: false,
       name: {
-        en: "Show All Builtin Commands...",
-        de: "Show All Builtin Commands...",
-        ru: "Show All Builtin Commands...",
+        en: "Ai Command Palette Settings...",
+        de: "Kurzbefehle \u2013 Einstellungen \u2026",
+        ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
       },
       hidden: false,
     },
@@ -9615,9 +9672,9 @@ See the LICENSE file for details.
   devInfo.folder = function () {
     return settingsFolder;
   };
-  devInfo.dataFile = function () {
+  devInfo.prefsFile = function () {
     var folder = this.folder();
-    var file = setupFileObject(folder, "data.json");
+    var file = setupFileObject(folder, "prefs.json");
     return file;
   };
   devInfo.commandsFile = function () {
@@ -9626,8 +9683,14 @@ See the LICENSE file for details.
     return file;
   };
   devInfo.save = function () {
-    writeJSONData(data, this.dataFile());
+    writeJSONData(prefs, this.prefsFile());
     writeJSONData(commandsData, this.commandsFile());
+  };
+  devInfo.log = function (data, fileName) {
+    fileName = typeof fileName !== "undefined" ? fileName : "log_" + Date.now() + ".txt";
+    var folder = this.folder();
+    var file = setupFileObject(folder, fileName);
+    writeData(data, file.fsName);
   };
 
   /**
@@ -9669,8 +9732,8 @@ See the LICENSE file for details.
   prefs.workflows = [];
   prefs.bookmarks = [];
   prefs.scripts = [];
+  prefs.fuzzy = true; // set to new fuzzy matcher as default
   prefs.latches = {};
-  prefs.searchIncludesType = false;
   prefs.version = _version;
   prefs.os = os;
   prefs.locale = locale;
@@ -10053,6 +10116,233 @@ See the LICENSE file for details.
     }
     this.loadedActions = ct > 0;
   };
+  function fuzzy(q, commands) {
+    q = q.toLowerCase();
+
+    var scores = {};
+    var matches = [];
+
+    var id, command, commandName, spans, score, latch, recent, bonus;
+    for (var i = 0; i < commands.length; i++) {
+      // get command info
+      id = commands[i];
+      command = commandsData[id];
+      commandName = determineCorrectString(command, "name").toLowerCase();
+      if (commandName == "") commandName = id.toLowerCase().replace("_", " ");
+
+      // find fuzzy matches
+      spans = findMatches(q.split(" "), commandName);
+
+      // no need to track scores of commands without matches
+      if (!spans.length) continue;
+
+      // calculate the command score
+      bonus = 0;
+      score = calculateScore(commandName, spans);
+
+      // // increase score if latched query
+      if (latches.hasOwnProperty(q) && commands.includes(latches[q])) {
+        latch = true;
+        bonus += 1;
+      }
+
+      // increase score recent command
+      if (recentCommands.hasOwnProperty(command.id)) {
+        recent = true;
+        bonus += 0.5;
+      }
+
+      scores[id] = score + bonus;
+
+      matches.push(id);
+    }
+
+    matches.sort(function (a, b) {
+      return scores[b] - scores[a];
+    });
+
+    return matches;
+  }
+
+  function calculateScore(command, spans) {
+    var lastCarrot = findLastCarrot(command);
+
+    // strip out ellipsis for correct full word check
+    command = command.replace(regexEllipsis, "");
+
+    var score = 0;
+    var s, e, wordStart, wordEnd;
+    for (var i = 0; i < spans.length; i++) {
+      s = spans[i][0];
+      e = spans[i][1];
+
+      // check for full word
+      wordStart = s == 0 || command.charAt(s - 1) == " " ? true : false;
+      wordEnd = e == command.length || command.charAt(e) == " " ? true : false;
+      if (wordStart && wordEnd) {
+        score += (e - s) * 3;
+      } else if (wordStart) {
+        score += (e - s) * 2;
+      } else {
+        score += e - s;
+      }
+
+      if (s >= lastCarrot) {
+        score += 0.5;
+      }
+    }
+    return score;
+  }
+
+  function findMatches(chunks, str) {
+    var spans = [];
+
+    var chunk, s, e, offset, lastSpan;
+    for (var i = 0; i < chunks.length; i++) {
+      var chunk = chunks[i];
+      if (!chunk) {
+        continue;
+      }
+
+      s = 0;
+      e = 1;
+      offset = 0;
+      lastSpan = null;
+
+      var chars, match, spanStart, spanEnd;
+      while (true) {
+        chars = chunk.substring(s, e);
+        match = str.substring(offset).match(chars);
+
+        if (match) {
+          spanStart = match.index + offset;
+          spanEnd = spanStart + chars.length;
+          lastSpan = [spanStart, spanEnd];
+          e++;
+        } else {
+          if (chars.length === 1) {
+            spans = [];
+            break;
+          }
+
+          s = e - 1;
+
+          if (lastSpan !== null) {
+            var spanStart = lastSpan[0];
+            var spanEnd = lastSpan[1];
+            offset = spanEnd;
+            spans.push([spanStart, spanEnd]);
+          }
+
+          lastSpan = null;
+        }
+
+        if (e === chunk.length + 1) {
+          if (lastSpan !== null) {
+            var hls = lastSpan[0];
+            var hle = lastSpan[1];
+            spans.push([hls, hle]);
+          }
+          break;
+        }
+      }
+    }
+    return spans;
+  }
+  /**
+   * Score array items based on regex string match.
+   * @param   {String} query    String to search for.
+   * @param   {Array}  commands Commands to match `query` against.
+   * @returns {Array}           Matching items sorted by score.
+   */
+  function scoreMatches(query, commands) {
+    var words = [];
+    var matches = [];
+    var scores = {};
+    var maxScore = 0;
+    query = query.toLowerCase();
+    var words = query.split(" ");
+    var id, command, name, type, score, strippedName;
+
+    // query latching
+    if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
+      scores[latches[query]] = 1000;
+      matches.push(latches[query]);
+    }
+
+    for (var i = 0; i < commands.length; i++) {
+      id = commands[i];
+      command = commandsData[id];
+      score = 0;
+      name = determineCorrectString(command, "name").toLowerCase();
+
+      // escape hatch
+      if (name == "") name = id.toLowerCase().replace("_", " ");
+
+      type = strings.hasOwnProperty(command.type)
+        ? localize(strings[command.type]).toLowerCase()
+        : command.type.toLowerCase();
+
+      // check for exact match
+      if (
+        query === name ||
+        query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName ||
+        query === type
+      ) {
+        score += word.length;
+      }
+
+      // strip junk from command name
+      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+
+      // add the command type to the name if user requested searching type
+      if (prefs.searchIncludesType) name = name.concat(" ", type);
+      // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
+
+      // check for singular word matches
+      var word, re;
+      for (var n = 0; n < words.length; n++) {
+        word = words[n];
+        if (!word) continue;
+
+        re = new RegExp("\\b" + word, "gi");
+
+        // check for a match at the beginning of a word
+        if (re.test(name) || re.test(strippedName)) score += word.length;
+      }
+
+      // updated scores for matches
+      if (score > 0) {
+        // increase score if command found in recent commands
+        if (score >= maxScore && recentCommands.hasOwnProperty(command.id)) {
+          score += recentCommands[command.id];
+        }
+        if (scores.hasOwnProperty(id)) {
+          scores[id] += score;
+        } else {
+          scores[id] = score;
+          matches.push(id);
+        }
+        if (scores[id] > maxScore) maxScore = scores[id];
+      }
+    }
+
+    /* Sort matched by their respective score */
+    function sortByScore(arr) {
+      for (var i = 0; i < arr.length; i++) {
+        for (var j = 0; j < arr.length - i - 1; j++) {
+          if (scores[arr[j + 1]] > scores[arr[j]]) {
+            var temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+          }
+        }
+      }
+      return arr;
+    }
+
+    return sortByScore(matches);
+  }
   // CUSTOM SCRIPTUI FILTERABLE LISTBOX
 
   /**
@@ -10135,7 +10425,7 @@ See the LICENSE file for details.
      * @param {Array}  columnKeys Command lookup key for each column.
      */
     loadCommands: function (listbox, commands, columnKeys) {
-      var id, command, str, item;
+      var id, command, name, str, item;
       for (var i = 0; i < commands.length; i++) {
         id = commands[i];
         // if command is no longer available just show the id
@@ -10144,6 +10434,7 @@ See the LICENSE file for details.
           continue;
         }
         command = commandsData[id];
+        name = determineCorrectString(command, "name");
         for (var j = 0; j < columnKeys.length; j++) {
           str = determineCorrectString(command, columnKeys[j]);
           if (str == null) alert(id);
@@ -10314,6 +10605,8 @@ See the LICENSE file for details.
   // USER DIALOGS
 
   function commandPalette(commands, title, columns, multiselect, showOnly, saveHistory) {
+    var qCache = {};
+
     // create the dialog
     var win = new Window("dialog");
     win.text = title;
@@ -10358,8 +10651,11 @@ See the LICENSE file for details.
     q.onChanging = function () {
       if (this.text === "") {
         matches = showOnly ? showOnly : commands;
+      } else if (qCache.hasOwnProperty(this.text)) {
+        matches = qCache[this.text];
       } else {
-        matches = scoreMatches(this.text, commands);
+        matches = matcher(this.text, commands);
+        qCache[this.text] = matches;
       }
       list.update(matches);
     };
@@ -10424,120 +10720,8 @@ See the LICENSE file for details.
     }
     return false;
   }
-
-  /**
-   * Try and determine which if a localized string should be used or just the value.
-   * @param command Command in question.
-   * @param prop    Command property to localize
-   * @returns       Correct string.
-   */
-  function determineCorrectString(command, prop) {
-    var s;
-    if (typeof command[prop] == "object") {
-      s = localize(command[prop]);
-    } else if (strings.hasOwnProperty(command[prop])) {
-      s = localize(strings[command[prop]]);
-    } else {
-      s = command[prop];
-    }
-    return s;
-  }
-
-  /**
-   * Score array items based on regex string match.
-   * @param   {String} query    String to search for.
-   * @param   {Array}  commands Commands to match `query` against.
-   * @returns {Array}           Matching items sorted by score.
-   */
-  function scoreMatches(query, commands) {
-    var words = [];
-    var matches = [];
-    var scores = {};
-    var maxScore = 0;
-    query = query.toLowerCase();
-    var words = query.split(" ");
-    var id, command, name, type, score, strippedName;
-
-    // query latching
-    if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
-      scores[latches[query]] = 1000;
-      matches.push(latches[query]);
-    }
-
-    for (var i = 0; i < commands.length; i++) {
-      id = commands[i];
-      command = commandsData[id];
-      score = 0;
-      name = determineCorrectString(command, "name").toLowerCase();
-
-      // escape hatch
-      if (name == "") name = id.toLowerCase().replace("_", " ");
-
-      type = strings.hasOwnProperty(command.type)
-        ? localize(strings[command.type]).toLowerCase()
-        : command.type.toLowerCase();
-
-      // check for exact match
-      if (
-        query === name ||
-        query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName ||
-        query === type
-      ) {
-        score += word.length;
-      }
-
-      // strip junk from command name
-      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
-
-      // add the command type to the name if user requested searching type
-      if (prefs.searchIncludesType) name = name.concat(" ", type);
-      // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
-
-      // check for singular word matches
-      var word, re;
-      for (var n = 0; n < words.length; n++) {
-        word = words[n];
-        if (!word) continue;
-
-        re = new RegExp("\\b" + word, "gi");
-
-        // check for a match at the beginning of a word
-        if (re.test(name) || re.test(strippedName)) score += word.length;
-      }
-
-      // updated scores for matches
-      if (score > 0) {
-        // increase score if command found in recent commands
-        if (score >= maxScore && recentCommands.hasOwnProperty(command.id)) {
-          score += recentCommands[command.id];
-        }
-        if (scores.hasOwnProperty(id)) {
-          scores[id] += score;
-        } else {
-          scores[id] = score;
-          matches.push(id);
-        }
-        if (scores[id] > maxScore) maxScore = scores[id];
-      }
-    }
-
-    /* Sort matched by their respective score */
-    function sortByScore(arr) {
-      for (var i = 0; i < arr.length; i++) {
-        for (var j = 0; j < arr.length - i - 1; j++) {
-          if (scores[arr[j + 1]] > scores[arr[j]]) {
-            var temp = arr[j];
-            arr[j] = arr[j + 1];
-            arr[j + 1] = temp;
-          }
-        }
-      }
-      return arr;
-    }
-
-    return sortByScore(matches);
-  }
   function workflowBuilder(commands, editWorkflowId) {
+    var qCache = {};
     var overwrite = false;
 
     // create the dialog
@@ -10639,8 +10823,11 @@ See the LICENSE file for details.
     q.onChanging = function () {
       if (this.text === "") {
         matches = commands;
+      } else if (qCache.hasOwnProperty(this.text)) {
+        matches = qCache[this.text];
       } else {
-        matches = scoreMatches(this.text, commands);
+        matches = matcher(this.text, commands);
+        qCache[this.text] = matches;
       }
       if (matches.length > 0) {
         list.update(matches);
@@ -10742,6 +10929,8 @@ See the LICENSE file for details.
     return false;
   }
   function startupBuilder(commands) {
+    var qCache = {};
+
     // create the dialog
     var win = new Window("dialog");
     win.text = localize(strings.startup_builder);
@@ -10817,8 +11006,11 @@ See the LICENSE file for details.
     q.onChanging = function () {
       if (this.text === "") {
         matches = commands;
+      } else if (qCache.hasOwnProperty(this.text)) {
+        matches = qCache[this.text];
       } else {
-        matches = scoreMatches(this.text, commands);
+        matches = matcher(this.text, commands);
+        qCache[this.text] = matches;
       }
       if (matches.length > 0) {
         list.update(matches);
@@ -10873,6 +11065,7 @@ See the LICENSE file for details.
     }
 
     del.onClick = function () {
+      // TODO: add removed item back to listbox and re-index matches
       var selected = sortIndexes(steps.listbox.selection);
       for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
         steps.listbox.remove(selected[i]);
@@ -10955,12 +11148,10 @@ See the LICENSE file for details.
     // hide `All Actions...` command if no actions
     if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
 
-    // hide `Enable Searching on Command Type` command if already enabled
-    if (command.id == "config_enableTypeInSearch" && prefs.searchIncludesType)
-      return false;
-    // hide `Disable Searching on Command Type` command if already disabled
-    if (command.id == "config_disableTypeInSearch" && !prefs.searchIncludesType)
-      return false;
+    // hide `Enable Fuzzy Matching` command if already enabled
+    if (command.id == "config_enableFuzzyMatching" && prefs.fuzzy) return false;
+    // hide `Disable Fuzzy Matching` command if already disabled
+    if (command.id == "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
 
     // hide `Unhide Commands...` command if no hidden commands
     if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
@@ -11120,23 +11311,23 @@ See the LICENSE file for details.
       case "deleteCommand":
         deleteCommand();
         break;
+      case "enableFuzzyMatching":
+      case "disableFuzzyMatching":
+        toggleFuzzyMatching();
+        break;
       case "hideCommand":
         hideCommand();
         break;
       case "unhideCommand":
         unhideCommand();
         break;
-      case "enableTypeInSearch":
-      case "disableTypeInSearch":
-        toggleTypeInSearch();
-        break;
       case "revealPrefFile":
         write = false;
         revealPrefFile();
         break;
-      case "showAllBuiltinCommands":
+      case "builtinCommands":
         write = false;
-        showAllBuiltinCommands();
+        builtinCommands();
         break;
       case "settings":
         write = false;
@@ -11152,9 +11343,17 @@ See the LICENSE file for details.
         write = false;
         showAllBookmarks();
         break;
+      case "allMenus":
+        write = false;
+        showAllMenus();
+        break;
       case "allScripts":
         write = false;
         showAllScripts();
+        break;
+      case "allTools":
+        write = false;
+        showAllTools();
         break;
       case "allWorkflows":
         write = false;
@@ -11378,10 +11577,10 @@ See the LICENSE file for details.
   }
 
   /**
-   * Enable/Disable searching on command type as well as command name.
+   * Toggle fuzzy command matching
    */
-  function toggleTypeInSearch() {
-    prefs.searchIncludesType = !prefs.searchIncludesType;
+  function toggleFuzzyMatching() {
+    prefs.fuzzy = !prefs.fuzzy;
   }
 
   /**
@@ -11416,7 +11615,7 @@ See the LICENSE file for details.
   /**
    * Present a palette with all built-in commands.
    */
-  function showAllBuiltinCommands() {
+  function builtinCommands() {
     var builtins = filterCommands(
       (commands = null),
       (types = ["builtin"]),
@@ -11681,6 +11880,27 @@ See the LICENSE file for details.
   }
 
   /**
+   * Present a palette with all menu commands.
+   */
+  function showAllMenus() {
+    var workflows = filterCommands(
+      (commands = null),
+      (types = ["menu"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = workflows),
+      (title = localize(strings.menu_commands)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
    * Present a palette with all user loaded scripts.
    */
   function showAllScripts() {
@@ -11708,6 +11928,27 @@ See the LICENSE file for details.
       (commands = scriptCommands),
       (title = localize(strings.Scripts)),
       (columns = columns),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Present a palette with all tools.
+   */
+  function showAllTools() {
+    var workflows = filterCommands(
+      (commands = null),
+      (types = ["tool"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = workflows),
+      (title = localize(strings.tl_all)),
+      (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
     if (!result) return;
@@ -12342,6 +12583,9 @@ See the LICENSE file for details.
   userPrefs.load(true);
   userActions.load();
   userHistory.load();
+
+  // set command palette matching algo
+  var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
 
   // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {
