@@ -85,7 +85,7 @@ function buildPicker(editPickerId) {
       action: "picker",
       name: result.name,
       commands: result.commands,
-      type: "picker",
+      type: "Picker",
       docRequired: false,
       selRequired: false,
       hidden: false,

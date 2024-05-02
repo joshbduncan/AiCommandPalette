@@ -142,7 +142,11 @@ function runCustomPicker(picker) {
     (columns = paletteSettings.columnSets.default),
     (multiselect = picker.multiselect)
   );
-  if (!result) return false;
+  if (!result) {
+    // set to null so any previous values are not incorrectly read
+    $.setenv("aic_picker_last", null);
+    return false;
+  }
 
   // grab the correct name data from the selected commands
   var args = [];

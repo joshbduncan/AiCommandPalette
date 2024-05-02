@@ -11439,7 +11439,11 @@ See the LICENSE file for details.
       (columns = paletteSettings.columnSets.default),
       (multiselect = picker.multiselect)
     );
-    if (!result) return false;
+    if (!result) {
+      // set to null so any previous values are not incorrectly read
+      $.setenv("aic_picker_last", null);
+      return false;
+    }
 
     // grab the correct name data from the selected commands
     var args = [];
@@ -11691,7 +11695,7 @@ See the LICENSE file for details.
         action: "picker",
         name: result.name,
         commands: result.commands,
-        type: "picker",
+        type: "Picker",
         docRequired: false,
         selRequired: false,
         hidden: false,
