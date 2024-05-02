@@ -11272,6 +11272,10 @@ See the LICENSE file for details.
     if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
     // hide `All Actions...` command if no actions
     if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
+    // hide `Edit Picker...` command if no pickers
+    if (command.id == "builtin_editPicker" && prefs.pickers.length < 1) return false;
+    // hide `All Pickers...` command if no pickers
+    if (command.id == "builtin_allPickers" && prefs.pickers.length < 1) return false;
 
     // hide `Enable Fuzzy Matching` command if already enabled
     if (command.id == "config_enableFuzzyMatching" && prefs.fuzzy) return false;
@@ -11771,7 +11775,7 @@ See the LICENSE file for details.
   function deleteCommand() {
     var deletableCommands = filterCommands(
       (commands = null),
-      (types = ["file", "folder", "script", "workflow"]),
+      (types = ["file", "folder", "script", "workflow", "picker"]),
       (showHidden = false),
       (showNonRelevant = true),
       (hideSpecificCommands = null)
@@ -11801,7 +11805,7 @@ See the LICENSE file for details.
       return;
 
     // go through each deletable command type and remove them from user prefs
-    var typesToCheck = ["workflows", "bookmarks", "scripts"];
+    var typesToCheck = ["workflows", "bookmarks", "scripts", "pickers"];
     for (var i = 0; i < typesToCheck.length; i++) {
       for (var j = prefs[typesToCheck[i]].length - 1; j >= 0; j--) {
         if (result.includes(prefs[typesToCheck[i]][j].id))
@@ -11829,7 +11833,16 @@ See the LICENSE file for details.
   function hideCommand() {
     var hideableCommands = filterCommands(
       (commands = null),
-      (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+      (types = [
+        "bookmark",
+        "script",
+        "workflow",
+        "menu",
+        "tool",
+        "action",
+        "builtin",
+        "picker",
+      ]),
       (showHidden = false),
       (showNonRelevant = true),
       (hideSpecificCommands = null)

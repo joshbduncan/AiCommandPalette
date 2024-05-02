@@ -169,7 +169,7 @@ function customizeStartup() {
 function deleteCommand() {
   var deletableCommands = filterCommands(
     (commands = null),
-    (types = ["file", "folder", "script", "workflow"]),
+    (types = ["file", "folder", "script", "workflow", "picker"]),
     (showHidden = false),
     (showNonRelevant = true),
     (hideSpecificCommands = null)
@@ -199,7 +199,7 @@ function deleteCommand() {
     return;
 
   // go through each deletable command type and remove them from user prefs
-  var typesToCheck = ["workflows", "bookmarks", "scripts"];
+  var typesToCheck = ["workflows", "bookmarks", "scripts", "pickers"];
   for (var i = 0; i < typesToCheck.length; i++) {
     for (var j = prefs[typesToCheck[i]].length - 1; j >= 0; j--) {
       if (result.includes(prefs[typesToCheck[i]][j].id))
@@ -227,7 +227,16 @@ function toggleFuzzyMatching() {
 function hideCommand() {
   var hideableCommands = filterCommands(
     (commands = null),
-    (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+    (types = [
+      "bookmark",
+      "script",
+      "workflow",
+      "menu",
+      "tool",
+      "action",
+      "builtin",
+      "picker",
+    ]),
     (showHidden = false),
     (showNonRelevant = true),
     (hideSpecificCommands = null)
