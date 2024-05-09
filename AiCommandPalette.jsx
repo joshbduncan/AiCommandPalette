@@ -11210,7 +11210,7 @@ See the LICENSE file for details.
       var selected = sortIndexes(steps.listbox.selection);
       for (var i = selected.length - 1; i > -1; i--) {
         // add removed item back to listbox
-        commands.push(steps.listbox.items[i].id);
+        commands.push(steps.listbox.items[selected[i]].id);
         steps.listbox.remove(selected[i]);
       }
 
