@@ -11035,7 +11035,7 @@ See the LICENSE file for details.
 
     del.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);
-      for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
+      for (var i = selected.length - 1; i > -1; i--) {
         steps.listbox.remove(selected[i]);
       }
       steps.listbox.selection == null;
@@ -11141,7 +11141,7 @@ See the LICENSE file for details.
       name: "ok",
     });
     save.preferredSize.width = 100;
-    save.enabled = editWorkflow ? true : false;
+    save.enabled = true;
     var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
       name: "cancel",
     });
@@ -11161,10 +11161,6 @@ See the LICENSE file for details.
       if (matches.length > 0) {
         list.update(matches);
       }
-    };
-
-    steps.listbox.onChange = function () {
-      save.enabled = steps.listbox.items.length > 0 ? true : false;
     };
 
     up.onClick = function () {
@@ -11211,13 +11207,22 @@ See the LICENSE file for details.
     }
 
     del.onClick = function () {
-      // TODO: add removed item back to listbox and re-index matches
       var selected = sortIndexes(steps.listbox.selection);
-      for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
+      for (var i = selected.length - 1; i > -1; i--) {
+        // add removed item back to listbox
+        commands.push(steps.listbox.items[i].id);
         steps.listbox.remove(selected[i]);
       }
+
+      // clear cache and re-index matches
+      qCache = {};
+      matches = matcher(q.text, commands);
+      qCache[this.text] = matches;
+      if (matches.length > 0) {
+        list.update(matches);
+      }
+
       steps.listbox.selection == null;
-      save.enabled = steps.listbox.items.length > 0 ? true : false;
     };
 
     if (win.show() == 1) {

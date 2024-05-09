@@ -65,7 +65,7 @@ function startupBuilder(commands) {
     name: "ok",
   });
   save.preferredSize.width = 100;
-  save.enabled = editWorkflow ? true : false;
+  save.enabled = true;
   var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
     name: "cancel",
   });
@@ -85,10 +85,6 @@ function startupBuilder(commands) {
     if (matches.length > 0) {
       list.update(matches);
     }
-  };
-
-  steps.listbox.onChange = function () {
-    save.enabled = steps.listbox.items.length > 0 ? true : false;
   };
 
   up.onClick = function () {
@@ -135,13 +131,22 @@ function startupBuilder(commands) {
   }
 
   del.onClick = function () {
-    // TODO: add removed item back to listbox and re-index matches
     var selected = sortIndexes(steps.listbox.selection);
-    for (var i = steps.listbox.selection.length - 1; i > -1; i--) {
+    for (var i = selected.length - 1; i > -1; i--) {
+      // add removed item back to listbox
+      commands.push(steps.listbox.items[i].id);
       steps.listbox.remove(selected[i]);
     }
+
+    // clear cache and re-index matches
+    qCache = {};
+    matches = matcher(q.text, commands);
+    qCache[this.text] = matches;
+    if (matches.length > 0) {
+      list.update(matches);
+    }
+
     steps.listbox.selection == null;
-    save.enabled = steps.listbox.items.length > 0 ? true : false;
   };
 
   if (win.show() == 1) {
