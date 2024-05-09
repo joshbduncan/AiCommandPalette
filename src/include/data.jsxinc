@@ -311,6 +311,7 @@ var strings = {
     de: "Zuletzt benutzte Datei \u00f6ffnen",
     ru: "Open Recent File",
   },
+  picker: { en: "Picker", de: "Picker", ru: "Picker" },
   placed_items: { en: "Placed Items", de: "Platzierte Objecte", ru: "Placed Items" },
   history_file_loading_error: {
     en: "Error Loading History\nA backup copy of your history has been created.",

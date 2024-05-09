@@ -85,16 +85,19 @@ function buildPicker(editPickerId) {
       action: "picker",
       name: result.name,
       commands: result.commands,
-      type: "Picker",
+      type: "picker",
       docRequired: false,
       selRequired: false,
       hidden: false,
       multiselect: result.multiselect,
     };
     prefs.pickers.push(picker);
+    commandsData[id] = picker;
   }
 
   addToStartup([id]);
+
+  return picker;
 }
 
 /**
@@ -648,7 +651,11 @@ function showAllWorkflows() {
  * @param {String} editWorkflowId Id of a current user workflow to edit.
  */
 function buildWorkflow(editWorkflowId) {
-  commandsToHide = ["builtin_buildPicker"];
+  commandsToHide = [
+    "builtin_editPicker",
+    "builtin_buildWorkflow",
+    "builtin_editWorkflow",
+  ];
   if (editWorkflowId) commandsToHide.push(editWorkflowId);
   var availableWorkflowCommands = filterCommands(
     (commands = null),

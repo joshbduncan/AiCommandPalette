@@ -193,7 +193,8 @@ See the LICENSE file for details.
     // remove any command already in startup commands
     var newCommandId;
     for (var i = newCommandIds.length - 1; i >= 0; i--) {
-      if (prefs.startupCommands.includes(newCommandIds[i])) {
+      newCommandId = newCommandIds[i];
+      if (prefs.startupCommands.includes(newCommandId)) {
         newCommandIds.splice(i, 1);
       }
     }
@@ -900,6 +901,7 @@ See the LICENSE file for details.
       de: "Zuletzt benutzte Datei \u00f6ffnen",
       ru: "Open Recent File",
     },
+    picker: { en: "Picker", de: "Picker", ru: "Picker" },
     placed_items: { en: "Placed Items", de: "Platzierte Objecte", ru: "Placed Items" },
     history_file_loading_error: {
       en: "Error Loading History\nA backup copy of your history has been created.",
@@ -10497,7 +10499,7 @@ See the LICENSE file for details.
    */
   function selectOnDoubleClick(listbox) {
     listbox.onDoubleClick = function () {
-      if (listbox.selection) listbox.window.close(1);
+      this.window.close(1);
     };
   }
 
@@ -10507,16 +10509,23 @@ See the LICENSE file for details.
    */
   function addToStepsOnDoubleClick(listbox) {
     listbox.onDoubleClick = function () {
-      var win, steps, command;
-      if (listbox.selection) {
-        win = listbox.window;
-        steps = win.findElement("steps");
-        command = commandsData[listbox.selection.id];
+      var win, steps, command, newItem, newPicker;
+      win = this.window;
+      steps = win.findElement("steps");
+      command = commandsData[this.selection.id];
+
+      // check for "Build Picker..." command
+      if (command.id == "builtin_buildPicker") {
+        newPicker = buildPicker();
+        newItem = steps.add("item", newPicker.name);
+        newItem.subItems[0].text = newPicker.type;
+        newItem.id = newPicker.id;
+      } else {
         newItem = steps.add("item", determineCorrectString(command, "name"));
         newItem.subItems[0].text = determineCorrectString(command, "type");
         newItem.id = command.id;
-        steps.notify("onChange");
       }
+      steps.notify("onChange");
     };
   }
 
@@ -10911,6 +10920,18 @@ See the LICENSE file for details.
       localize(strings.wf_steps_helptip),
       []
     );
+
+    // allow in-line editing of pickers
+    steps.listbox.onDoubleClick = function () {
+      var selectedItem, command, updatedPicker;
+      selectedItem = this.selection[0];
+      command = commandsData[selectedItem.id];
+      if (command.type.toLowerCase() == "picker") {
+        updatedPicker = buildPicker(command.id);
+        if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
+        if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
+      }
+    };
 
     var stepButtons = pSteps.add("group");
     stepButtons.alignment = "center";
@@ -11695,16 +11716,19 @@ See the LICENSE file for details.
         action: "picker",
         name: result.name,
         commands: result.commands,
-        type: "Picker",
+        type: "picker",
         docRequired: false,
         selRequired: false,
         hidden: false,
         multiselect: result.multiselect,
       };
       prefs.pickers.push(picker);
+      commandsData[id] = picker;
     }
 
     addToStartup([id]);
+
+    return picker;
   }
 
   /**
@@ -12258,7 +12282,11 @@ See the LICENSE file for details.
    * @param {String} editWorkflowId Id of a current user workflow to edit.
    */
   function buildWorkflow(editWorkflowId) {
-    commandsToHide = ["builtin_buildPicker"];
+    commandsToHide = [
+      "builtin_editPicker",
+      "builtin_buildWorkflow",
+      "builtin_editWorkflow",
+    ];
     if (editWorkflowId) commandsToHide.push(editWorkflowId);
     var availableWorkflowCommands = filterCommands(
       (commands = null),

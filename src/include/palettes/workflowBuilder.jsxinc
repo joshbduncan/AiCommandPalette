@@ -65,6 +65,18 @@ function workflowBuilder(commands, editWorkflowId) {
     []
   );
 
+  // allow in-line editing of pickers
+  steps.listbox.onDoubleClick = function () {
+    var selectedItem, command, updatedPicker;
+    selectedItem = this.selection[0];
+    command = commandsData[selectedItem.id];
+    if (command.type.toLowerCase() == "picker") {
+      updatedPicker = buildPicker(command.id);
+      if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
+      if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
+    }
+  };
+
   var stepButtons = pSteps.add("group");
   stepButtons.alignment = "center";
   var up = stepButtons.add("button", undefined, localize(strings.step_up));
