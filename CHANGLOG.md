@@ -6,7 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-<<<<<<< Updated upstream
 ## Added
 
 - fuzzy matching (e.g. looking for 'Outline Stroke', queries 'oust', 'ou st', 'st ou' will all work)
@@ -15,11 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Changes
 
 - removed searching on type command (added back 'all menu commands', 'all tools')
-=======
-### Added
-
-- Fuzzy matching for command search (option to use original matcher)
->>>>>>> Stashed changes
 
 ## [0.10.0] 2024-01-25
 
