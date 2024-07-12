@@ -193,7 +193,8 @@ See the LICENSE file for details.
     // remove any command already in startup commands
     var newCommandId;
     for (var i = newCommandIds.length - 1; i >= 0; i--) {
-      if (prefs.startupCommands.includes(newCommandIds[i])) {
+      newCommandId = newCommandIds[i];
+      if (prefs.startupCommands.includes(newCommandId)) {
         newCommandIds.splice(i, 1);
       }
     }
@@ -900,6 +901,7 @@ See the LICENSE file for details.
       de: "Zuletzt benutzte Datei \u00f6ffnen",
       ru: "Open Recent File",
     },
+    picker: { en: "Picker", de: "Picker", ru: "Picker" },
     placed_items: { en: "Placed Items", de: "Platzierte Objecte", ru: "Placed Items" },
     history_file_loading_error: {
       en: "Error Loading History\nA backup copy of your history has been created.",
@@ -907,6 +909,36 @@ See the LICENSE file for details.
       ru: "Error Loading History\nA backup copy of your history has been created.",
     },
     path_title_case: { en: "Path", de: "Path", ru: "Path" },
+    picker_builder_header: {
+      en: "Enter your custom commands below (one per line).",
+      de: "Enter your custom commands below (one per line).",
+      ru: "Enter your custom commands below (one per line).",
+    },
+    picker_builder_multi_select: {
+      en: "Multi-Select Enabled?",
+      de: "Multi-Select Enabled?",
+      ru: "Multi-Select Enabled?",
+    },
+    picker_builder_name: {
+      en: "Custom Picker Name",
+      de: "Custom Picker Name",
+      ru: "Custom Picker Name",
+    },
+    picker_builder_title: {
+      en: "Custom Picker Builder",
+      de: "Custom Picker Builder",
+      ru: "Custom Picker Builder",
+    },
+    picker_builder_save_conflict_message: {
+      en: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+      de: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+      ru: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+    },
+    picker_builder_save_conflict_title: {
+      en: "Save Custom Picker Conflict",
+      de: "Save Custom Picker Conflict",
+      ru: "Save Custom Picker Conflict",
+    },
     pref_file_loading_error: {
       en: "Error Loading Preferences\nA backup copy of your settings has been created.",
       de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
@@ -9258,6 +9290,15 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    builtin_allPickers: {
+      id: "builtin_allPickers",
+      action: "allPickers",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: { en: "All Pickers...", de: "All Pickers...", ru: "All Pickers..." },
+      hidden: false,
+    },
     builtin_allScripts: {
       id: "builtin_allScripts",
       action: "allScripts",
@@ -9313,6 +9354,24 @@ See the LICENSE file for details.
         de: "Arbeitsablauf bearbeiten \u2026",
         ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
       },
+      hidden: false,
+    },
+    builtin_buildPicker: {
+      id: "builtin_buildPicker",
+      action: "buildPicker",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: { en: "Build Picker...", de: "Build Picker...", ru: "Build Picker..." },
+      hidden: false,
+    },
+    builtin_editPicker: {
+      id: "builtin_editPicker",
+      action: "editPicker",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: { en: "Edit Picker...", de: "Edit Picker...", ru: "Edit Picker..." },
       hidden: false,
     },
     builtin_imageCapture: {
@@ -9732,6 +9791,7 @@ See the LICENSE file for details.
   prefs.workflows = [];
   prefs.bookmarks = [];
   prefs.scripts = [];
+  prefs.pickers = [];
   prefs.fuzzy = true; // set to new fuzzy matcher as default
   prefs.latches = {};
   prefs.version = _version;
@@ -9800,7 +9860,7 @@ See the LICENSE file for details.
     }
   };
   userPrefs.inject = function () {
-    var typesToInject = ["workflows", "bookmarks", "scripts"];
+    var typesToInject = ["workflows", "bookmarks", "scripts", "pickers"];
     for (var i = 0; i < typesToInject.length; i++) {
       for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
         commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
@@ -10431,18 +10491,19 @@ See the LICENSE file for details.
         // if command is no longer available just show the id
         if (!commandsData.hasOwnProperty(id)) {
           item = listbox.add("item", id);
-          continue;
-        }
-        command = commandsData[id];
-        name = determineCorrectString(command, "name");
-        for (var j = 0; j < columnKeys.length; j++) {
-          str = determineCorrectString(command, columnKeys[j]);
-          if (str == null) alert(id);
-          if (j === 0) {
-            item = listbox.add("item", str);
-            continue;
+        } else {
+          command = commandsData[id];
+          name = determineCorrectString(command, "name");
+
+          // add base item with info from first column
+          str = determineCorrectString(command, columnKeys[0]);
+          item = listbox.add("item", str ? str : name);
+
+          // add remaining columns as subItems
+          for (var j = 1; j < columnKeys.length; j++) {
+            str = determineCorrectString(command, columnKeys[j]);
+            item.subItems[j - 1].text = str ? str : "<missing>";
           }
-          item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);
         }
         item.id = id;
       }
@@ -10468,7 +10529,7 @@ See the LICENSE file for details.
    */
   function selectOnDoubleClick(listbox) {
     listbox.onDoubleClick = function () {
-      if (listbox.selection) listbox.window.close(1);
+      this.window.close(1);
     };
   }
 
@@ -10478,16 +10539,23 @@ See the LICENSE file for details.
    */
   function addToStepsOnDoubleClick(listbox) {
     listbox.onDoubleClick = function () {
-      var win, steps, command;
-      if (listbox.selection) {
-        win = listbox.window;
-        steps = win.findElement("steps");
-        command = commandsData[listbox.selection.id];
+      var win, steps, command, newItem, newPicker;
+      win = this.window;
+      steps = win.findElement("steps");
+      command = commandsData[this.selection.id];
+
+      // check for "Build Picker..." command
+      if (command.id == "builtin_buildPicker") {
+        newPicker = buildPicker();
+        newItem = steps.add("item", newPicker.name);
+        newItem.subItems[0].text = newPicker.type;
+        newItem.id = newPicker.id;
+      } else {
         newItem = steps.add("item", determineCorrectString(command, "name"));
         newItem.subItems[0].text = determineCorrectString(command, "type");
         newItem.id = command.id;
-        steps.notify("onChange");
       }
+      steps.notify("onChange");
     };
   }
 
@@ -10715,8 +10783,110 @@ See the LICENSE file for details.
         if (saveHistory) {
           updateHistory();
         }
-        return list.listbox.selection.id;
+        if (list.listbox.selection.hasOwnProperty("id")) {
+          return list.listbox.selection.id;
+        } else {
+          return list.listbox.selection.name;
+        }
       }
+    }
+    return false;
+  }
+  function pickerBuilder(editPickerId) {
+    var overwrite = false;
+
+    // create the dialog
+    var win = new Window("dialog");
+    win.text = localize(strings.picker_builder_title);
+    win.alignChildren = "fill";
+
+    // picker commands
+    var header = win.add(
+      "statictext",
+      undefined,
+      localize(strings.picker_builder_header)
+    );
+    header.justify = "center";
+    var pickerCommands = win.add("edittext", [0, 0, 400, 200], "", { multiline: true });
+    pickerCommands.text = editPickerId
+      ? commandsData[editPickerId].commands.join("\n")
+      : "";
+    pickerCommands.active = true;
+    var cbMultiselect = win.add(
+      "checkbox",
+      undefined,
+      localize(strings.picker_builder_multi_select)
+    );
+    cbMultiselect.value = editPickerId ? commandsData[editPickerId].multiselect : false;
+
+    // picker name
+    var pName = win.add("panel", undefined, localize(strings.picker_builder_name));
+    pName.alignChildren = ["fill", "center"];
+    pName.margins = 20;
+    var pickerNameText = editPickerId ? commandsData[editPickerId].name : "";
+    var pickerName = pName.add("edittext", undefined, pickerNameText);
+    pickerName.enabled = editPickerId ? true : false;
+
+    // window buttons
+    var winButtons = win.add("group");
+    winButtons.orientation = "row";
+    winButtons.alignChildren = ["center", "center"];
+    var save = winButtons.add("button", undefined, localize(strings.save), {
+      name: "ok",
+    });
+    save.preferredSize.width = 100;
+    save.enabled = editPickerId ? true : false;
+    var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
+      name: "cancel",
+    });
+    cancel.preferredSize.width = 100;
+
+    pickerCommands.onChange = function () {
+      pickerName.enabled = pickerCommands.text.length > 0 ? true : false;
+      save.enabled =
+        steps.listbox.items.length > 0 && pickerName.text.length > 0 ? true : false;
+    };
+
+    pickerName.onChanging = function () {
+      save.enabled = pickerCommands.text.length > 0 ? true : false;
+    };
+
+    save.onClick = function () {
+      // check for picker overwrite
+      var currentPickers = [];
+      for (var i = 0; i < prefs.pickers.length; i++) {
+        currentPickers.push(prefs.pickers[i].name);
+      }
+      if (currentPickers.includes(pickerName.text.trim())) {
+        overwrite = true;
+        if (
+          !confirm(
+            localize(
+              strings.picker_builder_save_conflict_message,
+              pickerName.text.trim()
+            ),
+            "noAsDflt",
+            localize(strings.picker_builder_save_conflict_title)
+          )
+        ) {
+          return;
+        }
+      }
+      win.close(1);
+    };
+
+    if (win.show() == 1) {
+      var commands = [];
+      var lines = pickerCommands.text.split(/\r\n|\r|\n/);
+      for (var i = 0; i < lines.length; i++) {
+        commands.push(lines[i].trim());
+      }
+      return {
+        name: pickerName.text.trim(),
+        commands: commands,
+        multiselect: cbMultiselect.value,
+        overwrite: overwrite,
+      };
     }
     return false;
   }
@@ -10787,6 +10957,18 @@ See the LICENSE file for details.
       []
     );
 
+    // allow in-line editing of pickers
+    steps.listbox.onDoubleClick = function () {
+      var selectedItem, command, updatedPicker;
+      selectedItem = this.selection[0];
+      command = commandsData[selectedItem.id];
+      if (command.type.toLowerCase() == "picker") {
+        updatedPicker = buildPicker(command.id);
+        if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
+        if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
+      }
+    };
+
     var stepButtons = pSteps.add("group");
     stepButtons.alignment = "center";
     var up = stepButtons.add("button", undefined, localize(strings.step_up));
@@ -10796,7 +10978,7 @@ See the LICENSE file for details.
     var del = stepButtons.add("button", undefined, localize(strings.step_delete));
     del.preferredSize.width = 100;
 
-    // command name
+    // workflow name
     var pName = win.add("panel", undefined, localize(strings.wf_save_as));
     pName.alignChildren = ["fill", "center"];
     pName.margins = 20;
@@ -11064,7 +11246,7 @@ See the LICENSE file for details.
       var selected = sortIndexes(steps.listbox.selection);
       for (var i = selected.length - 1; i > -1; i--) {
         // add removed item back to listbox
-        commands.push(steps.listbox.items[i].id);
+        commands.push(steps.listbox.items[selected[i]].id);
         steps.listbox.remove(selected[i]);
       }
 
@@ -11152,6 +11334,10 @@ See the LICENSE file for details.
     if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
     // hide `All Actions...` command if no actions
     if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
+    // hide `Edit Picker...` command if no pickers
+    if (command.id == "builtin_editPicker" && prefs.pickers.length < 1) return false;
+    // hide `All Pickers...` command if no pickers
+    if (command.id == "builtin_allPickers" && prefs.pickers.length < 1) return false;
 
     // hide `Enable Fuzzy Matching` command if already enabled
     if (command.id == "config_enableFuzzyMatching" && prefs.fuzzy) return false;
@@ -11246,6 +11432,9 @@ See the LICENSE file for details.
       case "folder":
         func = bookmarkAction;
         break;
+      case "picker":
+        func = runCustomPicker;
+        break;
       case "script":
         func = scriptAction;
         alertString = strings.sc_error_execution;
@@ -11284,6 +11473,52 @@ See the LICENSE file for details.
     } else {
       f.execute();
     }
+  }
+
+  function runCustomPicker(picker) {
+    // create custom adhoc commands from provided picker options
+    var commands = [];
+    var id, command;
+    for (var i = 0; i < picker.commands.length; i++) {
+      id = "picker_option_" + i.toString();
+      command = {
+        id: id,
+        action: "picker_option",
+        type: "Option",
+        docRequired: false,
+        selRequired: false,
+        name: picker.commands[i],
+        hidden: false,
+      };
+      commandsData[id] = command;
+      commands.push(id);
+    }
+
+    // present the custom picker
+    var result = commandPalette(
+      (commands = commands),
+      (title = picker.name),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = picker.multiselect)
+    );
+    if (!result) {
+      // set to null so any previous values are not incorrectly read
+      $.setenv("aic_picker_last", null);
+      return false;
+    }
+
+    // grab the correct name data from the selected commands
+    var args = [];
+    if (!picker.multiselect) {
+      args.push(commandsData[result].name);
+    } else {
+      for (var i = 0; i < result.length; i++) {
+        args.push(commandsData[result[i]].name);
+      }
+    }
+
+    // encode the array data into an environment variable for later use
+    $.setenv("aic_picker_last", args.toSource());
   }
 
   function scriptAction(command) {
@@ -11352,6 +11587,10 @@ See the LICENSE file for details.
         write = false;
         showAllMenus();
         break;
+      case "allPickers":
+        write = false;
+        showAllPickers();
+        break;
       case "allScripts":
         write = false;
         showAllScripts();
@@ -11369,6 +11608,12 @@ See the LICENSE file for details.
         break;
       case "editWorkflow":
         editWorkflow();
+        break;
+      case "buildPicker":
+        buildPicker();
+        break;
+      case "editPicker":
+        editPicker();
         break;
       case "documentReport":
         write = false;
@@ -11419,7 +11664,6 @@ See the LICENSE file for details.
         write = false;
         revealActiveDocument();
         break;
-
       default:
         alert(localize(strings.cd_invalid, action));
     }
@@ -11488,6 +11732,69 @@ See the LICENSE file for details.
   }
 
   /**
+   * Present the Picker Builder dialog for building/editing user picker.
+   * @param {String} editWorkflowId Id of a current user picker to edit.
+   */
+  function buildPicker(editPickerId) {
+    var result = pickerBuilder(editPickerId);
+
+    if (!result) return;
+
+    var id;
+    // when overwriting delete previous version and update prefs
+    if (result.overwrite) {
+      for (var i = prefs.pickers.length - 1; i >= 0; i--) {
+        if (prefs.pickers[i].name == result.name) {
+          prefs.pickers[i].commands = result.commands;
+          prefs.pickers[i].multiselect = result.multiselect;
+          id = prefs.pickers[i].id;
+        }
+      }
+    } else {
+      id = generateCommandId("picker_" + result.name.toLowerCase());
+      var picker = {
+        id: id,
+        action: "picker",
+        name: result.name,
+        commands: result.commands,
+        type: "picker",
+        docRequired: false,
+        selRequired: false,
+        hidden: false,
+        multiselect: result.multiselect,
+      };
+      prefs.pickers.push(picker);
+      commandsData[id] = picker;
+    }
+
+    addToStartup([id]);
+
+    return picker;
+  }
+
+  /**
+   * Present a palette with all user created picker. The selected picker will
+   * be opened in the picker builder.
+   */
+  function editPicker() {
+    var pickers = filterCommands(
+      (commands = null),
+      (types = ["picker"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = pickers),
+      (title = localize(strings.picker_to_edit)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    buildPicker(result);
+  }
+
+  /**
    * Clear all user history
    */
   function clearHistory() {
@@ -11537,7 +11844,7 @@ See the LICENSE file for details.
   function deleteCommand() {
     var deletableCommands = filterCommands(
       (commands = null),
-      (types = ["file", "folder", "script", "workflow"]),
+      (types = ["file", "folder", "script", "workflow", "picker"]),
       (showHidden = false),
       (showNonRelevant = true),
       (hideSpecificCommands = null)
@@ -11567,7 +11874,7 @@ See the LICENSE file for details.
       return;
 
     // go through each deletable command type and remove them from user prefs
-    var typesToCheck = ["workflows", "bookmarks", "scripts"];
+    var typesToCheck = ["workflows", "bookmarks", "scripts", "pickers"];
     for (var i = 0; i < typesToCheck.length; i++) {
       for (var j = prefs[typesToCheck[i]].length - 1; j >= 0; j--) {
         if (result.includes(prefs[typesToCheck[i]][j].id))
@@ -11595,7 +11902,16 @@ See the LICENSE file for details.
   function hideCommand() {
     var hideableCommands = filterCommands(
       (commands = null),
-      (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+      (types = [
+        "bookmark",
+        "script",
+        "workflow",
+        "menu",
+        "tool",
+        "action",
+        "builtin",
+        "picker",
+      ]),
       (showHidden = false),
       (showNonRelevant = true),
       (hideSpecificCommands = null)
@@ -11906,6 +12222,27 @@ See the LICENSE file for details.
   }
 
   /**
+   * Present a palette with all user created pickers.
+   */
+  function showAllPickers() {
+    var pickers = filterCommands(
+      (commands = null),
+      (types = ["picker"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = pickers),
+      (title = localize(strings.pickers_all)),
+      (columns = paletteSettings.columnSets.default),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
    * Present a palette with all user loaded scripts.
    */
   function showAllScripts() {
@@ -11986,6 +12323,12 @@ See the LICENSE file for details.
    * @param {String} editWorkflowId Id of a current user workflow to edit.
    */
   function buildWorkflow(editWorkflowId) {
+    commandsToHide = [
+      "builtin_editPicker",
+      "builtin_buildWorkflow",
+      "builtin_editWorkflow",
+    ];
+    if (editWorkflowId) commandsToHide.push(editWorkflowId);
     var availableWorkflowCommands = filterCommands(
       (commands = null),
       (types = [
@@ -11997,10 +12340,11 @@ See the LICENSE file for details.
         "tool",
         "action",
         "builtin",
+        "picker",
       ]),
       (showHidden = true),
       (showNonRelevant = true),
-      (hideSpecificCommands = workflow ? [workflow.id] : []) // hide current workflow when editing to prevent recursive loop
+      (hideSpecificCommands = commandsToHide) // hide current workflow when editing to prevent recursive loop
     );
     // show the workflow builder dialog
     var result = workflowBuilder(availableWorkflowCommands, editWorkflowId);
@@ -12591,6 +12935,7 @@ See the LICENSE file for details.
 
   // set command palette matching algo
   var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
+  // TODO: allow disable keyword latching
 
   // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {

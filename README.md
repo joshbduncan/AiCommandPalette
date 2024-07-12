@@ -42,6 +42,22 @@ Find yourself opening the same file inside of Illustrator multiple times a day? 
 
 !["Actions"](/images/bookmarks.png)
 
+### Custom Pickers
+
+In need of a custom command palette picker for something you do on a regular basis, or want to enhance a script you already use with a the ability to pick from a set of options? Use the `Build Picker...` command to create your very own searchable command palette. These are also great for use in [workflows](#workflows).
+
+!["Actions"](/images/custom-picker.png)
+
+The selected item will be saved to the environment variable `aic_picker_last` and can be accessed via a script using `$.getenv("aic_picker_last")`.
+
+Custom Pickers also allow for multiple selections. When enabled, the selected items are saved as an array so to access them make sure to use the [eval()](https://extendscript.docsforadobe.dev/integrating-external-libraries/defining-entry-points-for-indirect-access.html#eval) method like below.
+
+```javascript
+// anotherScript.jsx
+var colorFormats = eval($.getenv("aic_picker_last"));
+alert("Picked Color Formats\n" + colorFormats.join("\n"));
+```
+
 ### Scripts
 
 Load any JavaScript files (.js or .jsx) you want quick access to using the `Load Scripts...` command.
@@ -125,9 +141,13 @@ I recommend installing this action into your scripts folder ([how-to](https://ww
 
 Ai Command Palette was created to allow users to stay away from the mouse and do actions and operations via the keyboard. Funnily enough, there is a bug in ExtendScript that will delay/send the `Enter` key event after the palette is dismissed using the enter key.
 
-This issue doesn't effect very many actions and you may naver notice it, but if you run the `About Illusatrator...` command, you'll notice it appears and immediately disappears. This is because ExtendScript essentially "presses" the enter key after showing the about splash screen.
+This issue doesn't effect very many actions and you may never notice it, but if you run the `About Illusatrator...` command, you'll notice it appears and immediately disappears. This is because ExtendScript essentially "presses" the enter key after showing the about splash screen.
 
 I have tried lots of work-a-rounds to fix this but haven't found a solution yet.
+
+### Moving Between Palette Options Using Arrow Keys
+
+I have noticed that after some time without restarting Illustrator, the arrow keys stop moving up and down between palette options. Not sure of the cause but restarting Illustrator will get everything back operating normally.
 
 ### Running Actions 
 

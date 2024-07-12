@@ -311,6 +311,7 @@ var strings = {
     de: "Zuletzt benutzte Datei \u00f6ffnen",
     ru: "Open Recent File",
   },
+  picker: { en: "Picker", de: "Picker", ru: "Picker" },
   placed_items: { en: "Placed Items", de: "Platzierte Objecte", ru: "Placed Items" },
   history_file_loading_error: {
     en: "Error Loading History\nA backup copy of your history has been created.",
@@ -318,6 +319,36 @@ var strings = {
     ru: "Error Loading History\nA backup copy of your history has been created.",
   },
   path_title_case: { en: "Path", de: "Path", ru: "Path" },
+  picker_builder_header: {
+    en: "Enter your custom commands below (one per line).",
+    de: "Enter your custom commands below (one per line).",
+    ru: "Enter your custom commands below (one per line).",
+  },
+  picker_builder_multi_select: {
+    en: "Multi-Select Enabled?",
+    de: "Multi-Select Enabled?",
+    ru: "Multi-Select Enabled?",
+  },
+  picker_builder_name: {
+    en: "Custom Picker Name",
+    de: "Custom Picker Name",
+    ru: "Custom Picker Name",
+  },
+  picker_builder_title: {
+    en: "Custom Picker Builder",
+    de: "Custom Picker Builder",
+    ru: "Custom Picker Builder",
+  },
+  picker_builder_save_conflict_message: {
+    en: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+    de: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+    ru: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+  },
+  picker_builder_save_conflict_title: {
+    en: "Save Custom Picker Conflict",
+    de: "Save Custom Picker Conflict",
+    ru: "Save Custom Picker Conflict",
+  },
   pref_file_loading_error: {
     en: "Error Loading Preferences\nA backup copy of your settings has been created.",
     de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
@@ -8669,6 +8700,15 @@ var commandsData = {
     },
     hidden: false,
   },
+  builtin_allPickers: {
+    id: "builtin_allPickers",
+    action: "allPickers",
+    type: "builtin",
+    docRequired: false,
+    selRequired: false,
+    name: { en: "All Pickers...", de: "All Pickers...", ru: "All Pickers..." },
+    hidden: false,
+  },
   builtin_allScripts: {
     id: "builtin_allScripts",
     action: "allScripts",
@@ -8724,6 +8764,24 @@ var commandsData = {
       de: "Arbeitsablauf bearbeiten \u2026",
       ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
     },
+    hidden: false,
+  },
+  builtin_buildPicker: {
+    id: "builtin_buildPicker",
+    action: "buildPicker",
+    type: "builtin",
+    docRequired: false,
+    selRequired: false,
+    name: { en: "Build Picker...", de: "Build Picker...", ru: "Build Picker..." },
+    hidden: false,
+  },
+  builtin_editPicker: {
+    id: "builtin_editPicker",
+    action: "editPicker",
+    type: "builtin",
+    docRequired: false,
+    selRequired: false,
+    name: { en: "Edit Picker...", de: "Edit Picker...", ru: "Edit Picker..." },
     hidden: false,
   },
   builtin_imageCapture: {

@@ -70,7 +70,8 @@ function addToStartup(newCommandIds) {
   // remove any command already in startup commands
   var newCommandId;
   for (var i = newCommandIds.length - 1; i >= 0; i--) {
-    if (prefs.startupCommands.includes(newCommandIds[i])) {
+    newCommandId = newCommandIds[i];
+    if (prefs.startupCommands.includes(newCommandId)) {
       newCommandIds.splice(i, 1);
     }
   }

@@ -1,6 +1,7 @@
 //@include "fuzzy.jsxinc"
 //@include "nofuzz.jsxinc"
 //@include "commandPalette.jsxinc"
+//@include "pickerBuilder.jsxinc"
 //@include "workflowBuilder.jsxinc"
 //@include "startupBuilder.jsxinc"
 
@@ -67,6 +68,10 @@ function relevantCommand(command) {
   if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
   // hide `All Actions...` command if no actions
   if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
+  // hide `Edit Picker...` command if no pickers
+  if (command.id == "builtin_editPicker" && prefs.pickers.length < 1) return false;
+  // hide `All Pickers...` command if no pickers
+  if (command.id == "builtin_allPickers" && prefs.pickers.length < 1) return false;
 
   // hide `Enable Fuzzy Matching` command if already enabled
   if (command.id == "config_enableFuzzyMatching" && prefs.fuzzy) return false;

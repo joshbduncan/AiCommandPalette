@@ -86,18 +86,19 @@ ListBoxWrapper.prototype = {
       // if command is no longer available just show the id
       if (!commandsData.hasOwnProperty(id)) {
         item = listbox.add("item", id);
-        continue;
-      }
-      command = commandsData[id];
-      name = determineCorrectString(command, "name");
-      for (var j = 0; j < columnKeys.length; j++) {
-        str = determineCorrectString(command, columnKeys[j]);
-        if (str == null) alert(id);
-        if (j === 0) {
-          item = listbox.add("item", str);
-          continue;
+      } else {
+        command = commandsData[id];
+        name = determineCorrectString(command, "name");
+
+        // add base item with info from first column
+        str = determineCorrectString(command, columnKeys[0]);
+        item = listbox.add("item", str ? str : name);
+
+        // add remaining columns as subItems
+        for (var j = 1; j < columnKeys.length; j++) {
+          str = determineCorrectString(command, columnKeys[j]);
+          item.subItems[j - 1].text = str ? str : "<missing>";
         }
-        item.subItems[j - 1].text = determineCorrectString(command, columnKeys[j]);
       }
       item.id = id;
     }
@@ -123,7 +124,7 @@ ListBoxWrapper.prototype = {
  */
 function selectOnDoubleClick(listbox) {
   listbox.onDoubleClick = function () {
-    if (listbox.selection) listbox.window.close(1);
+    this.window.close(1);
   };
 }
 
@@ -133,16 +134,23 @@ function selectOnDoubleClick(listbox) {
  */
 function addToStepsOnDoubleClick(listbox) {
   listbox.onDoubleClick = function () {
-    var win, steps, command;
-    if (listbox.selection) {
-      win = listbox.window;
-      steps = win.findElement("steps");
-      command = commandsData[listbox.selection.id];
+    var win, steps, command, newItem, newPicker;
+    win = this.window;
+    steps = win.findElement("steps");
+    command = commandsData[this.selection.id];
+
+    // check for "Build Picker..." command
+    if (command.id == "builtin_buildPicker") {
+      newPicker = buildPicker();
+      newItem = steps.add("item", newPicker.name);
+      newItem.subItems[0].text = newPicker.type;
+      newItem.id = newPicker.id;
+    } else {
       newItem = steps.add("item", determineCorrectString(command, "name"));
       newItem.subItems[0].text = determineCorrectString(command, "type");
       newItem.id = command.id;
-      steps.notify("onChange");
     }
+    steps.notify("onChange");
   };
 }
 
@@ -370,7 +378,11 @@ function commandPalette(commands, title, columns, multiselect, showOnly, saveHis
       if (saveHistory) {
         updateHistory();
       }
-      return list.listbox.selection.id;
+      if (list.listbox.selection.hasOwnProperty("id")) {
+        return list.listbox.selection.id;
+      } else {
+        return list.listbox.selection.name;
+      }
     }
   }
   return false;

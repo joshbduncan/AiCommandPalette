@@ -60,6 +60,69 @@ function settings() {
 }
 
 /**
+ * Present the Picker Builder dialog for building/editing user picker.
+ * @param {String} editWorkflowId Id of a current user picker to edit.
+ */
+function buildPicker(editPickerId) {
+  var result = pickerBuilder(editPickerId);
+
+  if (!result) return;
+
+  var id;
+  // when overwriting delete previous version and update prefs
+  if (result.overwrite) {
+    for (var i = prefs.pickers.length - 1; i >= 0; i--) {
+      if (prefs.pickers[i].name == result.name) {
+        prefs.pickers[i].commands = result.commands;
+        prefs.pickers[i].multiselect = result.multiselect;
+        id = prefs.pickers[i].id;
+      }
+    }
+  } else {
+    id = generateCommandId("picker_" + result.name.toLowerCase());
+    var picker = {
+      id: id,
+      action: "picker",
+      name: result.name,
+      commands: result.commands,
+      type: "picker",
+      docRequired: false,
+      selRequired: false,
+      hidden: false,
+      multiselect: result.multiselect,
+    };
+    prefs.pickers.push(picker);
+    commandsData[id] = picker;
+  }
+
+  addToStartup([id]);
+
+  return picker;
+}
+
+/**
+ * Present a palette with all user created picker. The selected picker will
+ * be opened in the picker builder.
+ */
+function editPicker() {
+  var pickers = filterCommands(
+    (commands = null),
+    (types = ["picker"]),
+    (showHidden = true),
+    (showNonRelevant = false),
+    (hideSpecificCommands = null)
+  );
+  var result = commandPalette(
+    (commands = pickers),
+    (title = localize(strings.picker_to_edit)),
+    (columns = paletteSettings.columnSets.default),
+    (multiselect = false)
+  );
+  if (!result) return;
+  buildPicker(result);
+}
+
+/**
  * Clear all user history
  */
 function clearHistory() {
@@ -109,7 +172,7 @@ function customizeStartup() {
 function deleteCommand() {
   var deletableCommands = filterCommands(
     (commands = null),
-    (types = ["file", "folder", "script", "workflow"]),
+    (types = ["file", "folder", "script", "workflow", "picker"]),
     (showHidden = false),
     (showNonRelevant = true),
     (hideSpecificCommands = null)
@@ -139,7 +202,7 @@ function deleteCommand() {
     return;
 
   // go through each deletable command type and remove them from user prefs
-  var typesToCheck = ["workflows", "bookmarks", "scripts"];
+  var typesToCheck = ["workflows", "bookmarks", "scripts", "pickers"];
   for (var i = 0; i < typesToCheck.length; i++) {
     for (var j = prefs[typesToCheck[i]].length - 1; j >= 0; j--) {
       if (result.includes(prefs[typesToCheck[i]][j].id))
@@ -167,7 +230,16 @@ function toggleFuzzyMatching() {
 function hideCommand() {
   var hideableCommands = filterCommands(
     (commands = null),
-    (types = ["bookmark", "script", "workflow", "menu", "tool", "action", "builtin"]),
+    (types = [
+      "bookmark",
+      "script",
+      "workflow",
+      "menu",
+      "tool",
+      "action",
+      "builtin",
+      "picker",
+    ]),
     (showHidden = false),
     (showNonRelevant = true),
     (hideSpecificCommands = null)
@@ -478,6 +550,27 @@ function showAllMenus() {
 }
 
 /**
+ * Present a palette with all user created pickers.
+ */
+function showAllPickers() {
+  var pickers = filterCommands(
+    (commands = null),
+    (types = ["picker"]),
+    (showHidden = true),
+    (showNonRelevant = false),
+    (hideSpecificCommands = null)
+  );
+  var result = commandPalette(
+    (commands = pickers),
+    (title = localize(strings.pickers_all)),
+    (columns = paletteSettings.columnSets.default),
+    (multiselect = false)
+  );
+  if (!result) return;
+  processCommand(result);
+}
+
+/**
  * Present a palette with all user loaded scripts.
  */
 function showAllScripts() {
@@ -558,6 +651,12 @@ function showAllWorkflows() {
  * @param {String} editWorkflowId Id of a current user workflow to edit.
  */
 function buildWorkflow(editWorkflowId) {
+  commandsToHide = [
+    "builtin_editPicker",
+    "builtin_buildWorkflow",
+    "builtin_editWorkflow",
+  ];
+  if (editWorkflowId) commandsToHide.push(editWorkflowId);
   var availableWorkflowCommands = filterCommands(
     (commands = null),
     (types = [
@@ -569,10 +668,11 @@ function buildWorkflow(editWorkflowId) {
       "tool",
       "action",
       "builtin",
+      "picker",
     ]),
     (showHidden = true),
     (showNonRelevant = true),
-    (hideSpecificCommands = workflow ? [workflow.id] : []) // hide current workflow when editing to prevent recursive loop
+    (hideSpecificCommands = commandsToHide) // hide current workflow when editing to prevent recursive loop
   );
   // show the workflow builder dialog
   var result = workflowBuilder(availableWorkflowCommands, editWorkflowId);
