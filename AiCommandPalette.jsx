@@ -909,6 +909,36 @@ See the LICENSE file for details.
       ru: "Error Loading History\nA backup copy of your history has been created.",
     },
     path_title_case: { en: "Path", de: "Path", ru: "Path" },
+    picker_builder_header: {
+      en: "Enter your custom commands below (one per line).",
+      de: "Enter your custom commands below (one per line).",
+      ru: "Enter your custom commands below (one per line).",
+    },
+    picker_builder_multi_select: {
+      en: "Multi-Select Enabled?",
+      de: "Multi-Select Enabled?",
+      ru: "Multi-Select Enabled?",
+    },
+    picker_builder_name: {
+      en: "Custom Picker Name",
+      de: "Custom Picker Name",
+      ru: "Custom Picker Name",
+    },
+    picker_builder_title: {
+      en: "Custom Picker Builder",
+      de: "Custom Picker Builder",
+      ru: "Custom Picker Builder",
+    },
+    picker_builder_save_conflict_message: {
+      en: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+      de: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+      ru: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+    },
+    picker_builder_save_conflict_title: {
+      en: "Save Custom Picker Conflict",
+      de: "Save Custom Picker Conflict",
+      ru: "Save Custom Picker Conflict",
+    },
     pref_file_loading_error: {
       en: "Error Loading Preferences\nA backup copy of your settings has been created.",
       de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
@@ -10767,25 +10797,30 @@ See the LICENSE file for details.
 
     // create the dialog
     var win = new Window("dialog");
-    win.text = localize("Custom Picker Builder"); // TODO: localize
+    win.text = localize(strings.picker_builder_title);
     win.alignChildren = "fill";
 
     // picker commands
-    var pCommands = win.add(
-      "panel",
+    var header = win.add(
+      "statictext",
       undefined,
-      "Custom Picker Commands (separated by newlines)"
-    ); // TODO: localize
-    var pickerCommands = win.add("edittext", [0, 0, 300, 300], "", { multiline: true });
+      localize(strings.picker_builder_header)
+    );
+    header.justify = "center";
+    var pickerCommands = win.add("edittext", [0, 0, 400, 200], "", { multiline: true });
     pickerCommands.text = editPickerId
       ? commandsData[editPickerId].commands.join("\n")
       : "";
-
-    var cbMultiselect = win.add("checkbox", undefined, "Multi-Select Enabled?");
+    pickerCommands.active = true;
+    var cbMultiselect = win.add(
+      "checkbox",
+      undefined,
+      localize(strings.picker_builder_multi_select)
+    );
     cbMultiselect.value = editPickerId ? commandsData[editPickerId].multiselect : false;
 
     // picker name
-    var pName = win.add("panel", undefined, "Custom Picker Name"); // TODO: localize
+    var pName = win.add("panel", undefined, localize(strings.picker_builder_name));
     pName.alignChildren = ["fill", "center"];
     pName.margins = 20;
     var pickerNameText = editPickerId ? commandsData[editPickerId].name : "";
@@ -10826,12 +10861,13 @@ See the LICENSE file for details.
         overwrite = true;
         if (
           !confirm(
-            "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?" +
-              "\n" +
-              pickerName.text.trim(),
+            localize(
+              strings.picker_builder_save_conflict_message,
+              pickerName.text.trim()
+            ),
             "noAsDflt",
-            "Save Custom Picker Conflict"
-          ) // TODO: localize
+            localize(strings.picker_builder_save_conflict_title)
+          )
         ) {
           return;
         }
@@ -11750,7 +11786,7 @@ See the LICENSE file for details.
     );
     var result = commandPalette(
       (commands = pickers),
-      (title = "Choose a custom picker to edit."), // TODO: localize
+      (title = localize(strings.picker_to_edit)),
       (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );
@@ -12198,7 +12234,7 @@ See the LICENSE file for details.
     );
     var result = commandPalette(
       (commands = pickers),
-      (title = "All Pickers"), // TODO: localize
+      (title = localize(strings.pickers_all)),
       (columns = paletteSettings.columnSets.default),
       (multiselect = false)
     );

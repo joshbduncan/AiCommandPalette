@@ -319,6 +319,36 @@ var strings = {
     ru: "Error Loading History\nA backup copy of your history has been created.",
   },
   path_title_case: { en: "Path", de: "Path", ru: "Path" },
+  picker_builder_header: {
+    en: "Enter your custom commands below (one per line).",
+    de: "Enter your custom commands below (one per line).",
+    ru: "Enter your custom commands below (one per line).",
+  },
+  picker_builder_multi_select: {
+    en: "Multi-Select Enabled?",
+    de: "Multi-Select Enabled?",
+    ru: "Multi-Select Enabled?",
+  },
+  picker_builder_name: {
+    en: "Custom Picker Name",
+    de: "Custom Picker Name",
+    ru: "Custom Picker Name",
+  },
+  picker_builder_title: {
+    en: "Custom Picker Builder",
+    de: "Custom Picker Builder",
+    ru: "Custom Picker Builder",
+  },
+  picker_builder_save_conflict_message: {
+    en: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+    de: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+    ru: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+  },
+  picker_builder_save_conflict_title: {
+    en: "Save Custom Picker Conflict",
+    de: "Save Custom Picker Conflict",
+    ru: "Save Custom Picker Conflict",
+  },
   pref_file_loading_error: {
     en: "Error Loading Preferences\nA backup copy of your settings has been created.",
     de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
