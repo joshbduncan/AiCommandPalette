@@ -939,6 +939,12 @@ See the LICENSE file for details.
       de: "Save Custom Picker Conflict",
       ru: "Save Custom Picker Conflict",
     },
+    picker_to_edit: {
+      en: "Choose a custom picker to edit.",
+      de: "Choose a custom picker to edit.",
+      ru: "Choose a custom picker to edit.",
+    },
+    pickers_all: { en: "All Pickers", de: "All Pickers", ru: "All Pickers" },
     pref_file_loading_error: {
       en: "Error Loading Preferences\nA backup copy of your settings has been created.",
       de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
@@ -1040,6 +1046,7 @@ See the LICENSE file for details.
       ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c",
     },
     step_down: { en: "Move Down", de: "Nach unten", ru: "\u0412\u043d\u0438\u0437" },
+    step_edit: { en: "Edit", de: "Edit", ru: "Edit" },
     step_up: {
       en: "Move Up",
       de: "Nach oben",
@@ -1123,6 +1130,11 @@ See the LICENSE file for details.
       en: "Save Workflow As",
       de: "Arbeitsablauf speichern als",
       ru: "\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u0430\u043a",
+    },
+    wf_step_not_editable: {
+      en: "Selected Step Not Editable",
+      de: "Selected Step Not Editable",
+      ru: "Selected Step Not Editable",
     },
     wf_steps: {
       en: "Workflow Steps",
@@ -10893,6 +10905,7 @@ See the LICENSE file for details.
   function workflowBuilder(commands, editWorkflowId) {
     var qCache = {};
     var overwrite = false;
+    var editableCommandTypes = ["picker"];
 
     // create the dialog
     var win = new Window("dialog");
@@ -10962,11 +10975,13 @@ See the LICENSE file for details.
       var selectedItem, command, updatedPicker;
       selectedItem = this.selection[0];
       command = commandsData[selectedItem.id];
-      if (command.type.toLowerCase() == "picker") {
-        updatedPicker = buildPicker(command.id);
-        if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
-        if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
+      if (!editableCommandTypes.includes(command.type.toLowerCase())) {
+        alert(localize(strings.wf_step_not_editable));
+        return;
       }
+      updatedPicker = buildPicker(command.id);
+      if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
+      if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
     };
 
     var stepButtons = pSteps.add("group");
@@ -10975,6 +10990,8 @@ See the LICENSE file for details.
     up.preferredSize.width = 100;
     var down = stepButtons.add("button", undefined, localize(strings.step_down));
     down.preferredSize.width = 100;
+    var edit = stepButtons.add("button", undefined, localize(strings.step_edit));
+    edit.preferredSize.width = 100;
     var del = stepButtons.add("button", undefined, localize(strings.step_delete));
     del.preferredSize.width = 100;
 
@@ -11068,6 +11085,19 @@ See the LICENSE file for details.
     function contiguous(sel) {
       return sel.length == sel[sel.length - 1] - sel[0] + 1;
     }
+
+    edit.onClick = function () {
+      var selectedItem, command, updatedPicker;
+      selectedItem = steps.listbox.selection[0];
+      command = commandsData[selectedItem.id];
+      if (!editableCommandTypes.includes(command.type.toLowerCase())) {
+        alert(localize(strings.wf_step_not_editable));
+        return;
+      }
+      updatedPicker = buildPicker(command.id);
+      if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
+      if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
+    };
 
     del.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);

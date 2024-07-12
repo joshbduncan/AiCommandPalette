@@ -52,6 +52,8 @@ The selected item will be saved to the environment variable `aic_picker_last` an
 
 Custom Pickers also allow for multiple selections. When enabled, the selected items are saved as an array so to access them make sure to use the [eval()](https://extendscript.docsforadobe.dev/integrating-external-libraries/defining-entry-points-for-indirect-access.html#eval) method like below.
 
+ℹ️ Any custom pickers inside of workflows can be edited inside of the workflow editor by double-clicking the picker workflow step, or by clicking the workflow steps edit button.
+
 ```javascript
 // anotherScript.jsx
 var colorFormats = eval($.getenv("aic_picker_last"));

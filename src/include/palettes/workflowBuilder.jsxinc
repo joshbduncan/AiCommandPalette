@@ -1,6 +1,7 @@
 function workflowBuilder(commands, editWorkflowId) {
   var qCache = {};
   var overwrite = false;
+  var editableCommandTypes = ["picker"];
 
   // create the dialog
   var win = new Window("dialog");
@@ -70,11 +71,13 @@ function workflowBuilder(commands, editWorkflowId) {
     var selectedItem, command, updatedPicker;
     selectedItem = this.selection[0];
     command = commandsData[selectedItem.id];
-    if (command.type.toLowerCase() == "picker") {
-      updatedPicker = buildPicker(command.id);
-      if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
-      if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
+    if (!editableCommandTypes.includes(command.type.toLowerCase())) {
+      alert(localize(strings.wf_step_not_editable));
+      return;
     }
+    updatedPicker = buildPicker(command.id);
+    if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
+    if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
   };
 
   var stepButtons = pSteps.add("group");
@@ -83,6 +86,8 @@ function workflowBuilder(commands, editWorkflowId) {
   up.preferredSize.width = 100;
   var down = stepButtons.add("button", undefined, localize(strings.step_down));
   down.preferredSize.width = 100;
+  var edit = stepButtons.add("button", undefined, localize(strings.step_edit));
+  edit.preferredSize.width = 100;
   var del = stepButtons.add("button", undefined, localize(strings.step_delete));
   del.preferredSize.width = 100;
 
@@ -176,6 +181,19 @@ function workflowBuilder(commands, editWorkflowId) {
   function contiguous(sel) {
     return sel.length == sel[sel.length - 1] - sel[0] + 1;
   }
+
+  edit.onClick = function () {
+    var selectedItem, command, updatedPicker;
+    selectedItem = steps.listbox.selection[0];
+    command = commandsData[selectedItem.id];
+    if (!editableCommandTypes.includes(command.type.toLowerCase())) {
+      alert(localize(strings.wf_step_not_editable));
+      return;
+    }
+    updatedPicker = buildPicker(command.id);
+    if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
+    if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
+  };
 
   del.onClick = function () {
     var selected = sortIndexes(steps.listbox.selection);

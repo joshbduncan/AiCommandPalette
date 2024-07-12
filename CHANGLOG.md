@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.11.0] 2024-07-12
 
 ## Added
 
-- fuzzy matching (e.g. looking for 'Outline Stroke', queries 'oust', 'ou st', 'st ou' will all work)
+- fuzzy matching (e.g. looking for 'Outline Stroke', queries 'oust', 'ou st', 'st ou' will all work) [Issue #27](https://github.com/joshbduncan/AiCommandPalette/issues/26)
 - query cache to speed things up a bit (especially when backspacing/clearing characters)
+- custom pickers [Issue #27](https://github.com/joshbduncan/AiCommandPalette/issues/27)
+- in-place editing of some workflow steps (via double-click and edit button)
 
 ## Changes
 

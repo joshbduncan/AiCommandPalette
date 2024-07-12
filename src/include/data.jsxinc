@@ -349,6 +349,12 @@ var strings = {
     de: "Save Custom Picker Conflict",
     ru: "Save Custom Picker Conflict",
   },
+  picker_to_edit: {
+    en: "Choose a custom picker to edit.",
+    de: "Choose a custom picker to edit.",
+    ru: "Choose a custom picker to edit.",
+  },
+  pickers_all: { en: "All Pickers", de: "All Pickers", ru: "All Pickers" },
   pref_file_loading_error: {
     en: "Error Loading Preferences\nA backup copy of your settings has been created.",
     de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
@@ -450,6 +456,7 @@ var strings = {
     ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c",
   },
   step_down: { en: "Move Down", de: "Nach unten", ru: "\u0412\u043d\u0438\u0437" },
+  step_edit: { en: "Edit", de: "Edit", ru: "Edit" },
   step_up: {
     en: "Move Up",
     de: "Nach oben",
@@ -533,6 +540,11 @@ var strings = {
     en: "Save Workflow As",
     de: "Arbeitsablauf speichern als",
     ru: "\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u0430\u043a",
+  },
+  wf_step_not_editable: {
+    en: "Selected Step Not Editable",
+    de: "Selected Step Not Editable",
+    ru: "Selected Step Not Editable",
   },
   wf_steps: {
     en: "Workflow Steps",
