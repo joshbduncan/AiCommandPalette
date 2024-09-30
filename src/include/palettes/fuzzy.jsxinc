@@ -1,5 +1,10 @@
 function fuzzy(q, commands) {
-  q = q.toLowerCase();
+  function stripRegExpChars(input) {
+    // Regex pattern to match any of the characters that have special meaning in a regex
+    return input.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, "");
+  }
+
+  q = stripRegExpChars(q.toLowerCase());
 
   var scores = {};
   var matches = [];
@@ -11,6 +16,12 @@ function fuzzy(q, commands) {
     command = commandsData[id];
     commandName = determineCorrectString(command, "name").toLowerCase();
     if (commandName == "") commandName = id.toLowerCase().replace("_", " ");
+
+    // strip regex protected characters
+    commandName = stripRegExpChars(commandName);
+
+    // strip out ellipsis for correct full word check
+    commandName = commandName.replace(regexEllipsis, "");
 
     // find fuzzy matches
     spans = findMatches(q.split(" "), commandName);
@@ -49,9 +60,6 @@ function fuzzy(q, commands) {
 function calculateScore(command, spans) {
   var lastCarrot = findLastCarrot(command);
 
-  // strip out ellipsis for correct full word check
-  command = command.replace(regexEllipsis, "");
-
   var score = 0;
   var s, e, wordStart, wordEnd;
   for (var i = 0; i < spans.length; i++) {
@@ -61,6 +69,7 @@ function calculateScore(command, spans) {
     // check for full word
     wordStart = s == 0 || command.charAt(s - 1) == " " ? true : false;
     wordEnd = e == command.length || command.charAt(e) == " " ? true : false;
+
     if (wordStart && wordEnd) {
       score += (e - s) * 3;
     } else if (wordStart) {

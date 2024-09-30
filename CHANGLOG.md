@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.1] 2024-09-30
+
+## Added
+
+- New menu commands provided by [sttk3](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/m-p/14889553/page/2#M421919)
+    - File > Generate Vectors (Beta)...
+    - Object > Gen Shape Fill (Beta)...
+    - Window > Generate Patterns (Beta)
+
+### Fixed
+
+- Fuzzy command matches ignores regex special `.*+?^=!:${}()|\[\]\/\\]` characters when matching commands names
+
 ## [0.11.0] 2024-07-12
 
 ## Added
