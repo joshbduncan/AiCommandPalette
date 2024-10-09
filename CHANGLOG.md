@@ -4,9 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.2] 2024-10-08
+
+### Fixed
+
+- Removed unnecessary spaces at the lines (caused by compiler)
+
 ## [0.11.1] 2024-09-30
 
-## Added
+### Added
 
 - New menu commands provided by [sttk3](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/m-p/14889553/page/2#M421919)
     - File > Generate Vectors (Beta)...
@@ -19,14 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.11.0] 2024-07-12
 
-## Added
+### Added
 
 - fuzzy matching (e.g. looking for 'Outline Stroke', queries 'oust', 'ou st', 'st ou' will all work) [Issue #27](https://github.com/joshbduncan/AiCommandPalette/issues/26)
 - query cache to speed things up a bit (especially when backspacing/clearing characters)
 - custom pickers [Issue #27](https://github.com/joshbduncan/AiCommandPalette/issues/27)
 - in-place editing of some workflow steps (via double-click and edit button)
 
-## Changes
+### Changes
 
 - removed searching on type command (added back 'all menu commands', 'all tools')
 
