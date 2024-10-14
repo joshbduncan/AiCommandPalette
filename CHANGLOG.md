@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.3] 2024-10-14
+
+### Added
+
+- New menu and tool commands provided by [sttk3](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/m-p/14915000/page/2#M423329)
+    - Menu Commands
+        - Object > Objects on Path > Attach...
+        - Object > Objects on Path > Options...
+        - Object > Objects on Path > Expand
+        - Window > Type > Reflow Viewer
+    - Tool Commands
+        - Objects on Path
+
 ## [0.11.2] 2024-10-08
 
 ### Fixed

@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.11.2";
+  var _version = "0.11.3";
   var _copyright = "Copyright 2024 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -3050,6 +3050,48 @@ See the LICENSE file for details.
       },
       hidden: false,
       minVersion: 25.1,
+    },
+    menu_Attach_Objects_on_Path: {
+      id: "menu_Attach_Objects_on_Path",
+      action: "Attach Objects on Path",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Objects on Path > Attach...",
+        de: "Object > Objects on Path > Attach...",
+        ru: "Object > Objects on Path > Attach...",
+      },
+      hidden: false,
+      minVersion: 29,
+    },
+    menu_Options_Objects_on_Path: {
+      id: "menu_Options_Objects_on_Path",
+      action: "Options Objects on Path",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Objects on Path > Options...",
+        de: "Object > Objects on Path > Options...",
+        ru: "Object > Objects on Path > Options...",
+      },
+      hidden: false,
+      minVersion: 29,
+    },
+    menu_Expand_Objects_on_Path: {
+      id: "menu_Expand_Objects_on_Path",
+      action: "Expand Objects on Path",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Objects on Path > Expand",
+        de: "Object > Objects on Path > Expand",
+        ru: "Object > Objects on Path > Expand",
+      },
+      hidden: false,
+      minVersion: 29,
     },
     menu_Path_Blend_Make: {
       id: "menu_Path_Blend_Make",
@@ -7548,6 +7590,20 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    menu_ReflowWindowMenu: {
+      id: "menu_ReflowWindowMenu",
+      action: "ReflowWindowMenu",
+      type: "menu",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Window > Type > Reflow Viewer",
+        de: "Window > Type > Reflow Viewer",
+        ru: "Window > Type > Reflow Viewer",
+      },
+      hidden: false,
+      minVersion: 29,
+    },
     "menu_internal_palettes_posing_as_plug-in_menus-tab": {
       id: "menu_internal_palettes_posing_as_plug-in_menus-tab",
       action: "internal palettes posing as plug-in menus-tab",
@@ -8100,6 +8156,16 @@ See the LICENSE file for details.
       },
       hidden: false,
       minVersion: 24,
+    },
+    tool_Adobe_Constraints_Tool: {
+      id: "tool_Adobe_Constraints_Tool",
+      action: "Adobe Constraints Tool",
+      type: "tool",
+      docRequired: true,
+      selRequired: false,
+      name: { en: "Objects on Path", de: "Objects on Path", ru: "Objects on Path" },
+      hidden: false,
+      minVersion: 29,
     },
     tool_Adobe_Crop_Tool: {
       id: "tool_Adobe_Crop_Tool",

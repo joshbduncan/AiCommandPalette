@@ -18,7 +18,7 @@ sheet:  ## open the csv builder google sheet
 	open ${CSV_URL}
 
 copy:  ## copy compiled script to Ai scripts folder
-	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2024/Presets.localized/en_US/Scripts
+	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts
 
 reset: compile copy  ## re-compile script and copy to Ai scripts folder
 
