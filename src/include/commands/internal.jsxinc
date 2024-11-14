@@ -733,20 +733,22 @@ function editWorkflow() {
  * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html?#document-imagecapture
  */
 function imageCapture() {
-  if (activeDocument) {
-    var f = File.saveDialog();
-    if (f) {
-      try {
-        app.activeDocument.imageCapture(f);
-      } catch (e) {
-        alert(localize(strings.fl_error_writing, f));
-      }
-      // if chosen file name doesn't end in ".png" add the
-      // correct extension so they captured file open correctly
-      if (f.name.indexOf(".png") < f.name.length - 4)
-        f.rename(f.name.toString() + ".png");
-      if (f.exists) alert(localize(strings.file_saved, f.fsName));
+  if (app.documents.length > 0) {
+    alert(localize(strings.no_active_document));
+    return;
+  }
+  var f = File.saveDialog();
+  if (f) {
+    try {
+      app.activeDocument.imageCapture(f);
+    } catch (e) {
+      alert(localize(strings.fl_error_writing, f));
     }
+    // if chosen file name doesn't end in ".png" add the
+    // correct extension so they captured file open correctly
+    if (f.name.indexOf(".png") < f.name.length - 4)
+      f.rename(f.name.toString() + ".png");
+    if (f.exists) alert(localize(strings.file_saved, f.fsName));
   }
 }
 
@@ -1232,12 +1234,14 @@ function redrawWindows() {
  * Reveal the active document on the users system by opening it's parent folder.
  */
 function revealActiveDocument() {
-  if (activeDocument) {
-    if (app.activeDocument.path.fsName) {
-      var fp = new Folder(app.activeDocument.path.fsName);
-      fp.execute();
-    } else {
-      alert(localize(strings.active_document_not_saved));
-    }
+  if (app.documents.length > 0) {
+    alert(localize(strings.no_active_document));
+    return;
+  }
+  if (app.activeDocument.path.fsName) {
+    var fp = new Folder(app.activeDocument.path.fsName);
+    fp.execute();
+  } else {
+    alert(localize(strings.active_document_not_saved));
   }
 }

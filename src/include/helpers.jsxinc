@@ -34,18 +34,6 @@ function findLastCarrot(s) {
 }
 
 /**
- * Check to see if there is an active document.
- * @returns Make sure at least one document is open for certain built-in commands.
- */
-function activeDocument() {
-  if (app.documents.length < 1) {
-    alert(localize(strings.no_active_document));
-    return false;
-  }
-  return true;
-}
-
-/**
  * Generate a unique command id for the data model.
  * @param   s Base string to generate the id from.
  * @returns    Valid command id.
