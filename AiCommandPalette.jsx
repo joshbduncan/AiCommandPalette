@@ -476,11 +476,12 @@ See the LICENSE file for details.
         f.encoding = "UTF-8";
         f.open("w");
         f.write(data);
-        f.close();
       }
       f.execute();
     } catch (e) {
       $.writeln(e);
+    } finally {
+      f.close();
     }
   }
 
