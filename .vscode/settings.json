@@ -1,9 +1,14 @@
 {
     "cSpell.words": [
+        "DOCREQUIRED",
         "edittext",
+        "LAOL",
         "listbox",
+        "MAXVERSION",
+        "MINVERSION",
         "ngram",
         "ngrams",
-        "prefs"
+        "prefs",
+        "SELREQUIRED"
     ]
 }

@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.11.4";
+  var _version = "0.11.5";
   var _copyright = "Copyright 2024 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -535,9 +535,10 @@ See the LICENSE file for details.
       f.encoding = "UTF-8";
       f.open(mode);
       f.write(data);
-      f.close();
     } catch (e) {
       alert(localize(strings.fl_error_writing, f));
+    } finally {
+      f.close();
     }
   }
 
@@ -552,9 +553,10 @@ See the LICENSE file for details.
       f.encoding = "UTF-8";
       f.open("r");
       json = f.read();
-      f.close();
     } catch (e) {
       alert(localize(strings.fl_error_loading, f));
+    } finally {
+      f.close();
     }
     obj = eval(json);
     return obj;
@@ -571,9 +573,10 @@ See the LICENSE file for details.
       f.encoding = "UTF-8";
       f.open("w");
       f.write(data);
-      f.close();
     } catch (e) {
       alert(localize(strings.fl_error_writing, f));
+    } finally {
+      f.close();
     }
   }
   // ALL BUILT DATA FROM PYTHON SCRIPT
@@ -13120,9 +13123,10 @@ See the LICENSE file for details.
           f.encoding = "UTF-8";
           f.open("w");
           f.write(info.text);
-          f.close();
         } catch (e) {
           alert(localize(strings.fl_error_writing, f));
+        } finally {
+          f.close();
         }
         if (f.exists) alert(localize(strings.file_saved, f.fsName));
       }

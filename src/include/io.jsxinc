@@ -34,9 +34,10 @@ function writeData(data, fp, mode) {
     f.encoding = "UTF-8";
     f.open(mode);
     f.write(data);
-    f.close();
   } catch (e) {
     alert(localize(strings.fl_error_writing, f));
+  } finally {
+    f.close();
   }
 }
 
@@ -51,9 +52,10 @@ function readJSONData(f) {
     f.encoding = "UTF-8";
     f.open("r");
     json = f.read();
-    f.close();
   } catch (e) {
     alert(localize(strings.fl_error_loading, f));
+  } finally {
+    f.close();
   }
   obj = eval(json);
   return obj;
@@ -70,8 +72,9 @@ function writeJSONData(obj, f) {
     f.encoding = "UTF-8";
     f.open("w");
     f.write(data);
-    f.close();
   } catch (e) {
     alert(localize(strings.fl_error_writing, f));
+  } finally {
+    f.close();
   }
 }

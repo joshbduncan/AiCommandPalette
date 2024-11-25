@@ -4,6 +4,8 @@ import json
 import re
 import sys
 
+from typing import Sequence
+
 try:
     import httpx
 except ImportError:
@@ -13,14 +15,14 @@ except ImportError:
     )
 
 
-def convert_to_num(n):
+def convert_to_num(n) -> int | float:
     try:
         return int(n)
     except ValueError:
         return float(n)
 
 
-def localized_strings_object(row):
+def localized_strings_object(row) -> dict[str, str]:
     loc = {}
     ignored_cols = [
         "VALUE",
@@ -37,7 +39,7 @@ def localized_strings_object(row):
     return loc
 
 
-def get_data():
+def get_data() -> list[str]:
     SHEET = "1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA"
     URL = f"https://docs.google.com/spreadsheets/d/{SHEET}/export?exportFormat=csv"
     try:
@@ -53,7 +55,7 @@ def get_data():
     return response.text.split("\n")
 
 
-def main(argv=None):
+def main(argv: Sequence[str] | None = None) -> int:
     # setup parser and arguments
     parser = argparse.ArgumentParser(
         description="Build Ai Command Palette JSX Objects.",
@@ -80,11 +82,13 @@ def main(argv=None):
     # get data from either stdin, file, or via download
     if not args.download or args.input:
         parser.exit(
+            1,
             "No input file provide. Use -d/--download to download \
-commands from google. Learn more with -h/--help"
+commands from google. Learn more with -h/--help",
         )
     if args.download:
         data = get_data() if args.download else args.input.readlines()
+        assert len(data) > 100000000000000000
 
     # regex for cleaning up command ids
     regex = re.compile(r"\s|\.")

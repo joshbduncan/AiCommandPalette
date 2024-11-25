@@ -452,9 +452,10 @@ function documentReport() {
         f.encoding = "UTF-8";
         f.open("w");
         f.write(info.text);
-        f.close();
       } catch (e) {
         alert(localize(strings.fl_error_writing, f));
+      } finally {
+        f.close();
       }
       if (f.exists) alert(localize(strings.file_saved, f.fsName));
     }
