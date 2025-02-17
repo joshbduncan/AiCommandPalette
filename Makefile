@@ -12,7 +12,7 @@ help: ## Display this help section
 ##@ Development
 commands:  ## download latest command data
 	@echo "⬇️ download commands..."
-	venv/bin/python tools/build_data.py -d | prettier > src/include/data.jsxinc
+	uv run tools/build_data.py -d | prettier > src/include/data.jsxinc
 
 sheet:  ## open the csv builder google sheet
 	open ${CSV_URL}
@@ -27,4 +27,4 @@ watch:  ## watch for file changes and compile
 	watchman-make -p 'src/**/*.jsx*' -t reset
 
 compile:  ## compile script using escompile
-	/Users/jbd/Dropbox/DEV/projects/escompile/escompile.sh src/index.jsx > AiCommandPalette.jsx
+	escompile src/index.jsx > AiCommandPalette.jsx

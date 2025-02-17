@@ -1,3 +1,9 @@
+# /// script
+# dependencies = [
+#   "httpx",
+# ]
+# ///
+
 import argparse
 import csv
 import json
@@ -88,7 +94,7 @@ commands from google. Learn more with -h/--help",
         )
     if args.download:
         data = get_data() if args.download else args.input.readlines()
-        assert len(data) > 100000000000000000
+        assert len(data)
 
     # regex for cleaning up command ids
     regex = re.compile(r"\s|\.")

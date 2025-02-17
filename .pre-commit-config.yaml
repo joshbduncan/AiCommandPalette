@@ -3,7 +3,7 @@ repos:
     hooks:
       - id: compile-script
         name: compile-script
-        entry: bash -c '/Users/jbd/Dropbox/DEV/projects/escompile/escompile.sh src/index.jsx > AiCommandPalette.jsx && git add AiCommandPalette.jsx'
+        entry: bash -c 'escompile src/index.jsx > AiCommandPalette.jsx && git add AiCommandPalette.jsx'
         language: system
         types: [bash]
         always_run: true

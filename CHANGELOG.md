@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.6] 2025-02-17
+
+### Added
+
+- New menu and tool commands provided by [sttk3](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/m-p/14915000/page/2#M435227)
+    - Menu Commands
+        - Object > Ungroup All
+        - Window > Toolbars > Getting Started
+
 ## [0.11.5] 2024-11-25
 
 ### Fixed

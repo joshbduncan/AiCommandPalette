@@ -15,7 +15,7 @@ So, to make script installation as easy as possible I use a little utility I wro
 There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, [this script](/tools/build_data.py) helps me build/rebuild the objects used in the script.
 
 ```bash
-$ python3 tools/build_data.py -h                          
+$ uv run tools/build_data.py -h                          
 usage: build_commands_json.py [-h] [-i INPUT | -d]
 
 Build Ai Command Palette JSX Objects.
@@ -29,7 +29,11 @@ options:
 Copyright 2023 Josh Duncan (joshbduncan.com)
 ```
 
+> [!NOTE]
 > Please Note: The script works with a specifically formatted csv file the built from the same [Google Sheet](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=716124557) mentioned in the main project README.
+
+> [!TIP]
+> This build script requires the [HTTPX](https://www.python-httpx.org) package to be installed on your system or in a virtual environment. As you may notice above, I am using [UV](https://docs.astral.sh/uv/) and inline script metadata [(PEP 723)](https://peps.python.org/pep-0723/) to run the script.
 
 ### How It Works
 
