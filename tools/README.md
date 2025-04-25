@@ -10,44 +10,16 @@ So, to make script installation as easy as possible I use a little utility I wro
 ./escompile.sh src/script.jsx > compiledScript.jsx
 ```
 
-## Build Commands (build_data.py)
+## Build Commands (build_commands.py)
 
-There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, [this script](/tools/build_data.py) helps me build/rebuild the objects used in the script.
+There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, [this script](/tools/build_commands.py) helps me build/rebuild the objects used in the script from the [command data csv files](/data/).
 
 ```bash
-$ uv run tools/build_data.py -h                          
-usage: build_commands_json.py [-h] [-i INPUT | -d]
-
-Build Ai Command Palette JSX Objects.
-
-options:
-  -h, --help            show this help message and exit
-  -i INPUT, --input INPUT
-                        csv build data
-  -d, --download        download latest csv data from google
-
-Copyright 2023 Josh Duncan (joshbduncan.com)
+$ python3 tools/build_commands.py
 ```
 
 > [!NOTE]
-> Please Note: The script works with a specifically formatted csv file the built from the same [Google Sheet](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=716124557) mentioned in the main project README.
-
-> [!TIP]
-> This build script requires the [HTTPX](https://www.python-httpx.org) package to be installed on your system or in a virtual environment. As you may notice above, I am using [UV](https://docs.astral.sh/uv/) and inline script metadata [(PEP 723)](https://peps.python.org/pep-0723/) to run the script.
-
-### How It Works
-
-Supply a CSV file of commands and the script will build JSON object for (ex. [data.jsxinc](/src/include/data.jsxinc)) and output them to stdout. You can redirect the output to the appropriate file like I have below.
-
-```bash
-python3 tools/build_data.py -i data.csv > src/include/data.jsxinc
-```
-
-You can also build the data file directly from the live Google Sheet by using the `-d` flag.
-
-```bash
-python3 tools/build_data.py -d > src/include/data.jsxinc
-```
+> Please Note: The script **ONLY WORKS** with specifically formatted csv files.
 
 All commands are built into a single JavaScript objects like below.
 
@@ -70,7 +42,16 @@ All commands are built into a single JavaScript objects like below.
 }
 ```
 
-And all localized strings (used for dialogs and alerts) is built into a single object as well.
+## Build Strings (build_strings.py)
+
+With the help of some contributors, many of the string values used in Ai Command Palette have been localized. This script builds an object ExtendScript can use to localize the script UI for the user.
+
+```bash
+$ python3 tools/build_strings.py
+```
+
+> [!NOTE]
+> Please Note: The script **ONLY WORKS** with specifically formatted csv file.
 
 ```javascript
 // generated localized strings data object

@@ -1,0 +1,149 @@
+value,en,de,ru
+about,About,Über Kurzbefehle …,О скрипте
+ac_error_execution,Error executing action:\n%1\n\n%2,Fehler beim Ausführen der Aktion:\n%1\n\n%2,Ошибка запуска операции:\n%1\n\n%2
+action,Action,,
+Actions,Actions,Aktionen,
+active_document_not_saved,Active document not yet saved to the file system.,Das aktuelle Dokument wurde noch nicht gespeichert.,
+artboard,Artboard,,
+artboards,Artboards,Zeichenflächen,
+bm_already_loaded,Bookmark already loaded.,Dieses Lesezeichen wurde bereits erstellt.,
+bm_error_execution,Error opening bookmark:\n%1\n\n%2,Fehler beim Öffnen des Lesezeichens:\n%1\n\n%2,
+bm_error_exists,Bookmark no longer exists at original path. Try reloading.\n%1,"Das Lesezeichen ist an dieser Stelle nicht mehr vorhanden. Versuchen Sie, es nochmal zu laden.\n%1",
+bm_error_loading,Error loading bookmark:\n%1,Fehler beim Ladenn des Lesezeichens:\n%1,
+bm_load_bookmark,Load Bookmark(s),Lesezeichen erstellen,
+bm_total_loaded,Total bookmarks loaded:\n%1,Anzahl der geladenen Lesezeichen:\n%1,
+bookmark,Bookmark,Lesezeichen,
+Bookmarks,Bookmarks,Lesezeichen,
+builtin,Built-In,,
+cancel,Cancel,Abbrechen,Отмена
+cd_active_document_required,Command '%1' requires an active document. Continue Anyway?,Der Befehl '%1' erfordert ein geöffnetes Dokument. Trotzdem fortfahren?,
+cd_active_selection_required,Command '%1' requires an active selection. Continue Anyway?,Der Befehl '%1' erfordert eine Auswahl. Trotzdem fortfahren?,
+cd_all,Built-In Commands,,
+cd_clear_history_confirm,Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.,,
+cd_add_to_startup,Add new command(s) to your startup?,,
+cd_add_to_startup_title,Add To Startup Commands,,
+cd_delete_confirm,Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n%1,Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n%1,"Удалить команду?\nУдаленные команды больше не будут работать в любых созданных наборах, где они использовались\n\n%1"
+cd_delete_confirm_title,Confirm Commands To Delete,Bestätigen Sie die zu löschenden Befehle.,Подтвердить удаление команд
+cd_delete_select,Select Commands To Delete,Wählen Sie die zu löschenden Menübefehle aus.,Выбрать команды меню для удаления
+cd_error_delete,Command couldn't be deleted.\n%1,Befehl konnte nicht gelöscht werden.\n%1,Команда не может быть удалена\n%1
+cd_error_executing,Error executing command:\n%1\n\n%2,Fehler beim Ausführen des Befehls:\n%1\n\n%2,Ошибка запуска команды:\n%1\n\n%2
+cd_exception,Command Exception,Befehls-Ausnahme,
+cd_helptip,Double-click a command to add it as a workflow step below.,"Doppelklicken Sie auf einen Befehl, um ihn unten als benutzerdefinierten Schritt hinzuzufügen.","Нажмите дважды на команду, чтобы добавить ее как шаг набора"
+cd_hide_confirm_title,Confirm Commands To Hide,Auszublendende Befehle bestätigen,Подтвердить скрытие команд
+cd_hide_select,Select Commands To Hide,Wählen Sie die auszublendenden Menübefehle aus.,Выбрать команды меню для скрытия
+cd_invalid,Invalid command type:\n%1,Ungültiger Befehlstyp:\n%1,Неправильный тип:\n%1
+cd_none_delete,There are no commands to delete.,Es gibt keine Befehle zum Löschen.,Нет команд для удаления
+cd_none_hide,There are no commands to hide.,Es gibt keine Befehle zum Ausblenden.,Нет команд для скрытия
+cd_none_reveal,There are no hidden commands to reveal.,Keine verborgenen Befehle vorhanden.,Нет скрытых команд
+cd_q_helptip,"Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen.","Поиск команд, операций и загруженных скриптов"
+cd_reveal_confirm,Unhide Commands?\n%1,Verborgene Befehle anzeigen?\n%1,Показать скрытые команды?\n%1
+cd_reveal_confirm_title,Confirm Commands To Unhide,Die ausgewählten Befehle anzeigen?,Подтвердить показ команд
+cd_reveal_menu_select,Select Hidden Menu Commands To Unhide,"Wählen Sie die ausgeblendeten Menübefehle aus, die angezeigt werden sollen.",Выберите скрытые команды для показа
+cd_revealed_total,Total hidden commands revealed:\n%1,"Anzahl der verborgenen Befehle, die wieder angezeigt werden:\n%1",Показано скрытых команд:\n%1
+cd_search_for,"Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen.","Поиск команд, операций и загруженных скриптов"
+close,Close,Schließen,Закрывать
+config,Configuration,,
+copyright,Copyright 2024 Josh Duncan,,
+cp_config,Palette Settings and Configuration,Paletteneinstellungen und -konfiguration,Настройка и конфигурация панели
+cp_q_helptip,"Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen.","Поиск команд, операций и загруженных скриптов"
+defaults,Defaults,,
+description,"Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.","Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität.","Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность."
+document,Document,,
+document_report,Active Document Report,Dokumentinformationen,
+document_report_warning,FILE NOT SAVED. Save and rerun report for updated information.,,
+color_space_title_case,Color Space,,
+dr_color_space,Color Space: ,Farbmodus: ,
+dr_file_created,File Created: ,Datei erstellt am: ,
+dr_file_found,File Found: ,Datei gefunden: ,
+dr_filename,File: ,Datei: ,
+dr_header,File Information\n-----\n,Datei-Information\n-----\n,
+dr_height,Height: ,Höhe: ,
+dr_info_string,Ai Document Information,AI-Dokument-Information,
+dr_name,Name: ,,
+dr_path,Path: ,Pfad: ,
+dr_width,Width: ,Breite: ,
+file,File,,
+file_saved,File Saved:\n%1,Datei gespeichert:\n%1,
+fl_error_loading,Error loading file:\n%1,Fehler beim Laden der Datei:\n%1,Ошибка загрузки файла:\n%1
+fl_error_writing,Error writing file:\n%1,Fehler beim Schreiben der Datei:\n%1,Ошибка записи файла:\n%1
+folder,Folder,,
+fonts,Fonts,Schriften,
+github,Click here to learn more,Klicken Sie hier für weitere Informationen,"Нажмите, чтобы узнать больше"
+go_to_artboard,Go To Artboard,Gehen Sie zur Zeichenfläche,Перейти к монтажной области
+go_to_named_object,Go To Named Object,Gehen Sie zum benannten Objekt,Перейти к именованному объекту
+go_to_named_object_limit,Attention:\nThis document contains a lot of page items (%1). Please be patient while they load.,,
+go_to_named_object_no_objects,No named page items found.,Keine benannten Objekte vorhanden.,
+go_to_open_document,Go To Open Document,Geöffnete Dokumente auswählen,
+history_cleared,History cleared!,Zuletzt verwendete Befehle wurden gelöscht!,
+layer_title_case,Layer,,
+layers,Layers,Ebenen,
+menu,Menu,,
+menu_commands,Menu Commands,,
+name_title_case,Name,,
+no_active_document,No active documents.,Keine geöffneten Dokumente vorhanden..,
+no_document_variables,No document variables.,Keine Variablen vorhanden.,
+none,None,Ohne,
+open_recent_file,Open Recent File,Zuletzt benutzte Datei öffnen,
+picker,Picker,,
+placed_items,Placed Items,Platzierte Objecte,
+history_file_loading_error,Error Loading History\nA backup copy of your history has been created.,,
+path_title_case,Path,,
+picker_builder_header,Enter your custom commands below (one per line).,,
+picker_builder_multi_select,Multi-Select Enabled?,,
+picker_builder_name,Custom Picker Name,,
+picker_builder_title,Custom Picker Builder,,
+picker_builder_save_conflict_message,A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1,,
+picker_builder_save_conflict_title,Save Custom Picker Conflict,,
+picker_to_edit,Choose a custom picker to edit.,,
+pickers_all,All Pickers,,
+pref_file_loading_error,Error Loading Preferences\nA backup copy of your settings has been created.,Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.,
+pref_file_non_compatible,Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.,,
+pref_update_complete,Preferences Update Complete.,Aktualisierung der Voreinstellungen fertiggestellt,Preferences Update Complete
+recent_commands,Recent Commands,Zuletzt verwendete Befehle,
+ruler_units_title_case,Ruler Units,,
+save,Save,Speichern,Сохранять
+save_active_document_report,Save Active Document Report,,
+sc_already_loaded_title,Script Load Conflict,Skriptladekonflikt,Проблема загрузки скрипта
+sc_error_execution,Error executing script:\n%1\n\n%2,Fehler beim Ausführen des Skripts:\n%1\n\n%2,Ошибка запуска скрипта:\n%1\n\n%2
+sc_error_exists,Script no longer exists at original path. Try reloading.\n%1,Skript existiert nicht mehr am ursprünglichen Ort.\n%1,Скрипт не найден в указанной папке\n%1
+sc_error_loading,Error loading script:\n%1,Fehler beim Laden des Skripts:\n%1,Ошибка загрузки скрипта:\n%1
+sc_load_script,Load Script(s),Skripte laden,
+sc_none_selected,No script files selected.\nMust be JavaScript '.js' or '.jsx' files.,Keine Skriptdateien ausgewählt.\nEs müssen JavaScript-'.js'- oder '.jsx'-Dateien sein.,Не выбраны скрипты\nФайлы JavaScript имеют расширение '.js' или '.jsx'
+sc_total_loaded,Total scripts loaded:\n%1,Geladene Skripte insgesamt:\n%1,Загружено скриптов:\n%1
+script,Script,Skript,Скрипт
+Scripts,Scripts,Skripte laden,
+set_title_case,Set,,
+spot_colors,Spot Colors,Volltonfarben,
+startup_builder,Startup Screen Customizer,,
+startup_error_saving,Error saving startup commands.\nPrevious settings were reloaded.,,
+startup_helptip,Double-click a command to add it to your startup command list below.,,
+startup_steps,Startup Commands,,
+startup_steps_helptip,Startup commands will displayed in order from top to bottom.,,
+step_delete,Delete,Löschen,Удалить
+step_down,Move Down,Nach unten,Вниз
+step_edit,Edit,,
+step_up,Move Up,Nach oben,Наверх
+title,Ai Command Palette,Kurzbefehle,
+tl_all,Tools,Alle integrierten Werkzeuge,Стандартные инструменты
+tl_error_selecting,Error selecting tool:\n%1\n\n%2,Fehler beim Auswählen des Werkzeugs:\n%1\n\n%2,Ошибка выбора инструмента:\n%1\n\n%2
+tl_none_available,No tools are currently available.,Zurzeit sind keine Werkzeuge verfügbar.,Инструменты в данный момент недоступны
+tool,Tool,,
+type_title_case,Type,,
+user_prefs_inconsistency,User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.,,
+version,Version %1,Ausführung %1,версия %1
+wf_already_exists,A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?,Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf überschrieben werden?,Набор с таким именем уже существует\nХотите перезаписать предыдущий?
+wf_already_exists_title,Save Workflow Conflict,Arbeitsablauf-Konflikt speichern?,Проблема сохранения набора
+wf_builder,Workflow Builder,Arbeitsabläufe erstellen,Редактор наборов команд
+wf_choose,Choose A Workflow To Edit,Wählen Sie einen Arbeitsablauf zum Bearbeiten aus.,Выберите набор для редактирования
+wf_error_saving,Error saving workflow:\n%1,Fehler beim Speichern des Arbeitsablaufs:\n%1,Ошибка сохранения набора:\n%1
+wf_needs_attention,Workflow needs attention.\nThe following action steps from your workflow are not currently available.\n\n%1,Achtung!\nDie folgenden Aktionsschritte sind nicht mehr vorhanden\n\n%1,Набор требует внимания\nУказанные шаги в вашем наборе команд больше недоступны.\n\n%1
+wf_none_attention,There are no workflows that need attention.,"Es gibt keine Arbeitsabläufe, die beachtet werden müssen.",Нет наборов требующих внимания
+wf_none_edit,There are no workflows to edit.,Es gibt keine Arbeitsabläufe zum Bearbeiten.,Нет наборов для редактирования
+wf_not_saved,Workflow not saved.,Arbeitsablauf nicht gespeichert,Набор не сохранен
+wf_save,Save,,
+wf_save_as,Save Workflow As,Arbeitsablauf speichern als,Сохранить набор как
+wf_step_not_editable,Selected Step Not Editable,,
+wf_steps,Workflow Steps,Befehlskombinationen,Шаги набора
+wf_steps_helptip,Workflows will run in order from top to bottom.,Die Befehlskombinationen werden in der Reihenfolge von oben nach unten ausgeführt.,Набор выполняется сверху вниз
+workflow,Workflow,Arbeitsablauf,Наборы
+Workflows,Workflows,Arbeitsabläufe,

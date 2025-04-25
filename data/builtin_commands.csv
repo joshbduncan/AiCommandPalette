@@ -1,0 +1,25 @@
+value,ignore,type,docRequired,selRequired,minVersion,maxVersion,en,de,ru,notes
+documentReport,,builtin,TRUE,FALSE,,,Active Document Report,,,https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-artboards
+allActions,FALSE,builtin,FALSE,FALSE,,,All Actions...,Alle Aktionen …,,
+allBookmarks,FALSE,builtin,FALSE,FALSE,,,All Bookmarks...,Alle Lesezeichen …,,
+allMenus,FALSE,builtin,FALSE,FALSE,,,All Menu Commands...,,,
+allPickers,FALSE,builtin,FALSE,FALSE,,,All Pickers...,,,
+allScripts,FALSE,builtin,FALSE,FALSE,,,All Scripts...,Alle Skripte …,,
+allTools,FALSE,builtin,TRUE,FALSE,,,All Tools...,,,
+allWorkflows,FALSE,builtin,FALSE,FALSE,,,All Workflows...,Alle Arbeitsabläufe …,,
+buildWorkflow,FALSE,builtin,FALSE,FALSE,,,Build Workflow...,Arbeitsablauf erstellen …,Создать набор команд,
+editWorkflow,FALSE,builtin,FALSE,FALSE,,,Edit Workflow...,Arbeitsablauf bearbeiten …,Редактировать набор команд,
+buildPicker,FALSE,builtin,FALSE,FALSE,,,Build Picker...,,,
+editPicker,FALSE,builtin,FALSE,FALSE,,,Edit Picker...,,,
+imageCapture,FALSE,builtin,TRUE,FALSE,,,Export Active Artboard As PNG,Ausgewählte Zeichenfläche als PNG exportieren,,https://ai-scripting.docsforadobe.dev/jsobjref/Document.html?highlight=document#document-imagecapture
+exportVariables,FALSE,builtin,TRUE,FALSE,,,Export Document Variables As XML,Variablen als XML exportieren,,https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-exportvariables
+goToArtboard,FALSE,builtin,TRUE,FALSE,,,Go To Artboard...,Zeichenflächen auswählen …,Gehen Sie zur Zeichenfläche...,
+goToNamedObject,FALSE,builtin,TRUE,FALSE,,,Go To Named Object...,Benannte Objekte auswählen …,Перейти к именованному объекту...,
+goToDocument,FALSE,builtin,TRUE,FALSE,,,Go To Open Document,Geöffnete Dokumente auswählen …,,
+loadFileBookmark,FALSE,builtin,FALSE,FALSE,,,Load File Bookmark(s)...,Lesezeichen erstellen …,,
+loadFolderBookmark,FALSE,builtin,FALSE,FALSE,,,Load Folder Bookmark...,Lesezeichen-Ordner erstellen …,,
+loadScript,FALSE,builtin,FALSE,FALSE,,,Load Script(s)...,Skripte laden …,Загрузить скрипты,
+recentFiles,FALSE,builtin,FALSE,FALSE,,,Open Recent File...,Letzte Datei öffnen …,,
+recentCommands,FALSE,builtin,FALSE,FALSE,,,Recent Commands...,Letzte Befehle …,,
+redrawWindows,FALSE,builtin,TRUE,FALSE,,,Redraw Windows,Fenster aktualisieren,,https://ai-scripting.docsforadobe.dev/jsobjref/Application.html#application-redraw
+revealActiveDocument,FALSE,builtin,TRUE,FALSE,,,Reveal Active Document On System,Aktuelles Dokument im Dateimanager anzeigen,,https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-path

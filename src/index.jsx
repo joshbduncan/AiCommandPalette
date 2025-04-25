@@ -20,13 +20,15 @@ See the LICENSE file for details.
 
   //@includepath "include"
   //@includepath "include/commands"
+  //@includepath "include/data"
   //@includepath "include/palettes"
   //@includepath "include/user"
 
   //@include "polyfills.jsxinc"
   //@include "helpers.jsxinc"
   //@include "io.jsxinc"
-  //@include "data.jsxinc"
+  //@include "built_strings.jsxinc"
+  //@include "built_commands.jsxinc"
   //@include "config.jsxinc"
 
   //@include "user.jsxinc"

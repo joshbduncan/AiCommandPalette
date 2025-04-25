@@ -1,6 +1,5 @@
 SHELL := /bin/bash
 PWD := $(realpath $(dir $(abspath $(firstword $(MAKEFILE_LIST)))))
-CSV_URL = https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA
 
 .DEFAULT_GOAL := help
 .PHONY: help
@@ -10,12 +9,13 @@ help: ## Display this help section
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 ##@ Development
-commands:  ## download latest command data
-	@echo "⬇️ download commands..."
-	uv run tools/build_data.py -d | prettier > src/include/data.jsxinc
+build-strings:  ## build string objects from csv input file
+	@echo "⚙️ building string objects..."
+	python3 tools/build_strings.py data/strings.csv | prettier > src/include/data/built_strings.jsxinc
 
-sheet:  ## open the csv builder google sheet
-	open ${CSV_URL}
+build-commands:  ## build command objects from csv input file
+	@echo "⚙️ building command objects..."
+	python3 tools/build_commands.py | prettier > src/include/data/built_commands.jsxinc
 
 copy:  ## copy compiled script to Ai scripts folder
 	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts

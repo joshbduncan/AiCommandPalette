@@ -1,10 +1,30 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
 repos:
--   repo: local
-    hooks:
-      - id: compile-script
-        name: compile-script
-        entry: bash -c 'escompile src/index.jsx > AiCommandPalette.jsx && git add AiCommandPalette.jsx'
-        language: system
-        types: [bash]
-        always_run: true
-        verbose: true
+    - repo: local
+      hooks:
+        - id: build-strings
+          name: build strings
+          entry: bash -c 'make build-strings'
+          language: system
+          types: [bash]
+          always_run: true
+          verbose: true
+    - repo: local
+      hooks:
+        - id: build-commands
+          name: build commands
+          entry: bash -c 'make build-commands'
+          language: system
+          types: [bash]
+          always_run: true
+          verbose: true
+    - repo: local
+      hooks:
+        - id: compile-script
+          name: compile script
+          entry: bash -c 'escompile src/index.jsx > AiCommandPalette.jsx && git add AiCommandPalette.jsx'
+          language: system
+          types: [bash]
+          always_run: true
+          verbose: true

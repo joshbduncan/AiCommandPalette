@@ -4,9 +4,9 @@ This all came about after a suggestion from [Kurt Gold](https://community.adobe.
 
 ## Localization Spreadsheet
 
-There are 650+ strings that need to be translated so to make things easier, Kurt and myself used [Google Sheets](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=1896695315) to keep track of everything.
+There are 650+ strings that need to be translated so to make things easier, Kurt and myself initially used to keep track of everything but now the files are version controlled in this [repository](/data/).
 
-## How It Work
+## How It Works
 
 All of the localization is done at runtime via the ExtendScript `localize()` function (learn more below).
 

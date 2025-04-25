@@ -18,13 +18,13 @@ If you have worked with Alfred app or VS Code you know how great the “command 
 
 ### Menu Commands
 
-With nearly 500 Menu Commands available to Ai Command Palette ([view all here](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=716124557)), there isn't much you can't access. I have tested all of them on Adobe Illustrator v26.4.1.
+With nearly 500 Menu Commands available to Ai Command Palette ([view all here](data/menu_commands.csv)), there isn't much you can't access. I have tested all of them on Adobe Illustrator v26.4.1.
 
 !["Built-In Menu Commands"](/images/menu-commands.png)
 
 ### Tools
 
-Quickly access over almost 80 of Ai's built-in Tools ([view all here](https://docs.google.com/spreadsheets/d/1T-pBrLAOL3WuF1K7h6Wo_vIUa0tui9YiX591YqqKMdA/edit#gid=1114705496)) right from your keyboard without having to remember so many keyboard shortcuts.
+Quickly access over almost 80 of Ai's built-in Tools ([view all here](/data/tool_commands.csv)) right from your keyboard without having to remember so many keyboard shortcuts.
 
 !["Built-In Tools"](/images/tool-commands.png)
 
