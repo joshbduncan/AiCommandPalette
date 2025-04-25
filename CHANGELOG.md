@@ -4,11 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.12.0] 2025-04-25
+
+### Added
+
+- Added new menu command Type > Type Conversion (Convert To Point Type, Convert To Area Type) provided by [@sttk3](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/m-p/15289315/page/2#M441331)
 
 ### Changed
 
 - All command and string data is now stored in this repo for version control
+- Update menu commands provided by [@sttk3](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/m-p/15289315/page/2#M441331)
 
 ## [0.11.6] 2025-02-17
 
