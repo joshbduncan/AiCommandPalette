@@ -671,6 +671,7 @@ _Base Library Menu Item 26,TRUE,menu,FALSE,FALSE,,,Window > Symbol Libraries > W
 _Base Library Menu Item 27,TRUE,menu,FALSE,FALSE,,,Window > Symbol Libraries > Web Icons,Fenster > Symbol-Bibliotheken > Web-Symbole,,,
 Adobe Symbol Palette Plugin Other libraries menu item,FALSE,menu,FALSE,FALSE,,,Window > Symbol Libraries > Other Library...,Fenster > Symbol-Bibliotheken > Andere Bibliothek …,Окно > Библиотеки символов > Другая библиотека...,,
 helpcontent,FALSE,menu,FALSE,FALSE,,,Help > Illustrator Help...,Hilfe > Illustrator-Hilfe …,Справка > Справка программы Illustrator...,,
+whatsNewContent,FALSE,menu,FALSE,FALSE,27.9,,Help > Tutorials...,,,,
 supportCommunity,FALSE,menu,FALSE,FALSE,26,,Help > Support Community,Hilfe > Support-Community,Справка > Сообщество службы поддержки,,
 wishform,FALSE,menu,FALSE,FALSE,25,,Help > Submit Bug/Feature Request...,Hilfe > Fehlermeldung / Funktionswunsch senden …,Справка > Сообщение об ошибке/запрос на добавление новых функций...,,
 System Info,FALSE,menu,FALSE,FALSE,,,Help > System Info...,Hilfe > Systeminformationen …,Справка > Информация о системе…,,

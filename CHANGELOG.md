@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.1] 2025-04-29
+
+### Added
+
+- Added new menu command `Help > Tutorials...` provided by [@sttk3](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/m-p/15295058/page/2#M441548)
+
 ## [0.12.0] 2025-04-25
 
 ### Added

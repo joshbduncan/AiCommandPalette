@@ -8233,6 +8233,21 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    menu_whatsNewContent: {
+      id: "menu_whatsNewContent",
+      action: "whatsNewContent",
+      type: "menu",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Help > Tutorials...",
+        de: "Help > Tutorials...",
+        ru: "Help > Tutorials...",
+        "zh-cn": "Help > Tutorials...",
+      },
+      hidden: false,
+      minVersion: 27.9,
+    },
     menu_supportCommunity: {
       id: "menu_supportCommunity",
       action: "supportCommunity",
