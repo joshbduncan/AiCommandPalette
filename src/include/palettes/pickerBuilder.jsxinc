@@ -47,10 +47,10 @@ function pickerBuilder(editPickerId) {
   });
   cancel.preferredSize.width = 100;
 
-  pickerCommands.onChange = function () {
+  pickerCommands.onChanging = function () {
     pickerName.enabled = pickerCommands.text.length > 0 ? true : false;
     save.enabled =
-      steps.listbox.items.length > 0 && pickerName.text.length > 0 ? true : false;
+      pickerCommands.text.length > 0 && pickerName.text.length > 0 ? true : false;
   };
 
   pickerName.onChanging = function () {

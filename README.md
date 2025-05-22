@@ -34,13 +34,51 @@ Access all of your saved Actions using Ai Command Palette. Actions are listed "A
 
 !["Actions"](/images/actions.png)
 
-## Bookmarks
+### Bookmarks
 
 Find yourself opening the same file inside of Illustrator multiple times a day? Or need to easily access a folder full of project assets? Bookmarks have you covered.
 
 📝 File bookmarks open right into Illustrator and Folder bookmarks open in your file system.
 
 !["Actions"](/images/bookmarks.png)
+
+### Custom Commands
+
+Have any Illustrator plugins or add-ons essential to your workflow? If they offer menu and tool activation via ExtendScript, you can add them as custom commands to access them even faster.
+
+For example, I use (and love ❤️) [Astute Graphics PlugIns](https://astutegraphics.com), so I have a bunch of them added to my palette as custom commands.
+
+Add your own with the `Add Custom Commands` command. Custom Commands are input in a CSV like format `Command Name,Command Action,Command Type`.
+
+> [!TIP]
+> I'm keeping a list of known [external plugin commands here](/data/custom_commands.csv) for reference. If you know of more, please do a pull request to add them for others to enjoy.
+
+To discover the `Command Action` id for your own menu/tool commands, follow the directions below (source [krasnovpro on Adobe Forums](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/td-p/13131490/page/3)):
+
+1. Go to Edit → Keyboard Shortcuts
+2. Bind your tool to the 0 (zero key)
+3. Save keyboard shortcut set
+4. Open saved keyboard shortcuts file
+5. Find any occurrences of /Key 48 (like below)
+6. Remove the leading slash and all backslashes, and you get the command name
+
+```
+/Snap\ To\ Collisions\ Tool {
+	/Context 0
+	/Modifiers 0
+	/Represent 48
+	/Key 48
+}
+```
+
+```csv
+Astute Graphics - Arc by Points,Arc by Points Tool,tool
+Astute Graphics - Block Shadow,AG Block Shadow Tool,tool
+Astute Graphics - Circle by Points,Circle by Points Tool,tool
+Astute Graphics - Color Select,AG Color Select Tool,tool
+```
+
+
 
 ### Custom Pickers
 

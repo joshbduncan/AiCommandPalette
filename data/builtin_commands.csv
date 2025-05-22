@@ -1,7 +1,9 @@
 value,ignore,type,docRequired,selRequired,minVersion,maxVersion,en,de,ru,notes
 documentReport,,builtin,TRUE,FALSE,,,Active Document Report,,,https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-artboards
+addCustomCommands,FALSE,builtin,FALSE,FALSE,,,Add Custom Commands...,,,
 allActions,FALSE,builtin,FALSE,FALSE,,,All Actions...,Alle Aktionen …,,
 allBookmarks,FALSE,builtin,FALSE,FALSE,,,All Bookmarks...,Alle Lesezeichen …,,
+allCustomCommands,FALSE,builtin,FALSE,FALSE,,,All Custom Commands...,
 allMenus,FALSE,builtin,FALSE,FALSE,,,All Menu Commands...,,,
 allPickers,FALSE,builtin,FALSE,FALSE,,,All Pickers...,,,
 allScripts,FALSE,builtin,FALSE,FALSE,,,All Scripts...,Alle Skripte …,,

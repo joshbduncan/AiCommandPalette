@@ -44,6 +44,16 @@ paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
   key: "type",
 };
 
+paletteSettings.columnSets.customCommand = {};
+paletteSettings.columnSets.customCommand[localize(strings.name_title_case)] = {
+  width: 450,
+  key: "name",
+};
+paletteSettings.columnSets.customCommand[localize(strings.type_title_case)] = {
+  width: 100,
+  key: "actionType",
+};
+
 var visibleListItems = 9;
 var mostRecentCommandsCount = 25;
 
@@ -57,7 +67,7 @@ var regexCarrot = /\s>\s/g;
 
 var devInfo = {};
 devInfo.folder = function () {
-  return settingsFolder;
+  return userPrefsFolder;
 };
 devInfo.prefsFile = function () {
   var folder = this.folder();

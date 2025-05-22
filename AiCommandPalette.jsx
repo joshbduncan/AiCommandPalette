@@ -600,6 +600,11 @@ See the LICENSE file for details.
       de: "Das aktuelle Dokument wurde noch nicht gespeichert.",
       ru: "Active document not yet saved to the file system.",
     },
+    add_custom_commands_dialog_title: {
+      en: "Add Custom Commands",
+      de: "Add Custom Commands",
+      ru: "Add Custom Commands",
+    },
     artboard: { en: "Artboard", de: "Artboard", ru: "Artboard" },
     artboards: { en: "Artboards", de: "Zeichenfl\u00e4chen", ru: "Artboards" },
     bm_already_loaded: {
@@ -778,6 +783,17 @@ See the LICENSE file for details.
       de: "Befehle, Aktionen und geladene Skripte suchen.",
       ru: "\u041f\u043e\u0438\u0441\u043a \u043a\u043e\u043c\u0430\u043d\u0434, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u0445 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432",
     },
+    custom: { en: "Custom", de: "Custom", ru: "Custom" },
+    custom_commands_all: {
+      en: "All Custom Commands",
+      de: "All Custom Commands",
+      ru: "All Custom Commands",
+    },
+    custom_commands_header: {
+      en: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
+      de: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
+      ru: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
+    },
     defaults: { en: "Defaults", de: "Defaults", ru: "Defaults" },
     description: {
       en: "Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.",
@@ -937,9 +953,9 @@ See the LICENSE file for details.
     },
     pickers_all: { en: "All Pickers", de: "All Pickers", ru: "All Pickers" },
     pref_file_loading_error: {
-      en: "Error Loading Preferences\nA backup copy of your settings has been created.",
-      de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
-      ru: "Error Loading Preferences\nA backup copy of your settings has been created.",
+      en: "Error Loading Preferences\nA backup copy of your settings has been created.\n\n%1",
+      de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.\n\n%1",
+      ru: "Error Loading Preferences\nA backup copy of your settings has been created.\n\n%1",
     },
     pref_file_non_compatible: {
       en: "Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.",
@@ -9934,6 +9950,19 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    builtin_addCustomCommands: {
+      id: "builtin_addCustomCommands",
+      action: "addCustomCommands",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Add Custom Commands...",
+        de: "Add Custom Commands...",
+        ru: "Add Custom Commands...",
+      },
+      hidden: false,
+    },
     builtin_allActions: {
       id: "builtin_allActions",
       action: "allActions",
@@ -9953,6 +9982,19 @@ See the LICENSE file for details.
         en: "All Bookmarks...",
         de: "Alle Lesezeichen \u2026",
         ru: "All Bookmarks...",
+      },
+      hidden: false,
+    },
+    builtin_allCustomCommands: {
+      id: "builtin_allCustomCommands",
+      action: "allCustomCommands",
+      type: "builtin",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "All Custom Commands...",
+        de: "All Custom Commands...",
+        ru: "All Custom Commands...",
       },
       hidden: false,
     },
@@ -10369,6 +10411,16 @@ See the LICENSE file for details.
     key: "type",
   };
 
+  paletteSettings.columnSets.customCommand = {};
+  paletteSettings.columnSets.customCommand[localize(strings.name_title_case)] = {
+    width: 450,
+    key: "name",
+  };
+  paletteSettings.columnSets.customCommand[localize(strings.type_title_case)] = {
+    width: 100,
+    key: "actionType",
+  };
+
   var visibleListItems = 9;
   var mostRecentCommandsCount = 25;
 
@@ -10382,7 +10434,7 @@ See the LICENSE file for details.
 
   var devInfo = {};
   devInfo.folder = function () {
-    return settingsFolder;
+    return userPrefsFolder;
   };
   devInfo.prefsFile = function () {
     var folder = this.folder();
@@ -10442,6 +10494,7 @@ See the LICENSE file for details.
   prefs.startupCommands = null;
   prefs.hiddenCommands = [];
   prefs.workflows = [];
+  prefs.customCommands = [];
   prefs.bookmarks = [];
   prefs.scripts = [];
   prefs.pickers = [];
@@ -10504,16 +10557,23 @@ See the LICENSE file for details.
           if (propsToSkip.includes(prop)) continue;
           prefs[prop] = loadedData[prop];
         }
+
         if (inject) this.inject();
       } catch (e) {
         file.rename(file.name + ".bak");
         this.reveal();
-        Error.runtimeError(1, localize(strings.pref_file_loading_error));
+        Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
       }
     }
   };
   userPrefs.inject = function () {
-    var typesToInject = ["workflows", "bookmarks", "scripts", "pickers"];
+    var typesToInject = [
+      "workflows",
+      "bookmarks",
+      "scripts",
+      "pickers",
+      "customCommands",
+    ];
     for (var i = 0; i < typesToInject.length; i++) {
       for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
         commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
@@ -10815,7 +10875,7 @@ See the LICENSE file for details.
         obj = {};
         name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
         id = generateCommandId("action_" + set + "_" + name.toLowerCase());
-        id = set + "_" + name;
+        id = set + "_" + name; // FIXME: why?
         obj["id"] = id;
         obj["action"] = "action";
         obj["type"] = "action";
@@ -11454,6 +11514,50 @@ See the LICENSE file for details.
     }
     return false;
   }
+  function addCustomCommandsDialog() {
+    // create the dialog
+    var win = new Window("dialog");
+    win.text = localize(strings.add_custom_commands_dialog_title);
+    win.alignChildren = "fill";
+
+    var header = win.add(
+      "statictext",
+      [0, 0, 500, 100],
+      localize(strings.custom_commands_header),
+      {
+        justify: "center",
+        multiline: true,
+      }
+    );
+    header.justify = "center";
+
+    // custom commands csv text
+    var customCommands = win.add("edittext", [0, 0, 400, 200], "", { multiline: true });
+    customCommands.text = "";
+
+    // window buttons
+    var winButtons = win.add("group");
+    winButtons.orientation = "row";
+    winButtons.alignChildren = ["center", "center"];
+    var save = winButtons.add("button", undefined, localize(strings.save), {
+      name: "ok",
+    });
+    save.preferredSize.width = 100;
+    save.enabled = false;
+    var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
+      name: "cancel",
+    });
+    cancel.preferredSize.width = 100;
+
+    customCommands.onChanging = function () {
+      save.enabled = customCommands.text.length > 0 ? true : false;
+    };
+
+    if (win.show() == 1) {
+      return customCommands.text;
+    }
+    return false;
+  }
   function pickerBuilder(editPickerId) {
     var overwrite = false;
 
@@ -11503,10 +11607,10 @@ See the LICENSE file for details.
     });
     cancel.preferredSize.width = 100;
 
-    pickerCommands.onChange = function () {
+    pickerCommands.onChanging = function () {
       pickerName.enabled = pickerCommands.text.length > 0 ? true : false;
       save.enabled =
-        steps.listbox.items.length > 0 && pickerName.text.length > 0 ? true : false;
+        pickerCommands.text.length > 0 && pickerName.text.length > 0 ? true : false;
     };
 
     pickerName.onChanging = function () {
@@ -12096,6 +12200,9 @@ See the LICENSE file for details.
       case "builtin":
         func = internalAction;
         break;
+      case "custom":
+        func = command.actionType == "menu" ? menuAction : toolAction;
+        break;
       case "menu":
         func = menuAction;
         break;
@@ -12255,6 +12362,9 @@ See the LICENSE file for details.
         break;
 
       // builtin commands
+      case "addCustomCommands":
+        addCustomCommands();
+        break;
       case "allActions":
         write = false;
         showAllActions();
@@ -12262,6 +12372,10 @@ See the LICENSE file for details.
       case "allBookmarks":
         write = false;
         showAllBookmarks();
+        break;
+      case "allCustomCommands":
+        write = false;
+        showAllCustomCommands();
         break;
       case "allMenus":
         write = false;
@@ -12518,13 +12632,98 @@ See the LICENSE file for details.
   }
 
   /**
+   * Present a dialog for adding/editing custom user commands.
+   */
+  function addCustomCommands() {
+    function parseCSVLine(line) {
+      var result = [];
+      var current = "";
+      var quoteChar = null; // null, '"' or "'"
+      var i;
+
+      for (i = 0; i < line.length; i++) {
+        var c = line.charAt(i);
+
+        if (c === '"' || c === "'") {
+          if (quoteChar === null) {
+            quoteChar = c; // opening quote
+          } else if (quoteChar === c) {
+            quoteChar = null; // closing quote
+          } else {
+            current += c; // mismatched quote inside another quote
+          }
+        } else if (c === "," && quoteChar === null) {
+          result.push(current);
+          current = "";
+        } else {
+          current += c;
+        }
+      }
+
+      result.push(current); // last field
+      return result;
+    }
+
+    var result = addCustomCommandsDialog();
+
+    if (!result) return;
+
+    // make sure custom commands array exist before pushing new commands
+    if (!("customCommands" in prefs)) {
+      prefs.customCommands = [];
+    }
+
+    var newCustomCommandIds = [];
+    var lines = result.split(/\r\n|\r|\n/);
+    var line, parts, name, action, type, id, loc, obj;
+    for (var i = 0; i < lines.length; i++) {
+      line = lines[i].trim();
+
+      // skip blank lines
+      if (line === "") continue;
+
+      var parts = parseCSVLine(line);
+
+      // skip command if missing info [name, action, type (menu or tool)]
+      // TODO: should i warn the user a command is being skipped?
+      if (parts.length < 3) continue;
+
+      loc = {};
+      obj = {};
+
+      name = parts[0];
+      action = parts[1];
+      type = parts[2].toLowerCase();
+
+      // skip commands with invalid action type
+      if (type != "menu" && type != "tool") continue;
+
+      id = generateCommandId("custom_" + action.toLowerCase());
+      obj["id"] = id;
+      obj["action"] = action;
+      obj["actionType"] = type;
+      obj["type"] = "custom";
+      obj["name"] = name;
+      obj["docRequired"] = false;
+      obj["selRequired"] = false;
+      obj["hidden"] = false;
+
+      newCustomCommandIds.push(id);
+      prefs.customCommands.push(obj);
+      commandsData[id] = obj;
+    }
+
+    addToStartup(newCustomCommandIds);
+  }
+
+  /**
    * Present a palette with all user created commands (e.g. bookmarks, scripts, workflows).
    * The selected command will be deleted.
    */
   function deleteCommand() {
     var deletableCommands = filterCommands(
       (commands = null),
-      (types = ["file", "folder", "script", "workflow", "picker"]),
+      (types = ["file", "folder", "script", "workflow", "picker", "custom"]),
       (showHidden = false),
       (showNonRelevant = true),
       (hideSpecificCommands = null)
@@ -12584,6 +12783,7 @@ See the LICENSE file for details.
       (commands = null),
       (types = [
         "bookmark",
+        "custom",
         "script",
         "workflow",
         "menu",
@@ -12875,6 +13075,27 @@ See the LICENSE file for details.
       (commands = bookmarkCommands),
       (title = localize(strings.Bookmarks)),
       (columns = columns),
+      (multiselect = false)
+    );
+    if (!result) return;
+    processCommand(result);
+  }
+
+  /**
+   * Present a palette with all user created commands.
+   */
+  function showAllCustomCommands() {
+    var customCommands = filterCommands(
+      (commands = null),
+      (types = ["custom"]),
+      (showHidden = true),
+      (showNonRelevant = false),
+      (hideSpecificCommands = null)
+    );
+    var result = commandPalette(
+      (commands = customCommands),
+      (title = localize(strings.custom_commands_all)),
+      (columns = paletteSettings.columnSets.customCommand),
       (multiselect = false)
     );
     if (!result) return;

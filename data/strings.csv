@@ -4,6 +4,7 @@ ac_error_execution,Error executing action:\n%1\n\n%2,Fehler beim Ausführen der 
 action,Action,,
 Actions,Actions,Aktionen,
 active_document_not_saved,Active document not yet saved to the file system.,Das aktuelle Dokument wurde noch nicht gespeichert.,
+add_custom_commands_dialog_title,Add Custom Commands,,
 artboard,Artboard,,
 artboards,Artboards,Zeichenflächen,
 bm_already_loaded,Bookmark already loaded.,Dieses Lesezeichen wurde bereits erstellt.,
@@ -46,6 +47,9 @@ config,Configuration,,
 copyright,Copyright 2024 Josh Duncan,,
 cp_config,Palette Settings and Configuration,Paletteneinstellungen und -konfiguration,Настройка и конфигурация панели
 cp_q_helptip,"Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen.","Поиск команд, операций и загруженных скриптов"
+custom,"Custom",,
+custom_commands_all,All Custom Commands,,
+custom_commands_header,"Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",,
 defaults,Defaults,,
 description,"Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.","Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Menübefehle und Werkzeuge sowie alle Aktionen und Skripte, die direkt über die Tastatur ausgeführt werden können. Mit benutzerdefinierten Arbeitsabläufen können Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabläufen und steigern Sie Ihre Produktivität.","Повысьте скорость работы в Adobe Illustrator благодаря быстрому доступу к большинству команд меню, инструментам, всем операциям и любым загруженным скриптам прямо с клавиатуры. А пользовательские наборы позволяют комбинировать несколько команд, операций и скриптов. Замените повторяющиеся задачи наборами команд и повысьте свою производительность."
 document,Document,,
@@ -96,7 +100,7 @@ picker_builder_save_conflict_message,A custom picker with that name already exis
 picker_builder_save_conflict_title,Save Custom Picker Conflict,,
 picker_to_edit,Choose a custom picker to edit.,,
 pickers_all,All Pickers,,
-pref_file_loading_error,Error Loading Preferences\nA backup copy of your settings has been created.,Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.,
+pref_file_loading_error,Error Loading Preferences\nA backup copy of your settings has been created.\n\n%1,Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.\n\n%1,
 pref_file_non_compatible,Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.,,
 pref_update_complete,Preferences Update Complete.,Aktualisierung der Voreinstellungen fertiggestellt,Preferences Update Complete
 recent_commands,Recent Commands,Zuletzt verwendete Befehle,

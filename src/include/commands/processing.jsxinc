@@ -57,6 +57,9 @@ function executeAction(command) {
     case "builtin":
       func = internalAction;
       break;
+    case "custom":
+      func = command.actionType == "menu" ? menuAction : toolAction;
+      break;
     case "menu":
       func = menuAction;
       break;
@@ -216,6 +219,9 @@ function internalAction(command) {
       break;
 
     // builtin commands
+    case "addCustomCommands":
+      addCustomCommands();
+      break;
     case "allActions":
       write = false;
       showAllActions();
@@ -223,6 +229,10 @@ function internalAction(command) {
     case "allBookmarks":
       write = false;
       showAllBookmarks();
+      break;
+    case "allCustomCommands":
+      write = false;
+      showAllCustomCommands();
       break;
     case "allMenus":
       write = false;

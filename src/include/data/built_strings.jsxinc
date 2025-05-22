@@ -18,6 +18,11 @@ var strings = {
     de: "Das aktuelle Dokument wurde noch nicht gespeichert.",
     ru: "Active document not yet saved to the file system.",
   },
+  add_custom_commands_dialog_title: {
+    en: "Add Custom Commands",
+    de: "Add Custom Commands",
+    ru: "Add Custom Commands",
+  },
   artboard: { en: "Artboard", de: "Artboard", ru: "Artboard" },
   artboards: { en: "Artboards", de: "Zeichenfl\u00e4chen", ru: "Artboards" },
   bm_already_loaded: {
@@ -196,6 +201,17 @@ var strings = {
     de: "Befehle, Aktionen und geladene Skripte suchen.",
     ru: "\u041f\u043e\u0438\u0441\u043a \u043a\u043e\u043c\u0430\u043d\u0434, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u0445 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432",
   },
+  custom: { en: "Custom", de: "Custom", ru: "Custom" },
+  custom_commands_all: {
+    en: "All Custom Commands",
+    de: "All Custom Commands",
+    ru: "All Custom Commands",
+  },
+  custom_commands_header: {
+    en: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
+    de: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
+    ru: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
+  },
   defaults: { en: "Defaults", de: "Defaults", ru: "Defaults" },
   description: {
     en: "Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.",
@@ -355,9 +371,9 @@ var strings = {
   },
   pickers_all: { en: "All Pickers", de: "All Pickers", ru: "All Pickers" },
   pref_file_loading_error: {
-    en: "Error Loading Preferences\nA backup copy of your settings has been created.",
-    de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.",
-    ru: "Error Loading Preferences\nA backup copy of your settings has been created.",
+    en: "Error Loading Preferences\nA backup copy of your settings has been created.\n\n%1",
+    de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.\n\n%1",
+    ru: "Error Loading Preferences\nA backup copy of your settings has been created.\n\n%1",
   },
   pref_file_non_compatible: {
     en: "Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.",

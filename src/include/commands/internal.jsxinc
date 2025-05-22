@@ -166,13 +166,98 @@ function customizeStartup() {
 }
 
 /**
+ * Present a dialog for adding/editing custom user commands.
+ */
+function addCustomCommands() {
+  function parseCSVLine(line) {
+    var result = [];
+    var current = "";
+    var quoteChar = null; // null, '"' or "'"
+    var i;
+
+    for (i = 0; i < line.length; i++) {
+      var c = line.charAt(i);
+
+      if (c === '"' || c === "'") {
+        if (quoteChar === null) {
+          quoteChar = c; // opening quote
+        } else if (quoteChar === c) {
+          quoteChar = null; // closing quote
+        } else {
+          current += c; // mismatched quote inside another quote
+        }
+      } else if (c === "," && quoteChar === null) {
+        result.push(current);
+        current = "";
+      } else {
+        current += c;
+      }
+    }
+
+    result.push(current); // last field
+    return result;
+  }
+
+  var result = addCustomCommandsDialog();
+
+  if (!result) return;
+
+  // make sure custom commands array exist before pushing new commands
+  if (!("customCommands" in prefs)) {
+    prefs.customCommands = [];
+  }
+
+  var newCustomCommandIds = [];
+  var lines = result.split(/\r\n|\r|\n/);
+  var line, parts, name, action, type, id, loc, obj;
+  for (var i = 0; i < lines.length; i++) {
+    line = lines[i].trim();
+
+    // skip blank lines
+    if (line === "") continue;
+
+    var parts = parseCSVLine(line);
+
+    // skip command if missing info [name, action, type (menu or tool)]
+    // TODO: should i warn the user a command is being skipped?
+    if (parts.length < 3) continue;
+
+    loc = {};
+    obj = {};
+
+    name = parts[0];
+    action = parts[1];
+    type = parts[2].toLowerCase();
+
+    // skip commands with invalid action type
+    if (type != "menu" && type != "tool") continue;
+
+    id = generateCommandId("custom_" + action.toLowerCase());
+    obj["id"] = id;
+    obj["action"] = action;
+    obj["actionType"] = type;
+    obj["type"] = "custom";
+    obj["name"] = name;
+    obj["docRequired"] = false;
+    obj["selRequired"] = false;
+    obj["hidden"] = false;
+
+    newCustomCommandIds.push(id);
+    prefs.customCommands.push(obj);
+    commandsData[id] = obj;
+  }
+
+  addToStartup(newCustomCommandIds);
+}
+
+/**
  * Present a palette with all user created commands (e.g. bookmarks, scripts, workflows).
  * The selected command will be deleted.
  */
 function deleteCommand() {
   var deletableCommands = filterCommands(
     (commands = null),
-    (types = ["file", "folder", "script", "workflow", "picker"]),
+    (types = ["file", "folder", "script", "workflow", "picker", "custom"]),
     (showHidden = false),
     (showNonRelevant = true),
     (hideSpecificCommands = null)
@@ -232,6 +317,7 @@ function hideCommand() {
     (commands = null),
     (types = [
       "bookmark",
+      "custom",
       "script",
       "workflow",
       "menu",
@@ -523,6 +609,27 @@ function showAllBookmarks() {
     (commands = bookmarkCommands),
     (title = localize(strings.Bookmarks)),
     (columns = columns),
+    (multiselect = false)
+  );
+  if (!result) return;
+  processCommand(result);
+}
+
+/**
+ * Present a palette with all user created commands.
+ */
+function showAllCustomCommands() {
+  var customCommands = filterCommands(
+    (commands = null),
+    (types = ["custom"]),
+    (showHidden = true),
+    (showNonRelevant = false),
+    (hideSpecificCommands = null)
+  );
+  var result = commandPalette(
+    (commands = customCommands),
+    (title = localize(strings.custom_commands_all)),
+    (columns = paletteSettings.columnSets.customCommand),
     (multiselect = false)
   );
   if (!result) return;

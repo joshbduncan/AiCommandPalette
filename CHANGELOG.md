@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] 2025-05-22
+
+### Added
+
+- Custom User Commands `Add Custom Commands` suggested by [rutgerrrrr](https://github.com/joshbduncan/AiCommandPalette/issues/32)
+
+### Fixed
+
+- Picker builder name and save elements activation validator
+
+### Changed
+
+- `devInfo.folder` changed to `userPrefsFolder`
+
 ## [0.12.1] 2025-04-29
 
 ### Added
@@ -84,7 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - custom pickers [Issue #27](https://github.com/joshbduncan/AiCommandPalette/issues/27)
 - in-place editing of some workflow steps (via double-click and edit button)
 
-### Changes
+### Changed
 
 - removed searching on type command (added back 'all menu commands', 'all tools')
 
@@ -366,7 +380,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - [build_commands.py](/tools/build_commands.py) builds the built-in menu commands, the built-in tool commands, and the config commands objects directly from [menu_commands.csv](/commands/menu_commands.csv), [config_commands.csv](/commands/config_commands.csv), and [tool_commands.csv](/commands/tool_commands.csv), so any updates are easier to track and implement.
 - New way to build config menu
 
-### Changes
+### Changed
 
 - [translate.py](/tools/build_translations.py) moved to the tools folder.
 

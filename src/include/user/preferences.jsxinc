@@ -15,6 +15,7 @@ var prefs = {};
 prefs.startupCommands = null;
 prefs.hiddenCommands = [];
 prefs.workflows = [];
+prefs.customCommands = [];
 prefs.bookmarks = [];
 prefs.scripts = [];
 prefs.pickers = [];
@@ -77,16 +78,23 @@ userPrefs.load = function (inject) {
         if (propsToSkip.includes(prop)) continue;
         prefs[prop] = loadedData[prop];
       }
+
       if (inject) this.inject();
     } catch (e) {
       file.rename(file.name + ".bak");
       this.reveal();
-      Error.runtimeError(1, localize(strings.pref_file_loading_error));
+      Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
     }
   }
 };
 userPrefs.inject = function () {
-  var typesToInject = ["workflows", "bookmarks", "scripts", "pickers"];
+  var typesToInject = [
+    "workflows",
+    "bookmarks",
+    "scripts",
+    "pickers",
+    "customCommands",
+  ];
   for (var i = 0; i < typesToInject.length; i++) {
     for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
       commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
