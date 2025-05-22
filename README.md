@@ -38,7 +38,8 @@ Access all of your saved Actions using Ai Command Palette. Actions are listed "A
 
 Find yourself opening the same file inside of Illustrator multiple times a day? Or need to easily access a folder full of project assets? Bookmarks have you covered.
 
-📝 File bookmarks open right into Illustrator and Folder bookmarks open in your file system.
+> [!NOTE]
+> File bookmarks open right into Illustrator and Folder bookmarks open in your file system.
 
 !["Actions"](/images/bookmarks.png)
 
@@ -90,7 +91,8 @@ The selected item will be saved to the environment variable `aic_picker_last` an
 
 Custom Pickers also allow for multiple selections. When enabled, the selected items are saved as an array so to access them make sure to use the [eval()](https://extendscript.docsforadobe.dev/integrating-external-libraries/defining-entry-points-for-indirect-access.html#eval) method like below.
 
-ℹ️ Any custom pickers inside of workflows can be edited inside of the workflow editor by double-clicking the picker workflow step, or by clicking the workflow steps edit button.
+> [!TIP]
+> Any custom pickers inside of workflows can be edited inside of the workflow editor by double-clicking the picker workflow step, or by clicking the workflow steps edit button.
 
 ```javascript
 // anotherScript.jsx
@@ -102,7 +104,8 @@ alert("Picked Color Formats\n" + colorFormats.join("\n"));
 
 Load any JavaScript files (.js or .jsx) you want quick access to using the `Load Scripts...` command.
 
-❓ **Want to load a bunch of scripts?** Multiple selections are allowed using your standard OS multiple selection tools.
+> [!TIP]
+> **Want to load a bunch of scripts?** Multiple selections are allowed using your standard OS multiple selection tools.
 
 !["Scripts"](/images/scripts.png)
 
@@ -116,7 +119,8 @@ Do You...
 - need to perform an exact set of actions regularly and want to automate that?
 - need to quickly prototype the execution steps of a potential script?
 
-🧨 Workflows are a super powerful utility for beginners, pros, and everyone in between. The possibilities are almost limitless!
+> [!TIP]
+> Workflows are a super powerful utility for beginners, pros, and everyone in between. The possibilities are almost limitless!
 
 !["Workflow Builder"](/images/workflow-builder.png)
 
@@ -151,15 +155,18 @@ You can access the settings for Ai Command Palette by selecting the "Command Pal
 
 If there are any Actions, built-in Menu Commands, or built-in Tools you don't want to see in Ai Command Palette you can easily hide them. Note, they will not be deleted, just hidden from the search results.
 
-❓ **Need to hide a bunch of commands?** Multiple selections are allowed using your standard OS multiple selection tools.
+> [!TIP]
+> **Need to hide a bunch of commands?** Multiple selections are allowed using your standard OS multiple selection tools.
 
-❓ **Accidentally hide a command you didn't mean to?** To reveal any hidden commands, just use the "Reveal Commands..." function of Ai Command Palette.
+> [!TIP]
+> **Accidentally hide a command you didn't mean to?** To reveal any hidden commands, just use the "Reveal Commands..." function of Ai Command Palette.
 
 ### Reveal Preferences File
 
 All of your Ai Command Palette settings are saved on your system to a "json-like" preferences file. This includes any Scripts you load, Workflows you create, and Commands you have hidden. This command simply "reveals" your preferences file on your system.
 
-⚠️ I would not recommend directly editing the file unless you know exactly what you are going. This function is mostly for making backups or sharing your preferences with others.
+> [!CAUTION]
+> I would not recommend directly editing the file unless you know exactly what you are going. This function is mostly for making backups or sharing your preferences with others.
 
 ## Localization
 
@@ -173,7 +180,8 @@ If anyone wants to offer localization for other languages you can [learn more he
 
 I recommend installing this action into your scripts folder ([how-to](https://www.marspremedia.com/software/how-to-adobe-cc#illustrator)), then tying it to a keyboard shortcut using something like [Keyboard Maestro](https://www.keyboardmaestro.com/main/) (Mac), [BetterTouchTool](https://folivora.ai/) (Mac), or [AutoHotkey](https://www.autohotkey.com/) (Windows).
 
-ℹ️ I like to use the keyboard shortcut Command-Shift-P since it is somewhat mnemonic for "palette".
+> [!TIP]
+> I like to use the keyboard shortcut Command-Shift-P since it is somewhat mnemonic for "palette".
 
 ## Known Issues 🤦‍♂️
 
@@ -197,11 +205,13 @@ There is a known ExtendScript issue when running actions from a script (e.g. Ai 
 
 Using Ai Command Palette requires some basic knowledge of Illustrator. The script doesn't know which commands can or can't be run at the time of execution so tread carefully. I've included error checking where possible, so in most cases you should get an explanation when something breaks.
 
-⚠️ Action Execution: There are some known issues with executing actions via a script. There are no known solutions to this so if you encounter errors with a particular Action, it just may not be suitable to execute via Ai Command Palette.
+> [!IMPORTANT]
+> There are some known issues with executing actions via a script. There are no known solutions to this so if you encounter errors with a particular Action, it just may not be suitable to execute via Ai Command Palette.
 
 🐞 If you find a bug please [file an issue](https://github.com/joshbduncan/AiCommandPalette/issues).
 
-😬 Also know, most every action this script executes can be undone by choosing Edit > Undo (from the Edit menu at the top of your screen), or by pressing Command-Z (Mac) or Control+Z (Windows).
+> [!TIP]
+> Most every action this script executes can be undone by choosing Edit > Undo (from the Edit menu at the top of your screen), or by pressing Command-Z (Mac) or Control+Z (Windows).
 
 ## Credits
 
