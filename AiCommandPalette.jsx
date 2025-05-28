@@ -11127,6 +11127,10 @@ See the LICENSE file for details.
   }
   // CUSTOM SCRIPTUI FILTERABLE LISTBOX
 
+  // set flags for query arrow navigation fix
+  var fromQuery = false;
+  var fromQueryShiftKey = false;
+
   /**
    * Custom wrapper for a ScriptUI Listbox.
    * @param {Array}   commands    Commands to load into the list box.
@@ -11304,8 +11308,8 @@ See the LICENSE file for details.
    */
   function scrollListBoxWithArrows(listbox) {
     listbox.addEventListener("keydown", function (e) {
-      if (e.fromQuery) {
-        if (e.fromQueryShiftKey) {
+      if (fromQuery) {
+        if (fromQueryShiftKey) {
           if (e.keyName == "Up") {
             if (this.selection.index == 0) {
               this.selection = this.items.length - 1;
@@ -11379,6 +11383,8 @@ See the LICENSE file for details.
             }
           }
         }
+        fromQuery = false;
+        fromQueryShiftKey = false;
       } else {
         if (e.keyName == "Up" && this.selection.index == 0) {
           this.selection = this.items.length - 1;
@@ -11405,6 +11411,7 @@ See the LICENSE file for details.
     // setup the query input
     var q = win.add("edittext");
     q.helpTip = localize(strings.cd_q_helptip);
+    q.active = true;
 
     // setup the commands listbox
     var matches = showOnly ? showOnly : commands;
@@ -11433,8 +11440,6 @@ See the LICENSE file for details.
     // work-around to stop windows from flickering/flashing explorer
     if (windowsFlickerFix) {
       simulateKeypress("TAB", 1);
-    } else {
-      q.active = true;
     }
 
     // as a query is typed update the listbox
@@ -11485,8 +11490,8 @@ See the LICENSE file for details.
             0,
             ""
           );
-          kbEvent.fromQuery = true;
-          kbEvent.fromQueryShiftKey = e.getModifierState("shift");
+          fromQuery = true;
+          fromQueryShiftKey = e.getModifierState("shift");
           list.listbox.dispatchEvent(kbEvent);
           e.preventDefault();
         }
