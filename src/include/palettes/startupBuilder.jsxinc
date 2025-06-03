@@ -74,13 +74,13 @@ function startupBuilder(commands) {
   // as a query is typed update the listbox
   var matches;
   q.onChanging = function () {
-    if (this.text === "") {
+    if (q.text === "") {
       matches = commands;
-    } else if (qCache.hasOwnProperty(this.text)) {
-      matches = qCache[this.text];
+    } else if (qCache.hasOwnProperty(q.text)) {
+      matches = qCache[q.text];
     } else {
-      matches = matcher(this.text, commands);
-      qCache[this.text] = matches;
+      matches = matcher(q.text, commands);
+      qCache[q.text] = matches;
     }
     if (matches.length > 0) {
       list.update(matches);
@@ -141,7 +141,7 @@ function startupBuilder(commands) {
     // clear cache and re-index matches
     qCache = {};
     matches = matcher(q.text, commands);
-    qCache[this.text] = matches;
+    qCache[q.text] = matches;
     if (matches.length > 0) {
       list.update(matches);
     }
