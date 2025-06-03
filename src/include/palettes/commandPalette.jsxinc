@@ -128,7 +128,7 @@ ListBoxWrapper.prototype = {
  */
 function selectOnDoubleClick(listbox) {
   listbox.onDoubleClick = function () {
-    this.window.close(1);
+    listbox.window.close(1);
   };
 }
 
@@ -139,9 +139,9 @@ function selectOnDoubleClick(listbox) {
 function addToStepsOnDoubleClick(listbox) {
   listbox.onDoubleClick = function () {
     var win, steps, command, newItem, newPicker;
-    win = this.window;
+    win = listbox.window;
     steps = win.findElement("steps");
-    command = commandsData[this.selection.id];
+    command = commandsData[listbox.selection.id];
 
     // check for "Build Picker..." command
     if (command.id == "builtin_buildPicker") {
@@ -184,53 +184,56 @@ function scrollListBoxWithArrows(listbox) {
     if (fromQuery) {
       if (fromQueryShiftKey) {
         if (e.keyName == "Up") {
-          if (this.selection.index == 0) {
-            this.selection = this.items.length - 1;
+          if (listbox.selection.index == 0) {
+            listbox.selection = listbox.items.length - 1;
             e.preventDefault();
           } else {
-            this.selection--;
+            listbox.selection--;
           }
         }
         if (e.keyName == "Down") {
-          if (this.selection.index == this.items.length - 1) {
-            this.selection = 0;
+          if (listbox.selection.index == listbox.items.length - 1) {
+            listbox.selection = 0;
             e.preventDefault();
           } else {
-            if (e.keyName == "Down") this.selection++;
+            if (e.keyName == "Down") listbox.selection++;
           }
         }
       } else {
         if (e.keyName == "Up" || e.keyName == "Down") {
           if (e.keyName == "Up") {
             e.preventDefault();
-            if (!this.selection) {
-              this.selection = 0;
-            } else if (this.selection.index == 0) {
+            if (!listbox.selection) {
+              listbox.selection = 0;
+            } else if (listbox.selection.index == 0) {
               // jump to the bottom if at top
-              this.selection = this.items.length - 1;
-              this.frameStart = this.items.length - 1 - visibleListItems;
+              listbox.selection = listbox.items.length - 1;
+              listbox.frameStart = listbox.items.length - 1 - visibleListItems;
             } else {
-              if (this.selection.index > 0) {
-                this.selection = this.selection.index - 1;
-                if (this.selection.index < this.frameStart) this.frameStart--;
+              if (listbox.selection.index > 0) {
+                listbox.selection = listbox.selection.index - 1;
+                if (listbox.selection.index < listbox.frameStart) listbox.frameStart--;
               }
             }
           } else if (e.keyName == "Down") {
             e.preventDefault();
-            if (!this.selection) {
-              this.selection = 0;
-            } else if (this.selection.index === this.items.length - 1) {
+            if (!listbox.selection) {
+              listbox.selection = 0;
+            } else if (listbox.selection.index === listbox.items.length - 1) {
               // jump to the top if at the bottom
-              this.selection = 0;
-              this.frameStart = 0;
+              listbox.selection = 0;
+              listbox.frameStart = 0;
             } else {
-              if (this.selection.index < this.items.length) {
-                this.selection = this.selection.index + 1;
-                if (this.selection.index > this.frameStart + visibleListItems - 1) {
-                  if (this.frameStart < this.items.length - visibleListItems) {
-                    this.frameStart++;
+              if (listbox.selection.index < listbox.items.length) {
+                listbox.selection = listbox.selection.index + 1;
+                if (
+                  listbox.selection.index >
+                  listbox.frameStart + visibleListItems - 1
+                ) {
+                  if (listbox.frameStart < listbox.items.length - visibleListItems) {
+                    listbox.frameStart++;
                   } else {
-                    this.frameStart = this.frameStart;
+                    listbox.frameStart = listbox.frameStart;
                   }
                 }
               }
@@ -243,28 +246,29 @@ function scrollListBoxWithArrows(listbox) {
         and then hit an arrow key the above event listener will not work correctly so
         I just move the next selection (be it up or down) to the middle of the "frame".
         */
-          if (this.selection) {
+          if (listbox.selection) {
             if (
-              this.selection.index < this.frameStart ||
-              this.selection.index > this.frameStart + visibleListItems - 1
+              listbox.selection.index < listbox.frameStart ||
+              listbox.selection.index > listbox.frameStart + visibleListItems - 1
             )
-              this.frameStart = this.selection.index - Math.floor(visibleListItems / 2);
+              listbox.frameStart =
+                listbox.selection.index - Math.floor(visibleListItems / 2);
             // don't move the frame if list items don't fill the available rows
-            if (this.items.length <= visibleListItems) return;
-            // move the frame by revealing the calculated `this.frameStart`
-            this.revealItem(this.frameStart);
+            if (listbox.items.length <= visibleListItems) return;
+            // move the frame by revealing the calculated `listbox.frameStart`
+            listbox.revealItem(listbox.frameStart);
           }
         }
       }
       fromQuery = false;
       fromQueryShiftKey = false;
     } else {
-      if (e.keyName == "Up" && this.selection.index == 0) {
-        this.selection = this.items.length - 1;
+      if (e.keyName == "Up" && listbox.selection.index == 0) {
+        listbox.selection = listbox.items.length - 1;
         e.preventDefault();
       }
-      if (e.keyName == "Down" && this.selection.index == this.items.length - 1) {
-        this.selection = 0;
+      if (e.keyName == "Down" && listbox.selection.index == listbox.items.length - 1) {
+        listbox.selection = 0;
         e.preventDefault();
       }
     }
@@ -317,13 +321,13 @@ function commandPalette(commands, title, columns, multiselect, showOnly, saveHis
 
   // as a query is typed update the listbox
   q.onChanging = function () {
-    if (this.text === "") {
+    if (q.text === "") {
       matches = showOnly ? showOnly : commands;
-    } else if (qCache.hasOwnProperty(this.text)) {
-      matches = qCache[this.text];
+    } else if (qCache.hasOwnProperty(q.text)) {
+      matches = qCache[q.text];
     } else {
-      matches = matcher(this.text, commands);
-      qCache[this.text] = matches;
+      matches = matcher(q.text, commands);
+      qCache[q.text] = matches;
     }
     list.update(matches);
   };
