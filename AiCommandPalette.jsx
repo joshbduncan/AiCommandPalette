@@ -13364,14 +13364,13 @@ See the LICENSE file for details.
     var cur, id, obj;
     for (var i = 0; i < app.activeDocument.artboards.length; i++) {
       cur = app.activeDocument.artboards[i];
-      alert(cur.name);
       id = generateCommandId("artboard_" + i.toString());
       obj = {
         id: id,
         name: cur.name,
         action: "artboard",
         type: "artboard",
-        idx: i,
+        idx: (i + 1).toString(),
         docRequired: false,
         selRequired: false,
         hidden: false,
@@ -13379,6 +13378,7 @@ See the LICENSE file for details.
       arr.push(id);
       commandsData[id] = obj;
     }
+    return arr;
   }
 
   /**
@@ -13405,7 +13405,9 @@ See the LICENSE file for details.
     );
 
     if (!result) return;
-    app.activeDocument.artboards.setActiveArtboardIndex(commandsData[result].idx);
+    app.activeDocument.artboards.setActiveArtboardIndex(
+      Number(commandsData[result].idx) - 1
+    );
     app.executeMenuCommand("fitin");
   }
 
