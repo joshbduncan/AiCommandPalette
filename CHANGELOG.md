@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.2] 2025-06-03
+
+### Fixed
+
+- Update to previous fix for keyboard navigation (on Windows) from within the query box issue #33 [link](https://github.com/joshbduncan/AiCommandPalette/issues/33)
+- Fixed bug in Go To Artboard command issue #35 [link](https://github.com/joshbduncan/AiCommandPalette/issues/35)
+
 ## [0.13.1] 2025-05-28
 
 ### Fixed
