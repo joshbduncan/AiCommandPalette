@@ -6,6 +6,7 @@
  */
 function processCommand(id) {
   var command = commandsData[id];
+  logger.log("processing command:", localize(command.name));
   if (command.type == "workflow") {
     // check to make sure all workflow commands are valid
     badActions = checkWorkflowActions(command.actions);

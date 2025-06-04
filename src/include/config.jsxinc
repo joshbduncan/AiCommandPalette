@@ -17,6 +17,27 @@ var sysOS = /mac/i.test(os) ? "mac" : "win";
 var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 var settingsRequiredUpdateVersion = "0.10.0";
 
+// DEVELOPMENT SETTINGS
+var dev = $.getenv("USER") === "jbd" || $.getenv("AICP_LOG") === "true" ? true : false;
+// TODO: add user enabled logging
+// TODO: check if setenv lasts through a restart
+var logFilePath = Folder.desktop + "/AiCommandPalette.log";
+var logger;
+
+if (dev) {
+  var logFilePath = Folder.desktop + "/AiCommandPalette.log";
+  logger = new Logger(logFilePath, "a", undefined, true);
+  logger.log("**DEV MODE**");
+} else {
+  logger = {};
+  logger.log = function (text) {
+    $.writeln(text);
+  };
+}
+
+logger = new Logger(logFilePath, "a", undefined, true);
+logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
+
 // DIALOG SETTINGS
 
 var paletteSettings = {};

@@ -21,6 +21,7 @@ prefs.scripts = [];
 prefs.pickers = [];
 prefs.fuzzy = true; // set to new fuzzy matcher as default
 prefs.latches = {};
+prefs.logging = false;
 prefs.version = _version;
 prefs.os = os;
 prefs.locale = locale;
@@ -38,9 +39,11 @@ userPrefs.file = function () {
 };
 userPrefs.load = function (inject) {
   var file = this.file();
+  logger.log("loading user preferences:", file.fsName);
 
   // if the prefs files doesn't exist, check for old 'settings' file
   if (!file.exists) {
+    logger.log("no user prefs files found, checking for old 'settings' file");
     oldFile = setupFileObject(settingsFolder, settingsFileName);
 
     // no need to continue if no old 'settings' file is present
@@ -48,6 +51,7 @@ userPrefs.load = function (inject) {
 
     alert(localize(strings.pref_file_non_compatible));
     var backupFile = new File(oldFile + ".bak");
+    logger.log("backing up old `settings` file to: ", backupFile.fsName);
     oldFile.copy(backupFile);
 
     try {
@@ -79,9 +83,13 @@ userPrefs.load = function (inject) {
         prefs[prop] = loadedData[prop];
       }
 
-      if (inject) this.inject();
+      if (inject) {
+        this.inject();
+      }
     } catch (e) {
       file.rename(file.name + ".bak");
+      logger.log("error loading user prefs", e);
+      logger.log("renaming prefs file:", file.fsName);
       this.reveal();
       Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
     }
@@ -103,18 +111,23 @@ userPrefs.inject = function () {
 };
 userPrefs.save = function () {
   var file = this.file();
+  logger.log("writing user prefs");
   writeJSONData(prefs, file);
 };
 userPrefs.backup = function () {
   var backupFile = new File(this.file() + ".bak");
+  logger.log("user prefs backed up tp:", backupFile.fsName);
   this.file().copy(backupFile);
 };
 userPrefs.reveal = function () {
   var folder = this.folder();
+  logger.log("revealing user prefs");
   folder.execute();
 };
 
 function updateOldPreferences(oldFile) {
+  logger.log("converting old 'settings' file to new user prefs file");
+
   // read old data
   var data = readJSONData(oldFile);
 

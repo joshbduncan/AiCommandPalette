@@ -382,8 +382,10 @@ function commandPalette(commands, title, columns, multiselect, showOnly, saveHis
       for (var i = 0; i < list.listbox.selection.length; i++) {
         items.push(list.listbox.selection[i].id);
       }
+      logger.log("user selected commands:", items.join(", "));
       return items;
     } else {
+      logger.log("user selected command:", list.listbox.selection);
       if (saveHistory) {
         updateHistory();
       }

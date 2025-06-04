@@ -20,6 +20,7 @@ userHistory.file = function () {
 };
 userHistory.load = function () {
   var file = this.file();
+  logger.log("loading user history:", file.fsName);
   if (file.exists) {
     var queryCommandsLUT = {};
     var loadedData, entry;
@@ -69,18 +70,22 @@ userHistory.load = function () {
 };
 userHistory.clear = function () {
   var file = this.file();
+  logger.log("clearing user history");
   file.remove();
 };
 userHistory.save = function () {
   var file = this.file();
+  logger.log("writing user history");
   if (history.length > 500) history = history.slice(-500);
   writeJSONData(history, file);
 };
 userHistory.backup = function () {
   var backupFile = new File(this.file() + ".bak");
+  logger.log("user history backed up to:", backupFile.fsName);
   this.file().copy(backupFile);
 };
 userHistory.reveal = function () {
   var folder = this.folder();
+  logger.log("revealing history file");
   folder.execute();
 };

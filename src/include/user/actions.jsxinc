@@ -3,6 +3,8 @@
 var userActions = {};
 userActions.loadedActions = false;
 userActions.load = function () {
+  logger.log("loading user actions");
+
   var ct = 0;
   var currentPath, set, actionCount, name;
   var pref = app.preferences;
@@ -36,5 +38,6 @@ userActions.load = function () {
       commandsData[id] = obj;
     }
   }
+  logger.log("loaded", ct, "actions");
   this.loadedActions = ct > 0;
 };

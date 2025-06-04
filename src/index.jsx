@@ -26,6 +26,7 @@ See the LICENSE file for details.
 
   //@include "polyfills.jsxinc"
   //@include "helpers.jsxinc"
+  //@include "Logger.jsxinc"
   //@include "io.jsxinc"
   //@include "built_strings.jsxinc"
   //@include "built_commands.jsxinc"
@@ -57,6 +58,7 @@ See the LICENSE file for details.
     (showNonRelevant = false),
     (hideSpecificCommands = null)
   );
+  logger.log("queryable commands:", queryableCommands.length);
 
   var startupCommands = filterCommands(
     (commands = prefs.startupCommands),
@@ -65,6 +67,7 @@ See the LICENSE file for details.
     (showNonRelevant = false),
     (hideSpecificCommands = null)
   );
+  logger.log("startup commands:", startupCommands.length);
 
   var result = commandPalette(
     (commands = queryableCommands),

@@ -500,6 +500,119 @@ See the LICENSE file for details.
     html.close();
     html.execute();
   }
+  /**
+   * Determine the base calling script from the current stack.
+   * @returns {String} Initial script name.
+   */
+  function resolveBaseScriptFromStack() {
+    var stack = $.stack.split("\n");
+    var foo, bar;
+    for (var i = 0; i < stack.length; i++) {
+      foo = stack[i];
+      if (foo[0] == "[" && foo[foo.length - 1] == "]") {
+        bar = foo.slice(1, foo.length - 1);
+        if (isNaN(bar)) {
+          break;
+        }
+      }
+    }
+    return bar;
+  }
+
+  /**
+   * Module for easy file logging from within Adobe ExtendScript.
+   * @param {String} fp File path for the log file. Defaults to `Folder.userData/{base_script_file_name}.log`.
+   * @param {String} mode Optional log file write mode. Write `w` mode or append `a` mode. If write mode 'w', the log file will be overwritten on each script run. Defaults to `w`.
+   * @param {Number} sizeLimit Log file size limit (in bytes) for rotation. Defaults to 5,000,000.
+   * @param {Boolean} console Forward calls to `Logger.log()` to the JavaScript Console via `$.writeln()`. Defaults to `false`.
+   */
+  function Logger(fp, mode, sizeLimit, console) {
+    if (typeof fp == "undefined")
+      fp = Folder.userData + "/" + resolveBaseScriptFromStack() + ".log";
+
+    this.mode = typeof mode !== "undefined" ? mode.toLowerCase() : "w";
+    this.console = typeof console !== "undefined" ? console : false;
+    this.file = new File(fp);
+    this.badPath = false;
+
+    // rotate log if too big
+    sizeLimit = typeof sizeLimit !== "undefined" ? Number(sizeLimit) : 5000000;
+    if (this.file.length > sizeLimit) {
+      var ts = Date.now();
+      var rotatedFile = new File(this.file + ts + ".bak");
+      this.file.copy(rotatedFile);
+      this.file.remove();
+      alert(this.file);
+    }
+  }
+
+  Logger.prototype = {
+    /**
+     * Backup the log file.
+     * @returns {FileObject} Backup file object.
+     */
+    backup: function () {
+      var backupFile = new File(this.file + ".bak");
+      this.file.copy(backupFile);
+      return backupFile;
+    },
+    /**
+     * Write data to the log file.
+     * @param {String} text One or more strings to write, which are concatenated to form a single string.
+     * @returns {Boolean} Returns true if log file is successfully written, false if unsuccessful.
+     */
+    log: function (text) {
+      // no need to keep alerting when the log path is bad
+      if (this.badPath) return false;
+
+      var f = this.file;
+      var m = this.mode;
+      var ts = new Date().toLocaleString();
+
+      // ensure parent folder exists
+      if (!f.parent.exists) {
+        if (!f.parent.parent.exists) {
+          alert("Bad log file path!\n'" + this.file + "'");
+          this.badPath = true;
+          return false;
+        }
+        f.parent.create();
+      }
+
+      // grab all arguments
+      var args = ["[" + ts + "]"];
+      for (var i = 0; i < arguments.length; ++i) args.push(arguments[i]);
+
+      // write the data
+      try {
+        f.encoding = "UTF-8";
+        f.open(m);
+        f.writeln(args.join(" "));
+      } catch (e) {
+        $.writeln("Error writing file:\n" + f);
+        return false;
+      } finally {
+        f.close();
+      }
+
+      // write `text` to the console if requested
+      if (this.console) $.writeln(args.slice(1, args.length).join(" "));
+
+      return true;
+    },
+    /**
+     * Open the log file.
+     */
+    open: function () {
+      this.file.execute();
+    },
+    /**
+     * Reveal the log file in the platform-specific file browser.
+     */
+    reveal: function () {
+      this.file.parent.execute();
+    },
+  };
   // FILE/FOLDER OPERATIONS
 
   /**
@@ -10384,6 +10497,27 @@ See the LICENSE file for details.
   var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
   var settingsRequiredUpdateVersion = "0.10.0";
 
+  // DEVELOPMENT SETTINGS
+  var dev = $.getenv("USER") === "jbd" || $.getenv("AICP_LOG") === "true" ? true : false;
+  // TODO: add user enabled logging
+  // TODO: check if setenv lasts through a restart
+  var logFilePath = Folder.desktop + "/AiCommandPalette.log";
+  var logger;
+
+  if (dev) {
+    var logFilePath = Folder.desktop + "/AiCommandPalette.log";
+    logger = new Logger(logFilePath, "a", undefined, true);
+    logger.log("**DEV MODE**");
+  } else {
+    logger = {};
+    logger.log = function (text) {
+      $.writeln(text);
+    };
+  }
+
+  logger = new Logger(logFilePath, "a", undefined, true);
+  logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
+
   // DIALOG SETTINGS
 
   var paletteSettings = {};
@@ -10500,6 +10634,7 @@ See the LICENSE file for details.
   prefs.pickers = [];
   prefs.fuzzy = true; // set to new fuzzy matcher as default
   prefs.latches = {};
+  prefs.logging = false;
   prefs.version = _version;
   prefs.os = os;
   prefs.locale = locale;
@@ -10517,9 +10652,11 @@ See the LICENSE file for details.
   };
   userPrefs.load = function (inject) {
     var file = this.file();
+    logger.log("loading user preferences:", file.fsName);
 
     // if the prefs files doesn't exist, check for old 'settings' file
     if (!file.exists) {
+      logger.log("no user prefs files found, checking for old 'settings' file");
       oldFile = setupFileObject(settingsFolder, settingsFileName);
 
       // no need to continue if no old 'settings' file is present
@@ -10527,6 +10664,7 @@ See the LICENSE file for details.
 
       alert(localize(strings.pref_file_non_compatible));
       var backupFile = new File(oldFile + ".bak");
+      logger.log("backing up old `settings` file to: ", backupFile.fsName);
       oldFile.copy(backupFile);
 
       try {
@@ -10558,9 +10696,13 @@ See the LICENSE file for details.
           prefs[prop] = loadedData[prop];
         }
 
-        if (inject) this.inject();
+        if (inject) {
+          this.inject();
+        }
       } catch (e) {
         file.rename(file.name + ".bak");
+        logger.log("error loading user prefs", e);
+        logger.log("renaming prefs file:", file.fsName);
         this.reveal();
         Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
       }
@@ -10582,18 +10724,23 @@ See the LICENSE file for details.
   };
   userPrefs.save = function () {
     var file = this.file();
+    logger.log("writing user prefs");
     writeJSONData(prefs, file);
   };
   userPrefs.backup = function () {
     var backupFile = new File(this.file() + ".bak");
+    logger.log("user prefs backed up tp:", backupFile.fsName);
     this.file().copy(backupFile);
   };
   userPrefs.reveal = function () {
     var folder = this.folder();
+    logger.log("revealing user prefs");
     folder.execute();
   };
 
   function updateOldPreferences(oldFile) {
+    logger.log("converting old 'settings' file to new user prefs file");
+
     // read old data
     var data = readJSONData(oldFile);
 
@@ -10785,6 +10932,7 @@ See the LICENSE file for details.
   };
   userHistory.load = function () {
     var file = this.file();
+    logger.log("loading user history:", file.fsName);
     if (file.exists) {
       var queryCommandsLUT = {};
       var loadedData, entry;
@@ -10834,19 +10982,23 @@ See the LICENSE file for details.
   };
   userHistory.clear = function () {
     var file = this.file();
+    logger.log("clearing user history");
     file.remove();
   };
   userHistory.save = function () {
     var file = this.file();
+    logger.log("writing user history");
     if (history.length > 500) history = history.slice(-500);
     writeJSONData(history, file);
   };
   userHistory.backup = function () {
     var backupFile = new File(this.file() + ".bak");
+    logger.log("user history backed up to:", backupFile.fsName);
     this.file().copy(backupFile);
   };
   userHistory.reveal = function () {
     var folder = this.folder();
+    logger.log("revealing history file");
     folder.execute();
   };
   //USER ACTIONS
@@ -10854,6 +11006,8 @@ See the LICENSE file for details.
   var userActions = {};
   userActions.loadedActions = false;
   userActions.load = function () {
+    logger.log("loading user actions");
+
     var ct = 0;
     var currentPath, set, actionCount, name;
     var pref = app.preferences;
@@ -10887,6 +11041,7 @@ See the LICENSE file for details.
         commandsData[id] = obj;
       }
     }
+    logger.log("loaded", ct, "actions");
     this.loadedActions = ct > 0;
   };
   function fuzzy(q, commands) {
@@ -11509,8 +11664,10 @@ See the LICENSE file for details.
         for (var i = 0; i < list.listbox.selection.length; i++) {
           items.push(list.listbox.selection[i].id);
         }
+        logger.log("user selected commands:", items.join(", "));
         return items;
       } else {
+        logger.log("user selected command:", list.listbox.selection);
         if (saveHistory) {
           updateHistory();
         }
@@ -12158,6 +12315,7 @@ See the LICENSE file for details.
    */
   function processCommand(id) {
     var command = commandsData[id];
+    logger.log("processing command:", localize(command.name));
     if (command.type == "workflow") {
       // check to make sure all workflow commands are valid
       badActions = checkWorkflowActions(command.actions);
@@ -13867,6 +14025,7 @@ See the LICENSE file for details.
     (showNonRelevant = false),
     (hideSpecificCommands = null)
   );
+  logger.log("queryable commands:", queryableCommands.length);
 
   var startupCommands = filterCommands(
     (commands = prefs.startupCommands),
@@ -13875,6 +14034,7 @@ See the LICENSE file for details.
     (showNonRelevant = false),
     (hideSpecificCommands = null)
   );
+  logger.log("startup commands:", startupCommands.length);
 
   var result = commandPalette(
     (commands = queryableCommands),
