@@ -11381,7 +11381,8 @@ See the LICENSE file for details.
         columnWidths.push(this.columns[column].width);
         columnKeys.push(this.columns[column].key);
       }
-      listbox = this.container.add("listbox", bounds, undefined, {
+
+      var listbox = this.container.add("listbox", bounds, undefined, {
         name: this.name,
         numberOfColumns: columnTitles.length,
         showHeaders: true,
@@ -11389,13 +11390,15 @@ See the LICENSE file for details.
         columnWidths: columnWidths,
         multiselect: this.multiselect,
       });
-      if (commands.length) {
+      listbox.frameStart = 0;
+      if (this.helptip) listbox.helpTip = this.helptip;
+
+      if (commands && commands.length) {
         this.loadCommands(listbox, commands, columnKeys);
         listbox.selection = 0;
       }
+
       this.addListeners(listbox);
-      if (this.helptip) listbox.helpTip = this.helptip;
-      listbox.frameStart = 0;
       return listbox;
     },
     /**
@@ -11403,7 +11406,7 @@ See the LICENSE file for details.
      * @param {Array} matches Update listbox with new commands.
      */
     update: function (matches) {
-      temp = this.make(matches, this.listbox.bounds);
+      var temp = this.make(matches, this.listbox.bounds);
       this.listbox.window.remove(this.listbox);
       this.listbox = temp;
     },
@@ -11652,7 +11655,7 @@ See the LICENSE file for details.
     // as a query is typed update the listbox
     q.onChanging = function () {
       if (q.text === "") {
-        matches = showOnly ? showOnly : commands;
+        var matches = showOnly ? showOnly : commands;
       } else if (qCache.hasOwnProperty(q.text)) {
         matches = qCache[q.text];
       } else {
@@ -11719,11 +11722,9 @@ See the LICENSE file for details.
         if (saveHistory) {
           updateHistory();
         }
-        if (list.listbox.selection.hasOwnProperty("id")) {
-          return list.listbox.selection.id;
-        } else {
-          return list.listbox.selection.name;
-        }
+        return list.listbox.selection.hasOwnProperty("id")
+          ? list.listbox.selection.id
+          : list.listbox.selection.name;
       }
     }
     return false;

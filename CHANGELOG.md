@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Logger for debugging (with accompanying Enable/Disable Logging command)
 
+### Fixed
+
+- ListBoxWrapper, CommandPalette cleanup
+
 ## [0.13.2] 2025-06-03
 
 ### Fixed
