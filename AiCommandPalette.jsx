@@ -6,52 +6,393 @@ https://joshbduncan.com
 This script is distributed under the MIT License.
 See the LICENSE file for details.
 */
-
 (function () {
   //@target illustrator
-
   // SCRIPT INFORMATION
-
   var _title = "Ai Command Palette";
   var _version = "0.13.2";
   var _copyright = "Copyright 2024 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
-
-
-  // JAVASCRIPT POLYFILLS
-
-  //ARRAY POLYFILLS
-
   if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function (obj, start) {
-      for (var i = start || 0, j = this.length; i < j; i++) {
-        if (this[i] === obj) {
-          return i;
+    Array.prototype.indexOf = function (searchElement, fromIndex) {
+      var k;
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+      }
+      var o = Object(this);
+      var len = o.length >>> 0;
+      if (len === 0) {
+        return -1;
+      }
+      var n = +fromIndex || 0;
+      if (Math.abs(n) === Infinity) {
+        n = 0;
+      }
+      if (n >= len) {
+        return -1;
+      }
+      k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+      while (k < len) {
+        if (k in o && o[k] === searchElement) {
+          return k;
         }
+        k++;
       }
       return -1;
     };
   }
-
-  if (!Array.prototype.includes) {
-    Array.prototype.includes = function (search, start) {
-      if (start === undefined) {
-        start = 0;
+  if (!Array.prototype.every) {
+    Array.prototype.every = function (callbackfn, thisArg) {
+      "use strict";
+      var T, k;
+      if (this == null) {
+        throw new TypeError("this is null or not defined");
       }
-      return this.indexOf(search, start) !== -1;
+      // 1. Let O be the result of calling ToObject passing the this
+      //    value as the argument.
+      var O = Object(this);
+      // 2. Let lenValue be the result of calling the Get internal method
+      //    of O with the argument "length".
+      // 3. Let len be ToUint32(lenValue).
+      var len = O.length >>> 0;
+      // 4. If IsCallable(callbackfn) is false, throw a TypeError exception.
+      if (
+        typeof callbackfn !== "function" &&
+        Object.prototype.toString.call(callbackfn) !== "[object Function]"
+      ) {
+        throw new TypeError();
+      }
+      // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
+      if (arguments.length > 1) {
+        T = thisArg;
+      }
+      // 6. Let k be 0.
+      k = 0;
+      // 7. Repeat, while k < len
+      while (k < len) {
+        var kValue = void 0;
+        // a. Let Pk be ToString(k).
+        //   This is implicit for LHS operands of the in operator
+        // b. Let kPresent be the result of calling the HasProperty internal
+        //    method of O with argument Pk.
+        //   This step can be combined with c
+        // c. If kPresent is true, then
+        if (k in O) {
+          var testResult = void 0;
+          // i. Let kValue be the result of calling the Get internal method
+          //    of O with argument Pk.
+          kValue = O[k];
+          // ii. Let testResult be the result of calling the Call internal method
+          // of callbackfn with T as the this value if T is not undefined
+          // else is the result of calling callbackfn
+          // and argument list containing kValue, k, and O.
+          if (T) testResult = callbackfn.call(T, kValue, k, O);
+          else testResult = callbackfn(kValue, k, O);
+          // iii. If ToBoolean(testResult) is false, return false.
+          if (!testResult) {
+            return false;
+          }
+        }
+        k++;
+      }
+      return true;
     };
   }
-
-  // OBJECT POLYFILLS
-
-  /**
-   * Object.keys() polyfill
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
-   */
+  // Production steps of ECMA-262, Edition 5, 15.4.4.19
+  // Reference: http://es5.github.io/#x15.4.4.19
+  if (!Array.prototype.map) {
+    Array.prototype.map = function (callback /*, thisArg*/) {
+      var T, A, k;
+      if (this == null) {
+        throw new TypeError("this is null or not defined");
+      }
+      var O = Object(this);
+      var len = O.length >>> 0;
+      // If IsCallable(callback) is false, throw a TypeError exception.
+      // See: http://es5.github.com/#x9.11
+      if (typeof callback !== "function") {
+        throw new TypeError(callback + " is not a function");
+      }
+      // If thisArg was supplied, let T be thisArg; else let T be undefined.
+      if (arguments.length > 1) {
+        T = arguments[1];
+      }
+      A = new Array(len);
+      k = 0;
+      while (k < len) {
+        var kValue, mappedValue;
+        if (k in O) {
+          kValue = O[k];
+          mappedValue = callback.call(T, kValue, k, O);
+          A[k] = mappedValue;
+        }
+        k++;
+      }
+      return A;
+    };
+  }
+  if (!Array.prototype.filter) {
+    Array.prototype.filter = function (func, thisArg) {
+      "use strict";
+      if (!((typeof func === "Function" || typeof func === "function") && this))
+        throw new TypeError();
+      var len = this.length >>> 0;
+      var res = new Array(len), // preallocate array
+        t = this,
+        c = 0,
+        i = -1;
+      var kValue;
+      if (thisArg === undefined) {
+        while (++i !== len) {
+          // checks to see if the key was set
+          if (i in this) {
+            kValue = t[i]; // in case t is changed in callback
+            if (func(t[i], i, t)) {
+              res[c++] = kValue;
+            }
+          }
+        }
+      } else {
+        while (++i !== len) {
+          // checks to see if the key was set
+          if (i in this) {
+            kValue = t[i];
+            if (func.call(thisArg, t[i], i, t)) {
+              res[c++] = kValue;
+            }
+          }
+        }
+      }
+      res.length = c; // shrink down array to proper size
+      return res;
+    };
+  }
+  // https://github.com/jsPolyfill/Array.prototype.findIndex/blob/master/findIndex.js
+  if (!Array.prototype.findIndex) {
+    Array.prototype.findIndex =
+      Array.prototype.findIndex ||
+      function (callback) {
+        if (this === null) {
+          throw new TypeError("Array.prototype.findIndex called on null or undefined");
+        } else if (typeof callback !== "function") {
+          throw new TypeError("callback must be a function");
+        }
+        var list = Object(this);
+        // Makes sures is always has an positive integer as length.
+        var length = list.length >>> 0;
+        var thisArg = arguments[1];
+        for (var i = 0; i < length; i++) {
+          if (callback.call(thisArg, list[i], i, list)) {
+            return i;
+          }
+        }
+        return -1;
+      };
+  }
+  // https://tc39.github.io/ecma262/#sec-array.prototype.find
+  if (!Array.prototype.find) {
+    Array.prototype.find = function (predicate) {
+      if (this == null) {
+        throw new TypeError('"this" is null or not defined');
+      }
+      var o = Object(this);
+      var len = o.length >>> 0;
+      if (typeof predicate !== "function") {
+        throw new TypeError("predicate must be a function");
+      }
+      var thisArg = arguments[1];
+      var k = 0;
+      while (k < len) {
+        var kValue = o[k];
+        if (predicate.call(thisArg, kValue, k, o)) {
+          return kValue;
+        }
+        k++;
+      }
+      return undefined;
+    };
+  }
+  if (!Array.prototype.includes) {
+    //or use Object.defineProperty
+    Array.prototype.includes = function (search) {
+      return !!~this.indexOf(search);
+    };
+  }
+  if (!Array.prototype.last) {
+    Array.prototype.last = function () {
+      if (this.length < 1) {
+        return null;
+      }
+      return this[this.length - 1];
+    };
+  }
+  if (!Array.prototype.forEach) {
+    Array.prototype.forEach = function (callback, thisArg) {
+      var T, k;
+      if (this == null) {
+        throw new TypeError(" this is null or not defined");
+      }
+      var O = Object(this);
+      var len = O.length >>> 0;
+      if (typeof callback !== "function") {
+        throw new TypeError(callback + " is not a function");
+      }
+      if (arguments.length > 1) {
+        T = thisArg;
+      }
+      k = 0;
+      while (k < len) {
+        var kValue = void 0;
+        if (k in O) {
+          kValue = O[k];
+          callback.call(T, kValue, k, O);
+        }
+        k++;
+      }
+    };
+  }
+  if (!Array.from) {
+    Array.from = function (arrayLikeObject) {
+      var arr = [];
+      var thisItem;
+      for (var i = 0; i < arrayLikeObject.length; i++) {
+        thisItem = arrayLikeObject[i];
+        arr.push(thisItem);
+      }
+      return arr;
+    };
+  }
+  // Production steps of ECMA-262, Edition 5, 15.4.4.17
+  // Reference: https://es5.github.io/#x15.4.4.17
+  if (!Array.prototype.some) {
+    Array.prototype.some = function (fun, thisArg) {
+      "use strict";
+      if (this == null) {
+        throw new TypeError("Array.prototype.some called on null or undefined");
+      }
+      if (typeof fun !== "function") {
+        throw new TypeError();
+      }
+      var t = Object(this);
+      var len = t.length >>> 0;
+      for (var i = 0; i < len; i++) {
+        if (i in t && fun.call(thisArg, t[i], i, t)) {
+          return true;
+        }
+      }
+      return false;
+    };
+  }
+  // Production steps of ECMA-262, Edition 5, 15.4.4.21
+  // Reference: https://es5.github.io/#x15.4.4.21
+  // https://tc39.github.io/ecma262/#sec-array.prototype.reduce
+  if (!Array.prototype.reduce) {
+    Array.prototype.reduce = function (callback /*, initialValue*/) {
+      if (this === null) {
+        throw new TypeError("Array.prototype.reduce " + "called on null or undefined");
+      }
+      if (typeof callback !== "function") {
+        throw new TypeError(callback + " is not a function");
+      }
+      // 1. Let O be ? ToObject(this value).
+      var o = Object(this);
+      // 2. Let len be ? ToLength(? Get(O, "length")).
+      var len = o.length >>> 0;
+      // Steps 3, 4, 5, 6, 7
+      var k = 0;
+      var value;
+      if (arguments.length >= 2) {
+        value = arguments[1];
+      } else {
+        while (k < len && !(k in o)) {
+          k++;
+        }
+        // 3. If len is 0 and initialValue is not present,
+        //    throw a TypeError exception.
+        if (k >= len) {
+          throw new TypeError("Reduce of empty array " + "with no initial value");
+        }
+        value = o[k++];
+      }
+      // 8. Repeat, while k < len
+      while (k < len) {
+        // a. Let Pk be ! ToString(k).
+        // b. Let kPresent be ? HasProperty(O, Pk).
+        // c. If kPresent is true, then
+        //    i.  Let kValue be ? Get(O, Pk).
+        //    ii. Let accumulator be ? Call(
+        //          callbackfn, undefined,
+        //          « accumulator, kValue, k, O »).
+        if (k in o) {
+          value = callback(value, o[k], k, o);
+        }
+        // d. Increase k by 1.
+        k++;
+      }
+      // 9. Return accumulator.
+      return value;
+    };
+  }
+  if (!Array.prototype.addUnique) {
+    Array.prototype.addUnique = function (searchElement) {
+      if (this.indexOf(searchElement) < 0) {
+        this.push(searchElement);
+        return true;
+      }
+      return false;
+    };
+  }
+  if (!Array.prototype.removeUnique) {
+    Array.prototype.removeUnique = function (searchElement) {
+      var idx = this.indexOf(searchElement);
+      if (idx > -1) {
+        this.splice(idx, 1);
+        return true;
+      }
+      return false;
+    };
+  }
+  if (!Array.prototype.removeAtIndex) {
+    Array.prototype.removeAtIndex = function (idx) {
+      if (idx > -1) {
+        this.splice(idx, 1);
+        return true;
+      }
+      return false;
+    };
+  }
+  Array.prototype.makeUnique = function () {
+    return this.sort().filter(function (current, index, array) {
+      return index === 0 || current !== array[index - 1];
+    });
+  };
+  Number.prototype.toRadians = function () {
+    return this * (Math.PI / 180);
+  };
+  Number.prototype.toDegrees = function () {
+    return this * (180 / Math.PI);
+  };
+  Number.prototype.padZero = function (decimals) {
+    if (typeof decimals == "undefined") {
+      decimals = 2;
+    }
+    var numStr = this.toString();
+    var decimalsFound = numStr.length;
+    if (decimalsFound >= decimals) {
+      return this;
+    }
+    while (decimalsFound < decimals) {
+      numStr = "0" + numStr;
+      decimalsFound += 1;
+    }
+    return numStr;
+  };
+  function round2(num) {
+    return Math.round(num * 100) / 100;
+  }
   if (!Object.keys) {
     Object.keys = (function () {
-      "use strict";
       var hasOwnProperty = Object.prototype.hasOwnProperty,
         hasDontEnumBug = !{ toString: null }.propertyIsEnumerable("toString"),
         dontEnums = [
@@ -64,63 +405,375 @@ See the LICENSE file for details.
           "constructor",
         ],
         dontEnumsLength = dontEnums.length;
-
       return function (obj) {
-        if (typeof obj !== "function" && (typeof obj !== "object" || obj === null)) {
-          throw new TypeError("Object.keys called on non-object");
+        var wasNull = obj === null;
+        var errorMessageTypeReadout = wasNull
+          ? "input was null"
+          : "input was ".concat(typeof obj);
+        if ((typeof obj !== "object" && typeof obj !== "function") || wasNull)
+          throw new TypeError(
+            "Object.keys called on non-object (".concat(errorMessageTypeReadout, ").")
+          );
+        var result = [];
+        for (var prop in obj) {
+          if (hasOwnProperty.call(obj, prop)) result.push(prop);
         }
-
-        var result = [],
-          prop,
-          i;
-
-        for (prop in obj) {
-          if (hasOwnProperty.call(obj, prop)) {
-            result.push(prop);
-          }
-        }
-
         if (hasDontEnumBug) {
-          for (i = 0; i < dontEnumsLength; i++) {
-            if (hasOwnProperty.call(obj, dontEnums[i])) {
-              result.push(dontEnums[i]);
-            }
+          for (var i = 0; i < dontEnumsLength; i++) {
+            if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);
           }
         }
         return result;
       };
     })();
   }
-
-  // STRING POLYFILLS
-
-  /**
-   * String.prototype.trim() polyfill
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Polyfill
-   */
-  if (!String.prototype.trim) {
-    String.prototype.trim = function () {
-      return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-    };
+  if (typeof Object.create != "function") {
+    Object.create = (function () {
+      var Temp = function () {};
+      return function (prototype) {
+        if (arguments.length > 1) {
+          throw Error("Second argument not supported");
+        }
+        if (prototype !== Object(prototype) && prototype !== null) {
+          throw new TypeError("Argument must be an object or null");
+        }
+        if (prototype === null) {
+          throw Error("null [[Prototype]] not supported");
+        }
+        Temp.prototype = prototype;
+        var result = new Temp();
+        Temp.prototype = null;
+        return result;
+      };
+    })();
   }
-
-  /**
-   * String.prototype.replaceAll() polyfill
-   * https://gomakethings.com/how-to-replace-a-section-of-a-string-with-another-one-with-vanilla-js/
-   * @author Chris Ferdinandi
-   * @license MIT
-   */
-  if (!String.prototype.replaceAll) {
-    String.prototype.replaceAll = function (str, newStr) {
-      // If a regex pattern
-      if (Object.prototype.toString.call(str).toLowerCase() === "[object regexp]") {
-        return this.replace(str, newStr);
+  if (!Object.entries)
+    Object.entries = function (obj) {
+      var ownProps = Object.keys(obj),
+        i = ownProps.length,
+        resArray = new Array(i); // preallocate the Array
+      while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
+      return resArray;
+    };
+  if (typeof Object.toArray != "function") {
+    Object.toArray = (function () {
+      return function (obj) {
+        return Object.keys(obj).map(function (m) {
+          return obj[m];
+        });
+      };
+    })();
+  }
+  if (typeof Object.hasKeys != "function") {
+    Object.hasKeys = (function () {
+      return function (obj) {
+        if (obj == null) {
+          return false;
+        }
+        return Object.keys(obj).length > 0;
+      };
+    })();
+  }
+  if (!("assign" in Object)) {
+    ///@ts-ignore
+    Object.assign = (function (has) {
+      "use strict";
+      return assign;
+      function assign(target, source) {
+        for (var i = 1; i < arguments.length; i++) {
+          copy(target, arguments[i]);
+        }
+        return target;
       }
-
-      // If a string
-      return this.replace(new RegExp(str, "g"), newStr);
+      function copy(target, source) {
+        for (var key in source) {
+          if (has.call(source, key)) {
+            target[key] = source[key];
+          }
+        }
+      }
+    })({}.hasOwnProperty);
+  }
+  function clone(obj) {
+    var copy;
+    // Handle the 3 simple types, and null or undefined
+    if (null == obj || "object" != typeof obj) return obj;
+    // Handle Date
+    if (obj instanceof Date) {
+      copy = new Date();
+      copy.setTime(obj.getTime());
+      return copy;
+    }
+    // Handle Array
+    if (obj instanceof Array) {
+      copy = [];
+      for (var i = 0, len = obj.length; i < len; i++) {
+        copy[i] = clone(obj[i]);
+      }
+      return copy;
+    }
+    // Handle Object
+    if (obj instanceof Object) {
+      copy = {};
+      for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+      }
+      return copy;
+    }
+    throw new Error("Unable to copy obj! Its type isn't supported.");
+  }
+  /**
+   * Transfers properties from one object to another for those properties which are mutually inclusive.
+   * @param srcObj - Object which will be scanned for property keys and values.
+   * @param destObj - Object which will receive source object's values for properties which are also found inside it.
+   * @returns True if changes were made (or values are not primitive), or false if all values are primitive
+   * and satisfy a comparison of equality in values of the property inside both source & target objects.
+   */
+  function copyObjectPropertyValues(srcObj, destObj) {
+    var primitivesAndEqual = true;
+    var srcProp, destProp;
+    for (var all in srcObj) {
+      if (all in destObj) {
+        srcProp = srcObj[all];
+        destProp = destObj[all];
+        if (srcProp !== destProp) {
+          primitivesAndEqual = false;
+        }
+        destObj[all] = srcObj[all];
+      }
+    }
+    return !primitivesAndEqual;
+  }
+  /**
+   * Checks all properties of a source object against a target object and verifies if all source properties are included in the target.
+   * @param srcObj - Object which will be scanned for property keys.
+   * @param destObj - Object which will be checked to see if properties of the source object are found inside it.
+   * @returns True if all source properties are included in the target object.
+   */
+  function checkAllPropertyInclusion(srcObj, destObj) {
+    if (typeof srcObj != "object" || typeof destObj != "object") {
+      return false;
+    }
+    for (var all in srcObj) {
+      if (!(all in destObj)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  String.prototype.trim = function () {
+    return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+  };
+  String.prototype.replaceAt = function (index, replacement) {
+    return (
+      this.substr(0, index) + replacement + this.substr(index + replacement.length)
+    );
+  };
+  String.prototype.hexDecode = function () {
+    var r = "";
+    for (var i = 0; i < this.length; i += 2) {
+      r += unescape("%" + this.substr(i, 2));
+    }
+    return r;
+  };
+  String.prototype.hexEncode = function () {
+    var r = "";
+    var i = 0;
+    var h;
+    while (i < this.length) {
+      h = this.charCodeAt(i++).toString(16);
+      while (h.length < 2) {
+        h = h;
+      }
+      r += h;
+    }
+    return r;
+  };
+  String.prototype.zeroPad = function (num) {
+    var str = this;
+    for (var i = 0; i < num; i++) {
+      if (i > str.length) {
+        str = "0" + str;
+      }
+    }
+    return str;
+  };
+  String.prototype.toNumbers = function () {
+    var number = "0x";
+    var length = this.length;
+    for (var i = 0; i < length; i++) number += this.charCodeAt(i).toString(16);
+    return number;
+  };
+  String.prototype.fromNumbers = function () {
+    var number = this;
+    var string = "";
+    number = number.slice(2);
+    var length = number.length;
+    for (var i = 0; i < length; ) {
+      var code = number.slice(i, (i += 2));
+      string += String.fromCharCode(parseInt(code, 16));
+    }
+    return string;
+  };
+  String.prototype.escapeForRegexp = function () {
+    return this.replace(/([\/.*+?|()[\]{}\\^$])/g, "\\$1");
+  };
+  if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (search, rawPos) {
+      var pos = rawPos > 0 ? rawPos | 0 : 0;
+      return this.substring(pos, pos + search.length) === search;
     };
   }
+  if (!String.prototype.includes) {
+    String.prototype.includes = function (search, start) {
+      "use strict";
+      if (search instanceof RegExp) {
+        throw new TypeError("first argument must not be a RegExp");
+      }
+      if (start === undefined) {
+        start = 0;
+      }
+      return this.indexOf(search, start) !== -1;
+    };
+  }
+  if (!String.prototype.endsWith) {
+    String.prototype.endsWith = function (search, this_len) {
+      if (this_len === undefined || this_len > this.length) {
+        this_len = this.length;
+      }
+      return this.substring(this_len - search.length, this_len) === search;
+    };
+  }
+  function unCamelCaseSplit(str) {
+    if (!str.match(/([a-z][A-Z])/)) {
+      return str;
+    }
+    var newStr =
+      str[0].toUpperCase() +
+      str
+        .split(/([A-Z][a-z]+)/g)
+        .join(" ")
+        .replace(/\s{2}/g, " ")
+        .substr(1)
+        .replace(/\s+$/, "");
+    return newStr;
+  }
+  function capitalize(str) {
+    return str[0].toUpperCase() + str.substr(1);
+  }
+  function replacePercentMessage(str) {
+    var filledMessage = str;
+    for (var i = 1; i < arguments.length; i++) {
+      filledMessage = filledMessage.replace(
+        new RegExp("(%" + i.toString() + ")", "g"),
+        arguments[i].toString()
+      );
+    }
+    return filledMessage;
+  }
+  /**
+   * Determine the base calling script from the current stack.
+   * @returns {String} Initial script name.
+   */
+  function resolveBaseScriptFromStack() {
+    var stack = $.stack.split("\n");
+    var foo, bar;
+    for (var i = 0; i < stack.length; i++) {
+      foo = stack[i];
+      if (foo[0] == "[" && foo[foo.length - 1] == "]") {
+        bar = foo.slice(1, foo.length - 1);
+        if (isNaN(bar)) {
+          break;
+        }
+      }
+    }
+    return bar;
+  }
+  /**
+   * Module for easy file logging from within Adobe ExtendScript.
+   * @param {String} fp File path for the log file. Defaults to `Folder.userData/{base_script_file_name}.log`.
+   * @param {String} mode Optional log file write mode. Write `w` mode or append `a` mode. If write mode 'w', the log file will be overwritten on each script run. Defaults to `w`.
+   * @param {Number} sizeLimit Log file size limit (in bytes) for rotation. Defaults to 5,000,000.
+   * @param {Boolean} console Forward calls to `Logger.log()` to the JavaScript Console via `$.writeln()`. Defaults to `false`.
+   */
+  function Logger(fp, mode, sizeLimit, console) {
+    if (typeof fp == "undefined")
+      fp = Folder.userData + "/" + resolveBaseScriptFromStack() + ".log";
+    this.mode = typeof mode !== "undefined" ? mode.toLowerCase() : "w";
+    this.console = typeof console !== "undefined" ? console : false;
+    this.file = new File(fp);
+    this.badPath = false;
+    // rotate log if too big
+    sizeLimit = typeof sizeLimit !== "undefined" ? Number(sizeLimit) : 5000000;
+    if (this.file.length > sizeLimit) {
+      var ts = Date.now();
+      var rotatedFile = new File(this.file + ts + ".bak");
+      this.file.copy(rotatedFile);
+      this.file.remove();
+      alert(this.file);
+    }
+  }
+  Logger.prototype = {
+    /**
+     * Backup the log file.
+     * @returns {FileObject} Backup file object.
+     */
+    backup: function () {
+      var backupFile = new File(this.file + ".bak");
+      this.file.copy(backupFile);
+      return backupFile;
+    },
+    /**
+     * Write data to the log file.
+     * @param {String} text One or more strings to write, which are concatenated to form a single string.
+     * @returns {Boolean} Returns true if log file is successfully written, false if unsuccessful.
+     */
+    log: function (text) {
+      // no need to keep alerting when the log path is bad
+      if (this.badPath) return false;
+      var f = this.file;
+      var m = this.mode;
+      var ts = new Date().toLocaleString();
+      // ensure parent folder exists
+      if (!f.parent.exists) {
+        if (!f.parent.parent.exists) {
+          alert("Bad log file path!\n'" + this.file + "'");
+          this.badPath = true;
+          return false;
+        }
+        f.parent.create();
+      }
+      // grab all arguments
+      var args = ["[" + ts + "]"];
+      for (var i = 0; i < arguments.length; ++i) args.push(arguments[i]);
+      // write the data
+      try {
+        f.encoding = "UTF-8";
+        f.open(m);
+        f.writeln(args.join(" "));
+      } catch (e) {
+        $.writeln("Error writing file:\n" + f);
+        return false;
+      } finally {
+        f.close();
+      }
+      // write `text` to the console if requested
+      if (this.console) $.writeln(args.slice(1, args.length).join(" "));
+      return true;
+    },
+    /**
+     * Open the log file.
+     */
+    open: function () {
+      this.file.execute();
+    },
+    /**
+     * Reveal the log file in the platform-specific file browser.
+     */
+    reveal: function () {
+      this.file.parent.execute();
+    },
+  };
   /**
    * Try and determine which if a localized string should be used or just the value.
    * @param command Command in question.
@@ -138,24 +791,19 @@ See the LICENSE file for details.
     }
     return s;
   }
-
   function findLastCarrot(s) {
     var p = 0;
     var re = / > /g;
-
     if (re.test(s)) {
       var match = s.search(re);
       while (true) {
         p += match + 3;
         match = s.substring(p).search(re);
-
         if (match == -1) break;
       }
     }
-
     return p;
   }
-
   /**
    * Generate a unique command id for the data model.
    * @param   s Base string to generate the id from.
@@ -163,7 +811,7 @@ See the LICENSE file for details.
    */
   function generateCommandId(s) {
     var re = new RegExp("\\s|\\.", "gi");
-    var id = s.replaceAll(re, "_");
+    var id = s.replace(re, "_");
     var n = 0;
     while (commandsData.hasOwnProperty(id)) {
       n++;
@@ -171,7 +819,6 @@ See the LICENSE file for details.
     }
     return id;
   }
-
   /**
    * Ask the user if they want to add their new commands to their startup screen.
    * @param newCommandIds Ids of the new commands.
@@ -186,9 +833,7 @@ See the LICENSE file for details.
         newCommandIds.splice(i, 1);
       }
     }
-
     if (!newCommandIds.length) return;
-
     if (
       !confirm(
         localize(strings.cd_add_to_startup),
@@ -199,7 +844,6 @@ See the LICENSE file for details.
       return false;
     prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
   }
-
   /**
    * Get every font used inside of an the Ai document.
    * @param {Object} doc Ai document.
@@ -215,7 +859,6 @@ See the LICENSE file for details.
     }
     return fonts;
   }
-
   /**
    * Reset view and zoom in on a specific page item.
    * @param pageItem Page item to focus on.
@@ -225,17 +868,14 @@ See the LICENSE file for details.
     var screenBounds = app.activeDocument.views[0].bounds;
     var screenW = screenBounds[2] - screenBounds[0];
     var screenH = screenBounds[1] - screenBounds[3];
-
     // get the (true) visible bounds of the returned object
     var bounds = pageItem.visibleBounds;
     var itemW = bounds[2] - bounds[0];
     var itemH = bounds[1] - bounds[3];
     var itemCX = bounds[0] + itemW / 2;
     var itemCY = bounds[1] - itemH / 2;
-
     // reset the current view to center of selected object
     app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
-
     // calculate new zoom ratio to fit view to selected object
     var zoomRatio;
     if (itemW * (screenH / screenW) >= itemH) {
@@ -243,12 +883,10 @@ See the LICENSE file for details.
     } else {
       zoomRatio = screenH / itemH;
     }
-
     // set zoom to fit selected object plus a bit of padding
     var padding = 0.9;
     app.activeDocument.views[0].zoom = zoomRatio * padding;
   }
-
   /**
    * Get info for all placed files for the current document.
    * @returns {Array} Placed file information.
@@ -258,11 +896,9 @@ See the LICENSE file for details.
       ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
     //Read xmp string - You can see document XMP in Illustrator -> File-> File Info -> Raw Data
     var xmp = new XMPMeta(app.activeDocument.XMPString);
-
     var names = [];
     var allFilePaths = getAllPlacedFilePaths(xmp);
     // var brokenFilePaths = getBrokenFilePaths(xmp);
-
     // convert path to file object for property access
     var fileObjects = [];
     for (var i = 0; i < allFilePaths.length; i++) {
@@ -290,7 +926,6 @@ See the LICENSE file for details.
     }
     return names;
   }
-
   /**
    * Great trick to get all placed files (linked and embeded) @pixxxelschubser
    * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
@@ -309,7 +944,6 @@ See the LICENSE file for details.
     }
     return paths;
   }
-
   /**
    * Check for any placed files with broken links in the current document.
    * @param   {String} xmp Document xml data.
@@ -325,7 +959,6 @@ See the LICENSE file for details.
     }
     return paths;
   }
-
   /**
    * Check to make sure the command is available in the system Ai version.
    * @param command Command to check.
@@ -339,7 +972,6 @@ See the LICENSE file for details.
       return false;
     return true;
   }
-
   /**
    * Compare semantic version numbers.
    * @param {String} a Semantic version number.
@@ -350,35 +982,28 @@ See the LICENSE file for details.
     if (a === b) {
       return 0;
     }
-
     var a_components = a.split(".");
     var b_components = b.split(".");
-
     var len = Math.min(a_components.length, b_components.length);
-
     // loop while the components are equal
     for (var i = 0; i < len; i++) {
       // A bigger than B
       if (parseInt(a_components[i]) > parseInt(b_components[i])) {
         return 1;
       }
-
       // B bigger than A
       if (parseInt(a_components[i]) < parseInt(b_components[i])) {
         return -1;
       }
     }
-
     // If one's a prefix of the other, the longer one is greater.
     if (a_components.length > b_components.length) {
       return 1;
     }
-
     if (a_components.length < b_components.length) {
       return -1;
     }
   }
-
   /**
    * Convert Ai points unit to another api ruler constant.
    * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
@@ -399,7 +1024,6 @@ See the LICENSE file for details.
     };
     return points / conversions[unit];
   }
-
   /**
    * Return the names of each object in an Ai collection object.
    * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
@@ -423,7 +1047,6 @@ See the LICENSE file for details.
     }
     return sorted ? names.sort() : names;
   }
-
   /**
    * Present File.openDialog() for user to select files to load.
    * @param   {String}  prompt        Prompt for dialog.
@@ -445,7 +1068,6 @@ See the LICENSE file for details.
     }
     return results;
   }
-
   /**
    * Simulate a key press for Windows users.
    *
@@ -484,7 +1106,6 @@ See the LICENSE file for details.
       f.close();
     }
   }
-
   /**
    * Open a url in the system browser.
    * @param {String} url URL to open.
@@ -500,121 +1121,7 @@ See the LICENSE file for details.
     html.close();
     html.execute();
   }
-  /**
-   * Determine the base calling script from the current stack.
-   * @returns {String} Initial script name.
-   */
-  function resolveBaseScriptFromStack() {
-    var stack = $.stack.split("\n");
-    var foo, bar;
-    for (var i = 0; i < stack.length; i++) {
-      foo = stack[i];
-      if (foo[0] == "[" && foo[foo.length - 1] == "]") {
-        bar = foo.slice(1, foo.length - 1);
-        if (isNaN(bar)) {
-          break;
-        }
-      }
-    }
-    return bar;
-  }
-
-  /**
-   * Module for easy file logging from within Adobe ExtendScript.
-   * @param {String} fp File path for the log file. Defaults to `Folder.userData/{base_script_file_name}.log`.
-   * @param {String} mode Optional log file write mode. Write `w` mode or append `a` mode. If write mode 'w', the log file will be overwritten on each script run. Defaults to `w`.
-   * @param {Number} sizeLimit Log file size limit (in bytes) for rotation. Defaults to 5,000,000.
-   * @param {Boolean} console Forward calls to `Logger.log()` to the JavaScript Console via `$.writeln()`. Defaults to `false`.
-   */
-  function Logger(fp, mode, sizeLimit, console) {
-    if (typeof fp == "undefined")
-      fp = Folder.userData + "/" + resolveBaseScriptFromStack() + ".log";
-
-    this.mode = typeof mode !== "undefined" ? mode.toLowerCase() : "w";
-    this.console = typeof console !== "undefined" ? console : false;
-    this.file = new File(fp);
-    this.badPath = false;
-
-    // rotate log if too big
-    sizeLimit = typeof sizeLimit !== "undefined" ? Number(sizeLimit) : 5000000;
-    if (this.file.length > sizeLimit) {
-      var ts = Date.now();
-      var rotatedFile = new File(this.file + ts + ".bak");
-      this.file.copy(rotatedFile);
-      this.file.remove();
-      alert(this.file);
-    }
-  }
-
-  Logger.prototype = {
-    /**
-     * Backup the log file.
-     * @returns {FileObject} Backup file object.
-     */
-    backup: function () {
-      var backupFile = new File(this.file + ".bak");
-      this.file.copy(backupFile);
-      return backupFile;
-    },
-    /**
-     * Write data to the log file.
-     * @param {String} text One or more strings to write, which are concatenated to form a single string.
-     * @returns {Boolean} Returns true if log file is successfully written, false if unsuccessful.
-     */
-    log: function (text) {
-      // no need to keep alerting when the log path is bad
-      if (this.badPath) return false;
-
-      var f = this.file;
-      var m = this.mode;
-      var ts = new Date().toLocaleString();
-
-      // ensure parent folder exists
-      if (!f.parent.exists) {
-        if (!f.parent.parent.exists) {
-          alert("Bad log file path!\n'" + this.file + "'");
-          this.badPath = true;
-          return false;
-        }
-        f.parent.create();
-      }
-
-      // grab all arguments
-      var args = ["[" + ts + "]"];
-      for (var i = 0; i < arguments.length; ++i) args.push(arguments[i]);
-
-      // write the data
-      try {
-        f.encoding = "UTF-8";
-        f.open(m);
-        f.writeln(args.join(" "));
-      } catch (e) {
-        $.writeln("Error writing file:\n" + f);
-        return false;
-      } finally {
-        f.close();
-      }
-
-      // write `text` to the console if requested
-      if (this.console) $.writeln(args.slice(1, args.length).join(" "));
-
-      return true;
-    },
-    /**
-     * Open the log file.
-     */
-    open: function () {
-      this.file.execute();
-    },
-    /**
-     * Reveal the log file in the platform-specific file browser.
-     */
-    reveal: function () {
-      this.file.parent.execute();
-    },
-  };
   // FILE/FOLDER OPERATIONS
-
   /**
    * Setup folder object or create if doesn't exist.
    * @param   {String} path System folder path.
@@ -625,7 +1132,6 @@ See the LICENSE file for details.
     if (!folder.exists) folder.create();
     return folder;
   }
-
   /**
    * Setup file object.
    * @param   {Object} path Folder object where file should exist,
@@ -635,7 +1141,6 @@ See the LICENSE file for details.
   function setupFileObject(path, name) {
     return new File(path + "/" + name);
   }
-
   /**
    * Write string data to disk.
    * @param {String} data Data to be written.
@@ -655,7 +1160,6 @@ See the LICENSE file for details.
       f.close();
     }
   }
-
   /**
    * Read ExtendScript "json-like" data from file.
    * @param   {Object} f File object to read.
@@ -675,7 +1179,6 @@ See the LICENSE file for details.
     obj = eval(json);
     return obj;
   }
-
   /**
    * Write ExtendScript "json-like" data to disk.
    * @param {Object} obj Data to be written.
@@ -694,7 +1197,6 @@ See the LICENSE file for details.
     }
   }
   // GENERATED FROM CSV DATA FILES
-
   var strings = {
     about: {
       en: "About",
@@ -753,7 +1255,11 @@ See the LICENSE file for details.
     bookmark: { en: "Bookmark", de: "Lesezeichen", ru: "Bookmark" },
     Bookmarks: { en: "Bookmarks", de: "Lesezeichen", ru: "Bookmarks" },
     builtin: { en: "Built-In", de: "Built-In", ru: "Built-In" },
-    cancel: { en: "Cancel", de: "Abbrechen", ru: "\u041e\u0442\u043c\u0435\u043d\u0430" },
+    cancel: {
+      en: "Cancel",
+      de: "Abbrechen",
+      ru: "\u041e\u0442\u043c\u0435\u043d\u0430",
+    },
     cd_active_document_required: {
       en: "Command '%1' requires an active document. Continue Anyway?",
       de: "Der Befehl '%1' erfordert ein ge\u00f6ffnetes Dokument. Trotzdem fortfahren?",
@@ -764,7 +1270,11 @@ See the LICENSE file for details.
       de: "Der Befehl '%1' erfordert eine Auswahl. Trotzdem fortfahren?",
       ru: "Command '%1' requires an active selection. Continue Anyway?",
     },
-    cd_all: { en: "Built-In Commands", de: "Built-In Commands", ru: "Built-In Commands" },
+    cd_all: {
+      en: "Built-In Commands",
+      de: "Built-In Commands",
+      ru: "Built-In Commands",
+    },
     cd_clear_history_confirm: {
       en: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
       de: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
@@ -1270,7 +1780,6 @@ See the LICENSE file for details.
     Workflows: { en: "Workflows", de: "Arbeitsabl\u00e4ufe", ru: "Workflows" },
   };
   // GENERATED FROM CSV DATA FILES
-
   var commandsData = {
     menu_new: {
       id: "menu_new",
@@ -10531,16 +11040,12 @@ See the LICENSE file for details.
     },
   };
   // CONFIGURATION
-
   // DEVELOPMENT SETTINGS
-
   // localization testing
   // $.locale = false;
   // $.locale = "de";
   // $.locale = "ru";
-
   // ENVIRONMENT VARIABLES
-
   var aiVersion = parseFloat(app.version);
   var locale = $.locale;
   var currentLocale = locale.split("_")[0];
@@ -10548,13 +11053,11 @@ See the LICENSE file for details.
   var sysOS = /mac/i.test(os) ? "mac" : "win";
   var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
   var settingsRequiredUpdateVersion = "0.10.0";
-
   // DEVELOPMENT SETTINGS
   var devMode = $.getenv("USER") === "jbd" ? true : false;
   var debugLogging = $.getenv("AICP_DEBIG_LOGGING") === "true" ? true : false;
   var logFilePath = Folder.desktop + "/AiCommandPalette.log";
   var logger;
-
   if (devMode || debugLogging) {
     var logFilePath = Folder.desktop + "/AiCommandPalette.log";
     logger = new Logger(logFilePath, "a", undefined, true);
@@ -10565,11 +11068,8 @@ See the LICENSE file for details.
       $.writeln(text);
     };
   }
-
   logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
-
   // DIALOG SETTINGS
-
   var paletteSettings = {};
   paletteSettings.paletteWidth = 600;
   // was informed windows and mac have different listbox row hights so this makes sure exactly 9 rows show
@@ -10580,11 +11080,8 @@ See the LICENSE file for details.
     paletteSettings.paletteWidth,
     paletteSettings.paletteHeight,
   ];
-
   // COMMAND PALETTE COLUMN SETS
-
   paletteSettings.columnSets = {};
-
   paletteSettings.columnSets.default = {};
   paletteSettings.columnSets.default[localize(strings.name_title_case)] = {
     width: 450,
@@ -10594,7 +11091,6 @@ See the LICENSE file for details.
     width: 100,
     key: "type",
   };
-
   paletteSettings.columnSets.customCommand = {};
   paletteSettings.columnSets.customCommand[localize(strings.name_title_case)] = {
     width: 450,
@@ -10604,18 +11100,13 @@ See the LICENSE file for details.
     width: 100,
     key: "actionType",
   };
-
   var visibleListItems = 9;
   var mostRecentCommandsCount = 25;
-
   // MISCELLANEOUS SETTINGS
-
   var namedObjectLimit = 2000;
   var regexEllipsis = /\.\.\.$/;
   var regexCarrot = /\s>\s/g;
-
   // DEVELOPMENT HELPERS
-
   var devInfo = {};
   devInfo.folder = function () {
     return userPrefsFolder;
@@ -10635,12 +11126,12 @@ See the LICENSE file for details.
     writeJSONData(commandsData, this.commandsFile());
   };
   devInfo.log = function (data, fileName) {
-    fileName = typeof fileName !== "undefined" ? fileName : "log_" + Date.now() + ".txt";
+    fileName =
+      typeof fileName !== "undefined" ? fileName : "log_" + Date.now() + ".txt";
     var folder = this.folder();
     var file = setupFileObject(folder, fileName);
     writeData(data, file.fsName);
   };
-
   /**
    * Show an alert with object data.
    * @param obj Command to show data about.
@@ -10660,19 +11151,15 @@ See the LICENSE file for details.
     }
     alert(s);
   }
-
   //USER PREFERENCES
-
   // keeping around for alerting users of breaking changes
   var settingsFolderName = "JBD";
   var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
   var settingsFileName = "AiCommandPaletteSettings.json";
-
   // new v0.10.0 preferences
   var userPrefsFolderName = "JBD";
   var userPrefsFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
   var userPrefsFileName = "Preferences.json";
-
   // setup the base prefs model
   var prefs = {};
   prefs.startupCommands = null;
@@ -10689,7 +11176,6 @@ See the LICENSE file for details.
   prefs.locale = locale;
   prefs.aiVersion = aiVersion;
   prefs.timestamp = Date.now();
-
   var userPrefs = {};
   userPrefs.folder = function () {
     return userPrefsFolder;
@@ -10702,20 +11188,16 @@ See the LICENSE file for details.
   userPrefs.load = function (inject) {
     var file = this.file();
     logger.log("loading user preferences:", file.fsName);
-
     // if the prefs files doesn't exist, check for old 'settings' file
     if (!file.exists) {
       logger.log("no user prefs files found, checking for old 'settings' file");
       oldFile = setupFileObject(settingsFolder, settingsFileName);
-
       // no need to continue if no old 'settings' file is present
       if (!oldFile.exists) return;
-
       alert(localize(strings.pref_file_non_compatible));
       var backupFile = new File(oldFile + ".bak");
       logger.log("backing up old `settings` file to: ", backupFile.fsName);
       oldFile.copy(backupFile);
-
       try {
         updateOldPreferences(oldFile);
       } catch (e) {
@@ -10725,7 +11207,6 @@ See the LICENSE file for details.
       }
       alert(localize(strings.pref_update_complete));
     }
-
     if (file.exists) {
       var loadedData, prop, propsToSkip;
       try {
@@ -10733,18 +11214,15 @@ See the LICENSE file for details.
         if (loadedData == {}) {
           return;
         }
-
         // alert user if locale or os of current machine doesn't match loaded prefs
         // TODO: break when OS is updated, check for better machine identifier
         // if (locale != loadedData.locale || os != loadedData.os)
         //   alert(localize(strings.user_prefs_inconsistency));
-
         propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
         for (prop in loadedData) {
           if (propsToSkip.includes(prop)) continue;
           prefs[prop] = loadedData[prop];
         }
-
         if (inject) {
           this.inject();
         }
@@ -10786,23 +11264,18 @@ See the LICENSE file for details.
     logger.log("revealing user prefs");
     folder.execute();
   };
-
   function updateOldPreferences(oldFile) {
     logger.log("converting old 'settings' file to new user prefs file");
-
     // read old data
     var data = readJSONData(oldFile);
-
     // no need to continue if we don't know the old version
     if (!data.settings.hasOwnProperty("version")) return;
-
     if (semanticVersionComparison(data.settings.version, "0.8.1") == -1) {
       // build lut to convert old localized command strings to new command ids
       var commandsLUT = {};
       for (var command in commandsData) {
         commandsLUT[localize(commandsData[command].name)] = command;
       }
-
       // update bookmarks
       updatedBookmarks = {};
       for (var bookmark in data.commands.bookmark) {
@@ -10813,7 +11286,6 @@ See the LICENSE file for details.
         };
       }
       data.commands.bookmark = updatedBookmarks;
-
       // update scripts
       updatedScripts = {};
       for (var script in data.commands.script) {
@@ -10823,7 +11295,6 @@ See the LICENSE file for details.
         };
       }
       data.commands.script = updatedScripts;
-
       // update workflows
       updatedWorkflows = {};
       updatedActions = [];
@@ -10845,7 +11316,6 @@ See the LICENSE file for details.
         };
       }
       data.commands.workflow = updatedWorkflows;
-
       // update hidden commands
       updatedHiddenCommands = [];
       for (var i = 0; i < data.settings.hidden.length; i++) {
@@ -10854,7 +11324,6 @@ See the LICENSE file for details.
         }
       }
       data.settings.hidden = updatedHiddenCommands;
-
       // update recent commands
       updatedRecentCommands = [];
       for (var i = 0; i < data.recent.commands.length; i++) {
@@ -10863,14 +11332,11 @@ See the LICENSE file for details.
         }
       }
       data.recent.commands = updatedRecentCommands;
-
       // update version number so subsequent updates can be applied
       data.settings.version = "0.8.1";
     }
-
     if (semanticVersionComparison(data.settings.version, "0.10.0") == -1) {
       var startupCommands = [];
-
       // update bookmarks
       var bookmarks = [];
       var f, bookmark;
@@ -10892,7 +11358,6 @@ See the LICENSE file for details.
         startupCommands.push(prop);
       }
       prefs.bookmarks = bookmarks;
-
       // update scripts
       var scripts = [];
       var f, script;
@@ -10914,7 +11379,6 @@ See the LICENSE file for details.
         startupCommands.push(prop);
       }
       prefs.scripts = scripts;
-
       // update workflows
       var workflows = [];
       var workflow, actions, action;
@@ -10930,7 +11394,6 @@ See the LICENSE file for details.
             action = oldCommandIdsLUT[action];
           actions.push(action);
         }
-
         var workflow = {
           id: prop,
           name: prop,
@@ -10944,32 +11407,26 @@ See the LICENSE file for details.
         startupCommands.push(prop);
       }
       prefs.workflows = workflows;
-
       // add the base startup commands
       startupCommands = startupCommands.concat([
         "builtin_recentCommands",
         "config_settings",
       ]);
       prefs.startupCommands = startupCommands;
-
       // update hidden commands
       var hiddenCommands = data.settings.hidden;
       prefs.hiddenCommands = hiddenCommands;
-
       userPrefs.save();
     }
   }
   //USER HISTORY
-
   var userHistoryFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
   var userHistoryFileName = "History.json";
-
   // setup the base prefs model
   var history = [];
   var recentCommands = {};
   var mostRecentCommands = [];
   var latches = {};
-
   var userHistory = {};
   userHistory.folder = function () {
     return userHistoryFolder;
@@ -11051,17 +11508,14 @@ See the LICENSE file for details.
     folder.execute();
   };
   //USER ACTIONS
-
   var userActions = {};
   userActions.loadedActions = false;
   userActions.load = function () {
     logger.log("loading user actions");
-
     var ct = 0;
     var currentPath, set, actionCount, name;
     var pref = app.preferences;
     var path = "plugin/Action/SavedSets/set-";
-
     for (var i = 1; i <= 100; i++) {
       currentPath = path + i.toString() + "/";
       // get action sets
@@ -11076,7 +11530,9 @@ See the LICENSE file for details.
       for (var j = 1; j <= actionCount; j++) {
         loc = {};
         obj = {};
-        name = pref.getStringPreference(currentPath + "action-" + j.toString() + "/name");
+        name = pref.getStringPreference(
+          currentPath + "action-" + j.toString() + "/name"
+        );
         id = generateCommandId("action_" + set + "_" + name.toLowerCase());
         id = set + "_" + name; // FIXME: why?
         obj["id"] = id;
@@ -11092,17 +11548,97 @@ See the LICENSE file for details.
     }
     this.loadedActions = ct > 0;
   };
+  /**
+   * Filter the supplied commands by multiple factors.
+   * @param   {Array}   commands             Command `id`s to filter through.
+   * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+   * @param   {Boolean} showHidden           Should user-hidden commands be included?
+   * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
+   * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
+   * @returns {Array}                        Filtered command ids.
+   */
+  function filterCommands(
+    commands,
+    types,
+    showHidden,
+    showNonRelevant,
+    hideSpecificCommands
+  ) {
+    var filteredCommands = [];
+    var id, command;
+    commands = commands ? commands : Object.keys(commandsData);
+    for (var i = 0; i < commands.length; i++) {
+      id = commands[i];
+      if (!commandsData.hasOwnProperty(id)) continue;
+      command = commandsData[id];
+      // make sure Ai version meets command requirements
+      if (!commandVersionCheck(command)) continue;
+      // skip any hidden commands
+      if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
+      // skip any non relevant commands
+      if (!showNonRelevant && !relevantCommand(command)) continue;
+      // skip any specific commands name in hideSpecificCommands
+      if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
+      // then check to see if the command should be included
+      if (!types || types.includes(command.type)) filteredCommands.push(id);
+    }
+    return filteredCommands;
+  }
+  /**
+   * Determine is a command is relevant at the current moment.
+   * @param   {Object}  command Command object to check.
+   * @returns {Boolean}         If command is relevant.
+   */
+  function relevantCommand(command) {
+    // hide commands requiring an active documents if requested
+    if (command.docRequired && app.documents.length < 1) return false;
+    // hide commands requiring an active selection if requested
+    if (command.selRequired && app.activeDocument.selection.length < 1) return false;
+    // hide `Edit Workflow...` command if no workflows
+    if (command.id == "builtin_editWorkflow" && prefs.workflows.length < 1)
+      return false;
+    // hide `All Workflows...` command if no workflows
+    if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1)
+      return false;
+    // hide `All Scripts...` command if no scripts
+    if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
+    // hide `All Bookmarks...` command if no bookmarks
+    if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1)
+      return false;
+    // hide `All Actions...` command if no actions
+    if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
+    // hide `Edit Picker...` command if no pickers
+    if (command.id == "builtin_editPicker" && prefs.pickers.length < 1) return false;
+    // hide `All Pickers...` command if no pickers
+    if (command.id == "builtin_allPickers" && prefs.pickers.length < 1) return false;
+    // hide `Enable Fuzzy Matching` command if already enabled
+    if (command.id == "config_enableFuzzyMatching" && prefs.fuzzy) return false;
+    // hide `Disable Fuzzy Matching` command if already disabled
+    if (command.id == "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
+    // hide `Enable Debug Logging` command if already enabled
+    if (command.id == "config_enableDebugLogging" && debugLogging) return false;
+    // hide `Disable Debug Logging` command if already disabled
+    if (command.id == "config_disableDebugLogging" && !debugLogging) return false;
+    // hide `Unhide Commands...` command if no hidden commands
+    if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
+      return false;
+    // hide `Recent Commands...` and `Clear History` if no recent commands
+    if (
+      command.id == "builtin_recentCommands" &&
+      Object.keys(recentCommands).length === 0
+    ) {
+      return false;
+    }
+    return true;
+  }
   function fuzzy(q, commands) {
     function stripRegExpChars(input) {
       // Regex pattern to match any of the characters that have special meaning in a regex
       return input.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, "");
     }
-
     q = stripRegExpChars(q.toLowerCase());
-
     var scores = {};
     var matches = [];
-
     var id, command, commandName, spans, score, latch, recent, bonus;
     for (var i = 0; i < commands.length; i++) {
       // get command info
@@ -11110,60 +11646,45 @@ See the LICENSE file for details.
       command = commandsData[id];
       commandName = determineCorrectString(command, "name").toLowerCase();
       if (commandName == "") commandName = id.toLowerCase().replace("_", " ");
-
       // strip regex protected characters
       commandName = stripRegExpChars(commandName);
-
       // strip out ellipsis for correct full word check
       commandName = commandName.replace(regexEllipsis, "");
-
       // find fuzzy matches
       spans = findMatches(q.split(" "), commandName);
-
       // no need to track scores of commands without matches
       if (!spans.length) continue;
-
       // calculate the command score
       bonus = 0;
       score = calculateScore(commandName, spans);
-
       // // increase score if latched query
       if (latches.hasOwnProperty(q) && commands.includes(latches[q])) {
         latch = true;
         bonus += 1;
       }
-
       // increase score recent command
       if (recentCommands.hasOwnProperty(command.id)) {
         recent = true;
         bonus += 0.5;
       }
-
       scores[id] = score + bonus;
-
       matches.push(id);
     }
-
     matches.sort(function (a, b) {
       return scores[b] - scores[a];
     });
-
     return matches;
   }
-
   function calculateScore(command, spans) {
     var lastCarrot = findLastCarrot(command);
-
     var score = 0;
     var s, e, wordStart, wordEnd;
     for (var i = 0; i < spans.length; i++) {
       s = spans[i][0];
       e = spans[i][1];
-
       // check for full word
       wordStart = s == 0 || command.charAt(s - 1) == " " ? true : false;
       wordEnd = e == command.length || command.charAt(e) == " " ? true : false;
-
       if (wordStart && wordEnd) {
         score += (e - s) * 3;
       } else if (wordStart) {
@@ -11171,34 +11692,28 @@ See the LICENSE file for details.
       } else {
         score += e - s;
       }
-
       if (s >= lastCarrot) {
         score += 0.5;
       }
     }
     return score;
   }
-
   function findMatches(chunks, str) {
     var spans = [];
-
     var chunk, s, e, offset, lastSpan;
     for (var i = 0; i < chunks.length; i++) {
       var chunk = chunks[i];
       if (!chunk) {
         continue;
       }
-
       s = 0;
       e = 1;
       offset = 0;
       lastSpan = null;
-
       var chars, match, spanStart, spanEnd;
       while (true) {
         chars = chunk.substring(s, e);
         match = str.substring(offset).match(chars);
-
         if (match) {
           spanStart = match.index + offset;
           spanEnd = spanStart + chars.length;
@@ -11209,19 +11724,15 @@ See the LICENSE file for details.
             spans = [];
             break;
           }
-
           s = e - 1;
-
           if (lastSpan !== null) {
             var spanStart = lastSpan[0];
             var spanEnd = lastSpan[1];
             offset = spanEnd;
             spans.push([spanStart, spanEnd]);
           }
-
           lastSpan = null;
         }
-
         if (e === chunk.length + 1) {
           if (lastSpan !== null) {
             var hls = lastSpan[0];
@@ -11248,26 +11759,21 @@ See the LICENSE file for details.
     query = query.toLowerCase();
     var words = query.split(" ");
     var id, command, name, type, score, strippedName;
-
     // query latching
     if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
       scores[latches[query]] = 1000;
       matches.push(latches[query]);
     }
-
     for (var i = 0; i < commands.length; i++) {
       id = commands[i];
       command = commandsData[id];
       score = 0;
       name = determineCorrectString(command, "name").toLowerCase();
-
       // escape hatch
       if (name == "") name = id.toLowerCase().replace("_", " ");
-
       type = strings.hasOwnProperty(command.type)
         ? localize(strings[command.type]).toLowerCase()
         : command.type.toLowerCase();
-
       // check for exact match
       if (
         query === name ||
@@ -11276,26 +11782,20 @@ See the LICENSE file for details.
       ) {
         score += word.length;
       }
-
       // strip junk from command name
       strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
-
       // add the command type to the name if user requested searching type
       if (prefs.searchIncludesType) name = name.concat(" ", type);
       // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
-
       // check for singular word matches
       var word, re;
       for (var n = 0; n < words.length; n++) {
         word = words[n];
         if (!word) continue;
-
         re = new RegExp("\\b" + word, "gi");
-
         // check for a match at the beginning of a word
         if (re.test(name) || re.test(strippedName)) score += word.length;
       }
-
       // updated scores for matches
       if (score > 0) {
         // increase score if command found in recent commands
@@ -11311,7 +11811,6 @@ See the LICENSE file for details.
         if (scores[id] > maxScore) maxScore = scores[id];
       }
     }
-
     /* Sort matched by their respective score */
     function sortByScore(arr) {
       for (var i = 0; i < arr.length; i++) {
@@ -11325,15 +11824,12 @@ See the LICENSE file for details.
       }
       return arr;
     }
-
     return sortByScore(matches);
   }
   // CUSTOM SCRIPTUI FILTERABLE LISTBOX
-
   // set flags for query arrow navigation fix
   var fromQuery = false;
   var fromQueryShiftKey = false;
-
   /**
    * Custom wrapper for a ScriptUI Listbox.
    * @param {Array}   commands    Commands to load into the list box.
@@ -11363,7 +11859,6 @@ See the LICENSE file for details.
     this.listeners = listeners;
     this.listbox = this.make(commands, bounds);
   }
-
   ListBoxWrapper.prototype = {
     /**
      * Initialize a new ScriptUI listbox, load the initial commands, and attach event listeners.
@@ -11381,7 +11876,6 @@ See the LICENSE file for details.
         columnWidths.push(this.columns[column].width);
         columnKeys.push(this.columns[column].key);
       }
-
       var listbox = this.container.add("listbox", bounds, undefined, {
         name: this.name,
         numberOfColumns: columnTitles.length,
@@ -11392,12 +11886,10 @@ See the LICENSE file for details.
       });
       listbox.frameStart = 0;
       if (this.helptip) listbox.helpTip = this.helptip;
-
       if (commands && commands.length) {
         this.loadCommands(listbox, commands, columnKeys);
         listbox.selection = 0;
       }
-
       this.addListeners(listbox);
       return listbox;
     },
@@ -11426,11 +11918,9 @@ See the LICENSE file for details.
         } else {
           command = commandsData[id];
           name = determineCorrectString(command, "name");
-
           // add base item with info from first column
           str = determineCorrectString(command, columnKeys[0]);
           item = listbox.add("item", str ? str : name);
-
           // add remaining columns as subItems
           for (var j = 1; j < columnKeys.length; j++) {
             str = determineCorrectString(command, columnKeys[j]);
@@ -11452,9 +11942,7 @@ See the LICENSE file for details.
       }
     },
   };
-
   // LISTBOXWRAPPER LISTENERS
-
   /**
    * Close listbox when double-clicking a command.
    * @param {Object} listbox ScriptUI listbox.
@@ -11464,7 +11952,6 @@ See the LICENSE file for details.
       listbox.window.close(1);
     };
   }
-
   /**
    * Add listbox command to Workflow when double-clicking.
    * @param {Object}  listbox  ScriptUI listbox.
@@ -11475,7 +11962,6 @@ See the LICENSE file for details.
       win = listbox.window;
       steps = win.findElement("steps");
       command = commandsData[listbox.selection.id];
-
       // check for "Build Picker..." command
       if (command.id == "builtin_buildPicker") {
         newPicker = buildPicker();
@@ -11490,7 +11976,6 @@ See the LICENSE file for details.
       steps.notify("onChange");
     };
   }
-
   /**
    * Swap listbox items in place (along with their corresponding id).
    * @param {Object} x Listbox item.
@@ -11507,7 +11992,6 @@ See the LICENSE file for details.
     y.subItems[0].text = subT;
     y.id = id;
   }
-
   /**
    * Allow end-to-end scrolling from within a listbox.
    * @param {Object}  listbox  ScriptUI listbox.
@@ -11545,7 +12029,8 @@ See the LICENSE file for details.
               } else {
                 if (listbox.selection.index > 0) {
                   listbox.selection = listbox.selection.index - 1;
-                  if (listbox.selection.index < listbox.frameStart) listbox.frameStart--;
+                  if (listbox.selection.index < listbox.frameStart)
+                    listbox.frameStart--;
                 }
               }
             } else if (e.keyName == "Down") {
@@ -11573,12 +12058,12 @@ See the LICENSE file for details.
               }
             }
             /*
-          If a selection is made inside of the actual listbox frame by the user,
-          the API doesn't offer any way to know which part of the list is currently
-          visible in the listbox "frame". If the user was to re-enter the `q` edittext
-          and then hit an arrow key the above event listener will not work correctly so
-          I just move the next selection (be it up or down) to the middle of the "frame".
-          */
+                  If a selection is made inside of the actual listbox frame by the user,
+                  the API doesn't offer any way to know which part of the list is currently
+                  visible in the listbox "frame". If the user was to re-enter the `q` edittext
+                  and then hit an arrow key the above event listener will not work correctly so
+                  I just move the next selection (be it up or down) to the middle of the "frame".
+                  */
             if (listbox.selection) {
               if (
                 listbox.selection.index < listbox.frameStart ||
@@ -11600,29 +12085,34 @@ See the LICENSE file for details.
           listbox.selection = listbox.items.length - 1;
           e.preventDefault();
         }
-        if (e.keyName == "Down" && listbox.selection.index == listbox.items.length - 1) {
+        if (
+          e.keyName == "Down" &&
+          listbox.selection.index == listbox.items.length - 1
+        ) {
           listbox.selection = 0;
           e.preventDefault();
         }
       }
     });
   }
-
   // USER DIALOGS
-
-  function commandPalette(commands, title, columns, multiselect, showOnly, saveHistory) {
+  function commandPalette(
+    commands,
+    title,
+    columns,
+    multiselect,
+    showOnly,
+    saveHistory
+  ) {
     var qCache = {};
-
     // create the dialog
     var win = new Window("dialog");
     win.text = title;
     win.alignChildren = "fill";
-
     // setup the query input
     var q = win.add("edittext");
     q.helpTip = localize(strings.cd_q_helptip);
     q.active = true;
-
     // setup the commands listbox
     var matches = showOnly ? showOnly : commands;
     var list = new ListBoxWrapper(
@@ -11635,7 +12125,6 @@ See the LICENSE file for details.
       null,
       [selectOnDoubleClick, scrollListBoxWithArrows]
     );
-
     // window buttons
     var winButtons = win.add("group");
     winButtons.orientation = "row";
@@ -11646,12 +12135,10 @@ See the LICENSE file for details.
       name: "cancel",
     });
     cancel.preferredSize.width = 100;
-
     // work-around to stop windows from flickering/flashing explorer
     if (windowsFlickerFix) {
       simulateKeypress("TAB", 1);
     }
-
     // as a query is typed update the listbox
     q.onChanging = function () {
       if (q.text === "") {
@@ -11664,15 +12151,12 @@ See the LICENSE file for details.
       }
       list.update(matches);
     };
-
     // save query and command history
     function updateHistory() {
       // don't add to history if no query was typed
       if (q.text === "") return;
-
       // don't add `Recent Commands` command
       if (list.listbox.selection.id == "builtin_recentCommands") return;
-
       history.push({
         query: q.text,
         command: list.listbox.selection.id,
@@ -11680,7 +12164,6 @@ See the LICENSE file for details.
       });
       userHistory.save();
     }
-
     // allow using arrow key from query input by sending a custom keyboard event to the list box
     if (!multiselect) {
       var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
@@ -11707,7 +12190,6 @@ See the LICENSE file for details.
         }
       });
     }
-
     if (win.show() == 1) {
       if (!list.listbox.selection) return;
       if (multiselect) {
@@ -11734,7 +12216,6 @@ See the LICENSE file for details.
     var win = new Window("dialog");
     win.text = localize(strings.add_custom_commands_dialog_title);
     win.alignChildren = "fill";
-
     var header = win.add(
       "statictext",
       [0, 0, 500, 100],
@@ -11745,11 +12226,9 @@ See the LICENSE file for details.
       }
     );
     header.justify = "center";
-
     // custom commands csv text
     var customCommands = win.add("edittext", [0, 0, 400, 200], "", { multiline: true });
     customCommands.text = "";
-
     // window buttons
     var winButtons = win.add("group");
     winButtons.orientation = "row";
@@ -11763,11 +12242,9 @@ See the LICENSE file for details.
       name: "cancel",
     });
     cancel.preferredSize.width = 100;
-
     customCommands.onChanging = function () {
       save.enabled = customCommands.text.length > 0 ? true : false;
     };
-
     if (win.show() == 1) {
       return customCommands.text;
     }
@@ -11775,12 +12252,10 @@ See the LICENSE file for details.
   }
   function pickerBuilder(editPickerId) {
     var overwrite = false;
-
     // create the dialog
     var win = new Window("dialog");
     win.text = localize(strings.picker_builder_title);
     win.alignChildren = "fill";
-
     // picker commands
     var header = win.add(
       "statictext",
@@ -11799,7 +12274,6 @@ See the LICENSE file for details.
       localize(strings.picker_builder_multi_select)
     );
     cbMultiselect.value = editPickerId ? commandsData[editPickerId].multiselect : false;
-
     // picker name
     var pName = win.add("panel", undefined, localize(strings.picker_builder_name));
     pName.alignChildren = ["fill", "center"];
@@ -11807,7 +12281,6 @@ See the LICENSE file for details.
     var pickerNameText = editPickerId ? commandsData[editPickerId].name : "";
     var pickerName = pName.add("edittext", undefined, pickerNameText);
     pickerName.enabled = editPickerId ? true : false;
-
     // window buttons
     var winButtons = win.add("group");
     winButtons.orientation = "row";
@@ -11821,17 +12294,14 @@ See the LICENSE file for details.
       name: "cancel",
     });
     cancel.preferredSize.width = 100;
-
     pickerCommands.onChanging = function () {
       pickerName.enabled = pickerCommands.text.length > 0 ? true : false;
       save.enabled =
         pickerCommands.text.length > 0 && pickerName.text.length > 0 ? true : false;
     };
-
     pickerName.onChanging = function () {
       save.enabled = pickerCommands.text.length > 0 ? true : false;
     };
-
     save.onClick = function () {
       // check for picker overwrite
       var currentPickers = [];
@@ -11855,7 +12325,6 @@ See the LICENSE file for details.
       }
       win.close(1);
     };
-
     if (win.show() == 1) {
       var commands = [];
       var lines = pickerCommands.text.split(/\r\n|\r|\n/);
@@ -11875,19 +12344,16 @@ See the LICENSE file for details.
     var qCache = {};
     var overwrite = false;
     var editableCommandTypes = ["picker"];
-
     // create the dialog
     var win = new Window("dialog");
     win.text = localize(strings.wf_builder);
     win.alignChildren = "fill";
-
     // setup the query input
     var pSearch = win.add("panel", undefined, localize(strings.cd_search_for));
     pSearch.alignChildren = ["fill", "center"];
     pSearch.margins = 20;
     var q = pSearch.add("edittext");
     q.helpTip = localize(strings.cd_q_helptip);
-
     // setup the commands listbox
     var list = new ListBoxWrapper(
       commands,
@@ -11899,18 +12365,15 @@ See the LICENSE file for details.
       localize(strings.cd_helptip),
       [addToStepsOnDoubleClick, scrollListBoxWithArrows]
     );
-
     // work-around to stop windows from flickering/flashing explorer
     if (windowsFlickerFix) {
       simulateKeypress("TAB", 1);
     } else {
       q.active = true;
     }
-
     var pSteps = win.add("panel", undefined, localize(strings.wf_steps));
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
-
     // if editing a workflow check to make sure all of it's actions are still valid
     var editWorkflow, step;
     var actionSteps = [];
@@ -11926,7 +12389,6 @@ See the LICENSE file for details.
         actionSteps.push(step);
       }
     }
-
     // setup the workflow action steps listbox
     var steps = new ListBoxWrapper(
       actionSteps,
@@ -11938,7 +12400,6 @@ See the LICENSE file for details.
       localize(strings.wf_steps_helptip),
       []
     );
-
     // allow in-line editing of pickers
     steps.listbox.onDoubleClick = function () {
       var selectedItem, command, updatedPicker;
@@ -11952,7 +12413,6 @@ See the LICENSE file for details.
       if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
       if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
     };
-
     var stepButtons = pSteps.add("group");
     stepButtons.alignment = "center";
     var up = stepButtons.add("button", undefined, localize(strings.step_up));
@@ -11963,7 +12423,6 @@ See the LICENSE file for details.
     edit.preferredSize.width = 100;
     var del = stepButtons.add("button", undefined, localize(strings.step_delete));
     del.preferredSize.width = 100;
-
     // workflow name
     var pName = win.add("panel", undefined, localize(strings.wf_save_as));
     pName.alignChildren = ["fill", "center"];
@@ -11971,7 +12430,6 @@ See the LICENSE file for details.
     var workflowNameText = editWorkflow ? editWorkflow.name : "";
     var workflowName = pName.add("edittext", undefined, workflowNameText);
     workflowName.enabled = editWorkflow ? true : false;
-
     // window buttons
     var winButtons = win.add("group");
     winButtons.orientation = "row";
@@ -11985,7 +12443,6 @@ See the LICENSE file for details.
       name: "cancel",
     });
     cancel.preferredSize.width = 100;
-
     // as a query is typed update the listbox
     var matches;
     q.onChanging = function () {
@@ -12001,17 +12458,14 @@ See the LICENSE file for details.
         list.update(matches);
       }
     };
-
     steps.listbox.onChange = function () {
       workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
       save.enabled =
         steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
     };
-
     workflowName.onChanging = function () {
       save.enabled = workflowName.text.length > 0 ? true : false;
     };
-
     up.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);
       if (selected[i] == 0 || !contiguous(selected)) return;
@@ -12021,9 +12475,9 @@ See the LICENSE file for details.
           steps.listbox.items[selected[i]]
         );
       steps.listbox.selection = null;
-      for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
+      for (var n = 0; n < selected.length; n++)
+        steps.listbox.selection = selected[n] - 1;
     };
-
     down.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);
       if (
@@ -12037,9 +12491,9 @@ See the LICENSE file for details.
           steps.listbox.items[selected[i] + 1]
         );
       steps.listbox.selection = null;
-      for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
+      for (var n = 0; n < selected.length; n++)
+        steps.listbox.selection = selected[n] + 1;
     };
-
     // the api returns the selected items in the order they were
     // selected/clicked by the user when you call `list.selection`
     // so their actual listbox indexes need to be sorted for the
@@ -12049,12 +12503,10 @@ See the LICENSE file for details.
       for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
       return indexes.sort();
     }
-
     // check to make sure selection is contiguous
     function contiguous(sel) {
       return sel.length == sel[sel.length - 1] - sel[0] + 1;
     }
-
     edit.onClick = function () {
       var selectedItem, command, updatedPicker;
       selectedItem = steps.listbox.selection[0];
@@ -12067,7 +12519,6 @@ See the LICENSE file for details.
       if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
       if (updatedPicker.name != command.name) selectedItem.text = updatedPicker.name;
     };
-
     del.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);
       for (var i = selected.length - 1; i > -1; i--) {
@@ -12078,7 +12529,6 @@ See the LICENSE file for details.
       save.enabled =
         steps.listbox.items.length > 0 && workflowName.text.length > 0 ? true : false;
     };
-
     save.onClick = function () {
       // check for workflow overwrite
       var currentWorkflows = [];
@@ -12099,7 +12549,6 @@ See the LICENSE file for details.
       }
       win.close(1);
     };
-
     if (win.show() == 1) {
       var actions = [];
       for (var i = 0; i < steps.listbox.items.length; i++) {
@@ -12111,19 +12560,16 @@ See the LICENSE file for details.
   }
   function startupBuilder(commands) {
     var qCache = {};
-
     // create the dialog
     var win = new Window("dialog");
     win.text = localize(strings.startup_builder);
     win.alignChildren = "fill";
-
     // setup the query input
     var pSearch = win.add("panel", undefined, localize(strings.cd_search_for));
     pSearch.alignChildren = ["fill", "center"];
     pSearch.margins = 20;
     var q = pSearch.add("edittext");
     q.helpTip = localize(strings.cd_q_helptip);
-
     // setup the commands listbox
     var list = new ListBoxWrapper(
       commands,
@@ -12135,18 +12581,15 @@ See the LICENSE file for details.
       localize(strings.startup_helptip),
       [addToStepsOnDoubleClick, scrollListBoxWithArrows]
     );
-
     // work-around to stop windows from flickering/flashing explorer
     if (windowsFlickerFix) {
       simulateKeypress("TAB", 1);
     } else {
       q.active = true;
     }
-
     var pSteps = win.add("panel", undefined, localize(strings.startup_steps));
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
-
     // setup the workflow action steps listbox
     var steps = new ListBoxWrapper(
       prefs.startupCommands,
@@ -12158,7 +12601,6 @@ See the LICENSE file for details.
       localize(strings.startup_steps_helptip),
       []
     );
-
     var stepButtons = pSteps.add("group");
     stepButtons.alignment = "center";
     var up = stepButtons.add("button", undefined, localize(strings.step_up));
@@ -12167,7 +12609,6 @@ See the LICENSE file for details.
     down.preferredSize.width = 100;
     var del = stepButtons.add("button", undefined, localize(strings.step_delete));
     del.preferredSize.width = 100;
-
     // window buttons
     var winButtons = win.add("group");
     winButtons.orientation = "row";
@@ -12181,7 +12622,6 @@ See the LICENSE file for details.
       name: "cancel",
     });
     cancel.preferredSize.width = 100;
-
     // as a query is typed update the listbox
     var matches;
     q.onChanging = function () {
@@ -12197,7 +12637,6 @@ See the LICENSE file for details.
         list.update(matches);
       }
     };
-
     up.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);
       if (selected[i] == 0 || !contiguous(selected)) return;
@@ -12207,9 +12646,9 @@ See the LICENSE file for details.
           steps.listbox.items[selected[i]]
         );
       steps.listbox.selection = null;
-      for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] - 1;
+      for (var n = 0; n < selected.length; n++)
+        steps.listbox.selection = selected[n] - 1;
     };
-
     down.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);
       if (
@@ -12223,9 +12662,9 @@ See the LICENSE file for details.
           steps.listbox.items[selected[i] + 1]
         );
       steps.listbox.selection = null;
-      for (var n = 0; n < selected.length; n++) steps.listbox.selection = selected[n] + 1;
+      for (var n = 0; n < selected.length; n++)
+        steps.listbox.selection = selected[n] + 1;
     };
-
     // the api returns the selected items in the order they were
     // selected/clicked by the user when you call `list.selection`
     // so their actual listbox indexes need to be sorted for the
@@ -12235,12 +12674,10 @@ See the LICENSE file for details.
       for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
       return indexes.sort();
     }
-
     // check to make sure selection is contiguous
     function contiguous(sel) {
       return sel.length == sel[sel.length - 1] - sel[0] + 1;
     }
-
     del.onClick = function () {
       var selected = sortIndexes(steps.listbox.selection);
       for (var i = selected.length - 1; i > -1; i--) {
@@ -12248,7 +12685,6 @@ See the LICENSE file for details.
         commands.push(steps.listbox.items[selected[i]].id);
         steps.listbox.remove(selected[i]);
       }
-
       // clear cache and re-index matches
       qCache = {};
       matches = matcher(q.text, commands);
@@ -12256,10 +12692,8 @@ See the LICENSE file for details.
       if (matches.length > 0) {
         list.update(matches);
       }
-
       steps.listbox.selection == null;
     };
-
     if (win.show() == 1) {
       var items = [];
       for (var i = 0; i < steps.listbox.items.length; i++) {
@@ -12269,100 +12703,7 @@ See the LICENSE file for details.
     }
     return false;
   }
-
-  /**
-   * Filter the supplied commands by multiple factors.
-   * @param   {Array}   commands             Command `id`s to filter through.
-   * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
-   * @param   {Boolean} showHidden           Should user-hidden commands be included?
-   * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
-   * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
-   * @returns {Array}                        Filtered command ids.
-   */
-  function filterCommands(
-    commands,
-    types,
-    showHidden,
-    showNonRelevant,
-    hideSpecificCommands
-  ) {
-    var filteredCommands = [];
-    var id, command;
-    commands = commands ? commands : Object.keys(commandsData);
-    for (var i = 0; i < commands.length; i++) {
-      id = commands[i];
-      if (!commandsData.hasOwnProperty(id)) continue;
-      command = commandsData[id];
-
-      // make sure Ai version meets command requirements
-      if (!commandVersionCheck(command)) continue;
-
-      // skip any hidden commands
-      if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
-
-      // skip any non relevant commands
-      if (!showNonRelevant && !relevantCommand(command)) continue;
-
-      // skip any specific commands name in hideSpecificCommands
-      if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
-
-      // then check to see if the command should be included
-      if (!types || types.includes(command.type)) filteredCommands.push(id);
-    }
-    return filteredCommands;
-  }
-
-  /**
-   * Determine is a command is relevant at the current moment.
-   * @param   {Object}  command Command object to check.
-   * @returns {Boolean}         If command is relevant.
-   */
-  function relevantCommand(command) {
-    // hide commands requiring an active documents if requested
-    if (command.docRequired && app.documents.length < 1) return false;
-    // hide commands requiring an active selection if requested
-    if (command.selRequired && app.activeDocument.selection.length < 1) return false;
-
-    // hide `Edit Workflow...` command if no workflows
-    if (command.id == "builtin_editWorkflow" && prefs.workflows.length < 1) return false;
-    // hide `All Workflows...` command if no workflows
-    if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1) return false;
-    // hide `All Scripts...` command if no scripts
-    if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
-    // hide `All Bookmarks...` command if no bookmarks
-    if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1) return false;
-    // hide `All Actions...` command if no actions
-    if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
-    // hide `Edit Picker...` command if no pickers
-    if (command.id == "builtin_editPicker" && prefs.pickers.length < 1) return false;
-    // hide `All Pickers...` command if no pickers
-    if (command.id == "builtin_allPickers" && prefs.pickers.length < 1) return false;
-
-    // hide `Enable Fuzzy Matching` command if already enabled
-    if (command.id == "config_enableFuzzyMatching" && prefs.fuzzy) return false;
-    // hide `Disable Fuzzy Matching` command if already disabled
-    if (command.id == "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
-
-    // hide `Enable Debug Logging` command if already enabled
-    if (command.id == "config_enableDebugLogging" && debugLogging) return false;
-    // hide `Disable Debug Logging` command if already disabled
-    if (command.id == "config_disableDebugLogging" && !debugLogging) return false;
-
-    // hide `Unhide Commands...` command if no hidden commands
-    if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
-      return false;
-    // hide `Recent Commands...` and `Clear History` if no recent commands
-    if (
-      command.id == "builtin_recentCommands" &&
-      Object.keys(recentCommands).length === 0
-    ) {
-      return false;
-    }
-
-    return true;
-  }
   // COMMAND EXECUTION
-
   /**
    * Process command actions.
    * @param {String} id Command id to process.
@@ -12380,12 +12721,12 @@ See the LICENSE file for details.
         return;
       }
       // run each action in the workflow
-      for (var i = 0; i < command.actions.length; i++) processCommand(command.actions[i]);
+      for (var i = 0; i < command.actions.length; i++)
+        processCommand(command.actions[i]);
     } else {
       executeAction(command);
     }
   }
-
   /**
    * Execute command action.
    * @param {Object} command Command to execute.
@@ -12401,7 +12742,6 @@ See the LICENSE file for details.
         )
       )
         return;
-
     // check command to see if an active selection is required
     if (command.selRequired && app.activeDocument.selection.length < 1)
       if (
@@ -12412,7 +12752,6 @@ See the LICENSE file for details.
         )
       )
         return;
-
     // execute action based on the command type
     var func;
     var alertString = strings.cd_error_executing;
@@ -12450,26 +12789,21 @@ See the LICENSE file for details.
       default:
         alert(localize(strings.cd_invalid, command.type));
     }
-
     try {
       func(command);
     } catch (e) {
       alert(localize(alertString, localize(command.name), e));
     }
   }
-
   function menuAction(command) {
     app.executeMenuCommand(command.action);
   }
-
   function toolAction(command) {
     app.selectTool(command.action);
   }
-
   function actionAction(command) {
     app.doScript(command.name, command.set);
   }
-
   function bookmarkAction(command) {
     f = command.type == "file" ? new File(command.path) : new Folder(command.path);
     if (!f.exists) {
@@ -12482,7 +12816,6 @@ See the LICENSE file for details.
       f.execute();
     }
   }
-
   function runCustomPicker(picker) {
     // create custom adhoc commands from provided picker options
     var commands = [];
@@ -12501,7 +12834,6 @@ See the LICENSE file for details.
       commandsData[id] = command;
       commands.push(id);
     }
-
     // present the custom picker
     var result = commandPalette(
       (commands = commands),
@@ -12514,7 +12846,6 @@ See the LICENSE file for details.
       $.setenv("aic_picker_last", null);
       return false;
     }
-
     // grab the correct name data from the selected commands
     var args = [];
     if (!picker.multiselect) {
@@ -12524,11 +12855,9 @@ See the LICENSE file for details.
         args.push(commandsData[result[i]].name);
       }
     }
-
     // encode the array data into an environment variable for later use
     $.setenv("aic_picker_last", args.toSource());
   }
-
   function scriptAction(command) {
     f = new File(command.path);
     if (!f.exists) {
@@ -12537,7 +12866,6 @@ See the LICENSE file for details.
       $.evalFile(f);
     }
   }
-
   /**
    * Execute script actions.
    * @param {Object} command Command to execute.
@@ -12585,7 +12913,6 @@ See the LICENSE file for details.
         write = false;
         settings();
         break;
-
       // builtin commands
       case "addCustomCommands":
         addCustomCommands();
@@ -12690,7 +13017,6 @@ See the LICENSE file for details.
     userPrefs.save();
   }
   // AI COMMAND PALETTE CONFIGURATION COMMANDS
-
   /**
    * Ai Command Palette About Dialog.
    */
@@ -12698,7 +13024,6 @@ See the LICENSE file for details.
     var win = new Window("dialog");
     win.text = localize(strings.about);
     win.alignChildren = "fill";
-
     // script info
     var pAbout = win.add("panel");
     pAbout.margins = 20;
@@ -12706,7 +13031,6 @@ See the LICENSE file for details.
     pAbout.add("statictext", [0, 0, 500, 100], localize(strings.description), {
       multiline: true,
     });
-
     var links = pAbout.add("group");
     links.orientation = "column";
     links.alignChildren = ["center", "center"];
@@ -12721,14 +13045,11 @@ See the LICENSE file for details.
     winButtons.alignChildren = ["center", "center"];
     var ok = winButtons.add("button", undefined, "OK");
     ok.preferredSize.width = 100;
-
     github.addEventListener("mousedown", function () {
       openURL("https://github.com/joshbduncan/AiCommandPalette");
     });
-
     win.show();
   }
-
   /**
    * Present a palette with Ai Command Palette configuration commands.
    */
@@ -12749,16 +13070,13 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present the Picker Builder dialog for building/editing user picker.
    * @param {String} editWorkflowId Id of a current user picker to edit.
    */
   function buildPicker(editPickerId) {
     var result = pickerBuilder(editPickerId);
-
     if (!result) return;
-
     var id;
     // when overwriting delete previous version and update prefs
     if (result.overwrite) {
@@ -12785,12 +13103,9 @@ See the LICENSE file for details.
       prefs.pickers.push(picker);
       commandsData[id] = picker;
     }
-
     addToStartup([id]);
-
     return picker;
   }
-
   /**
    * Present a palette with all user created picker. The selected picker will
    * be opened in the picker builder.
@@ -12812,7 +13127,6 @@ See the LICENSE file for details.
     if (!result) return;
     buildPicker(result);
   }
-
   /**
    * Clear all user history
    */
@@ -12828,7 +13142,6 @@ See the LICENSE file for details.
       alert(localize(strings.history_cleared));
     }
   }
-
   /**
    * Present the Ai Command Palette startup configurator dialog.
    */
@@ -12855,7 +13168,6 @@ See the LICENSE file for details.
     if (!result) return;
     prefs.startupCommands = result;
   }
-
   /**
    * Present a dialog for adding/editing custom user commands.
    */
@@ -12865,10 +13177,8 @@ See the LICENSE file for details.
       var current = "";
       var quoteChar = null; // null, '"' or "'"
       var i;
-
       for (i = 0; i < line.length; i++) {
         var c = line.charAt(i);
-
         if (c === '"' || c === "'") {
           if (quoteChar === null) {
             quoteChar = c; // opening quote
@@ -12884,45 +13194,33 @@ See the LICENSE file for details.
           current += c;
         }
       }
-
       result.push(current); // last field
       return result;
     }
-
     var result = addCustomCommandsDialog();
-
     if (!result) return;
-
     // make sure custom commands array exist before pushing new commands
     if (!("customCommands" in prefs)) {
       prefs.customCommands = [];
     }
-
     var newCustomCommandIds = [];
     var lines = result.split(/\r\n|\r|\n/);
     var line, parts, name, action, type, id, loc, obj;
     for (var i = 0; i < lines.length; i++) {
       line = lines[i].trim();
-
       // skip blank lines
       if (line === "") continue;
-
       var parts = parseCSVLine(line);
-
       // skip command if missing info [name, action, type (menu or tool)]
       // TODO: should i warn the user a command is being skipped?
       if (parts.length < 3) continue;
-
       loc = {};
       obj = {};
-
       name = parts[0];
       action = parts[1];
       type = parts[2].toLowerCase();
-
       // skip commands with invalid action type
       if (type != "menu" && type != "tool") continue;
-
       id = generateCommandId("custom_" + action.toLowerCase());
       obj["id"] = id;
       obj["action"] = action;
@@ -12932,15 +13230,12 @@ See the LICENSE file for details.
       obj["docRequired"] = false;
       obj["selRequired"] = false;
       obj["hidden"] = false;
-
       newCustomCommandIds.push(id);
       prefs.customCommands.push(obj);
       commandsData[id] = obj;
     }
-
     addToStartup(newCustomCommandIds);
   }
-
   /**
    * Present a palette with all user created commands (e.g. bookmarks, scripts, workflows).
    * The selected command will be deleted.
@@ -12960,13 +13255,11 @@ See the LICENSE file for details.
       (multiselect = true)
     );
     if (!result) return;
-
     // get all of the actual command names for the confirmation dialog
     var commandNames = [];
     for (var i = 0; i < result.length; i++) {
       commandNames.push(commandsData[result[i]].name);
     }
-
     // confirm command deletion
     if (
       !confirm(
@@ -12976,7 +13269,6 @@ See the LICENSE file for details.
       )
     )
       return;
-
     // go through each deletable command type and remove them from user prefs
     var typesToCheck = ["workflows", "bookmarks", "scripts", "pickers"];
     for (var i = 0; i < typesToCheck.length; i++) {
@@ -12985,20 +13277,17 @@ See the LICENSE file for details.
           prefs[typesToCheck[i]].splice(j, 1);
       }
     }
-
     // also remove the commands from startup if included there
     for (var i = prefs.startupCommands.length - 1; i >= 0; i--) {
       if (result.includes(prefs.startupCommands[i])) prefs.startupCommands.splice(i, 1);
     }
   }
-
   /**
    * Toggle fuzzy command matching
    */
   function toggleFuzzyMatching() {
     prefs.fuzzy = !prefs.fuzzy;
   }
-
   /**
    * Toggle debug logging
    */
@@ -13009,7 +13298,6 @@ See the LICENSE file for details.
       $.setenv("AICP_DEBIG_LOGGING", "true");
     }
   }
-
   /**
    * Present a palette with all possible command (less config commands).
    * The selected command will be hidden from the palette.
@@ -13041,14 +13329,12 @@ See the LICENSE file for details.
     if (!result) return;
     prefs.hiddenCommands = prefs.hiddenCommands.concat(result);
   }
-
   /**
    * Reveal the user preference file within file system.
    */
   function revealPrefFile() {
     userPrefs.reveal();
   }
-
   /**
    * Present a palette with all built-in commands.
    */
@@ -13069,7 +13355,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present a palette with all hidden commands.
    * The selected command will be unhidden.
@@ -13086,9 +13371,7 @@ See the LICENSE file for details.
       prefs.hiddenCommands.splice(prefs.hiddenCommands.indexOf(result[i]), 1);
     }
   }
-
   // AI COMMAND PALETTE BUILT-IN OPERATIONS
-
   /**
    * Present a document report dialog with the ability to save the report as a text document.
    */
@@ -13117,7 +13400,6 @@ See the LICENSE file for details.
       convertPointsTo(app.activeDocument.height, rulerUnits) +
       " " +
       rulerUnits;
-
     // generate all optional report information (all included by default)
     var reportOptions = {
       artboards: {
@@ -13149,7 +13431,6 @@ See the LICENSE file for details.
         active: true,
       },
     };
-
     // build the report from the selected options (active = true)
     function buildReport() {
       var infoString = localize(strings.dr_info_string) + "\n\n" + fileInfo;
@@ -13165,14 +13446,12 @@ See the LICENSE file for details.
       infoString += "\n\n" + localize(strings.dr_file_created) + new Date();
       return infoString;
     }
-
     // setup the dialog
     var win = new Window("dialog");
     win.text = localize(strings.document_report);
     win.orientation = "column";
     win.alignChildren = ["center", "top"];
     win.alignChildren = "fill";
-
     // show a warning about stale info if document is not saved
     if (!app.activeDocument.saved) {
       var warning = win.add(
@@ -13187,12 +13466,10 @@ See the LICENSE file for details.
         1
       );
     }
-
     // panel - options
     var pOptions = win.add("panel", undefined, "Include?");
     pOptions.orientation = "row";
     pOptions.margins = 20;
-
     // add checkboxes for each report option
     var cb;
     for (var p in reportOptions) {
@@ -13213,14 +13490,12 @@ See the LICENSE file for details.
         cb.enabled = false;
       }
     }
-
     // script info
     var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
       multiline: true,
       scrollable: true,
       readonly: true,
     });
-
     // window buttons
     var winButtons = win.add("group");
     winButtons.orientation = "row";
@@ -13231,7 +13506,6 @@ See the LICENSE file for details.
       name: "ok",
     });
     close.preferredSize.width = 100;
-
     // save document info to selected file
     saveInfo.onClick = function () {
       var f = File.saveDialog(localize(strings.save_active_document_report));
@@ -13251,7 +13525,6 @@ See the LICENSE file for details.
     // show the info dialog
     win.show();
   }
-
   /**
    * Present a palette with all user loaded actions. NOTE, if you add new actions,
    * Illustrator must be restarted for them to be available.
@@ -13282,7 +13555,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present a palette with all user loaded file and folder bookmarks.
    */
@@ -13316,7 +13588,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present a palette with all user created commands.
    */
@@ -13337,7 +13608,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present a palette with all menu commands.
    */
@@ -13358,7 +13628,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present a palette with all user created pickers.
    */
@@ -13379,7 +13648,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present a palette with all user loaded scripts.
    */
@@ -13413,7 +13681,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present a palette with all tools.
    */
@@ -13434,7 +13701,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present a palette with all user created workflows.
    */
@@ -13455,7 +13721,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Present the Workflow Builder dialog for building/editing user workflows.
    * @param {String} editWorkflowId Id of a current user workflow to edit.
@@ -13486,9 +13751,7 @@ See the LICENSE file for details.
     );
     // show the workflow builder dialog
     var result = workflowBuilder(availableWorkflowCommands, editWorkflowId);
-
     if (!result) return;
-
     var id;
     // when overwriting delete previous version and update prefs
     if (result.overwrite) {
@@ -13512,10 +13775,8 @@ See the LICENSE file for details.
       };
       prefs.workflows.push(workflow);
     }
-
     addToStartup([id]);
   }
-
   /**
    * Present a palette with all user created workflows. The selected workflow will
    * be opened in the workflow builder.
@@ -13537,7 +13798,6 @@ See the LICENSE file for details.
     if (!result) return;
     buildWorkflow(result);
   }
-
   /**
    * Export the active artboard as a png file using the api `Document.imageCapture()` method.
    * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html?#document-imagecapture
@@ -13561,7 +13821,6 @@ See the LICENSE file for details.
       if (f.exists) alert(localize(strings.file_saved, f.fsName));
     }
   }
-
   /**
    * Export active document dataset variables to a file.
    * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-exportvariables
@@ -13581,7 +13840,6 @@ See the LICENSE file for details.
       alert(localize(strings.no_document_variables));
     }
   }
-
   /**
    * Load all artboards from the active document as objects into the data model.
    * @returns Artboard command ids.
@@ -13607,7 +13865,6 @@ See the LICENSE file for details.
     }
     return arr;
   }
-
   /**
    * Present a goto palette with artboards from the active document.
    * The selected artboard is made active and brought into view.
@@ -13630,14 +13887,12 @@ See the LICENSE file for details.
       (columns = columns),
       (multiselect = false)
     );
-
     if (!result) return;
     app.activeDocument.artboards.setActiveArtboardIndex(
       Number(commandsData[result].idx) - 1
     );
     app.executeMenuCommand("fitin");
   }
-
   /**
    * Load all page items from the active document as objects into the data model.
    * @returns Object command ids.
@@ -13665,7 +13920,6 @@ See the LICENSE file for details.
     }
     return arr;
   }
-
   /**
    * Present a goto palette with named objects from the active document.
    * The selected object is selected within the ui and brought into view.
@@ -13675,13 +13929,11 @@ See the LICENSE file for details.
       alert(
         localize(strings.go_to_named_object_limit, app.activeDocument.pageItems.length)
       );
-
     var arr = loadActiveDocumentPageItems();
     if (!arr.length) {
       alert(localize(strings.go_to_named_object_no_objects));
       return;
     }
-
     var columns = {};
     columns[localize(strings.name_title_case)] = {
       width: 100,
@@ -13701,18 +13953,14 @@ See the LICENSE file for details.
       (columns = columns),
       (multiselect = false)
     );
-
     if (!result) return;
     var pageItem = commandsData[result].pageItem;
     app.activeDocument.selection = null;
     pageItem.selected = true;
-
     // reset zoom for current document
     app.activeDocument.views[0].zoom = 1;
-
     zoomIntoPageItem(pageItem);
   }
-
   /**
    * Load all open documents objects into the data model.
    * @returns Document command ids.
@@ -13741,7 +13989,6 @@ See the LICENSE file for details.
     }
     return arr;
   }
-
   /**
    * Present a goto palette with currently open documents.
    * The selected document is activated.
@@ -13774,7 +14021,6 @@ See the LICENSE file for details.
     if (!result) return;
     commandsData[result].document.activate();
   }
-
   /**
    * Load file bookmarks from the users system into the command palette.
    */
@@ -13833,25 +14079,20 @@ See the LICENSE file for details.
     ]; // file types taken from Ai open dialog
     var re = new RegExp(acceptedTypes.join("|") + "$", "i");
     var files = loadFileTypes(localize(strings.bm_load_bookmark), true, re);
-
     if (files.length == 0) return;
-
     // get all current bookmark paths to ensure no duplicates
     var currentFileBookmarkPaths = [];
     for (var i = 0; i < prefs.bookmarks.length; i++) {
       if (prefs.bookmarks[i].type != "file") continue;
       currentFileBookmarkPaths.push(prefs.bookmarks[i].path);
     }
-
     var f, bookmark, bookmarkName, id, idx, oldId;
     var newBookmarks = [];
     var newBookmarkIds = [];
     for (var j = 0; j < files.length; j++) {
       f = files[j];
-
       // check if already loaded and skip if so
       if (currentFileBookmarkPaths.includes(f.fsName)) continue;
-
       bookmarkName = decodeURI(f.name);
       id = generateCommandId("bookmark_" + bookmarkName.toLowerCase());
       bookmark = {
@@ -13867,35 +14108,28 @@ See the LICENSE file for details.
       newBookmarks.push(bookmark);
       newBookmarkIds.push(bookmark.id);
     }
-
     if (newBookmarks.length == 0) return;
-
     prefs.bookmarks = prefs.bookmarks.concat(newBookmarks);
     addToStartup(newBookmarkIds);
   }
-
   /**
    * Load folder bookmarks from the users system into the command palette.
    */
   function loadFolderBookmark() {
     var f;
     f = Folder.selectDialog(localize(strings.bm_load_bookmark));
-
     if (!f) return;
-
     // get all current bookmark paths to ensure no duplicates
     var currentFolderBookmarks = [];
     for (var i = 0; i < prefs.bookmarks.length; i++) {
       if (prefs.bookmarks[i].type != "folder") continue;
       currentFolderBookmarks.push(prefs.bookmarks[i].path);
     }
-
     // check if already loaded and skip if so
     if (currentFolderBookmarks.includes(f.fsName)) {
       alert(localize(strings.bm_already_loaded));
       return;
     }
-
     var bookmarkName = decodeURI(f.name);
     var bookmark = {
       id: "bookmark" + "_" + bookmarkName.toLowerCase().replace(" ", "_"),
@@ -13910,7 +14144,6 @@ See the LICENSE file for details.
     prefs.bookmarks.push(bookmark);
     addToStartup([bookmark.id]);
   }
-
   /**
    * Load ExtendScript (.jsx and .js) scripts into the command palette.
    */
@@ -13918,24 +14151,19 @@ See the LICENSE file for details.
     var acceptedTypes = [".jsx", ".js"];
     var re = new RegExp(acceptedTypes.join("|") + "$", "i");
     var files = loadFileTypes(localize(strings.sc_load_script), true, re);
-
     if (files.length == 0) return;
-
     // get all current script paths to ensure no duplicates
     var currentScripts = [];
     for (var i = 0; i < prefs.scripts.length; i++) {
       currentScripts.push(prefs.scripts[i].path);
     }
-
     var f, script, scriptName, id;
     var newScripts = [];
     var newScriptIds = [];
     for (var j = 0; j < files.length; j++) {
       f = files[j];
-
       // check if already loaded and skip if so
       if (currentScripts.includes(f.fsName)) continue;
-
       scriptName = decodeURI(f.name);
       id = generateCommandId("script_" + scriptName.toLowerCase());
       script = {
@@ -13951,13 +14179,10 @@ See the LICENSE file for details.
       newScripts.push(script);
       newScriptIds.push(script.id);
     }
-
     if (newScripts.length == 0) return;
-
     prefs.scripts = prefs.scripts.concat(newScripts);
     addToStartup(newScriptIds);
   }
-
   /**
    * Present a palette with the most recent user commands.
    * The selected is executed.
@@ -13972,7 +14197,6 @@ See the LICENSE file for details.
     if (!result) return;
     processCommand(result);
   }
-
   /**
    * Load recently opened files as objects into the data model.
    * @returns File command ids.
@@ -14004,7 +14228,6 @@ See the LICENSE file for details.
     }
     return arr;
   }
-
   /**
    * Present a palette with recently opened files.
    * The selected file is opened.
@@ -14027,21 +14250,18 @@ See the LICENSE file for details.
       (multiselect = false)
     );
     if (!result) return;
-
     try {
       app.open(commandsData[result].document);
     } catch (e) {
       alert(localize(strings.fl_error_loading, result));
     }
   }
-
   /**
    * Redraw all application windows.
    */
   function redrawWindows() {
     app.redraw();
   }
-
   /**
    * Reveal the active document on the users system by opening it's parent folder.
    */
@@ -14071,47 +14291,31 @@ See the LICENSE file for details.
     }
     return badActions;
   }
-
   // load the user data
   userPrefs.load(true);
   userActions.load();
   userHistory.load();
-
   // set command palette matching algo
   var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
-
+  // TODO: allow disable keyword latching
   // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
   }
-
   // SHOW THE COMMAND PALETTE
-  var queryableCommands = filterCommands(
-    (commands = null),
-    (types = null),
-    (showHidden = false),
-    (showNonRelevant = false),
-    (hideSpecificCommands = null)
-  );
-  logger.log("queryable commands:", queryableCommands.length);
-
-  var startupCommands = filterCommands(
-    (commands = prefs.startupCommands),
-    (types = null),
-    (showHidden = false),
-    (showNonRelevant = false),
-    (hideSpecificCommands = null)
-  );
-  logger.log("startup commands:", startupCommands.length);
-
-  var result = commandPalette(
-    (commands = queryableCommands),
-    (title = localize(strings.title)),
-    (columns = paletteSettings.columnSets.default),
-    (multiselect = false),
-    (showOnly = startupCommands),
-    (saveHistory = true)
-  );
-  if (!result) return;
-  processCommand(result);
+  var queryableCommands = filterCommands(null, null, false, false, null);
+  var startupCommands = filterCommands(prefs.startupCommands, null, false, false, null);
+  launchCommandPalette();
+  function launchCommandPalette() {
+    var result = commandPalette(
+      queryableCommands,
+      localize(strings.title),
+      paletteSettings.columnSets.default,
+      false,
+      startupCommands,
+      true
+    );
+    if (!result) return;
+    processCommand(result);
+  }
 })();

@@ -11,20 +11,28 @@ help: ## Display this help section
 ##@ Development
 build-strings:  ## build string objects from csv input file
 	@echo "⚙️ building string objects..."
-	python3 tools/build_strings.py data/strings.csv | prettier > src/include/data/built_strings.jsxinc
+	python3 tools/build_strings.py data/strings.csv | prettier > src/data/built_strings.js
 
 build-commands:  ## build command objects from csv input file
 	@echo "⚙️ building command objects..."
-	python3 tools/build_commands.py | prettier > src/include/data/built_commands.jsxinc
+	python3 tools/build_commands.py | prettier > src/data/built_commands.js
 
 copy:  ## copy compiled script to Ai scripts folder
 	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts
 
-reset: compile copy  ## re-compile script and copy to Ai scripts folder
+reset: compile wrap copy  ## re-compile script and copy to Ai scripts folder
 
 ##@ Build
+wrap:  ## wrap built script into an anonymous function
+	./tools/wrap_in_anon_function.sh
+
+watchman:
+	watchman watch .
+	watchman -- trigger . script-jsx-wrap build/bundle.jsx -- ./tools/wrap_in_anon_function.sh
+	sudo watchman -- trigger . script-jsx-wrap AiCommandPalette.jsx -- sh -c "cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts"
+
 watch:  ## watch for file changes and compile
-	watchman-make -p 'src/**/*.jsx*' -t reset
+	tsc --watch
 
 compile:  ## compile script using escompile
-	escompile src/index.jsx > AiCommandPalette.jsx
+	tsc

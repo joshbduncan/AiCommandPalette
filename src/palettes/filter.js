@@ -1,11 +1,3 @@
-//@include "fuzzy.jsxinc"
-//@include "nofuzz.jsxinc"
-//@include "commandPalette.jsxinc"
-//@include "customCommands.jsxinc"
-//@include "pickerBuilder.jsxinc"
-//@include "workflowBuilder.jsxinc"
-//@include "startupBuilder.jsxinc"
-
 /**
  * Filter the supplied commands by multiple factors.
  * @param   {Array}   commands             Command `id`s to filter through.

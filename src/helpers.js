@@ -40,7 +40,7 @@ function findLastCarrot(s) {
  */
 function generateCommandId(s) {
   var re = new RegExp("\\s|\\.", "gi");
-  var id = s.replaceAll(re, "_");
+  var id = s.replace(re, "_");
   var n = 0;
   while (commandsData.hasOwnProperty(id)) {
     n++;

@@ -1,5 +1,7 @@
 // Test every tool command known to Ai Command Palette
 
+// TODO: update for new imports
+
 (function () {
   //@include "../src/include/polyfills.jsxinc"
   //@include "../src/include/helpers.jsxinc"

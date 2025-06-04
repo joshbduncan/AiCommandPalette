@@ -1,0 +1,58 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "ES3",
+        "ignoreDeprecations": "5.0",
+        "outFile": "build/bundle.jsx",
+        "allowJs": true,
+        "noLib": true,
+        "typeRoots": ["./types"],
+        // "types": ["./types/"],
+        "removeComments": false,
+        "sourceMap": false,
+        "alwaysStrict": false
+    },
+    "files": [
+        "./types/global.d.ts",
+        "./types/index.d.ts",
+        "./types/JavaScript.d.ts",
+        "./types/PlugPlugExternalObject.d.ts",
+        "./types/ScriptUI.d.ts",
+
+        "./src/header.js",
+
+        "./polyfills/Array.ts",
+        "./polyfills/Number.ts",
+        "./polyfills/Object.ts",
+        "./polyfills/String.ts",
+
+        "src/Logger.js",
+        "src/helpers.js",
+        "src/io.js",
+        
+        "src/data/built_strings.js",
+        "src/data/built_commands.js",
+        
+        "src/config.js",
+        "src/user/preferences.js",
+        "src/user/history.js",
+        "src/user/actions.js",
+
+        "src/palettes/filter.js",
+        "src/palettes/fuzzy.js",
+        "src/palettes/nofuzz.js",
+        "src/palettes/commandPalette.js",
+        "src/palettes/customCommands.js",
+        "src/palettes/pickerBuilder.js",
+        "src/palettes/workflowBuilder.js",
+        "src/palettes/startupBuilder.js",
+
+        "src/commands/processing.js",
+        "src/commands/internal.js",
+        "src/commands/workflows.js",
+
+        "src/index.jsx"
+    ],
+    // "include": ["./polyfills/**/*.ts"],
+    "exclude": ["build", "node_modules"]
+}

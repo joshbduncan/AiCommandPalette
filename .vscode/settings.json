@@ -10,5 +10,9 @@
         "ngrams",
         "prefs",
         "SELREQUIRED"
-    ]
+    ],
+    "search.exclude": {
+        "**/AiCommandPalette.jsx": true,
+        "dist/**": true
+    }
 }
