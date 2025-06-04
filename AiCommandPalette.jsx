@@ -10425,6 +10425,58 @@ See the LICENSE file for details.
       },
       hidden: false,
     },
+    config_enableFuzzyMatching: {
+      id: "config_enableFuzzyMatching",
+      action: "enableFuzzyMatching",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Enable Fuzzy Matching",
+        de: "Enable Fuzzy Matching",
+        ru: "Enable Fuzzy Matching",
+      },
+      hidden: false,
+    },
+    config_disableFuzzyMatching: {
+      id: "config_disableFuzzyMatching",
+      action: "disableFuzzyMatching",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Disable Fuzzy Matching",
+        de: "Disable Fuzzy Matching",
+        ru: "Disable Fuzzy Matching",
+      },
+      hidden: false,
+    },
+    config_enableDebugLogging: {
+      id: "config_enableDebugLogging",
+      action: "enableDebugLogging",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Enable Debug Logging",
+        de: "Enable Debug Logging",
+        ru: "Enable Debug Logging",
+      },
+      hidden: false,
+    },
+    config_disableDebugLogging: {
+      id: "config_disableDebugLogging",
+      action: "disableDebugLogging",
+      type: "config",
+      docRequired: false,
+      selRequired: false,
+      name: {
+        en: "Disable Debug Logging",
+        de: "Disable Debug Logging",
+        ru: "Disable Debug Logging",
+      },
+      hidden: false,
+    },
     config_hideCommand: {
       id: "config_hideCommand",
       action: "hideCommand",
@@ -10498,16 +10550,15 @@ See the LICENSE file for details.
   var settingsRequiredUpdateVersion = "0.10.0";
 
   // DEVELOPMENT SETTINGS
-  var dev = $.getenv("USER") === "jbd" || $.getenv("AICP_LOG") === "true" ? true : false;
-  // TODO: add user enabled logging
-  // TODO: check if setenv lasts through a restart
+  var devMode = $.getenv("USER") === "jbd" ? true : false;
+  var debugLogging = $.getenv("AICP_DEBIG_LOGGING") === "true" ? true : false;
   var logFilePath = Folder.desktop + "/AiCommandPalette.log";
   var logger;
 
-  if (dev) {
+  if (devMode || debugLogging) {
     var logFilePath = Folder.desktop + "/AiCommandPalette.log";
     logger = new Logger(logFilePath, "a", undefined, true);
-    logger.log("**DEV MODE**");
+    devMode && logger.log("**DEV MODE ENABLED**");
   } else {
     logger = {};
     logger.log = function (text) {
@@ -10515,7 +10566,6 @@ See the LICENSE file for details.
     };
   }
 
-  logger = new Logger(logFilePath, "a", undefined, true);
   logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
 
   // DIALOG SETTINGS
@@ -10634,7 +10684,6 @@ See the LICENSE file for details.
   prefs.pickers = [];
   prefs.fuzzy = true; // set to new fuzzy matcher as default
   prefs.latches = {};
-  prefs.logging = false;
   prefs.version = _version;
   prefs.os = os;
   prefs.locale = locale;
@@ -11041,7 +11090,6 @@ See the LICENSE file for details.
         commandsData[id] = obj;
       }
     }
-    logger.log("loaded", ct, "actions");
     this.loadedActions = ct > 0;
   };
   function fuzzy(q, commands) {
@@ -12294,6 +12342,11 @@ See the LICENSE file for details.
     // hide `Disable Fuzzy Matching` command if already disabled
     if (command.id == "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
 
+    // hide `Enable Debug Logging` command if already enabled
+    if (command.id == "config_enableDebugLogging" && debugLogging) return false;
+    // hide `Disable Debug Logging` command if already disabled
+    if (command.id == "config_disableDebugLogging" && !debugLogging) return false;
+
     // hide `Unhide Commands...` command if no hidden commands
     if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
       return false;
@@ -12508,6 +12561,10 @@ See the LICENSE file for details.
       case "enableFuzzyMatching":
       case "disableFuzzyMatching":
         toggleFuzzyMatching();
+        break;
+      case "enableDebugLogging":
+      case "disableDebugLogging":
+        toggleDebugLogging();
         break;
       case "hideCommand":
         hideCommand();
@@ -12939,6 +12996,17 @@ See the LICENSE file for details.
    */
   function toggleFuzzyMatching() {
     prefs.fuzzy = !prefs.fuzzy;
+  }
+
+  /**
+   * Toggle debug logging
+   */
+  function toggleDebugLogging() {
+    if (debugLogging) {
+      $.setenv("AICP_DEBIG_LOGGING", "false");
+    } else {
+      $.setenv("AICP_DEBIG_LOGGING", "true");
+    }
   }
 
   /**
@@ -14010,7 +14078,6 @@ See the LICENSE file for details.
 
   // set command palette matching algo
   var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
-  // TODO: allow disable keyword latching
 
   // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {

@@ -79,6 +79,11 @@ function relevantCommand(command) {
   // hide `Disable Fuzzy Matching` command if already disabled
   if (command.id == "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
 
+  // hide `Enable Debug Logging` command if already enabled
+  if (command.id == "config_enableDebugLogging" && debugLogging) return false;
+  // hide `Disable Debug Logging` command if already disabled
+  if (command.id == "config_disableDebugLogging" && !debugLogging) return false;
+
   // hide `Unhide Commands...` command if no hidden commands
   if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
     return false;

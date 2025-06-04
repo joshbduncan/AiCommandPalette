@@ -38,6 +38,5 @@ userActions.load = function () {
       commandsData[id] = obj;
     }
   }
-  logger.log("loaded", ct, "actions");
   this.loadedActions = ct > 0;
 };

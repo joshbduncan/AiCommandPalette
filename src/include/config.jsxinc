@@ -18,16 +18,15 @@ var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
 var settingsRequiredUpdateVersion = "0.10.0";
 
 // DEVELOPMENT SETTINGS
-var dev = $.getenv("USER") === "jbd" || $.getenv("AICP_LOG") === "true" ? true : false;
-// TODO: add user enabled logging
-// TODO: check if setenv lasts through a restart
+var devMode = $.getenv("USER") === "jbd" ? true : false;
+var debugLogging = $.getenv("AICP_DEBIG_LOGGING") === "true" ? true : false;
 var logFilePath = Folder.desktop + "/AiCommandPalette.log";
 var logger;
 
-if (dev) {
+if (devMode || debugLogging) {
   var logFilePath = Folder.desktop + "/AiCommandPalette.log";
   logger = new Logger(logFilePath, "a", undefined, true);
-  logger.log("**DEV MODE**");
+  devMode && logger.log("**DEV MODE ENABLED**");
 } else {
   logger = {};
   logger.log = function (text) {
@@ -35,7 +34,6 @@ if (dev) {
   };
 }
 
-logger = new Logger(logFilePath, "a", undefined, true);
 logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
 
 // DIALOG SETTINGS

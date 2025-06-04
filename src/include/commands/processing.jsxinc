@@ -200,6 +200,10 @@ function internalAction(command) {
     case "disableFuzzyMatching":
       toggleFuzzyMatching();
       break;
+    case "enableDebugLogging":
+    case "disableDebugLogging":
+      toggleDebugLogging();
+      break;
     case "hideCommand":
       hideCommand();
       break;

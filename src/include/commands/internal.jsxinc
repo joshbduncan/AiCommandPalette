@@ -309,6 +309,17 @@ function toggleFuzzyMatching() {
 }
 
 /**
+ * Toggle debug logging
+ */
+function toggleDebugLogging() {
+  if (debugLogging) {
+    $.setenv("AICP_DEBIG_LOGGING", "false");
+  } else {
+    $.setenv("AICP_DEBIG_LOGGING", "true");
+  }
+}
+
+/**
  * Present a palette with all possible command (less config commands).
  * The selected command will be hidden from the palette.
  */

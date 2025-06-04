@@ -21,7 +21,6 @@ prefs.scripts = [];
 prefs.pickers = [];
 prefs.fuzzy = true; // set to new fuzzy matcher as default
 prefs.latches = {};
-prefs.logging = false;
 prefs.version = _version;
 prefs.os = os;
 prefs.locale = locale;
