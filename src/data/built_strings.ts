@@ -1,6 +1,12 @@
 // GENERATED FROM CSV DATA FILES
 
-var strings = {
+interface LocalizedStrings {
+  [key: string]: {
+    [langCode: string]: string;
+  };
+}
+
+const strings = {
   about: {
     en: "About",
     de: "\u00dcber Kurzbefehle \u2026",

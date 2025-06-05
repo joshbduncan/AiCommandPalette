@@ -14,326 +14,194 @@ See the LICENSE file for details.
   var _copyright = "Copyright 2024 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
+  // Array.prototype.indexOf
   if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (searchElement, fromIndex) {
       var k;
-      if (this == null) {
-        throw new TypeError('"this" is null or not defined');
-      }
+      if (this == null) throw new TypeError('"this" is null or not defined');
       var o = Object(this);
       var len = o.length >>> 0;
-      if (len === 0) {
-        return -1;
-      }
+      if (len === 0) return -1;
       var n = +fromIndex || 0;
-      if (Math.abs(n) === Infinity) {
-        n = 0;
-      }
-      if (n >= len) {
-        return -1;
-      }
+      if (Math.abs(n) === Infinity) n = 0;
+      if (n >= len) return -1;
       k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
       while (k < len) {
-        if (k in o && o[k] === searchElement) {
-          return k;
-        }
+        if (k in o && o[k] === searchElement) return k;
         k++;
       }
       return -1;
     };
   }
+  // Array.prototype.every
   if (!Array.prototype.every) {
     Array.prototype.every = function (callbackfn, thisArg) {
       "use strict";
       var T, k;
-      if (this == null) {
-        throw new TypeError("this is null or not defined");
-      }
-      // 1. Let O be the result of calling ToObject passing the this
-      //    value as the argument.
+      if (this == null) throw new TypeError("this is null or not defined");
       var O = Object(this);
-      // 2. Let lenValue be the result of calling the Get internal method
-      //    of O with the argument "length".
-      // 3. Let len be ToUint32(lenValue).
       var len = O.length >>> 0;
-      // 4. If IsCallable(callbackfn) is false, throw a TypeError exception.
-      if (
-        typeof callbackfn !== "function" &&
-        Object.prototype.toString.call(callbackfn) !== "[object Function]"
-      ) {
-        throw new TypeError();
-      }
-      // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
-      if (arguments.length > 1) {
-        T = thisArg;
-      }
-      // 6. Let k be 0.
+      if (typeof callbackfn !== "function") throw new TypeError();
+      if (arguments.length > 1) T = thisArg;
       k = 0;
-      // 7. Repeat, while k < len
       while (k < len) {
-        var kValue = void 0;
-        // a. Let Pk be ToString(k).
-        //   This is implicit for LHS operands of the in operator
-        // b. Let kPresent be the result of calling the HasProperty internal
-        //    method of O with argument Pk.
-        //   This step can be combined with c
-        // c. If kPresent is true, then
         if (k in O) {
-          var testResult = void 0;
-          // i. Let kValue be the result of calling the Get internal method
-          //    of O with argument Pk.
-          kValue = O[k];
-          // ii. Let testResult be the result of calling the Call internal method
-          // of callbackfn with T as the this value if T is not undefined
-          // else is the result of calling callbackfn
-          // and argument list containing kValue, k, and O.
-          if (T) testResult = callbackfn.call(T, kValue, k, O);
-          else testResult = callbackfn(kValue, k, O);
-          // iii. If ToBoolean(testResult) is false, return false.
-          if (!testResult) {
-            return false;
-          }
+          var kValue = O[k];
+          var testResult = T
+            ? callbackfn.call(T, kValue, k, O)
+            : callbackfn(kValue, k, O);
+          if (!testResult) return false;
         }
         k++;
       }
       return true;
     };
   }
-  // Production steps of ECMA-262, Edition 5, 15.4.4.19
-  // Reference: http://es5.github.io/#x15.4.4.19
+  // Array.prototype.map
   if (!Array.prototype.map) {
-    Array.prototype.map = function (callback /*, thisArg*/) {
+    Array.prototype.map = function (callback, thisArg) {
       var T, A, k;
-      if (this == null) {
-        throw new TypeError("this is null or not defined");
-      }
+      if (this == null) throw new TypeError("this is null or not defined");
       var O = Object(this);
       var len = O.length >>> 0;
-      // If IsCallable(callback) is false, throw a TypeError exception.
-      // See: http://es5.github.com/#x9.11
-      if (typeof callback !== "function") {
+      if (typeof callback !== "function")
         throw new TypeError(callback + " is not a function");
-      }
-      // If thisArg was supplied, let T be thisArg; else let T be undefined.
-      if (arguments.length > 1) {
-        T = arguments[1];
-      }
+      if (arguments.length > 1) T = thisArg;
       A = new Array(len);
       k = 0;
       while (k < len) {
-        var kValue, mappedValue;
         if (k in O) {
-          kValue = O[k];
-          mappedValue = callback.call(T, kValue, k, O);
-          A[k] = mappedValue;
+          A[k] = callback.call(T, O[k], k, O);
         }
         k++;
       }
       return A;
     };
   }
+  // Array.prototype.filter
   if (!Array.prototype.filter) {
     Array.prototype.filter = function (func, thisArg) {
       "use strict";
-      if (!((typeof func === "Function" || typeof func === "function") && this))
-        throw new TypeError();
+      if (!(typeof func === "function" && this)) throw new TypeError();
       var len = this.length >>> 0;
-      var res = new Array(len), // preallocate array
-        t = this,
-        c = 0,
-        i = -1;
-      var kValue;
-      if (thisArg === undefined) {
-        while (++i !== len) {
-          // checks to see if the key was set
-          if (i in this) {
-            kValue = t[i]; // in case t is changed in callback
-            if (func(t[i], i, t)) {
-              res[c++] = kValue;
-            }
-          }
-        }
-      } else {
-        while (++i !== len) {
-          // checks to see if the key was set
-          if (i in this) {
-            kValue = t[i];
-            if (func.call(thisArg, t[i], i, t)) {
-              res[c++] = kValue;
-            }
+      var res = [];
+      var t = this;
+      var c = 0;
+      for (var i = 0; i < len; i++) {
+        if (i in t) {
+          var val = t[i];
+          if (func.call(thisArg, val, i, t)) {
+            res[c++] = val;
           }
         }
       }
-      res.length = c; // shrink down array to proper size
       return res;
     };
   }
-  // https://github.com/jsPolyfill/Array.prototype.findIndex/blob/master/findIndex.js
+  // Array.prototype.findIndex
   if (!Array.prototype.findIndex) {
-    Array.prototype.findIndex =
-      Array.prototype.findIndex ||
-      function (callback) {
-        if (this === null) {
-          throw new TypeError("Array.prototype.findIndex called on null or undefined");
-        } else if (typeof callback !== "function") {
-          throw new TypeError("callback must be a function");
-        }
-        var list = Object(this);
-        // Makes sures is always has an positive integer as length.
-        var length = list.length >>> 0;
-        var thisArg = arguments[1];
-        for (var i = 0; i < length; i++) {
-          if (callback.call(thisArg, list[i], i, list)) {
-            return i;
-          }
-        }
-        return -1;
-      };
-  }
-  // https://tc39.github.io/ecma262/#sec-array.prototype.find
-  if (!Array.prototype.find) {
-    Array.prototype.find = function (predicate) {
-      if (this == null) {
-        throw new TypeError('"this" is null or not defined');
+    Array.prototype.findIndex = function (callback, thisArg) {
+      if (this === null) throw new TypeError("called on null or undefined");
+      if (typeof callback !== "function")
+        throw new TypeError("callback must be a function");
+      var list = Object(this);
+      var length = list.length >>> 0;
+      for (var i = 0; i < length; i++) {
+        if (callback.call(thisArg, list[i], i, list)) return i;
       }
+      return -1;
+    };
+  }
+  // Array.prototype.find
+  if (!Array.prototype.find) {
+    Array.prototype.find = function (predicate, thisArg) {
+      if (this == null) throw new TypeError('"this" is null or not defined');
       var o = Object(this);
       var len = o.length >>> 0;
-      if (typeof predicate !== "function") {
+      if (typeof predicate !== "function")
         throw new TypeError("predicate must be a function");
-      }
-      var thisArg = arguments[1];
-      var k = 0;
-      while (k < len) {
-        var kValue = o[k];
-        if (predicate.call(thisArg, kValue, k, o)) {
-          return kValue;
-        }
-        k++;
+      for (var k = 0; k < len; k++) {
+        var value = o[k];
+        if (predicate.call(thisArg, value, k, o)) return value;
       }
       return undefined;
     };
   }
+  // Array.prototype.includes
   if (!Array.prototype.includes) {
-    //or use Object.defineProperty
     Array.prototype.includes = function (search) {
-      return !!~this.indexOf(search);
+      return this.indexOf(search) !== -1;
     };
   }
+  // Array.prototype.last
   if (!Array.prototype.last) {
     Array.prototype.last = function () {
-      if (this.length < 1) {
-        return null;
-      }
-      return this[this.length - 1];
+      return this.length > 0 ? this[this.length - 1] : null;
     };
   }
+  // Array.prototype.forEach
   if (!Array.prototype.forEach) {
     Array.prototype.forEach = function (callback, thisArg) {
-      var T, k;
-      if (this == null) {
-        throw new TypeError(" this is null or not defined");
-      }
+      if (this == null) throw new TypeError("this is null or not defined");
       var O = Object(this);
       var len = O.length >>> 0;
-      if (typeof callback !== "function") {
+      if (typeof callback !== "function")
         throw new TypeError(callback + " is not a function");
-      }
-      if (arguments.length > 1) {
-        T = thisArg;
-      }
-      k = 0;
-      while (k < len) {
-        var kValue = void 0;
-        if (k in O) {
-          kValue = O[k];
-          callback.call(T, kValue, k, O);
-        }
-        k++;
+      for (var k = 0; k < len; k++) {
+        if (k in O) callback.call(thisArg, O[k], k, O);
       }
     };
   }
+  // Array.from
   if (!Array.from) {
     Array.from = function (arrayLikeObject) {
       var arr = [];
-      var thisItem;
       for (var i = 0; i < arrayLikeObject.length; i++) {
-        thisItem = arrayLikeObject[i];
-        arr.push(thisItem);
+        arr.push(arrayLikeObject[i]);
       }
       return arr;
     };
   }
-  // Production steps of ECMA-262, Edition 5, 15.4.4.17
-  // Reference: https://es5.github.io/#x15.4.4.17
+  // Array.prototype.some
   if (!Array.prototype.some) {
     Array.prototype.some = function (fun, thisArg) {
-      "use strict";
-      if (this == null) {
+      if (this == null)
         throw new TypeError("Array.prototype.some called on null or undefined");
-      }
-      if (typeof fun !== "function") {
-        throw new TypeError();
-      }
+      if (typeof fun !== "function") throw new TypeError();
       var t = Object(this);
       var len = t.length >>> 0;
       for (var i = 0; i < len; i++) {
-        if (i in t && fun.call(thisArg, t[i], i, t)) {
-          return true;
-        }
+        if (i in t && fun.call(thisArg, t[i], i, t)) return true;
       }
       return false;
     };
   }
-  // Production steps of ECMA-262, Edition 5, 15.4.4.21
-  // Reference: https://es5.github.io/#x15.4.4.21
-  // https://tc39.github.io/ecma262/#sec-array.prototype.reduce
+  // Array.prototype.reduce
   if (!Array.prototype.reduce) {
-    Array.prototype.reduce = function (callback /*, initialValue*/) {
-      if (this === null) {
-        throw new TypeError("Array.prototype.reduce " + "called on null or undefined");
-      }
-      if (typeof callback !== "function") {
+    Array.prototype.reduce = function (callback, initialValue) {
+      if (this === null) throw new TypeError("called on null or undefined");
+      if (typeof callback !== "function")
         throw new TypeError(callback + " is not a function");
-      }
-      // 1. Let O be ? ToObject(this value).
       var o = Object(this);
-      // 2. Let len be ? ToLength(? Get(O, "length")).
       var len = o.length >>> 0;
-      // Steps 3, 4, 5, 6, 7
       var k = 0;
-      var value;
-      if (arguments.length >= 2) {
-        value = arguments[1];
-      } else {
-        while (k < len && !(k in o)) {
-          k++;
-        }
-        // 3. If len is 0 and initialValue is not present,
-        //    throw a TypeError exception.
-        if (k >= len) {
-          throw new TypeError("Reduce of empty array " + "with no initial value");
-        }
+      var value = arguments.length >= 2 ? initialValue : undefined;
+      if (value === undefined) {
+        while (k < len && !(k in o)) k++;
+        if (k >= len)
+          throw new TypeError("Reduce of empty array with no initial value");
         value = o[k++];
       }
-      // 8. Repeat, while k < len
       while (k < len) {
-        // a. Let Pk be ! ToString(k).
-        // b. Let kPresent be ? HasProperty(O, Pk).
-        // c. If kPresent is true, then
-        //    i.  Let kValue be ? Get(O, Pk).
-        //    ii. Let accumulator be ? Call(
-        //          callbackfn, undefined,
-        //          « accumulator, kValue, k, O »).
         if (k in o) {
           value = callback(value, o[k], k, o);
         }
-        // d. Increase k by 1.
         k++;
       }
-      // 9. Return accumulator.
       return value;
     };
   }
+  // Array.prototype.addUnique
   if (!Array.prototype.addUnique) {
     Array.prototype.addUnique = function (searchElement) {
       if (this.indexOf(searchElement) < 0) {
@@ -343,6 +211,7 @@ See the LICENSE file for details.
       return false;
     };
   }
+  // Array.prototype.removeUnique
   if (!Array.prototype.removeUnique) {
     Array.prototype.removeUnique = function (searchElement) {
       var idx = this.indexOf(searchElement);
@@ -353,6 +222,7 @@ See the LICENSE file for details.
       return false;
     };
   }
+  // Array.prototype.removeAtIndex
   if (!Array.prototype.removeAtIndex) {
     Array.prototype.removeAtIndex = function (idx) {
       if (idx > -1) {
@@ -362,11 +232,14 @@ See the LICENSE file for details.
       return false;
     };
   }
-  Array.prototype.makeUnique = function () {
-    return this.sort().filter(function (current, index, array) {
-      return index === 0 || current !== array[index - 1];
-    });
-  };
+  // Array.prototype.makeUnique
+  if (!Array.prototype.makeUnique) {
+    Array.prototype.makeUnique = function () {
+      return this.sort().filter(function (current, index, array) {
+        return index === 0 || current !== array[index - 1];
+      });
+    };
+  }
   Number.prototype.toRadians = function () {
     return this * (Math.PI / 180);
   };
@@ -374,13 +247,13 @@ See the LICENSE file for details.
     return this * (180 / Math.PI);
   };
   Number.prototype.padZero = function (decimals) {
-    if (typeof decimals == "undefined") {
+    if (typeof decimals === "undefined") {
       decimals = 2;
     }
     var numStr = this.toString();
     var decimalsFound = numStr.length;
     if (decimalsFound >= decimals) {
-      return this;
+      return numStr;
     }
     while (decimalsFound < decimals) {
       numStr = "0" + numStr;
@@ -393,26 +266,24 @@ See the LICENSE file for details.
   }
   if (!Object.keys) {
     Object.keys = (function () {
-      var hasOwnProperty = Object.prototype.hasOwnProperty,
-        hasDontEnumBug = !{ toString: null }.propertyIsEnumerable("toString"),
-        dontEnums = [
-          "toString",
-          "toLocaleString",
-          "valueOf",
-          "hasOwnProperty",
-          "isPrototypeOf",
-          "propertyIsEnumerable",
-          "constructor",
-        ],
-        dontEnumsLength = dontEnums.length;
+      var hasOwnProperty = Object.prototype.hasOwnProperty;
+      var hasDontEnumBug = !{ toString: null }.propertyIsEnumerable("toString");
+      var dontEnums = [
+        "toString",
+        "toLocaleString",
+        "valueOf",
+        "hasOwnProperty",
+        "isPrototypeOf",
+        "propertyIsEnumerable",
+        "constructor",
+      ];
+      var dontEnumsLength = dontEnums.length;
       return function (obj) {
         var wasNull = obj === null;
-        var errorMessageTypeReadout = wasNull
-          ? "input was null"
-          : "input was ".concat(typeof obj);
+        var typeDesc = wasNull ? "input was null" : "input was ".concat(typeof obj);
         if ((typeof obj !== "object" && typeof obj !== "function") || wasNull)
           throw new TypeError(
-            "Object.keys called on non-object (".concat(errorMessageTypeReadout, ").")
+            "Object.keys called on non-object (".concat(typeDesc, ").")
           );
         var result = [];
         for (var prop in obj) {
@@ -427,19 +298,14 @@ See the LICENSE file for details.
       };
     })();
   }
-  if (typeof Object.create != "function") {
+  if (typeof Object.create !== "function") {
     Object.create = (function () {
       var Temp = function () {};
       return function (prototype) {
-        if (arguments.length > 1) {
-          throw Error("Second argument not supported");
-        }
-        if (prototype !== Object(prototype) && prototype !== null) {
+        if (arguments.length > 1) throw Error("Second argument not supported");
+        if (prototype !== Object(prototype) && prototype !== null)
           throw new TypeError("Argument must be an object or null");
-        }
-        if (prototype === null) {
-          throw Error("null [[Prototype]] not supported");
-        }
+        if (prototype === null) throw Error("null [[Prototype]] not supported");
         Temp.prototype = prototype;
         var result = new Temp();
         Temp.prototype = null;
@@ -447,74 +313,62 @@ See the LICENSE file for details.
       };
     })();
   }
-  if (!Object.entries)
+  if (!Object.entries) {
     Object.entries = function (obj) {
-      var ownProps = Object.keys(obj),
-        i = ownProps.length,
-        resArray = new Array(i); // preallocate the Array
-      while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
+      var ownProps = Object.keys(obj);
+      var resArray = new Array(ownProps.length);
+      for (var i = ownProps.length; i--; ) {
+        resArray[i] = [ownProps[i], obj[ownProps[i]]];
+      }
       return resArray;
     };
-  if (typeof Object.toArray != "function") {
-    Object.toArray = (function () {
-      return function (obj) {
-        return Object.keys(obj).map(function (m) {
-          return obj[m];
-        });
-      };
-    })();
   }
-  if (typeof Object.hasKeys != "function") {
-    Object.hasKeys = (function () {
-      return function (obj) {
-        if (obj == null) {
-          return false;
-        }
-        return Object.keys(obj).length > 0;
-      };
-    })();
+  if (typeof Object.toArray !== "function") {
+    Object.toArray = function (obj) {
+      return Object.keys(obj).map(function (key) {
+        return obj[key];
+      });
+    };
+  }
+  if (typeof Object.hasKeys !== "function") {
+    Object.hasKeys = function (obj) {
+      if (obj == null) return false;
+      return Object.keys(obj).length > 0;
+    };
   }
   if (!("assign" in Object)) {
     ///@ts-ignore
     Object.assign = (function (has) {
       "use strict";
-      return assign;
-      function assign(target, source) {
-        for (var i = 1; i < arguments.length; i++) {
-          copy(target, arguments[i]);
+      return function assign(target) {
+        var sources = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+          sources[_i - 1] = arguments[_i];
         }
-        return target;
-      }
-      function copy(target, source) {
-        for (var key in source) {
-          if (has.call(source, key)) {
-            target[key] = source[key];
+        for (var i = 0; i < sources.length; i++) {
+          var source = sources[i];
+          for (var key in source) {
+            if (has.call(source, key)) {
+              target[key] = source[key];
+            }
           }
         }
-      }
+        return target;
+      };
     })({}.hasOwnProperty);
   }
   function clone(obj) {
-    var copy;
-    // Handle the 3 simple types, and null or undefined
-    if (null == obj || "object" != typeof obj) return obj;
-    // Handle Date
+    if (obj == null || typeof obj !== "object") return obj;
     if (obj instanceof Date) {
-      copy = new Date();
+      var copy = new Date();
       copy.setTime(obj.getTime());
       return copy;
     }
-    // Handle Array
-    if (obj instanceof Array) {
-      copy = [];
-      for (var i = 0, len = obj.length; i < len; i++) {
-        copy[i] = clone(obj[i]);
-      }
-      return copy;
+    if (Array.isArray(obj)) {
+      return obj.map(clone);
     }
-    // Handle Object
-    if (obj instanceof Object) {
-      copy = {};
+    if (typeof obj === "object") {
+      var copy = {};
       for (var attr in obj) {
         if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
       }
@@ -522,42 +376,22 @@ See the LICENSE file for details.
     }
     throw new Error("Unable to copy obj! Its type isn't supported.");
   }
-  /**
-   * Transfers properties from one object to another for those properties which are mutually inclusive.
-   * @param srcObj - Object which will be scanned for property keys and values.
-   * @param destObj - Object which will receive source object's values for properties which are also found inside it.
-   * @returns True if changes were made (or values are not primitive), or false if all values are primitive
-   * and satisfy a comparison of equality in values of the property inside both source & target objects.
-   */
   function copyObjectPropertyValues(srcObj, destObj) {
     var primitivesAndEqual = true;
-    var srcProp, destProp;
-    for (var all in srcObj) {
-      if (all in destObj) {
-        srcProp = srcObj[all];
-        destProp = destObj[all];
-        if (srcProp !== destProp) {
-          primitivesAndEqual = false;
-        }
-        destObj[all] = srcObj[all];
+    for (var key in srcObj) {
+      if (key in destObj) {
+        var srcProp = srcObj[key];
+        var destProp = destObj[key];
+        if (srcProp !== destProp) primitivesAndEqual = false;
+        destObj[key] = srcProp;
       }
     }
     return !primitivesAndEqual;
   }
-  /**
-   * Checks all properties of a source object against a target object and verifies if all source properties are included in the target.
-   * @param srcObj - Object which will be scanned for property keys.
-   * @param destObj - Object which will be checked to see if properties of the source object are found inside it.
-   * @returns True if all source properties are included in the target object.
-   */
   function checkAllPropertyInclusion(srcObj, destObj) {
-    if (typeof srcObj != "object" || typeof destObj != "object") {
-      return false;
-    }
-    for (var all in srcObj) {
-      if (!(all in destObj)) {
-        return false;
-      }
+    if (typeof srcObj !== "object" || typeof destObj !== "object") return false;
+    for (var key in srcObj) {
+      if (!(key in destObj)) return false;
     }
     return true;
   }
@@ -689,91 +523,99 @@ See the LICENSE file for details.
     }
     return bar;
   }
-  /**
-   * Module for easy file logging from within Adobe ExtendScript.
-   * @param {String} fp File path for the log file. Defaults to `Folder.userData/{base_script_file_name}.log`.
-   * @param {String} mode Optional log file write mode. Write `w` mode or append `a` mode. If write mode 'w', the log file will be overwritten on each script run. Defaults to `w`.
-   * @param {Number} sizeLimit Log file size limit (in bytes) for rotation. Defaults to 5,000,000.
-   * @param {Boolean} console Forward calls to `Logger.log()` to the JavaScript Console via `$.writeln()`. Defaults to `false`.
-   */
-  function Logger(fp, mode, sizeLimit, console) {
-    if (typeof fp == "undefined")
-      fp = Folder.userData + "/" + resolveBaseScriptFromStack() + ".log";
-    this.mode = typeof mode !== "undefined" ? mode.toLowerCase() : "w";
-    this.console = typeof console !== "undefined" ? console : false;
-    this.file = new File(fp);
-    this.badPath = false;
-    // rotate log if too big
-    sizeLimit = typeof sizeLimit !== "undefined" ? Number(sizeLimit) : 5000000;
-    if (this.file.length > sizeLimit) {
-      var ts = Date.now();
-      var rotatedFile = new File(this.file + ts + ".bak");
-      this.file.copy(rotatedFile);
-      this.file.remove();
-      alert(this.file);
+  var Logger = /** @class */ (function () {
+    /**
+     * Class for easy file logging from within Adobe ExtendScript.
+     * @param fp File path for the log file. Defaults to `Folder.userData/{base_script_file_name}.log`.
+     * @param mode Optional log file write mode. Write `w` mode or append `a` mode. If write mode 'w', the log file will be overwritten on each script run. Defaults to `w`.
+     * @param sizeLimit Log file size limit (in bytes) for rotation. Defaults to 5,000,000.
+     * @param consoleOutput Forward calls to `Logger.log()` to the JavaScript Console via `$.writeln()`. Defaults to `false`.
+     */
+    function Logger(fp, mode, sizeLimit, consoleOutput) {
+      if (mode === void 0) {
+        mode = "w";
+      }
+      if (sizeLimit === void 0) {
+        sizeLimit = 5000000;
+      }
+      if (consoleOutput === void 0) {
+        consoleOutput = false;
+      }
+      this.badPath = false;
+      if (typeof fp === "undefined") {
+        fp = Folder.userData.fullName + "/" + resolveBaseScriptFromStack() + ".log";
+      }
+      this.mode = mode.toLowerCase();
+      this.consoleOutput = consoleOutput;
+      this.file = new File(fp);
+      // Rotate log if too big
+      if (this.file.length > sizeLimit) {
+        this.backup(true);
+      }
     }
-  }
-  Logger.prototype = {
     /**
      * Backup the log file.
-     * @returns {FileObject} Backup file object.
      */
-    backup: function () {
-      var backupFile = new File(this.file + ".bak");
+    Logger.prototype.backup = function (removeOriginal) {
+      if (removeOriginal === void 0) {
+        removeOriginal = false;
+      }
+      var ts = Date.now();
+      var backupFile = new File("".concat(this.file.fsName, ".").concat(ts, ".bak"));
       this.file.copy(backupFile);
+      if (removeOriginal) this.file.remove();
       return backupFile;
-    },
+    };
     /**
      * Write data to the log file.
-     * @param {String} text One or more strings to write, which are concatenated to form a single string.
-     * @returns {Boolean} Returns true if log file is successfully written, false if unsuccessful.
      */
-    log: function (text) {
-      // no need to keep alerting when the log path is bad
+    Logger.prototype.log = function () {
+      var text = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        text[_i] = arguments[_i];
+      }
       if (this.badPath) return false;
       var f = this.file;
-      var m = this.mode;
       var ts = new Date().toLocaleString();
-      // ensure parent folder exists
+      // Ensure parent folder exists
       if (!f.parent.exists) {
         if (!f.parent.parent.exists) {
-          alert("Bad log file path!\n'" + this.file + "'");
+          alert("Bad log file path!\n'" + f.fullName + "'");
           this.badPath = true;
           return false;
         }
         f.parent.create();
       }
-      // grab all arguments
-      var args = ["[" + ts + "]"];
-      for (var i = 0; i < arguments.length; ++i) args.push(arguments[i]);
-      // write the data
+      var args = ["[".concat(ts, "]")].concat(text);
       try {
         f.encoding = "UTF-8";
-        f.open(m);
+        f.open(this.mode);
         f.writeln(args.join(" "));
       } catch (e) {
-        $.writeln("Error writing file:\n" + f);
+        $.writeln("Error writing file: ".concat(f.fullName));
         return false;
       } finally {
         f.close();
       }
-      // write `text` to the console if requested
-      if (this.console) $.writeln(args.slice(1, args.length).join(" "));
+      if (this.consoleOutput) {
+        $.writeln(text.join(" "));
+      }
       return true;
-    },
+    };
     /**
      * Open the log file.
      */
-    open: function () {
+    Logger.prototype.open = function () {
       this.file.execute();
-    },
+    };
     /**
-     * Reveal the log file in the platform-specific file browser.
+     * Reveal the log file location.
      */
-    reveal: function () {
+    Logger.prototype.reveal = function () {
       this.file.parent.execute();
-    },
-  };
+    };
+    return Logger;
+  })();
   /**
    * Try and determine which if a localized string should be used or just the value.
    * @param command Command in question.
@@ -1124,8 +966,6 @@ See the LICENSE file for details.
   // FILE/FOLDER OPERATIONS
   /**
    * Setup folder object or create if doesn't exist.
-   * @param   {String} path System folder path.
-   * @returns {Object}      Folder object.
    */
   function setupFolderObject(path) {
     var folder = new Folder(path);
@@ -1134,22 +974,18 @@ See the LICENSE file for details.
   }
   /**
    * Setup file object.
-   * @param   {Object} path Folder object where file should exist,
-   * @param   {String} name File name.
-   * @returns {Object}      File object.
    */
   function setupFileObject(path, name) {
-    return new File(path + "/" + name);
+    return new File("".concat(path, "/").concat(name));
   }
   /**
    * Write string data to disk.
-   * @param {String} data Data to be written.
-   * @param {Object} fp   File path.
-   * @param {string} mode File access mode.
    */
   function writeData(data, fp, mode) {
-    mode = typeof mode !== "undefined" ? mode : "w";
-    f = new File(fp);
+    if (mode === void 0) {
+      mode = "w";
+    }
+    var f = new File(typeof fp === "string" ? fp : fp.fsName);
     try {
       f.encoding = "UTF-8";
       f.open(mode);
@@ -1162,11 +998,9 @@ See the LICENSE file for details.
   }
   /**
    * Read ExtendScript "json-like" data from file.
-   * @param   {Object} f File object to read.
-   * @returns {Object}   Evaluated JSON data.
    */
   function readJSONData(f) {
-    var json, obj;
+    var json;
     try {
       f.encoding = "UTF-8";
       f.open("r");
@@ -1176,13 +1010,10 @@ See the LICENSE file for details.
     } finally {
       f.close();
     }
-    obj = eval(json);
-    return obj;
+    return eval(json);
   }
   /**
    * Write ExtendScript "json-like" data to disk.
-   * @param {Object} obj Data to be written.
-   * @param {Object} f   File object to write to.
    */
   function writeJSONData(obj, f) {
     var data = obj.toSource();
@@ -11160,109 +10991,104 @@ See the LICENSE file for details.
   var userPrefsFolderName = "JBD";
   var userPrefsFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
   var userPrefsFileName = "Preferences.json";
-  // setup the base prefs model
-  var prefs = {};
-  prefs.startupCommands = null;
-  prefs.hiddenCommands = [];
-  prefs.workflows = [];
-  prefs.customCommands = [];
-  prefs.bookmarks = [];
-  prefs.scripts = [];
-  prefs.pickers = [];
-  prefs.fuzzy = true; // set to new fuzzy matcher as default
-  prefs.latches = {};
-  prefs.version = _version;
-  prefs.os = os;
-  prefs.locale = locale;
-  prefs.aiVersion = aiVersion;
-  prefs.timestamp = Date.now();
-  var userPrefs = {};
-  userPrefs.folder = function () {
-    return userPrefsFolder;
+  var prefs = {
+    startupCommands: null,
+    hiddenCommands: [],
+    workflows: [],
+    customCommands: [],
+    bookmarks: [],
+    scripts: [],
+    pickers: [],
+    fuzzy: true, // set to new fuzzy matcher as default
+    latches: {},
+    version: _version,
+    os: os,
+    locale: locale,
+    aiVersion: aiVersion,
+    timestamp: Date.now(),
   };
-  userPrefs.file = function () {
-    var folder = this.folder();
-    var file = setupFileObject(folder, userPrefsFileName);
-    return file;
-  };
-  userPrefs.load = function (inject) {
-    var file = this.file();
-    logger.log("loading user preferences:", file.fsName);
-    // if the prefs files doesn't exist, check for old 'settings' file
-    if (!file.exists) {
-      logger.log("no user prefs files found, checking for old 'settings' file");
-      oldFile = setupFileObject(settingsFolder, settingsFileName);
-      // no need to continue if no old 'settings' file is present
-      if (!oldFile.exists) return;
-      alert(localize(strings.pref_file_non_compatible));
-      var backupFile = new File(oldFile + ".bak");
-      logger.log("backing up old `settings` file to: ", backupFile.fsName);
-      oldFile.copy(backupFile);
-      try {
-        updateOldPreferences(oldFile);
-      } catch (e) {
-        alert(localize(strings.pref_file_loading_error) + "\n\n" + e);
-        settingsFolder.execute();
-        return;
-      }
-      alert(localize(strings.pref_update_complete));
-    }
-    if (file.exists) {
-      var loadedData, prop, propsToSkip;
-      try {
-        loadedData = readJSONData(file);
-        if (loadedData == {}) {
+  var userPrefs = {
+    folder: function () {
+      return userPrefsFolder;
+    },
+    file: function () {
+      var folder = this.folder();
+      return setupFileObject(folder, userPrefsFileName);
+    },
+    load: function (inject) {
+      var file = this.file();
+      logger.log("loading user preferences:", file.fsName);
+      if (!file.exists) {
+        logger.log("no user prefs files found, checking for old 'settings' file");
+        var oldFile = setupFileObject(settingsFolder, settingsFileName);
+        if (!oldFile.exists) return;
+        alert(localize(strings.pref_file_non_compatible));
+        var backupFile = new File(oldFile + ".bak");
+        logger.log("backing up old `settings` file to:", backupFile.fsName);
+        oldFile.copy(backupFile);
+        try {
+          updateOldPreferences(oldFile);
+        } catch (e) {
+          alert(localize(strings.pref_file_loading_error) + "\n\n" + e);
+          settingsFolder.execute();
           return;
         }
-        // alert user if locale or os of current machine doesn't match loaded prefs
-        // TODO: break when OS is updated, check for better machine identifier
-        // if (locale != loadedData.locale || os != loadedData.os)
-        //   alert(localize(strings.user_prefs_inconsistency));
-        propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
-        for (prop in loadedData) {
-          if (propsToSkip.includes(prop)) continue;
-          prefs[prop] = loadedData[prop];
-        }
-        if (inject) {
-          this.inject();
-        }
-      } catch (e) {
-        file.rename(file.name + ".bak");
-        logger.log("error loading user prefs", e);
-        logger.log("renaming prefs file:", file.fsName);
-        this.reveal();
-        Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
+        alert(localize(strings.pref_update_complete));
       }
-    }
-  };
-  userPrefs.inject = function () {
-    var typesToInject = [
-      "workflows",
-      "bookmarks",
-      "scripts",
-      "pickers",
-      "customCommands",
-    ];
-    for (var i = 0; i < typesToInject.length; i++) {
-      for (var j = 0; j < prefs[typesToInject[i]].length; j++) {
-        commandsData[prefs[typesToInject[i]][j].id] = prefs[typesToInject[i]][j];
+      if (file.exists) {
+        try {
+          var loadedData = readJSONData(file);
+          if (Object.keys(loadedData).length === 0) return;
+          var propsToSkip = ["version", "os", "locale", "aiVersion", "timestamp"];
+          for (var prop in loadedData) {
+            if (propsToSkip.indexOf(prop) !== -1) continue;
+            prefs[prop] = loadedData[prop];
+          }
+          if (inject) {
+            this.inject();
+          }
+        } catch (e) {
+          file.rename(file.name + ".bak");
+          logger.log("error loading user prefs", e);
+          logger.log("renaming prefs file:", file.fsName);
+          this.reveal();
+          Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
+        }
       }
-    }
-  };
-  userPrefs.save = function () {
-    var file = this.file();
-    logger.log("writing user prefs");
-    writeJSONData(prefs, file);
-  };
-  userPrefs.backup = function () {
-    var backupFile = new File(this.file() + ".bak");
-    logger.log("user prefs backed up tp:", backupFile.fsName);
-    this.file().copy(backupFile);
-  };
-  userPrefs.reveal = function () {
-    var folder = this.folder();
-    logger.log("revealing user prefs");
-    folder.execute();
+    },
+    inject: function () {
+      var typesToInject = [
+        "workflows",
+        "bookmarks",
+        "scripts",
+        "pickers",
+        "customCommands",
+      ];
+      for (var i = 0; i < typesToInject.length; i++) {
+        var type = typesToInject[i];
+        for (var j = 0; j < prefs[type].length; j++) {
+          var item = prefs[type][j];
+          commandsData[item.id] = item;
+        }
+      }
+    },
+    save: function () {
+      var file = this.file();
+      logger.log("writing user prefs");
+      writeJSONData(prefs, file);
+    },
+    backup: function () {
+      var ts = Date.now();
+      var backupFile = new File("".concat(this.file.fsName, ".").concat(ts, ".bak"));
+      this.file.copy(backupFile);
+      logger.log("user prefs backed up to:", backupFile.fsName);
+      return backupFile;
+    },
+    reveal: function () {
+      var folder = this.folder();
+      logger.log("revealing user prefs");
+      folder.execute();
+    },
   };
   function updateOldPreferences(oldFile) {
     logger.log("converting old 'settings' file to new user prefs file");
@@ -11277,7 +11103,7 @@ See the LICENSE file for details.
         commandsLUT[localize(commandsData[command].name)] = command;
       }
       // update bookmarks
-      updatedBookmarks = {};
+      var updatedBookmarks = {};
       for (var bookmark in data.commands.bookmark) {
         updatedBookmarks[data.commands.bookmark[bookmark].name] = {
           type: "bookmark",
@@ -11287,7 +11113,7 @@ See the LICENSE file for details.
       }
       data.commands.bookmark = updatedBookmarks;
       // update scripts
-      updatedScripts = {};
+      var updatedScripts = {};
       for (var script in data.commands.script) {
         updatedScripts[data.commands.script[script].name] = {
           type: "script",
@@ -11296,10 +11122,11 @@ See the LICENSE file for details.
       }
       data.commands.script = updatedScripts;
       // update workflows
-      updatedWorkflows = {};
-      updatedActions = [];
+      var updatedWorkflows = {};
+      var updatedActions = [];
       for (var workflow in data.commands.workflow) {
-        var cur, updatedAction;
+        var cur = void 0,
+          updatedAction = void 0;
         for (var i = 0; i < data.commands.workflow[workflow].actions.length; i++) {
           cur = data.commands.workflow[workflow].actions[i];
           // if the action can't be found in the LUT, just leave it as user will be prompted when they attempt to run it
@@ -11317,7 +11144,7 @@ See the LICENSE file for details.
       }
       data.commands.workflow = updatedWorkflows;
       // update hidden commands
-      updatedHiddenCommands = [];
+      var updatedHiddenCommands = [];
       for (var i = 0; i < data.settings.hidden.length; i++) {
         if (commandsLUT.hasOwnProperty(data.settings.hidden[i])) {
           updatedHiddenCommands.push(commandsLUT[data.settings.hidden[i]]);
@@ -11325,7 +11152,7 @@ See the LICENSE file for details.
       }
       data.settings.hidden = updatedHiddenCommands;
       // update recent commands
-      updatedRecentCommands = [];
+      var updatedRecentCommands = [];
       for (var i = 0; i < data.recent.commands.length; i++) {
         if (commandsLUT.hasOwnProperty(data.recent.commands[i])) {
           updatedRecentCommands.push(commandsLUT[data.recent.commands[i]]);
@@ -11336,14 +11163,15 @@ See the LICENSE file for details.
       data.settings.version = "0.8.1";
     }
     if (semanticVersionComparison(data.settings.version, "0.10.0") == -1) {
-      var startupCommands = [];
+      var startupCommands_1 = [];
       // update bookmarks
       var bookmarks = [];
-      var f, bookmark;
+      var f = void 0,
+        bookmark = void 0;
       for (var prop in data.commands.bookmark) {
         f = new File(data.commands.bookmark[prop].path);
         if (!f.exists) continue;
-        bookmarkName = decodeURI(f.name);
+        var bookmarkName = decodeURI(f.name);
         bookmark = {
           id: prop,
           name: bookmarkName,
@@ -11355,16 +11183,16 @@ See the LICENSE file for details.
           hidden: false,
         };
         bookmarks.push(bookmark);
-        startupCommands.push(prop);
+        startupCommands_1.push(prop);
       }
       prefs.bookmarks = bookmarks;
       // update scripts
       var scripts = [];
-      var f, script;
+      var script = void 0;
       for (var prop in data.commands.script) {
         f = new File(data.commands.script[prop].path);
         if (!f.exists) continue;
-        scriptName = decodeURI(f.name);
+        var scriptName = decodeURI(f.name);
         script = {
           id: prop,
           name: scriptName,
@@ -11376,12 +11204,15 @@ See the LICENSE file for details.
           hidden: false,
         };
         scripts.push(script);
-        startupCommands.push(prop);
+        startupCommands_1.push(prop);
       }
       prefs.scripts = scripts;
       // update workflows
+      var oldCommandIdsLUT = {}; // TODO: find in old commits
       var workflows = [];
-      var workflow, actions, action;
+      var workflow = void 0,
+        actions = void 0,
+        action = void 0;
       for (var prop in data.commands.workflow) {
         // make sure actions are using the new command id format
         actions = [];
@@ -11394,7 +11225,7 @@ See the LICENSE file for details.
             action = oldCommandIdsLUT[action];
           actions.push(action);
         }
-        var workflow = {
+        var workflow_1 = {
           id: prop,
           name: prop,
           actions: actions,
@@ -11403,16 +11234,16 @@ See the LICENSE file for details.
           selRequired: false,
           hidden: false,
         };
-        workflows.push(workflow);
-        startupCommands.push(prop);
+        workflows.push(workflow_1);
+        startupCommands_1.push(prop);
       }
       prefs.workflows = workflows;
       // add the base startup commands
-      startupCommands = startupCommands.concat([
+      startupCommands_1 = startupCommands_1.concat([
         "builtin_recentCommands",
         "config_settings",
       ]);
-      prefs.startupCommands = startupCommands;
+      prefs.startupCommands = startupCommands_1;
       // update hidden commands
       var hiddenCommands = data.settings.hidden;
       prefs.hiddenCommands = hiddenCommands;
@@ -11427,85 +11258,89 @@ See the LICENSE file for details.
   var recentCommands = {};
   var mostRecentCommands = [];
   var latches = {};
-  var userHistory = {};
-  userHistory.folder = function () {
-    return userHistoryFolder;
-  };
-  userHistory.file = function () {
-    var folder = this.folder();
-    var file = setupFileObject(folder, userHistoryFileName);
-    return file;
-  };
-  userHistory.load = function () {
-    var file = this.file();
-    logger.log("loading user history:", file.fsName);
-    if (file.exists) {
-      var queryCommandsLUT = {};
-      var loadedData, entry;
-      try {
-        loadedData = readJSONData(file);
-        if (loadedData == []) return;
-        history = loadedData;
-        for (var i = loadedData.length - 1; i >= 0; i--) {
-          entry = loadedData[i];
-          // track how many times a query ties to a command
-          if (!queryCommandsLUT.hasOwnProperty(entry.query))
-            queryCommandsLUT[entry.query] = {};
-          if (!queryCommandsLUT[entry.query].hasOwnProperty(entry.command))
-            queryCommandsLUT[entry.query][entry.command] = 0;
-          queryCommandsLUT[entry.query][entry.command]++;
-          // track how often recent command have been ran
-          if (!recentCommands.hasOwnProperty(entry.command))
-            recentCommands[entry.command] = 0;
-          recentCommands[entry.command]++;
-          // track the past 25 most recent commands
-          if (
-            mostRecentCommands.length <= mostRecentCommandsCount &&
-            commandsData.hasOwnProperty(entry.command) &&
-            !mostRecentCommands.includes(entry.command)
-          )
-            mostRecentCommands.push(entry.command);
-        }
-        // build latches with most common command for each query
-        var query, command, commands;
-        for (query in queryCommandsLUT) {
-          commands = [];
-          for (command in queryCommandsLUT[query]) {
-            commands.push([command, queryCommandsLUT[query][command]]);
+  var userHistory = {
+    folder: function () {
+      return userHistoryFolder;
+    },
+    file: function () {
+      var folder = this.folder();
+      var file = setupFileObject(folder, userHistoryFileName);
+      return file;
+    },
+    load: function () {
+      var file = this.file();
+      logger.log("loading user history:", file.fsName);
+      if (file.exists) {
+        var queryCommandsLUT = {};
+        var loadedData = void 0,
+          entry = void 0;
+        try {
+          loadedData = readJSONData(file);
+          if (Object.keys(loadedData).length === 0) return;
+          history = loadedData;
+          for (var i = loadedData.length - 1; i >= 0; i--) {
+            entry = loadedData[i];
+            // track how many times a query ties to a command
+            if (!queryCommandsLUT.hasOwnProperty(entry.query))
+              queryCommandsLUT[entry.query] = {};
+            if (!queryCommandsLUT[entry.query].hasOwnProperty(entry.command))
+              queryCommandsLUT[entry.query][entry.command] = 0;
+            queryCommandsLUT[entry.query][entry.command]++;
+            // track how often recent command have been ran
+            if (!recentCommands.hasOwnProperty(entry.command))
+              recentCommands[entry.command] = 0;
+            recentCommands[entry.command]++;
+            // track the past 25 most recent commands
+            if (
+              mostRecentCommands.length <= mostRecentCommandsCount &&
+              commandsData.hasOwnProperty(entry.command) &&
+              !mostRecentCommands.includes(entry.command)
+            )
+              mostRecentCommands.push(entry.command);
           }
-          // sort by most used
-          commands.sort(function (a, b) {
-            return b[1] - a[1];
-          });
-          latches[query] = commands[0][0];
+          // build latches with most common command for each query
+          var commands = void 0;
+          for (var query in queryCommandsLUT) {
+            commands = [];
+            for (var command in queryCommandsLUT[query]) {
+              commands.push([command, queryCommandsLUT[query][command]]);
+            }
+            // sort by most used
+            commands.sort(function (a, b) {
+              return b[1] - a[1];
+            });
+            latches[query] = commands[0][0];
+          }
+        } catch (e) {
+          file.rename(file.name + ".bak");
+          this.reveal();
+          Error.runtimeError(1, localize(strings.history_file_loading_error));
         }
-      } catch (e) {
-        file.rename(file.name + ".bak");
-        this.reveal();
-        Error.runtimeError(1, localize(strings.history_file_loading_error));
       }
-    }
-  };
-  userHistory.clear = function () {
-    var file = this.file();
-    logger.log("clearing user history");
-    file.remove();
-  };
-  userHistory.save = function () {
-    var file = this.file();
-    logger.log("writing user history");
-    if (history.length > 500) history = history.slice(-500);
-    writeJSONData(history, file);
-  };
-  userHistory.backup = function () {
-    var backupFile = new File(this.file() + ".bak");
-    logger.log("user history backed up to:", backupFile.fsName);
-    this.file().copy(backupFile);
-  };
-  userHistory.reveal = function () {
-    var folder = this.folder();
-    logger.log("revealing history file");
-    folder.execute();
+    },
+    clear: function () {
+      var file = this.file();
+      logger.log("clearing user history");
+      file.remove();
+    },
+    save: function () {
+      var file = this.file();
+      logger.log("writing user history");
+      if (history.length > 500) history = history.slice(-500);
+      writeJSONData(history, file);
+    },
+    backup: function () {
+      var ts = Date.now();
+      var backupFile = new File("".concat(this.file.fsName, ".").concat(ts, ".bak"));
+      this.file.copy(backupFile);
+      logger.log("user history backed up to:", backupFile.fsName);
+      return backupFile;
+    },
+    reveal: function () {
+      var folder = this.folder();
+      logger.log("revealing history file");
+      folder.execute();
+    },
   };
   //USER ACTIONS
   var userActions = {};
@@ -14297,7 +14132,6 @@ See the LICENSE file for details.
   userHistory.load();
   // set command palette matching algo
   var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
-  // TODO: allow disable keyword latching
   // add basic defaults to the startup on a first-run/fresh install
   if (!prefs.startupCommands) {
     prefs.startupCommands = ["builtin_recentCommands", "config_settings"];

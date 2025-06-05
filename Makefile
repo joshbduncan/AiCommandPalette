@@ -11,11 +11,11 @@ help: ## Display this help section
 ##@ Development
 build-strings:  ## build string objects from csv input file
 	@echo "⚙️ building string objects..."
-	python3 tools/build_strings.py data/strings.csv | prettier > src/data/built_strings.js
+	python3 tools/build_strings.py | prettier --parser typescript > src/data/built_strings.ts
 
 build-commands:  ## build command objects from csv input file
 	@echo "⚙️ building command objects..."
-	python3 tools/build_commands.py | prettier > src/data/built_commands.js
+	python3 tools/build_commands.py | prettier --parser typescript > src/data/built_commands.ts
 
 copy:  ## copy compiled script to Ai scripts folder
 	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts

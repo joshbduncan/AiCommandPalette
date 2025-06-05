@@ -1,58 +1,54 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-        "target": "ES3",
-        "ignoreDeprecations": "5.0",
-        "outFile": "build/bundle.jsx",
-        "allowJs": true,
-        "noLib": true,
-        "typeRoots": ["./types"],
-        // "types": ["./types/"],
-        "removeComments": false,
-        "sourceMap": false,
-        "alwaysStrict": false
-    },
-    "files": [
-        "./types/global.d.ts",
-        "./types/index.d.ts",
-        "./types/JavaScript.d.ts",
-        "./types/PlugPlugExternalObject.d.ts",
-        "./types/ScriptUI.d.ts",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "ES3",
+    "ignoreDeprecations": "5.0",
+    "outFile": "build/bundle.jsx",
+    "allowJs": true,
+    "noLib": true,
+    // "typeRoots": ["./types"],
+    "types": ["types-for-adobe/Illustrator/2022", "./types"],
+    // "types": ["./types/"],
+    "removeComments": false,
+    "sourceMap": false,
+    "alwaysStrict": false
+    // "skipLibCheck": true
+  },
+  "files": [
+    "./src/header.js",
 
-        "./src/header.js",
+    "./polyfills/Array.ts",
+    "./polyfills/Number.ts",
+    "./polyfills/Object.ts",
+    "./polyfills/String.ts",
 
-        "./polyfills/Array.ts",
-        "./polyfills/Number.ts",
-        "./polyfills/Object.ts",
-        "./polyfills/String.ts",
+    "src/Logger.ts",
+    "src/helpers.js",
+    "src/io.ts",
 
-        "src/Logger.js",
-        "src/helpers.js",
-        "src/io.js",
-        
-        "src/data/built_strings.js",
-        "src/data/built_commands.js",
-        
-        "src/config.js",
-        "src/user/preferences.js",
-        "src/user/history.js",
-        "src/user/actions.js",
+    "src/data/built_strings.ts",
+    "src/data/built_commands.ts",
 
-        "src/palettes/filter.js",
-        "src/palettes/fuzzy.js",
-        "src/palettes/nofuzz.js",
-        "src/palettes/commandPalette.js",
-        "src/palettes/customCommands.js",
-        "src/palettes/pickerBuilder.js",
-        "src/palettes/workflowBuilder.js",
-        "src/palettes/startupBuilder.js",
+    "src/config.js",
+    "src/user/preferences.ts",
+    "src/user/history.ts",
+    "src/user/actions.js",
 
-        "src/commands/processing.js",
-        "src/commands/internal.js",
-        "src/commands/workflows.js",
+    "src/palettes/filter.js",
+    "src/palettes/fuzzy.js",
+    "src/palettes/nofuzz.js",
+    "src/palettes/commandPalette.js",
+    "src/palettes/customCommands.js",
+    "src/palettes/pickerBuilder.js",
+    "src/palettes/workflowBuilder.js",
+    "src/palettes/startupBuilder.js",
 
-        "src/index.jsx"
-    ],
-    // "include": ["./polyfills/**/*.ts"],
-    "exclude": ["build", "node_modules"]
+    "src/commands/processing.js",
+    "src/commands/internal.js",
+    "src/commands/workflows.js",
+
+    "src/index.js"
+  ],
+  // "include": ["./polyfills/**/*.ts"],
+  "exclude": ["build", "node_modules"]
 }

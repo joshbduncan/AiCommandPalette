@@ -5,7 +5,6 @@ userHistory.load();
 
 // set command palette matching algo
 var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
-// TODO: allow disable keyword latching
 
 // add basic defaults to the startup on a first-run/fresh install
 if (!prefs.startupCommands) {

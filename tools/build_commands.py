@@ -132,9 +132,34 @@ def main() -> int:
         all_commands = all_commands | commands
         assert all_commands
 
-    output = f"""// GENERATED FROM CSV DATA FILES
+    header = "// GENERATED FROM CSV DATA FILES"
+    interface = """
+interface LocalizedName {
+  [langCode: string]: string;
+}
 
-    var commandsData = {json.dumps(all_commands)}"""
+interface CommandEntry {
+  id: string;
+  action: string;
+  type: string;
+  docRequired: boolean;
+  selRequired: boolean;
+  name: LocalizedName;
+  hidden: boolean;
+  minVersion?: number;
+  maxVersion?: number;
+}
+
+interface CommandsData {
+  [key: string]: CommandEntry;
+}
+"""
+
+    output = f"""{header}
+
+{interface}
+
+    const commandsData = {json.dumps(all_commands)}"""
 
     print(output.replace("\\\\n", "\\n"))
 

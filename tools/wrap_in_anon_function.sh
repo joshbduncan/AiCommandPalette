@@ -19,7 +19,7 @@ TMPFILE="$(mktemp)"
     echo "(function() {"
     cat "$INFILE"
     echo "})();"
-} | prettier >"$TMPFILE"
+} | prettier --parser babel >"$TMPFILE"
 
 # Move the wrapped content back to the original output
 mv "$TMPFILE" "$OUTFILE"

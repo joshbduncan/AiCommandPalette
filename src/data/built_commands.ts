@@ -1,6 +1,26 @@
 // GENERATED FROM CSV DATA FILES
 
-var commandsData = {
+interface LocalizedName {
+  [langCode: string]: string;
+}
+
+interface CommandEntry {
+  id: string;
+  action: string;
+  type: string;
+  docRequired: boolean;
+  selRequired: boolean;
+  name: LocalizedName;
+  hidden: boolean;
+  minVersion?: number;
+  maxVersion?: number;
+}
+
+interface CommandsData {
+  [key: string]: CommandEntry;
+}
+
+const commandsData = {
   menu_new: {
     id: "menu_new",
     action: "new",
