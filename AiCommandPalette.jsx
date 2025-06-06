@@ -240,6 +240,12 @@ See the LICENSE file for details.
       });
     };
   }
+  // Array.isArray polyfill
+  if (!Array.isArray) {
+    Array.isArray = function (arg) {
+      return Object.prototype.toString.call(arg) === "[object Array]";
+    };
+  }
   Number.prototype.toRadians = function () {
     return this * (Math.PI / 180);
   };
@@ -504,529 +510,6 @@ See the LICENSE file for details.
       );
     }
     return filledMessage;
-  }
-  /**
-   * Determine the base calling script from the current stack.
-   * @returns {String} Initial script name.
-   */
-  function resolveBaseScriptFromStack() {
-    var stack = $.stack.split("\n");
-    var foo, bar;
-    for (var i = 0; i < stack.length; i++) {
-      foo = stack[i];
-      if (foo[0] == "[" && foo[foo.length - 1] == "]") {
-        bar = foo.slice(1, foo.length - 1);
-        if (isNaN(bar)) {
-          break;
-        }
-      }
-    }
-    return bar;
-  }
-  var Logger = /** @class */ (function () {
-    /**
-     * Class for easy file logging from within Adobe ExtendScript.
-     * @param fp File path for the log file. Defaults to `Folder.userData/{base_script_file_name}.log`.
-     * @param mode Optional log file write mode. Write `w` mode or append `a` mode. If write mode 'w', the log file will be overwritten on each script run. Defaults to `w`.
-     * @param sizeLimit Log file size limit (in bytes) for rotation. Defaults to 5,000,000.
-     * @param consoleOutput Forward calls to `Logger.log()` to the JavaScript Console via `$.writeln()`. Defaults to `false`.
-     */
-    function Logger(fp, mode, sizeLimit, consoleOutput) {
-      if (mode === void 0) {
-        mode = "w";
-      }
-      if (sizeLimit === void 0) {
-        sizeLimit = 5000000;
-      }
-      if (consoleOutput === void 0) {
-        consoleOutput = false;
-      }
-      this.badPath = false;
-      if (typeof fp === "undefined") {
-        fp = Folder.userData.fullName + "/" + resolveBaseScriptFromStack() + ".log";
-      }
-      this.mode = mode.toLowerCase();
-      this.consoleOutput = consoleOutput;
-      this.file = new File(fp);
-      // Rotate log if too big
-      if (this.file.length > sizeLimit) {
-        this.backup(true);
-      }
-    }
-    /**
-     * Backup the log file.
-     */
-    Logger.prototype.backup = function (removeOriginal) {
-      if (removeOriginal === void 0) {
-        removeOriginal = false;
-      }
-      var ts = Date.now();
-      var backupFile = new File("".concat(this.file.fsName, ".").concat(ts, ".bak"));
-      this.file.copy(backupFile);
-      if (removeOriginal) this.file.remove();
-      return backupFile;
-    };
-    /**
-     * Write data to the log file.
-     */
-    Logger.prototype.log = function () {
-      var text = [];
-      for (var _i = 0; _i < arguments.length; _i++) {
-        text[_i] = arguments[_i];
-      }
-      if (this.badPath) return false;
-      var f = this.file;
-      var ts = new Date().toLocaleString();
-      // Ensure parent folder exists
-      if (!f.parent.exists) {
-        if (!f.parent.parent.exists) {
-          alert("Bad log file path!\n'" + f.fullName + "'");
-          this.badPath = true;
-          return false;
-        }
-        f.parent.create();
-      }
-      var args = ["[".concat(ts, "]")].concat(text);
-      try {
-        f.encoding = "UTF-8";
-        f.open(this.mode);
-        f.writeln(args.join(" "));
-      } catch (e) {
-        $.writeln("Error writing file: ".concat(f.fullName));
-        return false;
-      } finally {
-        f.close();
-      }
-      if (this.consoleOutput) {
-        $.writeln(text.join(" "));
-      }
-      return true;
-    };
-    /**
-     * Open the log file.
-     */
-    Logger.prototype.open = function () {
-      this.file.execute();
-    };
-    /**
-     * Reveal the log file location.
-     */
-    Logger.prototype.reveal = function () {
-      this.file.parent.execute();
-    };
-    return Logger;
-  })();
-  /**
-   * Try and determine which if a localized string should be used or just the value.
-   * @param command Command in question.
-   * @param prop    Command property to localize
-   * @returns       Correct string.
-   */
-  function determineCorrectString(command, prop) {
-    var s;
-    if (typeof command[prop] == "object") {
-      s = localize(command[prop]);
-    } else if (strings.hasOwnProperty(command[prop])) {
-      s = localize(strings[command[prop]]);
-    } else {
-      s = command[prop];
-    }
-    return s;
-  }
-  function findLastCarrot(s) {
-    var p = 0;
-    var re = / > /g;
-    if (re.test(s)) {
-      var match = s.search(re);
-      while (true) {
-        p += match + 3;
-        match = s.substring(p).search(re);
-        if (match == -1) break;
-      }
-    }
-    return p;
-  }
-  /**
-   * Generate a unique command id for the data model.
-   * @param   s Base string to generate the id from.
-   * @returns    Valid command id.
-   */
-  function generateCommandId(s) {
-    var re = new RegExp("\\s|\\.", "gi");
-    var id = s.replace(re, "_");
-    var n = 0;
-    while (commandsData.hasOwnProperty(id)) {
-      n++;
-      id = s + n.toString();
-    }
-    return id;
-  }
-  /**
-   * Ask the user if they want to add their new commands to their startup screen.
-   * @param newCommandIds Ids of the new commands.
-   * @returns             If commands were added to their startup screen.
-   */
-  function addToStartup(newCommandIds) {
-    // remove any command already in startup commands
-    var newCommandId;
-    for (var i = newCommandIds.length - 1; i >= 0; i--) {
-      newCommandId = newCommandIds[i];
-      if (prefs.startupCommands.includes(newCommandId)) {
-        newCommandIds.splice(i, 1);
-      }
-    }
-    if (!newCommandIds.length) return;
-    if (
-      !confirm(
-        localize(strings.cd_add_to_startup),
-        "noAsDflt",
-        localize(strings.cd_add_to_startup_title)
-      )
-    )
-      return false;
-    prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
-  }
-  /**
-   * Get every font used inside of an the Ai document.
-   * @param {Object} doc Ai document.
-   */
-  function getDocumentFonts(doc) {
-    var fonts = [];
-    for (var i = 0; i < doc.textFrames.length; i++) {
-      for (var j = 0; j < doc.textFrames[i].textRanges.length; j++) {
-        if (!fonts.includes(doc.textFrames[i].textRanges[j].textFont)) {
-          fonts.push(doc.textFrames[i].textRanges[j].textFont);
-        }
-      }
-    }
-    return fonts;
-  }
-  /**
-   * Reset view and zoom in on a specific page item.
-   * @param pageItem Page item to focus on.
-   */
-  function zoomIntoPageItem(pageItem) {
-    // get screen information
-    var screenBounds = app.activeDocument.views[0].bounds;
-    var screenW = screenBounds[2] - screenBounds[0];
-    var screenH = screenBounds[1] - screenBounds[3];
-    // get the (true) visible bounds of the returned object
-    var bounds = pageItem.visibleBounds;
-    var itemW = bounds[2] - bounds[0];
-    var itemH = bounds[1] - bounds[3];
-    var itemCX = bounds[0] + itemW / 2;
-    var itemCY = bounds[1] - itemH / 2;
-    // reset the current view to center of selected object
-    app.activeDocument.views[0].centerPoint = [itemCX, itemCY];
-    // calculate new zoom ratio to fit view to selected object
-    var zoomRatio;
-    if (itemW * (screenH / screenW) >= itemH) {
-      zoomRatio = screenW / itemW;
-    } else {
-      zoomRatio = screenH / itemH;
-    }
-    // set zoom to fit selected object plus a bit of padding
-    var padding = 0.9;
-    app.activeDocument.views[0].zoom = zoomRatio * padding;
-  }
-  /**
-   * Get info for all placed files for the current document.
-   * @returns {Array} Placed file information.
-   */
-  function getPlacedFileInfoForReport() {
-    if (ExternalObject.AdobeXMPScript == undefined)
-      ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
-    //Read xmp string - You can see document XMP in Illustrator -> File-> File Info -> Raw Data
-    var xmp = new XMPMeta(app.activeDocument.XMPString);
-    var names = [];
-    var allFilePaths = getAllPlacedFilePaths(xmp);
-    // var brokenFilePaths = getBrokenFilePaths(xmp);
-    // convert path to file object for property access
-    var fileObjects = [];
-    for (var i = 0; i < allFilePaths.length; i++) {
-      fileObjects.push(new File(allFilePaths[i]));
-    }
-    // sort the files by name
-    fileObjects.sort(function (a, b) {
-      return a.name - b.name;
-    });
-    // build string with file info for the report
-    var f;
-    for (var i = 0; i < fileObjects.length; i++) {
-      f = fileObjects[i];
-      names.push(
-        localize(strings.dr_name) +
-          decodeURI(f.name) +
-          "\n" +
-          localize(strings.dr_path) +
-          f.fsName.replace(f.name, "") +
-          "\n" +
-          localize(strings.dr_file_found) +
-          f.exists.toString().toUpperCase() +
-          (i == fileObjects.length - 1 ? "" : "\n")
-      );
-    }
-    return names;
-  }
-  /**
-   * Great trick to get all placed files (linked and embeded) @pixxxelschubser
-   * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
-   *
-   * If you try to do this using the placedItems collection from the API you will have issues.
-   * @param   {String} xmp Document xml data.
-   * @returns {Array}      Placed file paths.
-   */
-  function getAllPlacedFilePaths(xmp) {
-    //Read file paths from XMP - this returns file paths of both embedded and linked images
-    var paths = [];
-    var xpath;
-    for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
-      xpath = "xmpMM:Manifest[" + i + "]/stMfs:reference/stRef:filePath";
-      paths.push(xmp.getProperty(XMPConst.NS_XMP_MM, xpath).value);
-    }
-    return paths;
-  }
-  /**
-   * Check for any placed files with broken links in the current document.
-   * @param   {String} xmp Document xml data.
-   * @returns {Array}      Broken placed file paths.
-   */
-  function getBrokenFilePaths(xmp) {
-    //Read file paths from XMP - this returns file paths of both embedded and linked images
-    var paths = [];
-    var xpath;
-    for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
-      xpath = "xmpMM:Ingredients[" + i + "]/stRef:filePath";
-      paths.push(xmp.getProperty(XMPConst.NS_XMP_MM, xpath).value);
-    }
-    return paths;
-  }
-  /**
-   * Check to make sure the command is available in the system Ai version.
-   * @param command Command to check.
-   * @returns       True if command is available in the current Ai version or false if not.
-   */
-  function commandVersionCheck(command) {
-    var aiVersion = parseFloat(app.version);
-    if (
-      (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
-      (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
-    )
-      return false;
-    return true;
-  }
-  /**
-   * Compare semantic version numbers.
-   * @param {String} a Semantic version number.
-   * @param {String} b Semantic version number.
-   * @returns          1 if `a` > `b`, -1 if `b` > `a`, 0 if `a` == `b`.
-   */
-  function semanticVersionComparison(a, b) {
-    if (a === b) {
-      return 0;
-    }
-    var a_components = a.split(".");
-    var b_components = b.split(".");
-    var len = Math.min(a_components.length, b_components.length);
-    // loop while the components are equal
-    for (var i = 0; i < len; i++) {
-      // A bigger than B
-      if (parseInt(a_components[i]) > parseInt(b_components[i])) {
-        return 1;
-      }
-      // B bigger than A
-      if (parseInt(a_components[i]) < parseInt(b_components[i])) {
-        return -1;
-      }
-    }
-    // If one's a prefix of the other, the longer one is greater.
-    if (a_components.length > b_components.length) {
-      return 1;
-    }
-    if (a_components.length < b_components.length) {
-      return -1;
-    }
-  }
-  /**
-   * Convert Ai points unit to another api ruler constant.
-   * https://ai-scripting.docsforadobe.dev/jsobjref/scripting-constants.html#jsobjref-scripting-constants-rulerunits
-   * @param   {Number} points Point value to convert.
-   * @param   {String} unit   RulerUnit to convert `points` to.
-   * @returns {Number}        Converted number.
-   */
-  function convertPointsTo(points, unit) {
-    var conversions = {
-      Centimeters: 28.346,
-      Qs: 0.709,
-      Inches: 72.0,
-      Pixels: 1.0,
-      Millimeters: 2.834645,
-      Unknown: 1.0,
-      Picas: 12.0,
-      Points: 1.0,
-    };
-    return points / conversions[unit];
-  }
-  /**
-   * Return the names of each object in an Ai collection object.
-   * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html?highlight=collection#collection-objects
-   * @param {Object}  collection Ai collection object.
-   * @param {Boolean} sorted     Should the results be sorted.
-   * @returns {Array}            Names of each object inside of `collection`.
-   */
-  function getCollectionObjectNames(collection, sorted) {
-    sorted = typeof sorted !== "undefined" ? sorted : false;
-    names = [];
-    if (collection.length > 0) {
-      for (var i = 0; i < collection.length; i++) {
-        if (collection.typename == "Spots") {
-          if (collection[i].name != "[Registration]") {
-            names.push(collection[i].name);
-          }
-        } else {
-          names.push(collection[i].name);
-        }
-      }
-    }
-    return sorted ? names.sort() : names;
-  }
-  /**
-   * Present File.openDialog() for user to select files to load.
-   * @param   {String}  prompt        Prompt for dialog.
-   * @param   {Boolean} multiselect   Can multiple files be selected.
-   * @param   {String}  fileTypeRegex RegEx search string for file types (e.g. ".jsx$|.js$").
-   * @returns {Array}                 Selected file(s).
-   */
-  function loadFileTypes(prompt, multiselect, fileTypeRegex) {
-    var results = [];
-    var files = File.openDialog(prompt, "", multiselect);
-    if (files) {
-      for (var i = 0; i < files.length; i++) {
-        f = files[i];
-        fname = decodeURI(f.name);
-        if (f.name.search(fileTypeRegex) >= 0) {
-          results.push(f);
-        }
-      }
-    }
-    return results;
-  }
-  /**
-   * Simulate a key press for Windows users.
-   *
-   * This function is in response to a known ScriptUI bug on Windows.
-   * You can read more about it in the GitHub issue linked below.
-   * https://github.com/joshbduncan/AiCommandPalette/issues/8
-   *
-   * Basically, on some Windows Ai versions, when a ScriptUI dialog is
-   * presented and the active attribute is set to true on a field, Windows
-   * will flash the Windows Explorer app quickly and then bring Ai back
-   * in focus with the dialog front and center. This is a terrible user
-   * experience so Sergey and I attempted to fix it the best we could.
-   *
-   * This clever solution was created by Sergey Osokin (https://github.com/creold)
-   *
-   * @param {String} k Key to simulate.
-   * @param {Number} n Number of times to simulate the keypress.
-   */
-  function simulateKeypress(k, n) {
-    if (!n) n = 1;
-    try {
-      var f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
-      if (!f.exists) {
-        var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
-        while (n--) {
-          data += 'WshShell.SendKeys "{' + k + '}"\n';
-        }
-        f.encoding = "UTF-8";
-        f.open("w");
-        f.write(data);
-      }
-      f.execute();
-    } catch (e) {
-      $.writeln(e);
-    } finally {
-      f.close();
-    }
-  }
-  /**
-   * Open a url in the system browser.
-   * @param {String} url URL to open.
-   */
-  function openURL(url) {
-    var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
-    html.open("w");
-    var htmlBody =
-      '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' +
-      url +
-      '"></head><body> <p></body></html>';
-    html.write(htmlBody);
-    html.close();
-    html.execute();
-  }
-  // FILE/FOLDER OPERATIONS
-  /**
-   * Setup folder object or create if doesn't exist.
-   */
-  function setupFolderObject(path) {
-    var folder = new Folder(path);
-    if (!folder.exists) folder.create();
-    return folder;
-  }
-  /**
-   * Setup file object.
-   */
-  function setupFileObject(path, name) {
-    return new File("".concat(path, "/").concat(name));
-  }
-  /**
-   * Write string data to disk.
-   */
-  function writeData(data, fp, mode) {
-    if (mode === void 0) {
-      mode = "w";
-    }
-    var f = new File(typeof fp === "string" ? fp : fp.fsName);
-    try {
-      f.encoding = "UTF-8";
-      f.open(mode);
-      f.write(data);
-    } catch (e) {
-      alert(localize(strings.fl_error_writing, f));
-    } finally {
-      f.close();
-    }
-  }
-  /**
-   * Read ExtendScript "json-like" data from file.
-   */
-  function readJSONData(f) {
-    var json;
-    try {
-      f.encoding = "UTF-8";
-      f.open("r");
-      json = f.read();
-    } catch (e) {
-      alert(localize(strings.fl_error_loading, f));
-    } finally {
-      f.close();
-    }
-    return eval(json);
-  }
-  /**
-   * Write ExtendScript "json-like" data to disk.
-   */
-  function writeJSONData(obj, f) {
-    var data = obj.toSource();
-    try {
-      f.encoding = "UTF-8";
-      f.open("w");
-      f.write(data);
-    } catch (e) {
-      alert(localize(strings.fl_error_writing, f));
-    } finally {
-      f.close();
-    }
   }
   // GENERATED FROM CSV DATA FILES
   var strings = {
@@ -10871,9 +10354,543 @@ See the LICENSE file for details.
       hidden: false,
     },
   };
-  // CONFIGURATION
-  var _a, _b;
+  /**
+   * Determine the base calling script from the current stack.
+   * @returns {String} Initial script name.
+   */
+  function resolveBaseScriptFromStack() {
+    var stack = $.stack.split("\n");
+    var foo, bar;
+    for (var i = 0; i < stack.length; i++) {
+      foo = stack[i];
+      if (foo[0] == "[" && foo[foo.length - 1] == "]") {
+        bar = foo.slice(1, foo.length - 1);
+        if (isNaN(bar)) {
+          break;
+        }
+      }
+    }
+    return bar;
+  }
+  var Logger = /** @class */ (function () {
+    /**
+     * Class for easy file logging from within Adobe ExtendScript.
+     * @param fp File path for the log file. Defaults to `Folder.userData/{base_script_file_name}.log`.
+     * @param mode Optional log file write mode. Write `w` mode or append `a` mode. If write mode 'w', the log file will be overwritten on each script run. Defaults to `w`.
+     * @param sizeLimit Log file size limit (in bytes) for rotation. Defaults to 5,000,000.
+     * @param consoleOutput Forward calls to `Logger.log()` to the JavaScript Console via `$.writeln()`. Defaults to `false`.
+     */
+    function Logger(fp, mode, sizeLimit, consoleOutput) {
+      if (mode === void 0) {
+        mode = "w";
+      }
+      if (sizeLimit === void 0) {
+        sizeLimit = 5000000;
+      }
+      if (consoleOutput === void 0) {
+        consoleOutput = false;
+      }
+      this.badPath = false;
+      if (typeof fp === "undefined") {
+        fp = Folder.userData.fullName + "/" + resolveBaseScriptFromStack() + ".log";
+      }
+      this.mode = mode.toLowerCase();
+      this.consoleOutput = consoleOutput;
+      this.file = new File(fp);
+      // Rotate log if too big
+      if (this.file.length > sizeLimit) {
+        this.backup(true);
+      }
+    }
+    /**
+     * Backup the log file.
+     */
+    Logger.prototype.backup = function (removeOriginal) {
+      if (removeOriginal === void 0) {
+        removeOriginal = false;
+      }
+      var ts = Date.now();
+      var backupFile = new File("".concat(this.file.fsName, ".").concat(ts, ".bak"));
+      this.file.copy(backupFile);
+      if (removeOriginal) this.file.remove();
+      return backupFile;
+    };
+    /**
+     * Write data to the log file.
+     */
+    Logger.prototype.log = function () {
+      var text = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        text[_i] = arguments[_i];
+      }
+      if (this.badPath) return false;
+      var f = this.file;
+      var ts = new Date().toLocaleString();
+      // Ensure parent folder exists
+      if (!f.parent.exists) {
+        if (!f.parent.parent.exists) {
+          alert("Bad log file path!\n'" + f.fullName + "'");
+          this.badPath = true;
+          return false;
+        }
+        f.parent.create();
+      }
+      var args = ["[".concat(ts, "]")].concat(text);
+      try {
+        f.encoding = "UTF-8";
+        f.open(this.mode);
+        f.writeln(args.join(" "));
+      } catch (e) {
+        $.writeln("Error writing file: ".concat(f.fullName));
+        return false;
+      } finally {
+        f.close();
+      }
+      if (this.consoleOutput) {
+        $.writeln(text.join(" "));
+      }
+      return true;
+    };
+    /**
+     * Open the log file.
+     */
+    Logger.prototype.open = function () {
+      this.file.execute();
+    };
+    /**
+     * Reveal the log file location.
+     */
+    Logger.prototype.reveal = function () {
+      this.file.parent.execute();
+    };
+    return Logger;
+  })();
+  /**
+   * Attempts to resolve the correct localized string for a given property
+   * on a command object. If the property is a language map, it is passed
+   * directly to `localize()`. If the property is a string that matches a key
+   * in the global `strings` map, the corresponding localized string is returned.
+   * Otherwise, the original string is returned as-is.
+   *
+   * @param command - The command object containing the property to resolve.
+   * @param prop - The property name to check and localize.
+   * @returns The resolved string, either localized or raw.
+   */
+  function determineCorrectString(command, prop) {
+    var value = command[prop];
+    if (typeof value === "object") {
+      return localize(value);
+    }
+    if (strings.hasOwnProperty(value)) {
+      return localize(strings[value]);
+    }
+    return value;
+  }
+  /**
+   * Finds the index position after the last occurrence of `' > '` in the given string.
+   * Useful for locating the final breadcrumb separator in a path-like string.
+   *
+   * @param s - The string to search within.
+   * @returns The position just after the last `' > '` or 0 if not found.
+   */
+  function findLastCarrot(s) {
+    var p = 0;
+    var re = / > /g;
+    if (re.test(s)) {
+      var match = s.search(re);
+      while (true) {
+        p += match + 3;
+        match = s.substring(p).search(re);
+        if (match === -1) break;
+      }
+    }
+    return p;
+  }
+  /**
+   * Generate a unique command ID for the data model by replacing whitespace and periods,
+   * and appending a number if necessary to ensure uniqueness.
+   *
+   * @param s - Base string to generate the ID from.
+   * @returns A valid, unique command ID.
+   */
+  function generateCommandId(s) {
+    var re = /\s|\./gi;
+    var id = s.replace(re, "_");
+    var n = 0;
+    while (commandsData.hasOwnProperty(id)) {
+      n++;
+      id = s + n.toString();
+    }
+    return id;
+  }
+  /**
+   * Ask the user if they want to add their new commands to their startup screen.
+   *
+   * @param newCommandIds - Array of new command IDs to add.
+   * @returns `false` if the user declines to add commands, `undefined` otherwise.
+   */
+  function addToStartup(newCommandIds) {
+    // Remove any command already in startupCommands
+    for (var i = newCommandIds.length - 1; i >= 0; i--) {
+      var newCommandId = newCommandIds[i];
+      if (prefs.startupCommands.includes(newCommandId)) {
+        newCommandIds.splice(i, 1);
+      }
+    }
+    if (!newCommandIds.length) return;
+    var confirmed = confirm(
+      localize(strings.cd_add_to_startup),
+      false,
+      localize(strings.cd_add_to_startup_title)
+    );
+    if (!confirmed) return false;
+    prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
+  }
+  /**
+   * Get every unique font used inside the Illustrator document.
+   *
+   * @param doc - The Illustrator document object.
+   * @returns An array of unique fonts used in the document.
+   */
+  function getDocumentFonts(doc) {
+    var fonts = [];
+    for (var i = 0; i < doc.textFrames.length; i++) {
+      var textFrame = doc.textFrames[i];
+      for (var j = 0; j < textFrame.textRanges.length; j++) {
+        var font = textFrame.textRanges[j].textFont;
+        if (fonts.indexOf(font) === -1) {
+          fonts.push(font);
+        }
+      }
+    }
+    return fonts;
+  }
+  /**
+   * Reset view and zoom in on a specific page item in the active Illustrator document.
+   *
+   * @param pageItem - The page item to focus the view on.
+   */
+  function zoomIntoPageItem(pageItem) {
+    var view = app.activeDocument.views[0];
+    // Get current screen dimensions
+    var screenBounds = view.bounds;
+    var screenW = screenBounds[2] - screenBounds[0];
+    var screenH = screenBounds[1] - screenBounds[3];
+    // Get page item's visible bounds and center
+    var bounds = pageItem.visibleBounds;
+    var itemW = bounds[2] - bounds[0];
+    var itemH = bounds[1] - bounds[3];
+    var itemCX = bounds[0] + itemW / 2;
+    var itemCY = bounds[1] - itemH / 2;
+    // Center the view on the page item
+    view.centerPoint = [itemCX, itemCY];
+    // Calculate zoom ratio
+    var ratioW = screenW / itemW;
+    var ratioH = screenH / itemH;
+    var zoomRatio = itemW * (screenH / screenW) >= itemH ? ratioW : ratioH;
+    // Apply zoom with a padding factor
+    var padding = 0.9;
+    view.zoom = zoomRatio * padding;
+  }
+  /**
+   * Get information for all placed files in the current Illustrator document.
+   * This includes file name, file path, and whether the file exists.
+   *
+   * @returns An array of localized strings containing file info for reporting.
+   */
+  function getPlacedFileInfoForReport() {
+    // Load AdobeXMPScript if not already available
+    if (ExternalObject.AdobeXMPScript === undefined) {
+      ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
+    }
+    // Parse XMP metadata from the current document
+    var xmp = new XMPMeta(app.activeDocument.XMPString);
+    var allFilePaths = getAllPlacedFilePaths(xmp);
+    // Convert paths to File objects
+    var fileObjects = allFilePaths.map(function (path) {
+      return new File(path);
+    });
+    // Sort files by name
+    fileObjects.sort(function (a, b) {
+      return a.name.localeCompare(b.name);
+    });
+    // Build localized strings for each file
+    var result = fileObjects.map(function (f, index) {
+      var fileInfo =
+        localize(strings.dr_name) +
+        decodeURI(f.name) +
+        "\n" +
+        localize(strings.dr_path) +
+        f.fsName.replace(f.name, "") +
+        "\n" +
+        localize(strings.dr_file_found) +
+        f.exists.toString().toUpperCase();
+      return index === fileObjects.length - 1 ? fileInfo : fileInfo + "\n";
+    });
+    return result;
+  }
+  /**
+   * Get all placed file paths (linked and embedded) from the document XMP metadata.
+   * This bypasses issues with the `placedItems` collection in the Illustrator API.
+   *
+   * Credit to @pixxxelschubser via Adobe forums:
+   * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
+   *
+   * @param xmp - The parsed XMP metadata object for the current document.
+   * @returns An array of file path strings.
+   */
+  function getAllPlacedFilePaths(xmp) {
+    var paths = [];
+    // Iterate over all items in the xmpMM:Manifest array
+    for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
+      var xpath = "xmpMM:Manifest[".concat(i, "]/stMfs:reference/stRef:filePath");
+      var prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
+      if (prop != null && typeof prop.value === "string") {
+        paths.push(prop.value);
+      }
+    }
+    return paths;
+  }
+  /**
+   * Check for any placed files with broken links in the current Illustrator document.
+   *
+   * This function parses the document's XMP metadata to find broken links listed under
+   * `xmpMM:Ingredients`, which includes externally referenced files (e.g., missing linked images).
+   *
+   * @param xmp - The parsed XMP metadata object for the current document.
+   * @returns An array of file path strings for the broken linked files.
+   */
+  function getBrokenFilePaths(xmp) {
+    var paths = [];
+    for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
+      var xpath = "xmpMM:Ingredients[".concat(i, "]/stRef:filePath");
+      var prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
+      if (prop != null && typeof prop.value === "string") {
+        paths.push(prop.value);
+      }
+    }
+    return paths;
+  }
+  /**
+   * Check whether a command is compatible with the current Illustrator version.
+   *
+   * Compares the system's Illustrator version against optional `minVersion` and `maxVersion`
+   * properties on the command to determine if the command should be available.
+   *
+   * @param command - The command object to validate.
+   * @returns True if the command is valid for the current Illustrator version, false otherwise.
+   */
+  function commandVersionCheck(command) {
+    var aiVersion = parseFloat(app.version);
+    if (
+      (command.minVersion !== undefined && command.minVersion > aiVersion) ||
+      (command.maxVersion !== undefined && command.maxVersion < aiVersion)
+    ) {
+      return false;
+    }
+    return true;
+  }
+  /**
+   * Compare two semantic version strings.
+   *
+   * @param a - First semantic version string (e.g. "1.2.3").
+   * @param b - Second semantic version string (e.g. "1.2.0").
+   * @returns 1 if `a` > `b`, -1 if `b` > `a`, 0 if they are equal.
+   */
+  function semanticVersionComparison(a, b) {
+    if (a === b) {
+      return 0;
+    }
+    var a_components = a.split(".");
+    var b_components = b.split(".");
+    var len = Math.min(a_components.length, b_components.length);
+    for (var i = 0; i < len; i++) {
+      var aNum = parseInt(a_components[i], 10);
+      var bNum = parseInt(b_components[i], 10);
+      if (aNum > bNum) {
+        return 1;
+      }
+      if (aNum < bNum) {
+        return -1;
+      }
+    }
+    // If one's a prefix of the other, the longer one is considered greater
+    if (a_components.length > b_components.length) {
+      return 1;
+    }
+    if (a_components.length < b_components.length) {
+      return -1;
+    }
+    return 0;
+  }
+  /**
+   * Return the names of each object in an Illustrator collection object.
+   * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html#collection-objects
+   *
+   * @param collection - Illustrator collection object with a `length` and `name` property on each item.
+   * @param sorted - Whether the results should be sorted alphabetically.
+   * @returns An array of names from the collection.
+   */
+  function getCollectionObjectNames(collection, sorted) {
+    if (sorted === void 0) {
+      sorted = false;
+    }
+    var names = [];
+    if (collection.length > 0) {
+      for (var i = 0; i < collection.length; i++) {
+        var item = collection[i];
+        if (collection.typename === "Spots") {
+          if (item.name !== "[Registration]") {
+            names.push(item.name);
+          }
+        } else {
+          names.push(item.name);
+        }
+      }
+    }
+    return sorted ? names.sort() : names;
+  }
+  /**
+   * Present File.openDialog() for user to select files to load.
+   *
+   * @param prompt - Prompt text for the open dialog.
+   * @param multiselect - Whether multiple files can be selected.
+   * @param fileFilter - A file filter string (e.g., "*.js;*.jsx" or "JavaScript Files:*.js,*.jsx").
+   * @returns An array of selected `File` objects, or an empty array if none selected.
+   */
+  function loadFileTypes(prompt, multiselect, fileFilter) {
+    var results = [];
+    var files = File.openDialog(prompt, fileFilter, multiselect);
+    if (files) {
+      var selectedFiles = Array.isArray(files) ? files : [files];
+      for (var i = 0; i < selectedFiles.length; i++) {
+        results.push(selectedFiles[i]);
+      }
+    }
+    return results;
+  }
+  /**
+   * Simulate a key press for Windows users to fix a ScriptUI focus bug.
+   *
+   * This function addresses a known issue where, on some Windows versions of Illustrator,
+   * setting `active = true` on a ScriptUI field causes a brief flash of Windows Explorer
+   * before the Illustrator dialog comes to the front. This workaround, created by Sergey Osokin,
+   * uses a temporary `.vbs` script to simulate a keypress and bring focus back cleanly.
+   *
+   * See: https://github.com/joshbduncan/AiCommandPalette/issues/8
+   *
+   * @param k - The key to simulate (e.g. "TAB", "ESC", etc.).
+   * @param n - Number of times to simulate the keypress. Defaults to 1.
+   */
+  function simulateKeypress(k, n) {
+    if (n === void 0) {
+      n = 1;
+    }
+    var f;
+    try {
+      f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
+      if (!f.exists) {
+        var data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
+        for (var i = 0; i < n; i++) {
+          data += 'WshShell.SendKeys "{'.concat(k, '}"\n');
+        }
+        f.encoding = "UTF-8";
+        f.open("w");
+        f.write(data);
+      }
+      f.execute();
+    } catch (e) {
+      $.writeln(e);
+    } finally {
+      if (f) f.close();
+    }
+  }
+  /**
+   * Open a URL in the system default browser.
+   *
+   * This function creates a temporary HTML file that redirects to the given URL,
+   * and then opens it using the default system browser. Useful workaround for
+   * opening links from ExtendScript (since `File.execute()` works on HTML files).
+   *
+   * @param url - The URL to open.
+   */
+  function openURL(url) {
+    var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
+    html.open("w");
+    var htmlBody =
+      '<html><head><META HTTP-EQUIV="Refresh" CONTENT="0; URL=' +
+      url +
+      '"></head><body><p></p></body></html>';
+    html.write(htmlBody);
+    html.close();
+    html.execute();
+  }
+  // FILE/FOLDER OPERATIONS
+  /**
+   * Setup folder object or create if doesn't exist.
+   */
+  function setupFolderObject(path) {
+    var folder = new Folder(path);
+    if (!folder.exists) folder.create();
+    return folder;
+  }
+  /**
+   * Setup file object.
+   */
+  function setupFileObject(path, name) {
+    return new File("".concat(path, "/").concat(name));
+  }
+  /**
+   * Write string data to disk.
+   */
+  function writeData(data, fp, mode) {
+    if (mode === void 0) {
+      mode = "w";
+    }
+    var f = new File(typeof fp === "string" ? fp : fp.fsName);
+    try {
+      f.encoding = "UTF-8";
+      f.open(mode);
+      f.write(data);
+    } catch (e) {
+      alert(localize(strings.fl_error_writing, f));
+    } finally {
+      f.close();
+    }
+  }
+  /**
+   * Read ExtendScript "json-like" data from file.
+   */
+  function readJSONData(f) {
+    var json;
+    try {
+      f.encoding = "UTF-8";
+      f.open("r");
+      json = f.read();
+    } catch (e) {
+      alert(localize(strings.fl_error_loading, f));
+    } finally {
+      f.close();
+    }
+    return eval(json);
+  }
+  /**
+   * Write ExtendScript "json-like" data to disk.
+   */
+  function writeJSONData(obj, f) {
+    var data = obj.toSource();
+    try {
+      f.encoding = "UTF-8";
+      f.open("w");
+      f.write(data);
+    } catch (e) {
+      alert(localize(strings.fl_error_writing, f));
+    } finally {
+      f.close();
+    }
+  }
   // DEVELOPMENT SETTINGS
+  var _a, _b;
   // localization testing
   // $.locale = false;
   // $.locale = "de";
@@ -11626,7 +11643,6 @@ See the LICENSE file for details.
     }
     return sortByScore(matches);
   }
-  // CUSTOM SCRIPTUI FILTERABLE LISTBOX
   // set flags for query arrow navigation fix
   var fromQuery = false;
   var fromQueryShiftKey = false;
@@ -12503,7 +12519,6 @@ See the LICENSE file for details.
     }
     return false;
   }
-  // COMMAND EXECUTION
   /**
    * Process command actions.
    * @param {String} id Command id to process.
@@ -12816,7 +12831,6 @@ See the LICENSE file for details.
     if (!write) return;
     userPrefs.save();
   }
-  // AI COMMAND PALETTE CONFIGURATION COMMANDS
   /**
    * Ai Command Palette About Dialog.
    */
@@ -13192,12 +13206,12 @@ See the LICENSE file for details.
       app.activeDocument.documentColorSpace.toString().split(".").pop() +
       "\n" +
       localize(strings.dr_width) +
-      convertPointsTo(app.activeDocument.width, rulerUnits) +
+      UnitValue("".concat(app.activeDocument.width, " pt")).as(rulerUnits) +
       " " +
       rulerUnits +
       "\n" +
       localize(strings.dr_height) +
-      convertPointsTo(app.activeDocument.height, rulerUnits) +
+      UnitValue("".concat(app.activeDocument.height, " pt")).as(rulerUnits) +
       " " +
       rulerUnits;
     // generate all optional report information (all included by default)

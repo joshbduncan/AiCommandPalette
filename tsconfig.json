@@ -15,19 +15,19 @@
     // "skipLibCheck": true
   },
   "files": [
-    "./src/header.js",
+    "src/header.ts",
 
     "./polyfills/Array.ts",
     "./polyfills/Number.ts",
     "./polyfills/Object.ts",
     "./polyfills/String.ts",
 
-    "src/Logger.ts",
-    "src/helpers.js",
-    "src/io.ts",
-
     "src/data/built_strings.ts",
     "src/data/built_commands.ts",
+
+    "src/Logger.ts",
+    "src/helpers.ts",
+    "src/io.ts",
 
     "src/config.ts",
     "src/user/preferences.ts",

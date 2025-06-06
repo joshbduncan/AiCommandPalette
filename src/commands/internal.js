@@ -416,12 +416,12 @@ function documentReport() {
     app.activeDocument.documentColorSpace.toString().split(".").pop() +
     "\n" +
     localize(strings.dr_width) +
-    convertPointsTo(app.activeDocument.width, rulerUnits) +
+    UnitValue(`${app.activeDocument.width} pt`).as(rulerUnits) +
     " " +
     rulerUnits +
     "\n" +
     localize(strings.dr_height) +
-    convertPointsTo(app.activeDocument.height, rulerUnits) +
+    UnitValue(`${app.activeDocument.height} pt`).as(rulerUnits) +
     " " +
     rulerUnits;
 
