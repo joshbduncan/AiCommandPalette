@@ -1,5 +1,3 @@
-// CUSTOM SCRIPTUI FILTERABLE LISTBOX
-
 // set flags for query arrow navigation fix
 var fromQuery = false;
 var fromQueryShiftKey = false;

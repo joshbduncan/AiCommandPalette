@@ -37,11 +37,7 @@ class Logger {
     consoleOutput: boolean = false
   ) {
     if (typeof fp === "undefined") {
-      fp =
-        Folder.userData.fullName +
-        "/" +
-        resolveBaseScriptFromStack() +
-        ".log";
+      fp = Folder.userData.fullName + "/" + resolveBaseScriptFromStack() + ".log";
     }
 
     this.mode = mode.toLowerCase();
@@ -50,7 +46,7 @@ class Logger {
 
     // Rotate log if too big
     if (this.file.length > sizeLimit) {
-      this.backup(true)
+      this.backup(true);
     }
   }
 
@@ -58,10 +54,10 @@ class Logger {
    * Backup the log file.
    */
   backup(removeOriginal: boolean = false): File {
-    const ts = Date.now()
+    const ts = Date.now();
     const backupFile = new File(`${this.file.fsName}.${ts}.bak`);
     this.file.copy(backupFile);
-    if (removeOriginal) this.file.remove()
+    if (removeOriginal) this.file.remove();
     return backupFile;
   }
 

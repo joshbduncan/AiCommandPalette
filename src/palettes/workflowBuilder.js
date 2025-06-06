@@ -21,7 +21,7 @@ function workflowBuilder(commands, editWorkflowId) {
     pSearch,
     "commands",
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-    paletteSettings.columnSets.default,
+    paletteSettings.columnSets.standard,
     false,
     localize(strings.cd_helptip),
     [addToStepsOnDoubleClick, scrollListBoxWithArrows]
@@ -60,7 +60,7 @@ function workflowBuilder(commands, editWorkflowId) {
     pSteps,
     "steps",
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-    paletteSettings.columnSets.default,
+    paletteSettings.columnSets.standard,
     true,
     localize(strings.wf_steps_helptip),
     []

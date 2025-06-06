@@ -22,7 +22,7 @@ function launchCommandPalette() {
   var result = commandPalette(
     queryableCommands,
     localize(strings.title),
-    paletteSettings.columnSets.default,
+    paletteSettings.columnSets.standard,
     false,
     startupCommands,
     true

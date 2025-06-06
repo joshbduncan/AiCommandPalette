@@ -1,5 +1,3 @@
-// GENERATED FROM CSV DATA FILES
-
 interface LocalizedName {
   [langCode: string]: string;
 }
@@ -20,6 +18,7 @@ interface CommandsData {
   [key: string]: CommandEntry;
 }
 
+// GENERATED FROM CSV DATA FILES
 const commandsData = {
   menu_new: {
     id: "menu_new",

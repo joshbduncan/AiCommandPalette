@@ -1,5 +1,3 @@
-//USER HISTORY
-
 const userHistoryFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
 const userHistoryFileName = "History.json";
 

@@ -29,12 +29,12 @@
     "src/data/built_strings.ts",
     "src/data/built_commands.ts",
 
-    "src/config.js",
+    "src/config.ts",
     "src/user/preferences.ts",
     "src/user/history.ts",
-    "src/user/actions.js",
+    "src/user/actions.ts",
 
-    "src/palettes/filter.js",
+    "src/palettes/filter.ts",
     "src/palettes/fuzzy.js",
     "src/palettes/nofuzz.js",
     "src/palettes/commandPalette.js",
@@ -45,7 +45,7 @@
 
     "src/commands/processing.js",
     "src/commands/internal.js",
-    "src/commands/workflows.js",
+    "src/commands/workflows.ts",
 
     "src/index.js"
   ],

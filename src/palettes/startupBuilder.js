@@ -19,7 +19,7 @@ function startupBuilder(commands) {
     pSearch,
     "commands",
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-    paletteSettings.columnSets.default,
+    paletteSettings.columnSets.standard,
     false,
     localize(strings.startup_helptip),
     [addToStepsOnDoubleClick, scrollListBoxWithArrows]
@@ -42,7 +42,7 @@ function startupBuilder(commands) {
     pSteps,
     "steps",
     [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-    paletteSettings.columnSets.default,
+    paletteSettings.columnSets.standard,
     true,
     localize(strings.startup_steps_helptip),
     []

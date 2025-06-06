@@ -1,5 +1,3 @@
-// COMMAND EXECUTION
-
 /**
  * Process command actions.
  * @param {String} id Command id to process.
@@ -143,7 +141,7 @@ function runCustomPicker(picker) {
   var result = commandPalette(
     (commands = commands),
     (title = picker.name),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = picker.multiselect)
   );
   if (!result) {

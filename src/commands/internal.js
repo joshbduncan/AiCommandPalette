@@ -1,5 +1,3 @@
-// AI COMMAND PALETTE CONFIGURATION COMMANDS
-
 /**
  * Ai Command Palette About Dialog.
  */
@@ -52,7 +50,7 @@ function settings() {
   var result = commandPalette(
     (commands = configCommands),
     (title = localize(strings.cp_config)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;
@@ -115,7 +113,7 @@ function editPicker() {
   var result = commandPalette(
     (commands = pickers),
     (title = localize(strings.picker_to_edit)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;
@@ -265,7 +263,7 @@ function deleteCommand() {
   var result = commandPalette(
     (commands = deletableCommands),
     (title = localize(strings.cd_delete_select)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = true)
   );
   if (!result) return;
@@ -344,7 +342,7 @@ function hideCommand() {
   var result = commandPalette(
     (commands = hideableCommands),
     (title = localize(strings.cd_hide_select)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = true)
   );
   if (!result) return;
@@ -372,7 +370,7 @@ function builtinCommands() {
   var result = commandPalette(
     (commands = builtins),
     (title = localize(strings.cd_all)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;
@@ -387,7 +385,7 @@ function unhideCommand() {
   var result = commandPalette(
     (commands = prefs.hiddenCommands),
     (title = localize(strings.cd_reveal_menu_select)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = true)
   );
   if (!result) return;
@@ -661,7 +659,7 @@ function showAllMenus() {
   var result = commandPalette(
     (commands = workflows),
     (title = localize(strings.menu_commands)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;
@@ -682,7 +680,7 @@ function showAllPickers() {
   var result = commandPalette(
     (commands = pickers),
     (title = localize(strings.pickers_all)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;
@@ -737,7 +735,7 @@ function showAllTools() {
   var result = commandPalette(
     (commands = workflows),
     (title = localize(strings.tl_all)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;
@@ -758,7 +756,7 @@ function showAllWorkflows() {
   var result = commandPalette(
     (commands = workflows),
     (title = localize(strings.Workflows)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;
@@ -840,7 +838,7 @@ function editWorkflow() {
   var result = commandPalette(
     (commands = workflows),
     (title = localize(strings.wf_choose)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;
@@ -1275,7 +1273,7 @@ function recentUserCommands() {
   var result = commandPalette(
     (commands = mostRecentCommands),
     (title = localize(strings.recent_commands)),
-    (columns = paletteSettings.columnSets.default),
+    (columns = paletteSettings.columnSets.standard),
     (multiselect = false)
   );
   if (!result) return;

@@ -1,5 +1,3 @@
-//USER PREFERENCES
-
 // keeping around for alerting users of breaking changes
 const settingsFolderName = "JBD";
 const settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
@@ -39,9 +37,9 @@ const prefs: Prefs = {
   fuzzy: true, // set to new fuzzy matcher as default
   latches: {},
   version: _version,
-  os: os,
-  locale: locale,
-  aiVersion: aiVersion,
+  os: $.os,
+  locale: $.locale,
+  aiVersion: parseFloat(app.version),
   timestamp: Date.now(),
 };
 

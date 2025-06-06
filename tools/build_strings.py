@@ -67,19 +67,16 @@ def main() -> int:
     strings = build_strings(rows)
     assert strings
 
-    header = "// GENERATED FROM CSV DATA FILES"
     interface = """
 interface LocalizedStrings {
   [key: string]: {
     [langCode: string]: string,
   };
-}
-"""
+}"""
 
-    output = f"""{header}
+    output = f"""{interface}
 
-{interface}
-
+// GENERATED FROM CSV DATA FILES
 const strings = {json.dumps(strings)}
 """
 

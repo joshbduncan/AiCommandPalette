@@ -209,6 +209,7 @@ function getBrokenFilePaths(xmp) {
  * @returns       True if command is available in the current Ai version or false if not.
  */
 function commandVersionCheck(command) {
+  const aiVersion = parseFloat(app.version);
   if (
     (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
     (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)

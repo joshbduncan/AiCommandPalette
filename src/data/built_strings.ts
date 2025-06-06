@@ -1,11 +1,10 @@
-// GENERATED FROM CSV DATA FILES
-
 interface LocalizedStrings {
   [key: string]: {
     [langCode: string]: string;
   };
 }
 
+// GENERATED FROM CSV DATA FILES
 const strings = {
   about: {
     en: "About",

@@ -807,6 +807,7 @@ See the LICENSE file for details.
    * @returns       True if command is available in the current Ai version or false if not.
    */
   function commandVersionCheck(command) {
+    var aiVersion = parseFloat(app.version);
     if (
       (command.hasOwnProperty("minVersion") && command.minVersion > aiVersion) ||
       (command.hasOwnProperty("maxVersion") && command.maxVersion < aiVersion)
@@ -10871,26 +10872,23 @@ See the LICENSE file for details.
     },
   };
   // CONFIGURATION
+  var _a, _b;
   // DEVELOPMENT SETTINGS
   // localization testing
   // $.locale = false;
   // $.locale = "de";
   // $.locale = "ru";
   // ENVIRONMENT VARIABLES
-  var aiVersion = parseFloat(app.version);
-  var locale = $.locale;
-  var currentLocale = locale.split("_")[0];
-  var os = $.os;
-  var sysOS = /mac/i.test(os) ? "mac" : "win";
-  var windowsFlickerFix = sysOS === "win" && aiVersion < 26.4 ? true : false;
+  var sysOS = /mac/i.test($.os) ? "mac" : "win";
+  var windowsFlickerFix =
+    sysOS === "win" && parseFloat(app.version) < 26.4 ? true : false;
   var settingsRequiredUpdateVersion = "0.10.0";
   // DEVELOPMENT SETTINGS
   var devMode = $.getenv("USER") === "jbd" ? true : false;
-  var debugLogging = $.getenv("AICP_DEBIG_LOGGING") === "true" ? true : false;
+  var debugLogging = $.getenv("AICP_DEBUG_LOGGING") === "true" ? true : false;
   var logFilePath = Folder.desktop + "/AiCommandPalette.log";
   var logger;
   if (devMode || debugLogging) {
-    var logFilePath = Folder.desktop + "/AiCommandPalette.log";
     logger = new Logger(logFilePath, "a", undefined, true);
     devMode && logger.log("**DEV MODE ENABLED**");
   } else {
@@ -10900,89 +10898,58 @@ See the LICENSE file for details.
     };
   }
   logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
-  // DIALOG SETTINGS
-  var paletteSettings = {};
-  paletteSettings.paletteWidth = 600;
-  // was informed windows and mac have different listbox row hights so this makes sure exactly 9 rows show
-  paletteSettings.paletteHeight = sysOS === "win" ? 211 : 201;
-  paletteSettings.bounds = [
-    0,
-    0,
-    paletteSettings.paletteWidth,
-    paletteSettings.paletteHeight,
-  ];
-  // COMMAND PALETTE COLUMN SETS
-  paletteSettings.columnSets = {};
-  paletteSettings.columnSets.default = {};
-  paletteSettings.columnSets.default[localize(strings.name_title_case)] = {
-    width: 450,
-    key: "name",
+  var paletteSettings = {
+    paletteWidth: 600,
+    paletteHeight: sysOS === "win" ? 211 : 201,
+    bounds: [0, 0, 600, sysOS === "win" ? 211 : 201],
+    columnSets: {
+      standard:
+        ((_a = {}),
+        (_a[localize(strings.name_title_case)] = {
+          width: 450,
+          key: "name",
+        }),
+        (_a[localize(strings.type_title_case)] = {
+          width: 100,
+          key: "type",
+        }),
+        _a),
+      customCommand:
+        ((_b = {}),
+        (_b[localize(strings.name_title_case)] = {
+          width: 450,
+          key: "name",
+        }),
+        (_b[localize(strings.type_title_case)] = {
+          width: 100,
+          key: "actionType",
+        }),
+        _b),
+    },
   };
-  paletteSettings.columnSets.default[localize(strings.type_title_case)] = {
-    width: 100,
-    key: "type",
-  };
-  paletteSettings.columnSets.customCommand = {};
-  paletteSettings.columnSets.customCommand[localize(strings.name_title_case)] = {
-    width: 450,
-    key: "name",
-  };
-  paletteSettings.columnSets.customCommand[localize(strings.type_title_case)] = {
-    width: 100,
-    key: "actionType",
-  };
+  // MISCELLANEOUS SETTINGS
   var visibleListItems = 9;
   var mostRecentCommandsCount = 25;
-  // MISCELLANEOUS SETTINGS
   var namedObjectLimit = 2000;
   var regexEllipsis = /\.\.\.$/;
   var regexCarrot = /\s>\s/g;
-  // DEVELOPMENT HELPERS
-  var devInfo = {};
-  devInfo.folder = function () {
-    return userPrefsFolder;
+  var devInfo = {
+    folder: function () {
+      return userPrefsFolder;
+    },
+    prefsFile: function () {
+      var folder = this.folder();
+      return setupFileObject(folder, "prefs.json");
+    },
+    commandsFile: function () {
+      var folder = this.folder();
+      return setupFileObject(folder, "commands.json");
+    },
+    save: function () {
+      writeJSONData(prefs, this.prefsFile());
+      writeJSONData(commandsData, this.commandsFile());
+    },
   };
-  devInfo.prefsFile = function () {
-    var folder = this.folder();
-    var file = setupFileObject(folder, "prefs.json");
-    return file;
-  };
-  devInfo.commandsFile = function () {
-    var folder = this.folder();
-    var file = setupFileObject(folder, "commands.json");
-    return file;
-  };
-  devInfo.save = function () {
-    writeJSONData(prefs, this.prefsFile());
-    writeJSONData(commandsData, this.commandsFile());
-  };
-  devInfo.log = function (data, fileName) {
-    fileName =
-      typeof fileName !== "undefined" ? fileName : "log_" + Date.now() + ".txt";
-    var folder = this.folder();
-    var file = setupFileObject(folder, fileName);
-    writeData(data, file.fsName);
-  };
-  /**
-   * Show an alert with object data.
-   * @param obj Command to show data about.
-   */
-  function alertObject(obj) {
-    var s = "";
-    for (var prop in obj) {
-      var subS = "";
-      if (obj[prop] != null && typeof obj[prop] == "object") {
-        for (var subProp in obj[prop]) {
-          subS += "> " + subProp + ": " + obj[prop][subProp] + "\n";
-        }
-        s += prop + ":\n" + subS;
-      } else {
-        s += prop + ": " + obj[prop] + "\n";
-      }
-    }
-    alert(s);
-  }
-  //USER PREFERENCES
   // keeping around for alerting users of breaking changes
   var settingsFolderName = "JBD";
   var settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
@@ -11002,9 +10969,9 @@ See the LICENSE file for details.
     fuzzy: true, // set to new fuzzy matcher as default
     latches: {},
     version: _version,
-    os: os,
-    locale: locale,
-    aiVersion: aiVersion,
+    os: $.os,
+    locale: $.locale,
+    aiVersion: parseFloat(app.version),
     timestamp: Date.now(),
   };
   var userPrefs = {
@@ -11250,7 +11217,6 @@ See the LICENSE file for details.
       userPrefs.save();
     }
   }
-  //USER HISTORY
   var userHistoryFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
   var userHistoryFileName = "History.json";
   // setup the base prefs model
@@ -11342,55 +11308,59 @@ See the LICENSE file for details.
       folder.execute();
     },
   };
-  //USER ACTIONS
-  var userActions = {};
-  userActions.loadedActions = false;
-  userActions.load = function () {
-    logger.log("loading user actions");
-    var ct = 0;
-    var currentPath, set, actionCount, name;
-    var pref = app.preferences;
-    var path = "plugin/Action/SavedSets/set-";
-    for (var i = 1; i <= 100; i++) {
-      currentPath = path + i.toString() + "/";
-      // get action sets
-      set = pref.getStringPreference(currentPath + "name");
-      if (!set) {
-        break;
-      }
-      // get actions in set
-      actionCount = Number(pref.getIntegerPreference(currentPath + "actionCount"));
-      ct += actionCount;
-      var name, id, loc, obj;
-      for (var j = 1; j <= actionCount; j++) {
-        loc = {};
-        obj = {};
-        name = pref.getStringPreference(
-          currentPath + "action-" + j.toString() + "/name"
+  var userActions = {
+    loadedActions: false,
+    load: function () {
+      logger.log("loading user actions");
+      var ct = 0;
+      var currentPath;
+      var set;
+      var actionCount;
+      var name;
+      var pref = app.preferences;
+      var path = "plugin/Action/SavedSets/set-";
+      for (var i = 1; i <= 100; i++) {
+        currentPath = "".concat(path).concat(i, "/");
+        // get action set
+        set = pref.getStringPreference("".concat(currentPath, "name"));
+        if (!set) break;
+        // get actions in set
+        actionCount = Number(
+          pref.getIntegerPreference("".concat(currentPath, "actionCount"))
         );
-        id = generateCommandId("action_" + set + "_" + name.toLowerCase());
-        id = set + "_" + name; // FIXME: why?
-        obj["id"] = id;
-        obj["action"] = "action";
-        obj["type"] = "action";
-        obj["set"] = set;
-        obj["name"] = name;
-        obj["docRequired"] = false;
-        obj["selRequired"] = false;
-        obj["hidden"] = false;
-        commandsData[id] = obj;
+        ct += actionCount;
+        for (var j = 1; j <= actionCount; j++) {
+          name = pref.getStringPreference(
+            "".concat(currentPath, "action-").concat(j, "/name")
+          );
+          var id = generateCommandId(
+            "action_".concat(set, "_").concat(name.toLowerCase())
+          );
+          id = "".concat(set, "_").concat(name); // FIXME: why?
+          var obj = {
+            id: id,
+            action: "action",
+            type: "action",
+            set: set,
+            name: name,
+            docRequired: false,
+            selRequired: false,
+            hidden: false,
+          };
+          commandsData[id] = obj;
+        }
       }
-    }
-    this.loadedActions = ct > 0;
+      this.loadedActions = ct > 0;
+    },
   };
   /**
    * Filter the supplied commands by multiple factors.
-   * @param   {Array}   commands             Command `id`s to filter through.
-   * @param   {Array}   types                Types of commands to include in the results (e.g. builtin, tool, config, etc.).
-   * @param   {Boolean} showHidden           Should user-hidden commands be included?
-   * @param   {Boolean} showNonRelevant      Should non-relevant commands be included?
-   * @param   {Array}   hideSpecificCommands Future me including a hack to hide specific commands.
-   * @returns {Array}                        Filtered command ids.
+   * @param commands Command `id`s to filter through. If `null`, all commands are checked.
+   * @param types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
+   * @param showHidden Should user-hidden commands be included?
+   * @param showNonRelevant Should non-relevant commands be included?
+   * @param hideSpecificCommands Specific commands to exclude from results.
+   * @returns Filtered command IDs.
    */
   function filterCommands(
     commands,
@@ -11400,29 +11370,24 @@ See the LICENSE file for details.
     hideSpecificCommands
   ) {
     var filteredCommands = [];
-    var id, command;
-    commands = commands ? commands : Object.keys(commandsData);
-    for (var i = 0; i < commands.length; i++) {
-      id = commands[i];
+    var allCommands =
+      commands !== null && commands !== void 0 ? commands : Object.keys(commandsData);
+    for (var i = 0; i < allCommands.length; i++) {
+      var id = allCommands[i];
       if (!commandsData.hasOwnProperty(id)) continue;
-      command = commandsData[id];
-      // make sure Ai version meets command requirements
+      var command = commandsData[id];
       if (!commandVersionCheck(command)) continue;
-      // skip any hidden commands
       if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
-      // skip any non relevant commands
       if (!showNonRelevant && !relevantCommand(command)) continue;
-      // skip any specific commands name in hideSpecificCommands
       if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
-      // then check to see if the command should be included
       if (!types || types.includes(command.type)) filteredCommands.push(id);
     }
     return filteredCommands;
   }
   /**
-   * Determine is a command is relevant at the current moment.
-   * @param   {Object}  command Command object to check.
-   * @returns {Boolean}         If command is relevant.
+   * Determine if a command is relevant at the current moment.
+   * @param command Command object to check.
+   * @returns Whether the command is relevant.
    */
   function relevantCommand(command) {
     // hide commands requiring an active documents if requested
@@ -11430,36 +11395,36 @@ See the LICENSE file for details.
     // hide commands requiring an active selection if requested
     if (command.selRequired && app.activeDocument.selection.length < 1) return false;
     // hide `Edit Workflow...` command if no workflows
-    if (command.id == "builtin_editWorkflow" && prefs.workflows.length < 1)
+    if (command.id === "builtin_editWorkflow" && prefs.workflows.length < 1)
       return false;
     // hide `All Workflows...` command if no workflows
-    if (command.id == "builtin_allWorkflows" && prefs.workflows.length < 1)
+    if (command.id === "builtin_allWorkflows" && prefs.workflows.length < 1)
       return false;
     // hide `All Scripts...` command if no scripts
-    if (command.id == "builtin_allScripts" && prefs.scripts.length < 1) return false;
+    if (command.id === "builtin_allScripts" && prefs.scripts.length < 1) return false;
     // hide `All Bookmarks...` command if no bookmarks
-    if (command.id == "builtin_allBookmarks" && prefs.bookmarks.length < 1)
+    if (command.id === "builtin_allBookmarks" && prefs.bookmarks.length < 1)
       return false;
     // hide `All Actions...` command if no actions
-    if (command.id == "builtin_allActions" && !userActions.loadedActions) return false;
+    if (command.id === "builtin_allActions" && !userActions.loadedActions) return false;
     // hide `Edit Picker...` command if no pickers
-    if (command.id == "builtin_editPicker" && prefs.pickers.length < 1) return false;
+    if (command.id === "builtin_editPicker" && prefs.pickers.length < 1) return false;
     // hide `All Pickers...` command if no pickers
-    if (command.id == "builtin_allPickers" && prefs.pickers.length < 1) return false;
+    if (command.id === "builtin_allPickers" && prefs.pickers.length < 1) return false;
     // hide `Enable Fuzzy Matching` command if already enabled
-    if (command.id == "config_enableFuzzyMatching" && prefs.fuzzy) return false;
+    if (command.id === "config_enableFuzzyMatching" && prefs.fuzzy) return false;
     // hide `Disable Fuzzy Matching` command if already disabled
-    if (command.id == "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
+    if (command.id === "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
     // hide `Enable Debug Logging` command if already enabled
-    if (command.id == "config_enableDebugLogging" && debugLogging) return false;
+    if (command.id === "config_enableDebugLogging" && debugLogging) return false;
     // hide `Disable Debug Logging` command if already disabled
-    if (command.id == "config_disableDebugLogging" && !debugLogging) return false;
+    if (command.id === "config_disableDebugLogging" && !debugLogging) return false;
     // hide `Unhide Commands...` command if no hidden commands
-    if (command.id == "config_unhideCommand" && prefs.hiddenCommands.length < 1)
+    if (command.id === "config_unhideCommand" && prefs.hiddenCommands.length < 1)
       return false;
     // hide `Recent Commands...` and `Clear History` if no recent commands
     if (
-      command.id == "builtin_recentCommands" &&
+      command.id === "builtin_recentCommands" &&
       Object.keys(recentCommands).length === 0
     ) {
       return false;
@@ -12195,7 +12160,7 @@ See the LICENSE file for details.
       pSearch,
       "commands",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-      paletteSettings.columnSets.default,
+      paletteSettings.columnSets.standard,
       false,
       localize(strings.cd_helptip),
       [addToStepsOnDoubleClick, scrollListBoxWithArrows]
@@ -12230,7 +12195,7 @@ See the LICENSE file for details.
       pSteps,
       "steps",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-      paletteSettings.columnSets.default,
+      paletteSettings.columnSets.standard,
       true,
       localize(strings.wf_steps_helptip),
       []
@@ -12411,7 +12376,7 @@ See the LICENSE file for details.
       pSearch,
       "commands",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-      paletteSettings.columnSets.default,
+      paletteSettings.columnSets.standard,
       false,
       localize(strings.startup_helptip),
       [addToStepsOnDoubleClick, scrollListBoxWithArrows]
@@ -12431,7 +12396,7 @@ See the LICENSE file for details.
       pSteps,
       "steps",
       [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
-      paletteSettings.columnSets.default,
+      paletteSettings.columnSets.standard,
       true,
       localize(strings.startup_steps_helptip),
       []
@@ -12673,7 +12638,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = commands),
       (title = picker.name),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = picker.multiselect)
     );
     if (!result) {
@@ -12899,7 +12864,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = configCommands),
       (title = localize(strings.cp_config)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -12956,7 +12921,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = pickers),
       (title = localize(strings.picker_to_edit)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -13086,7 +13051,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = deletableCommands),
       (title = localize(strings.cd_delete_select)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = true)
     );
     if (!result) return;
@@ -13158,7 +13123,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = hideableCommands),
       (title = localize(strings.cd_hide_select)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = true)
     );
     if (!result) return;
@@ -13184,7 +13149,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = builtins),
       (title = localize(strings.cd_all)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -13198,7 +13163,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = prefs.hiddenCommands),
       (title = localize(strings.cd_reveal_menu_select)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = true)
     );
     if (!result) return;
@@ -13457,7 +13422,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = workflows),
       (title = localize(strings.menu_commands)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -13477,7 +13442,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = pickers),
       (title = localize(strings.pickers_all)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -13530,7 +13495,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = workflows),
       (title = localize(strings.tl_all)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -13550,7 +13515,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = workflows),
       (title = localize(strings.Workflows)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -13627,7 +13592,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = workflows),
       (title = localize(strings.wf_choose)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -14026,7 +13991,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       (commands = mostRecentCommands),
       (title = localize(strings.recent_commands)),
-      (columns = paletteSettings.columnSets.default),
+      (columns = paletteSettings.columnSets.standard),
       (multiselect = false)
     );
     if (!result) return;
@@ -14113,16 +14078,20 @@ See the LICENSE file for details.
     }
   }
   /**
-   * Check is any workflow actions are currently non-active (non deleted, and Ai version compatible).
-   * @param   {Array} actions Workflow action steps to check.
-   * @returns {Array}         Non-active workflow action.
+   * Check if any workflow actions are currently non-active (nonexistent or AI version incompatible).
+   * @param actions Array of command IDs representing workflow action steps.
+   * @returns Array of non-active command IDs.
    */
   function checkWorkflowActions(actions) {
     var badActions = [];
     for (var i = 0; i < actions.length; i++) {
-      command = actions[i];
-      if (!commandsData.hasOwnProperty(actions[i]) || !commandVersionCheck(actions[i]))
-        badActions.push(actions[i]);
+      var commandId = actions[i];
+      if (
+        !commandsData.hasOwnProperty(commandId) ||
+        !commandVersionCheck(commandsData[commandId])
+      ) {
+        badActions.push(commandId);
+      }
     }
     return badActions;
   }
@@ -14144,7 +14113,7 @@ See the LICENSE file for details.
     var result = commandPalette(
       queryableCommands,
       localize(strings.title),
-      paletteSettings.columnSets.default,
+      paletteSettings.columnSets.standard,
       false,
       startupCommands,
       true

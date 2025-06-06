@@ -132,7 +132,6 @@ def main() -> int:
         all_commands = all_commands | commands
         assert all_commands
 
-    header = "// GENERATED FROM CSV DATA FILES"
     interface = """
 interface LocalizedName {
   [langCode: string]: string;
@@ -152,14 +151,12 @@ interface CommandEntry {
 
 interface CommandsData {
   [key: string]: CommandEntry;
-}
-"""
+}"""
 
-    output = f"""{header}
+    output = f"""{interface}
 
-{interface}
-
-    const commandsData = {json.dumps(all_commands)}"""
+// GENERATED FROM CSV DATA FILES
+const commandsData = {json.dumps(all_commands)}"""
 
     print(output.replace("\\\\n", "\\n"))
 
