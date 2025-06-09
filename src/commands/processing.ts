@@ -1,63 +1,65 @@
 /**
- * Process command actions.
- * @param {String} id Command id to process.
+ * Process a command by its ID.
+ * Handles workflows recursively and validates them before execution.
+ * @param id - The ID of the command to process.
  */
-function processCommand(id) {
-  var command = commandsData[id];
+function processCommand(id: string): void {
+  const command: CommandEntry = commandsData[id];
   logger.log("processing command:", localize(command.name));
-  if (command.type == "workflow") {
-    // check to make sure all workflow commands are valid
-    badActions = checkWorkflowActions(command.actions);
+
+  if (command.type === "workflow") {
+    const badActions = checkWorkflowActions(command.actions);
     if (badActions.length > 0) {
       alert(localize(strings.wf_needs_attention, badActions.join("\n")));
-      buildWorkflow(id, badActions);
+      // TODO: should bad actions be displayed differently in the workflow builder?
+      buildWorkflow(id);
       userPrefs.save();
       return;
     }
-    // run each action in the workflow
-    for (var i = 0; i < command.actions.length; i++) processCommand(command.actions[i]);
+
+    for (const actionId of command.actions) {
+      processCommand(actionId);
+    }
   } else {
     executeAction(command);
   }
 }
 
 /**
- * Execute command action.
- * @param {Object} command Command to execute.
+ * Execute a command action based on its type.
+ * @param command - The command object to execute.
  */
-function executeAction(command) {
-  // check command to see if an active document is required
-  if (command.docRequired && app.documents.length < 1)
-    if (
-      !confirm(
-        localize(strings.cd_active_document_required, command.action),
-        "noAsDflt",
-        localize(strings.cd_exception)
-      )
-    )
-      return;
+function executeAction(command: CommandEntry): void {
+  // Check if an active document is required
+  if (command.docRequired && app.documents.length < 1) {
+    const shouldProceed = confirm(
+      localize(strings.cd_active_document_required, command.action),
+      "noAsDflt",
+      localize(strings.cd_exception)
+    );
+    if (!shouldProceed) return;
+  }
 
-  // check command to see if an active selection is required
-  if (command.selRequired && app.activeDocument.selection.length < 1)
-    if (
-      !confirm(
-        localize(strings.cd_active_selection_required, command.action),
-        "noAsDflt",
-        localize(strings.cd_exception)
-      )
-    )
-      return;
+  // Check if an active selection is required
+  if (command.selRequired && app.activeDocument.selection.length < 1) {
+    const shouldProceed = confirm(
+      localize(strings.cd_active_selection_required, command.action),
+      "noAsDflt",
+      localize(strings.cd_exception)
+    );
+    if (!shouldProceed) return;
+  }
 
-  // execute action based on the command type
-  var func;
-  var alertString = strings.cd_error_executing;
+  let func: (cmd: CommandEntry) => void;
+  let alertString: LocalizedStringEntry = strings.cd_error_executing;
+
   switch (command.type.toLowerCase()) {
     case "config":
     case "builtin":
       func = internalAction;
       break;
     case "custom":
-      func = command.actionType == "menu" ? menuAction : toolAction;
+      func = command.actionType === "menu" ? menuAction : toolAction;
       break;
     case "menu":
       func = menuAction;
@@ -84,48 +86,63 @@ function executeAction(command) {
       break;
     default:
       alert(localize(strings.cd_invalid, command.type));
+      return;
   }
 
   try {
     func(command);
   } catch (e) {
-    alert(localize(alertString, localize(command.name), e));
+    const name = isLocalizedEntry(command.name) ? localize(command.name) : command.name;
+    alert(localize(alertString, name, e));
   }
 }
 
-function menuAction(command) {
+function menuAction(command: CommandEntry): void {
   app.executeMenuCommand(command.action);
 }
 
-function toolAction(command) {
+function toolAction(command: CommandEntry): void {
   app.selectTool(command.action);
 }
 
-function actionAction(command) {
-  app.doScript(command.name, command.set);
+function actionAction(command: CommandEntry): void {
+  const actionName = isLocalizedEntry(command.name)
+    ? localize(command.name)
+    : command.name;
+  app.doScript(actionName, command.set);
 }
 
-function bookmarkAction(command) {
-  f = command.type == "file" ? new File(command.path) : new Folder(command.path);
-  if (!f.exists) {
-    alert(localize(strings.bm_error_exists, command.path));
-    return;
-  }
-  if (command.type == "file") {
+function bookmarkAction(command: CommandEntry): void {
+  if (command.type === "file") {
+    const f = new File(command.path);
+    if (!f.exists) {
+      alert(localize(strings.bm_error_exists, command.path));
+      return;
+    }
     app.open(f);
-  } else {
+  } else if (command.type === "folder") {
+    const f = new Folder(command.path);
+    if (!f.exists) {
+      alert(localize(strings.bm_error_exists, command.path));
+      return;
+    }
     f.execute();
   }
 }
 
-function runCustomPicker(picker) {
-  // create custom adhoc commands from provided picker options
-  var commands = [];
-  var id, command;
-  for (var i = 0; i < picker.commands.length; i++) {
-    id = "picker_option_" + i.toString();
-    command = {
-      id: id,
+interface Picker {
+  name: string;
+  commands: string[];
+  multiselect: boolean;
+}
+
+function runCustomPicker(picker: Picker): void {
+  const commands: string[] = [];
+
+  for (let i = 0; i < picker.commands.length; i++) {
+    const id = `picker_option_${i}`;
+    const command: CommandEntry = {
+      id,
       action: "picker_option",
       type: "Option",
       docRequired: false,
@@ -137,52 +154,52 @@ function runCustomPicker(picker) {
     commands.push(id);
   }
 
-  // present the custom picker
-  var result = commandPalette(
-    (commands = commands),
-    (title = picker.name),
-    (columns = paletteSettings.columnSets.standard),
-    (multiselect = picker.multiselect)
+  const result = commandPalette(
+    commands,
+    picker.name,
+    paletteSettings.columnSets.standard,
+    picker.multiselect
   );
+
   if (!result) {
-    // set to null so any previous values are not incorrectly read
     $.setenv("aic_picker_last", null);
-    return false;
   }
 
-  // grab the correct name data from the selected commands
-  var args = [];
-  if (!picker.multiselect) {
-    args.push(commandsData[result].name);
-  } else {
-    for (var i = 0; i < result.length; i++) {
+  const args: string[] = [];
+
+  if (picker.multiselect && Array.isArray(result)) {
+    for (let i = 0; i < result.length; i++) {
       args.push(commandsData[result[i]].name);
     }
+  } else {
+    args.push(commandsData[result as string].name);
   }
 
-  // encode the array data into an environment variable for later use
   $.setenv("aic_picker_last", args.toSource());
 }
 
-function scriptAction(command) {
-  f = new File(command.path);
+function scriptAction(command: CommandEntry): void {
+  const f = new File(command.path);
   if (!f.exists) {
     alert(localize(strings.sc_error_exists, command.path));
-  } else {
-    $.evalFile(f);
+    return;
   }
+  $.evalFile(f);
 }
 
 /**
- * Execute script actions.
- * @param {Object} command Command to execute.
+ * Execute internal script actions.
+ * @param command Command to execute.
  */
-function internalAction(command) {
-  var write = true;
-  switch (command.action) {
+function internalAction(command: CommandEntry): void {
+  let shouldWritePrefs = true;
+
+  const { action } = command;
+
+  switch (action) {
     // config commands
     case "about":
-      write = false;
+      shouldWritePrefs = false;
       about();
       break;
     case "clearHistory":
@@ -209,15 +226,15 @@ function internalAction(command) {
       unhideCommand();
       break;
     case "revealPrefFile":
-      write = false;
+      shouldWritePrefs = false;
       revealPrefFile();
       break;
     case "builtinCommands":
-      write = false;
+      shouldWritePrefs = false;
       builtinCommands();
       break;
     case "settings":
-      write = false;
+      shouldWritePrefs = false;
       settings();
       break;
 
@@ -226,35 +243,35 @@ function internalAction(command) {
       addCustomCommands();
       break;
     case "allActions":
-      write = false;
+      shouldWritePrefs = false;
       showAllActions();
       break;
     case "allBookmarks":
-      write = false;
+      shouldWritePrefs = false;
       showAllBookmarks();
       break;
     case "allCustomCommands":
-      write = false;
+      shouldWritePrefs = false;
       showAllCustomCommands();
       break;
     case "allMenus":
-      write = false;
+      shouldWritePrefs = false;
       showAllMenus();
       break;
     case "allPickers":
-      write = false;
+      shouldWritePrefs = false;
       showAllPickers();
       break;
     case "allScripts":
-      write = false;
+      shouldWritePrefs = false;
       showAllScripts();
       break;
     case "allTools":
-      write = false;
+      shouldWritePrefs = false;
       showAllTools();
       break;
     case "allWorkflows":
-      write = false;
+      shouldWritePrefs = false;
       showAllWorkflows();
       break;
     case "buildWorkflow":
@@ -270,27 +287,27 @@ function internalAction(command) {
       editPicker();
       break;
     case "documentReport":
-      write = false;
+      shouldWritePrefs = false;
       documentReport();
       break;
     case "exportVariables":
-      write = false;
+      shouldWritePrefs = false;
       exportVariables();
       break;
     case "goToArtboard":
-      write = false;
+      shouldWritePrefs = false;
       goToArtboard();
       break;
     case "goToDocument":
-      write = false;
+      shouldWritePrefs = false;
       goToOpenDocument();
       break;
     case "goToNamedObject":
-      write = false;
+      shouldWritePrefs = false;
       goToNamedObject();
       break;
     case "imageCapture":
-      write = false;
+      shouldWritePrefs = false;
       imageCapture();
       break;
     case "loadFileBookmark":
@@ -303,24 +320,28 @@ function internalAction(command) {
       loadScripts();
       break;
     case "recentCommands":
-      write = false;
+      shouldWritePrefs = false;
       recentUserCommands();
       break;
     case "recentFiles":
-      write = false;
+      shouldWritePrefs = false;
       recentFiles();
       break;
     case "redrawWindows":
-      write = false;
+      shouldWritePrefs = false;
       redrawWindows();
       break;
     case "revealActiveDocument":
-      write = false;
+      shouldWritePrefs = false;
       revealActiveDocument();
       break;
+
     default:
       alert(localize(strings.cd_invalid, action));
+      return;
   }
-  if (!write) return;
-  userPrefs.save();
+
+  if (shouldWritePrefs) {
+    userPrefs.save();
+  }
 }

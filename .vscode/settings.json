@@ -1,18 +1,20 @@
 {
-    "cSpell.words": [
-        "DOCREQUIRED",
-        "edittext",
-        "LAOL",
-        "listbox",
-        "MAXVERSION",
-        "MINVERSION",
-        "ngram",
-        "ngrams",
-        "prefs",
-        "SELREQUIRED"
-    ],
-    "search.exclude": {
-        "**/AiCommandPalette.jsx": true,
-        "dist/**": true
-    }
+  "cSpell.words": [
+    "Artboard",
+    "DOCREQUIRED",
+    "edittext",
+    "LAOL",
+    "listbox",
+    "MAXVERSION",
+    "MINVERSION",
+    "ngram",
+    "ngrams",
+    "prefs",
+    "SELREQUIRED",
+    "statictext"
+  ],
+  "search.exclude": {
+    "**/AiCommandPalette.jsx": true,
+    "dist/**": true
+  }
 }

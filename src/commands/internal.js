@@ -311,9 +311,9 @@ function toggleFuzzyMatching() {
  */
 function toggleDebugLogging() {
   if (debugLogging) {
-    $.setenv("AICP_DEBIG_LOGGING", "false");
+    $.setenv("AICP_DEBUG_LOGGING", "false");
   } else {
-    $.setenv("AICP_DEBIG_LOGGING", "true");
+    $.setenv("AICP_DEBUG_LOGGING", "true");
   }
 }
 

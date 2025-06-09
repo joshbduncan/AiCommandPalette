@@ -72,6 +72,13 @@ interface LocalizedStrings {
   [key: string]: {
     [langCode: string]: string,
   };
+}
+
+interface LocalizedStringEntry {
+  en?: string;
+  de?: string;
+  ru?: string;
+  [langCode: string]: string | undefined;
 }"""
 
     output = f"""{interface}

@@ -4,6 +4,13 @@ interface LocalizedStrings {
   };
 }
 
+interface LocalizedStringEntry {
+  en?: string;
+  de?: string;
+  ru?: string;
+  [langCode: string]: string | undefined;
+}
+
 // GENERATED FROM CSV DATA FILES
 const strings = {
   about: {

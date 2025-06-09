@@ -133,17 +133,18 @@ def main() -> int:
         assert all_commands
 
     interface = """
-interface LocalizedName {
-  [langCode: string]: string;
-}
-
 interface CommandEntry {
   id: string;
   action: string;
   type: string;
+  actions?: string[];
+  actionType?: string;
   docRequired: boolean;
   selRequired: boolean;
-  name: LocalizedName;
+  name: LocalizedStringEntry | string;
+  set?: string;
+  path?: string;
+  commands?: string[];
   hidden: boolean;
   minVersion?: number;
   maxVersion?: number;

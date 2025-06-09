@@ -23,6 +23,17 @@ function determineCorrectString(command: CommandEntry, prop: string): string {
   return value;
 }
 
+function isLocalizedEntry(value: unknown): value is LocalizedStringEntry {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.keys(value).every(
+      (key) => typeof key === "string" && typeof (value as any)[key] === "string"
+    )
+  );
+}
+
 /**
  * Finds the index position after the last occurrence of `' > '` in the given string.
  * Useful for locating the final breadcrumb separator in a path-like string.
