@@ -24,7 +24,6 @@ var logFilePath = Folder.desktop + "/AiCommandPalette.log";
 var logger;
 
 if (devMode || debugLogging) {
-  var logFilePath = Folder.desktop + "/AiCommandPalette.log";
   logger = new Logger(logFilePath, "a", undefined, true);
   devMode && logger.log("**DEV MODE ENABLED**");
 } else {
@@ -86,7 +85,7 @@ var regexCarrot = /\s>\s/g;
 
 var devInfo = {};
 devInfo.folder = function () {
-  return userPrefsFolder;
+  return Folder.desktop;
 };
 devInfo.prefsFile = function () {
   var folder = this.folder();

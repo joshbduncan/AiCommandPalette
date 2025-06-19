@@ -13,7 +13,7 @@ See the LICENSE file for details.
   // SCRIPT INFORMATION
 
   var _title = "Ai Command Palette";
-  var _version = "0.13.2";
+  var _version = "0.13.3";
   var _copyright = "Copyright 2024 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
@@ -3151,6 +3151,51 @@ See the LICENSE file for details.
       },
       hidden: false,
       minVersion: 28.6,
+    },
+    menu_Gen_Expand_Object_Make: {
+      id: "menu_Gen_Expand_Object_Make",
+      action: "Gen Expand Object Make",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Generative Expand... > Make...",
+        de: "Object > Generative Expand... > Make...",
+        ru: "Object > Generative Expand... > Make...",
+        "zh-cn": "Object > Generative Expand... > Make...",
+      },
+      hidden: false,
+      minVersion: 29.6,
+    },
+    menu_Gen_Expand_Object_Combine: {
+      id: "menu_Gen_Expand_Object_Combine",
+      action: "Gen Expand Object Combine",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Generative Expand... > Combine",
+        de: "Object > Generative Expand... > Combine",
+        ru: "Object > Generative Expand... > Combine",
+        "zh-cn": "Object > Generative Expand... > Combine",
+      },
+      hidden: false,
+      minVersion: 29.6,
+    },
+    menu_Gen_Bleed_Object_Menu: {
+      id: "menu_Gen_Bleed_Object_Menu",
+      action: "Gen Bleed Object Menu",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Print Bleed...",
+        de: "Object > Print Bleed...",
+        ru: "Object > Print Bleed...",
+        "zh-cn": "Object > Print Bleed...",
+      },
+      hidden: false,
+      minVersion: 29.6,
     },
     menu_Adobe_Make_Pattern: {
       id: "menu_Adobe_Make_Pattern",
@@ -10556,7 +10601,6 @@ See the LICENSE file for details.
   var logger;
 
   if (devMode || debugLogging) {
-    var logFilePath = Folder.desktop + "/AiCommandPalette.log";
     logger = new Logger(logFilePath, "a", undefined, true);
     devMode && logger.log("**DEV MODE ENABLED**");
   } else {
@@ -10618,7 +10662,7 @@ See the LICENSE file for details.
 
   var devInfo = {};
   devInfo.folder = function () {
-    return userPrefsFolder;
+    return Folder.desktop;
   };
   devInfo.prefsFile = function () {
     var folder = this.folder();
