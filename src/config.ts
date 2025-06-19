@@ -96,7 +96,7 @@ interface DevInfo {
 
 const devInfo: DevInfo = {
   folder(): Folder {
-    return userPrefsFolder;
+    return Folder.desktop;
   },
 
   prefsFile(): File {
