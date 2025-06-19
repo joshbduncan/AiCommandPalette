@@ -10,8 +10,8 @@ See the LICENSE file for details.
   //@target illustrator
   // SCRIPT INFORMATION
   var _title = "Ai Command Palette";
-  var _version = "0.13.2";
-  var _copyright = "Copyright 2024 Josh Duncan";
+  var _version = "0.13.3";
+  var _copyright = "Copyright 2025 Josh Duncan";
   var _website = "joshbduncan.com";
   var _github = "https://github.com/joshbduncan";
   // Array.prototype.indexOf
@@ -2975,6 +2975,51 @@ See the LICENSE file for details.
       },
       hidden: false,
       minVersion: 28.6,
+    },
+    menu_Gen_Expand_Object_Make: {
+      id: "menu_Gen_Expand_Object_Make",
+      action: "Gen Expand Object Make",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Generative Expand... > Make...",
+        de: "Object > Generative Expand... > Make...",
+        ru: "Object > Generative Expand... > Make...",
+        "zh-cn": "Object > Generative Expand... > Make...",
+      },
+      hidden: false,
+      minVersion: 29.6,
+    },
+    menu_Gen_Expand_Object_Combine: {
+      id: "menu_Gen_Expand_Object_Combine",
+      action: "Gen Expand Object Combine",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Generative Expand... > Combine",
+        de: "Object > Generative Expand... > Combine",
+        ru: "Object > Generative Expand... > Combine",
+        "zh-cn": "Object > Generative Expand... > Combine",
+      },
+      hidden: false,
+      minVersion: 29.6,
+    },
+    menu_Gen_Bleed_Object_Menu: {
+      id: "menu_Gen_Bleed_Object_Menu",
+      action: "Gen Bleed Object Menu",
+      type: "menu",
+      docRequired: true,
+      selRequired: true,
+      name: {
+        en: "Object > Print Bleed...",
+        de: "Object > Print Bleed...",
+        ru: "Object > Print Bleed...",
+        "zh-cn": "Object > Print Bleed...",
+      },
+      hidden: false,
+      minVersion: 29.6,
     },
     menu_Adobe_Make_Pattern: {
       id: "menu_Adobe_Make_Pattern",
@@ -10486,6 +10531,16 @@ See the LICENSE file for details.
     }
     return value;
   }
+  function isLocalizedEntry(value) {
+    return (
+      typeof value === "object" &&
+      value !== null &&
+      !Array.isArray(value) &&
+      Object.keys(value).every(function (key) {
+        return typeof key === "string" && typeof value[key] === "string";
+      })
+    );
+  }
   /**
    * Finds the index position after the last occurrence of `' > '` in the given string.
    * Useful for locating the final breadcrumb separator in a path-like string.
@@ -10952,7 +11007,7 @@ See the LICENSE file for details.
   var regexCarrot = /\s>\s/g;
   var devInfo = {
     folder: function () {
-      return userPrefsFolder;
+      return Folder.desktop;
     },
     prefsFile: function () {
       var folder = this.folder();
@@ -11564,84 +11619,72 @@ See the LICENSE file for details.
   }
   /**
    * Score array items based on regex string match.
-   * @param   {String} query    String to search for.
-   * @param   {Array}  commands Commands to match `query` against.
-   * @returns {Array}           Matching items sorted by score.
+   * @param query String to search for.
+   * @param commands Command IDs to match `query` against.
+   * @returns Matching command IDs sorted by relevance score.
    */
   function scoreMatches(query, commands) {
-    var words = [];
+    var words = query.toLowerCase().split(" ");
     var matches = [];
     var scores = {};
     var maxScore = 0;
-    query = query.toLowerCase();
-    var words = query.split(" ");
-    var id, command, name, type, score, strippedName;
-    // query latching
+    // Prioritize latched query
     if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
-      scores[latches[query]] = 1000;
-      matches.push(latches[query]);
+      var latchedId = latches[query];
+      scores[latchedId] = 1000;
+      matches.push(latchedId);
     }
-    for (var i = 0; i < commands.length; i++) {
-      id = commands[i];
-      command = commandsData[id];
-      score = 0;
-      name = determineCorrectString(command, "name").toLowerCase();
-      // escape hatch
-      if (name == "") name = id.toLowerCase().replace("_", " ");
-      type = strings.hasOwnProperty(command.type)
+    for (var _i = 0, commands_1 = commands; _i < commands_1.length; _i++) {
+      var id = commands_1[_i];
+      var command = commandsData[id];
+      if (!command) continue;
+      var score = 0;
+      var name = determineCorrectString(command, "name").toLowerCase();
+      var type = strings.hasOwnProperty(command.type)
         ? localize(strings[command.type]).toLowerCase()
         : command.type.toLowerCase();
-      // check for exact match
-      if (
-        query === name ||
-        query.replace(regexEllipsis, "").replace(regexCarrot, " ") == strippedName ||
-        query === type
-      ) {
-        score += word.length;
+      var strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+      if (!name) {
+        name = id.toLowerCase().replace("_", " ");
       }
-      // strip junk from command name
-      strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+      // Exact match checks
+      if (query === name || query === strippedName || query === type) {
+        score += query.length;
+      }
       // add the command type to the name if user requested searching type
-      if (prefs.searchIncludesType) name = name.concat(" ", type);
+      // if (prefs.searchIncludesType) {
+      //   name += " " + type;
+      // }
       // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
-      // check for singular word matches
-      var word, re;
-      for (var n = 0; n < words.length; n++) {
-        word = words[n];
+      // Word-by-word matching
+      for (var _a = 0, words_1 = words; _a < words_1.length; _a++) {
+        var word = words_1[_a];
         if (!word) continue;
-        re = new RegExp("\\b" + word, "gi");
-        // check for a match at the beginning of a word
-        if (re.test(name) || re.test(strippedName)) score += word.length;
+        var re = new RegExp("\\b" + word, "gi");
+        if (re.test(name) || re.test(strippedName)) {
+          score += word.length;
+        }
       }
-      // updated scores for matches
+      // Score boost for recent commands
       if (score > 0) {
-        // increase score if command found in recent commands
-        if (score >= maxScore && recentCommands.hasOwnProperty(command.id)) {
+        if (recentCommands.hasOwnProperty(command.id)) {
           score += recentCommands[command.id];
         }
-        if (scores.hasOwnProperty(id)) {
-          scores[id] += score;
-        } else {
-          scores[id] = score;
-          matches.push(id);
-        }
-        if (scores[id] > maxScore) maxScore = scores[id];
-      }
-    }
-    /* Sort matched by their respective score */
-    function sortByScore(arr) {
-      for (var i = 0; i < arr.length; i++) {
-        for (var j = 0; j < arr.length - i - 1; j++) {
-          if (scores[arr[j + 1]] > scores[arr[j]]) {
-            var temp = arr[j];
-            arr[j] = arr[j + 1];
-            arr[j + 1] = temp;
-          }
+        scores[id] = (scores[id] || 0) + score;
+        matches.push(id);
+        if (scores[id] > maxScore) {
+          maxScore = scores[id];
         }
       }
-      return arr;
     }
-    return sortByScore(matches);
+    // Sort matches by score descending
+    return matches
+      .filter(function (id, i, self) {
+        return self.indexOf(id) === i;
+      }) // remove duplicates
+      .sort(function (a, b) {
+        return scores[b] - scores[a];
+      });
   }
   // set flags for query arrow navigation fix
   var fromQuery = false;
@@ -12520,54 +12563,53 @@ See the LICENSE file for details.
     return false;
   }
   /**
-   * Process command actions.
-   * @param {String} id Command id to process.
+   * Process a command by its ID.
+   * Handles workflows recursively and validates them before execution.
+   * @param id - The ID of the command to process.
    */
   function processCommand(id) {
     var command = commandsData[id];
     logger.log("processing command:", localize(command.name));
-    if (command.type == "workflow") {
-      // check to make sure all workflow commands are valid
-      badActions = checkWorkflowActions(command.actions);
+    if (command.type === "workflow") {
+      var badActions = checkWorkflowActions(command.actions);
       if (badActions.length > 0) {
         alert(localize(strings.wf_needs_attention, badActions.join("\n")));
-        buildWorkflow(id, badActions);
+        // TODO: should bad actions be displayed differently in the workflow builder?
+        buildWorkflow(id);
         userPrefs.save();
         return;
       }
-      // run each action in the workflow
-      for (var i = 0; i < command.actions.length; i++)
-        processCommand(command.actions[i]);
+      for (var _i = 0, _a = command.actions; _i < _a.length; _i++) {
+        var actionId = _a[_i];
+        processCommand(actionId);
+      }
     } else {
       executeAction(command);
     }
   }
   /**
-   * Execute command action.
-   * @param {Object} command Command to execute.
+   * Execute a command action based on its type.
+   * @param command - The command object to execute.
    */
   function executeAction(command) {
-    // check command to see if an active document is required
-    if (command.docRequired && app.documents.length < 1)
-      if (
-        !confirm(
-          localize(strings.cd_active_document_required, command.action),
-          "noAsDflt",
-          localize(strings.cd_exception)
-        )
-      )
-        return;
-    // check command to see if an active selection is required
-    if (command.selRequired && app.activeDocument.selection.length < 1)
-      if (
-        !confirm(
-          localize(strings.cd_active_selection_required, command.action),
-          "noAsDflt",
-          localize(strings.cd_exception)
-        )
-      )
-        return;
-    // execute action based on the command type
+    // Check if an active document is required
+    if (command.docRequired && app.documents.length < 1) {
+      var shouldProceed = confirm(
+        localize(strings.cd_active_document_required, command.action),
+        "noAsDflt",
+        localize(strings.cd_exception)
+      );
+      if (!shouldProceed) return;
+    }
+    // Check if an active selection is required
+    if (command.selRequired && app.activeDocument.selection.length < 1) {
+      var shouldProceed = confirm(
+        localize(strings.cd_active_selection_required, command.action),
+        "noAsDflt",
+        localize(strings.cd_exception)
+      );
+      if (!shouldProceed) return;
+    }
     var func;
     var alertString = strings.cd_error_executing;
     switch (command.type.toLowerCase()) {
@@ -12576,7 +12618,7 @@ See the LICENSE file for details.
         func = internalAction;
         break;
       case "custom":
-        func = command.actionType == "menu" ? menuAction : toolAction;
+        func = command.actionType === "menu" ? menuAction : toolAction;
         break;
       case "menu":
         func = menuAction;
@@ -12603,11 +12645,13 @@ See the LICENSE file for details.
         break;
       default:
         alert(localize(strings.cd_invalid, command.type));
+        return;
     }
     try {
       func(command);
     } catch (e) {
-      alert(localize(alertString, localize(command.name), e));
+      var name = isLocalizedEntry(command.name) ? localize(command.name) : command.name;
+      alert(localize(alertString, name, e));
     }
   }
   function menuAction(command) {
@@ -12617,27 +12661,33 @@ See the LICENSE file for details.
     app.selectTool(command.action);
   }
   function actionAction(command) {
-    app.doScript(command.name, command.set);
+    var actionName = isLocalizedEntry(command.name)
+      ? localize(command.name)
+      : command.name;
+    app.doScript(actionName, command.set);
   }
   function bookmarkAction(command) {
-    f = command.type == "file" ? new File(command.path) : new Folder(command.path);
-    if (!f.exists) {
-      alert(localize(strings.bm_error_exists, command.path));
-      return;
-    }
-    if (command.type == "file") {
+    if (command.type === "file") {
+      var f = new File(command.path);
+      if (!f.exists) {
+        alert(localize(strings.bm_error_exists, command.path));
+        return;
+      }
       app.open(f);
-    } else {
+    } else if (command.type === "folder") {
+      var f = new Folder(command.path);
+      if (!f.exists) {
+        alert(localize(strings.bm_error_exists, command.path));
+        return;
+      }
       f.execute();
     }
   }
   function runCustomPicker(picker) {
-    // create custom adhoc commands from provided picker options
     var commands = [];
-    var id, command;
     for (var i = 0; i < picker.commands.length; i++) {
-      id = "picker_option_" + i.toString();
-      command = {
+      var id = "picker_option_".concat(i);
+      var command = {
         id: id,
         action: "picker_option",
         type: "Option",
@@ -12649,48 +12699,44 @@ See the LICENSE file for details.
       commandsData[id] = command;
       commands.push(id);
     }
-    // present the custom picker
     var result = commandPalette(
-      (commands = commands),
-      (title = picker.name),
-      (columns = paletteSettings.columnSets.standard),
-      (multiselect = picker.multiselect)
+      commands,
+      picker.name,
+      paletteSettings.columnSets.standard,
+      picker.multiselect
     );
     if (!result) {
-      // set to null so any previous values are not incorrectly read
       $.setenv("aic_picker_last", null);
-      return false;
     }
-    // grab the correct name data from the selected commands
     var args = [];
-    if (!picker.multiselect) {
-      args.push(commandsData[result].name);
-    } else {
+    if (picker.multiselect && Array.isArray(result)) {
       for (var i = 0; i < result.length; i++) {
         args.push(commandsData[result[i]].name);
       }
+    } else {
+      args.push(commandsData[result].name);
     }
-    // encode the array data into an environment variable for later use
     $.setenv("aic_picker_last", args.toSource());
   }
   function scriptAction(command) {
-    f = new File(command.path);
+    var f = new File(command.path);
     if (!f.exists) {
       alert(localize(strings.sc_error_exists, command.path));
-    } else {
-      $.evalFile(f);
+      return;
     }
+    $.evalFile(f);
   }
   /**
-   * Execute script actions.
-   * @param {Object} command Command to execute.
+   * Execute internal script actions.
+   * @param command Command to execute.
    */
   function internalAction(command) {
-    var write = true;
-    switch (command.action) {
+    var shouldWritePrefs = true;
+    var action = command.action;
+    switch (action) {
       // config commands
       case "about":
-        write = false;
+        shouldWritePrefs = false;
         about();
         break;
       case "clearHistory":
@@ -12717,15 +12763,15 @@ See the LICENSE file for details.
         unhideCommand();
         break;
       case "revealPrefFile":
-        write = false;
+        shouldWritePrefs = false;
         revealPrefFile();
         break;
       case "builtinCommands":
-        write = false;
+        shouldWritePrefs = false;
         builtinCommands();
         break;
       case "settings":
-        write = false;
+        shouldWritePrefs = false;
         settings();
         break;
       // builtin commands
@@ -12733,35 +12779,35 @@ See the LICENSE file for details.
         addCustomCommands();
         break;
       case "allActions":
-        write = false;
+        shouldWritePrefs = false;
         showAllActions();
         break;
       case "allBookmarks":
-        write = false;
+        shouldWritePrefs = false;
         showAllBookmarks();
         break;
       case "allCustomCommands":
-        write = false;
+        shouldWritePrefs = false;
         showAllCustomCommands();
         break;
       case "allMenus":
-        write = false;
+        shouldWritePrefs = false;
         showAllMenus();
         break;
       case "allPickers":
-        write = false;
+        shouldWritePrefs = false;
         showAllPickers();
         break;
       case "allScripts":
-        write = false;
+        shouldWritePrefs = false;
         showAllScripts();
         break;
       case "allTools":
-        write = false;
+        shouldWritePrefs = false;
         showAllTools();
         break;
       case "allWorkflows":
-        write = false;
+        shouldWritePrefs = false;
         showAllWorkflows();
         break;
       case "buildWorkflow":
@@ -12777,27 +12823,27 @@ See the LICENSE file for details.
         editPicker();
         break;
       case "documentReport":
-        write = false;
+        shouldWritePrefs = false;
         documentReport();
         break;
       case "exportVariables":
-        write = false;
+        shouldWritePrefs = false;
         exportVariables();
         break;
       case "goToArtboard":
-        write = false;
+        shouldWritePrefs = false;
         goToArtboard();
         break;
       case "goToDocument":
-        write = false;
+        shouldWritePrefs = false;
         goToOpenDocument();
         break;
       case "goToNamedObject":
-        write = false;
+        shouldWritePrefs = false;
         goToNamedObject();
         break;
       case "imageCapture":
-        write = false;
+        shouldWritePrefs = false;
         imageCapture();
         break;
       case "loadFileBookmark":
@@ -12810,26 +12856,28 @@ See the LICENSE file for details.
         loadScripts();
         break;
       case "recentCommands":
-        write = false;
+        shouldWritePrefs = false;
         recentUserCommands();
         break;
       case "recentFiles":
-        write = false;
+        shouldWritePrefs = false;
         recentFiles();
         break;
       case "redrawWindows":
-        write = false;
+        shouldWritePrefs = false;
         redrawWindows();
         break;
       case "revealActiveDocument":
-        write = false;
+        shouldWritePrefs = false;
         revealActiveDocument();
         break;
       default:
         alert(localize(strings.cd_invalid, action));
+        return;
     }
-    if (!write) return;
-    userPrefs.save();
+    if (shouldWritePrefs) {
+      userPrefs.save();
+    }
   }
   /**
    * Ai Command Palette About Dialog.
@@ -13107,9 +13155,9 @@ See the LICENSE file for details.
    */
   function toggleDebugLogging() {
     if (debugLogging) {
-      $.setenv("AICP_DEBIG_LOGGING", "false");
+      $.setenv("AICP_DEBUG_LOGGING", "false");
     } else {
-      $.setenv("AICP_DEBIG_LOGGING", "true");
+      $.setenv("AICP_DEBUG_LOGGING", "true");
     }
   }
   /**
@@ -14122,17 +14170,13 @@ See the LICENSE file for details.
   // SHOW THE COMMAND PALETTE
   var queryableCommands = filterCommands(null, null, false, false, null);
   var startupCommands = filterCommands(prefs.startupCommands, null, false, false, null);
-  launchCommandPalette();
-  function launchCommandPalette() {
-    var result = commandPalette(
-      queryableCommands,
-      localize(strings.title),
-      paletteSettings.columnSets.standard,
-      false,
-      startupCommands,
-      true
-    );
-    if (!result) return;
-    processCommand(result);
-  }
+  var result = commandPalette(
+    queryableCommands,
+    localize(strings.title),
+    paletteSettings.columnSets.standard,
+    false,
+    startupCommands,
+    true
+  );
+  if (result) processCommand(result);
 })();

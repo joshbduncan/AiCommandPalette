@@ -47,7 +47,7 @@
     "src/commands/internal.js",
     "src/commands/workflows.ts",
 
-    "src/index.js"
+    "src/index.ts"
   ],
   // "include": ["./polyfills/**/*.ts"],
   "exclude": ["build", "node_modules"]

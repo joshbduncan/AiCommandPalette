@@ -34,5 +34,5 @@ watchman:
 watch:  ## watch for file changes and compile
 	tsc --watch
 
-compile:  ## compile script using escompile
+compile:  ## compile script using tsc
 	tsc
