@@ -12245,13 +12245,16 @@ See the LICENSE file for details.
         var confirmed = win.show() === 1;
         return confirmed ? customCommands.text : "";
     }
+    /**
+     * Build or edit a picker command via dialog interface.
+     * @param editPickerId The ID of the picker to edit, if any.
+     * @returns Picker configuration object or false if canceled.
+     */
     function pickerBuilder(editPickerId) {
         var overwrite = false;
-        // create the dialog
         var win = new Window("dialog");
         win.text = localize(strings.picker_builder_title);
         win.alignChildren = "fill";
-        // picker commands
         var header = win.add(
             "statictext",
             undefined,
@@ -12273,14 +12276,12 @@ See the LICENSE file for details.
         cbMultiselect.value = editPickerId
             ? commandsData[editPickerId].multiselect
             : false;
-        // picker name
         var pName = win.add("panel", undefined, localize(strings.picker_builder_name));
         pName.alignChildren = ["fill", "center"];
         pName.margins = 20;
         var pickerNameText = editPickerId ? commandsData[editPickerId].name : "";
         var pickerName = pName.add("edittext", undefined, pickerNameText);
-        pickerName.enabled = editPickerId ? true : false;
-        // window buttons
+        pickerName.enabled = Boolean(editPickerId);
         var winButtons = win.add("group");
         winButtons.orientation = "row";
         winButtons.alignChildren = ["center", "center"];
@@ -12288,50 +12289,42 @@ See the LICENSE file for details.
             name: "ok",
         });
         save.preferredSize.width = 100;
-        save.enabled = editPickerId ? true : false;
+        save.enabled = Boolean(editPickerId);
         var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
             name: "cancel",
         });
         cancel.preferredSize.width = 100;
         pickerCommands.onChanging = function () {
-            pickerName.enabled = pickerCommands.text.length > 0 ? true : false;
-            save.enabled =
-                pickerCommands.text.length > 0 && pickerName.text.length > 0
-                    ? true
-                    : false;
+            var hasText = pickerCommands.text.length > 0;
+            pickerName.enabled = hasText;
+            save.enabled = hasText && pickerName.text.length > 0;
         };
         pickerName.onChanging = function () {
-            save.enabled = pickerCommands.text.length > 0 ? true : false;
+            save.enabled = pickerCommands.text.length > 0 && pickerName.text.length > 0;
         };
         save.onClick = function () {
-            // check for picker overwrite
-            var currentPickers = [];
-            for (var i = 0; i < prefs.pickers.length; i++) {
-                currentPickers.push(prefs.pickers[i].name);
-            }
-            if (currentPickers.includes(pickerName.text.trim())) {
+            var nameTrimmed = pickerName.text.trim();
+            var currentPickers = prefs.pickers.map(function (p) {
+                return p.name;
+            });
+            if (currentPickers.includes(nameTrimmed)) {
                 overwrite = true;
-                if (
-                    !confirm(
-                        localize(
-                            strings.picker_builder_save_conflict_message,
-                            pickerName.text.trim()
-                        ),
-                        "noAsDflt",
-                        localize(strings.picker_builder_save_conflict_title)
-                    )
-                ) {
-                    return;
-                }
+                var confirmed = confirm(
+                    localize(strings.picker_builder_save_conflict_message, nameTrimmed),
+                    false,
+                    localize(strings.picker_builder_save_conflict_title)
+                );
+                if (!confirmed) return;
             }
             win.close(1);
         };
-        if (win.show() == 1) {
-            var commands = [];
-            var lines = pickerCommands.text.split(/\r\n|\r|\n/);
-            for (var i = 0; i < lines.length; i++) {
-                commands.push(lines[i].trim());
-            }
+        if (win.show() === 1) {
+            var commands = pickerCommands.text
+                .split(/\r\n|\r|\n/)
+                .map(function (line) {
+                    return line.trim();
+                })
+                .filter(Boolean);
             return {
                 name: pickerName.text.trim(),
                 commands: commands,
@@ -12341,21 +12334,25 @@ See the LICENSE file for details.
         }
         return false;
     }
+    /**
+     * Launch the Workflow Builder dialog to create or edit command workflows.
+     * @param commands List of available command IDs.
+     * @param editWorkflowId ID of the workflow to edit, or undefined to create a new one.
+     * @returns Workflow data or false if cancelled.
+     */
     function workflowBuilder(commands, editWorkflowId) {
         var qCache = {};
         var overwrite = false;
         var editableCommandTypes = ["picker"];
-        // create the dialog
         var win = new Window("dialog");
         win.text = localize(strings.wf_builder);
         win.alignChildren = "fill";
-        // setup the query input
+        // Search panel
         var pSearch = win.add("panel", undefined, localize(strings.cd_search_for));
         pSearch.alignChildren = ["fill", "center"];
         pSearch.margins = 20;
         var q = pSearch.add("edittext");
         q.helpTip = localize(strings.cd_q_helptip);
-        // setup the commands listbox
         var list = new ListBoxWrapper(
             commands,
             pSearch,
@@ -12366,31 +12363,24 @@ See the LICENSE file for details.
             localize(strings.cd_helptip),
             [addToStepsOnDoubleClick, scrollListBoxWithArrows]
         );
-        // work-around to stop windows from flickering/flashing explorer
-        if (windowsFlickerFix) {
-            simulateKeypress("TAB", 1);
-        } else {
-            q.active = true;
-        }
+        if (windowsFlickerFix) simulateKeypress("TAB", 1);
+        else q.active = true;
         var pSteps = win.add("panel", undefined, localize(strings.wf_steps));
         pSteps.alignChildren = ["fill", "center"];
         pSteps.margins = 20;
-        // if editing a workflow check to make sure all of it's actions are still valid
-        var editWorkflow, step;
         var actionSteps = [];
         if (editWorkflowId) {
-            editWorkflow = commandsData[editWorkflowId];
-            for (var i = 0; i < editWorkflow.actions.length; i++) {
-                step = editWorkflow.actions[i];
-                if (!commandsData.hasOwnProperty(editWorkflow.actions[i])) {
+            var editWorkflow_1 = commandsData[editWorkflowId];
+            for (var i = 0; i < editWorkflow_1.actions.length; i++) {
+                var step = editWorkflow_1.actions[i];
+                if (!commandsData.hasOwnProperty(step)) {
                     step += " [NOT FOUND]";
-                } else if (!commandVersionCheck(editWorkflow.actions[i])) {
+                } else if (!commandVersionCheck(step)) {
                     step += " [INCOMPATIBLE AI VERSION]";
                 }
                 actionSteps.push(step);
             }
         }
-        // setup the workflow action steps listbox
         var steps = new ListBoxWrapper(
             actionSteps,
             pSteps,
@@ -12401,18 +12391,16 @@ See the LICENSE file for details.
             localize(strings.wf_steps_helptip),
             []
         );
-        // allow in-line editing of pickers
         steps.listbox.onDoubleClick = function () {
-            var selectedItem, command, updatedPicker;
-            selectedItem = steps.listbox.selection[0];
-            command = commandsData[selectedItem.id];
+            var selectedItem = steps.listbox.selection[0];
+            var command = commandsData[selectedItem.id];
             if (!editableCommandTypes.includes(command.type.toLowerCase())) {
                 alert(localize(strings.wf_step_not_editable));
                 return;
             }
-            updatedPicker = buildPicker(command.id);
-            if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
-            if (updatedPicker.name != command.name)
+            var updatedPicker = buildPicker(command.id);
+            if (updatedPicker.id !== command.id) selectedItem.id = updatedPicker.id;
+            if (updatedPicker.name !== command.name)
                 selectedItem.text = updatedPicker.name;
         };
         var stepButtons = pSteps.add("group");
@@ -12425,14 +12413,12 @@ See the LICENSE file for details.
         edit.preferredSize.width = 100;
         var del = stepButtons.add("button", undefined, localize(strings.step_delete));
         del.preferredSize.width = 100;
-        // workflow name
         var pName = win.add("panel", undefined, localize(strings.wf_save_as));
         pName.alignChildren = ["fill", "center"];
         pName.margins = 20;
-        var workflowNameText = editWorkflow ? editWorkflow.name : "";
+        var workflowNameText = editWorkflowId ? commandsData[editWorkflowId].name : "";
         var workflowName = pName.add("edittext", undefined, workflowNameText);
-        workflowName.enabled = editWorkflow ? true : false;
-        // window buttons
+        workflowName.enabled = Boolean(editWorkflowId);
         var winButtons = win.add("group");
         winButtons.orientation = "row";
         winButtons.alignChildren = ["center", "center"];
@@ -12440,125 +12426,84 @@ See the LICENSE file for details.
             name: "ok",
         });
         save.preferredSize.width = 100;
-        save.enabled = editWorkflow ? true : false;
+        save.enabled = Boolean(editWorkflowId);
         var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
             name: "cancel",
         });
         cancel.preferredSize.width = 100;
-        // as a query is typed update the listbox
         var matches;
         q.onChanging = function () {
-            if (q.text === "") {
-                matches = commands;
-            } else if (qCache.hasOwnProperty(q.text)) {
-                matches = qCache[q.text];
-            } else {
-                matches = matcher(q.text, commands);
-                qCache[q.text] = matches;
-            }
-            if (matches.length > 0) {
-                list.update(matches);
-            }
+            var query = q.text;
+            if (query === "") matches = commands;
+            else if (qCache[query]) matches = qCache[query];
+            else matches = qCache[query] = matcher(query, commands);
+            if (matches.length > 0) list.update(matches);
         };
         steps.listbox.onChange = function () {
-            workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
-            save.enabled =
-                steps.listbox.items.length > 0 && workflowName.text.length > 0
-                    ? true
-                    : false;
+            workflowName.enabled = steps.listbox.items.length > 0;
+            save.enabled = workflowName.enabled && workflowName.text.length > 0;
         };
         workflowName.onChanging = function () {
-            save.enabled = workflowName.text.length > 0 ? true : false;
+            save.enabled = workflowName.text.length > 0;
         };
         up.onClick = function () {
             var selected = sortIndexes(steps.listbox.selection);
-            if (selected[i] == 0 || !contiguous(selected)) return;
-            for (var i = 0; i < selected.length; i++)
+            if (selected[0] === 0 || !contiguous(selected)) return;
+            for (var i = 0; i < selected.length; i++) {
                 swapListboxItems(
                     steps.listbox.items[selected[i] - 1],
                     steps.listbox.items[selected[i]]
                 );
-            steps.listbox.selection = null;
-            for (var n = 0; n < selected.length; n++)
-                steps.listbox.selection = selected[n] - 1;
+            }
+            steps.listbox.selection = selected.map(function (index) {
+                return index - 1;
+            });
         };
         down.onClick = function () {
             var selected = sortIndexes(steps.listbox.selection);
             if (
-                selected[selected.length - 1] == steps.listbox.items.length - 1 ||
+                selected[selected.length - 1] === steps.listbox.items.length - 1 ||
                 !contiguous(selected)
             )
                 return;
-            for (var i = steps.listbox.selection.length - 1; i > -1; i--)
+            for (var i = selected.length - 1; i >= 0; i--) {
                 swapListboxItems(
                     steps.listbox.items[selected[i]],
                     steps.listbox.items[selected[i] + 1]
                 );
-            steps.listbox.selection = null;
-            for (var n = 0; n < selected.length; n++)
-                steps.listbox.selection = selected[n] + 1;
-        };
-        // the api returns the selected items in the order they were
-        // selected/clicked by the user when you call `list.selection`
-        // so their actual listbox indexes need to be sorted for the
-        // up, down, and delete buttons to work when multiple items are selected
-        function sortIndexes(sel) {
-            var indexes = [];
-            for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
-            return indexes.sort();
-        }
-        // check to make sure selection is contiguous
-        function contiguous(sel) {
-            return sel.length == sel[sel.length - 1] - sel[0] + 1;
-        }
-        edit.onClick = function () {
-            var selectedItem, command, updatedPicker;
-            selectedItem = steps.listbox.selection[0];
-            command = commandsData[selectedItem.id];
-            if (!editableCommandTypes.includes(command.type.toLowerCase())) {
-                alert(localize(strings.wf_step_not_editable));
-                return;
             }
-            updatedPicker = buildPicker(command.id);
-            if (updatedPicker.id != command.id) selectedItem.id = updatedPicker.id;
-            if (updatedPicker.name != command.name)
-                selectedItem.text = updatedPicker.name;
+            steps.listbox.selection = selected.map(function (index) {
+                return index + 1;
+            });
         };
+        edit.onClick = steps.listbox.onDoubleClick;
         del.onClick = function () {
             var selected = sortIndexes(steps.listbox.selection);
-            for (var i = selected.length - 1; i > -1; i--) {
+            for (var i = selected.length - 1; i >= 0; i--) {
                 steps.listbox.remove(selected[i]);
             }
-            steps.listbox.selection == null;
-            workflowName.enabled = steps.listbox.items.length > 0 ? true : false;
-            save.enabled =
-                steps.listbox.items.length > 0 && workflowName.text.length > 0
-                    ? true
-                    : false;
+            steps.listbox.selection = null;
+            workflowName.enabled = steps.listbox.items.length > 0;
+            save.enabled = workflowName.enabled && workflowName.text.length > 0;
         };
         save.onClick = function () {
-            // check for workflow overwrite
-            var currentWorkflows = [];
-            for (var i = 0; i < prefs.workflows.length; i++) {
-                currentWorkflows.push(prefs.workflows[i].name);
-            }
-            if (currentWorkflows.includes(workflowName.text.trim())) {
+            var existingNames = prefs.workflows.map(function (wf) {
+                return wf.name;
+            });
+            if (existingNames.includes(workflowName.text.trim())) {
                 overwrite = true;
-                if (
-                    !confirm(
-                        localize(strings.wf_already_exists) +
-                            "\n" +
-                            workflowName.text.trim(),
-                        "noAsDflt",
-                        localize(strings.wf_already_exists_title)
-                    )
-                ) {
-                    return;
-                }
+                var confirmed = confirm(
+                    ""
+                        .concat(localize(strings.wf_already_exists), "\n")
+                        .concat(workflowName.text.trim()),
+                    false,
+                    localize(strings.wf_already_exists_title)
+                );
+                if (!confirmed) return;
             }
             win.close(1);
         };
-        if (win.show() == 1) {
+        if (win.show() === 1) {
             var actions = [];
             for (var i = 0; i < steps.listbox.items.length; i++) {
                 actions.push(steps.listbox.items[i].id);
@@ -12570,20 +12515,35 @@ See the LICENSE file for details.
             };
         }
         return false;
+        function sortIndexes(sel) {
+            return sel
+                .map(function (s) {
+                    return s.index;
+                })
+                .sort(function (a, b) {
+                    return a - b;
+                });
+        }
+        function contiguous(sel) {
+            return sel.length === sel[sel.length - 1] - sel[0] + 1;
+        }
     }
+    /**
+     * Launch the Startup Command Builder dialog for selecting and ordering startup commands.
+     * @param commands List of available command IDs.
+     * @returns An array of selected command IDs in the desired startup order, or `false` if cancelled.
+     */
     function startupBuilder(commands) {
         var qCache = {};
-        // create the dialog
         var win = new Window("dialog");
         win.text = localize(strings.startup_builder);
         win.alignChildren = "fill";
-        // setup the query input
+        // Search Panel
         var pSearch = win.add("panel", undefined, localize(strings.cd_search_for));
         pSearch.alignChildren = ["fill", "center"];
         pSearch.margins = 20;
         var q = pSearch.add("edittext");
         q.helpTip = localize(strings.cd_q_helptip);
-        // setup the commands listbox
         var list = new ListBoxWrapper(
             commands,
             pSearch,
@@ -12594,16 +12554,15 @@ See the LICENSE file for details.
             localize(strings.startup_helptip),
             [addToStepsOnDoubleClick, scrollListBoxWithArrows]
         );
-        // work-around to stop windows from flickering/flashing explorer
         if (windowsFlickerFix) {
             simulateKeypress("TAB", 1);
         } else {
             q.active = true;
         }
+        // Steps Panel
         var pSteps = win.add("panel", undefined, localize(strings.startup_steps));
         pSteps.alignChildren = ["fill", "center"];
         pSteps.margins = 20;
-        // setup the workflow action steps listbox
         var steps = new ListBoxWrapper(
             prefs.startupCommands,
             pSteps,
@@ -12622,7 +12581,7 @@ See the LICENSE file for details.
         down.preferredSize.width = 100;
         var del = stepButtons.add("button", undefined, localize(strings.step_delete));
         del.preferredSize.width = 100;
-        // window buttons
+        // Window Buttons
         var winButtons = win.add("group");
         winButtons.orientation = "row";
         winButtons.alignChildren = ["center", "center"];
@@ -12635,7 +12594,7 @@ See the LICENSE file for details.
             name: "cancel",
         });
         cancel.preferredSize.width = 100;
-        // as a query is typed update the listbox
+        // Filtering Logic
         var matches;
         q.onChanging = function () {
             if (q.text === "") {
@@ -12652,62 +12611,69 @@ See the LICENSE file for details.
         };
         up.onClick = function () {
             var selected = sortIndexes(steps.listbox.selection);
-            if (selected[i] == 0 || !contiguous(selected)) return;
-            for (var i = 0; i < selected.length; i++)
+            if (selected[0] === 0 || !contiguous(selected)) return;
+            for (var i = 0; i < selected.length; i++) {
                 swapListboxItems(
                     steps.listbox.items[selected[i] - 1],
                     steps.listbox.items[selected[i]]
                 );
+            }
             steps.listbox.selection = null;
-            for (var n = 0; n < selected.length; n++)
+            for (var n = 0; n < selected.length; n++) {
                 steps.listbox.selection = selected[n] - 1;
+            }
         };
         down.onClick = function () {
             var selected = sortIndexes(steps.listbox.selection);
             if (
-                selected[selected.length - 1] == steps.listbox.items.length - 1 ||
+                selected[selected.length - 1] === steps.listbox.items.length - 1 ||
                 !contiguous(selected)
             )
                 return;
-            for (var i = steps.listbox.selection.length - 1; i > -1; i--)
+            for (var i = selected.length - 1; i >= 0; i--) {
                 swapListboxItems(
                     steps.listbox.items[selected[i]],
                     steps.listbox.items[selected[i] + 1]
                 );
+            }
             steps.listbox.selection = null;
-            for (var n = 0; n < selected.length; n++)
+            for (var n = 0; n < selected.length; n++) {
                 steps.listbox.selection = selected[n] + 1;
+            }
         };
-        // the api returns the selected items in the order they were
-        // selected/clicked by the user when you call `list.selection`
-        // so their actual listbox indexes need to be sorted for the
-        // up, down, and delete buttons to work when multiple items are selected
-        function sortIndexes(sel) {
-            var indexes = [];
-            for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
-            return indexes.sort();
-        }
-        // check to make sure selection is contiguous
-        function contiguous(sel) {
-            return sel.length == sel[sel.length - 1] - sel[0] + 1;
-        }
         del.onClick = function () {
             var selected = sortIndexes(steps.listbox.selection);
-            for (var i = selected.length - 1; i > -1; i--) {
-                // add removed item back to listbox
+            for (var i = selected.length - 1; i >= 0; i--) {
                 commands.push(steps.listbox.items[selected[i]].id);
                 steps.listbox.remove(selected[i]);
             }
-            // clear cache and re-index matches
             qCache = {};
             matches = matcher(q.text, commands);
             qCache[q.text] = matches;
             if (matches.length > 0) {
                 list.update(matches);
             }
-            steps.listbox.selection == null;
+            steps.listbox.selection = null;
         };
-        if (win.show() == 1) {
+        /**
+         * Sort selection indexes from listbox items.
+         * @param sel Selected items.
+         */
+        function sortIndexes(sel) {
+            var indexes = [];
+            for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
+            return indexes.sort(function (a, b) {
+                return a - b;
+            });
+        }
+        /**
+         * Check whether selection indexes are contiguous.
+         * @param sel Sorted indexes.
+         */
+        function contiguous(sel) {
+            return sel.length === sel[sel.length - 1] - sel[0] + 1;
+        }
+        if (win.show() === 1) {
             var items = [];
             for (var i = 0; i < steps.listbox.items.length; i++) {
                 items.push(steps.listbox.items[i].id);
@@ -12750,7 +12716,7 @@ See the LICENSE file for details.
         if (command.docRequired && app.documents.length < 1) {
             var shouldProceed = confirm(
                 localize(strings.cd_active_document_required, command.action),
-                "noAsDflt",
+                false,
                 localize(strings.cd_exception)
             );
             if (!shouldProceed) return;
@@ -12759,7 +12725,7 @@ See the LICENSE file for details.
         if (command.selRequired && app.activeDocument.selection.length < 1) {
             var shouldProceed = confirm(
                 localize(strings.cd_active_selection_required, command.action),
-                "noAsDflt",
+                false,
                 localize(strings.cd_exception)
             );
             if (!shouldProceed) return;

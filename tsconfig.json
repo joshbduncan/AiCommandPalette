@@ -39,9 +39,9 @@
         "src/palettes/nofuzz.ts",
         "src/palettes/commandPalette.js",
         "src/palettes/customCommands.ts",
-        "src/palettes/pickerBuilder.js",
-        "src/palettes/workflowBuilder.js",
-        "src/palettes/startupBuilder.js",
+        "src/palettes/pickerBuilder.ts",
+        "src/palettes/workflowBuilder.ts",
+        "src/palettes/startupBuilder.ts",
 
         "src/commands/processing.ts",
         "src/commands/internal.ts",
