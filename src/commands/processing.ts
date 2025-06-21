@@ -34,7 +34,7 @@ function executeAction(command: CommandEntry): void {
     if (command.docRequired && app.documents.length < 1) {
         const shouldProceed = confirm(
             localize(strings.cd_active_document_required, command.action),
-            "noAsDflt",
+            false,
             localize(strings.cd_exception)
         );
         if (!shouldProceed) return;
@@ -44,7 +44,7 @@ function executeAction(command: CommandEntry): void {
     if (command.selRequired && app.activeDocument.selection.length < 1) {
         const shouldProceed = confirm(
             localize(strings.cd_active_selection_required, command.action),
-            "noAsDflt",
+            false,
             localize(strings.cd_exception)
         );
         if (!shouldProceed) return;
