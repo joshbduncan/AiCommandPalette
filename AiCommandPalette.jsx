@@ -11620,40 +11620,39 @@ See the LICENSE file for details.
         }
         return true;
     }
+    /**
+     * Remove regex-special characters from input string.
+     * @param input The input string to sanitize.
+     * @returns A string safe for regex usage.
+     */
+    function stripRegExpChars(input) {
+        return input.replace(/[.*+?^=!:${}()|[\]\/\\]/g, "");
+    }
+    /**
+     * Fuzzy match a query string against a list of command IDs.
+     * Scores and sorts matches based on relevance.
+     * @param q The user input query.
+     * @param commands List of command IDs to match against.
+     * @returns A sorted array of matching command IDs.
+     */
     function fuzzy(q, commands) {
-        function stripRegExpChars(input) {
-            // Regex pattern to match any of the characters that have special meaning in a regex
-            return input.replace(/[.*+?^=!:${}()|\[\]\/\\]/g, "");
-        }
-        q = stripRegExpChars(q.toLowerCase());
+        var sanitizedQuery = stripRegExpChars(q.toLowerCase());
         var scores = {};
         var matches = [];
-        var id, command, commandName, spans, score, latch, recent, bonus;
-        for (var i = 0; i < commands.length; i++) {
-            // get command info
-            id = commands[i];
-            command = commandsData[id];
-            commandName = determineCorrectString(command, "name").toLowerCase();
-            if (commandName == "") commandName = id.toLowerCase().replace("_", " ");
-            // strip regex protected characters
-            commandName = stripRegExpChars(commandName);
-            // strip out ellipsis for correct full word check
-            commandName = commandName.replace(regexEllipsis, "");
-            // find fuzzy matches
-            spans = findMatches(q.split(" "), commandName);
-            // no need to track scores of commands without matches
+        for (var _i = 0, commands_1 = commands; _i < commands_1.length; _i++) {
+            var id = commands_1[_i];
+            var command = commandsData[id];
+            var commandName = determineCorrectString(command, "name").toLowerCase();
+            if (!commandName) commandName = id.toLowerCase().replace("_", " ");
+            commandName = stripRegExpChars(commandName).replace(regexEllipsis, "");
+            var spans = findMatches(sanitizedQuery.split(" "), commandName);
             if (!spans.length) continue;
-            // calculate the command score
-            bonus = 0;
-            score = calculateScore(commandName, spans);
-            // // increase score if latched query
+            var score = calculateScore(commandName, spans);
+            var bonus = 0;
             if (latches.hasOwnProperty(q) && commands.includes(latches[q])) {
-                latch = true;
                 bonus += 1;
             }
-            // increase score recent command
             if (recentCommands.hasOwnProperty(command.id)) {
-                recent = true;
                 bonus += 0.5;
             }
             scores[id] = score + bonus;
@@ -11664,16 +11663,21 @@ See the LICENSE file for details.
         });
         return matches;
     }
+    /**
+     * Calculates a score based on match spans and string location.
+     * @param command The target string being matched.
+     * @param spans An array of start/end index pairs for matches.
+     * @returns A numeric relevance score.
+     */
     function calculateScore(command, spans) {
         var lastCarrot = findLastCarrot(command);
         var score = 0;
-        var s, e, wordStart, wordEnd;
-        for (var i = 0; i < spans.length; i++) {
-            s = spans[i][0];
-            e = spans[i][1];
-            // check for full word
-            wordStart = s == 0 || command.charAt(s - 1) == " " ? true : false;
-            wordEnd = e == command.length || command.charAt(e) == " " ? true : false;
+        for (var _i = 0, spans_1 = spans; _i < spans_1.length; _i++) {
+            var _a = spans_1[_i],
+                s = _a[0],
+                e = _a[1];
+            var wordStart = s === 0 || command.charAt(s - 1) === " ";
+            var wordEnd = e === command.length || command.charAt(e) === " ";
             if (wordStart && wordEnd) {
                 score += (e - s) * 3;
             } else if (wordStart) {
@@ -11687,36 +11691,38 @@ See the LICENSE file for details.
         }
         return score;
     }
+    /**
+     * Finds fuzzy match spans for chunks within a target string.
+     * Each span is a pair of indices [start, end].
+     * @param chunks Query words to match.
+     * @param str The target string to search.
+     * @returns Array of matching spans or empty array if no match.
+     */
     function findMatches(chunks, str) {
         var spans = [];
-        var chunk, s, e, offset, lastSpan;
-        for (var i = 0; i < chunks.length; i++) {
-            var chunk = chunks[i];
-            if (!chunk) {
-                continue;
-            }
-            s = 0;
-            e = 1;
-            offset = 0;
-            lastSpan = null;
-            var chars, match, spanStart, spanEnd;
+        for (var _i = 0, chunks_1 = chunks; _i < chunks_1.length; _i++) {
+            var chunk = chunks_1[_i];
+            if (!chunk) continue;
+            var s = 0;
+            var e = 1;
+            var offset = 0;
+            var lastSpan = null;
             while (true) {
-                chars = chunk.substring(s, e);
-                match = str.substring(offset).match(chars);
+                var chars = chunk.substring(s, e);
+                var match = str.substring(offset).match(chars);
                 if (match) {
-                    spanStart = match.index + offset;
-                    spanEnd = spanStart + chars.length;
+                    var spanStart = match.index + offset;
+                    var spanEnd = spanStart + chars.length;
                     lastSpan = [spanStart, spanEnd];
                     e++;
                 } else {
                     if (chars.length === 1) {
-                        spans = [];
-                        break;
+                        return [];
                     }
                     s = e - 1;
                     if (lastSpan !== null) {
-                        var spanStart = lastSpan[0];
-                        var spanEnd = lastSpan[1];
+                        var spanStart = lastSpan[0],
+                            spanEnd = lastSpan[1];
                         offset = spanEnd;
                         spans.push([spanStart, spanEnd]);
                     }
@@ -11724,9 +11730,7 @@ See the LICENSE file for details.
                 }
                 if (e === chunk.length + 1) {
                     if (lastSpan !== null) {
-                        var hls = lastSpan[0];
-                        var hle = lastSpan[1];
-                        spans.push([hls, hle]);
+                        spans.push(lastSpan);
                     }
                     break;
                 }
@@ -11751,8 +11755,8 @@ See the LICENSE file for details.
             scores[latchedId] = 1000;
             matches.push(latchedId);
         }
-        for (var _i = 0, commands_1 = commands; _i < commands_1.length; _i++) {
-            var id = commands_1[_i];
+        for (var _i = 0, commands_2 = commands; _i < commands_2.length; _i++) {
+            var id = commands_2[_i];
             var command = commandsData[id];
             if (!command) continue;
             var score = 0;

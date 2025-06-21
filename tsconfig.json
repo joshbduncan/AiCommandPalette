@@ -35,7 +35,7 @@
         "src/user/actions.ts",
 
         "src/palettes/filter.ts",
-        "src/palettes/fuzzy.js",
+        "src/palettes/fuzzy.ts",
         "src/palettes/nofuzz.ts",
         "src/palettes/commandPalette.js",
         "src/palettes/customCommands.ts",
