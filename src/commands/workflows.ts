@@ -4,17 +4,17 @@
  * @returns Array of non-active command IDs.
  */
 function checkWorkflowActions(actions: string[]): string[] {
-  const badActions: string[] = [];
+    const badActions: string[] = [];
 
-  for (let i = 0; i < actions.length; i++) {
-    const commandId = actions[i];
-    if (
-      !commandsData.hasOwnProperty(commandId) ||
-      !commandVersionCheck(commandsData[commandId])
-    ) {
-      badActions.push(commandId);
+    for (let i = 0; i < actions.length; i++) {
+        const commandId = actions[i];
+        if (
+            !commandsData.hasOwnProperty(commandId) ||
+            !commandVersionCheck(commandsData[commandId])
+        ) {
+            badActions.push(commandId);
+        }
     }
-  }
 
-  return badActions;
+    return badActions;
 }

@@ -18,7 +18,7 @@ build-commands:  ## build command objects from csv input file
 	python3 tools/build_commands.py | prettier --parser typescript > src/data/built_commands.ts
 
 copy:  ## copy compiled script to Ai scripts folder
-	cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts
+	sudo cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts
 
 reset: compile wrap copy  ## re-compile script and copy to Ai scripts folder
 
@@ -29,7 +29,8 @@ wrap:  ## wrap built script into an anonymous function
 watchman:
 	watchman watch .
 	watchman -- trigger . script-jsx-wrap build/bundle.jsx -- ./tools/wrap_in_anon_function.sh
-	sudo watchman -- trigger . script-jsx-wrap AiCommandPalette.jsx -- sh -c "cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts"
+	# watchman -- trigger . script-copy AiCommandPalette.jsx -- sh -c "cp AiCommandPalette.jsx /Applications/Adobe\ Illustrator\ 2025/Presets.localized/en_US/Scripts"
+	# watchman -- trigger . script-wrap-and-copy 'build/bundle.jsx' -- ./scripts/wrap_and_copy.sh
 
 watch:  ## watch for file changes and compile
 	tsc --watch

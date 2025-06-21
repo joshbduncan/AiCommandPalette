@@ -9,7 +9,7 @@
 
 const sysOS = /mac/i.test($.os) ? "mac" : "win";
 const windowsFlickerFix =
-  sysOS === "win" && parseFloat(app.version) < 26.4 ? true : false;
+    sysOS === "win" && parseFloat(app.version) < 26.4 ? true : false;
 const settingsRequiredUpdateVersion = "0.10.0";
 
 // DEVELOPMENT SETTINGS
@@ -19,62 +19,62 @@ const logFilePath = Folder.desktop + "/AiCommandPalette.log";
 let logger;
 
 if (devMode || debugLogging) {
-  logger = new Logger(logFilePath, "a", undefined, true);
-  devMode && logger.log("**DEV MODE ENABLED**");
+    logger = new Logger(logFilePath, "a", undefined, true);
+    devMode && logger.log("**DEV MODE ENABLED**");
 } else {
-  logger = {};
-  logger.log = function (text) {
-    $.writeln(text);
-  };
+    logger = {};
+    logger.log = function (text) {
+        $.writeln(text);
+    };
 }
 
 logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
 
 // PALETTE SETTINGS
 interface ColumnConfig {
-  width: number;
-  key: string;
+    width: number;
+    key: string;
 }
 
 interface ColumnSet {
-  [columnLabel: string]: ColumnConfig;
+    [columnLabel: string]: ColumnConfig;
 }
 
 interface PaletteSettings {
-  paletteWidth: number;
-  paletteHeight: number;
-  bounds: [number, number, number, number];
-  columnSets: {
-    [setName: string]: ColumnSet;
-  };
+    paletteWidth: number;
+    paletteHeight: number;
+    bounds: [number, number, number, number];
+    columnSets: {
+        [setName: string]: ColumnSet;
+    };
 }
 
 const paletteSettings: PaletteSettings = {
-  paletteWidth: 600,
-  paletteHeight: sysOS === "win" ? 211 : 201,
-  bounds: [0, 0, 600, sysOS === "win" ? 211 : 201],
-  columnSets: {
-    standard: {
-      [localize(strings.name_title_case)]: {
-        width: 450,
-        key: "name",
-      },
-      [localize(strings.type_title_case)]: {
-        width: 100,
-        key: "type",
-      },
+    paletteWidth: 600,
+    paletteHeight: sysOS === "win" ? 211 : 201,
+    bounds: [0, 0, 600, sysOS === "win" ? 211 : 201],
+    columnSets: {
+        standard: {
+            [localize(strings.name_title_case)]: {
+                width: 450,
+                key: "name",
+            },
+            [localize(strings.type_title_case)]: {
+                width: 100,
+                key: "type",
+            },
+        },
+        customCommand: {
+            [localize(strings.name_title_case)]: {
+                width: 450,
+                key: "name",
+            },
+            [localize(strings.type_title_case)]: {
+                width: 100,
+                key: "actionType",
+            },
+        },
     },
-    customCommand: {
-      [localize(strings.name_title_case)]: {
-        width: 450,
-        key: "name",
-      },
-      [localize(strings.type_title_case)]: {
-        width: 100,
-        key: "actionType",
-      },
-    },
-  },
 };
 
 // MISCELLANEOUS SETTINGS
@@ -88,29 +88,29 @@ const regexCarrot = /\s>\s/g;
 // DEVELOPMENT HELPERS
 
 interface DevInfo {
-  folder(): Folder;
-  prefsFile(): File;
-  commandsFile(): File;
-  save(): void;
+    folder(): Folder;
+    prefsFile(): File;
+    commandsFile(): File;
+    save(): void;
 }
 
 const devInfo: DevInfo = {
-  folder(): Folder {
-    return Folder.desktop;
-  },
+    folder(): Folder {
+        return Folder.desktop;
+    },
 
-  prefsFile(): File {
-    const folder = this.folder();
-    return setupFileObject(folder, "prefs.json");
-  },
+    prefsFile(): File {
+        const folder = this.folder();
+        return setupFileObject(folder, "prefs.json");
+    },
 
-  commandsFile(): File {
-    const folder = this.folder();
-    return setupFileObject(folder, "commands.json");
-  },
+    commandsFile(): File {
+        const folder = this.folder();
+        return setupFileObject(folder, "commands.json");
+    },
 
-  save(): void {
-    writeJSONData(prefs, this.prefsFile());
-    writeJSONData(commandsData, this.commandsFile());
-  },
+    save(): void {
+        writeJSONData(prefs, this.prefsFile());
+        writeJSONData(commandsData, this.commandsFile());
+    },
 };

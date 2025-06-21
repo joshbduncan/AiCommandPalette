@@ -10,28 +10,28 @@
  * @returns The resolved string, either localized or raw.
  */
 function determineCorrectString(command: CommandEntry, prop: string): string {
-  const value = command[prop];
+    const value = command[prop];
 
-  if (typeof value === "object") {
-    return localize(value);
-  }
+    if (typeof value === "object") {
+        return localize(value);
+    }
 
-  if (strings.hasOwnProperty(value)) {
-    return localize(strings[value as keyof typeof strings]);
-  }
+    if (strings.hasOwnProperty(value)) {
+        return localize(strings[value as keyof typeof strings]);
+    }
 
-  return value;
+    return value;
 }
 
 function isLocalizedEntry(value: unknown): value is LocalizedStringEntry {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    !Array.isArray(value) &&
-    Object.keys(value).every(
-      (key) => typeof key === "string" && typeof (value as any)[key] === "string"
-    )
-  );
+    return (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value) &&
+        Object.keys(value).every(
+            (key) => typeof key === "string" && typeof (value as any)[key] === "string"
+        )
+    );
 }
 
 /**
@@ -42,20 +42,20 @@ function isLocalizedEntry(value: unknown): value is LocalizedStringEntry {
  * @returns The position just after the last `' > '` or 0 if not found.
  */
 function findLastCarrot(s: string): number {
-  let p = 0;
-  const re = / > /g;
+    let p = 0;
+    const re = / > /g;
 
-  if (re.test(s)) {
-    let match = s.search(re);
-    while (true) {
-      p += match + 3;
-      match = s.substring(p).search(re);
+    if (re.test(s)) {
+        let match = s.search(re);
+        while (true) {
+            p += match + 3;
+            match = s.substring(p).search(re);
 
-      if (match === -1) break;
+            if (match === -1) break;
+        }
     }
-  }
 
-  return p;
+    return p;
 }
 
 /**
@@ -66,16 +66,16 @@ function findLastCarrot(s: string): number {
  * @returns A valid, unique command ID.
  */
 function generateCommandId(s: string): string {
-  const re = /\s|\./gi;
-  let id = s.replace(re, "_");
-  let n = 0;
+    const re = /\s|\./gi;
+    let id = s.replace(re, "_");
+    let n = 0;
 
-  while (commandsData.hasOwnProperty(id)) {
-    n++;
-    id = s + n.toString();
-  }
+    while (commandsData.hasOwnProperty(id)) {
+        n++;
+        id = s + n.toString();
+    }
 
-  return id;
+    return id;
 }
 
 /**
@@ -85,25 +85,25 @@ function generateCommandId(s: string): string {
  * @returns `false` if the user declines to add commands, `undefined` otherwise.
  */
 function addToStartup(newCommandIds: string[]): boolean | void {
-  // Remove any command already in startupCommands
-  for (let i = newCommandIds.length - 1; i >= 0; i--) {
-    const newCommandId = newCommandIds[i];
-    if (prefs.startupCommands.includes(newCommandId)) {
-      newCommandIds.splice(i, 1);
+    // Remove any command already in startupCommands
+    for (let i = newCommandIds.length - 1; i >= 0; i--) {
+        const newCommandId = newCommandIds[i];
+        if (prefs.startupCommands.includes(newCommandId)) {
+            newCommandIds.splice(i, 1);
+        }
     }
-  }
 
-  if (!newCommandIds.length) return;
+    if (!newCommandIds.length) return;
 
-  const confirmed = confirm(
-    localize(strings.cd_add_to_startup),
-    false,
-    localize(strings.cd_add_to_startup_title)
-  );
+    const confirmed = confirm(
+        localize(strings.cd_add_to_startup),
+        false,
+        localize(strings.cd_add_to_startup_title)
+    );
 
-  if (!confirmed) return false;
+    if (!confirmed) return false;
 
-  prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
+    prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
 }
 
 /**
@@ -113,21 +113,21 @@ function addToStartup(newCommandIds: string[]): boolean | void {
  * @returns An array of unique fonts used in the document.
  */
 function getDocumentFonts(doc: Document): TextFont[] {
-  const fonts: TextFont[] = [];
+    const fonts: TextFont[] = [];
 
-  for (let i = 0; i < doc.textFrames.length; i++) {
-    const textFrame = doc.textFrames[i];
+    for (let i = 0; i < doc.textFrames.length; i++) {
+        const textFrame = doc.textFrames[i];
 
-    for (let j = 0; j < textFrame.textRanges.length; j++) {
-      const font = textFrame.textRanges[j].textFont;
+        for (let j = 0; j < textFrame.textRanges.length; j++) {
+            const font = textFrame.textRanges[j].textFont;
 
-      if (fonts.indexOf(font) === -1) {
-        fonts.push(font);
-      }
+            if (fonts.indexOf(font) === -1) {
+                fonts.push(font);
+            }
+        }
     }
-  }
 
-  return fonts;
+    return fonts;
 }
 
 /**
@@ -136,31 +136,31 @@ function getDocumentFonts(doc: Document): TextFont[] {
  * @param pageItem - The page item to focus the view on.
  */
 function zoomIntoPageItem(pageItem: PageItem): void {
-  const view = app.activeDocument.views[0];
+    const view = app.activeDocument.views[0];
 
-  // Get current screen dimensions
-  const screenBounds = view.bounds;
-  const screenW = screenBounds[2] - screenBounds[0];
-  const screenH = screenBounds[1] - screenBounds[3];
+    // Get current screen dimensions
+    const screenBounds = view.bounds;
+    const screenW = screenBounds[2] - screenBounds[0];
+    const screenH = screenBounds[1] - screenBounds[3];
 
-  // Get page item's visible bounds and center
-  const bounds = pageItem.visibleBounds;
-  const itemW = bounds[2] - bounds[0];
-  const itemH = bounds[1] - bounds[3];
-  const itemCX = bounds[0] + itemW / 2;
-  const itemCY = bounds[1] - itemH / 2;
+    // Get page item's visible bounds and center
+    const bounds = pageItem.visibleBounds;
+    const itemW = bounds[2] - bounds[0];
+    const itemH = bounds[1] - bounds[3];
+    const itemCX = bounds[0] + itemW / 2;
+    const itemCY = bounds[1] - itemH / 2;
 
-  // Center the view on the page item
-  view.centerPoint = [itemCX, itemCY];
+    // Center the view on the page item
+    view.centerPoint = [itemCX, itemCY];
 
-  // Calculate zoom ratio
-  const ratioW = screenW / itemW;
-  const ratioH = screenH / itemH;
-  const zoomRatio = itemW * (screenH / screenW) >= itemH ? ratioW : ratioH;
+    // Calculate zoom ratio
+    const ratioW = screenW / itemW;
+    const ratioH = screenH / itemH;
+    const zoomRatio = itemW * (screenH / screenW) >= itemH ? ratioW : ratioH;
 
-  // Apply zoom with a padding factor
-  const padding = 0.9;
-  view.zoom = zoomRatio * padding;
+    // Apply zoom with a padding factor
+    const padding = 0.9;
+    view.zoom = zoomRatio * padding;
 }
 
 /**
@@ -170,39 +170,39 @@ function zoomIntoPageItem(pageItem: PageItem): void {
  * @returns An array of localized strings containing file info for reporting.
  */
 function getPlacedFileInfoForReport(): string[] {
-  // Load AdobeXMPScript if not already available
-  if (ExternalObject.AdobeXMPScript === undefined) {
-    ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
-  }
+    // Load AdobeXMPScript if not already available
+    if (ExternalObject.AdobeXMPScript === undefined) {
+        ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
+    }
 
-  // Parse XMP metadata from the current document
-  const xmp = new XMPMeta(app.activeDocument.XMPString);
-  const allFilePaths: string[] = getAllPlacedFilePaths(xmp);
+    // Parse XMP metadata from the current document
+    const xmp = new XMPMeta(app.activeDocument.XMPString);
+    const allFilePaths: string[] = getAllPlacedFilePaths(xmp);
 
-  // Convert paths to File objects
-  const fileObjects: File[] = allFilePaths.map((path) => new File(path));
+    // Convert paths to File objects
+    const fileObjects: File[] = allFilePaths.map((path) => new File(path));
 
-  // Sort files by name
-  fileObjects.sort(function (a, b) {
-    return a.name.localeCompare(b.name);
-  });
+    // Sort files by name
+    fileObjects.sort(function (a, b) {
+        return a.name.localeCompare(b.name);
+    });
 
-  // Build localized strings for each file
-  const result: string[] = fileObjects.map((f, index) => {
-    const fileInfo =
-      localize(strings.dr_name) +
-      decodeURI(f.name) +
-      "\n" +
-      localize(strings.dr_path) +
-      f.fsName.replace(f.name, "") +
-      "\n" +
-      localize(strings.dr_file_found) +
-      f.exists.toString().toUpperCase();
+    // Build localized strings for each file
+    const result: string[] = fileObjects.map((f, index) => {
+        const fileInfo =
+            localize(strings.dr_name) +
+            decodeURI(f.name) +
+            "\n" +
+            localize(strings.dr_path) +
+            f.fsName.replace(f.name, "") +
+            "\n" +
+            localize(strings.dr_file_found) +
+            f.exists.toString().toUpperCase();
 
-    return index === fileObjects.length - 1 ? fileInfo : fileInfo + "\n";
-  });
+        return index === fileObjects.length - 1 ? fileInfo : fileInfo + "\n";
+    });
 
-  return result;
+    return result;
 }
 
 /**
@@ -216,18 +216,18 @@ function getPlacedFileInfoForReport(): string[] {
  * @returns An array of file path strings.
  */
 function getAllPlacedFilePaths(xmp: XMPMeta): string[] {
-  const paths: string[] = [];
+    const paths: string[] = [];
 
-  // Iterate over all items in the xmpMM:Manifest array
-  for (let i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
-    const xpath = `xmpMM:Manifest[${i}]/stMfs:reference/stRef:filePath`;
-    const prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
-    if (prop != null && typeof prop.value === "string") {
-      paths.push(prop.value);
+    // Iterate over all items in the xmpMM:Manifest array
+    for (let i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
+        const xpath = `xmpMM:Manifest[${i}]/stMfs:reference/stRef:filePath`;
+        const prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
+        if (prop != null && typeof prop.value === "string") {
+            paths.push(prop.value);
+        }
     }
-  }
 
-  return paths;
+    return paths;
 }
 
 /**
@@ -240,17 +240,17 @@ function getAllPlacedFilePaths(xmp: XMPMeta): string[] {
  * @returns An array of file path strings for the broken linked files.
  */
 function getBrokenFilePaths(xmp: XMPMeta): string[] {
-  const paths: string[] = [];
+    const paths: string[] = [];
 
-  for (let i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
-    const xpath = `xmpMM:Ingredients[${i}]/stRef:filePath`;
-    const prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
-    if (prop != null && typeof prop.value === "string") {
-      paths.push(prop.value);
+    for (let i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
+        const xpath = `xmpMM:Ingredients[${i}]/stRef:filePath`;
+        const prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
+        if (prop != null && typeof prop.value === "string") {
+            paths.push(prop.value);
+        }
     }
-  }
 
-  return paths;
+    return paths;
 }
 
 /**
@@ -263,19 +263,19 @@ function getBrokenFilePaths(xmp: XMPMeta): string[] {
  * @returns True if the command is valid for the current Illustrator version, false otherwise.
  */
 function commandVersionCheck(command: {
-  minVersion?: number;
-  maxVersion?: number;
+    minVersion?: number;
+    maxVersion?: number;
 }): boolean {
-  const aiVersion = parseFloat(app.version);
+    const aiVersion = parseFloat(app.version);
 
-  if (
-    (command.minVersion !== undefined && command.minVersion > aiVersion) ||
-    (command.maxVersion !== undefined && command.maxVersion < aiVersion)
-  ) {
-    return false;
-  }
+    if (
+        (command.minVersion !== undefined && command.minVersion > aiVersion) ||
+        (command.maxVersion !== undefined && command.maxVersion < aiVersion)
+    ) {
+        return false;
+    }
 
-  return true;
+    return true;
 }
 
 /**
@@ -286,38 +286,38 @@ function commandVersionCheck(command: {
  * @returns 1 if `a` > `b`, -1 if `b` > `a`, 0 if they are equal.
  */
 function semanticVersionComparison(a: string, b: string): number {
-  if (a === b) {
+    if (a === b) {
+        return 0;
+    }
+
+    const a_components = a.split(".");
+    const b_components = b.split(".");
+
+    const len = Math.min(a_components.length, b_components.length);
+
+    for (let i = 0; i < len; i++) {
+        const aNum = parseInt(a_components[i], 10);
+        const bNum = parseInt(b_components[i], 10);
+
+        if (aNum > bNum) {
+            return 1;
+        }
+
+        if (aNum < bNum) {
+            return -1;
+        }
+    }
+
+    // If one's a prefix of the other, the longer one is considered greater
+    if (a_components.length > b_components.length) {
+        return 1;
+    }
+
+    if (a_components.length < b_components.length) {
+        return -1;
+    }
+
     return 0;
-  }
-
-  const a_components = a.split(".");
-  const b_components = b.split(".");
-
-  const len = Math.min(a_components.length, b_components.length);
-
-  for (let i = 0; i < len; i++) {
-    const aNum = parseInt(a_components[i], 10);
-    const bNum = parseInt(b_components[i], 10);
-
-    if (aNum > bNum) {
-      return 1;
-    }
-
-    if (aNum < bNum) {
-      return -1;
-    }
-  }
-
-  // If one's a prefix of the other, the longer one is considered greater
-  if (a_components.length > b_components.length) {
-    return 1;
-  }
-
-  if (a_components.length < b_components.length) {
-    return -1;
-  }
-
-  return 0;
 }
 
 /**
@@ -329,25 +329,25 @@ function semanticVersionComparison(a: string, b: string): number {
  * @returns An array of names from the collection.
  */
 function getCollectionObjectNames(
-  collection: { length: number; typename: string; [index: number]: { name: string } },
-  sorted: boolean = false
+    collection: { length: number; typename: string; [index: number]: { name: string } },
+    sorted: boolean = false
 ): string[] {
-  const names: string[] = [];
+    const names: string[] = [];
 
-  if (collection.length > 0) {
-    for (let i = 0; i < collection.length; i++) {
-      const item = collection[i];
-      if (collection.typename === "Spots") {
-        if (item.name !== "[Registration]") {
-          names.push(item.name);
+    if (collection.length > 0) {
+        for (let i = 0; i < collection.length; i++) {
+            const item = collection[i];
+            if (collection.typename === "Spots") {
+                if (item.name !== "[Registration]") {
+                    names.push(item.name);
+                }
+            } else {
+                names.push(item.name);
+            }
         }
-      } else {
-        names.push(item.name);
-      }
     }
-  }
 
-  return sorted ? names.sort() : names;
+    return sorted ? names.sort() : names;
 }
 
 /**
@@ -359,24 +359,24 @@ function getCollectionObjectNames(
  * @returns An array of selected `File` objects, or an empty array if none selected.
  */
 function loadFileTypes(
-  prompt: string,
-  multiselect: boolean,
-  fileFilter: string
+    prompt: string,
+    multiselect: boolean,
+    fileFilter: string
 ): File[] {
-  const results: File[] = [];
-  const files = File.openDialog(prompt, fileFilter, multiselect) as
-    | File
-    | File[]
-    | null;
+    const results: File[] = [];
+    const files = File.openDialog(prompt, fileFilter, multiselect) as
+        | File
+        | File[]
+        | null;
 
-  if (files) {
-    const selectedFiles = Array.isArray(files) ? files : [files];
-    for (let i = 0; i < selectedFiles.length; i++) {
-      results.push(selectedFiles[i]);
+    if (files) {
+        const selectedFiles = Array.isArray(files) ? files : [files];
+        for (let i = 0; i < selectedFiles.length; i++) {
+            results.push(selectedFiles[i]);
+        }
     }
-  }
 
-  return results;
+    return results;
 }
 
 /**
@@ -393,27 +393,27 @@ function loadFileTypes(
  * @param n - Number of times to simulate the keypress. Defaults to 1.
  */
 function simulateKeypress(k: string, n: number = 1): void {
-  let f: File;
-  try {
-    f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
+    let f: File;
+    try {
+        f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
 
-    if (!f.exists) {
-      let data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
-      for (let i = 0; i < n; i++) {
-        data += `WshShell.SendKeys "{${k}}"\n`;
-      }
+        if (!f.exists) {
+            let data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';
+            for (let i = 0; i < n; i++) {
+                data += `WshShell.SendKeys "{${k}}"\n`;
+            }
 
-      f.encoding = "UTF-8";
-      f.open("w");
-      f.write(data);
+            f.encoding = "UTF-8";
+            f.open("w");
+            f.write(data);
+        }
+
+        f.execute();
+    } catch (e) {
+        $.writeln(e);
+    } finally {
+        if (f) f.close();
     }
-
-    f.execute();
-  } catch (e) {
-    $.writeln(e);
-  } finally {
-    if (f) f.close();
-  }
 }
 
 /**
@@ -426,15 +426,15 @@ function simulateKeypress(k: string, n: number = 1): void {
  * @param url - The URL to open.
  */
 function openURL(url: string): void {
-  const html = new File(Folder.temp.absoluteURI + "/aisLink.html");
-  html.open("w");
+    const html = new File(Folder.temp.absoluteURI + "/aisLink.html");
+    html.open("w");
 
-  const htmlBody =
-    '<html><head><META HTTP-EQUIV="Refresh" CONTENT="0; URL=' +
-    url +
-    '"></head><body><p></p></body></html>';
+    const htmlBody =
+        '<html><head><META HTTP-EQUIV="Refresh" CONTENT="0; URL=' +
+        url +
+        '"></head><body><p></p></body></html>';
 
-  html.write(htmlBody);
-  html.close();
-  html.execute();
+    html.write(htmlBody);
+    html.close();
+    html.execute();
 }
