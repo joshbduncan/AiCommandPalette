@@ -62,7 +62,9 @@ function settings(): void {
 
     if (!result) return;
 
-    processCommand(result);
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 interface PickerCommandEntry {
@@ -136,15 +138,18 @@ function buildPicker(editPickerId?: string): PickerCommandEntry | undefined {
 function editPicker(): void {
     const pickers: string[] = filterCommands(null, ["picker"], true, false, null);
 
-    const result = commandPalette({
-        commands: pickers,
-        title: localize(strings.picker_to_edit),
-        columns: paletteSettings.columnSets.standard,
-        multiselect: false,
-    });
+    const result = commandPalette(
+        pickers,
+        localize(strings.picker_to_edit),
+        paletteSettings.columnSets.standard,
+        false
+    );
 
     if (!result) return;
-    buildPicker(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 /**
@@ -371,7 +376,11 @@ function hideCommand(): void {
 
     if (!result) return;
 
-    prefs.hiddenCommands = prefs.hiddenCommands.concat(result);
+    const commandIds: string[] = Array.isArray(result)
+        ? (result as string[])
+        : [result as string];
+
+    prefs.hiddenCommands = prefs.hiddenCommands.concat(commandIds);
 }
 
 /**
@@ -394,9 +403,9 @@ function builtinCommands(): void {
         false
     );
 
-    if (!result) return;
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
 
-    processCommand(result);
+    processCommand(commandId);
 }
 
 /**
@@ -425,7 +434,9 @@ function unhideCommand(): void {
 
 function documentReport(): void {
     const doc = app.activeDocument;
-    const rulerUnits = doc.rulerUnits.toString().split(".").pop()!;
+    const rulerUnits = doc.rulerUnits.toString().split(".").pop()! as UnitName;
+    const docUnitValue = new UnitValue(1, rulerUnits);
+
     const fileInfo = [
         localize(strings.dr_header),
         `${localize(strings.dr_filename)}${doc.name}`,
@@ -435,24 +446,30 @@ function documentReport(): void {
             .split(".")
             .pop()}`,
         `${localize(strings.dr_width)}${UnitValue(`${doc.width} pt`).as(
-            rulerUnits
-        )} ${rulerUnits}`,
+            docUnitValue.type
+        )} ${docUnitValue.type}`,
         `${localize(strings.dr_height)}${UnitValue(`${doc.height} pt`).as(
-            rulerUnits
-        )} ${rulerUnits}`,
+            docUnitValue.type
+        )} ${docUnitValue.type}`,
     ].join("\n");
 
+    const artboards = getCollectionObjectNames(doc.artboards);
+    const documentFonts = getDocumentFonts(doc)?.map((font) => font.name) || [];
+    const fonts = getCollectionObjectNames(documentFonts, true);
+    const layers = getCollectionObjectNames(doc.layers);
+    const placedFiles = getPlacedFileInfoForReport();
+    const spotColors = getCollectionObjectNames(doc.spots, true);
     const reportOptions: Record<string, { str: string; active: boolean }> = {
         artboards: {
-            str: getCollectionObjectNames(doc.artboards).join("\n"),
+            str: artboards.join("\n"),
             active: true,
         },
         fonts: {
-            str: getCollectionObjectNames(getDocumentFonts(doc), true).join("\n"),
+            str: fonts.join("\n"),
             active: true,
         },
         layers: {
-            str: getCollectionObjectNames(doc.layers).join("\n"),
+            str: layers.join("\n"),
             active: true,
         },
         placed_items: {
@@ -460,7 +477,7 @@ function documentReport(): void {
             active: true,
         },
         spot_colors: {
-            str: getCollectionObjectNames(doc.spots, true).join("\n"),
+            str: spotColors.join("\n"),
             active: true,
         },
     };
@@ -574,7 +591,10 @@ function showAllActions(): void {
     );
 
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 function showAllBookmarks(): void {
@@ -603,7 +623,10 @@ function showAllBookmarks(): void {
     );
 
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 function showAllCustomCommands(): void {
@@ -617,7 +640,10 @@ function showAllCustomCommands(): void {
     );
 
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 function showAllMenus(): void {
@@ -631,7 +657,10 @@ function showAllMenus(): void {
     );
 
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 function showAllPickers(): void {
@@ -643,7 +672,10 @@ function showAllPickers(): void {
         false
     );
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 function showAllScripts(): void {
@@ -656,7 +688,10 @@ function showAllScripts(): void {
 
     const result = commandPalette(scripts, localize(strings.Scripts), columns, false);
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 function showAllTools(): void {
@@ -668,7 +703,10 @@ function showAllTools(): void {
         false
     );
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 function showAllWorkflows(): void {
@@ -680,7 +718,10 @@ function showAllWorkflows(): void {
         false
     );
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 function buildWorkflow(editWorkflowId?: string): void {
@@ -756,7 +797,9 @@ function editWorkflow(): void {
 
     if (!result) return;
 
-    buildWorkflow(result);
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 /**
@@ -873,7 +916,9 @@ function goToArtboard(): void {
 
     if (!result) return;
 
-    const idx = Number(commandsData[result].idx) - 1;
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    const idx = Number(commandsData[commandId].idx) - 1;
     app.activeDocument.artboards.setActiveArtboardIndex(idx);
     app.executeMenuCommand("fitin");
 }
@@ -951,7 +996,9 @@ function goToNamedObject(): void {
 
     if (!result) return;
 
-    const pageItem = (commandsData[result] as CommandEntry).pageItem;
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    const pageItem = (commandsData[commandId] as CommandEntry).pageItem;
 
     doc.selection = null;
     pageItem.selected = true;
@@ -1027,7 +1074,9 @@ function goToOpenDocument(): void {
 
     if (!result) return;
 
-    const entry = commandsData[result] as CommandEntry & { document: Document };
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    const entry = commandsData[commandId] as CommandEntry & { document: Document };
     entry.document.activate();
 }
 
@@ -1086,7 +1135,11 @@ function loadFileBookmark(): void {
     ]; // file types taken from Ai open dialog
 
     const re = new RegExp(`${acceptedTypes.join("|")}$`, "i");
-    const files: File[] = loadFileTypes(localize(strings.bm_load_bookmark), true, re);
+    const files: File[] = loadFileTypes(
+        localize(strings.bm_load_bookmark),
+        true,
+        re.toString()
+    );
 
     if (files.length === 0) return;
 
@@ -1162,7 +1215,11 @@ function loadFolderBookmark(): void {
 function loadScripts(): void {
     const acceptedTypes = [".jsx", ".js"];
     const re = new RegExp(`${acceptedTypes.join("|")}$`, "i");
-    const files: File[] = loadFileTypes(localize(strings.sc_load_script), true, re);
+    const files: File[] = loadFileTypes(
+        localize(strings.sc_load_script),
+        true,
+        re.toString()
+    );
 
     if (files.length === 0) return;
 
@@ -1210,7 +1267,10 @@ function recentUserCommands(): void {
     );
 
     if (!result) return;
-    processCommand(result);
+
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
 }
 
 /**
@@ -1274,8 +1334,10 @@ function recentFiles(): void {
     );
     if (!result) return;
 
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
     try {
-        app.open(commandsData[result].document);
+        app.open(commandsData[commandId].document);
     } catch (e) {
         alert(localize(strings.fl_error_loading, result));
     }
