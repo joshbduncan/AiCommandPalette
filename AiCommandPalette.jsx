@@ -10698,7 +10698,7 @@ See the LICENSE file for details.
         for (var i = 0; i < doc.textFrames.length; i++) {
             var textFrame = doc.textFrames[i];
             for (var j = 0; j < textFrame.textRanges.length; j++) {
-                var font = textFrame.textRanges[j].textFont;
+                var font = textFrame.textRanges[j].characterAttributes.textFont;
                 if (fonts.indexOf(font) === -1) {
                     fonts.push(font);
                 }
@@ -10884,7 +10884,7 @@ See the LICENSE file for details.
         if (collection.length > 0) {
             for (var i = 0; i < collection.length; i++) {
                 var item = collection[i];
-                if (collection.typename === "Spots") {
+                if (collection.typename == "Spots") {
                     if (item.name !== "[Registration]") {
                         names.push(item.name);
                     }
@@ -11169,7 +11169,14 @@ See the LICENSE file for details.
             if (file.exists) {
                 try {
                     var loadedData = readJSONData(file);
-                    if (Object.keys(loadedData).length === 0) return;
+                    if (
+                        !loadedData ||
+                        typeof loadedData !== "object" ||
+                        Array.isArray(loadedData)
+                    )
+                        return;
+                    var data = loadedData;
+                    if (Object.keys(data).length === 0) return;
                     var propsToSkip = [
                         "version",
                         "os",
@@ -11813,50 +11820,50 @@ See the LICENSE file for details.
     var fromQuery = false;
     var fromQueryShiftKey = false;
     /**
-     * Custom wrapper for a ScriptUI Listbox.
-     * @param {Array}   commands    Commands to load into the list box.
-     * @param {Object}  container   ScriptUI container the listbox should be attached to.
-     * @param {String}  name        Lookup name for the listbox.
-     * @param {Array}   bounds      Bounds array for the listbox.
-     * @param {Object}  columns     Listbox column information.
-     * @param {Boolean} multiselect Should the listbox allow multiple selections (disable some features).
-     * @param {String}  helptip     Listbox helptip/tooltip pop-up.
-     * @param {Array}   listeners   ScriptUI listeners to add to the listbox.
+     * A custom wrapper for a ScriptUI ListBox that supports multiple columns,
+     * optional tooltips, multiselect, and command loading.
      */
-    function ListBoxWrapper(
-        commands,
-        container,
-        name,
-        bounds,
-        columns,
-        multiselect,
-        helptip,
-        listeners
-    ) {
-        this.container = container;
-        this.name = name;
-        this.columns = columns;
-        this.multiselect = multiselect;
-        this.helptip = helptip;
-        this.listeners = listeners;
-        this.listbox = this.make(commands, bounds);
-    }
-    ListBoxWrapper.prototype = {
+    var ListBoxWrapper = /** @class */ (function () {
         /**
-         * Initialize a new ScriptUI listbox, load the initial commands, and attach event listeners.
-         * @param commands Item to load into the listbox.
-         * @param bounds   ScriptUI bounds array.
-         * @returns        ScriptUI listbox.
+         * Create a new ListBoxWrapper instance.
+         *
+         * @param commands - The command IDs to populate the listbox.
+         * @param container - The ScriptUI container to which the listbox will be added.
+         * @param name - A name for the listbox instance.
+         * @param bounds - The bounds of the listbox (left, top, right, bottom).
+         * @param columns - Column definitions including width and key.
+         * @param multiselect - Whether multiple items can be selected.
+         * @param helptip - Optional help tooltip for the listbox.
+         * @param listeners - Optional array of event listeners to attach to the listbox.
          */
-        make: function (commands, bounds) {
-            var column;
+        function ListBoxWrapper(
+            commands,
+            container,
+            name,
+            bounds,
+            columns,
+            multiselect,
+            helptip,
+            listeners
+        ) {
+            this.container = container;
+            this.name = name;
+            this.bounds = bounds;
+            this.columns = columns;
+            this.multiselect = multiselect;
+            this.helptip = helptip;
+            this.listeners = listeners;
+            this.listbox = this.make(commands, bounds);
+        }
+        ListBoxWrapper.prototype.make = function (commands, bounds) {
             var columnTitles = [];
             var columnWidths = [];
             var columnKeys = [];
-            for (column in this.columns) {
-                columnTitles.push(this.columns[column].hideTitle ? "" : column);
-                columnWidths.push(this.columns[column].width);
-                columnKeys.push(this.columns[column].key);
+            for (var title in this.columns) {
+                var col = this.columns[title];
+                columnTitles.push(col.hideTitle ? "" : title);
+                columnWidths.push(col.width);
+                columnKeys.push(col.key);
             }
             var listbox = this.container.add("listbox", bounds, undefined, {
                 name: this.name,
@@ -11868,85 +11875,74 @@ See the LICENSE file for details.
             });
             listbox.frameStart = 0;
             if (this.helptip) listbox.helpTip = this.helptip;
-            if (commands && commands.length) {
+            if (commands.length > 0) {
                 this.loadCommands(listbox, commands, columnKeys);
                 listbox.selection = 0;
             }
             this.addListeners(listbox);
             return listbox;
-        },
-        /**
-         * Update the listbox with new items.
-         * @param {Array} matches Update listbox with new commands.
-         */
-        update: function (matches) {
-            var temp = this.make(matches, this.listbox.bounds);
+        };
+        ListBoxWrapper.prototype.update = function (matches) {
+            var newListbox = this.make(matches, this.listbox.bounds);
             this.listbox.window.remove(this.listbox);
-            this.listbox = temp;
-        },
-        /**
-         * Load command items in a ScriptUI listbox.
-         * @param {Array}  listbox    ScriptUI listbox to load the command item in to.
-         * @param {Array}  commands   Commands to load into the list box.
-         * @param {Array}  columnKeys Command lookup key for each column.
-         */
-        loadCommands: function (listbox, commands, columnKeys) {
-            var id, command, name, str, item;
-            for (var i = 0; i < commands.length; i++) {
-                id = commands[i];
-                // if command is no longer available just show the id
+            this.listbox = newListbox;
+        };
+        ListBoxWrapper.prototype.loadCommands = function (
+            listbox,
+            commands,
+            columnKeys
+        ) {
+            for (var _i = 0, commands_3 = commands; _i < commands_3.length; _i++) {
+                var id = commands_3[_i];
+                var item = void 0;
                 if (!commandsData.hasOwnProperty(id)) {
                     item = listbox.add("item", id);
                 } else {
-                    command = commandsData[id];
-                    name = determineCorrectString(command, "name");
-                    // add base item with info from first column
-                    str = determineCorrectString(command, columnKeys[0]);
-                    item = listbox.add("item", str ? str : name);
-                    // add remaining columns as subItems
+                    var command = commandsData[id];
+                    var name = determineCorrectString(command, "name");
+                    var mainText =
+                        determineCorrectString(command, columnKeys[0]) || name;
+                    item = listbox.add("item", mainText);
                     for (var j = 1; j < columnKeys.length; j++) {
-                        str = determineCorrectString(command, columnKeys[j]);
-                        item.subItems[j - 1].text = str ? str : "<missing>";
+                        var str = determineCorrectString(command, columnKeys[j]);
+                        item.subItems[j - 1].text = str || "<missing>";
                     }
                 }
                 item.id = id;
             }
-        },
-        /**
-         * Attach event listeners to the specified listbox.
-         * @param {Object} listbox ScriptUI listbox to attach the listeners to.
-         */
-        addListeners: function (listbox) {
-            var listener;
-            for (var i = 0; i < this.listeners.length; i++) {
-                listener = this.listeners[i];
+        };
+        ListBoxWrapper.prototype.addListeners = function (listbox) {
+            for (var _i = 0, _a = this.listeners; _i < _a.length; _i++) {
+                var listener = _a[_i];
                 listener(listbox);
             }
-        },
-    };
+        };
+        return ListBoxWrapper;
+    })();
     // LISTBOXWRAPPER LISTENERS
     /**
-     * Close listbox when double-clicking a command.
-     * @param {Object} listbox ScriptUI listbox.
+     * Close the window when an item in the listbox is double-clicked.
+     * @param listbox ScriptUI ListBox
      */
     function selectOnDoubleClick(listbox) {
         listbox.onDoubleClick = function () {
-            listbox.window.close(1);
+            var _a;
+            (_a = listbox.window) === null || _a === void 0 ? void 0 : _a.close(1);
         };
     }
     /**
      * Add listbox command to Workflow when double-clicking.
-     * @param {Object}  listbox  ScriptUI listbox.
+     * @param listbox ScriptUI ListBox
      */
     function addToStepsOnDoubleClick(listbox) {
         listbox.onDoubleClick = function () {
-            var win, steps, command, newItem, newPicker;
-            win = listbox.window;
-            steps = win.findElement("steps");
-            command = commandsData[listbox.selection.id];
-            // check for "Build Picker..." command
-            if (command.id == "builtin_buildPicker") {
-                newPicker = buildPicker();
+            var win = listbox.window;
+            var steps = win.findElement("steps");
+            var selection = listbox.selection;
+            var command = commandsData[selection.id];
+            var newItem;
+            if (command.id === "builtin_buildPicker") {
+                var newPicker = buildPicker();
                 newItem = steps.add("item", newPicker.name);
                 newItem.subItems[0].text = newPicker.type;
                 newItem.id = newPicker.id;
@@ -11960,63 +11956,60 @@ See the LICENSE file for details.
     }
     /**
      * Swap listbox items in place (along with their corresponding id).
-     * @param {Object} x Listbox item.
-     * @param {Object} y Listbox item.
+     * @param x Listbox item to swap.
+     * @param y Listbox item to swap.
      */
     function swapListboxItems(x, y) {
-        var t = x.text;
-        var subT = x.subItems[0].text;
-        var id = x.id;
+        var tempText = x.text;
+        var tempSubText = x.subItems[0].text;
+        var tempId = x.id;
         x.text = y.text;
         x.subItems[0].text = y.subItems[0].text;
         x.id = y.id;
-        y.text = t;
-        y.subItems[0].text = subT;
-        y.id = id;
+        y.text = tempText;
+        y.subItems[0].text = tempSubText;
+        y.id = tempId;
     }
     /**
      * Allow end-to-end scrolling from within a listbox.
-     * @param {Object}  listbox  ScriptUI listbox.
+     * @param listbox ScriptUI listbox.
      */
     function scrollListBoxWithArrows(listbox) {
         listbox.addEventListener("keydown", function (e) {
             if (fromQuery) {
                 if (fromQueryShiftKey) {
-                    if (e.keyName == "Up") {
-                        if (listbox.selection.index == 0) {
+                    if (e.keyName === "Up") {
+                        if (listbox.selection.index === 0) {
                             listbox.selection = listbox.items.length - 1;
                             e.preventDefault();
                         } else {
                             listbox.selection--;
                         }
-                    }
-                    if (e.keyName == "Down") {
-                        if (listbox.selection.index == listbox.items.length - 1) {
+                    } else if (e.keyName === "Down") {
+                        if (listbox.selection.index === listbox.items.length - 1) {
                             listbox.selection = 0;
                             e.preventDefault();
                         } else {
-                            if (e.keyName == "Down") listbox.selection++;
+                            listbox.selection++;
                         }
                     }
                 } else {
-                    if (e.keyName == "Up" || e.keyName == "Down") {
-                        if (e.keyName == "Up") {
+                    if (e.keyName === "Up" || e.keyName === "Down") {
+                        if (e.keyName === "Up") {
                             e.preventDefault();
                             if (!listbox.selection) {
                                 listbox.selection = 0;
-                            } else if (listbox.selection.index == 0) {
-                                // jump to the bottom if at top
+                            } else if (listbox.selection.index === 0) {
                                 listbox.selection = listbox.items.length - 1;
                                 listbox.frameStart =
                                     listbox.items.length - 1 - visibleListItems;
                             } else {
-                                if (listbox.selection.index > 0) {
-                                    listbox.selection = listbox.selection.index - 1;
-                                    if (listbox.selection.index < listbox.frameStart)
-                                        listbox.frameStart--;
+                                listbox.selection = listbox.selection.index - 1;
+                                if (listbox.selection.index < listbox.frameStart) {
+                                    listbox.frameStart--;
                                 }
                             }
-                        } else if (e.keyName == "Down") {
+                        } else if (e.keyName === "Down") {
                             e.preventDefault();
                             if (!listbox.selection) {
                                 listbox.selection = 0;
@@ -12024,24 +12017,19 @@ See the LICENSE file for details.
                                 listbox.selection.index ===
                                 listbox.items.length - 1
                             ) {
-                                // jump to the top if at the bottom
                                 listbox.selection = 0;
                                 listbox.frameStart = 0;
                             } else {
-                                if (listbox.selection.index < listbox.items.length) {
-                                    listbox.selection = listbox.selection.index + 1;
+                                listbox.selection = listbox.selection.index + 1;
+                                if (
+                                    listbox.selection.index >
+                                    listbox.frameStart + visibleListItems - 1
+                                ) {
                                     if (
-                                        listbox.selection.index >
-                                        listbox.frameStart + visibleListItems - 1
+                                        listbox.frameStart <
+                                        listbox.items.length - visibleListItems
                                     ) {
-                                        if (
-                                            listbox.frameStart <
-                                            listbox.items.length - visibleListItems
-                                        ) {
-                                            listbox.frameStart++;
-                                        } else {
-                                            listbox.frameStart = listbox.frameStart;
-                                        }
+                                        listbox.frameStart++;
                                     }
                                 }
                             }
@@ -12053,18 +12041,17 @@ See the LICENSE file for details.
         and then hit an arrow key the above event listener will not work correctly so
         I just move the next selection (be it up or down) to the middle of the "frame".
         */
-                        if (listbox.selection) {
-                            if (
-                                listbox.selection.index < listbox.frameStart ||
+                        if (
+                            listbox.selection &&
+                            (listbox.selection.index < listbox.frameStart ||
                                 listbox.selection.index >
-                                    listbox.frameStart + visibleListItems - 1
-                            )
-                                listbox.frameStart =
-                                    listbox.selection.index -
-                                    Math.floor(visibleListItems / 2);
-                            // don't move the frame if list items don't fill the available rows
-                            if (listbox.items.length <= visibleListItems) return;
-                            // move the frame by revealing the calculated `listbox.frameStart`
+                                    listbox.frameStart + visibleListItems - 1)
+                        ) {
+                            listbox.frameStart =
+                                listbox.selection.index -
+                                Math.floor(visibleListItems / 2);
+                        }
+                        if (listbox.items.length > visibleListItems) {
                             listbox.revealItem(listbox.frameStart);
                         }
                     }
@@ -12072,13 +12059,12 @@ See the LICENSE file for details.
                 fromQuery = false;
                 fromQueryShiftKey = false;
             } else {
-                if (e.keyName == "Up" && listbox.selection.index == 0) {
+                if (e.keyName === "Up" && listbox.selection.index === 0) {
                     listbox.selection = listbox.items.length - 1;
                     e.preventDefault();
-                }
-                if (
-                    e.keyName == "Down" &&
-                    listbox.selection.index == listbox.items.length - 1
+                } else if (
+                    e.keyName === "Down" &&
+                    listbox.selection.index === listbox.items.length - 1
                 ) {
                     listbox.selection = 0;
                     e.preventDefault();
@@ -12086,7 +12072,17 @@ See the LICENSE file for details.
             }
         });
     }
-    // USER DIALOGS
+    /**
+     * Display a modal command palette dialog and return user selection.
+     *
+     * @param commands - List of available command IDs.
+     * @param title - Window title.
+     * @param columns - Column configuration for listbox.
+     * @param multiselect - Whether multiple commands can be selected.
+     * @param showOnly - Optional subset of commands to display.
+     * @param saveHistory - Whether to store query and command in user history.
+     * @returns The selected command ID(s), or false if cancelled.
+     */
     function commandPalette(
         commands,
         title,
@@ -12096,16 +12092,13 @@ See the LICENSE file for details.
         saveHistory
     ) {
         var qCache = {};
-        // create the dialog
         var win = new Window("dialog");
         win.text = title;
         win.alignChildren = "fill";
-        // setup the query input
         var q = win.add("edittext");
         q.helpTip = localize(strings.cd_q_helptip);
         q.active = true;
-        // setup the commands listbox
-        var matches = showOnly ? showOnly : commands;
+        var matches = showOnly !== null && showOnly !== void 0 ? showOnly : commands;
         var list = new ListBoxWrapper(
             matches,
             win,
@@ -12113,10 +12106,9 @@ See the LICENSE file for details.
             paletteSettings.bounds,
             columns,
             multiselect,
-            null,
+            undefined,
             [selectOnDoubleClick, scrollListBoxWithArrows]
         );
-        // window buttons
         var winButtons = win.add("group");
         winButtons.orientation = "row";
         winButtons.alignChildren = ["center", "center"];
@@ -12126,14 +12118,13 @@ See the LICENSE file for details.
             name: "cancel",
         });
         cancel.preferredSize.width = 100;
-        // work-around to stop windows from flickering/flashing explorer
         if (windowsFlickerFix) {
             simulateKeypress("TAB", 1);
         }
-        // as a query is typed update the listbox
         q.onChanging = function () {
             if (q.text === "") {
-                var matches = showOnly ? showOnly : commands;
+                matches =
+                    showOnly !== null && showOnly !== void 0 ? showOnly : commands;
             } else if (qCache.hasOwnProperty(q.text)) {
                 matches = qCache[q.text];
             } else {
@@ -12142,30 +12133,26 @@ See the LICENSE file for details.
             }
             list.update(matches);
         };
-        // save query and command history
-        function updateHistory() {
-            // don't add to history if no query was typed
+        var updateHistory = function () {
             if (q.text === "") return;
-            // don't add `Recent Commands` command
-            if (list.listbox.selection.id == "builtin_recentCommands") return;
+            var selected = list.listbox.selection;
+            if (!selected || selected.id === "builtin_recentCommands") return;
             history.push({
                 query: q.text,
-                command: list.listbox.selection.id,
+                command: selected.id,
                 timestamp: Date.now(),
             });
             userHistory.save();
-        }
-        // allow using arrow key from query input by sending a custom keyboard event to the list box
+        };
         if (!multiselect) {
-            var kbEvent = ScriptUI.events.createEvent("KeyboardEvent");
+            var kbEvent_1 = ScriptUI.events.createEvent("KeyboardEvent");
             q.addEventListener("keydown", function (e) {
-                // hack to keep original commands from reloading before closing command palette when hitting the escape key while within the query box
-                if (e.keyName == "Escape") {
+                if (e.keyName === "Escape") {
                     e.preventDefault();
                     win.close();
                 }
-                if (e.keyName == "Up" || e.keyName == "Down") {
-                    kbEvent.initKeyboardEvent(
+                if (e.keyName === "Up" || e.keyName === "Down") {
+                    kbEvent_1.initKeyboardEvent(
                         "keydown",
                         true,
                         true,
@@ -12176,28 +12163,26 @@ See the LICENSE file for details.
                     );
                     fromQuery = true;
                     fromQueryShiftKey = e.getModifierState("shift");
-                    list.listbox.dispatchEvent(kbEvent);
+                    list.listbox.dispatchEvent(kbEvent_1);
                     e.preventDefault();
                 }
             });
         }
-        if (win.show() == 1) {
-            if (!list.listbox.selection) return;
+        if (win.show() === 1) {
+            if (!list.listbox.selection) return false;
             if (multiselect) {
                 var items = [];
-                for (var i = 0; i < list.listbox.selection.length; i++) {
-                    items.push(list.listbox.selection[i].id);
+                var selections = list.listbox.selection;
+                for (var i = 0; i < selections.length; i++) {
+                    items.push(selections[i].id);
                 }
                 logger.log("user selected commands:", items.join(", "));
                 return items;
             } else {
-                logger.log("user selected command:", list.listbox.selection);
-                if (saveHistory) {
-                    updateHistory();
-                }
-                return list.listbox.selection.hasOwnProperty("id")
-                    ? list.listbox.selection.id
-                    : list.listbox.selection.name;
+                var selected = list.listbox.selection;
+                logger.log("user selected command:", selected);
+                if (saveHistory) updateHistory();
+                return selected.hasOwnProperty("id") ? selected.id : selected.name;
             }
         }
         return false;
@@ -12319,8 +12304,11 @@ See the LICENSE file for details.
             win.close(1);
         };
         if (win.show() === 1) {
-            var commands = pickerCommands.text
-                .split(/\r\n|\r|\n/)
+            var newCustomCommandIds = [];
+            var text = pickerCommands.text;
+            var normalized = text.replace(/\r\n|\r/g, "\n");
+            var commands = normalized
+                .split("\n")
                 .map(function (line) {
                     return line.trim();
                 })
@@ -12447,7 +12435,12 @@ See the LICENSE file for details.
             save.enabled = workflowName.text.length > 0;
         };
         up.onClick = function () {
-            var selected = sortIndexes(steps.listbox.selection);
+            var rawSelection = steps.listbox.selection;
+            if (!rawSelection || typeof rawSelection === "number") return;
+            var selectedListItems = Array.isArray(rawSelection)
+                ? rawSelection
+                : [rawSelection];
+            var selected = sortIndexes(selectedListItems);
             if (selected[0] === 0 || !contiguous(selected)) return;
             for (var i = 0; i < selected.length; i++) {
                 swapListboxItems(
@@ -12455,12 +12448,18 @@ See the LICENSE file for details.
                     steps.listbox.items[selected[i]]
                 );
             }
-            steps.listbox.selection = selected.map(function (index) {
-                return index - 1;
-            });
+            steps.listbox.selection = null;
+            for (var n = 0; n < selected.length; n++) {
+                steps.listbox.selection = selected[n] - 1;
+            }
         };
         down.onClick = function () {
-            var selected = sortIndexes(steps.listbox.selection);
+            var rawSelection = steps.listbox.selection;
+            if (!rawSelection || typeof rawSelection === "number") return;
+            var selectedListItems = Array.isArray(rawSelection)
+                ? rawSelection
+                : [rawSelection];
+            var selected = sortIndexes(selectedListItems);
             if (
                 selected[selected.length - 1] === steps.listbox.items.length - 1 ||
                 !contiguous(selected)
@@ -12472,13 +12471,19 @@ See the LICENSE file for details.
                     steps.listbox.items[selected[i] + 1]
                 );
             }
-            steps.listbox.selection = selected.map(function (index) {
-                return index + 1;
-            });
+            steps.listbox.selection = null;
+            for (var n = 0; n < selected.length; n++) {
+                steps.listbox.selection = selected[n] + 1;
+            }
         };
         edit.onClick = steps.listbox.onDoubleClick;
         del.onClick = function () {
-            var selected = sortIndexes(steps.listbox.selection);
+            var rawSelection = steps.listbox.selection;
+            if (!rawSelection || typeof rawSelection === "number") return;
+            var selectedListItems = Array.isArray(rawSelection)
+                ? rawSelection
+                : [rawSelection];
+            var selected = sortIndexes(selectedListItems);
             for (var i = selected.length - 1; i >= 0; i--) {
                 steps.listbox.remove(selected[i]);
             }
@@ -12506,7 +12511,8 @@ See the LICENSE file for details.
         if (win.show() === 1) {
             var actions = [];
             for (var i = 0; i < steps.listbox.items.length; i++) {
-                actions.push(steps.listbox.items[i].id);
+                var lbi = steps.listbox.items[i];
+                actions.push(lbi.id);
             }
             return {
                 name: workflowName.text.trim(),
@@ -12610,7 +12616,12 @@ See the LICENSE file for details.
             }
         };
         up.onClick = function () {
-            var selected = sortIndexes(steps.listbox.selection);
+            var rawSelection = steps.listbox.selection;
+            if (!rawSelection || typeof rawSelection === "number") return;
+            var selectedListItems = Array.isArray(rawSelection)
+                ? rawSelection
+                : [rawSelection];
+            var selected = sortIndexes(selectedListItems);
             if (selected[0] === 0 || !contiguous(selected)) return;
             for (var i = 0; i < selected.length; i++) {
                 swapListboxItems(
@@ -12624,7 +12635,12 @@ See the LICENSE file for details.
             }
         };
         down.onClick = function () {
-            var selected = sortIndexes(steps.listbox.selection);
+            var rawSelection = steps.listbox.selection;
+            if (!rawSelection || typeof rawSelection === "number") return;
+            var selectedListItems = Array.isArray(rawSelection)
+                ? rawSelection
+                : [rawSelection];
+            var selected = sortIndexes(selectedListItems);
             if (
                 selected[selected.length - 1] === steps.listbox.items.length - 1 ||
                 !contiguous(selected)
@@ -12642,9 +12658,15 @@ See the LICENSE file for details.
             }
         };
         del.onClick = function () {
-            var selected = sortIndexes(steps.listbox.selection);
+            var rawSelection = steps.listbox.selection;
+            if (!rawSelection || typeof rawSelection === "number") return;
+            var selectedListItems = Array.isArray(rawSelection)
+                ? rawSelection
+                : [rawSelection];
+            var selected = sortIndexes(selectedListItems);
             for (var i = selected.length - 1; i >= 0; i--) {
-                commands.push(steps.listbox.items[selected[i]].id);
+                var lbi = steps.listbox.items[selected[i]];
+                commands.push(lbi.id);
                 steps.listbox.remove(selected[i]);
             }
             qCache = {};
@@ -12660,11 +12682,13 @@ See the LICENSE file for details.
          * @param sel Selected items.
          */
         function sortIndexes(sel) {
-            var indexes = [];
-            for (var i = 0; i < sel.length; i++) indexes.push(sel[i].index);
-            return indexes.sort(function (a, b) {
-                return a - b;
-            });
+            return sel
+                .map(function (item) {
+                    return item.index;
+                })
+                .sort(function (a, b) {
+                    return a - b;
+                });
         }
         /**
          * Check whether selection indexes are contiguous.
@@ -12676,7 +12700,8 @@ See the LICENSE file for details.
         if (win.show() === 1) {
             var items = [];
             for (var i = 0; i < steps.listbox.items.length; i++) {
-                items.push(steps.listbox.items[i].id);
+                var lbi = steps.listbox.items[i];
+                items.push(lbi.id);
             }
             return items;
         }
@@ -12689,7 +12714,7 @@ See the LICENSE file for details.
      */
     function processCommand(id) {
         var command = commandsData[id];
-        logger.log("processing command:", localize(command.name));
+        logger.log("processing command:", command.id);
         if (command.type === "workflow") {
             var badActions = checkWorkflowActions(command.actions);
             if (badActions.length > 0) {
@@ -12773,7 +12798,7 @@ See the LICENSE file for details.
             var name = isLocalizedEntry(command.name)
                 ? localize(command.name)
                 : command.name;
-            alert(localize(alertString, name, e));
+            alert(localize(alertString, name, e.message));
         }
     }
     function menuAction(command) {
@@ -12830,14 +12855,10 @@ See the LICENSE file for details.
         if (!result) {
             $.setenv("aic_picker_last", null);
         }
-        var args = [];
-        if (picker.multiselect && Array.isArray(result)) {
-            for (var i = 0; i < result.length; i++) {
-                args.push(commandsData[result[i]].name);
-            }
-        } else {
-            args.push(commandsData[result].name);
-        }
+        var commandIds = Array.isArray(result) ? result : [result];
+        var args = commandIds.map(function (id) {
+            return commandsData[id].name;
+        });
         $.setenv("aic_picker_last", args.toSource());
     }
     function scriptAction(command) {
@@ -13052,7 +13073,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     /**
      * Present the Picker Builder dialog for building/editing a user picker.
@@ -13101,14 +13123,15 @@ See the LICENSE file for details.
      */
     function editPicker() {
         var pickers = filterCommands(null, ["picker"], true, false, null);
-        var result = commandPalette({
-            commands: pickers,
-            title: localize(strings.picker_to_edit),
-            columns: paletteSettings.columnSets.standard,
-            multiselect: false,
-        });
+        var result = commandPalette(
+            pickers,
+            localize(strings.picker_to_edit),
+            paletteSettings.columnSets.standard,
+            false
+        );
         if (!result) return;
-        buildPicker(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     /**
      * Clear all user history.
@@ -13184,7 +13207,8 @@ See the LICENSE file for details.
         //     prefs.customCommands = [];
         // }
         var newCustomCommandIds = [];
-        var lines = result.split(/\r\n|\r|\n/);
+        var normalized = result.replace(/\r\n|\r/g, "\n");
+        var lines = normalized.split("\n");
         for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
             var lineRaw = lines_1[_i];
             var line = lineRaw.trim();
@@ -13232,14 +13256,9 @@ See the LICENSE file for details.
             true
         );
         if (!result || result.length === 0) return;
-        var commandNames = result.map(function (id) {
-            var _a, _b;
-            return (_b =
-                (_a = commandsData[id]) === null || _a === void 0
-                    ? void 0
-                    : _a.name) !== null && _b !== void 0
-                ? _b
-                : id;
+        var commandIds = Array.isArray(result) ? result : [result];
+        var commandNames = commandIds.map(function (id) {
+            return commandsData[id].name;
         });
         var confirmed = confirm(
             localize(strings.cd_delete_confirm, commandNames.join("\n")),
@@ -13248,19 +13267,21 @@ See the LICENSE file for details.
         );
         if (!confirmed) return;
         // Delete from prefs collections
-        var typesToCheck = ["workflows", "bookmarks", "scripts", "pickers"];
+        var typesToCheck = [
+            prefs.workflows,
+            prefs.bookmarks,
+            prefs.scripts,
+            prefs.pickers,
+        ];
         for (
             var _i = 0, typesToCheck_1 = typesToCheck;
             _i < typesToCheck_1.length;
             _i++
         ) {
             var type = typesToCheck_1[_i];
-            var items = prefs[type];
-            if (Array.isArray(items)) {
-                for (var i = items.length - 1; i >= 0; i--) {
-                    if (result.includes(items[i].id)) {
-                        items.splice(i, 1);
-                    }
+            for (var i = type.length - 1; i >= 0; i--) {
+                if (result.includes(type[i].id)) {
+                    type.splice(i, 1);
                 }
             }
         }
@@ -13312,7 +13333,8 @@ See the LICENSE file for details.
             true
         );
         if (!result) return;
-        prefs.hiddenCommands = prefs.hiddenCommands.concat(result);
+        var commandIds = Array.isArray(result) ? result : [result];
+        prefs.hiddenCommands = prefs.hiddenCommands.concat(commandIds);
     }
     /**
      * Reveal the user preference file in the file system.
@@ -13331,8 +13353,8 @@ See the LICENSE file for details.
             paletteSettings.columnSets.standard,
             false
         );
-        if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     /**
      * Present a palette with all hidden commands.
@@ -13358,6 +13380,8 @@ See the LICENSE file for details.
     function documentReport() {
         var doc = app.activeDocument;
         var rulerUnits = doc.rulerUnits.toString().split(".").pop();
+        var docUnitValue = new UnitValue(1, rulerUnits);
+        var docUnitNameAbbrev = docUnitValue.type == "?" ? "pt" : docUnitValue.type;
         var fileInfo = [
             localize(strings.dr_header),
             "".concat(localize(strings.dr_filename)).concat(doc.name),
@@ -13369,24 +13393,36 @@ See the LICENSE file for details.
                 .concat(doc.documentColorSpace.toString().split(".").pop()),
             ""
                 .concat(localize(strings.dr_width))
-                .concat(UnitValue("".concat(doc.width, " pt")).as(rulerUnits), " ")
-                .concat(rulerUnits),
+                .concat(
+                    UnitValue("".concat(doc.width, " pt")).as(docUnitNameAbbrev),
+                    " "
+                )
+                .concat(docUnitNameAbbrev),
             ""
                 .concat(localize(strings.dr_height))
-                .concat(UnitValue("".concat(doc.height, " pt")).as(rulerUnits), " ")
-                .concat(rulerUnits),
+                .concat(
+                    UnitValue("".concat(doc.height, " pt")).as(docUnitNameAbbrev),
+                    " "
+                )
+                .concat(docUnitValue.type),
         ].join("\n");
+        var artboards = getCollectionObjectNames(doc.artboards);
+        var documentFonts = getDocumentFonts(doc);
+        var fonts = getCollectionObjectNames(documentFonts, true);
+        var layers = getCollectionObjectNames(doc.layers);
+        var placedFiles = getPlacedFileInfoForReport();
+        var spotColors = getCollectionObjectNames(doc.spots, true);
         var reportOptions = {
             artboards: {
-                str: getCollectionObjectNames(doc.artboards).join("\n"),
+                str: artboards.join("\n"),
                 active: true,
             },
             fonts: {
-                str: getCollectionObjectNames(getDocumentFonts(doc), true).join("\n"),
+                str: fonts.join("\n"),
                 active: true,
             },
             layers: {
-                str: getCollectionObjectNames(doc.layers).join("\n"),
+                str: layers.join("\n"),
                 active: true,
             },
             placed_items: {
@@ -13394,7 +13430,7 @@ See the LICENSE file for details.
                 active: true,
             },
             spot_colors: {
-                str: getCollectionObjectNames(doc.spots, true).join("\n"),
+                str: spotColors.join("\n"),
                 active: true,
             },
         };
@@ -13501,7 +13537,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     function showAllBookmarks() {
         var _a;
@@ -13534,7 +13571,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     function showAllCustomCommands() {
         var customCommands = filterCommands(null, ["custom"], true, false, null);
@@ -13545,7 +13583,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     function showAllMenus() {
         var menus = filterCommands(null, ["menu"], true, false, null);
@@ -13556,7 +13595,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     function showAllPickers() {
         var pickers = filterCommands(null, ["picker"], true, false, null);
@@ -13567,7 +13607,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     function showAllScripts() {
         var _a;
@@ -13580,7 +13621,8 @@ See the LICENSE file for details.
             _a);
         var result = commandPalette(scripts, localize(strings.Scripts), columns, false);
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     function showAllTools() {
         var tools = filterCommands(null, ["tool"], true, false, null);
@@ -13591,7 +13633,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     function showAllWorkflows() {
         var workflows = filterCommands(null, ["workflow"], true, false, null);
@@ -13602,7 +13645,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     function buildWorkflow(editWorkflowId) {
         var commandsToHide = [
@@ -13668,7 +13712,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        buildWorkflow(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     /**
      * Export the active artboard as a PNG file using the `Document.imageCapture()` method.
@@ -13769,7 +13814,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        var idx = Number(commandsData[result].idx) - 1;
+        var commandId = Array.isArray(result) ? result[0] : result;
+        var idx = Number(commandsData[commandId].idx) - 1;
         app.activeDocument.artboards.setActiveArtboardIndex(idx);
         app.executeMenuCommand("fitin");
     }
@@ -13836,7 +13882,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        var pageItem = commandsData[result].pageItem;
+        var commandId = Array.isArray(result) ? result[0] : result;
+        var pageItem = commandsData[commandId].pageItem;
         doc.selection = null;
         pageItem.selected = true;
         // reset zoom for current document
@@ -13912,7 +13959,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        var entry = commandsData[result];
+        var commandId = Array.isArray(result) ? result[0] : result;
+        var entry = commandsData[commandId];
         entry.document.activate();
     }
     /**
@@ -13969,7 +14017,11 @@ See the LICENSE file for details.
             ".wmf",
         ]; // file types taken from Ai open dialog
         var re = new RegExp("".concat(acceptedTypes.join("|"), "$"), "i");
-        var files = loadFileTypes(localize(strings.bm_load_bookmark), true, re);
+        var files = loadFileTypes(
+            localize(strings.bm_load_bookmark),
+            true,
+            re.toString()
+        );
         if (files.length === 0) return;
         var currentFileBookmarkPaths = prefs.bookmarks
             .filter(function (b) {
@@ -14043,7 +14095,11 @@ See the LICENSE file for details.
     function loadScripts() {
         var acceptedTypes = [".jsx", ".js"];
         var re = new RegExp("".concat(acceptedTypes.join("|"), "$"), "i");
-        var files = loadFileTypes(localize(strings.sc_load_script), true, re);
+        var files = loadFileTypes(
+            localize(strings.sc_load_script),
+            true,
+            re.toString()
+        );
         if (files.length === 0) return;
         var currentScripts = prefs.scripts.map(function (s) {
             return s.path;
@@ -14084,7 +14140,8 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
-        processCommand(result);
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
     }
     /**
      * Load recently opened files as objects into the data model.
@@ -14141,8 +14198,9 @@ See the LICENSE file for details.
             false
         );
         if (!result) return;
+        var commandId = Array.isArray(result) ? result[0] : result;
         try {
-            app.open(commandsData[result].document);
+            app.open(commandsData[commandId].document);
         } catch (e) {
             alert(localize(strings.fl_error_loading, result));
         }
@@ -14218,5 +14276,8 @@ See the LICENSE file for details.
         startupCommands,
         true
     );
-    if (result) processCommand(result);
+    if (result) {
+        var commandId = Array.isArray(result) ? result[0] : result;
+        processCommand(commandId);
+    }
 })();

@@ -154,40 +154,75 @@ function workflowBuilder(
     };
 
     up.onClick = function () {
-        const selected = sortIndexes(steps.listbox.selection);
+        const rawSelection = steps.listbox.selection;
+
+        if (!rawSelection || typeof rawSelection === "number") return;
+
+        const selectedListItems: ListItemWithId[] = Array.isArray(rawSelection)
+            ? (rawSelection as unknown as ListItemWithId[])
+            : [rawSelection as ListItemWithId];
+
+        const selected = sortIndexes(selectedListItems);
         if (selected[0] === 0 || !contiguous(selected)) return;
+
         for (let i = 0; i < selected.length; i++) {
             swapListboxItems(
-                steps.listbox.items[selected[i] - 1],
-                steps.listbox.items[selected[i]]
+                steps.listbox.items[selected[i] - 1] as ListItemWithId,
+                steps.listbox.items[selected[i]] as ListItemWithId
             );
         }
-        steps.listbox.selection = selected.map((index) => index - 1);
+
+        steps.listbox.selection = null;
+        for (let n = 0; n < selected.length; n++) {
+            steps.listbox.selection = selected[n] - 1;
+        }
     };
 
     down.onClick = function () {
-        const selected = sortIndexes(steps.listbox.selection);
+        const rawSelection = steps.listbox.selection;
+
+        if (!rawSelection || typeof rawSelection === "number") return;
+
+        const selectedListItems: ListItemWithId[] = Array.isArray(rawSelection)
+            ? (rawSelection as unknown as ListItemWithId[])
+            : [rawSelection as ListItemWithId];
+
+        const selected = sortIndexes(selectedListItems);
         if (
             selected[selected.length - 1] === steps.listbox.items.length - 1 ||
             !contiguous(selected)
         )
             return;
+
         for (let i = selected.length - 1; i >= 0; i--) {
             swapListboxItems(
-                steps.listbox.items[selected[i]],
-                steps.listbox.items[selected[i] + 1]
+                steps.listbox.items[selected[i]] as ListItemWithId,
+                steps.listbox.items[selected[i] + 1] as ListItemWithId
             );
         }
-        steps.listbox.selection = selected.map((index) => index + 1);
+        steps.listbox.selection = null;
+        for (let n = 0; n < selected.length; n++) {
+            steps.listbox.selection = selected[n] + 1;
+        }
     };
 
     edit.onClick = steps.listbox.onDoubleClick;
 
     del.onClick = function () {
-        const selected = sortIndexes(steps.listbox.selection);
+        const rawSelection = steps.listbox.selection;
+
+        if (!rawSelection || typeof rawSelection === "number") return;
+
+        const selectedListItems: ListItemWithId[] = Array.isArray(rawSelection)
+            ? (rawSelection as unknown as ListItemWithId[])
+            : [rawSelection as ListItemWithId];
+
+        const selected = sortIndexes(selectedListItems);
+
         for (let i = selected.length - 1; i >= 0; i--) {
             steps.listbox.remove(selected[i]);
         }
+
         steps.listbox.selection = null;
         workflowName.enabled = steps.listbox.items.length > 0;
         save.enabled = workflowName.enabled && workflowName.text.length > 0;
@@ -210,7 +245,8 @@ function workflowBuilder(
     if (win.show() === 1) {
         const actions: string[] = [];
         for (let i = 0; i < steps.listbox.items.length; i++) {
-            actions.push(steps.listbox.items[i].id);
+            const lbi = steps.listbox.items[i] as ListItemWithId;
+            actions.push(lbi.id);
         }
         return {
             name: workflowName.text.trim(),

@@ -5,7 +5,7 @@
  */
 function processCommand(id: string): void {
     const command: CommandEntry = commandsData[id];
-    logger.log("processing command:", localize(command.name));
+    logger.log("processing command:", command.id);
 
     if (command.type === "workflow") {
         const badActions = checkWorkflowActions(command.actions);
@@ -50,7 +50,7 @@ function executeAction(command: CommandEntry): void {
         if (!shouldProceed) return;
     }
 
-    let func: (cmd: CommandEntry) => void;
+    let func;
     let alertString: LocalizedStringEntry = strings.cd_error_executing;
 
     switch (command.type.toLowerCase()) {
@@ -95,7 +95,7 @@ function executeAction(command: CommandEntry): void {
         const name = isLocalizedEntry(command.name)
             ? localize(command.name)
             : command.name;
-        alert(localize(alertString, name, e));
+        alert(localize(alertString, name, e.message));
     }
 }
 
@@ -167,15 +167,11 @@ function runCustomPicker(picker: Picker): void {
         $.setenv("aic_picker_last", null);
     }
 
-    const args: string[] = [];
+    const commandIds: string[] = Array.isArray(result)
+        ? (result as string[])
+        : [result as string];
 
-    if (picker.multiselect && Array.isArray(result)) {
-        for (let i = 0; i < result.length; i++) {
-            args.push(commandsData[result[i]].name);
-        }
-    } else {
-        args.push(commandsData[result as string].name);
-    }
+    const args = commandIds.map((id) => commandsData[id].name as string);
 
     $.setenv("aic_picker_last", args.toSource());
 }

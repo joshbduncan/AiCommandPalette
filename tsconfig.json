@@ -6,13 +6,10 @@
         "outFile": "build/bundle.jsx",
         "allowJs": true,
         "noLib": true,
-        // "typeRoots": ["./types"],
-        "types": ["types-for-adobe/Illustrator/2022", "./types"],
-        // "types": ["./types/"],
+        "types": ["types-for-adobe/Illustrator/2022"],
         "removeComments": false,
         "sourceMap": false,
         "alwaysStrict": false
-        // "skipLibCheck": true
     },
     "files": [
         "src/header.ts",
@@ -37,7 +34,7 @@
         "src/palettes/filter.ts",
         "src/palettes/fuzzy.ts",
         "src/palettes/nofuzz.ts",
-        "src/palettes/commandPalette.js",
+        "src/palettes/commandPalette.ts",
         "src/palettes/customCommands.ts",
         "src/palettes/pickerBuilder.ts",
         "src/palettes/workflowBuilder.ts",
@@ -49,6 +46,6 @@
 
         "src/index.ts"
     ],
-    // "include": ["./polyfills/**/*.ts"],
+    "include": ["types/**/*"],
     "exclude": ["build", "node_modules"]
 }

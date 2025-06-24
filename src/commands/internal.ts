@@ -237,7 +237,8 @@ function addCustomCommands(): void {
     // }
 
     const newCustomCommandIds: string[] = [];
-    const lines = result.split(/\r\n|\r|\n/);
+    const normalized = result.replace(/\r\n|\r/g, "\n");
+    const lines = normalized.split("\n");
 
     for (const lineRaw of lines) {
         const line = lineRaw.trim();
@@ -294,7 +295,11 @@ function deleteCommand(): void {
 
     if (!result || result.length === 0) return;
 
-    const commandNames = result.map((id) => commandsData[id]?.name ?? id);
+    const commandIds: string[] = Array.isArray(result)
+        ? (result as string[])
+        : [result as string];
+
+    const commandNames = commandIds.map((id) => commandsData[id].name);
 
     const confirmed = confirm(
         localize(strings.cd_delete_confirm, commandNames.join("\n")),
@@ -305,19 +310,16 @@ function deleteCommand(): void {
     if (!confirmed) return;
 
     // Delete from prefs collections
-    const typesToCheck: (keyof typeof prefs)[] = [
-        "workflows",
-        "bookmarks",
-        "scripts",
-        "pickers",
+    const typesToCheck: any[] = [
+        prefs.workflows,
+        prefs.bookmarks,
+        prefs.scripts,
+        prefs.pickers,
     ];
     for (const type of typesToCheck) {
-        const items = prefs[type];
-        if (Array.isArray(items)) {
-            for (let i = items.length - 1; i >= 0; i--) {
-                if (result.includes(items[i].id)) {
-                    items.splice(i, 1);
-                }
+        for (let i = type.length - 1; i >= 0; i--) {
+            if (result.includes(type[i].id)) {
+                type.splice(i, 1);
             }
         }
     }
@@ -436,6 +438,7 @@ function documentReport(): void {
     const doc = app.activeDocument;
     const rulerUnits = doc.rulerUnits.toString().split(".").pop()! as UnitName;
     const docUnitValue = new UnitValue(1, rulerUnits);
+    const docUnitNameAbbrev = docUnitValue.type == "?" ? "pt" : docUnitValue.type;
 
     const fileInfo = [
         localize(strings.dr_header),
@@ -446,15 +449,15 @@ function documentReport(): void {
             .split(".")
             .pop()}`,
         `${localize(strings.dr_width)}${UnitValue(`${doc.width} pt`).as(
-            docUnitValue.type
-        )} ${docUnitValue.type}`,
+            docUnitNameAbbrev
+        )} ${docUnitNameAbbrev}`,
         `${localize(strings.dr_height)}${UnitValue(`${doc.height} pt`).as(
-            docUnitValue.type
+            docUnitNameAbbrev
         )} ${docUnitValue.type}`,
     ].join("\n");
 
     const artboards = getCollectionObjectNames(doc.artboards);
-    const documentFonts = getDocumentFonts(doc)?.map((font) => font.name) || [];
+    const documentFonts = getDocumentFonts(doc);
     const fonts = getCollectionObjectNames(documentFonts, true);
     const layers = getCollectionObjectNames(doc.layers);
     const placedFiles = getPlacedFileInfoForReport();

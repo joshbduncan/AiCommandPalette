@@ -25,4 +25,8 @@ var result = commandPalette(
     true
 );
 
-if (result) processCommand(result);
+if (result) {
+    const commandId: string = Array.isArray(result) ? result[0] : (result as string);
+
+    processCommand(commandId);
+}

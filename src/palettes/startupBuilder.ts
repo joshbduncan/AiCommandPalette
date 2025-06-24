@@ -116,13 +116,21 @@ function startupBuilder(commands: string[]): string[] | false {
     };
 
     up.onClick = function () {
-        const selected = sortIndexes(steps.listbox.selection);
+        const rawSelection = steps.listbox.selection;
+
+        if (!rawSelection || typeof rawSelection === "number") return;
+
+        const selectedListItems: ListItemWithId[] = Array.isArray(rawSelection)
+            ? (rawSelection as unknown as ListItemWithId[])
+            : [rawSelection as ListItemWithId];
+
+        const selected = sortIndexes(selectedListItems);
         if (selected[0] === 0 || !contiguous(selected)) return;
 
         for (let i = 0; i < selected.length; i++) {
             swapListboxItems(
-                steps.listbox.items[selected[i] - 1],
-                steps.listbox.items[selected[i]]
+                steps.listbox.items[selected[i] - 1] as ListItemWithId,
+                steps.listbox.items[selected[i]] as ListItemWithId
             );
         }
         steps.listbox.selection = null;
@@ -132,7 +140,15 @@ function startupBuilder(commands: string[]): string[] | false {
     };
 
     down.onClick = function () {
-        const selected = sortIndexes(steps.listbox.selection);
+        const rawSelection = steps.listbox.selection;
+
+        if (!rawSelection || typeof rawSelection === "number") return;
+
+        const selectedListItems: ListItemWithId[] = Array.isArray(rawSelection)
+            ? (rawSelection as unknown as ListItemWithId[])
+            : [rawSelection as ListItemWithId];
+
+        const selected = sortIndexes(selectedListItems);
         if (
             selected[selected.length - 1] === steps.listbox.items.length - 1 ||
             !contiguous(selected)
@@ -141,8 +157,8 @@ function startupBuilder(commands: string[]): string[] | false {
 
         for (let i = selected.length - 1; i >= 0; i--) {
             swapListboxItems(
-                steps.listbox.items[selected[i]],
-                steps.listbox.items[selected[i] + 1]
+                steps.listbox.items[selected[i]] as ListItemWithId,
+                steps.listbox.items[selected[i] + 1] as ListItemWithId
             );
         }
         steps.listbox.selection = null;
@@ -152,9 +168,19 @@ function startupBuilder(commands: string[]): string[] | false {
     };
 
     del.onClick = function () {
-        const selected = sortIndexes(steps.listbox.selection);
+        const rawSelection = steps.listbox.selection;
+
+        if (!rawSelection || typeof rawSelection === "number") return;
+
+        const selectedListItems: ListItemWithId[] = Array.isArray(rawSelection)
+            ? (rawSelection as unknown as ListItemWithId[])
+            : [rawSelection as ListItemWithId];
+
+        const selected = sortIndexes(selectedListItems);
+
         for (let i = selected.length - 1; i >= 0; i--) {
-            commands.push(steps.listbox.items[selected[i]].id);
+            const lbi = steps.listbox.items[selected[i]] as ListItemWithId;
+            commands.push(lbi.id);
             steps.listbox.remove(selected[i]);
         }
 
@@ -173,11 +199,8 @@ function startupBuilder(commands: string[]): string[] | false {
      * @param sel Selected items.
      */
     function sortIndexes(sel: ListItem[]): number[] {
-        const indexes: number[] = [];
-        for (let i = 0; i < sel.length; i++) indexes.push(sel[i].index);
-        return indexes.sort((a, b) => a - b);
+        return sel.map((item) => item.index).sort((a, b) => a - b);
     }
-
     /**
      * Check whether selection indexes are contiguous.
      * @param sel Sorted indexes.
@@ -189,7 +212,8 @@ function startupBuilder(commands: string[]): string[] | false {
     if (win.show() === 1) {
         const items: string[] = [];
         for (let i = 0; i < steps.listbox.items.length; i++) {
-            items.push(steps.listbox.items[i].id);
+            const lbi = steps.listbox.items[i] as ListItemWithId;
+            items.push(lbi.id);
         }
         return items;
     }

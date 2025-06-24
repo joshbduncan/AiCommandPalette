@@ -134,20 +134,26 @@ def main() -> int:
 
     interface = """
 interface CommandEntry {
-  id: string;
-  action: string;
-  type: string;
-  actions?: string[];
-  actionType?: string;
-  docRequired: boolean;
-  selRequired: boolean;
-  name: LocalizedStringEntry | string;
-  set?: string;
-  path?: string;
-  commands?: string[];
-  hidden: boolean;
-  minVersion?: number;
-  maxVersion?: number;
+    action: string;
+    actions?: string[];
+    actionType?: string;
+    colorSpace?: string;
+    commands?: string[];
+    docRequired: boolean;
+    document?: Document | File;
+    hidden: boolean;
+    id: string;
+    idx?: string;
+    layer?: string;
+    maxVersion?: number;
+    minVersion?: number;
+    name: LocalizedStringEntry | string;
+    pageItem?: PageItem;
+    path?: string;
+    rulerUnits?: string;
+    selRequired: boolean;
+    set?: string;
+    type: string;
 }
 
 interface CommandsData {

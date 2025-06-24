@@ -12,6 +12,10 @@ interface ListItemWithId extends ListItem {
     id: string;
 }
 
+interface ListBoxWithFrame extends ListBox {
+    frameStart: number;
+}
+
 /**
  * A custom wrapper for a ScriptUI ListBox that supports multiple columns,
  * optional tooltips, multiselect, and command loading.
@@ -19,7 +23,7 @@ interface ListItemWithId extends ListItem {
 class ListBoxWrapper {
     public listbox: ListBox;
 
-    private container: _Control;
+    private container: Window | Panel;
     private name: string;
     private bounds: number[];
     private columns: Record<string, ColumnDefinition>;
@@ -41,7 +45,7 @@ class ListBoxWrapper {
      */
     constructor(
         commands: string[],
-        container: any,
+        container: Window | Panel,
         name: string,
         bounds: number[],
         columns: Record<string, ColumnDefinition>,
@@ -56,7 +60,7 @@ class ListBoxWrapper {
         this.multiselect = multiselect;
         this.helptip = helptip;
         this.listeners = listeners;
-        this.listbox = this.make(commands, bounds);
+        this.listbox = this.make(commands, this.bounds);
     }
 
     private make(commands: string[], bounds: number[]): ListBox {
@@ -78,7 +82,7 @@ class ListBoxWrapper {
             columnTitles,
             columnWidths,
             multiselect: this.multiselect,
-        }) as ListBox;
+        }) as ListBoxWithFrame;
 
         listbox.frameStart = 0;
         if (this.helptip) listbox.helpTip = this.helptip;
@@ -198,57 +202,67 @@ function swapListboxItems(x: ListItemWithId, y: ListItemWithId): void {
  * Allow end-to-end scrolling from within a listbox.
  * @param listbox ScriptUI listbox.
  */
-function scrollListBoxWithArrows(listbox: ListBox): void {
+function scrollListBoxWithArrows(listbox: ListBoxWithFrame): void {
     listbox.addEventListener("keydown", (e: KeyboardEvent) => {
+        const rawSelection = listbox.selection;
+        let curListItem: ListItem;
+        let curIndex: number;
+
+        if (
+            !rawSelection ||
+            typeof rawSelection === "number" ||
+            Array.isArray(rawSelection)
+        ) {
+            curListItem = listbox.items[0] as ListItem;
+            curIndex = 0;
+        } else {
+            curListItem = listbox.selection as ListItem;
+            curIndex = curListItem.index;
+        }
+
         if (fromQuery) {
             if (fromQueryShiftKey) {
                 if (e.keyName === "Up") {
-                    if (listbox.selection.index === 0) {
+                    if (curIndex === 0) {
                         listbox.selection = listbox.items.length - 1;
-                        e.preventDefault();
                     } else {
-                        listbox.selection--;
+                        listbox.selection = curIndex - 1;
                     }
+                    e.preventDefault();
                 } else if (e.keyName === "Down") {
-                    if (listbox.selection.index === listbox.items.length - 1) {
+                    if (curIndex === listbox.items.length - 1) {
                         listbox.selection = 0;
-                        e.preventDefault();
                     } else {
-                        listbox.selection++;
+                        listbox.selection = curIndex + 1;
                     }
+                    e.preventDefault();
                 }
             } else {
                 if (e.keyName === "Up" || e.keyName === "Down") {
                     if (e.keyName === "Up") {
-                        e.preventDefault();
-                        if (!listbox.selection) {
+                        if (!curListItem) {
                             listbox.selection = 0;
-                        } else if (listbox.selection.index === 0) {
+                        } else if (curIndex === 0) {
                             listbox.selection = listbox.items.length - 1;
                             listbox.frameStart =
                                 listbox.items.length - 1 - visibleListItems;
                         } else {
-                            listbox.selection = listbox.selection.index - 1;
-                            if (listbox.selection.index < listbox.frameStart) {
+                            listbox.selection = curIndex - 1;
+                            if (curIndex - 1 < listbox.frameStart) {
                                 listbox.frameStart--;
                             }
                         }
+                        e.preventDefault();
                     } else if (e.keyName === "Down") {
                         e.preventDefault();
                         if (!listbox.selection) {
                             listbox.selection = 0;
-                        } else if (
-                            listbox.selection.index ===
-                            listbox.items.length - 1
-                        ) {
+                        } else if (curIndex === listbox.items.length - 1) {
                             listbox.selection = 0;
                             listbox.frameStart = 0;
                         } else {
-                            listbox.selection = listbox.selection.index + 1;
-                            if (
-                                listbox.selection.index >
-                                listbox.frameStart + visibleListItems - 1
-                            ) {
+                            listbox.selection = curIndex + 1;
+                            if (curIndex > listbox.frameStart + visibleListItems - 1) {
                                 if (
                                     listbox.frameStart <
                                     listbox.items.length - visibleListItems
@@ -268,12 +282,11 @@ function scrollListBoxWithArrows(listbox: ListBox): void {
         */
                     if (
                         listbox.selection &&
-                        (listbox.selection.index < listbox.frameStart ||
-                            listbox.selection.index >
-                                listbox.frameStart + visibleListItems - 1)
+                        (curIndex < listbox.frameStart ||
+                            curIndex > listbox.frameStart + visibleListItems - 1)
                     ) {
                         listbox.frameStart =
-                            listbox.selection.index - Math.floor(visibleListItems / 2);
+                            curIndex - Math.floor(visibleListItems / 2);
                     }
 
                     if (listbox.items.length > visibleListItems) {
@@ -285,13 +298,10 @@ function scrollListBoxWithArrows(listbox: ListBox): void {
             fromQuery = false;
             fromQueryShiftKey = false;
         } else {
-            if (e.keyName === "Up" && listbox.selection.index === 0) {
+            if (e.keyName === "Up" && curIndex === 0) {
                 listbox.selection = listbox.items.length - 1;
                 e.preventDefault();
-            } else if (
-                e.keyName === "Down" &&
-                listbox.selection.index === listbox.items.length - 1
-            ) {
+            } else if (e.keyName === "Down" && curIndex === listbox.items.length - 1) {
                 listbox.selection = 0;
                 e.preventDefault();
             }
@@ -415,19 +425,23 @@ function commandPalette(
     if (win.show() === 1) {
         if (!list.listbox.selection) return false;
 
+        const rawSelection = list.listbox.selection;
+        if (!rawSelection || typeof rawSelection === "number") return false;
+
+        const selectedListItems: ListItemWithId[] = Array.isArray(rawSelection)
+            ? (rawSelection as unknown as ListItemWithId[])
+            : [rawSelection as ListItemWithId];
+
         if (multiselect) {
-            const items: CommandId[] = [];
-            const selections = list.listbox.selection as ListItemWithId[];
-            for (let i = 0; i < selections.length; i++) {
-                items.push(selections[i].id);
-            }
+            const selections = rawSelection as unknown as ListItemWithId[];
+            const items: CommandId[] = selections.map((item) => item.id);
             logger.log("user selected commands:", items.join(", "));
             return items;
         } else {
-            const selected = list.listbox.selection as ListItemWithId;
+            const selected = rawSelection as ListItemWithId;
             logger.log("user selected command:", selected);
             if (saveHistory) updateHistory();
-            return selected.hasOwnProperty("id") ? selected.id : selected.name;
+            return selected.id;
         }
     }
 

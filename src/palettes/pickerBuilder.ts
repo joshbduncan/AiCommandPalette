@@ -96,8 +96,12 @@ function pickerBuilder(editPickerId?: string):
     };
 
     if (win.show() === 1) {
-        const commands = pickerCommands.text
-            .split(/\r\n|\r|\n/)
+        const newCustomCommandIds: string[] = [];
+        const text = pickerCommands.text;
+        const normalized = text.replace(/\r\n|\r/g, "\n");
+
+        const commands = normalized
+            .split("\n")
             .map((line) => line.trim())
             .filter(Boolean);
 

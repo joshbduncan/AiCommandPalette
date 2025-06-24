@@ -1,18 +1,24 @@
 interface CommandEntry {
-    id: string;
     action: string;
-    type: string;
     actions?: string[];
     actionType?: string;
-    docRequired: boolean;
-    selRequired: boolean;
-    name: LocalizedStringEntry | string;
-    set?: string;
-    path?: string;
+    colorSpace?: string;
     commands?: string[];
+    docRequired: boolean;
+    document?: Document | File;
     hidden: boolean;
-    minVersion?: number;
+    id: string;
+    idx?: string;
+    layer?: string;
     maxVersion?: number;
+    minVersion?: number;
+    name: LocalizedStringEntry | string;
+    pageItem?: PageItem;
+    path?: string;
+    rulerUnits?: string;
+    selRequired: boolean;
+    set?: string;
+    type: string;
 }
 
 interface CommandsData {

@@ -92,7 +92,15 @@ const userPrefs: UserPrefs = {
         if (file.exists) {
             try {
                 const loadedData = readJSONData(file);
-                if (Object.keys(loadedData).length === 0) return;
+                if (
+                    !loadedData ||
+                    typeof loadedData !== "object" ||
+                    Array.isArray(loadedData)
+                )
+                    return;
+
+                const data = loadedData as Record<string, unknown>;
+                if (Object.keys(data).length === 0) return;
 
                 const propsToSkip = [
                     "version",

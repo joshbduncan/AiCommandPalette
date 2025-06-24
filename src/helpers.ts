@@ -23,7 +23,7 @@ function determineCorrectString(command: CommandEntry, prop: string): string {
     return value;
 }
 
-function isLocalizedEntry(value: unknown): value is LocalizedStringEntry {
+function isLocalizedEntry(value: any): value is LocalizedStringEntry {
     return (
         typeof value === "object" &&
         value !== null &&
@@ -119,7 +119,7 @@ function getDocumentFonts(doc: Document): TextFont[] {
         const textFrame = doc.textFrames[i];
 
         for (let j = 0; j < textFrame.textRanges.length; j++) {
-            const font = textFrame.textRanges[j].textFont;
+            const font = textFrame.textRanges[j].characterAttributes.textFont;
 
             if (fonts.indexOf(font) === -1) {
                 fonts.push(font);
@@ -215,7 +215,7 @@ function getPlacedFileInfoForReport(): string[] {
  * @param xmp - The parsed XMP metadata object for the current document.
  * @returns An array of file path strings.
  */
-function getAllPlacedFilePaths(xmp: XMPMeta): string[] {
+function getAllPlacedFilePaths(xmp: XMPMetaInstance): string[] {
     const paths: string[] = [];
 
     // Iterate over all items in the xmpMM:Manifest array
@@ -239,7 +239,7 @@ function getAllPlacedFilePaths(xmp: XMPMeta): string[] {
  * @param xmp - The parsed XMP metadata object for the current document.
  * @returns An array of file path strings for the broken linked files.
  */
-function getBrokenFilePaths(xmp: XMPMeta): string[] {
+function getBrokenFilePaths(xmp: XMPMetaInstance): string[] {
     const paths: string[] = [];
 
     for (let i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
@@ -329,7 +329,7 @@ function semanticVersionComparison(a: string, b: string): number {
  * @returns An array of names from the collection.
  */
 function getCollectionObjectNames(
-    collection: { length: number; typename: string; [index: number]: { name: string } },
+    collection: any[],
     sorted: boolean = false
 ): string[] {
     const names: string[] = [];
@@ -337,7 +337,7 @@ function getCollectionObjectNames(
     if (collection.length > 0) {
         for (let i = 0; i < collection.length; i++) {
             const item = collection[i];
-            if (collection.typename === "Spots") {
+            if (collection.typename == "Spots") {
                 if (item.name !== "[Registration]") {
                     names.push(item.name);
                 }
