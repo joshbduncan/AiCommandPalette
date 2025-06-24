@@ -204,73 +204,73 @@ function swapListboxItems(x: ListItemWithId, y: ListItemWithId): void {
  */
 function scrollListBoxWithArrows(listbox: ListBoxWithFrame): void {
     listbox.addEventListener("keydown", (e: KeyboardEvent) => {
-        const rawSelection = listbox.selection;
-        let curListItem: ListItem;
-        let curIndex: number;
+        if (typeof listbox.selection === "number" || Array.isArray(listbox.selection))
+            return;
 
-        if (
-            !rawSelection ||
-            typeof rawSelection === "number" ||
-            Array.isArray(rawSelection)
-        ) {
-            curListItem = listbox.items[0] as ListItem;
-            curIndex = 0;
-        } else {
-            curListItem = listbox.selection as ListItem;
-            curIndex = curListItem.index;
+        if (!listbox.selection) {
+            listbox.selection = 0;
+            return;
         }
+
+        const listboxSelection = listbox.selection as ListItemWithId;
 
         if (fromQuery) {
             if (fromQueryShiftKey) {
                 if (e.keyName === "Up") {
-                    if (curIndex === 0) {
+                    if (listboxSelection.index === 0) {
                         listbox.selection = listbox.items.length - 1;
                     } else {
-                        listbox.selection = curIndex - 1;
+                        listbox.selection = listboxSelection.index - 1;
                     }
                     e.preventDefault();
                 } else if (e.keyName === "Down") {
-                    if (curIndex === listbox.items.length - 1) {
+                    if (listboxSelection.index === listbox.items.length - 1) {
                         listbox.selection = 0;
                     } else {
-                        listbox.selection = curIndex + 1;
+                        listbox.selection = listboxSelection.index + 1;
                     }
                     e.preventDefault();
                 }
             } else {
                 if (e.keyName === "Up" || e.keyName === "Down") {
                     if (e.keyName === "Up") {
-                        if (!curListItem) {
-                            listbox.selection = 0;
-                        } else if (curIndex === 0) {
+                        if (listboxSelection.index == 0) {
+                            // jump to the bottom if at top
                             listbox.selection = listbox.items.length - 1;
                             listbox.frameStart =
                                 listbox.items.length - 1 - visibleListItems;
                         } else {
-                            listbox.selection = curIndex - 1;
-                            if (curIndex - 1 < listbox.frameStart) {
-                                listbox.frameStart--;
+                            if (listboxSelection.index > 0) {
+                                listbox.selection = listboxSelection.index - 1;
+                                if (listboxSelection.index < listbox.frameStart)
+                                    listbox.frameStart--;
                             }
                         }
                         e.preventDefault();
                     } else if (e.keyName === "Down") {
-                        e.preventDefault();
-                        if (!listbox.selection) {
-                            listbox.selection = 0;
-                        } else if (curIndex === listbox.items.length - 1) {
+                        if (listboxSelection.index === listbox.items.length - 1) {
+                            // jump to the top if at the bottom
                             listbox.selection = 0;
                             listbox.frameStart = 0;
                         } else {
-                            listbox.selection = curIndex + 1;
-                            if (curIndex > listbox.frameStart + visibleListItems - 1) {
+                            if (listboxSelection.index < listbox.items.length) {
+                                listbox.selection = listboxSelection.index + 1;
                                 if (
-                                    listbox.frameStart <
-                                    listbox.items.length - visibleListItems
+                                    listboxSelection.index >
+                                    listbox.frameStart + visibleListItems - 1
                                 ) {
-                                    listbox.frameStart++;
+                                    if (
+                                        listbox.frameStart <
+                                        listbox.items.length - visibleListItems
+                                    ) {
+                                        listbox.frameStart++;
+                                    } else {
+                                        listbox.frameStart = listbox.frameStart;
+                                    }
                                 }
                             }
                         }
+                        e.preventDefault();
                     }
 
                     /*
@@ -280,28 +280,32 @@ function scrollListBoxWithArrows(listbox: ListBoxWithFrame): void {
         and then hit an arrow key the above event listener will not work correctly so
         I just move the next selection (be it up or down) to the middle of the "frame".
         */
+                    const updatedListboxSelection = listbox.selection as ListItemWithId;
                     if (
-                        listbox.selection &&
-                        (curIndex < listbox.frameStart ||
-                            curIndex > listbox.frameStart + visibleListItems - 1)
-                    ) {
+                        updatedListboxSelection.index < listbox.frameStart ||
+                        updatedListboxSelection.index >
+                            listbox.frameStart + visibleListItems - 1
+                    )
                         listbox.frameStart =
-                            curIndex - Math.floor(visibleListItems / 2);
-                    }
-
-                    if (listbox.items.length > visibleListItems) {
-                        listbox.revealItem(listbox.frameStart);
-                    }
+                            updatedListboxSelection.index -
+                            Math.floor(visibleListItems / 2);
+                    // don't move the frame if list items don't fill the available rows
+                    if (listbox.items.length <= visibleListItems) return;
+                    // move the frame by revealing the calculated `listbox.frameStart`
+                    listbox.revealItem(listbox.frameStart);
                 }
             }
 
             fromQuery = false;
             fromQueryShiftKey = false;
         } else {
-            if (e.keyName === "Up" && curIndex === 0) {
+            if (e.keyName === "Up" && listboxSelection.index === 0) {
                 listbox.selection = listbox.items.length - 1;
                 e.preventDefault();
-            } else if (e.keyName === "Down" && curIndex === listbox.items.length - 1) {
+            } else if (
+                e.keyName === "Down" &&
+                listboxSelection.index === listbox.items.length - 1
+            ) {
                 listbox.selection = 0;
                 e.preventDefault();
             }
@@ -317,21 +321,21 @@ type CommandPaletteResult = CommandId[] | CommandId | false;
 /**
  * Display a modal command palette dialog and return user selection.
  *
- * @param commands - List of available command IDs.
- * @param title - Window title.
- * @param columns - Column configuration for listbox.
- * @param multiselect - Whether multiple commands can be selected.
- * @param showOnly - Optional subset of commands to display.
- * @param saveHistory - Whether to store query and command in user history.
+ * @param commands - List of available command IDs. Defaults to user startup commands.
+ * @param title - Window title. Defaults to `_title_.
+ * @param columns - Column configuration for listbox. Defaults to `paletteSettings.columnSets.standard`
+ * @param multiselect - Whether multiple commands can be selected. Defaults to false.
+ * @param showOnly - Optional subset of commands to display. Defaults to null.
+ * @param saveHistory - Whether to store query and command in user history. Defaults to true.
  * @returns The selected command ID(s), or false if cancelled.
  */
 function commandPalette(
-    commands: CommandId[],
-    title: string,
-    columns: Record<string, ColumnDefinition>,
-    multiselect: boolean,
-    showOnly?: CommandId[],
-    saveHistory?: boolean
+    commands: CommandId[] = startupCommands,
+    title: string = _title,
+    columns: Record<string, ColumnDefinition> = paletteSettings.columnSets.standard,
+    multiselect: boolean = false,
+    showOnly: CommandId[] = null,
+    saveHistory: boolean = true
 ): CommandPaletteResult {
     const qCache: Record<string, CommandId[]> = {};
 

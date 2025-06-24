@@ -142,7 +142,7 @@ function runCustomPicker(picker: Picker): void {
     const commands: string[] = [];
 
     for (let i = 0; i < picker.commands.length; i++) {
-        const id = `picker_option_${i}`;
+        const id = `${picker.name}_option_${i}`;
         const command: CommandEntry = {
             id,
             action: "picker_option",
