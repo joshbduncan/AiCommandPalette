@@ -814,6 +814,11 @@ See the LICENSE file for details.
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
         },
         folder: { en: "Folder", de: "Folder", ru: "Folder" },
+        folder_already_watched: {
+            en: "Folder $1 already watched.",
+            de: "Folder $1 already watched.",
+            ru: "Folder $1 already watched.",
+        },
         fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
         github: {
             en: "Click here to learn more",
@@ -942,6 +947,21 @@ See the LICENSE file for details.
             en: "Recent Commands",
             de: "Zuletzt verwendete Befehle",
             ru: "Recent Commands",
+        },
+        remove_watched_folders: {
+            en: "Select Watched Folder(s) To Remove...",
+            de: "Select Watched Folder(s) To Remove...",
+            ru: "Select Watched Folder(s) To Remove...",
+        },
+        remove_watched_folders_confirm: {
+            en: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
+            de: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
+            ru: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
+        },
+        remove_watched_folders_confirm_title: {
+            en: "Confirm Watched Folder(s) To Delete",
+            de: "Confirm Watched Folder(s) To Delete",
+            ru: "Confirm Watched Folder(s) To Delete",
         },
         ruler_units_title_case: {
             en: "Ruler Units",
@@ -1074,6 +1094,11 @@ See the LICENSE file for details.
             de: "Ausf\u00fchrung %1",
             ru: "\u0432\u0435\u0440\u0441\u0438\u044f %1",
         },
+        watched_folder_not_found: {
+            en: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+            de: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+            ru: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+        },
         wf_already_exists: {
             en: "A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?",
             de: "Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf \u00fcberschrieben werden?",
@@ -1139,6 +1164,11 @@ See the LICENSE file for details.
             en: "Workflows will run in order from top to bottom.",
             de: "Die Befehlskombinationen werden in der Reihenfolge von oben nach unten ausgef\u00fchrt.",
             ru: "\u041d\u0430\u0431\u043e\u0440 \u0432\u044b\u043f\u043e\u043b\u043d\u044f\u0435\u0442\u0441\u044f \u0441\u0432\u0435\u0440\u0445\u0443 \u0432\u043d\u0438\u0437",
+        },
+        watched_folder_select: {
+            en: "Select script a folder to watch.",
+            de: "Select script a folder to watch.",
+            ru: "Select script a folder to watch.",
         },
         workflow: {
             en: "Workflow",
@@ -10309,6 +10339,19 @@ See the LICENSE file for details.
             },
             hidden: false,
         },
+        builtin_watchScriptFolder: {
+            id: "builtin_watchScriptFolder",
+            action: "watchScriptFolder",
+            type: "builtin",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Watch Script Folder...",
+                de: "Watch Script Folder...",
+                ru: "Watch Script Folder...",
+            },
+            hidden: false,
+        },
         config_about: {
             id: "config_about",
             action: "about",
@@ -10449,6 +10492,19 @@ See the LICENSE file for details.
                 en: "Reveal Preferences File",
                 de: "Einstellungen-Datei anzeigen",
                 ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0444\u0430\u0439\u043b \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043a",
+            },
+            hidden: false,
+        },
+        config_removeWatchedFolders: {
+            id: "config_removeWatchedFolders",
+            action: "removeWatchedFolders",
+            type: "config",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Remove Watched Folder(s)...",
+                de: "Remove Watched Folder(s)...",
+                ru: "Remove Watched Folder(s)...",
             },
             hidden: false,
         },
@@ -10970,6 +11026,50 @@ See the LICENSE file for details.
         html.close();
         html.execute();
     }
+    /**
+     * Get all `.js` and `.jsx` files in a folder.
+     * @param folder - The starting folder object.
+     * @param recursive - If true, searches subfolders recursively.
+     * @returns An array of matching File objects.
+     */
+    function findScriptFiles(folder, recursive) {
+        if (recursive === void 0) {
+            recursive = false;
+        }
+        var result = [];
+        if (!(folder instanceof Folder) || !folder.exists) {
+            throw new Error("Invalid or non-existent folder.");
+        }
+        var entries = folder.getFiles();
+        for (var i = 0; i < entries.length; i++) {
+            var entry = entries[i];
+            if (entry instanceof File) {
+                var name = entry.name.toLowerCase();
+                if (name.endsWith(".js") || name.endsWith(".jsx")) {
+                    result.push(entry);
+                }
+            } else if (recursive && entry instanceof Folder) {
+                result.push.apply(result, findScriptFiles(entry, true));
+            }
+        }
+        return result;
+    }
+    /**
+     * Generate a simple hash string from input.
+     * Safe for ExtendScript (ES3).
+     * @param str - The input string to hash.
+     * @returns A base36 hash string.
+     */
+    function hashString(str) {
+        var hash = 0;
+        if (str.length === 0) return "0";
+        for (var i = 0; i < str.length; i++) {
+            var chr = str.charCodeAt(i);
+            hash = (hash << 5) - hash + chr;
+            hash |= 0; // Convert to 32-bit int
+        }
+        return Math.abs(hash).toString(36);
+    }
     // FILE/FOLDER OPERATIONS
     /**
      * Setup folder object or create if doesn't exist.
@@ -11127,6 +11227,7 @@ See the LICENSE file for details.
         customCommands: [],
         bookmarks: [],
         scripts: [],
+        watchedFolders: [],
         pickers: [],
         fuzzy: true, // set to new fuzzy matcher as default
         latches: {},
@@ -11214,6 +11315,53 @@ See the LICENSE file for details.
                     var item = prefs[type][j];
                     commandsData[item.id] = item;
                 }
+            }
+        },
+        loadWatchedScripts: function () {
+            for (var _i = 0, _a = prefs.watchedFolders; _i < _a.length; _i++) {
+                var path = _a[_i];
+                var folder = new Folder(path);
+                if (!folder.exists) {
+                    logger.log("folder not found: ".concat(folder.fsName));
+                    alert(
+                        localize(
+                            strings.watched_folder_not_found,
+                            decodeURI(folder.name)
+                        )
+                    );
+                    continue;
+                }
+                logger.log("loading watched script folder: ".concat(folder.fsName));
+                // find all scripts
+                var files = findScriptFiles(folder, false);
+                // FIXME: should search be recursive???
+                var scripts = [];
+                for (var _b = 0, files_1 = files; _b < files_1.length; _b++) {
+                    var f = files_1[_b];
+                    var scriptName = decodeURI(f.name);
+                    var id = generateCommandId(
+                        "watchedScript_" + scriptName + hashString(f.fsName)
+                    );
+                    if (commandsData[id]) {
+                        logger.log("Duplicate script ID skipped: ".concat(id));
+                        continue;
+                    }
+                    var script = {
+                        id: id,
+                        name: scriptName,
+                        action: "script",
+                        type: "Script",
+                        path: f.fsName,
+                        docRequired: false,
+                        selRequired: false,
+                        hidden: false,
+                    };
+                    commandsData[id] = script;
+                    scripts.push(script);
+                }
+                logger.log(
+                    "loaded ".concat(scripts.length, " scripts from: ").concat(folder)
+                );
             }
         },
         save: function () {
@@ -11571,7 +11719,8 @@ See the LICENSE file for details.
             if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
             if (!showNonRelevant && !relevantCommand(command)) continue;
             if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
-            if (!types || types.includes(command.type)) filteredCommands.push(id);
+            if (!types || types.includes(command.type.toLowerCase()))
+                filteredCommands.push(id);
         }
         return filteredCommands;
     }
@@ -11586,27 +11735,30 @@ See the LICENSE file for details.
         // hide commands requiring an active selection if requested
         if (command.selRequired && app.activeDocument.selection.length < 1)
             return false;
+        // hide `Remove Watched Folder...`
+        if (
+            command.id === "config_removeWatchedFolders" &&
+            !prefs.watchedFolders.length
+        )
+            return false;
         // hide `Edit Workflow...` command if no workflows
-        if (command.id === "builtin_editWorkflow" && prefs.workflows.length < 1)
+        if (command.id === "builtin_editWorkflow" && !prefs.workflows.length)
             return false;
         // hide `All Workflows...` command if no workflows
-        if (command.id === "builtin_allWorkflows" && prefs.workflows.length < 1)
+        if (command.id === "builtin_allWorkflows" && !prefs.workflows.length)
             return false;
         // hide `All Scripts...` command if no scripts
-        if (command.id === "builtin_allScripts" && prefs.scripts.length < 1)
-            return false;
+        if (command.id === "builtin_allScripts" && !prefs.scripts.length) return false;
         // hide `All Bookmarks...` command if no bookmarks
-        if (command.id === "builtin_allBookmarks" && prefs.bookmarks.length < 1)
+        if (command.id === "builtin_allBookmarks" && !prefs.bookmarks.length)
             return false;
         // hide `All Actions...` command if no actions
         if (command.id === "builtin_allActions" && !userActions.loadedActions)
             return false;
         // hide `Edit Picker...` command if no pickers
-        if (command.id === "builtin_editPicker" && prefs.pickers.length < 1)
-            return false;
+        if (command.id === "builtin_editPicker" && !prefs.pickers.length) return false;
         // hide `All Pickers...` command if no pickers
-        if (command.id === "builtin_allPickers" && prefs.pickers.length < 1)
-            return false;
+        if (command.id === "builtin_allPickers" && !prefs.pickers.length) return false;
         // hide `Enable Fuzzy Matching` command if already enabled
         if (command.id === "config_enableFuzzyMatching" && prefs.fuzzy) return false;
         // hide `Disable Fuzzy Matching` command if already disabled
@@ -11616,7 +11768,7 @@ See the LICENSE file for details.
         // hide `Disable Debug Logging` command if already disabled
         if (command.id === "config_disableDebugLogging" && !debugLogging) return false;
         // hide `Unhide Commands...` command if no hidden commands
-        if (command.id === "config_unhideCommand" && prefs.hiddenCommands.length < 1)
+        if (command.id === "config_unhideCommand" && !prefs.hiddenCommands.length)
             return false;
         // hide `Recent Commands...` and `Clear History` if no recent commands
         if (
@@ -12923,6 +13075,9 @@ See the LICENSE file for details.
             case "deleteCommand":
                 deleteCommand();
                 break;
+            case "removeWatchedFolders":
+                removeWatchedFolders();
+                break;
             case "enableFuzzyMatching":
             case "disableFuzzyMatching":
                 toggleFuzzyMatching();
@@ -13045,6 +13200,9 @@ See the LICENSE file for details.
             case "revealActiveDocument":
                 shouldWritePrefs = false;
                 revealActiveDocument();
+                break;
+            case "watchScriptFolder":
+                watchScriptFolder();
                 break;
             default:
                 alert(localize(strings.cd_invalid, action));
@@ -13186,15 +13344,15 @@ See the LICENSE file for details.
         var availableStartupCommands = filterCommands(
             null,
             [
-                "file",
-                "folder",
+                // "file",
+                // "folder",
                 "script",
-                "workflow",
-                "menu",
-                "tool",
-                "action",
-                "builtin",
-                "config",
+                // "workflow",
+                // "menu",
+                // "tool",
+                // "action",
+                // "builtin",
+                // "config",
             ],
             true, // showHidden
             true, // showNonRelevant
@@ -13321,6 +13479,67 @@ See the LICENSE file for details.
         for (var i = prefs.startupCommands.length - 1; i >= 0; i--) {
             if (result.includes(prefs.startupCommands[i])) {
                 prefs.startupCommands.splice(i, 1);
+            }
+        }
+    }
+    /**
+     * Present a palette with all user watched folders.
+     * The selected command(s) will be deleted.
+     */
+    function removeWatchedFolders() {
+        var commands = [];
+        for (var i = 0; i < prefs.watchedFolders.length; i++) {
+            var folder = new Folder(prefs.watchedFolders[i]);
+            var id = generateCommandId("watchedFolder_" + hashString(folder.fsName));
+            var command = {
+                id: id,
+                name: folder.fsName,
+                action: "Remove Watched Folder",
+                type: "Watched Folder",
+                docRequired: false,
+                selRequired: false,
+                hidden: false,
+                index: i,
+            };
+            commandsData[id] = command;
+            commands.push(id);
+        }
+        var result = commandPalette(
+            commands,
+            localize(strings.remove_watched_folders),
+            paletteSettings.columnSets.standard,
+            true
+        );
+        if (!result || result.length === 0) return;
+        var commandIds = Array.isArray(result) ? result : [result];
+        var folderLocations = commandIds.map(function (id) {
+            return commandsData[id].path;
+        });
+        var confirmed = confirm(
+            localize(
+                strings.remove_watched_folders_confirm,
+                folderLocations.join("\n")
+            ),
+            false,
+            localize(strings.remove_watched_folders_confirm_title)
+        );
+        if (!confirmed) return;
+        var indexesToRemove = commandIds.map(function (id) {
+            return commandsData[id].index;
+        });
+        // sort descending so we remove from the end first
+        indexesToRemove.sort(function (a, b) {
+            return b - a;
+        });
+        // Delete watched folders from prefs
+        for (
+            var _i = 0, indexesToRemove_1 = indexesToRemove;
+            _i < indexesToRemove_1.length;
+            _i++
+        ) {
+            var index = indexesToRemove_1[_i];
+            if (index >= 0 && index < prefs.watchedFolders.length) {
+                prefs.watchedFolders.splice(index, 1);
             }
         }
     }
@@ -13693,6 +13912,7 @@ See the LICENSE file for details.
                 "file",
                 "folder",
                 "script",
+                "watchedScript",
                 "workflow",
                 "menu",
                 "tool",
@@ -13745,7 +13965,7 @@ See the LICENSE file for details.
         );
         if (!result) return;
         var commandId = Array.isArray(result) ? result[0] : result;
-        processCommand(commandId);
+        buildWorkflow(commandId);
     }
     /**
      * Export the active artboard as a PNG file using the `Document.imageCapture()` method.
@@ -14064,8 +14284,8 @@ See the LICENSE file for details.
             });
         var newBookmarks = [];
         var newBookmarkIds = [];
-        for (var _i = 0, files_1 = files; _i < files_1.length; _i++) {
-            var f = files_1[_i];
+        for (var _i = 0, files_2 = files; _i < files_2.length; _i++) {
+            var f = files_2[_i];
             if (currentFileBookmarkPaths.includes(f.fsName)) continue;
             var bookmarkName = decodeURI(f.name);
             var id = generateCommandId("bookmark_".concat(bookmarkName.toLowerCase()));
@@ -14122,6 +14342,21 @@ See the LICENSE file for details.
         addToStartup([bookmark.id]);
     }
     /**
+     * Watch a folder, and load all found scripts into the command palette.
+     */
+    function watchScriptFolder() {
+        // pick a folder
+        var folder = Folder.selectDialog(localize(strings.watched_folder_select));
+        if (!folder) return;
+        // check prefs to see if folder is already watched
+        if (prefs.watchedFolders.includes(folder.fsName)) {
+            logger.log("watched folder already in prefs: ".concat(folder.fsName));
+            alert(localize(strings.folder_already_watched, decodeURI(folder.name)));
+            return;
+        }
+        prefs.watchedFolders.push(folder.fsName);
+    }
+    /**
      * Load ExtendScript (.jsx and .js) scripts into the command palette.
      */
     function loadScripts() {
@@ -14136,10 +14371,10 @@ See the LICENSE file for details.
         var currentScripts = prefs.scripts.map(function (s) {
             return s.path;
         });
-        var newScripts = [];
-        var newScriptIds = [];
-        for (var _i = 0, files_2 = files; _i < files_2.length; _i++) {
-            var f = files_2[_i];
+        var scripts = [];
+        var newScriptIDs = [];
+        for (var _i = 0, files_3 = files; _i < files_3.length; _i++) {
+            var f = files_3[_i];
             if (currentScripts.includes(f.fsName)) continue;
             var scriptName = decodeURI(f.name);
             var id = generateCommandId("script_".concat(scriptName.toLowerCase()));
@@ -14153,12 +14388,12 @@ See the LICENSE file for details.
                 selRequired: false,
                 hidden: false,
             };
-            newScripts.push(script);
-            newScriptIds.push(id);
+            scripts.push(script);
+            newScriptIDs.push(id);
         }
-        if (newScripts.length === 0) return;
-        prefs.scripts = prefs.scripts.concat(newScripts);
-        addToStartup(newScriptIds);
+        if (scripts.length === 0) return;
+        prefs.scripts = prefs.scripts.concat(scripts);
+        addToStartup(newScriptIDs);
     }
     /**
      * Present a palette with the most recent user commands.
@@ -14285,6 +14520,7 @@ See the LICENSE file for details.
     userPrefs.load(true);
     userActions.load();
     userHistory.load();
+    userPrefs.loadWatchedScripts();
     // set command palette matching algo
     var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
     // add basic defaults to the startup on a first-run/fresh install

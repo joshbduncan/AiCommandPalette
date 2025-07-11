@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Watched Script Folders - work with a large number of scripts (or develop your own)? Each time the Command Palette is launched, all script files within your watched folders are automatically indexed and made available to run directly from the palette.
+
 ### Changed
 
 - Project refactored to TypeScript

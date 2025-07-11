@@ -209,6 +209,9 @@ function internalAction(command: CommandEntry): void {
         case "deleteCommand":
             deleteCommand();
             break;
+        case "removeWatchedFolders":
+            removeWatchedFolders();
+            break;
         case "enableFuzzyMatching":
         case "disableFuzzyMatching":
             toggleFuzzyMatching();
@@ -333,7 +336,9 @@ function internalAction(command: CommandEntry): void {
             shouldWritePrefs = false;
             revealActiveDocument();
             break;
-
+        case "watchScriptFolder":
+            watchScriptFolder();
+            break;
         default:
             alert(localize(strings.cd_invalid, action));
             return;

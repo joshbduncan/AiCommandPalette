@@ -2,6 +2,7 @@
 userPrefs.load(true);
 userActions.load();
 userHistory.load();
+userPrefs.loadWatchedScripts();
 
 // set command palette matching algo
 const matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;

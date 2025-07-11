@@ -289,6 +289,11 @@ const strings = {
         ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
     },
     folder: { en: "Folder", de: "Folder", ru: "Folder" },
+    folder_already_watched: {
+        en: "Folder $1 already watched.",
+        de: "Folder $1 already watched.",
+        ru: "Folder $1 already watched.",
+    },
     fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
     github: {
         en: "Click here to learn more",
@@ -410,6 +415,21 @@ const strings = {
         de: "Zuletzt verwendete Befehle",
         ru: "Recent Commands",
     },
+    remove_watched_folders: {
+        en: "Select Watched Folder(s) To Remove...",
+        de: "Select Watched Folder(s) To Remove...",
+        ru: "Select Watched Folder(s) To Remove...",
+    },
+    remove_watched_folders_confirm: {
+        en: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
+        de: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
+        ru: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
+    },
+    remove_watched_folders_confirm_title: {
+        en: "Confirm Watched Folder(s) To Delete",
+        de: "Confirm Watched Folder(s) To Delete",
+        ru: "Confirm Watched Folder(s) To Delete",
+    },
     ruler_units_title_case: { en: "Ruler Units", de: "Ruler Units", ru: "Ruler Units" },
     save: {
         en: "Save",
@@ -521,6 +541,11 @@ const strings = {
         de: "Ausf\u00fchrung %1",
         ru: "\u0432\u0435\u0440\u0441\u0438\u044f %1",
     },
+    watched_folder_not_found: {
+        en: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+        de: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+        ru: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+    },
     wf_already_exists: {
         en: "A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?",
         de: "Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf \u00fcberschrieben werden?",
@@ -586,6 +611,11 @@ const strings = {
         en: "Workflows will run in order from top to bottom.",
         de: "Die Befehlskombinationen werden in der Reihenfolge von oben nach unten ausgef\u00fchrt.",
         ru: "\u041d\u0430\u0431\u043e\u0440 \u0432\u044b\u043f\u043e\u043b\u043d\u044f\u0435\u0442\u0441\u044f \u0441\u0432\u0435\u0440\u0445\u0443 \u0432\u043d\u0438\u0437",
+    },
+    watched_folder_select: {
+        en: "Select script a folder to watch.",
+        de: "Select script a folder to watch.",
+        ru: "Select script a folder to watch.",
     },
     workflow: {
         en: "Workflow",

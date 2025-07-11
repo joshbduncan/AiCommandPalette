@@ -438,3 +438,51 @@ function openURL(url: string): void {
     html.close();
     html.execute();
 }
+
+/**
+ * Get all `.js` and `.jsx` files in a folder.
+ * @param folder - The starting folder object.
+ * @param recursive - If true, searches subfolders recursively.
+ * @returns An array of matching File objects.
+ */
+function findScriptFiles(folder: Folder, recursive: boolean = false): File[] {
+    const result: File[] = [];
+
+    if (!(folder instanceof Folder) || !folder.exists) {
+        throw new Error("Invalid or non-existent folder.");
+    }
+
+    const entries = folder.getFiles();
+
+    for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
+
+        if (entry instanceof File) {
+            const name = entry.name.toLowerCase();
+            if (name.endsWith(".js") || name.endsWith(".jsx")) {
+                result.push(entry);
+            }
+        } else if (recursive && entry instanceof Folder) {
+            result.push.apply(result, findScriptFiles(entry, true));
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Generate a simple hash string from input.
+ * Safe for ExtendScript (ES3).
+ * @param str - The input string to hash.
+ * @returns A base36 hash string.
+ */
+function hashString(str: string): string {
+    var hash = 0;
+    if (str.length === 0) return "0";
+    for (var i = 0; i < str.length; i++) {
+        var chr = str.charCodeAt(i);
+        hash = (hash << 5) - hash + chr;
+        hash |= 0; // Convert to 32-bit int
+    }
+    return Math.abs(hash).toString(36);
+}

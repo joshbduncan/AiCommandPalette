@@ -16,6 +16,7 @@ interface Prefs {
     customCommands: any[];
     bookmarks: any[];
     scripts: any[];
+    watchedFolders: string[];
     pickers: any[];
     fuzzy: boolean;
     latches: Record<string, any>;
@@ -33,6 +34,7 @@ const prefs: Prefs = {
     customCommands: [],
     bookmarks: [],
     scripts: [],
+    watchedFolders: [],
     pickers: [],
     fuzzy: true, // set to new fuzzy matcher as default
     latches: {},
@@ -48,6 +50,7 @@ interface UserPrefs {
     file(): File;
     load(inject?: boolean): void;
     inject(): void;
+    loadWatchedScripts(): void;
     save(): void;
     backup(): void;
     reveal(): void;
@@ -141,6 +144,55 @@ const userPrefs: UserPrefs = {
                 const item = prefs[type][j];
                 commandsData[item.id] = item;
             }
+        }
+    },
+
+    loadWatchedScripts() {
+        for (const path of prefs.watchedFolders) {
+            const folder = new Folder(path);
+
+            if (!folder.exists) {
+                logger.log(`folder not found: ${folder.fsName}`);
+                alert(
+                    localize(strings.watched_folder_not_found, decodeURI(folder.name))
+                );
+                continue;
+            }
+
+            logger.log(`loading watched script folder: ${folder.fsName}`);
+
+            // find all scripts
+            var files = findScriptFiles(folder, false);
+            // FIXME: should search be recursive???
+
+            const scripts: CommandEntry[] = [];
+
+            for (const f of files) {
+                const scriptName = decodeURI(f.name);
+                const id = generateCommandId(
+                    "watchedScript_" + scriptName + hashString(f.fsName)
+                );
+
+                if (commandsData[id]) {
+                    logger.log(`Duplicate script ID skipped: ${id}`);
+                    continue;
+                }
+
+                const script: CommandEntry = {
+                    id,
+                    name: scriptName,
+                    action: "script",
+                    type: "Script",
+                    path: f.fsName,
+                    docRequired: false,
+                    selRequired: false,
+                    hidden: false,
+                };
+
+                commandsData[id] = script;
+                scripts.push(script);
+            }
+            logger.log(`loaded ${scripts.length} scripts from: ${folder}`);
         }
     },
 

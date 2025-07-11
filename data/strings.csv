@@ -71,6 +71,7 @@ file_saved,File Saved:\n%1,Datei gespeichert:\n%1,
 fl_error_loading,Error loading file:\n%1,Fehler beim Laden der Datei:\n%1,Ошибка загрузки файла:\n%1
 fl_error_writing,Error writing file:\n%1,Fehler beim Schreiben der Datei:\n%1,Ошибка записи файла:\n%1
 folder,Folder,,
+folder_already_watched,Folder $1 already watched.,,
 fonts,Fonts,Schriften,
 github,Click here to learn more,Klicken Sie hier für weitere Informationen,"Нажмите, чтобы узнать больше"
 go_to_artboard,Go To Artboard,Gehen Sie zur Zeichenfläche,Перейти к монтажной области
@@ -104,6 +105,9 @@ pref_file_loading_error,Error Loading Preferences\nA backup copy of your setting
 pref_file_non_compatible,Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.,,
 pref_update_complete,Preferences Update Complete.,Aktualisierung der Voreinstellungen fertiggestellt,Preferences Update Complete
 recent_commands,Recent Commands,Zuletzt verwendete Befehle,
+remove_watched_folders,Select Watched Folder(s) To Remove...,,
+remove_watched_folders_confirm,Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1,,
+remove_watched_folders_confirm_title,Confirm Watched Folder(s) To Delete,,
 ruler_units_title_case,Ruler Units,,
 save,Save,Speichern,Сохранять
 save_active_document_report,Save Active Document Report,,
@@ -135,6 +139,7 @@ tool,Tool,,
 type_title_case,Type,,
 user_prefs_inconsistency,User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.,,
 version,Version %1,Ausführung %1,версия %1
+watched_folder_not_found,Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.,,
 wf_already_exists,A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?,Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf überschrieben werden?,Набор с таким именем уже существует\nХотите перезаписать предыдущий?
 wf_already_exists_title,Save Workflow Conflict,Arbeitsablauf-Konflikt speichern?,Проблема сохранения набора
 wf_builder,Workflow Builder,Arbeitsabläufe erstellen,Редактор наборов команд
@@ -149,5 +154,6 @@ wf_save_as,Save Workflow As,Arbeitsablauf speichern als,Сохранить на�
 wf_step_not_editable,Selected Step Not Editable,,
 wf_steps,Workflow Steps,Befehlskombinationen,Шаги набора
 wf_steps_helptip,Workflows will run in order from top to bottom.,Die Befehlskombinationen werden in der Reihenfolge von oben nach unten ausgeführt.,Набор выполняется сверху вниз
+watched_folder_select,Select script a folder to watch.,,
 workflow,Workflow,Arbeitsablauf,Наборы
 Workflows,Workflows,Arbeitsabläufe,

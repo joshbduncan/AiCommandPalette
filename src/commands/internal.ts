@@ -175,15 +175,15 @@ function customizeStartup(): void {
     const availableStartupCommands = filterCommands(
         null,
         [
-            "file",
-            "folder",
+            // "file",
+            // "folder",
             "script",
-            "workflow",
-            "menu",
-            "tool",
-            "action",
-            "builtin",
-            "config",
+            // "workflow",
+            // "menu",
+            // "tool",
+            // "action",
+            // "builtin",
+            // "config",
         ],
         true, // showHidden
         true, // showNonRelevant
@@ -328,6 +328,66 @@ function deleteCommand(): void {
     for (let i = prefs.startupCommands.length - 1; i >= 0; i--) {
         if (result.includes(prefs.startupCommands[i])) {
             prefs.startupCommands.splice(i, 1);
+        }
+    }
+}
+
+/**
+ * Present a palette with all user watched folders.
+ * The selected command(s) will be deleted.
+ */
+function removeWatchedFolders(): void {
+    const commands: string[] = [];
+
+    for (let i = 0; i < prefs.watchedFolders.length; i++) {
+        const folder = new Folder(prefs.watchedFolders[i]);
+        const id = generateCommandId("watchedFolder_" + hashString(folder.fsName));
+        const command: CommandEntry = {
+            id,
+            name: folder.fsName,
+            action: "Remove Watched Folder",
+            type: "Watched Folder",
+            docRequired: false,
+            selRequired: false,
+            hidden: false,
+            index: i,
+        };
+        commandsData[id] = command;
+        commands.push(id);
+    }
+
+    const result = commandPalette(
+        commands,
+        localize(strings.remove_watched_folders),
+        paletteSettings.columnSets.standard,
+        true
+    );
+
+    if (!result || result.length === 0) return;
+
+    const commandIds: string[] = Array.isArray(result)
+        ? (result as string[])
+        : [result as string];
+
+    const folderLocations = commandIds.map((id) => commandsData[id].path);
+
+    const confirmed = confirm(
+        localize(strings.remove_watched_folders_confirm, folderLocations.join("\n")),
+        false,
+        localize(strings.remove_watched_folders_confirm_title)
+    );
+
+    if (!confirmed) return;
+
+    const indexesToRemove: number[] = commandIds.map((id) => commandsData[id].index);
+
+    // sort descending so we remove from the end first
+    indexesToRemove.sort((a, b) => b - a);
+
+    // Delete watched folders from prefs
+    for (const index of indexesToRemove) {
+        if (index >= 0 && index < prefs.watchedFolders.length) {
+            prefs.watchedFolders.splice(index, 1);
         }
     }
 }
@@ -741,6 +801,7 @@ function buildWorkflow(editWorkflowId?: string): void {
             "file",
             "folder",
             "script",
+            "watchedScript",
             "workflow",
             "menu",
             "tool",
@@ -802,7 +863,7 @@ function editWorkflow(): void {
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);
 
-    processCommand(commandId);
+    buildWorkflow(commandId);
 }
 
 /**
@@ -1213,6 +1274,24 @@ function loadFolderBookmark(): void {
 }
 
 /**
+ * Watch a folder, and load all found scripts into the command palette.
+ */
+function watchScriptFolder(): void {
+    // pick a folder
+    var folder = Folder.selectDialog(localize(strings.watched_folder_select));
+    if (!folder) return;
+
+    // check prefs to see if folder is already watched
+    if (prefs.watchedFolders.includes(folder.fsName)) {
+        logger.log(`watched folder already in prefs: ${folder.fsName}`);
+        alert(localize(strings.folder_already_watched, decodeURI(folder.name)));
+        return;
+    }
+
+    prefs.watchedFolders.push(folder.fsName);
+}
+
+/**
  * Load ExtendScript (.jsx and .js) scripts into the command palette.
  */
 function loadScripts(): void {
@@ -1228,8 +1307,8 @@ function loadScripts(): void {
 
     const currentScripts: string[] = prefs.scripts.map((s) => s.path);
 
-    const newScripts: CommandEntry[] = [];
-    const newScriptIds: string[] = [];
+    const scripts: CommandEntry[] = [];
+    const newScriptIDs: string[] = [];
 
     for (const f of files) {
         if (currentScripts.includes(f.fsName)) continue;
@@ -1247,14 +1326,14 @@ function loadScripts(): void {
             hidden: false,
         };
 
-        newScripts.push(script);
-        newScriptIds.push(id);
+        scripts.push(script);
+        newScriptIDs.push(id);
     }
 
-    if (newScripts.length === 0) return;
+    if (scripts.length === 0) return;
 
-    prefs.scripts = prefs.scripts.concat(newScripts);
-    addToStartup(newScriptIds);
+    prefs.scripts = prefs.scripts.concat(scripts);
+    addToStartup(newScriptIDs);
 }
 
 /**

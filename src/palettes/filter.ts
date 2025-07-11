@@ -33,7 +33,8 @@ function filterCommands(
         if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
         if (!showNonRelevant && !relevantCommand(command)) continue;
         if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
-        if (!types || types.includes(command.type)) filteredCommands.push(id);
+        if (!types || types.includes(command.type.toLowerCase()))
+            filteredCommands.push(id);
     }
 
     return filteredCommands;
@@ -50,23 +51,23 @@ function relevantCommand(command: Command): boolean {
     // hide commands requiring an active selection if requested
     if (command.selRequired && app.activeDocument.selection.length < 1) return false;
 
+    // hide `Remove Watched Folder...`
+    if (command.id === "config_removeWatchedFolders" && !prefs.watchedFolders.length)
+        return false;
     // hide `Edit Workflow...` command if no workflows
-    if (command.id === "builtin_editWorkflow" && prefs.workflows.length < 1)
-        return false;
+    if (command.id === "builtin_editWorkflow" && !prefs.workflows.length) return false;
     // hide `All Workflows...` command if no workflows
-    if (command.id === "builtin_allWorkflows" && prefs.workflows.length < 1)
-        return false;
+    if (command.id === "builtin_allWorkflows" && !prefs.workflows.length) return false;
     // hide `All Scripts...` command if no scripts
-    if (command.id === "builtin_allScripts" && prefs.scripts.length < 1) return false;
+    if (command.id === "builtin_allScripts" && !prefs.scripts.length) return false;
     // hide `All Bookmarks...` command if no bookmarks
-    if (command.id === "builtin_allBookmarks" && prefs.bookmarks.length < 1)
-        return false;
+    if (command.id === "builtin_allBookmarks" && !prefs.bookmarks.length) return false;
     // hide `All Actions...` command if no actions
     if (command.id === "builtin_allActions" && !userActions.loadedActions) return false;
     // hide `Edit Picker...` command if no pickers
-    if (command.id === "builtin_editPicker" && prefs.pickers.length < 1) return false;
+    if (command.id === "builtin_editPicker" && !prefs.pickers.length) return false;
     // hide `All Pickers...` command if no pickers
-    if (command.id === "builtin_allPickers" && prefs.pickers.length < 1) return false;
+    if (command.id === "builtin_allPickers" && !prefs.pickers.length) return false;
 
     // hide `Enable Fuzzy Matching` command if already enabled
     if (command.id === "config_enableFuzzyMatching" && prefs.fuzzy) return false;
@@ -79,7 +80,7 @@ function relevantCommand(command: Command): boolean {
     if (command.id === "config_disableDebugLogging" && !debugLogging) return false;
 
     // hide `Unhide Commands...` command if no hidden commands
-    if (command.id === "config_unhideCommand" && prefs.hiddenCommands.length < 1)
+    if (command.id === "config_unhideCommand" && !prefs.hiddenCommands.length)
         return false;
     // hide `Recent Commands...` and `Clear History` if no recent commands
     if (

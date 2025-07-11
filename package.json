@@ -1,16 +1,16 @@
 {
-  "name": "Ai Command Palette",
-  "version": "0.13.2",
-  "description": "Adobe Illustrator Command Palette",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "types-for-adobe": "^7.2.4"
-  }
+    "name": "Ai Command Palette",
+    "version": "0.13.2",
+    "description": "Adobe Illustrator Command Palette",
+    "main": "src/index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "type": "commonjs",
+    "dependencies": {
+        "types-for-adobe": "^7.2.4"
+    }
 }
