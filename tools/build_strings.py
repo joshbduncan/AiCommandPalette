@@ -67,9 +67,25 @@ def main() -> int:
     strings = build_strings(rows)
     assert strings
 
-    output = f"""// GENERATED FROM CSV DATA FILES
+    interface = """
+interface LocalizedStrings {
+  [key: string]: {
+    [langCode: string]: string,
+  };
+}
 
-    var strings = {json.dumps(strings)}"""
+interface LocalizedStringEntry {
+  en?: string;
+  de?: string;
+  ru?: string;
+  [langCode: string]: string | undefined;
+}"""
+
+    output = f"""{interface}
+
+// GENERATED FROM CSV DATA FILES
+const strings = {json.dumps(strings)}
+"""
 
     print(output.replace("\\\\n", "\\n"))
 

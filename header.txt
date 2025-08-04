@@ -1,0 +1,8 @@
+/*
+Ai Command Palette
+Copyright 2024 Josh Duncan
+https://joshbduncan.com
+
+This script is distributed under the MIT License.
+See the LICENSE file for details.
+*/

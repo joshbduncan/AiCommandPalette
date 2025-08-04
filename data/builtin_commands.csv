@@ -25,3 +25,4 @@ recentFiles,FALSE,builtin,FALSE,FALSE,,,Open Recent File...,Letzte Datei öffnen
 recentCommands,FALSE,builtin,FALSE,FALSE,,,Recent Commands...,Letzte Befehle …,,
 redrawWindows,FALSE,builtin,TRUE,FALSE,,,Redraw Windows,Fenster aktualisieren,,https://ai-scripting.docsforadobe.dev/jsobjref/Application.html#application-redraw
 revealActiveDocument,FALSE,builtin,TRUE,FALSE,,,Reveal Active Document On System,Aktuelles Dokument im Dateimanager anzeigen,,https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-path
+watchScriptFolder,FALSE,builtin,FALSE,FALSE,,,Watch Script Folder...,,,

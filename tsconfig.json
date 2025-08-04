@@ -1,0 +1,51 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "ES3",
+        "ignoreDeprecations": "5.0",
+        "outFile": "build/bundle.jsx",
+        "allowJs": true,
+        "noLib": true,
+        "types": ["types-for-adobe/Illustrator/2022"],
+        "removeComments": false,
+        "sourceMap": false,
+        "alwaysStrict": false
+    },
+    "files": [
+        "src/header.ts",
+
+        "./polyfills/Array.ts",
+        "./polyfills/Number.ts",
+        "./polyfills/Object.ts",
+        "./polyfills/String.ts",
+
+        "src/data/built_strings.ts",
+        "src/data/built_commands.ts",
+
+        "src/Logger.ts",
+        "src/helpers.ts",
+        "src/io.ts",
+
+        "src/config.ts",
+        "src/user/preferences.ts",
+        "src/user/history.ts",
+        "src/user/actions.ts",
+
+        "src/palettes/filter.ts",
+        "src/palettes/fuzzy.ts",
+        "src/palettes/nofuzz.ts",
+        "src/palettes/commandPalette.ts",
+        "src/palettes/customCommands.ts",
+        "src/palettes/pickerBuilder.ts",
+        "src/palettes/workflowBuilder.ts",
+        "src/palettes/startupBuilder.ts",
+
+        "src/commands/processing.ts",
+        "src/commands/internal.ts",
+        "src/commands/workflows.ts",
+
+        "src/index.ts"
+    ],
+    "include": ["types/**/*"],
+    "exclude": ["build", "node_modules"]
+}

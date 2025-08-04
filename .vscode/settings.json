@@ -1,14 +1,25 @@
 {
     "cSpell.words": [
+        "Artboard",
+        "artboards",
+        "Dflt",
         "DOCREQUIRED",
         "edittext",
+        "helptip",
+        "hideable",
         "LAOL",
         "listbox",
+        "LISTBOXWRAPPER",
         "MAXVERSION",
         "MINVERSION",
         "ngram",
         "ngrams",
         "prefs",
-        "SELREQUIRED"
-    ]
+        "SELREQUIRED",
+        "statictext"
+    ],
+    "search.exclude": {
+        "**/AiCommandPalette.jsx": true,
+        "dist/**": true
+    }
 }

@@ -19,12 +19,12 @@ repos:
           types: [bash]
           always_run: true
           verbose: true
-    - repo: local
-      hooks:
-        - id: compile-script
-          name: compile script
-          entry: bash -c 'escompile src/index.jsx > AiCommandPalette.jsx && git add AiCommandPalette.jsx'
-          language: system
-          types: [bash]
-          always_run: true
-          verbose: true
+    # - repo: local
+    #   hooks:
+    #     - id: compile-script
+    #       name: compile script
+    #       entry: bash -c 'tsc'
+    #       language: system
+    #       types: [bash]
+    #       always_run: true
+    #       verbose: true

@@ -105,9 +105,13 @@ alert("Picked Color Formats\n" + colorFormats.join("\n"));
 Load any JavaScript files (.js or .jsx) you want quick access to using the `Load Scripts...` command.
 
 > [!TIP]
-> **Want to load a bunch of scripts?** Multiple selections are allowed using your standard OS multiple selection tools.
+> **Want to load a bunch of scripts?** Multiple selections are allowed using your standard OS multiple selection tools or you can watch entire script folders via [Watched Script Folders](#watched-script-folders).
 
 !["Scripts"](/images/scripts.png)
+
+### Watched Script Folders
+
+If you work with a large number of scripts (or develop your own) it can be more efficient to watch entire folders rather than loading scripts individually. Each time the Command Palette is launched, all script files within your watched folders are automatically indexed and made available to run directly from the palette.
 
 ### Workflows
 
