@@ -139,7 +139,7 @@ tool,Tool,,
 type_title_case,Type,,
 user_prefs_inconsistency,User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.,,
 version,Version %1,Ausführung %1,версия %1
-watched_folder_not_found,Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.,,
+watched_folder_not_found,Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.,,
 wf_already_exists,A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?,Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf überschrieben werden?,Набор с таким именем уже существует\nХотите перезаписать предыдущий?
 wf_already_exists_title,Save Workflow Conflict,Arbeitsablauf-Konflikt speichern?,Проблема сохранения набора
 wf_builder,Workflow Builder,Arbeitsabläufe erstellen,Редактор наборов команд

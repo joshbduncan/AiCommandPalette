@@ -22,7 +22,7 @@ See the LICENSE file for details.
     //@target illustrator
     // SCRIPT INFORMATION
     var _title = "Ai Command Palette";
-    var _version = "0.13.3";
+    var _version = "0.14.0";
     var _copyright = "Copyright 2025 Josh Duncan";
     var _website = "joshbduncan.com";
     var _github = "https://github.com/joshbduncan";
@@ -1095,9 +1095,9 @@ See the LICENSE file for details.
             ru: "\u0432\u0435\u0440\u0441\u0438\u044f %1",
         },
         watched_folder_not_found: {
-            en: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
-            de: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
-            ru: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+            en: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+            de: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+            ru: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
         },
         wf_already_exists: {
             en: "A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?",
@@ -11490,10 +11490,11 @@ See the LICENSE file for details.
             for (var prop in data.commands.script) {
                 f = new File(data.commands.script[prop].path);
                 if (!f.exists) continue;
+                var scriptParent = decodeURI(f.parent.name);
                 var scriptName = decodeURI(f.name);
                 script = {
                     id: prop,
-                    name: scriptName,
+                    name: "".concat(scriptParent, " > ").concat(scriptName),
                     action: "script",
                     type: "script",
                     path: f.fsName,
@@ -14522,7 +14523,6 @@ See the LICENSE file for details.
     userActions.load();
     userHistory.load();
     userPrefs.loadWatchedScripts();
-    writeJSONData(commandsData, new File(Folder.desktop + "donkey.json"));
     // set command palette matching algo
     var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
     // add basic defaults to the startup on a first-run/fresh install

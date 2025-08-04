@@ -542,9 +542,9 @@ const strings = {
         ru: "\u0432\u0435\u0440\u0441\u0438\u044f %1",
     },
     watched_folder_not_found: {
-        en: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
-        de: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
-        ru: "Watched folder $1 not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+        en: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+        de: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+        ru: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
     },
     wf_already_exists: {
         en: "A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?",
