@@ -1313,11 +1313,12 @@ function loadScripts(): void {
     for (const f of files) {
         if (currentScripts.includes(f.fsName)) continue;
 
+        const scriptParent = decodeURI(f.parent.name);
         const scriptName = decodeURI(f.name);
         const id = generateCommandId(`script_${scriptName.toLowerCase()}`);
         const script: CommandEntry = {
             id,
-            name: scriptName,
+            name: `${scriptParent} > ${scriptName}`,
             action: "script",
             type: "script",
             path: f.fsName,

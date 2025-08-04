@@ -162,12 +162,12 @@ const userPrefs: UserPrefs = {
             logger.log(`loading watched script folder: ${folder.fsName}`);
 
             // find all scripts
-            var files = findScriptFiles(folder, false);
-            // FIXME: should search be recursive???
+            var files = findScriptFiles(folder, true);
 
             const scripts: CommandEntry[] = [];
 
             for (const f of files) {
+                const scriptParent = decodeURI(f.parent.name);
                 const scriptName = decodeURI(f.name);
                 const id = generateCommandId(
                     "watchedScript_" + scriptName + hashString(f.fsName)
@@ -180,7 +180,7 @@ const userPrefs: UserPrefs = {
 
                 const script: CommandEntry = {
                     id,
-                    name: scriptName,
+                    name: `${scriptParent} > ${scriptName}`,
                     action: "script",
                     type: "Script",
                     path: f.fsName,
@@ -329,10 +329,11 @@ function updateOldPreferences(oldFile) {
         for (const prop in data.commands.script) {
             f = new File(data.commands.script[prop].path);
             if (!f.exists) continue;
+            const scriptParent = decodeURI(f.parent.name);
             const scriptName = decodeURI(f.name);
             script = {
                 id: prop,
-                name: scriptName,
+                name: `${scriptParent} > ${scriptName}`,
                 action: "script",
                 type: "script",
                 path: f.fsName,

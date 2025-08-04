@@ -11034,7 +11034,7 @@ See the LICENSE file for details.
      */
     function findScriptFiles(folder, recursive) {
         if (recursive === void 0) {
-            recursive = false;
+            recursive = true;
         }
         var result = [];
         if (!(folder instanceof Folder) || !folder.exists) {
@@ -11333,11 +11333,11 @@ See the LICENSE file for details.
                 }
                 logger.log("loading watched script folder: ".concat(folder.fsName));
                 // find all scripts
-                var files = findScriptFiles(folder, false);
-                // FIXME: should search be recursive???
+                var files = findScriptFiles(folder, true);
                 var scripts = [];
                 for (var _b = 0, files_1 = files; _b < files_1.length; _b++) {
                     var f = files_1[_b];
+                    var scriptParent = decodeURI(f.parent.name);
                     var scriptName = decodeURI(f.name);
                     var id = generateCommandId(
                         "watchedScript_" + scriptName + hashString(f.fsName)
@@ -11348,7 +11348,7 @@ See the LICENSE file for details.
                     }
                     var script = {
                         id: id,
-                        name: scriptName,
+                        name: "".concat(scriptParent, " > ").concat(scriptName),
                         action: "script",
                         type: "Script",
                         path: f.fsName,
@@ -14376,11 +14376,12 @@ See the LICENSE file for details.
         for (var _i = 0, files_3 = files; _i < files_3.length; _i++) {
             var f = files_3[_i];
             if (currentScripts.includes(f.fsName)) continue;
+            var scriptParent = decodeURI(f.parent.name);
             var scriptName = decodeURI(f.name);
             var id = generateCommandId("script_".concat(scriptName.toLowerCase()));
             var script = {
                 id: id,
-                name: scriptName,
+                name: "".concat(scriptParent, " > ").concat(scriptName),
                 action: "script",
                 type: "script",
                 path: f.fsName,
@@ -14521,6 +14522,7 @@ See the LICENSE file for details.
     userActions.load();
     userHistory.load();
     userPrefs.loadWatchedScripts();
+    writeJSONData(commandsData, new File(Folder.desktop + "donkey.json"));
     // set command palette matching algo
     var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
     // add basic defaults to the startup on a first-run/fresh install

@@ -445,7 +445,7 @@ function openURL(url: string): void {
  * @param recursive - If true, searches subfolders recursively.
  * @returns An array of matching File objects.
  */
-function findScriptFiles(folder: Folder, recursive: boolean = false): File[] {
+function findScriptFiles(folder: Folder, recursive: boolean = true): File[] {
     const result: File[] = [];
 
     if (!(folder instanceof Folder) || !folder.exists) {
