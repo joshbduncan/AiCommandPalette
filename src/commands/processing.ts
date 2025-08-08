@@ -104,6 +104,7 @@ function menuAction(command: CommandEntry): void {
 }
 
 function toolAction(command: CommandEntry): void {
+    // @ts-ignore
     app.selectTool(command.action);
 }
 

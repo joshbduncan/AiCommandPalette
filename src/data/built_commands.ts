@@ -19,6 +19,7 @@ interface CommandEntry {
     selRequired: boolean;
     set?: string;
     type: string;
+    index?: number;
 }
 
 interface CommandsData {

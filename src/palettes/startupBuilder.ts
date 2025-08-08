@@ -22,22 +22,18 @@ function startupBuilder(commands: string[]): string[] | false {
     const q = pSearch.add("edittext") as EditText;
     q.helpTip = localize(strings.cd_q_helptip);
 
+    let matches = commands;
+
     const list = new ListBoxWrapper(
-        commands,
+        matches,
         pSearch,
         "commands",
         [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
         paletteSettings.columnSets.standard,
         false,
         localize(strings.startup_helptip),
-        [addToStepsOnDoubleClick, scrollListBoxWithArrows]
+        [addToStepsOnDoubleClick]
     );
-
-    if (windowsFlickerFix) {
-        simulateKeypress("TAB", 1);
-    } else {
-        q.active = true;
-    }
 
     // Steps Panel
     const pSteps = win.add(
@@ -99,8 +95,14 @@ function startupBuilder(commands: string[]): string[] | false {
     }) as Button;
     cancel.preferredSize.width = 100;
 
-    // Filtering Logic
-    let matches: string[];
+    // catch escape key and close window to stop default startup command reload/flicker on escape
+    win.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.keyName === "Escape") {
+            e.preventDefault();
+            win.close();
+        }
+    });
+
     q.onChanging = function () {
         if (q.text === "") {
             matches = commands;
@@ -110,10 +112,100 @@ function startupBuilder(commands: string[]): string[] | false {
             matches = matcher(q.text, commands);
             qCache[q.text] = matches;
         }
-        if (matches.length > 0) {
-            list.update(matches);
-        }
+        list.update(matches);
     };
+
+    // allow scrolling of the listbox from within the query input
+    q.addEventListener("keydown", (e: KeyboardEvent) => {
+        const listbox = list.listbox as ListBoxWithFrame;
+        const listboxSelection = listbox.selection as ListItemWithId;
+
+        if (e.keyName === "Up" || e.keyName === "Down") {
+            e.preventDefault();
+
+            if (typeof listboxSelection === "number" || Array.isArray(listboxSelection))
+                return;
+
+            if (!listboxSelection) {
+                listbox.selection = 0;
+                return;
+            }
+
+            if (e.getModifierState("Shift")) {
+                if (e.keyName === "Up") {
+                    if (listboxSelection.index === 0) {
+                        listbox.selection = listbox.items.length - 1;
+                    } else {
+                        listbox.selection = listboxSelection.index - 1;
+                    }
+                } else if (e.keyName === "Down") {
+                    if (listboxSelection.index === listbox.items.length - 1) {
+                        listbox.selection = 0;
+                    } else {
+                        listbox.selection = listboxSelection.index + 1;
+                    }
+                }
+            } else {
+                if (e.keyName === "Up") {
+                    if (listboxSelection.index == 0) {
+                        // jump to the bottom it at top
+                        listbox.selection = listbox.items.length - 1;
+                        listbox.frameStart =
+                            listbox.items.length - 1 - visibleListItems;
+                    } else if (listboxSelection.index > 0) {
+                        listbox.selection = listboxSelection.index - 1;
+                        if (listboxSelection.index < listbox.frameStart)
+                            listbox.frameStart--;
+                    }
+                } else if (e.keyName === "Down") {
+                    if (listboxSelection.index === listbox.items.length - 1) {
+                        // jump to the top if at the bottom
+                        listbox.selection = 0;
+                        listbox.frameStart = 0;
+                    } else {
+                        if (listboxSelection.index < listbox.items.length) {
+                            listbox.selection = listboxSelection.index + 1;
+                            if (
+                                listboxSelection.index >
+                                listbox.frameStart + visibleListItems - 1
+                            ) {
+                                if (
+                                    listbox.frameStart <
+                                    listbox.items.length - visibleListItems
+                                ) {
+                                    listbox.frameStart++;
+                                } else {
+                                    listbox.frameStart = listbox.frameStart;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                /*
+                    If a selection is made inside of the actual listbox frame by the user,
+                    the API doesn't offer any way to know which part of the list is currently
+                    visible in the listbox "frame". If the user was to re-enter the `q` edittext
+                    and then hit an arrow key the above event listener will not work correctly so
+                    I just move the next selection (be it up or down) to the middle of the "frame".
+                    */
+                const updatedListboxSelection = listbox.selection as ListItemWithId;
+                if (
+                    updatedListboxSelection.index < listbox.frameStart ||
+                    updatedListboxSelection.index >
+                        listbox.frameStart + visibleListItems - 1
+                )
+                    listbox.frameStart =
+                        updatedListboxSelection.index -
+                        Math.floor(visibleListItems / 2);
+                // don't move the frame if list items don't fill the available rows
+                if (listbox.items.length <= visibleListItems) return;
+                // move the frame by revealing the calculated `listbox.frameStart`
+                // @ts-ignore
+                listbox.revealItem(listbox.frameStart);
+            }
+        }
+    });
 
     up.onClick = function () {
         const rawSelection = steps.listbox.selection;

@@ -34,6 +34,7 @@
         "src/palettes/filter.ts",
         "src/palettes/fuzzy.ts",
         "src/palettes/nofuzz.ts",
+        "src/palettes/ListBoxWrapper.ts",
         "src/palettes/commandPalette.ts",
         "src/palettes/customCommands.ts",
         "src/palettes/pickerBuilder.ts",

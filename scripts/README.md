@@ -1,4 +1,4 @@
-# Ai Command Palette - Build Tools
+# Ai Command Palette - Build Scripts
 
 ## ExtendScript Compiler
 
@@ -12,10 +12,10 @@ So, to make script installation as easy as possible I use a little utility I wro
 
 ## Build Commands (build_commands.py)
 
-There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, [this script](/tools/build_commands.py) helps me build/rebuild the objects used in the script from the [command data csv files](/data/).
+There are almost 500 menu commands, 80 tools, and a handful of custom configuration commands available in Ai Command Palette and since they get updated often, [this script](/scripts/build_commands.py) helps me build/rebuild the objects used in the script from the [command data csv files](/data/).
 
 ```bash
-$ python3 tools/build_commands.py
+$ python3 scripts/build_commands.py
 ```
 
 > [!NOTE]
@@ -47,7 +47,7 @@ All commands are built into a single JavaScript objects like below.
 With the help of some contributors, many of the string values used in Ai Command Palette have been localized. This script builds an object ExtendScript can use to localize the script UI for the user.
 
 ```bash
-$ python3 tools/build_strings.py
+$ python3 scripts/build_strings.py
 ```
 
 > [!NOTE]

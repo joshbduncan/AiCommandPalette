@@ -4,6 +4,7 @@ const userHistoryFileName = "History.json";
 // setup the base prefs model
 let history = [];
 const recentCommands = {};
+const recentQueries = [];
 const mostRecentCommands = [];
 const latches = {};
 
@@ -51,6 +52,10 @@ const userHistory: UserHistory = {
                     if (!recentCommands.hasOwnProperty(entry.command))
                         recentCommands[entry.command] = 0;
                     recentCommands[entry.command]++;
+                    // track recent queries
+                    if (!recentQueries.includes(entry.query)) {
+                        recentQueries.push(entry.query);
+                    }
                     // track the past 25 most recent commands
                     if (
                         mostRecentCommands.length <= mostRecentCommandsCount &&
@@ -75,6 +80,7 @@ const userHistory: UserHistory = {
             } catch (e) {
                 file.rename(file.name + ".bak");
                 this.reveal();
+                // @ts-ignore
                 Error.runtimeError(1, localize(strings.history_file_loading_error));
             }
         }

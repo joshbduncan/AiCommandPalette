@@ -1,10 +1,19 @@
 {
-    "name": "Ai Command Palette",
+    "name": "ai-command-palette",
     "version": "0.13.2",
     "description": "Adobe Illustrator Command Palette",
     "main": "src/index.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build-strings": "zsh -c \"python3 scripts/build_strings.py | prettier --parser typescript > src/data/built_strings.ts\"",
+        "build-commands": "zsh -c \"python3 scripts/build_commands.py | prettier --parser typescript > src/data/built_commands.ts\"",
+        "copy-to-ai": "zsh -c \"sudo cp AiCommandPalette.jsx /Applications/Adobe\\ Illustrator\\ 2025/Presets.localized/en_US/Scripts\"",
+        "build": "tsc",
+        "postbuild": "npm-run-all postbuild:*",
+        "postbuild:strip-ts-comments": "zsh -c \"scripts/strip_ts_comments.sh\"",
+        "postbuild:wrap-in-anon-func": "zsh -c \"scripts/wrap_in_anon_function.sh\"",
+        "postbuild:prettier": "zsh -c \"prettier --parser=babel --write AiCommandPalette.jsx\"",
+        "dev": "chokidar 'src/**/*.ts' -c 'npm-run-all build postbuild copy-to-ai'"
     },
     "keywords": [],
     "author": "",
@@ -12,5 +21,9 @@
     "type": "commonjs",
     "dependencies": {
         "types-for-adobe": "^7.2.4"
+    },
+    "devDependencies": {
+        "chokidar-cli": "^3.0.0",
+        "npm-run-all": "^4.1.5"
     }
 }

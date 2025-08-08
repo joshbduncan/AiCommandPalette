@@ -175,15 +175,15 @@ function customizeStartup(): void {
     const availableStartupCommands = filterCommands(
         null,
         [
-            // "file",
-            // "folder",
+            "file",
+            "folder",
             "script",
-            // "workflow",
-            // "menu",
-            // "tool",
-            // "action",
-            // "builtin",
-            // "config",
+            "workflow",
+            "menu",
+            "tool",
+            "action",
+            "builtin",
+            "config",
         ],
         true, // showHidden
         true, // showNonRelevant
@@ -571,7 +571,9 @@ function documentReport(): void {
             localize(strings.document_report_warning)
         );
         warning.justify = "center";
+
         warning.graphics.foregroundColor = warning.graphics.newPen(
+            // @ts-ignore
             win.graphics.PenType.SOLID_COLOR,
             [1, 0, 0],
             1

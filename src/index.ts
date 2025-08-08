@@ -23,6 +23,7 @@ var result = commandPalette(
     paletteSettings.columnSets.standard,
     false,
     startupCommands,
+    true,
     true
 );
 

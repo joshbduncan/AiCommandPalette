@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Path to header file
 HEADER="header.txt"
@@ -23,5 +24,3 @@ TMPFILE="$(mktemp)"
 
 # Move the wrapped content back to the original output
 mv "$TMPFILE" "$OUTFILE"
-
-echo "Wrapped $INFILE in an anonymous function."

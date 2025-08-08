@@ -10,6 +10,7 @@ function addCustomCommandsDialog(): string {
 
     // Header text
     const header = win.add(
+        // @ts-ignore
         "statictext",
         [0, 0, 500, 100],
         localize(strings.custom_commands_header),

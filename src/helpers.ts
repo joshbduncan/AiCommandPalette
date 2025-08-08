@@ -219,8 +219,10 @@ function getAllPlacedFilePaths(xmp: XMPMetaInstance): string[] {
     const paths: string[] = [];
 
     // Iterate over all items in the xmpMM:Manifest array
+    // @ts-ignore
     for (let i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
         const xpath = `xmpMM:Manifest[${i}]/stMfs:reference/stRef:filePath`;
+        // @ts-ignore
         const prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
         if (prop != null && typeof prop.value === "string") {
             paths.push(prop.value);
@@ -242,8 +244,10 @@ function getAllPlacedFilePaths(xmp: XMPMetaInstance): string[] {
 function getBrokenFilePaths(xmp: XMPMetaInstance): string[] {
     const paths: string[] = [];
 
+    // @ts-ignore
     for (let i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients"); i++) {
         const xpath = `xmpMM:Ingredients[${i}]/stRef:filePath`;
+        // @ts-ignore
         const prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
         if (prop != null && typeof prop.value === "string") {
             paths.push(prop.value);
@@ -337,7 +341,7 @@ function getCollectionObjectNames(
     if (collection.length > 0) {
         for (let i = 0; i < collection.length; i++) {
             const item = collection[i];
-            if (collection.typename == "Spots") {
+            if ("typename" in collection && collection.typename == "Spots") {
                 if (item.name !== "[Registration]") {
                     names.push(item.name);
                 }

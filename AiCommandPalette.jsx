@@ -358,7 +358,6 @@ See the LICENSE file for details.
         };
     }
     if (!("assign" in Object)) {
-        ///@ts-ignore
         Object.assign = (function (has) {
             "use strict";
             return function assign(target) {
@@ -10940,7 +10939,7 @@ See the LICENSE file for details.
         if (collection.length > 0) {
             for (var i = 0; i < collection.length; i++) {
                 var item = collection[i];
-                if (collection.typename == "Spots") {
+                if ("typename" in collection && collection.typename == "Spots") {
                     if (item.name !== "[Registration]") {
                         names.push(item.name);
                     }
@@ -11556,6 +11555,7 @@ See the LICENSE file for details.
     // setup the base prefs model
     var history = [];
     var recentCommands = {};
+    var recentQueries = [];
     var mostRecentCommands = [];
     var latches = {};
     var userHistory = {
@@ -11592,6 +11592,10 @@ See the LICENSE file for details.
                         if (!recentCommands.hasOwnProperty(entry.command))
                             recentCommands[entry.command] = 0;
                         recentCommands[entry.command]++;
+                        // track recent queries
+                        if (!recentQueries.includes(entry.query)) {
+                            recentQueries.push(entry.query);
+                        }
                         // track the past 25 most recent commands
                         if (
                             mostRecentCommands.length <= mostRecentCommandsCount &&
@@ -11969,9 +11973,57 @@ See the LICENSE file for details.
                 return scores[b] - scores[a];
             });
     }
-    // set flags for query arrow navigation fix
-    var fromQuery = false;
-    var fromQueryShiftKey = false;
+    // LISTBOXWRAPPER LISTENERS
+    /**
+     * Close the window when an item in the listbox is double-clicked.
+     * @param listbox ScriptUI ListBox
+     */
+    function selectOnDoubleClick(listbox) {
+        listbox.onDoubleClick = function () {
+            var _a;
+            (_a = listbox.window) === null || _a === void 0 ? void 0 : _a.close(1);
+        };
+    }
+    /**
+     * Add listbox command to Workflow when double-clicking.
+     * @param listbox ScriptUI ListBox
+     */
+    function addToStepsOnDoubleClick(listbox) {
+        listbox.onDoubleClick = function () {
+            var win = listbox.window;
+            var steps = win.findElement("steps");
+            var selection = listbox.selection;
+            var command = commandsData[selection.id];
+            var newItem;
+            if (command.id === "builtin_buildPicker") {
+                var newPicker = buildPicker();
+                newItem = steps.add("item", newPicker.name);
+                newItem.subItems[0].text = newPicker.type;
+                newItem.id = newPicker.id;
+            } else {
+                newItem = steps.add("item", determineCorrectString(command, "name"));
+                newItem.subItems[0].text = determineCorrectString(command, "type");
+                newItem.id = command.id;
+            }
+            steps.notify("onChange");
+        };
+    }
+    /**
+     * Swap listbox items in place (along with their corresponding id).
+     * @param x Listbox item to swap.
+     * @param y Listbox item to swap.
+     */
+    function swapListboxItems(x, y) {
+        var tempText = x.text;
+        var tempSubText = x.subItems[0].text;
+        var tempId = x.id;
+        x.text = y.text;
+        x.subItems[0].text = y.subItems[0].text;
+        x.id = y.id;
+        y.text = tempText;
+        y.subItems[0].text = tempSubText;
+        y.id = tempId;
+    }
     /**
      * A custom wrapper for a ScriptUI ListBox that supports multiple columns,
      * optional tooltips, multiselect, and command loading.
@@ -12032,12 +12084,35 @@ See the LICENSE file for details.
                 this.loadCommands(listbox, commands, columnKeys);
                 listbox.selection = 0;
             }
+            // Allow end-to-end scrolling from within a listbox.
+            listbox.addEventListener("keydown", function (e) {
+                if (
+                    typeof listbox.selection === "number" ||
+                    Array.isArray(listbox.selection)
+                )
+                    return;
+                if (!listbox.selection) {
+                    listbox.selection = 0;
+                    return;
+                }
+                var listboxSelection = listbox.selection;
+                if (e.keyName === "Up" && listboxSelection.index === 0) {
+                    listbox.selection = listbox.items.length - 1;
+                    e.preventDefault();
+                } else if (
+                    e.keyName === "Down" &&
+                    listboxSelection.index === listbox.items.length - 1
+                ) {
+                    listbox.selection = 0;
+                    e.preventDefault();
+                }
+            });
             this.addListeners(listbox);
             return listbox;
         };
         ListBoxWrapper.prototype.update = function (matches) {
             var newListbox = this.make(matches, this.listbox.bounds);
-            this.listbox.window.remove(this.listbox);
+            this.container.remove(this.listbox);
             this.listbox = newListbox;
         };
         ListBoxWrapper.prototype.loadCommands = function (
@@ -12072,106 +12147,189 @@ See the LICENSE file for details.
         };
         return ListBoxWrapper;
     })();
-    // LISTBOXWRAPPER LISTENERS
     /**
-     * Close the window when an item in the listbox is double-clicked.
-     * @param listbox ScriptUI ListBox
+     * Display a modal command palette dialog and return user selection.
+     *
+     * @param commands - List of available command IDs. Defaults to user startup commands.
+     * @param title - Window title. Defaults to `_title_.
+     * @param columns - Column configuration for listbox. Defaults to `paletteSettings.columnSets.standard`
+     * @param multiselect - Whether multiple commands can be selected. Defaults to false.
+     * @param showOnly - Optional subset of commands to display. Defaults to null.
+     * @param saveHistory - Whether to store query and command in user history. Defaults to true.
+     * @param scrollHistory - Should command history be accessible via the up arrow. Defaults to false.
+     * @returns The selected command ID(s), or false if cancelled.
      */
-    function selectOnDoubleClick(listbox) {
-        listbox.onDoubleClick = function () {
-            var _a;
-            (_a = listbox.window) === null || _a === void 0 ? void 0 : _a.close(1);
-        };
-    }
-    /**
-     * Add listbox command to Workflow when double-clicking.
-     * @param listbox ScriptUI ListBox
-     */
-    function addToStepsOnDoubleClick(listbox) {
-        listbox.onDoubleClick = function () {
-            var win = listbox.window;
-            var steps = win.findElement("steps");
-            var selection = listbox.selection;
-            var command = commandsData[selection.id];
-            var newItem;
-            if (command.id === "builtin_buildPicker") {
-                var newPicker = buildPicker();
-                newItem = steps.add("item", newPicker.name);
-                newItem.subItems[0].text = newPicker.type;
-                newItem.id = newPicker.id;
+    function commandPalette(
+        commands,
+        title,
+        columns,
+        multiselect,
+        showOnly,
+        saveHistory,
+        scrollHistory
+    ) {
+        if (commands === void 0) {
+            commands = startupCommands;
+        }
+        if (title === void 0) {
+            title = _title;
+        }
+        if (columns === void 0) {
+            columns = paletteSettings.columnSets.standard;
+        }
+        if (multiselect === void 0) {
+            multiselect = false;
+        }
+        if (showOnly === void 0) {
+            showOnly = null;
+        }
+        if (saveHistory === void 0) {
+            saveHistory = true;
+        }
+        if (scrollHistory === void 0) {
+            scrollHistory = false;
+        }
+        var qCache = {};
+        var historyScrolling = true;
+        var historyIndex = 0;
+        var win = new Window("dialog");
+        win.text = title;
+        win.alignChildren = "fill";
+        var q = win.add("edittext");
+        q.helpTip = localize(strings.cd_q_helptip);
+        var matches = showOnly !== null && showOnly !== void 0 ? showOnly : commands;
+        var list = new ListBoxWrapper(
+            matches,
+            win,
+            "commands",
+            paletteSettings.bounds,
+            columns,
+            multiselect,
+            undefined,
+            [selectOnDoubleClick]
+        );
+        var winButtons = win.add("group");
+        winButtons.orientation = "row";
+        winButtons.alignChildren = ["center", "center"];
+        var ok = winButtons.add("button", undefined, "OK");
+        ok.preferredSize.width = 100;
+        var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
+            name: "cancel",
+        });
+        cancel.preferredSize.width = 100;
+        if (windowsFlickerFix) {
+            simulateKeypress("TAB", 1);
+        } else {
+            q.active = true;
+        }
+        // catch escape key and close window to stop default startup command reloadZ on escape
+        win.addEventListener("keydown", function (e) {
+            if (e.keyName === "Escape") {
+                e.preventDefault();
+                win.close();
+            }
+        });
+        q.onChanging = function () {
+            historyScrolling = false;
+            historyIndex = 0;
+            if (q.text === "") {
+                matches =
+                    showOnly !== null && showOnly !== void 0 ? showOnly : commands;
+                historyScrolling = true;
+            } else if (qCache.hasOwnProperty(q.text)) {
+                matches = qCache[q.text];
             } else {
-                newItem = steps.add("item", determineCorrectString(command, "name"));
-                newItem.subItems[0].text = determineCorrectString(command, "type");
-                newItem.id = command.id;
+                matches = matcher(q.text, commands);
+                qCache[q.text] = matches;
             }
-            steps.notify("onChange");
+            list.update(matches);
         };
-    }
-    /**
-     * Swap listbox items in place (along with their corresponding id).
-     * @param x Listbox item to swap.
-     * @param y Listbox item to swap.
-     */
-    function swapListboxItems(x, y) {
-        var tempText = x.text;
-        var tempSubText = x.subItems[0].text;
-        var tempId = x.id;
-        x.text = y.text;
-        x.subItems[0].text = y.subItems[0].text;
-        x.id = y.id;
-        y.text = tempText;
-        y.subItems[0].text = tempSubText;
-        y.id = tempId;
-    }
-    /**
-     * Allow end-to-end scrolling from within a listbox.
-     * @param listbox ScriptUI listbox.
-     */
-    function scrollListBoxWithArrows(listbox) {
-        listbox.addEventListener("keydown", function (e) {
-            if (
-                typeof listbox.selection === "number" ||
-                Array.isArray(listbox.selection)
-            )
-                return;
-            if (!listbox.selection) {
-                listbox.selection = 0;
-                return;
-            }
-            var listboxSelection = listbox.selection;
-            if (fromQuery) {
-                if (fromQueryShiftKey) {
-                    if (e.keyName === "Up") {
-                        if (listboxSelection.index === 0) {
-                            listbox.selection = listbox.items.length - 1;
+        var updateHistory = function () {
+            if (q.text === "") return;
+            var selected = list.listbox.selection;
+            if (!selected || selected.id === "builtin_recentCommands") return;
+            history.push({
+                query: q.text,
+                command: selected.id,
+                timestamp: Date.now(),
+            });
+            userHistory.save();
+        };
+        // allow scrolling through query history
+        if (scrollHistory) {
+            q.addEventListener("keydown", function (e) {
+                if (e.keyName === "Up" && historyScrolling) {
+                    e.preventDefault();
+                    if (recentQueries && recentQueries.length > 0) {
+                        var historyEntry = recentQueries[historyIndex];
+                        logger.log(
+                            "scrolling query history, current index = "
+                                .concat(historyIndex, ", ")
+                                .concat(historyEntry)
+                        );
+                        q.text = historyEntry;
+                        historyIndex = Math.min(
+                            historyIndex + 1,
+                            recentQueries.length - 1
+                        );
+                        if (qCache.hasOwnProperty(q.text)) {
+                            matches = qCache[q.text];
                         } else {
-                            listbox.selection = listboxSelection.index - 1;
+                            matches = matcher(q.text, commands);
+                            qCache[q.text] = matches;
                         }
-                        e.preventDefault();
-                    } else if (e.keyName === "Down") {
-                        if (listboxSelection.index === listbox.items.length - 1) {
-                            listbox.selection = 0;
-                        } else {
-                            listbox.selection = listboxSelection.index + 1;
-                        }
-                        e.preventDefault();
+                        list.update(matches);
                     }
-                } else {
-                    if (e.keyName === "Up" || e.keyName === "Down") {
+                }
+            });
+        }
+        // allow scrolling of the listbox from within the query input
+        if (!multiselect) {
+            q.addEventListener("keydown", function (e) {
+                var listbox = list.listbox;
+                var listboxSelection = listbox.selection;
+                if (e.keyName === "Up" || e.keyName === "Down") {
+                    e.preventDefault();
+                    if (
+                        typeof listboxSelection === "number" ||
+                        Array.isArray(listboxSelection)
+                    )
+                        return;
+                    if (!listboxSelection) {
+                        listbox.selection = 0;
+                        return;
+                    }
+                    if (historyScrolling && e.keyName === "Up") {
+                        return;
+                    }
+                    historyScrolling = false;
+                    historyIndex = 0;
+                    if (e.getModifierState("Shift")) {
+                        if (e.keyName === "Up") {
+                            if (listboxSelection.index === 0) {
+                                listbox.selection = listbox.items.length - 1;
+                            } else {
+                                listbox.selection = listboxSelection.index - 1;
+                            }
+                        } else if (e.keyName === "Down") {
+                            if (listboxSelection.index === listbox.items.length - 1) {
+                                listbox.selection = 0;
+                            } else {
+                                listbox.selection = listboxSelection.index + 1;
+                            }
+                        }
+                    } else {
                         if (e.keyName === "Up") {
                             if (listboxSelection.index == 0) {
-                                // jump to the bottom if at top
+                                // jump to the bottom it at top
                                 listbox.selection = listbox.items.length - 1;
                                 listbox.frameStart =
                                     listbox.items.length - 1 - visibleListItems;
-                            } else {
-                                if (listboxSelection.index > 0) {
-                                    listbox.selection = listboxSelection.index - 1;
-                                    if (listboxSelection.index < listbox.frameStart)
-                                        listbox.frameStart--;
-                                }
+                            } else if (listboxSelection.index > 0) {
+                                listbox.selection = listboxSelection.index - 1;
+                                if (listboxSelection.index < listbox.frameStart)
+                                    listbox.frameStart--;
                             }
-                            e.preventDefault();
                         } else if (e.keyName === "Down") {
                             if (listboxSelection.index === listbox.items.length - 1) {
                                 // jump to the top if at the bottom
@@ -12195,15 +12353,14 @@ See the LICENSE file for details.
                                     }
                                 }
                             }
-                            e.preventDefault();
                         }
                         /*
-        If a selection is made inside of the actual listbox frame by the user,
-        the API doesn't offer any way to know which part of the list is currently
-        visible in the listbox "frame". If the user was to re-enter the `q` edittext
-        and then hit an arrow key the above event listener will not work correctly so
-        I just move the next selection (be it up or down) to the middle of the "frame".
-        */
+                    If a selection is made inside of the actual listbox frame by the user,
+                    the API doesn't offer any way to know which part of the list is currently
+                    visible in the listbox "frame". If the user was to re-enter the `q` edittext
+                    and then hit an arrow key the above event listener will not work correctly so
+                    I just move the next selection (be it up or down) to the middle of the "frame".
+                    */
                         var updatedListboxSelection = listbox.selection;
                         if (
                             updatedListboxSelection.index < listbox.frameStart ||
@@ -12218,134 +12375,6 @@ See the LICENSE file for details.
                         // move the frame by revealing the calculated `listbox.frameStart`
                         listbox.revealItem(listbox.frameStart);
                     }
-                }
-                fromQuery = false;
-                fromQueryShiftKey = false;
-            } else {
-                if (e.keyName === "Up" && listboxSelection.index === 0) {
-                    listbox.selection = listbox.items.length - 1;
-                    e.preventDefault();
-                } else if (
-                    e.keyName === "Down" &&
-                    listboxSelection.index === listbox.items.length - 1
-                ) {
-                    listbox.selection = 0;
-                    e.preventDefault();
-                }
-            }
-        });
-    }
-    /**
-     * Display a modal command palette dialog and return user selection.
-     *
-     * @param commands - List of available command IDs. Defaults to user startup commands.
-     * @param title - Window title. Defaults to `_title_.
-     * @param columns - Column configuration for listbox. Defaults to `paletteSettings.columnSets.standard`
-     * @param multiselect - Whether multiple commands can be selected. Defaults to false.
-     * @param showOnly - Optional subset of commands to display. Defaults to null.
-     * @param saveHistory - Whether to store query and command in user history. Defaults to true.
-     * @returns The selected command ID(s), or false if cancelled.
-     */
-    function commandPalette(
-        commands,
-        title,
-        columns,
-        multiselect,
-        showOnly,
-        saveHistory
-    ) {
-        if (commands === void 0) {
-            commands = startupCommands;
-        }
-        if (title === void 0) {
-            title = _title;
-        }
-        if (columns === void 0) {
-            columns = paletteSettings.columnSets.standard;
-        }
-        if (multiselect === void 0) {
-            multiselect = false;
-        }
-        if (showOnly === void 0) {
-            showOnly = null;
-        }
-        if (saveHistory === void 0) {
-            saveHistory = true;
-        }
-        var qCache = {};
-        var win = new Window("dialog");
-        win.text = title;
-        win.alignChildren = "fill";
-        var q = win.add("edittext");
-        q.helpTip = localize(strings.cd_q_helptip);
-        q.active = true;
-        var matches = showOnly !== null && showOnly !== void 0 ? showOnly : commands;
-        var list = new ListBoxWrapper(
-            matches,
-            win,
-            "commands",
-            paletteSettings.bounds,
-            columns,
-            multiselect,
-            undefined,
-            [selectOnDoubleClick, scrollListBoxWithArrows]
-        );
-        var winButtons = win.add("group");
-        winButtons.orientation = "row";
-        winButtons.alignChildren = ["center", "center"];
-        var ok = winButtons.add("button", undefined, "OK");
-        ok.preferredSize.width = 100;
-        var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
-            name: "cancel",
-        });
-        cancel.preferredSize.width = 100;
-        if (windowsFlickerFix) {
-            simulateKeypress("TAB", 1);
-        }
-        q.onChanging = function () {
-            if (q.text === "") {
-                matches =
-                    showOnly !== null && showOnly !== void 0 ? showOnly : commands;
-            } else if (qCache.hasOwnProperty(q.text)) {
-                matches = qCache[q.text];
-            } else {
-                matches = matcher(q.text, commands);
-                qCache[q.text] = matches;
-            }
-            list.update(matches);
-        };
-        var updateHistory = function () {
-            if (q.text === "") return;
-            var selected = list.listbox.selection;
-            if (!selected || selected.id === "builtin_recentCommands") return;
-            history.push({
-                query: q.text,
-                command: selected.id,
-                timestamp: Date.now(),
-            });
-            userHistory.save();
-        };
-        if (!multiselect) {
-            var kbEvent_1 = ScriptUI.events.createEvent("KeyboardEvent");
-            q.addEventListener("keydown", function (e) {
-                if (e.keyName === "Escape") {
-                    e.preventDefault();
-                    win.close();
-                }
-                if (e.keyName === "Up" || e.keyName === "Down") {
-                    kbEvent_1.initKeyboardEvent(
-                        "keydown",
-                        true,
-                        true,
-                        list.listbox,
-                        e.keyName,
-                        0,
-                        ""
-                    );
-                    fromQuery = true;
-                    fromQueryShiftKey = e.getModifierState("shift");
-                    list.listbox.dispatchEvent(kbEvent_1);
-                    e.preventDefault();
                 }
             });
         }
@@ -12526,18 +12555,17 @@ See the LICENSE file for details.
         pSearch.margins = 20;
         var q = pSearch.add("edittext");
         q.helpTip = localize(strings.cd_q_helptip);
+        var matches = commands;
         var list = new ListBoxWrapper(
-            commands,
+            matches,
             pSearch,
             "commands",
             [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
             paletteSettings.columnSets.standard,
             false,
             localize(strings.cd_helptip),
-            [addToStepsOnDoubleClick, scrollListBoxWithArrows]
+            [addToStepsOnDoubleClick]
         );
-        if (windowsFlickerFix) simulateKeypress("TAB", 1);
-        else q.active = true;
         var pSteps = win.add("panel", undefined, localize(strings.wf_steps));
         pSteps.alignChildren = ["fill", "center"];
         pSteps.margins = 20;
@@ -12604,14 +12632,118 @@ See the LICENSE file for details.
             name: "cancel",
         });
         cancel.preferredSize.width = 100;
-        var matches;
+        if (windowsFlickerFix) {
+            simulateKeypress("TAB", 1);
+        } else {
+            q.active = true;
+        }
+        // catch escape key and close window to stop default startup command reload/flicker on escape
+        win.addEventListener("keydown", function (e) {
+            if (e.keyName === "Escape") {
+                e.preventDefault();
+                win.close();
+            }
+        });
         q.onChanging = function () {
-            var query = q.text;
-            if (query === "") matches = commands;
-            else if (qCache[query]) matches = qCache[query];
-            else matches = qCache[query] = matcher(query, commands);
-            if (matches.length > 0) list.update(matches);
+            if (q.text === "") {
+                matches = commands;
+            } else if (qCache.hasOwnProperty(q.text)) {
+                matches = qCache[q.text];
+            } else {
+                matches = matcher(q.text, commands);
+                qCache[q.text] = matches;
+            }
+            // alert(matches.length.toString());
+            list.update(matches);
         };
+        // allow scrolling of the listbox from within the query input
+        q.addEventListener("keydown", function (e) {
+            var listbox = list.listbox;
+            var listboxSelection = listbox.selection;
+            if (e.keyName === "Up" || e.keyName === "Down") {
+                e.preventDefault();
+                if (
+                    typeof listboxSelection === "number" ||
+                    Array.isArray(listboxSelection)
+                )
+                    return;
+                if (!listboxSelection) {
+                    listbox.selection = 0;
+                    return;
+                }
+                if (e.getModifierState("Shift")) {
+                    if (e.keyName === "Up") {
+                        if (listboxSelection.index === 0) {
+                            listbox.selection = listbox.items.length - 1;
+                        } else {
+                            listbox.selection = listboxSelection.index - 1;
+                        }
+                    } else if (e.keyName === "Down") {
+                        if (listboxSelection.index === listbox.items.length - 1) {
+                            listbox.selection = 0;
+                        } else {
+                            listbox.selection = listboxSelection.index + 1;
+                        }
+                    }
+                } else {
+                    if (e.keyName === "Up") {
+                        if (listboxSelection.index == 0) {
+                            // jump to the bottom it at top
+                            listbox.selection = listbox.items.length - 1;
+                            listbox.frameStart =
+                                listbox.items.length - 1 - visibleListItems;
+                        } else if (listboxSelection.index > 0) {
+                            listbox.selection = listboxSelection.index - 1;
+                            if (listboxSelection.index < listbox.frameStart)
+                                listbox.frameStart--;
+                        }
+                    } else if (e.keyName === "Down") {
+                        if (listboxSelection.index === listbox.items.length - 1) {
+                            // jump to the top if at the bottom
+                            listbox.selection = 0;
+                            listbox.frameStart = 0;
+                        } else {
+                            if (listboxSelection.index < listbox.items.length) {
+                                listbox.selection = listboxSelection.index + 1;
+                                if (
+                                    listboxSelection.index >
+                                    listbox.frameStart + visibleListItems - 1
+                                ) {
+                                    if (
+                                        listbox.frameStart <
+                                        listbox.items.length - visibleListItems
+                                    ) {
+                                        listbox.frameStart++;
+                                    } else {
+                                        listbox.frameStart = listbox.frameStart;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    /*
+                    If a selection is made inside of the actual listbox frame by the user,
+                    the API doesn't offer any way to know which part of the list is currently
+                    visible in the listbox "frame". If the user was to re-enter the `q` edittext
+                    and then hit an arrow key the above event listener will not work correctly so
+                    I just move the next selection (be it up or down) to the middle of the "frame".
+                    */
+                    var updatedListboxSelection = listbox.selection;
+                    if (
+                        updatedListboxSelection.index < listbox.frameStart ||
+                        updatedListboxSelection.index >
+                            listbox.frameStart + visibleListItems - 1
+                    )
+                        listbox.frameStart =
+                            updatedListboxSelection.index -
+                            Math.floor(visibleListItems / 2);
+                    // don't move the frame if list items don't fill the available rows
+                    if (listbox.items.length <= visibleListItems) return;
+                    // move the frame by revealing the calculated `listbox.frameStart`
+                    listbox.revealItem(listbox.frameStart);
+                }
+            }
+        });
         steps.listbox.onChange = function () {
             workflowName.enabled = steps.listbox.items.length > 0;
             save.enabled = workflowName.enabled && workflowName.text.length > 0;
@@ -12735,21 +12867,17 @@ See the LICENSE file for details.
         pSearch.margins = 20;
         var q = pSearch.add("edittext");
         q.helpTip = localize(strings.cd_q_helptip);
+        var matches = commands;
         var list = new ListBoxWrapper(
-            commands,
+            matches,
             pSearch,
             "commands",
             [0, 0, paletteSettings.paletteWidth, paletteSettings.paletteHeight],
             paletteSettings.columnSets.standard,
             false,
             localize(strings.startup_helptip),
-            [addToStepsOnDoubleClick, scrollListBoxWithArrows]
+            [addToStepsOnDoubleClick]
         );
-        if (windowsFlickerFix) {
-            simulateKeypress("TAB", 1);
-        } else {
-            q.active = true;
-        }
         // Steps Panel
         var pSteps = win.add("panel", undefined, localize(strings.startup_steps));
         pSteps.alignChildren = ["fill", "center"];
@@ -12785,8 +12913,13 @@ See the LICENSE file for details.
             name: "cancel",
         });
         cancel.preferredSize.width = 100;
-        // Filtering Logic
-        var matches;
+        // catch escape key and close window to stop default startup command reload/flicker on escape
+        win.addEventListener("keydown", function (e) {
+            if (e.keyName === "Escape") {
+                e.preventDefault();
+                win.close();
+            }
+        });
         q.onChanging = function () {
             if (q.text === "") {
                 matches = commands;
@@ -12796,10 +12929,96 @@ See the LICENSE file for details.
                 matches = matcher(q.text, commands);
                 qCache[q.text] = matches;
             }
-            if (matches.length > 0) {
-                list.update(matches);
-            }
+            list.update(matches);
         };
+        // allow scrolling of the listbox from within the query input
+        q.addEventListener("keydown", function (e) {
+            var listbox = list.listbox;
+            var listboxSelection = listbox.selection;
+            if (e.keyName === "Up" || e.keyName === "Down") {
+                e.preventDefault();
+                if (
+                    typeof listboxSelection === "number" ||
+                    Array.isArray(listboxSelection)
+                )
+                    return;
+                if (!listboxSelection) {
+                    listbox.selection = 0;
+                    return;
+                }
+                if (e.getModifierState("Shift")) {
+                    if (e.keyName === "Up") {
+                        if (listboxSelection.index === 0) {
+                            listbox.selection = listbox.items.length - 1;
+                        } else {
+                            listbox.selection = listboxSelection.index - 1;
+                        }
+                    } else if (e.keyName === "Down") {
+                        if (listboxSelection.index === listbox.items.length - 1) {
+                            listbox.selection = 0;
+                        } else {
+                            listbox.selection = listboxSelection.index + 1;
+                        }
+                    }
+                } else {
+                    if (e.keyName === "Up") {
+                        if (listboxSelection.index == 0) {
+                            // jump to the bottom it at top
+                            listbox.selection = listbox.items.length - 1;
+                            listbox.frameStart =
+                                listbox.items.length - 1 - visibleListItems;
+                        } else if (listboxSelection.index > 0) {
+                            listbox.selection = listboxSelection.index - 1;
+                            if (listboxSelection.index < listbox.frameStart)
+                                listbox.frameStart--;
+                        }
+                    } else if (e.keyName === "Down") {
+                        if (listboxSelection.index === listbox.items.length - 1) {
+                            // jump to the top if at the bottom
+                            listbox.selection = 0;
+                            listbox.frameStart = 0;
+                        } else {
+                            if (listboxSelection.index < listbox.items.length) {
+                                listbox.selection = listboxSelection.index + 1;
+                                if (
+                                    listboxSelection.index >
+                                    listbox.frameStart + visibleListItems - 1
+                                ) {
+                                    if (
+                                        listbox.frameStart <
+                                        listbox.items.length - visibleListItems
+                                    ) {
+                                        listbox.frameStart++;
+                                    } else {
+                                        listbox.frameStart = listbox.frameStart;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    /*
+                    If a selection is made inside of the actual listbox frame by the user,
+                    the API doesn't offer any way to know which part of the list is currently
+                    visible in the listbox "frame". If the user was to re-enter the `q` edittext
+                    and then hit an arrow key the above event listener will not work correctly so
+                    I just move the next selection (be it up or down) to the middle of the "frame".
+                    */
+                    var updatedListboxSelection = listbox.selection;
+                    if (
+                        updatedListboxSelection.index < listbox.frameStart ||
+                        updatedListboxSelection.index >
+                            listbox.frameStart + visibleListItems - 1
+                    )
+                        listbox.frameStart =
+                            updatedListboxSelection.index -
+                            Math.floor(visibleListItems / 2);
+                    // don't move the frame if list items don't fill the available rows
+                    if (listbox.items.length <= visibleListItems) return;
+                    // move the frame by revealing the calculated `listbox.frameStart`
+                    listbox.revealItem(listbox.frameStart);
+                }
+            }
+        });
         up.onClick = function () {
             var rawSelection = steps.listbox.selection;
             if (!rawSelection || typeof rawSelection === "number") return;
@@ -13345,15 +13564,15 @@ See the LICENSE file for details.
         var availableStartupCommands = filterCommands(
             null,
             [
-                // "file",
-                // "folder",
+                "file",
+                "folder",
                 "script",
-                // "workflow",
-                // "menu",
-                // "tool",
-                // "action",
-                // "builtin",
-                // "config",
+                "workflow",
+                "menu",
+                "tool",
+                "action",
+                "builtin",
+                "config",
             ],
             true, // showHidden
             true, // showNonRelevant
@@ -14544,6 +14763,7 @@ See the LICENSE file for details.
         paletteSettings.columnSets.standard,
         false,
         startupCommands,
+        true,
         true
     );
     if (result) {

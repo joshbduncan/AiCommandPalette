@@ -125,6 +125,7 @@ const userPrefs: UserPrefs = {
                 logger.log("error loading user prefs", e);
                 logger.log("renaming prefs file:", file.fsName);
                 this.reveal();
+                // @ts-ignore
                 Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
             }
         }
