@@ -1,6 +1,6 @@
 {
     "name": "ai-command-palette",
-    "version": "0.13.2",
+    "version": "0.15.0",
     "description": "Adobe Illustrator Command Palette",
     "main": "src/index.ts",
     "scripts": {

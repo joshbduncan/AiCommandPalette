@@ -22,7 +22,7 @@ See the LICENSE file for details.
     //@target illustrator
     // SCRIPT INFORMATION
     var _title = "Ai Command Palette";
-    var _version = "0.14.0";
+    var _version = "0.15.0";
     var _copyright = "Copyright 2025 Josh Duncan";
     var _website = "joshbduncan.com";
     var _github = "https://github.com/joshbduncan";

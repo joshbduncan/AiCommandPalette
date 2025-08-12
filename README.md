@@ -78,9 +78,6 @@ Astute Graphics - Block Shadow,AG Block Shadow Tool,tool
 Astute Graphics - Circle by Points,Circle by Points Tool,tool
 Astute Graphics - Color Select,AG Color Select Tool,tool
 ```
-
-
-
 ### Custom Pickers
 
 In need of a custom command palette picker for something you do on a regular basis, or want to enhance a script you already use with a the ability to pick from a set of options? Use the `Build Picker...` command to create your very own searchable command palette. These are also great for use in [workflows](#workflows).
@@ -99,7 +96,6 @@ Custom Pickers also allow for multiple selections. When enabled, the selected it
 var colorFormats = eval($.getenv("aic_picker_last"));
 alert("Picked Color Formats\n" + colorFormats.join("\n"));
 ```
-
 ### Scripts
 
 Load any JavaScript files (.js or .jsx) you want quick access to using the `Load Scripts...` command.
@@ -150,6 +146,10 @@ Ai Command Palette has access to most of Illustrator's functionality via the men
 - Reveal Active Document On System
 - Export Active Artboard As PNG
 - Export Document Variables
+
+## Query History
+
+Quickly access your previous query history right from the command palette using the up arrow right.
 
 ## Settings
 
