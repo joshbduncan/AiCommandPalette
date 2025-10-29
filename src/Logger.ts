@@ -56,7 +56,7 @@ class Logger {
     backup(removeOriginal: boolean = false): File {
         const ts = Date.now();
         const backupFile = new File(`${this.file.fsName}.${ts}.bak`);
-        this.file.copy(backupFile);
+        this.file.copy(backupFile.fsName);
         if (removeOriginal) this.file.remove();
         return backupFile;
     }

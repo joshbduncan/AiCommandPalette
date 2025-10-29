@@ -79,7 +79,7 @@ const userPrefs: UserPrefs = {
             alert(localize(strings.pref_file_non_compatible));
             const backupFile = new File(oldFile + ".bak");
             logger.log("backing up old `settings` file to:", backupFile.fsName);
-            oldFile.copy(backupFile);
+            oldFile.copy(backupFile.fsName);
 
             try {
                 updateOldPreferences(oldFile);
