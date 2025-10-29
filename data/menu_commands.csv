@@ -12,7 +12,7 @@ Adobe AI Save Selected Slices,FALSE,menu,TRUE,TRUE,,,File > Save Selected Slices
 revert,FALSE,menu,TRUE,FALSE,,,File > Revert,Datei > Zurück zur letzten Version,Файл > Восстановить,文件>还原…,
 Search Adobe Stock,FALSE,menu,FALSE,FALSE,19,,File > Search Adobe Stock,Datei > Adobe Stock durchsuchen …,Файл > Поиск в Adobe Stock...,文件>搜索Adobe Stock…,
 AI Place,FALSE,menu,TRUE,FALSE,,,File > Place...,Datei > Platzieren …,Файл > Поместить...,文件>放置…,
-Generate Modal File Menu ,FALSE,menu,TRUE,FALSE,28.6,,File > Generate Vectors...,,,文件>生成矢量…,Note that there is a space after 'Menu'
+Generate Modal File Menu ,FALSE,menu,TRUE,FALSE,28.6,29.999,File > Generate Vectors...,,,文件>生成矢量…,Note that there is a space after 'Menu'
 exportForScreens,FALSE,menu,TRUE,FALSE,20,,File > Export > Export For Screens...,Datei > Exportieren > Für Bildschirme exportieren …,Файл > Экспорт для экранов...,文件>导出>屏幕导出…,
 export,FALSE,menu,TRUE,FALSE,,,File > Export > Export As...,Datei > Exportieren …,Файл > Экспортировать как...,文件>导出>导出为…,
 Adobe AI Save For Web,FALSE,menu,TRUE,FALSE,,,File > Export > Save for Web (Legacy)...,Datei > Für Web speichern (Legacy) …,Файл > Сохранить для браузеров...,文件>导出>存储为Web格式(旧版)…,
@@ -106,6 +106,14 @@ AI Object Mosaic Plug-in4,FALSE,menu,TRUE,TRUE,,,Object > Create Object Mosaic..
 TrimMark v25,FALSE,menu,TRUE,TRUE,,,Object > Create Trim Marks...,Objekt > Schnittmarken erstellen,Объект > Создать метки обреза,,
 Flatten Transparency,FALSE,menu,TRUE,TRUE,,,Object > Flatten Transparency...,Objekt > Transparenz reduzieren …,Объект > Обработка прозрачности...,,
 Make Pixel Perfect,FALSE,menu,TRUE,TRUE,,,Object > Make Pixel Perfect,Objekt > Pixelgenaue Darstellung anwenden,Объект > Коррекция на уровне пикселов,,
+GenAIConsolidatedGenerateVectors,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generate Vectors...,,,,,"Moved to Generative submenu in v30.0, Changed from 'Generate Modal File Menu ' at v30.0"
+GenAIConsolidatedShapeFill,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Gen Shape Fill...,,,,,"Moved to Generative submenu in v30.0, Changed from 'Shape Fill Object Menu' at v30.0"
+Gen Expand Object Make,FALSE,menu,TRUE,FALSE,30.0,,Object > Generative > Generative Expand... > Make...,,,,
+Gen Expand Object Combine,FALSE,menu,TRUE,FALSE,30.0,,Object > Generative > Generative Expand... > Combine,,,,
+GenAIConsolidatedBleed,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Print Bleed...,,,,,"Moved to Generative submenu in v30.0, Changed from 'Shape Fill Object Menu' at v30.0"
+GenAIConsolidatedRecolor,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generative Recolor...,,,,,
+GenAIConsolidatedPatterns,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generate Patterns...,,,,,"Moved to Generative submenu in v30.0, Changed from 'Adobe Generative Patterns Panel' at v30.0"
+GenAIConsolidatedVariations,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generation History...,,,,,
 AISlice Make Slice,FALSE,menu,TRUE,TRUE,,,Object > Slice > Make,Objekt > Slice > Erstellen,Объект > Фрагменты > Создать,,
 AISlice Release Slice,FALSE,menu,TRUE,TRUE,,,Object > Slice > Release,Objekt > Slice > Zurückwandeln,Объект > Фрагменты > Расформировать,,
 AISlice Create from Guides,FALSE,menu,TRUE,FALSE,,,Object > Slice > Create from Guides,Objekt > Slice > Aus Hilfslinien erstellen,Объект > Фрагменты > Создать по направляющим,,
@@ -133,10 +141,10 @@ cleanup menu item,FALSE,menu,TRUE,FALSE,,,Object > Path > Clean Up...,Objekt > P
 smooth menu item,FALSE,menu,TRUE,TRUE,28,,Object > Path > Smooth,,,,
 Convert to Shape,FALSE,menu,TRUE,TRUE,18,,Object > Shape > Convert to Shapes,Objekt > Form > In Form umwandeln,Объект > Фигура > Преобразовать в фигуры,,
 Expand Shape,FALSE,menu,TRUE,TRUE,18,,Object > Shape > Expand Shapes,Objekt > Form > Form umwandeln,Объект > Фигура > Разобрать фигуру,,
-Shape Fill Object Menu,FALSE,menu,TRUE,TRUE,28.6,,Object > Gen Shape Fill...,,,,
-Gen Expand Object Make,FALSE,menu,TRUE,TRUE,29.6,,Object > Generative Expand... > Make...,,,,
-Gen Expand Object Combine,FALSE,menu,TRUE,TRUE,29.6,,Object > Generative Expand... > Combine,,,,
-Gen Bleed Object Menu,FALSE,menu,TRUE,TRUE,29.6,,Object > Print Bleed...,,,,
+Shape Fill Object Menu,FALSE,menu,TRUE,TRUE,28.6,29.999,Object > Gen Shape Fill...,,,,
+Gen Expand Object Make,FALSE,menu,TRUE,TRUE,29.6,29.999,Object > Generative Expand... > Make...,,,,
+Gen Expand Object Combine,FALSE,menu,TRUE,TRUE,29.6,29.999,Object > Generative Expand... > Combine,,,,
+Gen Bleed Object Menu,FALSE,menu,TRUE,TRUE,29.6,29.999,Object > Print Bleed...,,,,
 Adobe Make Pattern,FALSE,menu,TRUE,FALSE,,,Object > Pattern > Make,Objekt > Muster > Erstellen,Объект > Узор > Создать,,
 Adobe Edit Pattern,FALSE,menu,TRUE,TRUE,,,Object > Pattern > Edit Pattern,Objekt > Muster > Muster bearbeiten,Объект > Узор > Редактировать узор,,
 Adobe Pattern Tile Color,FALSE,menu,FALSE,FALSE,,,Object > Pattern > Tile Edge Color...,Objekt > Muster > Farbe für Musterelement-Kante,Объект > Узор > Цвет края элемента...,,
@@ -193,6 +201,7 @@ noCompoundPath,FALSE,menu,TRUE,TRUE,,,Object > Compound Path > Release,Objekt > 
 setCropMarks,FALSE,menu,TRUE,TRUE,,,Object > Artboards > Convert to Artboards,Objekt > Zeichenflächen > In Zeichenflächen konvertieren,Объект > Монтажные области > Преобразовать в монтажные области,,
 ReArrange Artboards,FALSE,menu,TRUE,FALSE,,,Object > Artboards > Rearrange All Artboards,Objekt > Zeichenflächen > Alle Zeichenflächen neu anordnen,Объект > Монтажные области > Переупорядочить все монт. обл.,,
 Fit Artboard to artwork bounds,FALSE,menu,TRUE,FALSE,,,Object > Artboards > Fit to Artwork Bounds,Objekt > Zeichenflächen > An Bildmaterialbegrenzungen anpassen,Объект > Монтажные области > Подогнать по границам иллюстрации,,
+Switch Orientation,FALSE,menu,TRUE,FALSE,30.0,,Object > Artboards > Switch Orientation,,,,,
 Fit Artboard to selected Art,FALSE,menu,TRUE,TRUE,,,Object > Artboards > Fit to Selected Art,Objekt > Zeichenflächen > An ausgewählte Grafik anpassen,Объект > Монтажные области > Подогнать по границам выделенной иллюстрации,,
 setGraphStyle,FALSE,menu,TRUE,FALSE,,,Object > Graph > Type...,Objekt > Diagramm > Art …,Объект > Диаграмма > Тип…,,
 editGraphData,FALSE,menu,TRUE,TRUE,,,Object > Graph > Data...,Objekt > Diagramm > Daten …,Объект > Диаграмма > Данные…,,
