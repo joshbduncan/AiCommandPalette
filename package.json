@@ -7,7 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "build-strings": "zsh -c \"python3 scripts/build_strings.py | prettier --parser typescript > src/data/built_strings.ts\"",
         "build-commands": "zsh -c \"python3 scripts/build_commands.py | prettier --parser typescript > src/data/built_commands.ts\"",
-        "copy-to-ai": "zsh -c \"sudo cp AiCommandPalette.jsx /Applications/Adobe\\ Illustrator\\ 2025/Presets.localized/en_US/Scripts\"",
+        "copy-to-ai": "zsh -c \"sudo cp AiCommandPalette.jsx /Applications/Adobe\\ Illustrator\\ 2026/Presets.localized/en_US/Scripts\"",
         "build": "tsc",
         "postbuild": "npm-run-all postbuild:*",
         "postbuild:strip-ts-comments": "zsh -c \"scripts/strip_ts_comments.sh\"",
