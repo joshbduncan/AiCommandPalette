@@ -49,7 +49,7 @@ function addToStepsOnDoubleClick(listbox: ListBox): void {
                 determineCorrectString(command, "name")
             ) as ListItemWithId;
             newItem.subItems[0].text = determineCorrectString(command, "type");
-            newItem.id = command.id;
+            newItem.id = selection.id;
         }
 
         steps.notify("onChange");
