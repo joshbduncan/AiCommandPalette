@@ -6,7 +6,7 @@ Just some notes to help me remember how things work...
 
 Every command is a simple object like below.
 
-```json
+```typescript
 {
   "id": "menu_new",
   "action": "new",
@@ -28,7 +28,7 @@ All commands object have a standard set of properties, but different types of co
 
 ### Action
 
-```json
+```typescript
 {
   "id": "action_sample_action",
   "action": "action",
@@ -43,7 +43,7 @@ All commands object have a standard set of properties, but different types of co
 
 ### Bookmark (File or Folder)
 
-```json
+```typescript
 {
   "id": "bookmark_Awesome_Vectors_ai",
   "action": "bookmark",
@@ -58,7 +58,7 @@ All commands object have a standard set of properties, but different types of co
 
 ### Menu
 
-```json
+```typescript
 {
   "id": "menu_new",
   "action": "new",
@@ -76,7 +76,7 @@ All commands object have a standard set of properties, but different types of co
 
 ### Script
 
-```json
+```typescript
 {
   "id": "script_Automate_Something_jsx",
   "action": "script",
@@ -91,7 +91,7 @@ All commands object have a standard set of properties, but different types of co
 
 ### Tool
 
-```json
+```typescript
 {
   "id": "tool_Adobe_Direct_Select_Tool",
   "action": "Adobe Direct Select Tool",
@@ -110,7 +110,7 @@ All commands object have a standard set of properties, but different types of co
 
 ### Workflow
 
-```json
+```typescript
 {
   "id": "workflow_time_saving_workflow",
   "action": "workflow",
@@ -120,5 +120,47 @@ All commands object have a standard set of properties, but different types of co
   "docRequired": false,
   "selRequired": false,
   "hidden": false,
+}
+```
+
+## Data/Object Models
+
+### recentCommands
+
+```typescript
+const recentCommands = {
+  command: 3 // command: count of times found in history
+}
+```
+
+### recentQueries
+
+```typescript
+const recentQueries = ["query"]
+```
+
+### mostRecentCommands
+
+The 25 most recent commands.
+
+```typescript
+const mostRecentCommands = [command]
+```
+
+### latches
+
+```typescript
+const latches = {
+  "query": command // user query: command
+}
+```
+
+### queryCommandsLUT
+
+```typescript
+const queryCommandsLUT = {
+  "query": { // user query
+    command: 3 // matching command: count of times found in user history
+  }
 }
 ```
