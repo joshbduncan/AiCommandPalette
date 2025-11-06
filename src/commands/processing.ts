@@ -227,6 +227,10 @@ function internalAction(command: CommandEntry): void {
         case "unhideCommand":
             unhideCommand();
             break;
+        case "revealLog":
+            shouldWritePrefs = false;
+            revealLog();
+            break;
         case "revealPrefFile":
             shouldWritePrefs = false;
             revealPrefFile();
