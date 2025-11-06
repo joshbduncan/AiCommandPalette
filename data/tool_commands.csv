@@ -1,94 +1,94 @@
-value,ignore,type,docRequired,selRequired,minVersion,maxVersion,en,de,ru,notes
-Adobe Add Anchor Point Tool,FALSE,tool,TRUE,FALSE,24,,Add Anchor Point Tool,Ankerpunkt-hinzufügen-Werkzeug,Инструмент: Добавить опорную точку,
-Adobe Anchor Point Tool,FALSE,tool,TRUE,FALSE,24,,Anchor Point Tool,Ankerpunkt-Werkzeug,Инструмент: Опорная точка,
-Adobe Arc Tool,FALSE,tool,TRUE,FALSE,24,,Arc Tool,Bogen-Werkzeug,Инструмент: Дуга,
-Adobe Area Graph Tool,FALSE,tool,TRUE,FALSE,24,,Area Graph Tool,Flächendiagramm,Инструмент: Диаграмма с областями,
-Adobe Area Type Tool,FALSE,tool,TRUE,FALSE,24,,Area Type Tool,Flächentext-Werkzeug,Инструмент: Текст в области,
-Adobe Constraints Tool,FALSE,tool,TRUE,FALSE,29,,Objects on Path,,,
-Adobe Crop Tool,FALSE,tool,TRUE,FALSE,24,,Artboard Tool,Zeichenflächen-Werkzeug,Инструмент: Монтажная область,
-Adobe Bar Graph Tool,FALSE,tool,TRUE,FALSE,24,,Bar Graph Tool,Horizontales Balkendiagramm,Инструмент: Диаграмма горизонтальные полосы,
-Adobe Blend Tool,FALSE,tool,TRUE,FALSE,24,,Blend Tool,Angleichen-Werkzeug,Инструмент: Переход,
-Adobe Bloat Tool,FALSE,tool,TRUE,FALSE,24,,Bloat Tool,Aufblasen-Werkzeug,Инструмент: Раздувание,
-Adobe Blob Brush Tool,FALSE,tool,TRUE,FALSE,24,,Blob Brush Tool,Tropfenpinsel-Werkzeug,Инструмент: Кисть-клякса,
-Adobe Column Graph Tool,FALSE,tool,TRUE,FALSE,24,,Column Graph Tool,Vertikales Balkendiagramm,Инструмент: Диаграмма вертикальные полосы,
-Adobe Cyrstallize Tool,FALSE,tool,TRUE,FALSE,24,,Crystallize Tool,Kristallisieren-Werkzeug,Инструмент: Кристаллизация,
-Adobe Curvature Tool,FALSE,tool,TRUE,FALSE,24,,Curvature Tool,Kurvenzeichner,Инструмент: Кривизна,
-Adobe Delete Anchor Point Tool,FALSE,tool,TRUE,FALSE,24,,Delete Anchor Point Tool,Ankerpunkt-löschen-Werkzeug,Инструмент: Удалить опорную точку,
-Adobe Dimension Tool,FALSE,tool,TRUE,FALSE,28.1,,Dimension Tool,,,
-Adobe Direct Select Tool,FALSE,tool,TRUE,FALSE,24,,Direct Selection Tool,Direktauswahl-Werkzeug,Инструмент: Прямое выделение,
-Adobe Ellipse Shape Tool,FALSE,tool,TRUE,FALSE,24,,Ellipse Tool,Ellipse-Werkzeug,Инструмент: Эллипс,
-Adobe Eraser Tool,FALSE,tool,TRUE,FALSE,24,,Eraser Tool,Radiergummi-Werkzeug,Инструмент: Ластик,
-Adobe Eyedropper Tool,FALSE,tool,TRUE,FALSE,24,,Eyedropper Tool,Pipette-Werkzeug,Инструмент: Пипетка,
-Adobe Flare Tool,FALSE,tool,TRUE,FALSE,24,,Flare Tool,Blendenflecke-Werkzeug,Инструмент: Блик,
-Adobe Free Transform Tool,FALSE,tool,TRUE,FALSE,24,,Free Transform Tool,Frei-transformieren-Werkzeug,Инструмент: Свободное трансформирование,
-Adobe Gradient Vector Tool,FALSE,tool,TRUE,FALSE,24,,Gradient Tool,Verlauf-Werkzeug,Инструмент: Градиент,
-Adobe Direct Object Select Tool,FALSE,tool,TRUE,FALSE,24,,Group Selection Tool,Gruppenauswahl-Werkzeug,Инструмент: Групповое выделение,
-Adobe Scroll Tool,FALSE,tool,TRUE,FALSE,24,,Hand Tool,Hand-Werkzeug,Инструмент: Рука,
-Adobe Intertwine Zone Marker Tool,FALSE,tool,TRUE,FALSE,27,,Intertwine Tool,,,
-Adobe Corner Join Tool,FALSE,tool,TRUE,FALSE,24,,Join Tool,Zusammenfügen-Werkzeug,Инструмент: Соединение,
-Adobe Knife Tool,FALSE,tool,TRUE,FALSE,24,,Knife Tool,Messer-Werkzeug,Инструмент: Нож,
-Adobe Direct Lasso Tool,FALSE,tool,TRUE,FALSE,24,,Lasso Tool,Lasso-Werkzeug,Инструмент: Лассо,
-Adobe Line Graph Tool,FALSE,tool,TRUE,FALSE,24,,Line Graph Tool,Liniendiagramm,Инструмент: Линейная диаграмма,
-Adobe Line Tool,FALSE,tool,TRUE,FALSE,24,,Line Segment Tool,Liniensegment-Werkzeug,Инструмент: Отрезок линии,
-Adobe Planar Paintbucket Tool,FALSE,tool,TRUE,FALSE,24,,Live Paint Bucket Tool,Interaktiv-malen-Werkzeug,Инструмент: Быстрая заливка,
-Adobe Planar Face Select Tool,FALSE,tool,TRUE,FALSE,24,,Live Paint Selection Tool,Interaktiv-malen-Auswahlwerkzeug,Инструмент: Выделение быстрых заливок,
-Adobe Magic Wand Tool,FALSE,tool,TRUE,FALSE,24,,Magic Wand Tool,Zauberstab-Werkzeug,Инструмент: Волшебная палочка,
-Adobe Measure Tool,FALSE,tool,TRUE,FALSE,24,,Measure Tool,Mess-Werkzeug,Инструмент: Линейка,
-Adobe Mesh Editing Tool,FALSE,tool,TRUE,FALSE,24,,Mesh Tool,Gitter-Werkzeug,Инструмент: Сетка,
-Adobe Brush Tool,FALSE,tool,TRUE,FALSE,24,,Paintbrush Tool,Pinsel-Werkzeug,Инструмент: Кисть,
-Adobe Freehand Erase Tool,FALSE,tool,TRUE,FALSE,24,,Path Eraser Tool,Löschen-Werkzeug,Инструмент: Стирание контура,
-Adobe Pattern Tile Tool,FALSE,tool,TRUE,FALSE,24,,Pattern Tile Tool,Musterelement-Werkzeug,Инструмент: Элемент узора,
-Adobe Pen Tool,FALSE,tool,TRUE,FALSE,24,,Pen Tool,Zeichenstift-Werkzeug,Инструмент: Перо,
-Adobe Freehand Tool,FALSE,tool,TRUE,FALSE,24,,Pencil Tool,Buntstift-Werkzeug,Инструмент: Карандаш,
-Perspective Grid Tool,FALSE,tool,TRUE,FALSE,24,,Perspective Grid Tool,Perspektivenraster-Werkzeug,Инструмент: Сетка перспективы,
-Perspective Selection Tool,FALSE,tool,TRUE,FALSE,24,,Perspective Selection Tool,Perspektivenauswahl-Werkzeug,Инструмент: Выбор перспективы,
-Adobe Pie Graph Tool,FALSE,tool,TRUE,FALSE,24,,Pie Graph Tool,Kreisdiagramm-Werkzeug,Инструмент: Круговая диаграмма,
-Adobe Place Gun Tool,TRUE,tool,TRUE,FALSE,,,Place Tool,,,
-Adobe Polar Grid Tool,FALSE,tool,TRUE,FALSE,24,,Polar Grid Tool,Radiales-Raster-Werkzeug,Инструмент: Полярная сетка,
-Adobe Shape Construction Regular Polygon Tool,FALSE,tool,TRUE,FALSE,24,,Polygon Tool,Polygon-Werkzeug,Инструмент: Многоугольник,
-Adobe Page Tool,FALSE,tool,TRUE,FALSE,24,,Print Tiling Tool,Druckaufteilungs-Werkzeug,Инструмент: Разбиение для печати,
-Adobe Pucker Tool,FALSE,tool,TRUE,FALSE,24,,Pucker Tool,Zusammenziehen-Werkzeug,Инструмент: Втягивание,
-Adobe Puppet Warp Tool,FALSE,tool,TRUE,FALSE,24,,Puppet Warp Tool,Formgitter-Werkzeug,Инструмент: Марионеточная деформация,
-Adobe Radar Graph Tool,FALSE,tool,TRUE,FALSE,24,,Radar Graph Tool,Netzdiagramm,Инструмент: Диаграмма радар,
-Adobe Rectangle Shape Tool,FALSE,tool,TRUE,FALSE,24,,Rectangle Tool,Rechteck-Werkzeug,Инструмент: Прямоугольник,
-Adobe Rectangular Grid Tool,FALSE,tool,TRUE,FALSE,24,,Rectangular Grid Tool,Rechteckiges-Raster-Werkzeug,Инструмент: Прямоугольная сетка,
-Adobe Reflect Tool,FALSE,tool,TRUE,FALSE,24,,Reflect Tool,Spiegeln-Werkzeug,Инструмент: Зеркальное отражение,
-Adobe Reshape Tool,FALSE,tool,TRUE,FALSE,24,,Reshape Tool,Form-ändern-Werkzeug,Инструмент: Перерисовка,
-Adobe Rotate Tool,FALSE,tool,TRUE,FALSE,24,,Rotate Tool,Drehen-Werkzeug,Инструмент: Поворот,
-Adobe Rotate Canvas Tool,FALSE,tool,TRUE,FALSE,24,,Rotate View Tool,Ansichtdrehung-Werkzeug,Инструмент: Поворот вида,
-Adobe Rounded Rectangle Tool,FALSE,tool,TRUE,FALSE,24,,Rounded Rectangle Tool,Abgerundetes-Rechteck-Werkzeug,Инструмент: Прямоугольник со скругленными углами,
-Adobe Scale Tool,FALSE,tool,TRUE,FALSE,24,,Scale Tool,Skalieren-Werkzeug,Инструмент: Масштаб,
-Adobe Scallop Tool,FALSE,tool,TRUE,FALSE,24,,Scallop Tool,Ausbuchten-Werkzeug,Инструмент: Зубцы,
-Adobe Scatter Graph Tool,FALSE,tool,TRUE,FALSE,24,,Scatter Graph Tool,Streudiagramm,Инструмент: Точечная диаграмма,
-Adobe Scissors Tool,FALSE,tool,TRUE,FALSE,24,,Scissors Tool,Schere-Werkzeug,Инструмент: Ножницы,
-Adobe Select Tool,FALSE,tool,TRUE,FALSE,24,,Selection Tool,Auswahl-Werkzeug,Инструмент: Выделение,
-Adobe Shape Builder Tool,FALSE,tool,TRUE,FALSE,24,,Shape Builder Tool,Formerstellungs-Werkzeug,Инструмент: Создание фигур,
-Adobe Shaper Tool,FALSE,tool,TRUE,FALSE,24,,Shaper Tool,Shaper-Werkzeug,Инструмент: Произвольная кривая,
-Adobe Shear Tool,FALSE,tool,TRUE,FALSE,24,,Shear Tool,Verbiegen-Werkzeug,Инструмент: Наклон,
-Adobe Slice Tool,FALSE,tool,TRUE,FALSE,24,,Slice Tool,Slice-Werkzeug,Инструмент: Фрагменты,
-Adobe Slice Select Tool,FALSE,tool,TRUE,FALSE,24,,Slice Selection Tool,Slice-Auswahl-Werkzeug,Инструмент: Выделение фрагмента,
-Adobe Freehand Smooth Tool,FALSE,tool,TRUE,FALSE,24,,Smooth Tool,Glätten-Werkzeug,Инструмент: Сглаживание,
-Adobe Shape Construction Spiral Tool,FALSE,tool,TRUE,FALSE,24,,Spiral Tool,Spirale-Werkzeug,Инструмент: Спираль,
-Adobe Stacked Bar Graph Tool,FALSE,tool,TRUE,FALSE,24,,Stacked Bar Graph Tool,Gestapeltes horizontales Balkendiagramm,Инструмент: Диаграмма горизонтальный стек,
-Adobe Stacked Column Graph Tool,FALSE,tool,TRUE,FALSE,24,,Stacked Column Graph Tool,Gestapeltes vertikales Balkendiagramm,Инструмент: Диаграмма вертикальный стек,
-Adobe Shape Construction Star Tool,FALSE,tool,TRUE,FALSE,24,,Star Tool,Stern-Werkzeug,Инструмент: Звезда,
-Adobe Stencil Tool,TRUE,tool,TRUE,FALSE,,,Stencil Tool,,,
-Adobe Symbol Screener Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Screener Tool,Symbol-transparent-gestalten-Werkzeug,Инструмент: Прозрачность символов,
-Adobe Symbol Scruncher Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Scruncher Tool,Symbol-stauchen-Werkzeug,Инструмент: Уплотнение символов,
-Adobe Symbol Shifter Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Shifter Tool,Symbol-verschieben-Werkzeug,Инструмент: Смещение символов,
-Adobe Symbol Sizer Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Sizer Tool,Symbol-skalieren-Werkzeug,Инструмент: Размер символов,
-Adobe Symbol Spinner Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Spinner Tool,Symbol-drehen-Werkzeug,Инструмент: Вращение символов,
-Adobe Symbol Sprayer Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Sprayer Tool,Symbol-aufsprühen-Werkzeug,Инструмент: Распыление символов,
-Adobe Symbol Stainer Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Stainer Tool,Symbol-färben-Werkzeug,Инструмент: Обесцвечивание символов,
-Adobe Symbol Styler Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Styler Tool,Symbol-gestalten-Werkzeug,Инструмент: Стили символов,
-Adobe Touch Type Tool,FALSE,tool,TRUE,FALSE,24,,Touch Type Tool,Touch-Type-Textwerkzeug,Инструмент: Изменение текста,
-Adobe New Twirl Tool,FALSE,tool,TRUE,FALSE,24,,Twirl Tool,Strudel-Werkzeug,Инструмент: Воронка,
-Adobe Type Tool,FALSE,tool,TRUE,FALSE,24,,Type Tool,Text-Werkzeug,Инструмент: Текст,
-Adobe Path Type Tool,FALSE,tool,TRUE,FALSE,24,,Type on a Path Tool,Pfadtext-Werkzeug,Инструмент: Текст по контуру,
-Adobe Vertical Area Type Tool,FALSE,tool,TRUE,FALSE,24,,Vertical Area Type Tool,Vertikaler-Flächentext-Werkzeug,Инструмент: Вертикальный текст в области,
-Adobe Vertical Type Tool,FALSE,tool,TRUE,FALSE,24,,Vertical Type Tool,Vertikaler-Text-Werkzeug,Инструмент: Вертикальный текст,
-Adobe Vertical Path Type Tool,FALSE,tool,TRUE,FALSE,24,,Vertical Type on a Path Tool,Vertikaler-Pfadtext-Werkzeug,Инструмент: Вертикальный текст по контуру,
-Adobe Warp Tool,FALSE,tool,TRUE,FALSE,24,,Warp Tool,Verkrümmen-Werkzeug,Инструмент: Деформация,
-Adobe Width Tool,FALSE,tool,TRUE,FALSE,24,,Width Tool,Breiten-Werkzeug,Инструмент: Ширина,
-Adobe Wrinkle Tool,FALSE,tool,TRUE,FALSE,24,,Wrinkle Tool,Zerknittern-Werkzeug,Инструмент: Морщины,
-Adobe Zoom Tool,FALSE,tool,TRUE,FALSE,24,,Zoom Tool,Zoom-Werkzeug,Инструмент: Масштаб,
+id,value,ignore,type,docRequired,selRequired,minVersion,maxVersion,en,de,ru,notes
+tool_1000,Adobe Add Anchor Point Tool,FALSE,tool,TRUE,FALSE,24,,Add Anchor Point Tool,Ankerpunkt-hinzufügen-Werkzeug,Инструмент: Добавить опорную точку
+tool_1001,Adobe Anchor Point Tool,FALSE,tool,TRUE,FALSE,24,,Anchor Point Tool,Ankerpunkt-Werkzeug,Инструмент: Опорная точка
+tool_1002,Adobe Arc Tool,FALSE,tool,TRUE,FALSE,24,,Arc Tool,Bogen-Werkzeug,Инструмент: Дуга
+tool_1003,Adobe Area Graph Tool,FALSE,tool,TRUE,FALSE,24,,Area Graph Tool,Flächendiagramm,Инструмент: Диаграмма с областями
+tool_1004,Adobe Area Type Tool,FALSE,tool,TRUE,FALSE,24,,Area Type Tool,Flächentext-Werkzeug,Инструмент: Текст в области
+tool_1005,Adobe Constraints Tool,FALSE,tool,TRUE,FALSE,29,,Objects on Path
+tool_1006,Adobe Crop Tool,FALSE,tool,TRUE,FALSE,24,,Artboard Tool,Zeichenflächen-Werkzeug,Инструмент: Монтажная область
+tool_1007,Adobe Bar Graph Tool,FALSE,tool,TRUE,FALSE,24,,Bar Graph Tool,Horizontales Balkendiagramm,Инструмент: Диаграмма горизонтальные полосы
+tool_1008,Adobe Blend Tool,FALSE,tool,TRUE,FALSE,24,,Blend Tool,Angleichen-Werkzeug,Инструмент: Переход
+tool_1009,Adobe Bloat Tool,FALSE,tool,TRUE,FALSE,24,,Bloat Tool,Aufblasen-Werkzeug,Инструмент: Раздувание
+tool_1010,Adobe Blob Brush Tool,FALSE,tool,TRUE,FALSE,24,,Blob Brush Tool,Tropfenpinsel-Werkzeug,Инструмент: Кисть-клякса
+tool_1011,Adobe Column Graph Tool,FALSE,tool,TRUE,FALSE,24,,Column Graph Tool,Vertikales Balkendiagramm,Инструмент: Диаграмма вертикальные полосы
+tool_1012,Adobe Cyrstallize Tool,FALSE,tool,TRUE,FALSE,24,,Crystallize Tool,Kristallisieren-Werkzeug,Инструмент: Кристаллизация
+tool_1013,Adobe Curvature Tool,FALSE,tool,TRUE,FALSE,24,,Curvature Tool,Kurvenzeichner,Инструмент: Кривизна
+tool_1014,Adobe Delete Anchor Point Tool,FALSE,tool,TRUE,FALSE,24,,Delete Anchor Point Tool,Ankerpunkt-löschen-Werkzeug,Инструмент: Удалить опорную точку
+tool_1015,Adobe Dimension Tool,FALSE,tool,TRUE,FALSE,28.1,,Dimension Tool
+tool_1016,Adobe Direct Select Tool,FALSE,tool,TRUE,FALSE,24,,Direct Selection Tool,Direktauswahl-Werkzeug,Инструмент: Прямое выделение
+tool_1017,Adobe Ellipse Shape Tool,FALSE,tool,TRUE,FALSE,24,,Ellipse Tool,Ellipse-Werkzeug,Инструмент: Эллипс
+tool_1018,Adobe Eraser Tool,FALSE,tool,TRUE,FALSE,24,,Eraser Tool,Radiergummi-Werkzeug,Инструмент: Ластик
+tool_1019,Adobe Eyedropper Tool,FALSE,tool,TRUE,FALSE,24,,Eyedropper Tool,Pipette-Werkzeug,Инструмент: Пипетка
+tool_1020,Adobe Flare Tool,FALSE,tool,TRUE,FALSE,24,,Flare Tool,Blendenflecke-Werkzeug,Инструмент: Блик
+tool_1021,Adobe Free Transform Tool,FALSE,tool,TRUE,FALSE,24,,Free Transform Tool,Frei-transformieren-Werkzeug,Инструмент: Свободное трансформирование
+tool_1022,Adobe Gradient Vector Tool,FALSE,tool,TRUE,FALSE,24,,Gradient Tool,Verlauf-Werkzeug,Инструмент: Градиент
+tool_1023,Adobe Direct Object Select Tool,FALSE,tool,TRUE,FALSE,24,,Group Selection Tool,Gruppenauswahl-Werkzeug,Инструмент: Групповое выделение
+tool_1024,Adobe Scroll Tool,FALSE,tool,TRUE,FALSE,24,,Hand Tool,Hand-Werkzeug,Инструмент: Рука
+tool_1025,Adobe Intertwine Zone Marker Tool,FALSE,tool,TRUE,FALSE,27,,Intertwine Tool
+tool_1026,Adobe Corner Join Tool,FALSE,tool,TRUE,FALSE,24,,Join Tool,Zusammenfügen-Werkzeug,Инструмент: Соединение
+tool_1027,Adobe Knife Tool,FALSE,tool,TRUE,FALSE,24,,Knife Tool,Messer-Werkzeug,Инструмент: Нож
+tool_1028,Adobe Direct Lasso Tool,FALSE,tool,TRUE,FALSE,24,,Lasso Tool,Lasso-Werkzeug,Инструмент: Лассо
+tool_1029,Adobe Line Graph Tool,FALSE,tool,TRUE,FALSE,24,,Line Graph Tool,Liniendiagramm,Инструмент: Линейная диаграмма
+tool_1030,Adobe Line Tool,FALSE,tool,TRUE,FALSE,24,,Line Segment Tool,Liniensegment-Werkzeug,Инструмент: Отрезок линии
+tool_1031,Adobe Planar Paintbucket Tool,FALSE,tool,TRUE,FALSE,24,,Live Paint Bucket Tool,Interaktiv-malen-Werkzeug,Инструмент: Быстрая заливка
+tool_1032,Adobe Planar Face Select Tool,FALSE,tool,TRUE,FALSE,24,,Live Paint Selection Tool,Interaktiv-malen-Auswahlwerkzeug,Инструмент: Выделение быстрых заливок
+tool_1033,Adobe Magic Wand Tool,FALSE,tool,TRUE,FALSE,24,,Magic Wand Tool,Zauberstab-Werkzeug,Инструмент: Волшебная палочка
+tool_1034,Adobe Measure Tool,FALSE,tool,TRUE,FALSE,24,,Measure Tool,Mess-Werkzeug,Инструмент: Линейка
+tool_1035,Adobe Mesh Editing Tool,FALSE,tool,TRUE,FALSE,24,,Mesh Tool,Gitter-Werkzeug,Инструмент: Сетка
+tool_1036,Adobe Brush Tool,FALSE,tool,TRUE,FALSE,24,,Paintbrush Tool,Pinsel-Werkzeug,Инструмент: Кисть
+tool_1037,Adobe Freehand Erase Tool,FALSE,tool,TRUE,FALSE,24,,Path Eraser Tool,Löschen-Werkzeug,Инструмент: Стирание контура
+tool_1038,Adobe Pattern Tile Tool,FALSE,tool,TRUE,FALSE,24,,Pattern Tile Tool,Musterelement-Werkzeug,Инструмент: Элемент узора
+tool_1039,Adobe Pen Tool,FALSE,tool,TRUE,FALSE,24,,Pen Tool,Zeichenstift-Werkzeug,Инструмент: Перо
+tool_1040,Adobe Freehand Tool,FALSE,tool,TRUE,FALSE,24,,Pencil Tool,Buntstift-Werkzeug,Инструмент: Карандаш
+tool_1041,Perspective Grid Tool,FALSE,tool,TRUE,FALSE,24,,Perspective Grid Tool,Perspektivenraster-Werkzeug,Инструмент: Сетка перспективы
+tool_1042,Perspective Selection Tool,FALSE,tool,TRUE,FALSE,24,,Perspective Selection Tool,Perspektivenauswahl-Werkzeug,Инструмент: Выбор перспективы
+tool_1043,Adobe Pie Graph Tool,FALSE,tool,TRUE,FALSE,24,,Pie Graph Tool,Kreisdiagramm-Werkzeug,Инструмент: Круговая диаграмма
+tool_1044,Adobe Place Gun Tool,TRUE,tool,TRUE,FALSE,,,Place Tool
+tool_1045,Adobe Polar Grid Tool,FALSE,tool,TRUE,FALSE,24,,Polar Grid Tool,Radiales-Raster-Werkzeug,Инструмент: Полярная сетка
+tool_1046,Adobe Shape Construction Regular Polygon Tool,FALSE,tool,TRUE,FALSE,24,,Polygon Tool,Polygon-Werkzeug,Инструмент: Многоугольник
+tool_1047,Adobe Page Tool,FALSE,tool,TRUE,FALSE,24,,Print Tiling Tool,Druckaufteilungs-Werkzeug,Инструмент: Разбиение для печати
+tool_1048,Adobe Pucker Tool,FALSE,tool,TRUE,FALSE,24,,Pucker Tool,Zusammenziehen-Werkzeug,Инструмент: Втягивание
+tool_1049,Adobe Puppet Warp Tool,FALSE,tool,TRUE,FALSE,24,,Puppet Warp Tool,Formgitter-Werkzeug,Инструмент: Марионеточная деформация
+tool_1050,Adobe Radar Graph Tool,FALSE,tool,TRUE,FALSE,24,,Radar Graph Tool,Netzdiagramm,Инструмент: Диаграмма радар
+tool_1051,Adobe Rectangle Shape Tool,FALSE,tool,TRUE,FALSE,24,,Rectangle Tool,Rechteck-Werkzeug,Инструмент: Прямоугольник
+tool_1052,Adobe Rectangular Grid Tool,FALSE,tool,TRUE,FALSE,24,,Rectangular Grid Tool,Rechteckiges-Raster-Werkzeug,Инструмент: Прямоугольная сетка
+tool_1053,Adobe Reflect Tool,FALSE,tool,TRUE,FALSE,24,,Reflect Tool,Spiegeln-Werkzeug,Инструмент: Зеркальное отражение
+tool_1054,Adobe Reshape Tool,FALSE,tool,TRUE,FALSE,24,,Reshape Tool,Form-ändern-Werkzeug,Инструмент: Перерисовка
+tool_1055,Adobe Rotate Tool,FALSE,tool,TRUE,FALSE,24,,Rotate Tool,Drehen-Werkzeug,Инструмент: Поворот
+tool_1056,Adobe Rotate Canvas Tool,FALSE,tool,TRUE,FALSE,24,,Rotate View Tool,Ansichtdrehung-Werkzeug,Инструмент: Поворот вида
+tool_1057,Adobe Rounded Rectangle Tool,FALSE,tool,TRUE,FALSE,24,,Rounded Rectangle Tool,Abgerundetes-Rechteck-Werkzeug,Инструмент: Прямоугольник со скругленными углами
+tool_1058,Adobe Scale Tool,FALSE,tool,TRUE,FALSE,24,,Scale Tool,Skalieren-Werkzeug,Инструмент: Масштаб
+tool_1059,Adobe Scallop Tool,FALSE,tool,TRUE,FALSE,24,,Scallop Tool,Ausbuchten-Werkzeug,Инструмент: Зубцы
+tool_1060,Adobe Scatter Graph Tool,FALSE,tool,TRUE,FALSE,24,,Scatter Graph Tool,Streudiagramm,Инструмент: Точечная диаграмма
+tool_1061,Adobe Scissors Tool,FALSE,tool,TRUE,FALSE,24,,Scissors Tool,Schere-Werkzeug,Инструмент: Ножницы
+tool_1062,Adobe Select Tool,FALSE,tool,TRUE,FALSE,24,,Selection Tool,Auswahl-Werkzeug,Инструмент: Выделение
+tool_1063,Adobe Shape Builder Tool,FALSE,tool,TRUE,FALSE,24,,Shape Builder Tool,Formerstellungs-Werkzeug,Инструмент: Создание фигур
+tool_1064,Adobe Shaper Tool,FALSE,tool,TRUE,FALSE,24,,Shaper Tool,Shaper-Werkzeug,Инструмент: Произвольная кривая
+tool_1065,Adobe Shear Tool,FALSE,tool,TRUE,FALSE,24,,Shear Tool,Verbiegen-Werkzeug,Инструмент: Наклон
+tool_1066,Adobe Slice Tool,FALSE,tool,TRUE,FALSE,24,,Slice Tool,Slice-Werkzeug,Инструмент: Фрагменты
+tool_1067,Adobe Slice Select Tool,FALSE,tool,TRUE,FALSE,24,,Slice Selection Tool,Slice-Auswahl-Werkzeug,Инструмент: Выделение фрагмента
+tool_1068,Adobe Freehand Smooth Tool,FALSE,tool,TRUE,FALSE,24,,Smooth Tool,Glätten-Werkzeug,Инструмент: Сглаживание
+tool_1069,Adobe Shape Construction Spiral Tool,FALSE,tool,TRUE,FALSE,24,,Spiral Tool,Spirale-Werkzeug,Инструмент: Спираль
+tool_1070,Adobe Stacked Bar Graph Tool,FALSE,tool,TRUE,FALSE,24,,Stacked Bar Graph Tool,Gestapeltes horizontales Balkendiagramm,Инструмент: Диаграмма горизонтальный стек
+tool_1071,Adobe Stacked Column Graph Tool,FALSE,tool,TRUE,FALSE,24,,Stacked Column Graph Tool,Gestapeltes vertikales Balkendiagramm,Инструмент: Диаграмма вертикальный стек
+tool_1072,Adobe Shape Construction Star Tool,FALSE,tool,TRUE,FALSE,24,,Star Tool,Stern-Werkzeug,Инструмент: Звезда
+tool_1073,Adobe Stencil Tool,TRUE,tool,TRUE,FALSE,,,Stencil Tool
+tool_1074,Adobe Symbol Screener Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Screener Tool,Symbol-transparent-gestalten-Werkzeug,Инструмент: Прозрачность символов
+tool_1075,Adobe Symbol Scruncher Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Scruncher Tool,Symbol-stauchen-Werkzeug,Инструмент: Уплотнение символов
+tool_1076,Adobe Symbol Shifter Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Shifter Tool,Symbol-verschieben-Werkzeug,Инструмент: Смещение символов
+tool_1077,Adobe Symbol Sizer Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Sizer Tool,Symbol-skalieren-Werkzeug,Инструмент: Размер символов
+tool_1078,Adobe Symbol Spinner Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Spinner Tool,Symbol-drehen-Werkzeug,Инструмент: Вращение символов
+tool_1079,Adobe Symbol Sprayer Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Sprayer Tool,Symbol-aufsprühen-Werkzeug,Инструмент: Распыление символов
+tool_1080,Adobe Symbol Stainer Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Stainer Tool,Symbol-färben-Werkzeug,Инструмент: Обесцвечивание символов
+tool_1081,Adobe Symbol Styler Tool,FALSE,tool,TRUE,FALSE,24,,Symbol Styler Tool,Symbol-gestalten-Werkzeug,Инструмент: Стили символов
+tool_1082,Adobe Touch Type Tool,FALSE,tool,TRUE,FALSE,24,,Touch Type Tool,Touch-Type-Textwerkzeug,Инструмент: Изменение текста
+tool_1083,Adobe New Twirl Tool,FALSE,tool,TRUE,FALSE,24,,Twirl Tool,Strudel-Werkzeug,Инструмент: Воронка
+tool_1084,Adobe Type Tool,FALSE,tool,TRUE,FALSE,24,,Type Tool,Text-Werkzeug,Инструмент: Текст
+tool_1085,Adobe Path Type Tool,FALSE,tool,TRUE,FALSE,24,,Type on a Path Tool,Pfadtext-Werkzeug,Инструмент: Текст по контуру
+tool_1086,Adobe Vertical Area Type Tool,FALSE,tool,TRUE,FALSE,24,,Vertical Area Type Tool,Vertikaler-Flächentext-Werkzeug,Инструмент: Вертикальный текст в области
+tool_1087,Adobe Vertical Type Tool,FALSE,tool,TRUE,FALSE,24,,Vertical Type Tool,Vertikaler-Text-Werkzeug,Инструмент: Вертикальный текст
+tool_1088,Adobe Vertical Path Type Tool,FALSE,tool,TRUE,FALSE,24,,Vertical Type on a Path Tool,Vertikaler-Pfadtext-Werkzeug,Инструмент: Вертикальный текст по контуру
+tool_1089,Adobe Warp Tool,FALSE,tool,TRUE,FALSE,24,,Warp Tool,Verkrümmen-Werkzeug,Инструмент: Деформация
+tool_1090,Adobe Width Tool,FALSE,tool,TRUE,FALSE,24,,Width Tool,Breiten-Werkzeug,Инструмент: Ширина
+tool_1091,Adobe Wrinkle Tool,FALSE,tool,TRUE,FALSE,24,,Wrinkle Tool,Zerknittern-Werkzeug,Инструмент: Морщины
+tool_1092,Adobe Zoom Tool,FALSE,tool,TRUE,FALSE,24,,Zoom Tool,Zoom-Werkzeug,Инструмент: Масштаб
