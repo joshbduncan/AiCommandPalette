@@ -1,6 +1,5 @@
 import csv
 import json
-import re
 import sys
 from pathlib import Path
 
@@ -27,11 +26,11 @@ def read_csv_data(fp: Path) -> list[dict]:
         return list(csv.DictReader(f))
 
 
-def build_commands(rows: list[dict]) -> dict[dict[str, str]]:
+def build_commands(rows: list[dict]) -> dict:
     """Build a dictionary of command objects from CSV data in the following format.
 
         ```
-        menu_new: {
+        menu_1000: {
             id: "menu_new",
             action: "new",
             type: "menu",
@@ -56,10 +55,9 @@ def build_commands(rows: list[dict]) -> dict[dict[str, str]]:
 
     commands = {}
 
-    # regex for cleaning up command ids
-    regex = re.compile(r"\s|\.")
-
     for row in rows:
+        command_id = row.pop("id", None)
+
         value = row.pop("value", None)
         if value is None:
             continue
@@ -68,32 +66,33 @@ def build_commands(rows: list[dict]) -> dict[dict[str, str]]:
         if ignore:
             continue
 
-        command_type = row.pop("type", None)
+        command_type = row.pop("type", None).lower()
         if command_type is None:
             continue
 
         # extract all other non localization values
         doc_required = row.pop("docRequired", "False").lower() == "true"
         sel_required = row.pop("selRequired", "False").lower() == "true"
+
         min_version = row.pop("minVersion", None)
         max_version = row.pop("maxVersion", None)
-        notes = row.pop("notes", None)
+        _ = row.pop("notes", None)
 
         # get default english string for incomplete localization
         default_value = row.get("en", None)
         if default_value is None:
             continue
 
-        # cleanup and build final command id
-        stripped_value = value.replace(".", "", -1)
-        id = regex.sub("_", f"{command_type}_{stripped_value}")
-
         # set localized values
         localized_strings = {k: v or default_value for k, v in row.items()}
 
+        # cleanup command id
+        stripped_value = value.replace(".", "").replace(" ", "_")
+        old_command_id = f"{command_type}_{stripped_value}"
+
         # build final command object
         command = {
-            "id": id,
+            "id": old_command_id,
             "action": value,
             "type": command_type,
             "docRequired": doc_required,
@@ -108,7 +107,7 @@ def build_commands(rows: list[dict]) -> dict[dict[str, str]]:
         if max_version:
             command["maxVersion"] = convert_to_num(max_version)
 
-        commands[id] = command
+        commands[command_id or old_command_id] = command
 
     return commands
 

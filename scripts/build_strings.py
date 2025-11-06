@@ -19,7 +19,7 @@ def read_csv_data(fp: Path) -> list[dict]:
         return list(csv.DictReader(f))
 
 
-def build_strings(rows: list[dict]) -> dict[dict[str, str]]:
+def build_strings(rows: list[dict]) -> dict:
     """Build a dictionary of string objects from CSV data in the following format.
 
         ```
@@ -45,7 +45,7 @@ def build_strings(rows: list[dict]) -> dict[dict[str, str]]:
         if id is None:
             continue
 
-        notes = row.pop("notes", None)
+        _ = row.pop("notes", None)
 
         # get default english string for incomplete localization
         default_value = row.get("en", None)
