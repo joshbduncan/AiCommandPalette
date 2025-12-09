@@ -124,7 +124,7 @@ menu_1121,AISlice Divide,FALSE,menu,TRUE,TRUE,,,Object > Slice > Divide Slices..
 menu_1122,AISlice Delete All Slices,FALSE,menu,TRUE,TRUE,,,Object > Slice > Delete All,Objekt > Slice > Alle löschen,Объект > Фрагменты > Удалить все
 menu_1123,AISlice Slice Options,FALSE,menu,TRUE,TRUE,,,Object > Slice > Slice Options...,Objekt > Slice > Slice-Optionen …,Объект > Фрагменты > Параметры фрагмента...
 menu_1124,AISlice Clip to Artboard,FALSE,menu,TRUE,TRUE,,,Object > Slice > Clip to Artboard,Objekt > Slice > Ganze Zeichenfläche exportieren,Объект > Фрагменты > Обрезать по монтажной области
-menu_1125,Generate Modal File Menu ,FALSE,menu,TRUE,FALSE,28.6,,Object > Generate Vectors...,,,,Note that there is a space after 'Menu'
+menu_1125,Generate Modal File Menu ,FALSE,menu,TRUE,FALSE,28.6,29.999,Object > Generate Vectors...,,,,Note that there is a space after 'Menu'
 menu_1126,Expand3,FALSE,menu,TRUE,TRUE,,,Object > Expand...,Objekt > Umwandeln …,Объект > Разобрать…
 menu_1127,expandStyle,FALSE,menu,TRUE,TRUE,,,Object > Expand Appearance,Objekt > Aussehen umwandeln,Объект > Разобрать оформление
 menu_1128,join,FALSE,menu,TRUE,TRUE,,,Object > Path > Join,Objekt > Pfad > Zusammenfügen,Объект > Контур > Соединить
