@@ -446,6 +446,13 @@ function hideCommand(): void {
 }
 
 /**
+ * Reveal the plugin log file in the file system.
+ */
+function revealLog(): void {
+    logger.reveal();
+}
+
+/**
  * Reveal the user preference file in the file system.
  */
 function revealPrefFile(): void {
@@ -484,11 +491,17 @@ function unhideCommand(): void {
 
     if (!result) return;
 
-    for (const id of result) {
+    let ids: CommandId[];
+    if (typeof result === "string") {
+        ids = [result];
+    } else {
+        ids = result; // CommandId[]
+    }
+
+    for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
         const index = prefs.hiddenCommands.indexOf(id);
-        if (index !== -1) {
-            prefs.hiddenCommands.splice(index, 1);
-        }
+        if (index !== -1) prefs.hiddenCommands.splice(index, 1);
     }
 }
 

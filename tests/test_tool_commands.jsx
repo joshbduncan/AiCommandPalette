@@ -79,6 +79,6 @@
     s += results + "\n\n";
     s += "File Created: " + new Date();
 
-    writeData(s, f);
+    writeTextFile(s, f);
     f.execute();
 })();

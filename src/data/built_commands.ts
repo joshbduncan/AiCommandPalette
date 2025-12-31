@@ -28,7 +28,7 @@ interface CommandsData {
 
 // GENERATED FROM CSV DATA FILES
 const commandsData = {
-    menu_new: {
+    menu_1000: {
         id: "menu_new",
         action: "new",
         type: "menu",
@@ -42,7 +42,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_newFromTemplate: {
+    menu_1001: {
         id: "menu_newFromTemplate",
         action: "newFromTemplate",
         type: "menu",
@@ -56,7 +56,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_open: {
+    menu_1002: {
         id: "menu_open",
         action: "open",
         type: "menu",
@@ -70,7 +70,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Bridge_Browse: {
+    menu_1003: {
         id: "menu_Adobe_Bridge_Browse",
         action: "Adobe Bridge Browse",
         type: "menu",
@@ -84,7 +84,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_close: {
+    menu_1004: {
         id: "menu_close",
         action: "close",
         type: "menu",
@@ -98,7 +98,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_save: {
+    menu_1005: {
         id: "menu_save",
         action: "save",
         type: "menu",
@@ -112,7 +112,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_saveas: {
+    menu_1006: {
         id: "menu_saveas",
         action: "saveas",
         type: "menu",
@@ -126,7 +126,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_saveacopy: {
+    menu_1007: {
         id: "menu_saveacopy",
         action: "saveacopy",
         type: "menu",
@@ -140,7 +140,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_saveastemplate: {
+    menu_1008: {
         id: "menu_saveastemplate",
         action: "saveastemplate",
         type: "menu",
@@ -154,7 +154,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_AI_Save_Selected_Slices: {
+    menu_1009: {
         id: "menu_Adobe_AI_Save_Selected_Slices",
         action: "Adobe AI Save Selected Slices",
         type: "menu",
@@ -168,7 +168,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_revert: {
+    menu_1010: {
         id: "menu_revert",
         action: "revert",
         type: "menu",
@@ -182,7 +182,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Search_Adobe_Stock: {
+    menu_1011: {
         id: "menu_Search_Adobe_Stock",
         action: "Search Adobe Stock",
         type: "menu",
@@ -197,7 +197,7 @@ const commandsData = {
         hidden: false,
         minVersion: 19,
     },
-    menu_AI_Place: {
+    menu_1012: {
         id: "menu_AI_Place",
         action: "AI Place",
         type: "menu",
@@ -211,22 +211,23 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Generate_Modal_File_Menu_: {
+    menu_1013: {
         id: "menu_Generate_Modal_File_Menu_",
         action: "Generate Modal File Menu ",
         type: "menu",
         docRequired: true,
         selRequired: false,
         name: {
-            en: "Object > Generate Vectors...",
-            de: "Object > Generate Vectors...",
-            ru: "Object > Generate Vectors...",
-            "zh-cn": "Object > Generate Vectors...",
+            en: "File > Generate Vectors...",
+            de: "File > Generate Vectors...",
+            ru: "File > Generate Vectors...",
+            "zh-cn": "\u6587\u4ef6>\u751f\u6210\u77e2\u91cf\u2026",
         },
         hidden: false,
         minVersion: 28.6,
+        maxVersion: 29.999,
     },
-    menu_exportForScreens: {
+    menu_1014: {
         id: "menu_exportForScreens",
         action: "exportForScreens",
         type: "menu",
@@ -241,7 +242,7 @@ const commandsData = {
         hidden: false,
         minVersion: 20,
     },
-    menu_export: {
+    menu_1015: {
         id: "menu_export",
         action: "export",
         type: "menu",
@@ -255,7 +256,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_AI_Save_For_Web: {
+    menu_1016: {
         id: "menu_Adobe_AI_Save_For_Web",
         action: "Adobe AI Save For Web",
         type: "menu",
@@ -270,7 +271,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_exportSelection: {
+    menu_1017: {
         id: "menu_exportSelection",
         action: "exportSelection",
         type: "menu",
@@ -285,7 +286,7 @@ const commandsData = {
         hidden: false,
         minVersion: 20,
     },
-    menu_Package_Menu_Item: {
+    menu_1018: {
         id: "menu_Package_Menu_Item",
         action: "Package Menu Item",
         type: "menu",
@@ -299,7 +300,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ai_browse_for_script: {
+    menu_1019: {
         id: "menu_ai_browse_for_script",
         action: "ai_browse_for_script",
         type: "menu",
@@ -313,7 +314,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_doc-color-cmyk": {
+    menu_1021: {
         id: "menu_doc-color-cmyk",
         action: "doc-color-cmyk",
         type: "menu",
@@ -328,7 +329,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_doc-color-rgb": {
+    menu_1022: {
         id: "menu_doc-color-rgb",
         action: "doc-color-rgb",
         type: "menu",
@@ -343,7 +344,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_File_Info: {
+    menu_1023: {
         id: "menu_File_Info",
         action: "File Info",
         type: "menu",
@@ -357,7 +358,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Print: {
+    menu_1024: {
         id: "menu_Print",
         action: "Print",
         type: "menu",
@@ -371,7 +372,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_quit: {
+    menu_1025: {
         id: "menu_quit",
         action: "quit",
         type: "menu",
@@ -385,7 +386,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_undo: {
+    menu_1026: {
         id: "menu_undo",
         action: "undo",
         type: "menu",
@@ -399,7 +400,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_redo: {
+    menu_1027: {
         id: "menu_redo",
         action: "redo",
         type: "menu",
@@ -413,7 +414,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_cut: {
+    menu_1028: {
         id: "menu_cut",
         action: "cut",
         type: "menu",
@@ -427,7 +428,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_copy: {
+    menu_1029: {
         id: "menu_copy",
         action: "copy",
         type: "menu",
@@ -441,7 +442,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_paste: {
+    menu_1030: {
         id: "menu_paste",
         action: "paste",
         type: "menu",
@@ -455,7 +456,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_pasteFront: {
+    menu_1031: {
         id: "menu_pasteFront",
         action: "pasteFront",
         type: "menu",
@@ -469,7 +470,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_pasteBack: {
+    menu_1032: {
         id: "menu_pasteBack",
         action: "pasteBack",
         type: "menu",
@@ -483,7 +484,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_pasteInPlace: {
+    menu_1033: {
         id: "menu_pasteInPlace",
         action: "pasteInPlace",
         type: "menu",
@@ -497,7 +498,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_pasteInAllArtboard: {
+    menu_1034: {
         id: "menu_pasteInAllArtboard",
         action: "pasteInAllArtboard",
         type: "menu",
@@ -511,7 +512,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_pasteWithoutFormatting: {
+    menu_1035: {
         id: "menu_pasteWithoutFormatting",
         action: "pasteWithoutFormatting",
         type: "menu",
@@ -526,7 +527,7 @@ const commandsData = {
         hidden: false,
         minVersion: 25.3,
     },
-    menu_clear: {
+    menu_1036: {
         id: "menu_clear",
         action: "clear",
         type: "menu",
@@ -540,7 +541,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_and_Replace: {
+    menu_1037: {
         id: "menu_Find_and_Replace",
         action: "Find and Replace",
         type: "menu",
@@ -554,7 +555,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Next: {
+    menu_1038: {
         id: "menu_Find_Next",
         action: "Find Next",
         type: "menu",
@@ -568,7 +569,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Auto_Spell_Check: {
+    menu_1039: {
         id: "menu_Auto_Spell_Check",
         action: "Auto Spell Check",
         type: "menu",
@@ -583,7 +584,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Check_Spelling: {
+    menu_1040: {
         id: "menu_Check_Spelling",
         action: "Check Spelling",
         type: "menu",
@@ -598,7 +599,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Edit_Custom_Dictionary: {
+    menu_1041: {
         id: "menu_Edit_Custom_Dictionary",
         action: "Edit Custom Dictionary...",
         type: "menu",
@@ -612,7 +613,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Recolor_Art_Dialog: {
+    menu_1042: {
         id: "menu_Recolor_Art_Dialog",
         action: "Recolor Art Dialog",
         type: "menu",
@@ -626,7 +627,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adjust3: {
+    menu_1043: {
         id: "menu_Adjust3",
         action: "Adjust3",
         type: "menu",
@@ -640,7 +641,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Colors3: {
+    menu_1044: {
         id: "menu_Colors3",
         action: "Colors3",
         type: "menu",
@@ -654,7 +655,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Colors4: {
+    menu_1045: {
         id: "menu_Colors4",
         action: "Colors4",
         type: "menu",
@@ -668,7 +669,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Colors5: {
+    menu_1046: {
         id: "menu_Colors5",
         action: "Colors5",
         type: "menu",
@@ -682,7 +683,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Colors8: {
+    menu_1047: {
         id: "menu_Colors8",
         action: "Colors8",
         type: "menu",
@@ -696,7 +697,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Colors7: {
+    menu_1048: {
         id: "menu_Colors7",
         action: "Colors7",
         type: "menu",
@@ -710,7 +711,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Colors9: {
+    menu_1049: {
         id: "menu_Colors9",
         action: "Colors9",
         type: "menu",
@@ -724,7 +725,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Generative_Recolor_Art_Dialog: {
+    menu_1050: {
         id: "menu_Generative_Recolor_Art_Dialog",
         action: "Generative Recolor Art Dialog",
         type: "menu",
@@ -739,7 +740,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27.6,
     },
-    menu_Colors6: {
+    menu_1051: {
         id: "menu_Colors6",
         action: "Colors6",
         type: "menu",
@@ -753,7 +754,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Overprint2: {
+    menu_1052: {
         id: "menu_Overprint2",
         action: "Overprint2",
         type: "menu",
@@ -767,7 +768,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Saturate3: {
+    menu_1053: {
         id: "menu_Saturate3",
         action: "Saturate3",
         type: "menu",
@@ -781,7 +782,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_EditOriginal_Menu_Item: {
+    menu_1054: {
         id: "menu_EditOriginal_Menu_Item",
         action: "EditOriginal Menu Item",
         type: "menu",
@@ -795,7 +796,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Transparency_Presets: {
+    menu_1055: {
         id: "menu_Transparency_Presets",
         action: "Transparency Presets",
         type: "menu",
@@ -809,7 +810,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Print_Presets: {
+    menu_1056: {
         id: "menu_Print_Presets",
         action: "Print Presets",
         type: "menu",
@@ -823,7 +824,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_PDF_Presets: {
+    menu_1057: {
         id: "menu_PDF_Presets",
         action: "PDF Presets",
         type: "menu",
@@ -837,7 +838,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_PerspectiveGridPresets: {
+    menu_1058: {
         id: "menu_PerspectiveGridPresets",
         action: "PerspectiveGridPresets",
         type: "menu",
@@ -851,7 +852,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_color: {
+    menu_1059: {
         id: "menu_color",
         action: "color",
         type: "menu",
@@ -865,7 +866,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_assignprofile: {
+    menu_1060: {
         id: "menu_assignprofile",
         action: "assignprofile",
         type: "menu",
@@ -879,7 +880,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_KBSC_Menu_Item: {
+    menu_1061: {
         id: "menu_KBSC_Menu_Item",
         action: "KBSC Menu Item",
         type: "menu",
@@ -893,7 +894,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_SWFPresets: {
+    menu_1062: {
         id: "menu_SWFPresets",
         action: "SWFPresets",
         type: "menu",
@@ -909,7 +910,7 @@ const commandsData = {
         minVersion: 22,
         maxVersion: 25.9,
     },
-    menu_transformagain: {
+    menu_1064: {
         id: "menu_transformagain",
         action: "transformagain",
         type: "menu",
@@ -923,7 +924,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_transformmove: {
+    menu_1065: {
         id: "menu_transformmove",
         action: "transformmove",
         type: "menu",
@@ -937,7 +938,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_transformrotate: {
+    menu_1066: {
         id: "menu_transformrotate",
         action: "transformrotate",
         type: "menu",
@@ -951,7 +952,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_transformreflect: {
+    menu_1067: {
         id: "menu_transformreflect",
         action: "transformreflect",
         type: "menu",
@@ -965,7 +966,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_transformscale: {
+    menu_1068: {
         id: "menu_transformscale",
         action: "transformscale",
         type: "menu",
@@ -979,7 +980,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_transformshear: {
+    menu_1069: {
         id: "menu_transformshear",
         action: "transformshear",
         type: "menu",
@@ -993,7 +994,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Transform_v23: {
+    menu_1070: {
         id: "menu_Transform_v23",
         action: "Transform v23",
         type: "menu",
@@ -1007,7 +1008,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AI_Reset_Bounding_Box: {
+    menu_1071: {
         id: "menu_AI_Reset_Bounding_Box",
         action: "AI Reset Bounding Box",
         type: "menu",
@@ -1021,7 +1022,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_sendToFront: {
+    menu_1072: {
         id: "menu_sendToFront",
         action: "sendToFront",
         type: "menu",
@@ -1035,7 +1036,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_sendForward: {
+    menu_1073: {
         id: "menu_sendForward",
         action: "sendForward",
         type: "menu",
@@ -1049,7 +1050,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_sendBackward: {
+    menu_1074: {
         id: "menu_sendBackward",
         action: "sendBackward",
         type: "menu",
@@ -1063,7 +1064,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_sendToBack: {
+    menu_1075: {
         id: "menu_sendToBack",
         action: "sendToBack",
         type: "menu",
@@ -1077,7 +1078,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_2: {
+    menu_1076: {
         id: "menu_Selection_Hat_2",
         action: "Selection Hat 2",
         type: "menu",
@@ -1091,7 +1092,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Horizontal_Align_Left: {
+    menu_1077: {
         id: "menu_Horizontal_Align_Left",
         action: "Horizontal Align Left",
         type: "menu",
@@ -1106,7 +1107,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Horizontal_Align_Center: {
+    menu_1078: {
         id: "menu_Horizontal_Align_Center",
         action: "Horizontal Align Center",
         type: "menu",
@@ -1121,7 +1122,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Horizontal_Align_Right: {
+    menu_1079: {
         id: "menu_Horizontal_Align_Right",
         action: "Horizontal Align Right",
         type: "menu",
@@ -1136,7 +1137,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Vertical_Align_Top: {
+    menu_1080: {
         id: "menu_Vertical_Align_Top",
         action: "Vertical Align Top",
         type: "menu",
@@ -1151,7 +1152,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Vertical_Align_Center: {
+    menu_1081: {
         id: "menu_Vertical_Align_Center",
         action: "Vertical Align Center",
         type: "menu",
@@ -1166,7 +1167,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Vertical_Align_Bottom: {
+    menu_1082: {
         id: "menu_Vertical_Align_Bottom",
         action: "Vertical Align Bottom",
         type: "menu",
@@ -1181,7 +1182,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Vertical_Distribute_Top: {
+    menu_1083: {
         id: "menu_Vertical_Distribute_Top",
         action: "Vertical Distribute Top",
         type: "menu",
@@ -1196,7 +1197,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Vertical_Distribute_Center: {
+    menu_1084: {
         id: "menu_Vertical_Distribute_Center",
         action: "Vertical Distribute Center",
         type: "menu",
@@ -1211,7 +1212,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Vertical_Distribute_Bottom: {
+    menu_1085: {
         id: "menu_Vertical_Distribute_Bottom",
         action: "Vertical Distribute Bottom",
         type: "menu",
@@ -1226,7 +1227,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Horizontal_Distribute_Left: {
+    menu_1086: {
         id: "menu_Horizontal_Distribute_Left",
         action: "Horizontal Distribute Left",
         type: "menu",
@@ -1241,7 +1242,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Horizontal_Distribute_Center: {
+    menu_1087: {
         id: "menu_Horizontal_Distribute_Center",
         action: "Horizontal Distribute Center",
         type: "menu",
@@ -1256,7 +1257,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Horizontal_Distribute_Right: {
+    menu_1088: {
         id: "menu_Horizontal_Distribute_Right",
         action: "Horizontal Distribute Right",
         type: "menu",
@@ -1271,7 +1272,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_group: {
+    menu_1089: {
         id: "menu_group",
         action: "group",
         type: "menu",
@@ -1285,7 +1286,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ungroup: {
+    menu_1090: {
         id: "menu_ungroup",
         action: "ungroup",
         type: "menu",
@@ -1299,7 +1300,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ungroup_all: {
+    menu_1091: {
         id: "menu_ungroup_all",
         action: "ungroup all",
         type: "menu",
@@ -1314,7 +1315,7 @@ const commandsData = {
         hidden: false,
         minVersion: 29.3,
     },
-    menu_lock: {
+    menu_1092: {
         id: "menu_lock",
         action: "lock",
         type: "menu",
@@ -1328,7 +1329,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_5: {
+    menu_1093: {
         id: "menu_Selection_Hat_5",
         action: "Selection Hat 5",
         type: "menu",
@@ -1342,7 +1343,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_7: {
+    menu_1094: {
         id: "menu_Selection_Hat_7",
         action: "Selection Hat 7",
         type: "menu",
@@ -1356,7 +1357,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_unlockAll: {
+    menu_1095: {
         id: "menu_unlockAll",
         action: "unlockAll",
         type: "menu",
@@ -1370,7 +1371,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_hide: {
+    menu_1096: {
         id: "menu_hide",
         action: "hide",
         type: "menu",
@@ -1384,7 +1385,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_4: {
+    menu_1097: {
         id: "menu_Selection_Hat_4",
         action: "Selection Hat 4",
         type: "menu",
@@ -1398,7 +1399,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_6: {
+    menu_1098: {
         id: "menu_Selection_Hat_6",
         action: "Selection Hat 6",
         type: "menu",
@@ -1412,7 +1413,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_showAll: {
+    menu_1099: {
         id: "menu_showAll",
         action: "showAll",
         type: "menu",
@@ -1426,7 +1427,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Crop_Image: {
+    menu_1100: {
         id: "menu_Crop_Image",
         action: "Crop Image",
         type: "menu",
@@ -1441,7 +1442,7 @@ const commandsData = {
         hidden: false,
         minVersion: 23,
     },
-    menu_Rasterize_8_menu_item: {
+    menu_1101: {
         id: "menu_Rasterize_8_menu_item",
         action: "Rasterize 8 menu item",
         type: "menu",
@@ -1455,7 +1456,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_make_mesh: {
+    menu_1102: {
         id: "menu_make_mesh",
         action: "make mesh",
         type: "menu",
@@ -1469,7 +1470,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_AI_Object_Mosaic_Plug-in4": {
+    menu_1103: {
         id: "menu_AI_Object_Mosaic_Plug-in4",
         action: "AI Object Mosaic Plug-in4",
         type: "menu",
@@ -1483,7 +1484,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_TrimMark_v25: {
+    menu_1104: {
         id: "menu_TrimMark_v25",
         action: "TrimMark v25",
         type: "menu",
@@ -1497,7 +1498,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Flatten_Transparency: {
+    menu_1105: {
         id: "menu_Flatten_Transparency",
         action: "Flatten Transparency",
         type: "menu",
@@ -1511,7 +1512,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Make_Pixel_Perfect: {
+    menu_1106: {
         id: "menu_Make_Pixel_Perfect",
         action: "Make Pixel Perfect",
         type: "menu",
@@ -1525,7 +1526,127 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Make_Slice: {
+    menu_1107: {
+        id: "menu_GenAIConsolidatedGenerateVectors",
+        action: "GenAIConsolidatedGenerateVectors",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        name: {
+            en: "Object > Generative > Generate Vectors...",
+            de: "Object > Generative > Generate Vectors...",
+            ru: "Object > Generative > Generate Vectors...",
+            "zh-cn": "Object > Generative > Generate Vectors...",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1108: {
+        id: "menu_GenAIConsolidatedShapeFill",
+        action: "GenAIConsolidatedShapeFill",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        name: {
+            en: "Object > Generative > Gen Shape Fill...",
+            de: "Object > Generative > Gen Shape Fill...",
+            ru: "Object > Generative > Gen Shape Fill...",
+            "zh-cn": "Object > Generative > Gen Shape Fill...",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1109: {
+        id: "menu_Gen_Expand_Object_Make",
+        action: "Gen Expand Object Make",
+        type: "menu",
+        docRequired: true,
+        selRequired: false,
+        name: {
+            en: "Object > Generative > Generative Expand... > Make...",
+            de: "Object > Generative > Generative Expand... > Make...",
+            ru: "Object > Generative > Generative Expand... > Make...",
+            "zh-cn": "Object > Generative > Generative Expand... > Make...",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1110: {
+        id: "menu_Gen_Expand_Object_Combine",
+        action: "Gen Expand Object Combine",
+        type: "menu",
+        docRequired: true,
+        selRequired: false,
+        name: {
+            en: "Object > Generative > Generative Expand... > Combine",
+            de: "Object > Generative > Generative Expand... > Combine",
+            ru: "Object > Generative > Generative Expand... > Combine",
+            "zh-cn": "Object > Generative > Generative Expand... > Combine",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1111: {
+        id: "menu_GenAIConsolidatedBleed",
+        action: "GenAIConsolidatedBleed",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        name: {
+            en: "Object > Generative > Print Bleed...",
+            de: "Object > Generative > Print Bleed...",
+            ru: "Object > Generative > Print Bleed...",
+            "zh-cn": "Object > Generative > Print Bleed...",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1112: {
+        id: "menu_GenAIConsolidatedRecolor",
+        action: "GenAIConsolidatedRecolor",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        name: {
+            en: "Object > Generative > Generative Recolor...",
+            de: "Object > Generative > Generative Recolor...",
+            ru: "Object > Generative > Generative Recolor...",
+            "zh-cn": "Object > Generative > Generative Recolor...",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1113: {
+        id: "menu_GenAIConsolidatedPatterns",
+        action: "GenAIConsolidatedPatterns",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        name: {
+            en: "Object > Generative > Generate Patterns...",
+            de: "Object > Generative > Generate Patterns...",
+            ru: "Object > Generative > Generate Patterns...",
+            "zh-cn": "Object > Generative > Generate Patterns...",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1114: {
+        id: "menu_GenAIConsolidatedVariations",
+        action: "GenAIConsolidatedVariations",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        name: {
+            en: "Object > Generative > Generation History...",
+            de: "Object > Generative > Generation History...",
+            ru: "Object > Generative > Generation History...",
+            "zh-cn": "Object > Generative > Generation History...",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1115: {
         id: "menu_AISlice_Make_Slice",
         action: "AISlice Make Slice",
         type: "menu",
@@ -1539,7 +1660,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Release_Slice: {
+    menu_1116: {
         id: "menu_AISlice_Release_Slice",
         action: "AISlice Release Slice",
         type: "menu",
@@ -1553,7 +1674,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Create_from_Guides: {
+    menu_1117: {
         id: "menu_AISlice_Create_from_Guides",
         action: "AISlice Create from Guides",
         type: "menu",
@@ -1567,7 +1688,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Create_from_Selection: {
+    menu_1118: {
         id: "menu_AISlice_Create_from_Selection",
         action: "AISlice Create from Selection",
         type: "menu",
@@ -1581,7 +1702,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Duplicate: {
+    menu_1119: {
         id: "menu_AISlice_Duplicate",
         action: "AISlice Duplicate",
         type: "menu",
@@ -1595,7 +1716,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Combine: {
+    menu_1120: {
         id: "menu_AISlice_Combine",
         action: "AISlice Combine",
         type: "menu",
@@ -1609,7 +1730,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Divide: {
+    menu_1121: {
         id: "menu_AISlice_Divide",
         action: "AISlice Divide",
         type: "menu",
@@ -1623,7 +1744,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Delete_All_Slices: {
+    menu_1122: {
         id: "menu_AISlice_Delete_All_Slices",
         action: "AISlice Delete All Slices",
         type: "menu",
@@ -1637,7 +1758,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Slice_Options: {
+    menu_1123: {
         id: "menu_AISlice_Slice_Options",
         action: "AISlice Slice Options",
         type: "menu",
@@ -1651,7 +1772,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Clip_to_Artboard: {
+    menu_1124: {
         id: "menu_AISlice_Clip_to_Artboard",
         action: "AISlice Clip to Artboard",
         type: "menu",
@@ -1665,7 +1786,23 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Expand3: {
+    menu_1125: {
+        id: "menu_Generate_Modal_File_Menu_",
+        action: "Generate Modal File Menu ",
+        type: "menu",
+        docRequired: true,
+        selRequired: false,
+        name: {
+            en: "Object > Generate Vectors...",
+            de: "Object > Generate Vectors...",
+            ru: "Object > Generate Vectors...",
+            "zh-cn": "Object > Generate Vectors...",
+        },
+        hidden: false,
+        minVersion: 28.6,
+        maxVersion: 29.999,
+    },
+    menu_1126: {
         id: "menu_Expand3",
         action: "Expand3",
         type: "menu",
@@ -1679,7 +1816,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_expandStyle: {
+    menu_1127: {
         id: "menu_expandStyle",
         action: "expandStyle",
         type: "menu",
@@ -1693,7 +1830,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_join: {
+    menu_1128: {
         id: "menu_join",
         action: "join",
         type: "menu",
@@ -1707,7 +1844,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_average: {
+    menu_1129: {
         id: "menu_average",
         action: "average",
         type: "menu",
@@ -1721,7 +1858,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_OffsetPath_v22: {
+    menu_1130: {
         id: "menu_OffsetPath_v22",
         action: "OffsetPath v22",
         type: "menu",
@@ -1735,7 +1872,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_OffsetPath_v23: {
+    menu_1131: {
         id: "menu_OffsetPath_v23",
         action: "OffsetPath v23",
         type: "menu",
@@ -1749,7 +1886,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Reverse_Path_Direction: {
+    menu_1132: {
         id: "menu_Reverse_Path_Direction",
         action: "Reverse Path Direction",
         type: "menu",
@@ -1764,7 +1901,7 @@ const commandsData = {
         hidden: false,
         minVersion: 21,
     },
-    menu_simplify_menu_item: {
+    menu_1133: {
         id: "menu_simplify_menu_item",
         action: "simplify menu item",
         type: "menu",
@@ -1778,7 +1915,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Add_Anchor_Points2: {
+    menu_1134: {
         id: "menu_Add_Anchor_Points2",
         action: "Add Anchor Points2",
         type: "menu",
@@ -1792,7 +1929,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Remove_Anchor_Points_menu: {
+    menu_1135: {
         id: "menu_Remove_Anchor_Points_menu",
         action: "Remove Anchor Points menu",
         type: "menu",
@@ -1806,7 +1943,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Knife_Tool2: {
+    menu_1136: {
         id: "menu_Knife_Tool2",
         action: "Knife Tool2",
         type: "menu",
@@ -1820,7 +1957,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Rows_and_Columns: {
+    menu_1137: {
         id: "menu_Rows_and_Columns",
         action: "Rows and Columns....",
         type: "menu",
@@ -1834,7 +1971,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_cleanup_menu_item: {
+    menu_1138: {
         id: "menu_cleanup_menu_item",
         action: "cleanup menu item",
         type: "menu",
@@ -1848,7 +1985,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_smooth_menu_item: {
+    menu_1139: {
         id: "menu_smooth_menu_item",
         action: "smooth menu item",
         type: "menu",
@@ -1863,7 +2000,7 @@ const commandsData = {
         hidden: false,
         minVersion: 28,
     },
-    menu_Convert_to_Shape: {
+    menu_1140: {
         id: "menu_Convert_to_Shape",
         action: "Convert to Shape",
         type: "menu",
@@ -1878,7 +2015,7 @@ const commandsData = {
         hidden: false,
         minVersion: 18,
     },
-    menu_Expand_Shape: {
+    menu_1141: {
         id: "menu_Expand_Shape",
         action: "Expand Shape",
         type: "menu",
@@ -1893,7 +2030,7 @@ const commandsData = {
         hidden: false,
         minVersion: 18,
     },
-    menu_Shape_Fill_Object_Menu: {
+    menu_1142: {
         id: "menu_Shape_Fill_Object_Menu",
         action: "Shape Fill Object Menu",
         type: "menu",
@@ -1907,8 +2044,9 @@ const commandsData = {
         },
         hidden: false,
         minVersion: 28.6,
+        maxVersion: 29.999,
     },
-    menu_Gen_Expand_Object_Make: {
+    menu_1143: {
         id: "menu_Gen_Expand_Object_Make",
         action: "Gen Expand Object Make",
         type: "menu",
@@ -1922,8 +2060,9 @@ const commandsData = {
         },
         hidden: false,
         minVersion: 29.6,
+        maxVersion: 29.999,
     },
-    menu_Gen_Expand_Object_Combine: {
+    menu_1144: {
         id: "menu_Gen_Expand_Object_Combine",
         action: "Gen Expand Object Combine",
         type: "menu",
@@ -1937,8 +2076,9 @@ const commandsData = {
         },
         hidden: false,
         minVersion: 29.6,
+        maxVersion: 29.999,
     },
-    menu_Gen_Bleed_Object_Menu: {
+    menu_1145: {
         id: "menu_Gen_Bleed_Object_Menu",
         action: "Gen Bleed Object Menu",
         type: "menu",
@@ -1952,8 +2092,9 @@ const commandsData = {
         },
         hidden: false,
         minVersion: 29.6,
+        maxVersion: 29.999,
     },
-    menu_Adobe_Make_Pattern: {
+    menu_1146: {
         id: "menu_Adobe_Make_Pattern",
         action: "Adobe Make Pattern",
         type: "menu",
@@ -1967,7 +2108,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Edit_Pattern: {
+    menu_1147: {
         id: "menu_Adobe_Edit_Pattern",
         action: "Adobe Edit Pattern",
         type: "menu",
@@ -1981,7 +2122,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Pattern_Tile_Color: {
+    menu_1148: {
         id: "menu_Adobe_Pattern_Tile_Color",
         action: "Adobe Pattern Tile Color",
         type: "menu",
@@ -1995,22 +2136,38 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Generative_Patterns_Panel: {
+    menu_1149: {
         id: "menu_Adobe_Generative_Patterns_Panel",
         action: "Adobe Generative Patterns Panel",
         type: "menu",
         docRequired: true,
         selRequired: false,
         name: {
-            en: "Window > Generate Patterns",
-            de: "Window > Generate Patterns",
-            ru: "Window > Generate Patterns",
-            "zh-cn": "Window > Generate Patterns",
+            en: "Object > Pattern > Generate Patterns",
+            de: "Object > Pattern > Generate Patterns",
+            ru: "Object > Pattern > Generate Patterns",
+            "zh-cn": "Object > Pattern > Generate Patterns",
         },
         hidden: false,
         minVersion: 28.6,
+        maxVersion: 29.999,
     },
-    menu_Partial_Rearrange_Make: {
+    menu_1150: {
+        id: "menu_GenAIConsolidatedPatterns",
+        action: "GenAIConsolidatedPatterns",
+        type: "menu",
+        docRequired: true,
+        selRequired: false,
+        name: {
+            en: "Object > Pattern > Generate Patterns",
+            de: "Object > Pattern > Generate Patterns",
+            ru: "Object > Pattern > Generate Patterns",
+            "zh-cn": "Object > Pattern > Generate Patterns",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1151: {
         id: "menu_Partial_Rearrange_Make",
         action: "Partial Rearrange Make",
         type: "menu",
@@ -2025,7 +2182,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Partial_Rearrange_Release: {
+    menu_1152: {
         id: "menu_Partial_Rearrange_Release",
         action: "Partial Rearrange Release",
         type: "menu",
@@ -2040,7 +2197,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Partial_Rearrange_Edit: {
+    menu_1153: {
         id: "menu_Partial_Rearrange_Edit",
         action: "Partial Rearrange Edit",
         type: "menu",
@@ -2055,7 +2212,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Make_Radial_Repeat: {
+    menu_1154: {
         id: "menu_Make_Radial_Repeat",
         action: "Make Radial Repeat",
         type: "menu",
@@ -2070,7 +2227,7 @@ const commandsData = {
         hidden: false,
         minVersion: 25.1,
     },
-    menu_Make_Grid_Repeat: {
+    menu_1155: {
         id: "menu_Make_Grid_Repeat",
         action: "Make Grid Repeat",
         type: "menu",
@@ -2085,7 +2242,7 @@ const commandsData = {
         hidden: false,
         minVersion: 25.1,
     },
-    menu_Make_Symmetry_Repeat: {
+    menu_1156: {
         id: "menu_Make_Symmetry_Repeat",
         action: "Make Symmetry Repeat",
         type: "menu",
@@ -2100,7 +2257,7 @@ const commandsData = {
         hidden: false,
         minVersion: 25.1,
     },
-    menu_Release_Repeat_Art: {
+    menu_1157: {
         id: "menu_Release_Repeat_Art",
         action: "Release Repeat Art",
         type: "menu",
@@ -2115,7 +2272,7 @@ const commandsData = {
         hidden: false,
         minVersion: 25.1,
     },
-    menu_Repeat_Art_Options: {
+    menu_1158: {
         id: "menu_Repeat_Art_Options",
         action: "Repeat Art Options",
         type: "menu",
@@ -2130,7 +2287,7 @@ const commandsData = {
         hidden: false,
         minVersion: 25.1,
     },
-    menu_Attach_Objects_on_Path: {
+    menu_1159: {
         id: "menu_Attach_Objects_on_Path",
         action: "Attach Objects on Path",
         type: "menu",
@@ -2145,7 +2302,7 @@ const commandsData = {
         hidden: false,
         minVersion: 29,
     },
-    menu_Options_Objects_on_Path: {
+    menu_1160: {
         id: "menu_Options_Objects_on_Path",
         action: "Options Objects on Path",
         type: "menu",
@@ -2160,7 +2317,7 @@ const commandsData = {
         hidden: false,
         minVersion: 29,
     },
-    menu_Expand_Objects_on_Path: {
+    menu_1161: {
         id: "menu_Expand_Objects_on_Path",
         action: "Expand Objects on Path",
         type: "menu",
@@ -2175,7 +2332,7 @@ const commandsData = {
         hidden: false,
         minVersion: 29,
     },
-    menu_Path_Blend_Make: {
+    menu_1162: {
         id: "menu_Path_Blend_Make",
         action: "Path Blend Make",
         type: "menu",
@@ -2189,7 +2346,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Path_Blend_Release: {
+    menu_1163: {
         id: "menu_Path_Blend_Release",
         action: "Path Blend Release",
         type: "menu",
@@ -2203,7 +2360,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Path_Blend_Options: {
+    menu_1164: {
         id: "menu_Path_Blend_Options",
         action: "Path Blend Options",
         type: "menu",
@@ -2217,7 +2374,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Path_Blend_Expand: {
+    menu_1165: {
         id: "menu_Path_Blend_Expand",
         action: "Path Blend Expand",
         type: "menu",
@@ -2231,7 +2388,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Path_Blend_Replace_Spine: {
+    menu_1166: {
         id: "menu_Path_Blend_Replace_Spine",
         action: "Path Blend Replace Spine",
         type: "menu",
@@ -2245,7 +2402,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Path_Blend_Reverse_Spine: {
+    menu_1167: {
         id: "menu_Path_Blend_Reverse_Spine",
         action: "Path Blend Reverse Spine",
         type: "menu",
@@ -2259,7 +2416,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Path_Blend_Reverse_Stack: {
+    menu_1168: {
         id: "menu_Path_Blend_Reverse_Stack",
         action: "Path Blend Reverse Stack",
         type: "menu",
@@ -2273,7 +2430,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Make_Warp: {
+    menu_1169: {
         id: "menu_Make_Warp",
         action: "Make Warp",
         type: "menu",
@@ -2287,7 +2444,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Create_Envelope_Grid: {
+    menu_1170: {
         id: "menu_Create_Envelope_Grid",
         action: "Create Envelope Grid",
         type: "menu",
@@ -2301,7 +2458,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Make_Envelope: {
+    menu_1171: {
         id: "menu_Make_Envelope",
         action: "Make Envelope",
         type: "menu",
@@ -2315,7 +2472,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Release_Envelope: {
+    menu_1172: {
         id: "menu_Release_Envelope",
         action: "Release Envelope",
         type: "menu",
@@ -2329,7 +2486,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Envelope_Options: {
+    menu_1173: {
         id: "menu_Envelope_Options",
         action: "Envelope Options",
         type: "menu",
@@ -2343,7 +2500,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Expand_Envelope: {
+    menu_1174: {
         id: "menu_Expand_Envelope",
         action: "Expand Envelope",
         type: "menu",
@@ -2357,7 +2514,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Edit_Envelope_Contents: {
+    menu_1175: {
         id: "menu_Edit_Envelope_Contents",
         action: "Edit Envelope Contents",
         type: "menu",
@@ -2371,7 +2528,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Attach_to_Active_Plane: {
+    menu_1176: {
         id: "menu_Attach_to_Active_Plane",
         action: "Attach to Active Plane",
         type: "menu",
@@ -2385,7 +2542,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Release_with_Perspective: {
+    menu_1177: {
         id: "menu_Release_with_Perspective",
         action: "Release with Perspective",
         type: "menu",
@@ -2399,7 +2556,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Show_Object_Grid_Plane: {
+    menu_1178: {
         id: "menu_Show_Object_Grid_Plane",
         action: "Show Object Grid Plane",
         type: "menu",
@@ -2413,7 +2570,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Edit_Original_Object: {
+    menu_1179: {
         id: "menu_Edit_Original_Object",
         action: "Edit Original Object",
         type: "menu",
@@ -2427,7 +2584,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Make_Planet_X: {
+    menu_1180: {
         id: "menu_Make_Planet_X",
         action: "Make Planet X",
         type: "menu",
@@ -2441,7 +2598,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Marge_Planet_X: {
+    menu_1181: {
         id: "menu_Marge_Planet_X",
         action: "Marge Planet X",
         type: "menu",
@@ -2455,7 +2612,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Release_Planet_X: {
+    menu_1182: {
         id: "menu_Release_Planet_X",
         action: "Release Planet X",
         type: "menu",
@@ -2469,7 +2626,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Planet_X_Options: {
+    menu_1183: {
         id: "menu_Planet_X_Options",
         action: "Planet X Options",
         type: "menu",
@@ -2483,7 +2640,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Expand_Planet_X: {
+    menu_1184: {
         id: "menu_Expand_Planet_X",
         action: "Expand Planet X",
         type: "menu",
@@ -2497,7 +2654,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Make_Image_Tracing: {
+    menu_1185: {
         id: "menu_Make_Image_Tracing",
         action: "Make Image Tracing",
         type: "menu",
@@ -2511,7 +2668,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Make_and_Expand_Image_Tracing: {
+    menu_1186: {
         id: "menu_Make_and_Expand_Image_Tracing",
         action: "Make and Expand Image Tracing",
         type: "menu",
@@ -2525,7 +2682,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Release_Image_Tracing: {
+    menu_1187: {
         id: "menu_Release_Image_Tracing",
         action: "Release Image Tracing",
         type: "menu",
@@ -2539,7 +2696,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Expand_Image_Tracing: {
+    menu_1188: {
         id: "menu_Expand_Image_Tracing",
         action: "Expand Image Tracing",
         type: "menu",
@@ -2553,7 +2710,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Make_Vector_Edge: {
+    menu_1189: {
         id: "menu_Make_Vector_Edge",
         action: "Make Vector Edge",
         type: "menu",
@@ -2568,7 +2725,7 @@ const commandsData = {
         hidden: false,
         minVersion: 28,
     },
-    menu_Release_Vector_Edge: {
+    menu_1190: {
         id: "menu_Release_Vector_Edge",
         action: "Release Vector Edge",
         type: "menu",
@@ -2583,7 +2740,7 @@ const commandsData = {
         hidden: false,
         minVersion: 28,
     },
-    menu_Edit_Vector_Edge: {
+    menu_1191: {
         id: "menu_Edit_Vector_Edge",
         action: "Edit Vector Edge",
         type: "menu",
@@ -2598,7 +2755,7 @@ const commandsData = {
         hidden: false,
         minVersion: 28,
     },
-    menu_Make_Text_Wrap: {
+    menu_1192: {
         id: "menu_Make_Text_Wrap",
         action: "Make Text Wrap",
         type: "menu",
@@ -2612,7 +2769,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Release_Text_Wrap: {
+    menu_1193: {
         id: "menu_Release_Text_Wrap",
         action: "Release Text Wrap",
         type: "menu",
@@ -2626,7 +2783,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Text_Wrap_Options: {
+    menu_1194: {
         id: "menu_Text_Wrap_Options",
         action: "Text Wrap Options...",
         type: "menu",
@@ -2640,7 +2797,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_makeMask: {
+    menu_1195: {
         id: "menu_makeMask",
         action: "makeMask",
         type: "menu",
@@ -2654,7 +2811,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_releaseMask: {
+    menu_1196: {
         id: "menu_releaseMask",
         action: "releaseMask",
         type: "menu",
@@ -2668,7 +2825,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_editMask: {
+    menu_1197: {
         id: "menu_editMask",
         action: "editMask",
         type: "menu",
@@ -2682,7 +2839,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_compoundPath: {
+    menu_1198: {
         id: "menu_compoundPath",
         action: "compoundPath",
         type: "menu",
@@ -2696,7 +2853,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_noCompoundPath: {
+    menu_1199: {
         id: "menu_noCompoundPath",
         action: "noCompoundPath",
         type: "menu",
@@ -2710,7 +2867,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_setCropMarks: {
+    menu_1200: {
         id: "menu_setCropMarks",
         action: "setCropMarks",
         type: "menu",
@@ -2724,7 +2881,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ReArrange_Artboards: {
+    menu_1201: {
         id: "menu_ReArrange_Artboards",
         action: "ReArrange Artboards",
         type: "menu",
@@ -2738,7 +2895,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Fit_Artboard_to_artwork_bounds: {
+    menu_1202: {
         id: "menu_Fit_Artboard_to_artwork_bounds",
         action: "Fit Artboard to artwork bounds",
         type: "menu",
@@ -2752,7 +2909,22 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Fit_Artboard_to_selected_Art: {
+    menu_1203: {
+        id: "menu_Switch_Orientation",
+        action: "Switch Orientation",
+        type: "menu",
+        docRequired: true,
+        selRequired: false,
+        name: {
+            en: "Object > Artboards > Switch Orientation",
+            de: "Object > Artboards > Switch Orientation",
+            ru: "Object > Artboards > Switch Orientation",
+            "zh-cn": "Object > Artboards > Switch Orientation",
+        },
+        hidden: false,
+        minVersion: 30.0,
+    },
+    menu_1204: {
         id: "menu_Fit_Artboard_to_selected_Art",
         action: "Fit Artboard to selected Art",
         type: "menu",
@@ -2766,7 +2938,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_setGraphStyle: {
+    menu_1205: {
         id: "menu_setGraphStyle",
         action: "setGraphStyle",
         type: "menu",
@@ -2780,7 +2952,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_editGraphData: {
+    menu_1206: {
         id: "menu_editGraphData",
         action: "editGraphData",
         type: "menu",
@@ -2794,7 +2966,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_graphDesigns: {
+    menu_1207: {
         id: "menu_graphDesigns",
         action: "graphDesigns",
         type: "menu",
@@ -2808,7 +2980,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_setBarDesign: {
+    menu_1208: {
         id: "menu_setBarDesign",
         action: "setBarDesign",
         type: "menu",
@@ -2822,7 +2994,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_setIconDesign: {
+    menu_1209: {
         id: "menu_setIconDesign",
         action: "setIconDesign",
         type: "menu",
@@ -2836,7 +3008,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Browse_Typekit_Fonts_Menu_IllustratorUI: {
+    menu_1210: {
         id: "menu_Browse_Typekit_Fonts_Menu_IllustratorUI",
         action: "Browse Typekit Fonts Menu IllustratorUI",
         type: "menu",
@@ -2851,7 +3023,7 @@ const commandsData = {
         hidden: false,
         minVersion: 17.1,
     },
-    menu_alternate_glyph_palette_plugin: {
+    menu_1211: {
         id: "menu_alternate_glyph_palette_plugin",
         action: "alternate glyph palette plugin",
         type: "menu",
@@ -2865,7 +3037,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_point-area": {
+    menu_1212: {
         id: "menu_point-area",
         action: "point-area",
         type: "menu",
@@ -2880,7 +3052,7 @@ const commandsData = {
         hidden: false,
         minVersion: 29.4,
     },
-    "menu_area-type-options": {
+    menu_1213: {
         id: "menu_area-type-options",
         action: "area-type-options",
         type: "menu",
@@ -2894,7 +3066,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Rainbow: {
+    menu_1214: {
         id: "menu_Rainbow",
         action: "Rainbow",
         type: "menu",
@@ -2908,7 +3080,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Skew: {
+    menu_1215: {
         id: "menu_Skew",
         action: "Skew",
         type: "menu",
@@ -2922,7 +3094,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_3D_ribbon: {
+    menu_1216: {
         id: "menu_3D_ribbon",
         action: "3D ribbon",
         type: "menu",
@@ -2936,7 +3108,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Stair_Step: {
+    menu_1217: {
         id: "menu_Stair_Step",
         action: "Stair Step",
         type: "menu",
@@ -2950,7 +3122,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Gravity: {
+    menu_1218: {
         id: "menu_Gravity",
         action: "Gravity",
         type: "menu",
@@ -2964,7 +3136,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_typeOnPathOptions: {
+    menu_1219: {
         id: "menu_typeOnPathOptions",
         action: "typeOnPathOptions",
         type: "menu",
@@ -2978,7 +3150,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_updateLegacyTOP: {
+    menu_1220: {
         id: "menu_updateLegacyTOP",
         action: "updateLegacyTOP",
         type: "menu",
@@ -2992,7 +3164,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_threadTextCreate: {
+    menu_1221: {
         id: "menu_threadTextCreate",
         action: "threadTextCreate",
         type: "menu",
@@ -3006,7 +3178,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_releaseThreadedTextSelection: {
+    menu_1222: {
         id: "menu_releaseThreadedTextSelection",
         action: "releaseThreadedTextSelection",
         type: "menu",
@@ -3020,7 +3192,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_removeThreading: {
+    menu_1223: {
         id: "menu_removeThreading",
         action: "removeThreading",
         type: "menu",
@@ -3034,7 +3206,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_fitHeadline: {
+    menu_1224: {
         id: "menu_fitHeadline",
         action: "fitHeadline",
         type: "menu",
@@ -3048,7 +3220,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_IllustratorUI_Resolve_Missing_Font: {
+    menu_1225: {
         id: "menu_Adobe_IllustratorUI_Resolve_Missing_Font",
         action: "Adobe IllustratorUI Resolve Missing Font",
         type: "menu",
@@ -3062,7 +3234,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Illustrator_Find_Font_Menu_Item: {
+    menu_1226: {
         id: "menu_Adobe_Illustrator_Find_Font_Menu_Item",
         action: "Adobe Illustrator Find Font Menu Item",
         type: "menu",
@@ -3076,7 +3248,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_UpperCase_Change_Case_Item: {
+    menu_1227: {
         id: "menu_UpperCase_Change_Case_Item",
         action: "UpperCase Change Case Item",
         type: "menu",
@@ -3090,7 +3262,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_LowerCase_Change_Case_Item: {
+    menu_1228: {
         id: "menu_LowerCase_Change_Case_Item",
         action: "LowerCase Change Case Item",
         type: "menu",
@@ -3104,7 +3276,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Title_Case_Change_Case_Item: {
+    menu_1229: {
         id: "menu_Title_Case_Change_Case_Item",
         action: "Title Case Change Case Item",
         type: "menu",
@@ -3118,7 +3290,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Sentence_case_Change_Case_Item: {
+    menu_1230: {
         id: "menu_Sentence_case_Change_Case_Item",
         action: "Sentence case Change Case Item",
         type: "menu",
@@ -3132,7 +3304,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Illustrator_Smart_Punctuation_Menu_Item: {
+    menu_1231: {
         id: "menu_Adobe_Illustrator_Smart_Punctuation_Menu_Item",
         action: "Adobe Illustrator Smart Punctuation Menu Item",
         type: "menu",
@@ -3146,7 +3318,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_outline: {
+    menu_1232: {
         id: "menu_outline",
         action: "outline",
         type: "menu",
@@ -3160,7 +3332,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Optical_Alignment_Item: {
+    menu_1233: {
         id: "menu_Adobe_Optical_Alignment_Item",
         action: "Adobe Optical Alignment Item",
         type: "menu",
@@ -3174,7 +3346,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_convert_list_style_to_text: {
+    menu_1234: {
         id: "menu_convert_list_style_to_text",
         action: "convert list style to text",
         type: "menu",
@@ -3189,7 +3361,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27.1,
     },
-    menu_showHiddenChar: {
+    menu_1235: {
         id: "menu_showHiddenChar",
         action: "showHiddenChar",
         type: "menu",
@@ -3203,7 +3375,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_type-horizontal": {
+    menu_1236: {
         id: "menu_type-horizontal",
         action: "type-horizontal",
         type: "menu",
@@ -3217,7 +3389,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_type-vertical": {
+    menu_1237: {
         id: "menu_type-vertical",
         action: "type-vertical",
         type: "menu",
@@ -3231,7 +3403,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_selectall: {
+    menu_1238: {
         id: "menu_selectall",
         action: "selectall",
         type: "menu",
@@ -3245,7 +3417,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_selectallinartboard: {
+    menu_1239: {
         id: "menu_selectallinartboard",
         action: "selectallinartboard",
         type: "menu",
@@ -3259,7 +3431,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_deselectall: {
+    menu_1240: {
         id: "menu_deselectall",
         action: "deselectall",
         type: "menu",
@@ -3273,7 +3445,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Reselect_menu_item: {
+    menu_1241: {
         id: "menu_Find_Reselect_menu_item",
         action: "Find Reselect menu item",
         type: "menu",
@@ -3287,7 +3459,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Inverse_menu_item: {
+    menu_1242: {
         id: "menu_Inverse_menu_item",
         action: "Inverse menu item",
         type: "menu",
@@ -3301,7 +3473,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_8: {
+    menu_1243: {
         id: "menu_Selection_Hat_8",
         action: "Selection Hat 8",
         type: "menu",
@@ -3315,7 +3487,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_9: {
+    menu_1244: {
         id: "menu_Selection_Hat_9",
         action: "Selection Hat 9",
         type: "menu",
@@ -3329,7 +3501,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Appearance_menu_item: {
+    menu_1245: {
         id: "menu_Find_Appearance_menu_item",
         action: "Find Appearance menu item",
         type: "menu",
@@ -3343,7 +3515,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Appearance_Attributes_menu_item: {
+    menu_1246: {
         id: "menu_Find_Appearance_Attributes_menu_item",
         action: "Find Appearance Attributes menu item",
         type: "menu",
@@ -3357,7 +3529,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Blending_Mode_menu_item: {
+    menu_1247: {
         id: "menu_Find_Blending_Mode_menu_item",
         action: "Find Blending Mode menu item",
         type: "menu",
@@ -3371,7 +3543,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_Find_Fill_&_Stroke_menu_item": {
+    menu_1248: {
         id: "menu_Find_Fill_&_Stroke_menu_item",
         action: "Find Fill & Stroke menu item",
         type: "menu",
@@ -3385,7 +3557,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Fill_Color_menu_item: {
+    menu_1249: {
         id: "menu_Find_Fill_Color_menu_item",
         action: "Find Fill Color menu item",
         type: "menu",
@@ -3399,7 +3571,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Opacity_menu_item: {
+    menu_1250: {
         id: "menu_Find_Opacity_menu_item",
         action: "Find Opacity menu item",
         type: "menu",
@@ -3413,7 +3585,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Stroke_Color_menu_item: {
+    menu_1251: {
         id: "menu_Find_Stroke_Color_menu_item",
         action: "Find Stroke Color menu item",
         type: "menu",
@@ -3427,7 +3599,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Stroke_Weight_menu_item: {
+    menu_1252: {
         id: "menu_Find_Stroke_Weight_menu_item",
         action: "Find Stroke Weight menu item",
         type: "menu",
@@ -3441,7 +3613,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Style_menu_item: {
+    menu_1253: {
         id: "menu_Find_Style_menu_item",
         action: "Find Style menu item",
         type: "menu",
@@ -3455,7 +3627,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Live_Shape_menu_item: {
+    menu_1254: {
         id: "menu_Find_Live_Shape_menu_item",
         action: "Find Live Shape menu item",
         type: "menu",
@@ -3469,7 +3641,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Symbol_Instance_menu_item: {
+    menu_1255: {
         id: "menu_Find_Symbol_Instance_menu_item",
         action: "Find Symbol Instance menu item",
         type: "menu",
@@ -3483,7 +3655,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Link_Block_Series_menu_item: {
+    menu_1256: {
         id: "menu_Find_Link_Block_Series_menu_item",
         action: "Find Link Block Series menu item",
         type: "menu",
@@ -3497,7 +3669,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Find_Text_Font_Family_menu_item: {
+    menu_1257: {
         id: "menu_Find_Text_Font_Family_menu_item",
         action: "Find Text Font Family menu item",
         type: "menu",
@@ -3512,7 +3684,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Find_Text_Font_Family_Style_menu_item: {
+    menu_1258: {
         id: "menu_Find_Text_Font_Family_Style_menu_item",
         action: "Find Text Font Family Style menu item",
         type: "menu",
@@ -3527,7 +3699,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Find_Text_Font_Family_Style_Size_menu_item: {
+    menu_1259: {
         id: "menu_Find_Text_Font_Family_Style_Size_menu_item",
         action: "Find Text Font Family Style Size menu item",
         type: "menu",
@@ -3542,7 +3714,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Find_Text_Font_Size_menu_item: {
+    menu_1260: {
         id: "menu_Find_Text_Font_Size_menu_item",
         action: "Find Text Font Size menu item",
         type: "menu",
@@ -3557,7 +3729,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Find_Text_Fill_Color_menu_item: {
+    menu_1261: {
         id: "menu_Find_Text_Fill_Color_menu_item",
         action: "Find Text Fill Color menu item",
         type: "menu",
@@ -3572,7 +3744,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Find_Text_Stroke_Color_menu_item: {
+    menu_1262: {
         id: "menu_Find_Text_Stroke_Color_menu_item",
         action: "Find Text Stroke Color menu item",
         type: "menu",
@@ -3587,7 +3759,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Find_Text_Fill_Stroke_Color_menu_item: {
+    menu_1263: {
         id: "menu_Find_Text_Fill_Stroke_Color_menu_item",
         action: "Find Text Fill Stroke Color menu item",
         type: "menu",
@@ -3602,7 +3774,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Selection_Hat_3: {
+    menu_1264: {
         id: "menu_Selection_Hat_3",
         action: "Selection Hat 3",
         type: "menu",
@@ -3616,7 +3788,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_1: {
+    menu_1265: {
         id: "menu_Selection_Hat_1",
         action: "Selection Hat 1",
         type: "menu",
@@ -3630,7 +3802,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Bristle_Brush_Strokes_menu_item: {
+    menu_1266: {
         id: "menu_Bristle_Brush_Strokes_menu_item",
         action: "Bristle Brush Strokes menu item",
         type: "menu",
@@ -3644,7 +3816,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Brush_Strokes_menu_item: {
+    menu_1267: {
         id: "menu_Brush_Strokes_menu_item",
         action: "Brush Strokes menu item",
         type: "menu",
@@ -3658,7 +3830,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Clipping_Masks_menu_item: {
+    menu_1268: {
         id: "menu_Clipping_Masks_menu_item",
         action: "Clipping Masks menu item",
         type: "menu",
@@ -3672,7 +3844,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Stray_Points_menu_item: {
+    menu_1269: {
         id: "menu_Stray_Points_menu_item",
         action: "Stray Points menu item",
         type: "menu",
@@ -3686,7 +3858,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Text_Objects_menu_item: {
+    menu_1270: {
         id: "menu_Text_Objects_menu_item",
         action: "Text Objects menu item",
         type: "menu",
@@ -3700,7 +3872,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Point_Text_Objects_menu_item: {
+    menu_1271: {
         id: "menu_Point_Text_Objects_menu_item",
         action: "Point Text Objects menu item",
         type: "menu",
@@ -3714,7 +3886,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Area_Text_Objects_menu_item: {
+    menu_1272: {
         id: "menu_Area_Text_Objects_menu_item",
         action: "Area Text Objects menu item",
         type: "menu",
@@ -3728,7 +3900,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_SmartEdit_Menu_Item: {
+    menu_1273: {
         id: "menu_SmartEdit_Menu_Item",
         action: "SmartEdit Menu Item",
         type: "menu",
@@ -3743,7 +3915,7 @@ const commandsData = {
         hidden: false,
         minVersion: 23,
     },
-    menu_Selection_Hat_10: {
+    menu_1274: {
         id: "menu_Selection_Hat_10",
         action: "Selection Hat 10",
         type: "menu",
@@ -3757,7 +3929,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_11: {
+    menu_1275: {
         id: "menu_Selection_Hat_11",
         action: "Selection Hat 11",
         type: "menu",
@@ -3771,7 +3943,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Selection_Hat_14: {
+    menu_1276: {
         id: "menu_Selection_Hat_14",
         action: "Selection Hat 14",
         type: "menu",
@@ -3786,7 +3958,7 @@ const commandsData = {
         hidden: false,
         minVersion: 28,
     },
-    menu_Adobe_Apply_Last_Effect: {
+    menu_1277: {
         id: "menu_Adobe_Apply_Last_Effect",
         action: "Adobe Apply Last Effect",
         type: "menu",
@@ -3800,7 +3972,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Last_Effect: {
+    menu_1278: {
         id: "menu_Adobe_Last_Effect",
         action: "Adobe Last Effect",
         type: "menu",
@@ -3814,7 +3986,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Rasterize_Effect_Setting: {
+    menu_1279: {
         id: "menu_Live_Rasterize_Effect_Setting",
         action: "Live Rasterize Effect Setting",
         type: "menu",
@@ -3828,7 +4000,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Adobe_Geometry3D_Extrude: {
+    menu_1280: {
         id: "menu_Live_Adobe_Geometry3D_Extrude",
         action: "Live Adobe Geometry3D Extrude",
         type: "menu",
@@ -3843,7 +4015,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Live_Adobe_Geometry3D_Revolve: {
+    menu_1281: {
         id: "menu_Live_Adobe_Geometry3D_Revolve",
         action: "Live Adobe Geometry3D Revolve",
         type: "menu",
@@ -3858,7 +4030,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Live_Adobe_Geometry3D_Inflate: {
+    menu_1282: {
         id: "menu_Live_Adobe_Geometry3D_Inflate",
         action: "Live Adobe Geometry3D Inflate",
         type: "menu",
@@ -3873,7 +4045,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Live_Adobe_Geometry3D_Rotate: {
+    menu_1283: {
         id: "menu_Live_Adobe_Geometry3D_Rotate",
         action: "Live Adobe Geometry3D Rotate",
         type: "menu",
@@ -3888,7 +4060,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Live_Adobe_Geometry3D_Materials: {
+    menu_1284: {
         id: "menu_Live_Adobe_Geometry3D_Materials",
         action: "Live Adobe Geometry3D Materials",
         type: "menu",
@@ -3903,7 +4075,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Live_3DExtrude: {
+    menu_1285: {
         id: "menu_Live_3DExtrude",
         action: "Live 3DExtrude",
         type: "menu",
@@ -3919,7 +4091,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Live_3DRevolve: {
+    menu_1286: {
         id: "menu_Live_3DRevolve",
         action: "Live 3DRevolve",
         type: "menu",
@@ -3934,7 +4106,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Live_3DRotate: {
+    menu_1287: {
         id: "menu_Live_3DRotate",
         action: "Live 3DRotate",
         type: "menu",
@@ -3949,7 +4121,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Live_Rectangle: {
+    menu_1288: {
         id: "menu_Live_Rectangle",
         action: "Live Rectangle",
         type: "menu",
@@ -3963,7 +4135,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Rounded_Rectangle: {
+    menu_1289: {
         id: "menu_Live_Rounded_Rectangle",
         action: "Live Rounded Rectangle",
         type: "menu",
@@ -3977,7 +4149,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Ellipse: {
+    menu_1290: {
         id: "menu_Live_Ellipse",
         action: "Live Ellipse",
         type: "menu",
@@ -3991,7 +4163,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Trim_Marks: {
+    menu_1291: {
         id: "menu_Live_Trim_Marks",
         action: "Live Trim Marks",
         type: "menu",
@@ -4005,7 +4177,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Free_Distort: {
+    menu_1292: {
         id: "menu_Live_Free_Distort",
         action: "Live Free Distort",
         type: "menu",
@@ -4019,7 +4191,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_Live_Pucker_&_Bloat": {
+    menu_1293: {
         id: "menu_Live_Pucker_&_Bloat",
         action: "Live Pucker & Bloat",
         type: "menu",
@@ -4033,7 +4205,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Roughen: {
+    menu_1294: {
         id: "menu_Live_Roughen",
         action: "Live Roughen",
         type: "menu",
@@ -4047,7 +4219,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Transform: {
+    menu_1295: {
         id: "menu_Live_Transform",
         action: "Live Transform",
         type: "menu",
@@ -4061,7 +4233,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Scribble_and_Tweak: {
+    menu_1296: {
         id: "menu_Live_Scribble_and_Tweak",
         action: "Live Scribble and Tweak",
         type: "menu",
@@ -4075,7 +4247,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Twist: {
+    menu_1297: {
         id: "menu_Live_Twist",
         action: "Live Twist",
         type: "menu",
@@ -4089,7 +4261,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Zig_Zag: {
+    menu_1298: {
         id: "menu_Live_Zig_Zag",
         action: "Live Zig Zag",
         type: "menu",
@@ -4103,7 +4275,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Offset_Path: {
+    menu_1299: {
         id: "menu_Live_Offset_Path",
         action: "Live Offset Path",
         type: "menu",
@@ -4117,7 +4289,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Outline_Object: {
+    menu_1300: {
         id: "menu_Live_Outline_Object",
         action: "Live Outline Object",
         type: "menu",
@@ -4131,7 +4303,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Outline_Stroke: {
+    menu_1301: {
         id: "menu_Live_Outline_Stroke",
         action: "Live Outline Stroke",
         type: "menu",
@@ -4145,7 +4317,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Add: {
+    menu_1302: {
         id: "menu_Live_Pathfinder_Add",
         action: "Live Pathfinder Add",
         type: "menu",
@@ -4159,7 +4331,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Intersect: {
+    menu_1303: {
         id: "menu_Live_Pathfinder_Intersect",
         action: "Live Pathfinder Intersect",
         type: "menu",
@@ -4173,7 +4345,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Exclude: {
+    menu_1304: {
         id: "menu_Live_Pathfinder_Exclude",
         action: "Live Pathfinder Exclude",
         type: "menu",
@@ -4187,7 +4359,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Subtract: {
+    menu_1305: {
         id: "menu_Live_Pathfinder_Subtract",
         action: "Live Pathfinder Subtract",
         type: "menu",
@@ -4201,7 +4373,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Minus_Back: {
+    menu_1306: {
         id: "menu_Live_Pathfinder_Minus_Back",
         action: "Live Pathfinder Minus Back",
         type: "menu",
@@ -4215,7 +4387,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Divide: {
+    menu_1307: {
         id: "menu_Live_Pathfinder_Divide",
         action: "Live Pathfinder Divide",
         type: "menu",
@@ -4229,7 +4401,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Trim: {
+    menu_1308: {
         id: "menu_Live_Pathfinder_Trim",
         action: "Live Pathfinder Trim",
         type: "menu",
@@ -4243,7 +4415,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Merge: {
+    menu_1309: {
         id: "menu_Live_Pathfinder_Merge",
         action: "Live Pathfinder Merge",
         type: "menu",
@@ -4257,7 +4429,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Crop: {
+    menu_1310: {
         id: "menu_Live_Pathfinder_Crop",
         action: "Live Pathfinder Crop",
         type: "menu",
@@ -4271,7 +4443,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Outline: {
+    menu_1311: {
         id: "menu_Live_Pathfinder_Outline",
         action: "Live Pathfinder Outline",
         type: "menu",
@@ -4285,7 +4457,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Hard_Mix: {
+    menu_1312: {
         id: "menu_Live_Pathfinder_Hard_Mix",
         action: "Live Pathfinder Hard Mix",
         type: "menu",
@@ -4299,7 +4471,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Soft_Mix: {
+    menu_1313: {
         id: "menu_Live_Pathfinder_Soft_Mix",
         action: "Live Pathfinder Soft Mix",
         type: "menu",
@@ -4313,7 +4485,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Pathfinder_Trap: {
+    menu_1314: {
         id: "menu_Live_Pathfinder_Trap",
         action: "Live Pathfinder Trap",
         type: "menu",
@@ -4327,7 +4499,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Rasterize: {
+    menu_1315: {
         id: "menu_Live_Rasterize",
         action: "Live Rasterize",
         type: "menu",
@@ -4341,7 +4513,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Adobe_Drop_Shadow: {
+    menu_1316: {
         id: "menu_Live_Adobe_Drop_Shadow",
         action: "Live Adobe Drop Shadow",
         type: "menu",
@@ -4355,7 +4527,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Feather: {
+    menu_1317: {
         id: "menu_Live_Feather",
         action: "Live Feather",
         type: "menu",
@@ -4369,7 +4541,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Inner_Glow: {
+    menu_1318: {
         id: "menu_Live_Inner_Glow",
         action: "Live Inner Glow",
         type: "menu",
@@ -4383,7 +4555,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Outer_Glow: {
+    menu_1319: {
         id: "menu_Live_Outer_Glow",
         action: "Live Outer Glow",
         type: "menu",
@@ -4397,7 +4569,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Adobe_Round_Corners: {
+    menu_1320: {
         id: "menu_Live_Adobe_Round_Corners",
         action: "Live Adobe Round Corners",
         type: "menu",
@@ -4411,7 +4583,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Scribble_Fill: {
+    menu_1321: {
         id: "menu_Live_Scribble_Fill",
         action: "Live Scribble Fill",
         type: "menu",
@@ -4425,7 +4597,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_SVG_Filters: {
+    menu_1322: {
         id: "menu_Live_SVG_Filters",
         action: "Live SVG Filters",
         type: "menu",
@@ -4439,7 +4611,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_SVG_Filter_Import: {
+    menu_1323: {
         id: "menu_SVG_Filter_Import",
         action: "SVG Filter Import",
         type: "menu",
@@ -4453,7 +4625,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Arc: {
+    menu_1324: {
         id: "menu_Live_Deform_Arc",
         action: "Live Deform Arc",
         type: "menu",
@@ -4467,7 +4639,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Arc_Lower: {
+    menu_1325: {
         id: "menu_Live_Deform_Arc_Lower",
         action: "Live Deform Arc Lower",
         type: "menu",
@@ -4481,7 +4653,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Arc_Upper: {
+    menu_1326: {
         id: "menu_Live_Deform_Arc_Upper",
         action: "Live Deform Arc Upper",
         type: "menu",
@@ -4495,7 +4667,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Arch: {
+    menu_1327: {
         id: "menu_Live_Deform_Arch",
         action: "Live Deform Arch",
         type: "menu",
@@ -4509,7 +4681,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Bulge: {
+    menu_1328: {
         id: "menu_Live_Deform_Bulge",
         action: "Live Deform Bulge",
         type: "menu",
@@ -4523,7 +4695,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Shell_Lower: {
+    menu_1329: {
         id: "menu_Live_Deform_Shell_Lower",
         action: "Live Deform Shell Lower",
         type: "menu",
@@ -4537,7 +4709,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Shell_Upper: {
+    menu_1330: {
         id: "menu_Live_Deform_Shell_Upper",
         action: "Live Deform Shell Upper",
         type: "menu",
@@ -4551,7 +4723,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Flag: {
+    menu_1331: {
         id: "menu_Live_Deform_Flag",
         action: "Live Deform Flag",
         type: "menu",
@@ -4565,7 +4737,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Wave: {
+    menu_1332: {
         id: "menu_Live_Deform_Wave",
         action: "Live Deform Wave",
         type: "menu",
@@ -4579,7 +4751,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Fish: {
+    menu_1333: {
         id: "menu_Live_Deform_Fish",
         action: "Live Deform Fish",
         type: "menu",
@@ -4593,7 +4765,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Rise: {
+    menu_1334: {
         id: "menu_Live_Deform_Rise",
         action: "Live Deform Rise",
         type: "menu",
@@ -4607,7 +4779,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Fisheye: {
+    menu_1335: {
         id: "menu_Live_Deform_Fisheye",
         action: "Live Deform Fisheye",
         type: "menu",
@@ -4621,7 +4793,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Inflate: {
+    menu_1336: {
         id: "menu_Live_Deform_Inflate",
         action: "Live Deform Inflate",
         type: "menu",
@@ -4635,7 +4807,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Squeeze: {
+    menu_1337: {
         id: "menu_Live_Deform_Squeeze",
         action: "Live Deform Squeeze",
         type: "menu",
@@ -4649,7 +4821,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Deform_Twist: {
+    menu_1338: {
         id: "menu_Live_Deform_Twist",
         action: "Live Deform Twist",
         type: "menu",
@@ -4663,7 +4835,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_GEfc: {
+    menu_1339: {
         id: "menu_Live_PSAdapter_plugin_GEfc",
         action: "Live PSAdapter_plugin_GEfc",
         type: "menu",
@@ -4677,7 +4849,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_ClrP: {
+    menu_1340: {
         id: "menu_Live_PSAdapter_plugin_ClrP",
         action: "Live PSAdapter_plugin_ClrP",
         type: "menu",
@@ -4691,7 +4863,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Ct: {
+    menu_1341: {
         id: "menu_Live_PSAdapter_plugin_Ct",
         action: "Live PSAdapter_plugin_Ct",
         type: "menu",
@@ -4705,7 +4877,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_DryB: {
+    menu_1342: {
         id: "menu_Live_PSAdapter_plugin_DryB",
         action: "Live PSAdapter_plugin_DryB",
         type: "menu",
@@ -4719,7 +4891,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_FlmG: {
+    menu_1343: {
         id: "menu_Live_PSAdapter_plugin_FlmG",
         action: "Live PSAdapter_plugin_FlmG",
         type: "menu",
@@ -4733,7 +4905,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Frsc: {
+    menu_1344: {
         id: "menu_Live_PSAdapter_plugin_Frsc",
         action: "Live PSAdapter_plugin_Frsc",
         type: "menu",
@@ -4747,7 +4919,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_NGlw: {
+    menu_1345: {
         id: "menu_Live_PSAdapter_plugin_NGlw",
         action: "Live PSAdapter_plugin_NGlw",
         type: "menu",
@@ -4761,7 +4933,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_PntD: {
+    menu_1346: {
         id: "menu_Live_PSAdapter_plugin_PntD",
         action: "Live PSAdapter_plugin_PntD",
         type: "menu",
@@ -4775,7 +4947,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_PltK: {
+    menu_1347: {
         id: "menu_Live_PSAdapter_plugin_PltK",
         action: "Live PSAdapter_plugin_PltK",
         type: "menu",
@@ -4789,7 +4961,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_PlsW: {
+    menu_1348: {
         id: "menu_Live_PSAdapter_plugin_PlsW",
         action: "Live PSAdapter_plugin_PlsW",
         type: "menu",
@@ -4803,7 +4975,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_PstE: {
+    menu_1349: {
         id: "menu_Live_PSAdapter_plugin_PstE",
         action: "Live PSAdapter_plugin_PstE",
         type: "menu",
@@ -4817,7 +4989,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_RghP: {
+    menu_1350: {
         id: "menu_Live_PSAdapter_plugin_RghP",
         action: "Live PSAdapter_plugin_RghP",
         type: "menu",
@@ -4831,7 +5003,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_SmdS: {
+    menu_1351: {
         id: "menu_Live_PSAdapter_plugin_SmdS",
         action: "Live PSAdapter_plugin_SmdS",
         type: "menu",
@@ -4845,7 +5017,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Spng: {
+    menu_1352: {
         id: "menu_Live_PSAdapter_plugin_Spng",
         action: "Live PSAdapter_plugin_Spng",
         type: "menu",
@@ -4859,7 +5031,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Undr: {
+    menu_1353: {
         id: "menu_Live_PSAdapter_plugin_Undr",
         action: "Live PSAdapter_plugin_Undr",
         type: "menu",
@@ -4873,7 +5045,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Wtrc: {
+    menu_1354: {
         id: "menu_Live_PSAdapter_plugin_Wtrc",
         action: "Live PSAdapter_plugin_Wtrc",
         type: "menu",
@@ -4887,7 +5059,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Adobe_PSL_Gaussian_Blur: {
+    menu_1355: {
         id: "menu_Live_Adobe_PSL_Gaussian_Blur",
         action: "Live Adobe PSL Gaussian Blur",
         type: "menu",
@@ -4901,7 +5073,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_RdlB: {
+    menu_1356: {
         id: "menu_Live_PSAdapter_plugin_RdlB",
         action: "Live PSAdapter_plugin_RdlB",
         type: "menu",
@@ -4915,7 +5087,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_SmrB: {
+    menu_1357: {
         id: "menu_Live_PSAdapter_plugin_SmrB",
         action: "Live PSAdapter_plugin_SmrB",
         type: "menu",
@@ -4929,7 +5101,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_AccE: {
+    menu_1358: {
         id: "menu_Live_PSAdapter_plugin_AccE",
         action: "Live PSAdapter_plugin_AccE",
         type: "menu",
@@ -4943,7 +5115,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_AngS: {
+    menu_1359: {
         id: "menu_Live_PSAdapter_plugin_AngS",
         action: "Live PSAdapter_plugin_AngS",
         type: "menu",
@@ -4957,7 +5129,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Crsh: {
+    menu_1360: {
         id: "menu_Live_PSAdapter_plugin_Crsh",
         action: "Live PSAdapter_plugin_Crsh",
         type: "menu",
@@ -4971,7 +5143,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_DrkS: {
+    menu_1361: {
         id: "menu_Live_PSAdapter_plugin_DrkS",
         action: "Live PSAdapter_plugin_DrkS",
         type: "menu",
@@ -4985,7 +5157,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_InkO: {
+    menu_1362: {
         id: "menu_Live_PSAdapter_plugin_InkO",
         action: "Live PSAdapter_plugin_InkO",
         type: "menu",
@@ -4999,7 +5171,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Spt: {
+    menu_1363: {
         id: "menu_Live_PSAdapter_plugin_Spt",
         action: "Live PSAdapter_plugin_Spt",
         type: "menu",
@@ -5013,7 +5185,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_SprS: {
+    menu_1364: {
         id: "menu_Live_PSAdapter_plugin_SprS",
         action: "Live PSAdapter_plugin_SprS",
         type: "menu",
@@ -5027,7 +5199,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Smie: {
+    menu_1365: {
         id: "menu_Live_PSAdapter_plugin_Smie",
         action: "Live PSAdapter_plugin_Smie",
         type: "menu",
@@ -5041,7 +5213,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_DfsG: {
+    menu_1366: {
         id: "menu_Live_PSAdapter_plugin_DfsG",
         action: "Live PSAdapter_plugin_DfsG",
         type: "menu",
@@ -5055,7 +5227,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Gls: {
+    menu_1367: {
         id: "menu_Live_PSAdapter_plugin_Gls",
         action: "Live PSAdapter_plugin_Gls",
         type: "menu",
@@ -5069,7 +5241,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_OcnR: {
+    menu_1368: {
         id: "menu_Live_PSAdapter_plugin_OcnR",
         action: "Live PSAdapter_plugin_OcnR",
         type: "menu",
@@ -5083,7 +5255,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_ClrH: {
+    menu_1369: {
         id: "menu_Live_PSAdapter_plugin_ClrH",
         action: "Live PSAdapter_plugin_ClrH",
         type: "menu",
@@ -5097,7 +5269,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Crst: {
+    menu_1370: {
         id: "menu_Live_PSAdapter_plugin_Crst",
         action: "Live PSAdapter_plugin_Crst",
         type: "menu",
@@ -5111,7 +5283,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Mztn: {
+    menu_1371: {
         id: "menu_Live_PSAdapter_plugin_Mztn",
         action: "Live PSAdapter_plugin_Mztn",
         type: "menu",
@@ -5125,7 +5297,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Pntl: {
+    menu_1372: {
         id: "menu_Live_PSAdapter_plugin_Pntl",
         action: "Live PSAdapter_plugin_Pntl",
         type: "menu",
@@ -5139,7 +5311,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_BsRl: {
+    menu_1373: {
         id: "menu_Live_PSAdapter_plugin_BsRl",
         action: "Live PSAdapter_plugin_BsRl",
         type: "menu",
@@ -5153,7 +5325,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_ChlC: {
+    menu_1374: {
         id: "menu_Live_PSAdapter_plugin_ChlC",
         action: "Live PSAdapter_plugin_ChlC",
         type: "menu",
@@ -5167,7 +5339,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Chrc: {
+    menu_1375: {
         id: "menu_Live_PSAdapter_plugin_Chrc",
         action: "Live PSAdapter_plugin_Chrc",
         type: "menu",
@@ -5181,7 +5353,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Chrm: {
+    menu_1376: {
         id: "menu_Live_PSAdapter_plugin_Chrm",
         action: "Live PSAdapter_plugin_Chrm",
         type: "menu",
@@ -5195,7 +5367,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_CntC: {
+    menu_1377: {
         id: "menu_Live_PSAdapter_plugin_CntC",
         action: "Live PSAdapter_plugin_CntC",
         type: "menu",
@@ -5209,7 +5381,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_GraP: {
+    menu_1378: {
         id: "menu_Live_PSAdapter_plugin_GraP",
         action: "Live PSAdapter_plugin_GraP",
         type: "menu",
@@ -5223,7 +5395,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_HlfS: {
+    menu_1379: {
         id: "menu_Live_PSAdapter_plugin_HlfS",
         action: "Live PSAdapter_plugin_HlfS",
         type: "menu",
@@ -5237,7 +5409,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_NtPr: {
+    menu_1380: {
         id: "menu_Live_PSAdapter_plugin_NtPr",
         action: "Live PSAdapter_plugin_NtPr",
         type: "menu",
@@ -5251,7 +5423,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Phtc: {
+    menu_1381: {
         id: "menu_Live_PSAdapter_plugin_Phtc",
         action: "Live PSAdapter_plugin_Phtc",
         type: "menu",
@@ -5265,7 +5437,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Plst: {
+    menu_1382: {
         id: "menu_Live_PSAdapter_plugin_Plst",
         action: "Live PSAdapter_plugin_Plst",
         type: "menu",
@@ -5279,7 +5451,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Rtcl: {
+    menu_1383: {
         id: "menu_Live_PSAdapter_plugin_Rtcl",
         action: "Live PSAdapter_plugin_Rtcl",
         type: "menu",
@@ -5293,7 +5465,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Stmp: {
+    menu_1384: {
         id: "menu_Live_PSAdapter_plugin_Stmp",
         action: "Live PSAdapter_plugin_Stmp",
         type: "menu",
@@ -5307,7 +5479,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_TrnE: {
+    menu_1385: {
         id: "menu_Live_PSAdapter_plugin_TrnE",
         action: "Live PSAdapter_plugin_TrnE",
         type: "menu",
@@ -5321,7 +5493,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_WtrP: {
+    menu_1386: {
         id: "menu_Live_PSAdapter_plugin_WtrP",
         action: "Live PSAdapter_plugin_WtrP",
         type: "menu",
@@ -5335,7 +5507,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_GlwE: {
+    menu_1387: {
         id: "menu_Live_PSAdapter_plugin_GlwE",
         action: "Live PSAdapter_plugin_GlwE",
         type: "menu",
@@ -5349,7 +5521,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Crql: {
+    menu_1388: {
         id: "menu_Live_PSAdapter_plugin_Crql",
         action: "Live PSAdapter_plugin_Crql",
         type: "menu",
@@ -5363,7 +5535,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Grn: {
+    menu_1389: {
         id: "menu_Live_PSAdapter_plugin_Grn",
         action: "Live PSAdapter_plugin_Grn",
         type: "menu",
@@ -5377,7 +5549,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_MscT: {
+    menu_1390: {
         id: "menu_Live_PSAdapter_plugin_MscT",
         action: "Live PSAdapter_plugin_MscT",
         type: "menu",
@@ -5391,7 +5563,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Ptch: {
+    menu_1391: {
         id: "menu_Live_PSAdapter_plugin_Ptch",
         action: "Live PSAdapter_plugin_Ptch",
         type: "menu",
@@ -5405,7 +5577,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_StnG: {
+    menu_1392: {
         id: "menu_Live_PSAdapter_plugin_StnG",
         action: "Live PSAdapter_plugin_StnG",
         type: "menu",
@@ -5419,7 +5591,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Txtz: {
+    menu_1393: {
         id: "menu_Live_PSAdapter_plugin_Txtz",
         action: "Live PSAdapter_plugin_Txtz",
         type: "menu",
@@ -5433,7 +5605,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_Dntr: {
+    menu_1394: {
         id: "menu_Live_PSAdapter_plugin_Dntr",
         action: "Live PSAdapter_plugin_Dntr",
         type: "menu",
@@ -5447,7 +5619,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_PSAdapter_plugin_NTSC: {
+    menu_1395: {
         id: "menu_Live_PSAdapter_plugin_NTSC",
         action: "Live PSAdapter_plugin_NTSC",
         type: "menu",
@@ -5461,7 +5633,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_preview: {
+    menu_1396: {
         id: "menu_preview",
         action: "preview",
         type: "menu",
@@ -5475,7 +5647,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_GPU_Preview: {
+    menu_1397: {
         id: "menu_GPU_Preview",
         action: "GPU Preview",
         type: "menu",
@@ -5489,7 +5661,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ink: {
+    menu_1398: {
         id: "menu_ink",
         action: "ink",
         type: "menu",
@@ -5503,7 +5675,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_raster: {
+    menu_1399: {
         id: "menu_raster",
         action: "raster",
         type: "menu",
@@ -5517,7 +5689,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_proof-document": {
+    menu_1400: {
         id: "menu_proof-document",
         action: "proof-document",
         type: "menu",
@@ -5531,7 +5703,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_proof-mac-rgb": {
+    menu_1401: {
         id: "menu_proof-mac-rgb",
         action: "proof-mac-rgb",
         type: "menu",
@@ -5545,7 +5717,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_proof-win-rgb": {
+    menu_1402: {
         id: "menu_proof-win-rgb",
         action: "proof-win-rgb",
         type: "menu",
@@ -5559,7 +5731,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_proof-monitor-rgb": {
+    menu_1403: {
         id: "menu_proof-monitor-rgb",
         action: "proof-monitor-rgb",
         type: "menu",
@@ -5573,7 +5745,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_proof-colorblindp": {
+    menu_1404: {
         id: "menu_proof-colorblindp",
         action: "proof-colorblindp",
         type: "menu",
@@ -5587,7 +5759,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_proof-colorblindd": {
+    menu_1405: {
         id: "menu_proof-colorblindd",
         action: "proof-colorblindd",
         type: "menu",
@@ -5601,7 +5773,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_proof-custom": {
+    menu_1406: {
         id: "menu_proof-custom",
         action: "proof-custom",
         type: "menu",
@@ -5615,7 +5787,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_proofColors: {
+    menu_1407: {
         id: "menu_proofColors",
         action: "proofColors",
         type: "menu",
@@ -5629,7 +5801,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_zoomin: {
+    menu_1408: {
         id: "menu_zoomin",
         action: "zoomin",
         type: "menu",
@@ -5643,7 +5815,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_zoomout: {
+    menu_1409: {
         id: "menu_zoomout",
         action: "zoomout",
         type: "menu",
@@ -5657,7 +5829,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_fitin: {
+    menu_1410: {
         id: "menu_fitin",
         action: "fitin",
         type: "menu",
@@ -5671,7 +5843,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_fitall: {
+    menu_1411: {
         id: "menu_fitall",
         action: "fitall",
         type: "menu",
@@ -5685,7 +5857,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Feedback_Menu: {
+    menu_1412: {
         id: "menu_AISlice_Feedback_Menu",
         action: "AISlice Feedback Menu",
         type: "menu",
@@ -5699,7 +5871,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AISlice_Lock_Menu: {
+    menu_1413: {
         id: "menu_AISlice_Lock_Menu",
         action: "AISlice Lock Menu",
         type: "menu",
@@ -5713,7 +5885,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AI_Bounding_Box_Toggle: {
+    menu_1414: {
         id: "menu_AI_Bounding_Box_Toggle",
         action: "AI Bounding Box Toggle",
         type: "menu",
@@ -5727,7 +5899,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_TransparencyGrid_Menu_Item: {
+    menu_1415: {
         id: "menu_TransparencyGrid_Menu_Item",
         action: "TransparencyGrid Menu Item",
         type: "menu",
@@ -5741,7 +5913,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_actualsize: {
+    menu_1416: {
         id: "menu_actualsize",
         action: "actualsize",
         type: "menu",
@@ -5755,7 +5927,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Show_Gaps_Planet_X: {
+    menu_1417: {
         id: "menu_Show_Gaps_Planet_X",
         action: "Show Gaps Planet X",
         type: "menu",
@@ -5769,7 +5941,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Gradient_Feedback: {
+    menu_1418: {
         id: "menu_Gradient_Feedback",
         action: "Gradient Feedback",
         type: "menu",
@@ -5783,7 +5955,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Live_Corner_Annotator: {
+    menu_1419: {
         id: "menu_Live_Corner_Annotator",
         action: "Live Corner Annotator",
         type: "menu",
@@ -5798,7 +5970,7 @@ const commandsData = {
         hidden: false,
         minVersion: 17.1,
     },
-    menu_edge: {
+    menu_1420: {
         id: "menu_edge",
         action: "edge",
         type: "menu",
@@ -5812,7 +5984,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_Snapomatic_on-off_menu_item": {
+    menu_1421: {
         id: "menu_Snapomatic_on-off_menu_item",
         action: "Snapomatic on-off menu item",
         type: "menu",
@@ -5826,7 +5998,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Show_Perspective_Grid: {
+    menu_1422: {
         id: "menu_Show_Perspective_Grid",
         action: "Show Perspective Grid",
         type: "menu",
@@ -5840,7 +6012,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Show_Ruler: {
+    menu_1423: {
         id: "menu_Show_Ruler",
         action: "Show Ruler",
         type: "menu",
@@ -5854,7 +6026,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Snap_to_Grid: {
+    menu_1424: {
         id: "menu_Snap_to_Grid",
         action: "Snap to Grid",
         type: "menu",
@@ -5868,7 +6040,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Lock_Perspective_Grid: {
+    menu_1425: {
         id: "menu_Lock_Perspective_Grid",
         action: "Lock Perspective Grid",
         type: "menu",
@@ -5882,7 +6054,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Lock_Station_Point: {
+    menu_1426: {
         id: "menu_Lock_Station_Point",
         action: "Lock Station Point",
         type: "menu",
@@ -5896,7 +6068,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Define_Perspective_Grid: {
+    menu_1427: {
         id: "menu_Define_Perspective_Grid",
         action: "Define Perspective Grid",
         type: "menu",
@@ -5910,7 +6082,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Save_Perspective_Grid_as_Preset: {
+    menu_1428: {
         id: "menu_Save_Perspective_Grid_as_Preset",
         action: "Save Perspective Grid as Preset",
         type: "menu",
@@ -5924,7 +6096,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_artboard: {
+    menu_1429: {
         id: "menu_artboard",
         action: "artboard",
         type: "menu",
@@ -5938,7 +6110,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_pagetiling: {
+    menu_1430: {
         id: "menu_pagetiling",
         action: "pagetiling",
         type: "menu",
@@ -5952,7 +6124,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_showtemplate: {
+    menu_1431: {
         id: "menu_showtemplate",
         action: "showtemplate",
         type: "menu",
@@ -5966,7 +6138,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ruler: {
+    menu_1432: {
         id: "menu_ruler",
         action: "ruler",
         type: "menu",
@@ -5980,7 +6152,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_rulerCoordinateSystem: {
+    menu_1433: {
         id: "menu_rulerCoordinateSystem",
         action: "rulerCoordinateSystem",
         type: "menu",
@@ -5994,7 +6166,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_videoruler: {
+    menu_1434: {
         id: "menu_videoruler",
         action: "videoruler",
         type: "menu",
@@ -6008,7 +6180,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_textthreads: {
+    menu_1435: {
         id: "menu_textthreads",
         action: "textthreads",
         type: "menu",
@@ -6022,7 +6194,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_showguide: {
+    menu_1436: {
         id: "menu_showguide",
         action: "showguide",
         type: "menu",
@@ -6036,7 +6208,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_lockguide: {
+    menu_1437: {
         id: "menu_lockguide",
         action: "lockguide",
         type: "menu",
@@ -6050,7 +6222,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_makeguide: {
+    menu_1438: {
         id: "menu_makeguide",
         action: "makeguide",
         type: "menu",
@@ -6064,7 +6236,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_releaseguide: {
+    menu_1439: {
         id: "menu_releaseguide",
         action: "releaseguide",
         type: "menu",
@@ -6078,7 +6250,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_clearguide: {
+    menu_1440: {
         id: "menu_clearguide",
         action: "clearguide",
         type: "menu",
@@ -6092,7 +6264,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_showgrid: {
+    menu_1441: {
         id: "menu_showgrid",
         action: "showgrid",
         type: "menu",
@@ -6106,7 +6278,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_snapgrid: {
+    menu_1442: {
         id: "menu_snapgrid",
         action: "snapgrid",
         type: "menu",
@@ -6120,7 +6292,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_snappoint: {
+    menu_1443: {
         id: "menu_snappoint",
         action: "snappoint",
         type: "menu",
@@ -6134,7 +6306,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_newview: {
+    menu_1444: {
         id: "menu_newview",
         action: "newview",
         type: "menu",
@@ -6148,7 +6320,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_editview: {
+    menu_1445: {
         id: "menu_editview",
         action: "editview",
         type: "menu",
@@ -6162,7 +6334,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_newwindow: {
+    menu_1446: {
         id: "menu_newwindow",
         action: "newwindow",
         type: "menu",
@@ -6176,7 +6348,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_cascade: {
+    menu_1447: {
         id: "menu_cascade",
         action: "cascade",
         type: "menu",
@@ -6190,7 +6362,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_tile: {
+    menu_1448: {
         id: "menu_tile",
         action: "tile",
         type: "menu",
@@ -6204,7 +6376,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_floatInWindow: {
+    menu_1449: {
         id: "menu_floatInWindow",
         action: "floatInWindow",
         type: "menu",
@@ -6218,7 +6390,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_floatAllInWindows: {
+    menu_1450: {
         id: "menu_floatAllInWindows",
         action: "floatAllInWindows",
         type: "menu",
@@ -6232,7 +6404,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_consolidateAllWindows: {
+    menu_1451: {
         id: "menu_consolidateAllWindows",
         action: "consolidateAllWindows",
         type: "menu",
@@ -6246,7 +6418,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_Browse_Add-Ons_Menu": {
+    menu_1452: {
         id: "menu_Browse_Add-Ons_Menu",
         action: "Browse Add-Ons Menu",
         type: "menu",
@@ -6261,7 +6433,7 @@ const commandsData = {
         hidden: false,
         minVersion: 19,
     },
-    menu_Adobe_Reset_Workspace: {
+    menu_1453: {
         id: "menu_Adobe_Reset_Workspace",
         action: "Adobe Reset Workspace",
         type: "menu",
@@ -6275,7 +6447,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_New_Workspace: {
+    menu_1454: {
         id: "menu_Adobe_New_Workspace",
         action: "Adobe New Workspace",
         type: "menu",
@@ -6289,7 +6461,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Manage_Workspace: {
+    menu_1455: {
         id: "menu_Adobe_Manage_Workspace",
         action: "Adobe Manage Workspace",
         type: "menu",
@@ -6303,7 +6475,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_drover_control_palette_plugin: {
+    menu_1457: {
         id: "menu_drover_control_palette_plugin",
         action: "drover control palette plugin",
         type: "menu",
@@ -6317,7 +6489,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Advanced_Toolbar_Menu: {
+    menu_1458: {
         id: "menu_Adobe_Advanced_Toolbar_Menu",
         action: "Adobe Advanced Toolbar Menu",
         type: "menu",
@@ -6332,7 +6504,7 @@ const commandsData = {
         hidden: false,
         minVersion: 23,
     },
-    menu_Adobe_Basic_Toolbar_Menu: {
+    menu_1459: {
         id: "menu_Adobe_Basic_Toolbar_Menu",
         action: "Adobe Basic Toolbar Menu",
         type: "menu",
@@ -6347,7 +6519,7 @@ const commandsData = {
         hidden: false,
         minVersion: 23,
     },
-    menu_Adobe_Quick_Toolbar_Menu: {
+    menu_1460: {
         id: "menu_Adobe_Quick_Toolbar_Menu",
         action: "Adobe Quick Toolbar Menu",
         type: "menu",
@@ -6362,7 +6534,7 @@ const commandsData = {
         hidden: false,
         minVersion: 29.3,
     },
-    menu_New_Tools_Panel: {
+    menu_1461: {
         id: "menu_New_Tools_Panel",
         action: "New Tools Panel",
         type: "menu",
@@ -6377,7 +6549,7 @@ const commandsData = {
         hidden: false,
         minVersion: 17,
     },
-    menu_Manage_Tools_Panel: {
+    menu_1462: {
         id: "menu_Manage_Tools_Panel",
         action: "Manage Tools Panel",
         type: "menu",
@@ -6392,7 +6564,7 @@ const commandsData = {
         hidden: false,
         minVersion: 17,
     },
-    menu_Adobe_3D_Panel: {
+    menu_1463: {
         id: "menu_Adobe_3D_Panel",
         action: "Adobe 3D Panel",
         type: "menu",
@@ -6407,7 +6579,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_Adobe_Action_Palette: {
+    menu_1464: {
         id: "menu_Adobe_Action_Palette",
         action: "Adobe Action Palette",
         type: "menu",
@@ -6421,7 +6593,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AdobeAlignObjects2: {
+    menu_1465: {
         id: "menu_AdobeAlignObjects2",
         action: "AdobeAlignObjects2",
         type: "menu",
@@ -6435,7 +6607,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Style_Palette: {
+    menu_1466: {
         id: "menu_Style_Palette",
         action: "Style Palette",
         type: "menu",
@@ -6449,7 +6621,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Artboard_Palette: {
+    menu_1467: {
         id: "menu_Adobe_Artboard_Palette",
         action: "Adobe Artboard Palette",
         type: "menu",
@@ -6463,7 +6635,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_SmartExport_Panel_Menu_Item: {
+    menu_1468: {
         id: "menu_Adobe_SmartExport_Panel_Menu_Item",
         action: "Adobe SmartExport Panel Menu Item",
         type: "menu",
@@ -6478,7 +6650,7 @@ const commandsData = {
         hidden: false,
         minVersion: 20,
     },
-    "menu_internal_palettes_posing_as_plug-in_menus-attributes": {
+    menu_1469: {
         id: "menu_internal_palettes_posing_as_plug-in_menus-attributes",
         action: "internal palettes posing as plug-in menus-attributes",
         type: "menu",
@@ -6492,7 +6664,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_BrushManager_Menu_Item: {
+    menu_1470: {
         id: "menu_Adobe_BrushManager_Menu_Item",
         action: "Adobe BrushManager Menu Item",
         type: "menu",
@@ -6506,7 +6678,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Color_Palette: {
+    menu_1471: {
         id: "menu_Adobe_Color_Palette",
         action: "Adobe Color Palette",
         type: "menu",
@@ -6520,7 +6692,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Harmony_Palette: {
+    menu_1472: {
         id: "menu_Adobe_Harmony_Palette",
         action: "Adobe Harmony Palette",
         type: "menu",
@@ -6534,7 +6706,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Illustrator_Kuler_Panel: {
+    menu_1473: {
         id: "menu_Adobe_Illustrator_Kuler_Panel",
         action: "Adobe Illustrator Kuler Panel",
         type: "menu",
@@ -6550,7 +6722,7 @@ const commandsData = {
         minVersion: 22,
         maxVersion: 25.9,
     },
-    menu_Adobe_Commenting_Palette: {
+    menu_1474: {
         id: "menu_Adobe_Commenting_Palette",
         action: "Adobe Commenting Palette",
         type: "menu",
@@ -6565,7 +6737,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_CSS_Menu_Item: {
+    menu_1475: {
         id: "menu_CSS_Menu_Item",
         action: "CSS Menu Item",
         type: "menu",
@@ -6579,7 +6751,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_DocInfo1: {
+    menu_1476: {
         id: "menu_DocInfo1",
         action: "DocInfo1",
         type: "menu",
@@ -6593,7 +6765,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Flattening_Preview: {
+    menu_1477: {
         id: "menu_Adobe_Flattening_Preview",
         action: "Adobe Flattening Preview",
         type: "menu",
@@ -6607,7 +6779,23 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Generate: {
+    menu_1478: {
+        id: "menu_Adobe_Generative_Patterns_Panel",
+        action: "Adobe Generative Patterns Panel",
+        type: "menu",
+        docRequired: true,
+        selRequired: false,
+        name: {
+            en: "Window > Generate Patterns",
+            de: "Window > Generate Patterns",
+            ru: "Window > Generate Patterns",
+            "zh-cn": "Window > Generate Patterns",
+        },
+        hidden: false,
+        minVersion: 28.6,
+        maxVersion: 29.999,
+    },
+    menu_1479: {
         id: "menu_Generate",
         action: "Generate",
         type: "menu",
@@ -6622,7 +6810,7 @@ const commandsData = {
         hidden: false,
         minVersion: 28,
     },
-    menu_Adobe_Gradient_Palette: {
+    menu_1480: {
         id: "menu_Adobe_Gradient_Palette",
         action: "Adobe Gradient Palette",
         type: "menu",
@@ -6636,7 +6824,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Style_Palette: {
+    menu_1481: {
         id: "menu_Adobe_Style_Palette",
         action: "Adobe Style Palette",
         type: "menu",
@@ -6650,7 +6838,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_HistoryPanel_Menu_Item: {
+    menu_1482: {
         id: "menu_Adobe_HistoryPanel_Menu_Item",
         action: "Adobe HistoryPanel Menu Item",
         type: "menu",
@@ -6666,7 +6854,7 @@ const commandsData = {
         minVersion: 26.4,
         maxVersion: 26.9,
     },
-    menu_Adobe_History_Panel_Menu_Item: {
+    menu_1483: {
         id: "menu_Adobe_History_Panel_Menu_Item",
         action: "Adobe History Panel Menu Item",
         type: "menu",
@@ -6681,7 +6869,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    menu_Adobe_Vectorize_Panel: {
+    menu_1484: {
         id: "menu_Adobe_Vectorize_Panel",
         action: "Adobe Vectorize Panel",
         type: "menu",
@@ -6695,7 +6883,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_internal_palettes_posing_as_plug-in_menus-info": {
+    menu_1485: {
         id: "menu_internal_palettes_posing_as_plug-in_menus-info",
         action: "internal palettes posing as plug-in menus-info",
         type: "menu",
@@ -6709,7 +6897,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AdobeLayerPalette1: {
+    menu_1486: {
         id: "menu_AdobeLayerPalette1",
         action: "AdobeLayerPalette1",
         type: "menu",
@@ -6723,7 +6911,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Learn_Panel_Menu_Item: {
+    menu_1487: {
         id: "menu_Adobe_Learn_Panel_Menu_Item",
         action: "Adobe Learn Panel Menu Item",
         type: "menu",
@@ -6739,7 +6927,7 @@ const commandsData = {
         minVersion: 22,
         maxVersion: 25.9,
     },
-    menu_Adobe_CSXS_Extension_comadobeDesignLibrariesangularLibraries: {
+    menu_1488: {
         id: "menu_Adobe_CSXS_Extension_comadobeDesignLibrariesangularLibraries",
         action: "Adobe CSXS Extension com.adobe.DesignLibraries.angularLibraries",
         type: "menu",
@@ -6753,7 +6941,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_LinkPalette_Menu_Item: {
+    menu_1489: {
         id: "menu_Adobe_LinkPalette_Menu_Item",
         action: "Adobe LinkPalette Menu Item",
         type: "menu",
@@ -6767,7 +6955,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AI_Magic_Wand: {
+    menu_1490: {
         id: "menu_AI_Magic_Wand",
         action: "AI Magic Wand",
         type: "menu",
@@ -6781,7 +6969,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Vector_Edge_Panel: {
+    menu_1491: {
         id: "menu_Adobe_Vector_Edge_Panel",
         action: "Adobe Vector Edge Panel",
         type: "menu",
@@ -6796,7 +6984,7 @@ const commandsData = {
         hidden: false,
         minVersion: 28,
     },
-    menu_AdobeNavigator: {
+    menu_1492: {
         id: "menu_AdobeNavigator",
         action: "AdobeNavigator",
         type: "menu",
@@ -6810,7 +6998,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_PathfinderUI: {
+    menu_1493: {
         id: "menu_Adobe_PathfinderUI",
         action: "Adobe PathfinderUI",
         type: "menu",
@@ -6824,7 +7012,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Pattern_Panel_Toggle: {
+    menu_1494: {
         id: "menu_Adobe_Pattern_Panel_Toggle",
         action: "Adobe Pattern Panel Toggle",
         type: "menu",
@@ -6838,7 +7026,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ReTypeWindowMenu: {
+    menu_1496: {
         id: "menu_ReTypeWindowMenu",
         action: "ReTypeWindowMenu",
         type: "menu",
@@ -6853,7 +7041,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27.6,
     },
-    menu_Adobe_Separation_Preview_Panel: {
+    menu_1497: {
         id: "menu_Adobe_Separation_Preview_Panel",
         action: "Adobe Separation Preview Panel",
         type: "menu",
@@ -6867,7 +7055,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Stroke_Palette: {
+    menu_1498: {
         id: "menu_Adobe_Stroke_Palette",
         action: "Adobe Stroke Palette",
         type: "menu",
@@ -6881,7 +7069,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_SVG_Interactivity_Palette: {
+    menu_1499: {
         id: "menu_Adobe_SVG_Interactivity_Palette",
         action: "Adobe SVG Interactivity Palette",
         type: "menu",
@@ -6895,7 +7083,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Swatches_Menu_Item: {
+    menu_1500: {
         id: "menu_Adobe_Swatches_Menu_Item",
         action: "Adobe Swatches Menu Item",
         type: "menu",
@@ -6909,7 +7097,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Symbol_Palette: {
+    menu_1501: {
         id: "menu_Adobe_Symbol_Palette",
         action: "Adobe Symbol Palette",
         type: "menu",
@@ -6923,7 +7111,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AdobeTransformObjects1: {
+    menu_1502: {
         id: "menu_AdobeTransformObjects1",
         action: "AdobeTransformObjects1",
         type: "menu",
@@ -6937,7 +7125,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Transparency_Palette_Menu_Item: {
+    menu_1503: {
         id: "menu_Adobe_Transparency_Palette_Menu_Item",
         action: "Adobe Transparency Palette Menu Item",
         type: "menu",
@@ -6951,7 +7139,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_internal_palettes_posing_as_plug-in_menus-character": {
+    menu_1504: {
         id: "menu_internal_palettes_posing_as_plug-in_menus-character",
         action: "internal palettes posing as plug-in menus-character",
         type: "menu",
@@ -6965,7 +7153,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Character_Styles: {
+    menu_1505: {
         id: "menu_Character_Styles",
         action: "Character Styles",
         type: "menu",
@@ -6979,7 +7167,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_alternate_glyph_palette_plugin_2: {
+    menu_1506: {
         id: "menu_alternate_glyph_palette_plugin_2",
         action: "alternate glyph palette plugin 2",
         type: "menu",
@@ -6993,7 +7181,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_internal_palettes_posing_as_plug-in_menus-opentype": {
+    menu_1507: {
         id: "menu_internal_palettes_posing_as_plug-in_menus-opentype",
         action: "internal palettes posing as plug-in menus-opentype",
         type: "menu",
@@ -7007,7 +7195,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    "menu_internal_palettes_posing_as_plug-in_menus-paragraph": {
+    menu_1508: {
         id: "menu_internal_palettes_posing_as_plug-in_menus-paragraph",
         action: "internal palettes posing as plug-in menus-paragraph",
         type: "menu",
@@ -7021,7 +7209,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Paragraph_Styles_Palette: {
+    menu_1509: {
         id: "menu_Adobe_Paragraph_Styles_Palette",
         action: "Adobe Paragraph Styles Palette",
         type: "menu",
@@ -7035,7 +7223,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ReflowWindowMenu: {
+    menu_1510: {
         id: "menu_ReflowWindowMenu",
         action: "ReflowWindowMenu",
         type: "menu",
@@ -7050,7 +7238,7 @@ const commandsData = {
         hidden: false,
         minVersion: 29,
     },
-    "menu_internal_palettes_posing_as_plug-in_menus-tab": {
+    menu_1511: {
         id: "menu_internal_palettes_posing_as_plug-in_menus-tab",
         action: "internal palettes posing as plug-in menus-tab",
         type: "menu",
@@ -7064,7 +7252,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Variables_Palette_Menu_Item: {
+    menu_1512: {
         id: "menu_Adobe_Variables_Palette_Menu_Item",
         action: "Adobe Variables Palette Menu Item",
         type: "menu",
@@ -7078,7 +7266,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Version_History_File_Menu_Item: {
+    menu_1513: {
         id: "menu_Adobe_Version_History_File_Menu_Item",
         action: "Adobe Version History File Menu Item",
         type: "menu",
@@ -7093,7 +7281,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_AdobeBrushMgrUI_Other_libraries_menu_item: {
+    menu_1539: {
         id: "menu_AdobeBrushMgrUI_Other_libraries_menu_item",
         action: "AdobeBrushMgrUI Other libraries menu item",
         type: "menu",
@@ -7107,7 +7295,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Art_Style_Plugin_Other_libraries_menu_item: {
+    menu_1552: {
         id: "menu_Adobe_Art_Style_Plugin_Other_libraries_menu_item",
         action: "Adobe Art Style Plugin Other libraries menu item",
         type: "menu",
@@ -7121,7 +7309,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AdobeSwatch__Other_libraries_menu_item: {
+    menu_1654: {
         id: "menu_AdobeSwatch__Other_libraries_menu_item",
         action: "AdobeSwatch_ Other libraries menu item",
         type: "menu",
@@ -7135,7 +7323,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Symbol_Palette_Plugin_Other_libraries_menu_item: {
+    menu_1683: {
         id: "menu_Adobe_Symbol_Palette_Plugin_Other_libraries_menu_item",
         action: "Adobe Symbol Palette Plugin Other libraries menu item",
         type: "menu",
@@ -7149,7 +7337,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_helpcontent: {
+    menu_1684: {
         id: "menu_helpcontent",
         action: "helpcontent",
         type: "menu",
@@ -7163,7 +7351,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_whatsNewContent: {
+    menu_1685: {
         id: "menu_whatsNewContent",
         action: "whatsNewContent",
         type: "menu",
@@ -7178,7 +7366,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27.9,
     },
-    menu_supportCommunity: {
+    menu_1686: {
         id: "menu_supportCommunity",
         action: "supportCommunity",
         type: "menu",
@@ -7193,7 +7381,7 @@ const commandsData = {
         hidden: false,
         minVersion: 26,
     },
-    menu_wishform: {
+    menu_1687: {
         id: "menu_wishform",
         action: "wishform",
         type: "menu",
@@ -7208,7 +7396,7 @@ const commandsData = {
         hidden: false,
         minVersion: 25,
     },
-    menu_System_Info: {
+    menu_1688: {
         id: "menu_System_Info",
         action: "System Info",
         type: "menu",
@@ -7222,7 +7410,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Actions_Batch: {
+    menu_1694: {
         id: "menu_Adobe_Actions_Batch",
         action: "Adobe Actions Batch",
         type: "menu",
@@ -7236,7 +7424,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_New_Fill_Shortcut: {
+    menu_1695: {
         id: "menu_Adobe_New_Fill_Shortcut",
         action: "Adobe New Fill Shortcut",
         type: "menu",
@@ -7250,7 +7438,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_New_Stroke_Shortcut: {
+    menu_1696: {
         id: "menu_Adobe_New_Stroke_Shortcut",
         action: "Adobe New Stroke Shortcut",
         type: "menu",
@@ -7264,7 +7452,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_New_Style_Shortcut: {
+    menu_1697: {
         id: "menu_Adobe_New_Style_Shortcut",
         action: "Adobe New Style Shortcut",
         type: "menu",
@@ -7278,7 +7466,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AdobeLayerPalette2: {
+    menu_1698: {
         id: "menu_AdobeLayerPalette2",
         action: "AdobeLayerPalette2",
         type: "menu",
@@ -7292,7 +7480,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_AdobeLayerPalette3: {
+    menu_1699: {
         id: "menu_AdobeLayerPalette3",
         action: "AdobeLayerPalette3",
         type: "menu",
@@ -7306,7 +7494,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_Update_Link_Shortcut: {
+    menu_1700: {
         id: "menu_Adobe_Update_Link_Shortcut",
         action: "Adobe Update Link Shortcut",
         type: "menu",
@@ -7320,7 +7508,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_New_Swatch_Shortcut_Menu: {
+    menu_1701: {
         id: "menu_Adobe_New_Swatch_Shortcut_Menu",
         action: "Adobe New Swatch Shortcut Menu",
         type: "menu",
@@ -7334,7 +7522,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_Adobe_New_Symbol_Shortcut: {
+    menu_1702: {
         id: "menu_Adobe_New_Symbol_Shortcut",
         action: "Adobe New Symbol Shortcut",
         type: "menu",
@@ -7348,7 +7536,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_about: {
+    menu_1703: {
         id: "menu_about",
         action: "about",
         type: "menu",
@@ -7362,7 +7550,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_preference: {
+    menu_1704: {
         id: "menu_preference",
         action: "preference",
         type: "menu",
@@ -7376,7 +7564,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_selectPref: {
+    menu_1705: {
         id: "menu_selectPref",
         action: "selectPref",
         type: "menu",
@@ -7390,7 +7578,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_keyboardPref: {
+    menu_1706: {
         id: "menu_keyboardPref",
         action: "keyboardPref",
         type: "menu",
@@ -7404,7 +7592,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_unitundoPref: {
+    menu_1707: {
         id: "menu_unitundoPref",
         action: "unitundoPref",
         type: "menu",
@@ -7418,7 +7606,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_guidegridPref: {
+    menu_1708: {
         id: "menu_guidegridPref",
         action: "guidegridPref",
         type: "menu",
@@ -7432,7 +7620,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_snapPref: {
+    menu_1709: {
         id: "menu_snapPref",
         action: "snapPref",
         type: "menu",
@@ -7446,7 +7634,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_slicePref: {
+    menu_1710: {
         id: "menu_slicePref",
         action: "slicePref",
         type: "menu",
@@ -7460,7 +7648,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_hyphenPref: {
+    menu_1711: {
         id: "menu_hyphenPref",
         action: "hyphenPref",
         type: "menu",
@@ -7474,7 +7662,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_pluginPref: {
+    menu_1712: {
         id: "menu_pluginPref",
         action: "pluginPref",
         type: "menu",
@@ -7488,7 +7676,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_UIPref: {
+    menu_1713: {
         id: "menu_UIPref",
         action: "UIPref",
         type: "menu",
@@ -7502,7 +7690,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_GPUPerformancePref: {
+    menu_1714: {
         id: "menu_GPUPerformancePref",
         action: "GPUPerformancePref",
         type: "menu",
@@ -7517,7 +7705,7 @@ const commandsData = {
         hidden: false,
         minVersion: 19,
     },
-    menu_FilePref: {
+    menu_1715: {
         id: "menu_FilePref",
         action: "FilePref",
         type: "menu",
@@ -7531,7 +7719,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_ClipboardPref: {
+    menu_1716: {
         id: "menu_ClipboardPref",
         action: "ClipboardPref",
         type: "menu",
@@ -7546,7 +7734,7 @@ const commandsData = {
         hidden: false,
         minVersion: 25,
     },
-    menu_BlackPref: {
+    menu_1717: {
         id: "menu_BlackPref",
         action: "BlackPref",
         type: "menu",
@@ -7560,7 +7748,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    menu_DevicesPref: {
+    menu_1718: {
         id: "menu_DevicesPref",
         action: "DevicesPref",
         type: "menu",
@@ -7575,7 +7763,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    menu_Debug_Panel: {
+    menu_1719: {
         id: "menu_Debug_Panel",
         action: "Debug Panel",
         type: "menu",
@@ -7589,7 +7777,7 @@ const commandsData = {
         },
         hidden: false,
     },
-    tool_Adobe_Add_Anchor_Point_Tool: {
+    tool_1000: {
         id: "tool_Adobe_Add_Anchor_Point_Tool",
         action: "Adobe Add Anchor Point Tool",
         type: "tool",
@@ -7603,7 +7791,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Anchor_Point_Tool: {
+    tool_1001: {
         id: "tool_Adobe_Anchor_Point_Tool",
         action: "Adobe Anchor Point Tool",
         type: "tool",
@@ -7617,7 +7805,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Arc_Tool: {
+    tool_1002: {
         id: "tool_Adobe_Arc_Tool",
         action: "Adobe Arc Tool",
         type: "tool",
@@ -7631,7 +7819,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Area_Graph_Tool: {
+    tool_1003: {
         id: "tool_Adobe_Area_Graph_Tool",
         action: "Adobe Area Graph Tool",
         type: "tool",
@@ -7645,7 +7833,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Area_Type_Tool: {
+    tool_1004: {
         id: "tool_Adobe_Area_Type_Tool",
         action: "Adobe Area Type Tool",
         type: "tool",
@@ -7659,7 +7847,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Constraints_Tool: {
+    tool_1005: {
         id: "tool_Adobe_Constraints_Tool",
         action: "Adobe Constraints Tool",
         type: "tool",
@@ -7669,7 +7857,7 @@ const commandsData = {
         hidden: false,
         minVersion: 29,
     },
-    tool_Adobe_Crop_Tool: {
+    tool_1006: {
         id: "tool_Adobe_Crop_Tool",
         action: "Adobe Crop Tool",
         type: "tool",
@@ -7683,7 +7871,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Bar_Graph_Tool: {
+    tool_1007: {
         id: "tool_Adobe_Bar_Graph_Tool",
         action: "Adobe Bar Graph Tool",
         type: "tool",
@@ -7697,7 +7885,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Blend_Tool: {
+    tool_1008: {
         id: "tool_Adobe_Blend_Tool",
         action: "Adobe Blend Tool",
         type: "tool",
@@ -7711,7 +7899,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Bloat_Tool: {
+    tool_1009: {
         id: "tool_Adobe_Bloat_Tool",
         action: "Adobe Bloat Tool",
         type: "tool",
@@ -7725,7 +7913,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Blob_Brush_Tool: {
+    tool_1010: {
         id: "tool_Adobe_Blob_Brush_Tool",
         action: "Adobe Blob Brush Tool",
         type: "tool",
@@ -7739,7 +7927,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Column_Graph_Tool: {
+    tool_1011: {
         id: "tool_Adobe_Column_Graph_Tool",
         action: "Adobe Column Graph Tool",
         type: "tool",
@@ -7753,7 +7941,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Cyrstallize_Tool: {
+    tool_1012: {
         id: "tool_Adobe_Cyrstallize_Tool",
         action: "Adobe Cyrstallize Tool",
         type: "tool",
@@ -7767,7 +7955,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Curvature_Tool: {
+    tool_1013: {
         id: "tool_Adobe_Curvature_Tool",
         action: "Adobe Curvature Tool",
         type: "tool",
@@ -7781,7 +7969,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Delete_Anchor_Point_Tool: {
+    tool_1014: {
         id: "tool_Adobe_Delete_Anchor_Point_Tool",
         action: "Adobe Delete Anchor Point Tool",
         type: "tool",
@@ -7795,7 +7983,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Dimension_Tool: {
+    tool_1015: {
         id: "tool_Adobe_Dimension_Tool",
         action: "Adobe Dimension Tool",
         type: "tool",
@@ -7805,7 +7993,7 @@ const commandsData = {
         hidden: false,
         minVersion: 28.1,
     },
-    tool_Adobe_Direct_Select_Tool: {
+    tool_1016: {
         id: "tool_Adobe_Direct_Select_Tool",
         action: "Adobe Direct Select Tool",
         type: "tool",
@@ -7819,7 +8007,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Ellipse_Shape_Tool: {
+    tool_1017: {
         id: "tool_Adobe_Ellipse_Shape_Tool",
         action: "Adobe Ellipse Shape Tool",
         type: "tool",
@@ -7833,7 +8021,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Eraser_Tool: {
+    tool_1018: {
         id: "tool_Adobe_Eraser_Tool",
         action: "Adobe Eraser Tool",
         type: "tool",
@@ -7847,7 +8035,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Eyedropper_Tool: {
+    tool_1019: {
         id: "tool_Adobe_Eyedropper_Tool",
         action: "Adobe Eyedropper Tool",
         type: "tool",
@@ -7861,7 +8049,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Flare_Tool: {
+    tool_1020: {
         id: "tool_Adobe_Flare_Tool",
         action: "Adobe Flare Tool",
         type: "tool",
@@ -7875,7 +8063,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Free_Transform_Tool: {
+    tool_1021: {
         id: "tool_Adobe_Free_Transform_Tool",
         action: "Adobe Free Transform Tool",
         type: "tool",
@@ -7889,7 +8077,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Gradient_Vector_Tool: {
+    tool_1022: {
         id: "tool_Adobe_Gradient_Vector_Tool",
         action: "Adobe Gradient Vector Tool",
         type: "tool",
@@ -7903,7 +8091,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Direct_Object_Select_Tool: {
+    tool_1023: {
         id: "tool_Adobe_Direct_Object_Select_Tool",
         action: "Adobe Direct Object Select Tool",
         type: "tool",
@@ -7917,7 +8105,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Scroll_Tool: {
+    tool_1024: {
         id: "tool_Adobe_Scroll_Tool",
         action: "Adobe Scroll Tool",
         type: "tool",
@@ -7931,7 +8119,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Intertwine_Zone_Marker_Tool: {
+    tool_1025: {
         id: "tool_Adobe_Intertwine_Zone_Marker_Tool",
         action: "Adobe Intertwine Zone Marker Tool",
         type: "tool",
@@ -7941,7 +8129,7 @@ const commandsData = {
         hidden: false,
         minVersion: 27,
     },
-    tool_Adobe_Corner_Join_Tool: {
+    tool_1026: {
         id: "tool_Adobe_Corner_Join_Tool",
         action: "Adobe Corner Join Tool",
         type: "tool",
@@ -7955,7 +8143,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Knife_Tool: {
+    tool_1027: {
         id: "tool_Adobe_Knife_Tool",
         action: "Adobe Knife Tool",
         type: "tool",
@@ -7969,7 +8157,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Direct_Lasso_Tool: {
+    tool_1028: {
         id: "tool_Adobe_Direct_Lasso_Tool",
         action: "Adobe Direct Lasso Tool",
         type: "tool",
@@ -7983,7 +8171,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Line_Graph_Tool: {
+    tool_1029: {
         id: "tool_Adobe_Line_Graph_Tool",
         action: "Adobe Line Graph Tool",
         type: "tool",
@@ -7997,7 +8185,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Line_Tool: {
+    tool_1030: {
         id: "tool_Adobe_Line_Tool",
         action: "Adobe Line Tool",
         type: "tool",
@@ -8011,7 +8199,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Planar_Paintbucket_Tool: {
+    tool_1031: {
         id: "tool_Adobe_Planar_Paintbucket_Tool",
         action: "Adobe Planar Paintbucket Tool",
         type: "tool",
@@ -8025,7 +8213,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Planar_Face_Select_Tool: {
+    tool_1032: {
         id: "tool_Adobe_Planar_Face_Select_Tool",
         action: "Adobe Planar Face Select Tool",
         type: "tool",
@@ -8039,7 +8227,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Magic_Wand_Tool: {
+    tool_1033: {
         id: "tool_Adobe_Magic_Wand_Tool",
         action: "Adobe Magic Wand Tool",
         type: "tool",
@@ -8053,7 +8241,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Measure_Tool: {
+    tool_1034: {
         id: "tool_Adobe_Measure_Tool",
         action: "Adobe Measure Tool",
         type: "tool",
@@ -8067,7 +8255,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Mesh_Editing_Tool: {
+    tool_1035: {
         id: "tool_Adobe_Mesh_Editing_Tool",
         action: "Adobe Mesh Editing Tool",
         type: "tool",
@@ -8081,7 +8269,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Brush_Tool: {
+    tool_1036: {
         id: "tool_Adobe_Brush_Tool",
         action: "Adobe Brush Tool",
         type: "tool",
@@ -8095,7 +8283,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Freehand_Erase_Tool: {
+    tool_1037: {
         id: "tool_Adobe_Freehand_Erase_Tool",
         action: "Adobe Freehand Erase Tool",
         type: "tool",
@@ -8109,7 +8297,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Pattern_Tile_Tool: {
+    tool_1038: {
         id: "tool_Adobe_Pattern_Tile_Tool",
         action: "Adobe Pattern Tile Tool",
         type: "tool",
@@ -8123,7 +8311,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Pen_Tool: {
+    tool_1039: {
         id: "tool_Adobe_Pen_Tool",
         action: "Adobe Pen Tool",
         type: "tool",
@@ -8137,7 +8325,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Freehand_Tool: {
+    tool_1040: {
         id: "tool_Adobe_Freehand_Tool",
         action: "Adobe Freehand Tool",
         type: "tool",
@@ -8151,7 +8339,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Perspective_Grid_Tool: {
+    tool_1041: {
         id: "tool_Perspective_Grid_Tool",
         action: "Perspective Grid Tool",
         type: "tool",
@@ -8165,7 +8353,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Perspective_Selection_Tool: {
+    tool_1042: {
         id: "tool_Perspective_Selection_Tool",
         action: "Perspective Selection Tool",
         type: "tool",
@@ -8179,7 +8367,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Pie_Graph_Tool: {
+    tool_1043: {
         id: "tool_Adobe_Pie_Graph_Tool",
         action: "Adobe Pie Graph Tool",
         type: "tool",
@@ -8193,7 +8381,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Polar_Grid_Tool: {
+    tool_1045: {
         id: "tool_Adobe_Polar_Grid_Tool",
         action: "Adobe Polar Grid Tool",
         type: "tool",
@@ -8207,7 +8395,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Shape_Construction_Regular_Polygon_Tool: {
+    tool_1046: {
         id: "tool_Adobe_Shape_Construction_Regular_Polygon_Tool",
         action: "Adobe Shape Construction Regular Polygon Tool",
         type: "tool",
@@ -8221,7 +8409,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Page_Tool: {
+    tool_1047: {
         id: "tool_Adobe_Page_Tool",
         action: "Adobe Page Tool",
         type: "tool",
@@ -8235,7 +8423,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Pucker_Tool: {
+    tool_1048: {
         id: "tool_Adobe_Pucker_Tool",
         action: "Adobe Pucker Tool",
         type: "tool",
@@ -8249,7 +8437,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Puppet_Warp_Tool: {
+    tool_1049: {
         id: "tool_Adobe_Puppet_Warp_Tool",
         action: "Adobe Puppet Warp Tool",
         type: "tool",
@@ -8263,7 +8451,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Radar_Graph_Tool: {
+    tool_1050: {
         id: "tool_Adobe_Radar_Graph_Tool",
         action: "Adobe Radar Graph Tool",
         type: "tool",
@@ -8277,7 +8465,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Rectangle_Shape_Tool: {
+    tool_1051: {
         id: "tool_Adobe_Rectangle_Shape_Tool",
         action: "Adobe Rectangle Shape Tool",
         type: "tool",
@@ -8291,7 +8479,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Rectangular_Grid_Tool: {
+    tool_1052: {
         id: "tool_Adobe_Rectangular_Grid_Tool",
         action: "Adobe Rectangular Grid Tool",
         type: "tool",
@@ -8305,7 +8493,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Reflect_Tool: {
+    tool_1053: {
         id: "tool_Adobe_Reflect_Tool",
         action: "Adobe Reflect Tool",
         type: "tool",
@@ -8319,7 +8507,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Reshape_Tool: {
+    tool_1054: {
         id: "tool_Adobe_Reshape_Tool",
         action: "Adobe Reshape Tool",
         type: "tool",
@@ -8333,7 +8521,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Rotate_Tool: {
+    tool_1055: {
         id: "tool_Adobe_Rotate_Tool",
         action: "Adobe Rotate Tool",
         type: "tool",
@@ -8347,7 +8535,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Rotate_Canvas_Tool: {
+    tool_1056: {
         id: "tool_Adobe_Rotate_Canvas_Tool",
         action: "Adobe Rotate Canvas Tool",
         type: "tool",
@@ -8361,7 +8549,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Rounded_Rectangle_Tool: {
+    tool_1057: {
         id: "tool_Adobe_Rounded_Rectangle_Tool",
         action: "Adobe Rounded Rectangle Tool",
         type: "tool",
@@ -8375,7 +8563,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Scale_Tool: {
+    tool_1058: {
         id: "tool_Adobe_Scale_Tool",
         action: "Adobe Scale Tool",
         type: "tool",
@@ -8389,7 +8577,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Scallop_Tool: {
+    tool_1059: {
         id: "tool_Adobe_Scallop_Tool",
         action: "Adobe Scallop Tool",
         type: "tool",
@@ -8403,7 +8591,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Scatter_Graph_Tool: {
+    tool_1060: {
         id: "tool_Adobe_Scatter_Graph_Tool",
         action: "Adobe Scatter Graph Tool",
         type: "tool",
@@ -8417,7 +8605,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Scissors_Tool: {
+    tool_1061: {
         id: "tool_Adobe_Scissors_Tool",
         action: "Adobe Scissors Tool",
         type: "tool",
@@ -8431,7 +8619,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Select_Tool: {
+    tool_1062: {
         id: "tool_Adobe_Select_Tool",
         action: "Adobe Select Tool",
         type: "tool",
@@ -8445,7 +8633,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Shape_Builder_Tool: {
+    tool_1063: {
         id: "tool_Adobe_Shape_Builder_Tool",
         action: "Adobe Shape Builder Tool",
         type: "tool",
@@ -8459,7 +8647,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Shaper_Tool: {
+    tool_1064: {
         id: "tool_Adobe_Shaper_Tool",
         action: "Adobe Shaper Tool",
         type: "tool",
@@ -8473,7 +8661,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Shear_Tool: {
+    tool_1065: {
         id: "tool_Adobe_Shear_Tool",
         action: "Adobe Shear Tool",
         type: "tool",
@@ -8487,7 +8675,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Slice_Tool: {
+    tool_1066: {
         id: "tool_Adobe_Slice_Tool",
         action: "Adobe Slice Tool",
         type: "tool",
@@ -8501,7 +8689,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Slice_Select_Tool: {
+    tool_1067: {
         id: "tool_Adobe_Slice_Select_Tool",
         action: "Adobe Slice Select Tool",
         type: "tool",
@@ -8515,7 +8703,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Freehand_Smooth_Tool: {
+    tool_1068: {
         id: "tool_Adobe_Freehand_Smooth_Tool",
         action: "Adobe Freehand Smooth Tool",
         type: "tool",
@@ -8529,7 +8717,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Shape_Construction_Spiral_Tool: {
+    tool_1069: {
         id: "tool_Adobe_Shape_Construction_Spiral_Tool",
         action: "Adobe Shape Construction Spiral Tool",
         type: "tool",
@@ -8543,7 +8731,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Stacked_Bar_Graph_Tool: {
+    tool_1070: {
         id: "tool_Adobe_Stacked_Bar_Graph_Tool",
         action: "Adobe Stacked Bar Graph Tool",
         type: "tool",
@@ -8557,7 +8745,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Stacked_Column_Graph_Tool: {
+    tool_1071: {
         id: "tool_Adobe_Stacked_Column_Graph_Tool",
         action: "Adobe Stacked Column Graph Tool",
         type: "tool",
@@ -8571,7 +8759,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Shape_Construction_Star_Tool: {
+    tool_1072: {
         id: "tool_Adobe_Shape_Construction_Star_Tool",
         action: "Adobe Shape Construction Star Tool",
         type: "tool",
@@ -8585,7 +8773,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Symbol_Screener_Tool: {
+    tool_1074: {
         id: "tool_Adobe_Symbol_Screener_Tool",
         action: "Adobe Symbol Screener Tool",
         type: "tool",
@@ -8599,7 +8787,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Symbol_Scruncher_Tool: {
+    tool_1075: {
         id: "tool_Adobe_Symbol_Scruncher_Tool",
         action: "Adobe Symbol Scruncher Tool",
         type: "tool",
@@ -8613,7 +8801,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Symbol_Shifter_Tool: {
+    tool_1076: {
         id: "tool_Adobe_Symbol_Shifter_Tool",
         action: "Adobe Symbol Shifter Tool",
         type: "tool",
@@ -8627,7 +8815,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Symbol_Sizer_Tool: {
+    tool_1077: {
         id: "tool_Adobe_Symbol_Sizer_Tool",
         action: "Adobe Symbol Sizer Tool",
         type: "tool",
@@ -8641,7 +8829,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Symbol_Spinner_Tool: {
+    tool_1078: {
         id: "tool_Adobe_Symbol_Spinner_Tool",
         action: "Adobe Symbol Spinner Tool",
         type: "tool",
@@ -8655,7 +8843,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Symbol_Sprayer_Tool: {
+    tool_1079: {
         id: "tool_Adobe_Symbol_Sprayer_Tool",
         action: "Adobe Symbol Sprayer Tool",
         type: "tool",
@@ -8669,7 +8857,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Symbol_Stainer_Tool: {
+    tool_1080: {
         id: "tool_Adobe_Symbol_Stainer_Tool",
         action: "Adobe Symbol Stainer Tool",
         type: "tool",
@@ -8683,7 +8871,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Symbol_Styler_Tool: {
+    tool_1081: {
         id: "tool_Adobe_Symbol_Styler_Tool",
         action: "Adobe Symbol Styler Tool",
         type: "tool",
@@ -8697,7 +8885,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Touch_Type_Tool: {
+    tool_1082: {
         id: "tool_Adobe_Touch_Type_Tool",
         action: "Adobe Touch Type Tool",
         type: "tool",
@@ -8711,7 +8899,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_New_Twirl_Tool: {
+    tool_1083: {
         id: "tool_Adobe_New_Twirl_Tool",
         action: "Adobe New Twirl Tool",
         type: "tool",
@@ -8725,7 +8913,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Type_Tool: {
+    tool_1084: {
         id: "tool_Adobe_Type_Tool",
         action: "Adobe Type Tool",
         type: "tool",
@@ -8739,7 +8927,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Path_Type_Tool: {
+    tool_1085: {
         id: "tool_Adobe_Path_Type_Tool",
         action: "Adobe Path Type Tool",
         type: "tool",
@@ -8753,7 +8941,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Vertical_Area_Type_Tool: {
+    tool_1086: {
         id: "tool_Adobe_Vertical_Area_Type_Tool",
         action: "Adobe Vertical Area Type Tool",
         type: "tool",
@@ -8767,7 +8955,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Vertical_Type_Tool: {
+    tool_1087: {
         id: "tool_Adobe_Vertical_Type_Tool",
         action: "Adobe Vertical Type Tool",
         type: "tool",
@@ -8781,7 +8969,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Vertical_Path_Type_Tool: {
+    tool_1088: {
         id: "tool_Adobe_Vertical_Path_Type_Tool",
         action: "Adobe Vertical Path Type Tool",
         type: "tool",
@@ -8795,7 +8983,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Warp_Tool: {
+    tool_1089: {
         id: "tool_Adobe_Warp_Tool",
         action: "Adobe Warp Tool",
         type: "tool",
@@ -8809,7 +8997,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Width_Tool: {
+    tool_1090: {
         id: "tool_Adobe_Width_Tool",
         action: "Adobe Width Tool",
         type: "tool",
@@ -8823,7 +9011,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Wrinkle_Tool: {
+    tool_1091: {
         id: "tool_Adobe_Wrinkle_Tool",
         action: "Adobe Wrinkle Tool",
         type: "tool",
@@ -8837,7 +9025,7 @@ const commandsData = {
         hidden: false,
         minVersion: 24,
     },
-    tool_Adobe_Zoom_Tool: {
+    tool_1092: {
         id: "tool_Adobe_Zoom_Tool",
         action: "Adobe Zoom Tool",
         type: "tool",
@@ -9310,6 +9498,15 @@ const commandsData = {
             de: "Befehle ausblenden \u2026",
             ru: "\u0421\u043a\u0440\u044b\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
         },
+        hidden: false,
+    },
+    config_revealLog: {
+        id: "config_revealLog",
+        action: "revealLog",
+        type: "config",
+        docRequired: false,
+        selRequired: false,
+        name: { en: "Reveal Log", de: "Reveal Log", ru: "Reveal Log" },
         hidden: false,
     },
     config_revealPrefFile: {

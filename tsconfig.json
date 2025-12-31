@@ -14,6 +14,7 @@
     "files": [
         "src/header.ts",
 
+        "./polyfills/json2.js",
         "./polyfills/Array.ts",
         "./polyfills/Number.ts",
         "./polyfills/Object.ts",

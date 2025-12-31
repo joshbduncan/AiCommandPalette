@@ -17,46 +17,30 @@ function setupFileObject(path: Folder, name: string): File {
 }
 
 /**
- * Write string data to disk.
+ * Read string data from disk.
  */
-function writeData(data: string, fp: string | File, mode: string = "w") {
-    const f = new File(typeof fp === "string" ? fp : fp.fsName);
-    try {
-        f.encoding = "UTF-8";
-        f.open(mode);
-        f.write(data);
-    } catch (e) {
-        alert(localize(strings.fl_error_writing, f));
-    } finally {
-        f.close();
-    }
-}
-
-/**
- * Read ExtendScript "json-like" data from file.
- */
-function readJSONData(f: File): object {
-    let json;
+function readTextFile(f: File): string {
+    let data;
     try {
         f.encoding = "UTF-8";
         f.open("r");
-        json = f.read();
+        data = f.read();
     } catch (e) {
         alert(localize(strings.fl_error_loading, f));
     } finally {
         f.close();
     }
-    return eval(json);
+    return data;
 }
 
 /**
- * Write ExtendScript "json-like" data to disk.
+ * Write string data to disk.
  */
-function writeJSONData(obj: object, f: File) {
-    const data = obj.toSource();
+function writeTextFile(data: string, fp: string | File, mode: string = "w") {
+    const f = new File(typeof fp === "string" ? fp : fp.fsName);
     try {
         f.encoding = "UTF-8";
-        f.open("w");
+        f.open(mode);
         f.write(data);
     } catch (e) {
         alert(localize(strings.fl_error_writing, f));

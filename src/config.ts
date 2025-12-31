@@ -6,21 +6,25 @@
 // $.locale = "ru";
 
 // ENVIRONMENT VARIABLES
-
 const sysOS = /mac/i.test($.os) ? "mac" : "win";
 const windowsFlickerFix =
     sysOS === "win" && parseFloat(app.version) < 26.4 ? true : false;
 const settingsRequiredUpdateVersion = "0.10.0";
 
+// PLUG-IN DATA STORAGE
+const pluginDataFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
+const logFilePath = pluginDataFolder + "/AiCommandPalette.log";
+const userPrefsFileName = "Preferences.json";
+const userHistoryFileName = "History.json";
+
 // DEVELOPMENT SETTINGS
 const devMode = $.getenv("USER") === "jbd" ? true : false;
-const debugLogging = $.getenv("AICP_DEBUG_LOGGING") === "true" ? true : false;
-const logFilePath = Folder.desktop + "/AiCommandPalette.log";
+const debugLogging = $.getenv("AICP_DEBUG_LOGGING") !== "false" ? true : false;
+
 let logger;
 
 if (devMode || debugLogging) {
     logger = new Logger(logFilePath, "a", undefined, true);
-    devMode && logger.log("**DEV MODE ENABLED**");
 } else {
     logger = {};
     logger.log = function (text) {
@@ -28,7 +32,33 @@ if (devMode || debugLogging) {
     };
 }
 
-logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
+interface DevInfo {
+    folder(): Folder;
+    prefsFile(): File;
+    commandsFile(): File;
+    save(): void;
+}
+
+const devInfo: DevInfo = {
+    folder(): Folder {
+        return pluginDataFolder;
+    },
+
+    prefsFile(): File {
+        const folder = this.folder();
+        return setupFileObject(folder, "prefs.json");
+    },
+
+    commandsFile(): File {
+        const folder = this.folder();
+        return setupFileObject(folder, "commands.json");
+    },
+
+    save(): void {
+        writeTextFile(JSON.stringify(prefs, undefined, 4), this.prefsFile());
+        writeTextFile(JSON.stringify(commandsData, undefined, 4), this.commandsFile());
+    },
+};
 
 // PALETTE SETTINGS
 interface ColumnConfig {
@@ -84,33 +114,3 @@ const mostRecentCommandsCount = 25;
 const namedObjectLimit = 2000;
 const regexEllipsis = /\.\.\.$/;
 const regexCarrot = /\s>\s/g;
-
-// DEVELOPMENT HELPERS
-
-interface DevInfo {
-    folder(): Folder;
-    prefsFile(): File;
-    commandsFile(): File;
-    save(): void;
-}
-
-const devInfo: DevInfo = {
-    folder(): Folder {
-        return Folder.desktop;
-    },
-
-    prefsFile(): File {
-        const folder = this.folder();
-        return setupFileObject(folder, "prefs.json");
-    },
-
-    commandsFile(): File {
-        const folder = this.folder();
-        return setupFileObject(folder, "commands.json");
-    },
-
-    save(): void {
-        writeJSONData(prefs, this.prefsFile());
-        writeJSONData(commandsData, this.commandsFile());
-    },
-};

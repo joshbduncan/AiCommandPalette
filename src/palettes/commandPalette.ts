@@ -64,7 +64,7 @@ function commandPalette(
         q.active = true;
     }
 
-    // catch escape key and close window to stop default startup command reloadZ on escape
+    // catch escape key and close window to stop default startup command reload on escape
     win.addEventListener("keydown", (e: KeyboardEvent) => {
         if (e.keyName === "Escape") {
             e.preventDefault();
@@ -107,9 +107,6 @@ function commandPalette(
                 e.preventDefault();
                 if (recentQueries && recentQueries.length > 0) {
                     const historyEntry = recentQueries[historyIndex];
-                    logger.log(
-                        `scrolling query history, current index = ${historyIndex}, ${historyEntry}`
-                    );
                     q.text = historyEntry;
                     historyIndex = Math.min(historyIndex + 1, recentQueries.length - 1);
                     if (qCache.hasOwnProperty(q.text)) {

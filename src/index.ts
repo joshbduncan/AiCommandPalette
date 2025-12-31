@@ -1,11 +1,17 @@
+logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
+
 // load the user data
 userPrefs.load(true);
 userActions.load();
 userHistory.load();
 userPrefs.loadWatchedScripts();
 
+// debugging flag
+// devMode && devInfo.save();
+
 // set command palette matching algo
 const matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
+logger.log(`fuzzy matcher ${prefs["fuzzy"] ? "enabled" : "disabled"}`);
 
 // add basic defaults to the startup on a first-run/fresh install
 if (!prefs.startupCommands) {

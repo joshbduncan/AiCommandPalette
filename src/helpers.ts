@@ -399,7 +399,7 @@ function loadFileTypes(
 function simulateKeypress(k: string, n: number = 1): void {
     let f: File;
     try {
-        f = setupFileObject(settingsFolder, "SimulateKeypress.vbs");
+        f = setupFileObject(pluginDataFolder, "SimulateKeypress.vbs");
 
         if (!f.exists) {
             let data = 'Set WshShell = WScript.CreateObject("WScript.Shell")\n';

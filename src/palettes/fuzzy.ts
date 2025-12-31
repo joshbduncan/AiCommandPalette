@@ -25,13 +25,14 @@ function fuzzy(q: string, commands: string[]): string[] {
         if (!commandName) commandName = id.toLowerCase().replace("_", " ");
         commandName = stripRegExpChars(commandName).replace(regexEllipsis, "");
 
-        const spans = findMatches(sanitizedQuery.split(" "), commandName);
+        const chunks = sanitizedQuery.split(" ");
+        const spans = findMatches(chunks, commandName);
         if (!spans.length) continue;
 
-        let score = calculateScore(commandName, spans);
+        let score = calculateScore(commandName, spans, chunks);
         let bonus = 0;
 
-        if (latches.hasOwnProperty(q) && commands.includes(latches[q])) {
+        if (latches.hasOwnProperty(q) && latches[q] == command.id) {
             bonus += 1;
         }
 
@@ -48,30 +49,56 @@ function fuzzy(q: string, commands: string[]): string[] {
 }
 
 /**
- * Calculates a score based on match spans and string location.
- * @param command The target string being matched.
- * @param spans An array of start/end index pairs for matches.
- * @returns A numeric relevance score.
+ * Calculates a fuzzy-match relevance score for a command string.
+ *
+ * This scoring function considers both the positional context of each match
+ * span (e.g., word boundaries and sections after the last `>` carrot) and the
+ * quality of the match itself. Longer contiguous spans earn exponentially
+ * higher scores, and exact matches against query chunks (when provided) receive
+ * an additional bonus — even when embedded inside larger tokens (e.g. inside
+ * camelCase or compound identifiers).
+ *
+ * Intended use: highlight spans, boost meaningful exact matches, and emulate
+ * modern command-palette ranking where complete token matches outrank scattered
+ * partial matches.
+ *
+ * @param command The command text being evaluated.
+ * @param spans Array of `[start, end)` tuples representing fuzzy-matched
+ *        character ranges within `command`.
+ * @param chunks (Optional) Original query chunks; used to award extra credit
+ *        when a span exactly equals a user-typed chunk, regardless of position.
+ * @returns A numeric relevance score where higher values indicate a stronger
+ *          fuzzy match.
  */
-function calculateScore(command: string, spans: [number, number][]): number {
+function calculateScore(
+    command: string,
+    spans: [number, number][],
+    chunks?: string[]
+): number {
     const lastCarrot = findLastCarrot(command);
     let score = 0;
 
     for (const [s, e] of spans) {
-        const wordStart = s === 0 || command.charAt(s - 1) === " ";
-        const wordEnd = e === command.length || command.charAt(e) === " ";
+        const len = e - s;
+        const startBoundary = s === 0 || command.charAt(s - 1) === " ";
+        const endBoundary = e === command.length || command.charAt(e) === " ";
 
-        if (wordStart && wordEnd) {
-            score += (e - s) * 3;
-        } else if (wordStart) {
-            score += (e - s) * 2;
-        } else {
-            score += e - s;
+        const boundaryMult = startBoundary && endBoundary ? 3 : startBoundary ? 2 : 1;
+
+        let spanScore = len * boundaryMult;
+        spanScore += len * len; // contiguity boost
+
+        if (chunks) {
+            const spanText = command.slice(s, e).toLowerCase();
+            if (chunks.some((c) => c.toLowerCase() === spanText)) {
+                // Exact-chunk bonus (tune the factor as you like)
+                spanScore += len * 3;
+            }
         }
 
-        if (s >= lastCarrot) {
-            score += 0.5;
-        }
+        if (s >= lastCarrot) spanScore += 0.5 * len;
+
+        score += spanScore;
     }
 
     return score;

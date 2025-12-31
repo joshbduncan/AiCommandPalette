@@ -1,13 +1,3 @@
-// keeping around for alerting users of breaking changes
-const settingsFolderName = "JBD";
-const settingsFolder = setupFolderObject(Folder.userData + "/" + settingsFolderName);
-const settingsFileName = "AiCommandPaletteSettings.json";
-
-// new v0.10.0 preferences
-const userPrefsFolderName = "JBD";
-const userPrefsFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
-const userPrefsFileName = "Preferences.json";
-
 // setup the base prefs model
 interface Prefs {
     startupCommands: string[];
@@ -19,7 +9,6 @@ interface Prefs {
     watchedFolders: string[];
     pickers: any[];
     fuzzy: boolean;
-    latches: Record<string, any>;
     version: string;
     os: string;
     locale: string;
@@ -37,7 +26,6 @@ const prefs: Prefs = {
     watchedFolders: [],
     pickers: [],
     fuzzy: true, // set to new fuzzy matcher as default
-    latches: {},
     version: _version,
     os: $.os,
     locale: $.locale,
@@ -58,7 +46,7 @@ interface UserPrefs {
 
 const userPrefs: UserPrefs = {
     folder() {
-        return userPrefsFolder;
+        return pluginDataFolder;
     },
 
     file() {
@@ -66,60 +54,36 @@ const userPrefs: UserPrefs = {
         return setupFileObject(folder, userPrefsFileName);
     },
 
+    /**
+     * Loads user preferences from disk (migrates legacy formats as needed).
+     * If `inject` is true, calls `this.inject()` after loading.
+     *
+     * @param inject Inject user commands into `commandsData`.
+     * @returns {void} Nothing.
+     */
     load(inject?: boolean) {
         const file = this.file();
         logger.log("loading user preferences:", file.fsName);
 
-        if (!file.exists) {
-            logger.log("no user prefs files found, checking for old 'settings' file");
-            const oldFile = setupFileObject(settingsFolder, settingsFileName);
+        if (!file.exists) return;
 
-            if (!oldFile.exists) return;
+        // Track which updates have been applied
+        let updateVersion0_16_0 = false;
 
-            alert(localize(strings.pref_file_non_compatible));
-            const backupFile = new File(oldFile + ".bak");
-            logger.log("backing up old `settings` file to:", backupFile.fsName);
-            oldFile.copy(backupFile.fsName);
+        const s: string = readTextFile(file);
+        let data;
 
+        // try true JSON first
+        try {
+            data = JSON.parse(s);
+        } catch (e) {}
+
+        // try json-like eval second
+        if (data === undefined) {
             try {
-                updateOldPreferences(oldFile);
-            } catch (e) {
-                alert(localize(strings.pref_file_loading_error) + "\n\n" + e);
-                settingsFolder.execute();
-                return;
-            }
-
-            alert(localize(strings.pref_update_complete));
-        }
-
-        if (file.exists) {
-            try {
-                const loadedData = readJSONData(file);
-                if (
-                    !loadedData ||
-                    typeof loadedData !== "object" ||
-                    Array.isArray(loadedData)
-                )
-                    return;
-
-                const data = loadedData as Record<string, unknown>;
-                if (Object.keys(data).length === 0) return;
-
-                const propsToSkip = [
-                    "version",
-                    "os",
-                    "locale",
-                    "aiVersion",
-                    "timestamp",
-                ];
-                for (const prop in loadedData) {
-                    if (propsToSkip.indexOf(prop) !== -1) continue;
-                    prefs[prop] = loadedData[prop];
-                }
-
-                if (inject) {
-                    this.inject();
-                }
+                data = eval(s);
+                // write true JSON back to disk
+                writeTextFile(JSON.stringify(data), file);
             } catch (e) {
                 file.rename(file.name + ".bak");
                 logger.log("error loading user prefs", e);
@@ -129,8 +93,97 @@ const userPrefs: UserPrefs = {
                 Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
             }
         }
+
+        if (!data || typeof data !== "object") return;
+        if (Object.keys(data).length === 0) return;
+
+        // update stored command ids to v0.15.0 unique ids
+        if (semanticVersionComparison(prefs.version, "0.16.0") == -1) {
+            logger.log("applying v0.16.0 prefs command id update");
+            updateVersion0_16_0 = true;
+
+            // build lut to convert old menu command ids to updated versions
+            const commandsLUT: Record<string, string> = {};
+            for (const key in commandsData) {
+                const command = commandsData[key] as CommandEntry;
+
+                // only add command where the is new (menu commands for now)
+                if (key == command.id) continue;
+
+                // skip any ids already added to the LUT
+                if (commandsLUT.hasOwnProperty(command.id)) continue;
+
+                commandsLUT[command.id] = key;
+            }
+
+            // update startup commands
+            for (let i = 0; i < data.startupCommands.length; i++) {
+                const oldId = data.startupCommands[i];
+                if (!commandsLUT.hasOwnProperty(oldId) || oldId == commandsLUT[oldId])
+                    continue;
+                logger.log(
+                    `- updating startup command: ${oldId} -> ${commandsLUT[oldId]}`
+                );
+                data.startupCommands[i] = commandsLUT[oldId];
+            }
+
+            // update hidden commands
+            for (let i = 0; i < data.hiddenCommands.length; i++) {
+                const oldId = data.hiddenCommands[i];
+                if (!commandsLUT.hasOwnProperty(oldId) || oldId == commandsLUT[oldId])
+                    continue;
+                logger.log(
+                    `- updating hidden command: ${oldId} -> ${commandsLUT[oldId]}`
+                );
+                data.hiddenCommands[i] = commandsLUT[oldId];
+            }
+
+            // update workflow commands
+            for (let i = 0; i < data.workflows.length; i++) {
+                let workflow = data.workflows[i];
+                for (let j = 0; j < data.workflows[i].actions.length; j++) {
+                    const oldId = data.workflows[i].actions[j];
+                    if (
+                        !commandsLUT.hasOwnProperty(oldId) ||
+                        oldId == commandsLUT[oldId]
+                    )
+                        continue;
+                    logger.log(
+                        `- updating ${workflow.id} action: ${oldId} -> ${commandsLUT[oldId]}`
+                    );
+                    data.workflows[i].actions[j] = commandsLUT[oldId];
+                }
+            }
+        }
+
+        const propsToSkip = [
+            "version",
+            "os",
+            "locale",
+            "aiVersion",
+            "timestamp",
+            "latches",
+        ];
+        for (const prop in data) {
+            if (propsToSkip.includes(prop)) continue;
+            prefs[prop] = data[prop];
+        }
+
+        if (inject) {
+            this.inject();
+        }
+
+        if (updateVersion0_16_0) {
+            // TODO: alert use of clean history
+            // userHistory.backup();
+            // userHistory.clear();
+            this.save();
+        }
     },
 
+    /**
+     * Inject commands loaded from user preference file into `commandsData`.
+     */
     inject() {
         const typesToInject = [
             "workflows",
@@ -193,20 +246,20 @@ const userPrefs: UserPrefs = {
                 commandsData[id] = script;
                 scripts.push(script);
             }
-            logger.log(`loaded ${scripts.length} scripts from: ${folder}`);
         }
     },
 
     save() {
         const file = this.file();
         logger.log("writing user prefs");
-        writeJSONData(prefs, file);
+        writeTextFile(JSON.stringify(prefs, undefined, 4), file);
     },
 
     backup() {
+        const file = this.file();
         const ts = Date.now();
-        const backupFile = new File(`${this.file.fsName}.${ts}.bak`);
-        this.file.copy(backupFile);
+        const backupFile = new File(`${file}.${ts}.bak`);
+        file.copy(backupFile);
         logger.log("user prefs backed up to:", backupFile.fsName);
         return backupFile;
     },
@@ -217,178 +270,3 @@ const userPrefs: UserPrefs = {
         folder.execute();
     },
 };
-
-function updateOldPreferences(oldFile) {
-    logger.log("converting old 'settings' file to new user prefs file");
-
-    // read old data
-    const data: any = readJSONData(oldFile);
-
-    // no need to continue if we don't know the old version
-    if (!data.settings.hasOwnProperty("version")) return;
-
-    if (semanticVersionComparison(data.settings.version, "0.8.1") == -1) {
-        // build lut to convert old localized command strings to new command ids
-        const commandsLUT = {};
-        for (const command in commandsData) {
-            commandsLUT[localize(commandsData[command].name)] = command;
-        }
-
-        // update bookmarks
-        const updatedBookmarks = {};
-        for (const bookmark in data.commands.bookmark) {
-            updatedBookmarks[data.commands.bookmark[bookmark].name] = {
-                type: "bookmark",
-                path: data.commands.bookmark[bookmark].path,
-                bookmarkType: data.commands.bookmark[bookmark].bookmarkType,
-            };
-        }
-        data.commands.bookmark = updatedBookmarks;
-
-        // update scripts
-        const updatedScripts = {};
-        for (const script in data.commands.script) {
-            updatedScripts[data.commands.script[script].name] = {
-                type: "script",
-                path: data.commands.script[script].path,
-            };
-        }
-        data.commands.script = updatedScripts;
-
-        // update workflows
-        const updatedWorkflows = {};
-        const updatedActions = [];
-        for (const workflow in data.commands.workflow) {
-            let cur, updatedAction;
-            for (let i = 0; i < data.commands.workflow[workflow].actions.length; i++) {
-                cur = data.commands.workflow[workflow].actions[i];
-                // if the action can't be found in the LUT, just leave it as user will be prompted when they attempt to run it
-                if (!commandsLUT.hasOwnProperty(cur)) {
-                    updatedAction = cur;
-                } else {
-                    updatedAction = commandsLUT[cur];
-                }
-                updatedActions.push(updatedAction);
-            }
-            updatedWorkflows[data.commands.workflow[workflow].name] = {
-                type: "workflow",
-                actions: updatedActions,
-            };
-        }
-        data.commands.workflow = updatedWorkflows;
-
-        // update hidden commands
-        const updatedHiddenCommands = [];
-        for (let i = 0; i < data.settings.hidden.length; i++) {
-            if (commandsLUT.hasOwnProperty(data.settings.hidden[i])) {
-                updatedHiddenCommands.push(commandsLUT[data.settings.hidden[i]]);
-            }
-        }
-        data.settings.hidden = updatedHiddenCommands;
-
-        // update recent commands
-        const updatedRecentCommands = [];
-        for (let i = 0; i < data.recent.commands.length; i++) {
-            if (commandsLUT.hasOwnProperty(data.recent.commands[i])) {
-                updatedRecentCommands.push(commandsLUT[data.recent.commands[i]]);
-            }
-        }
-        data.recent.commands = updatedRecentCommands;
-
-        // update version number so subsequent updates can be applied
-        data.settings.version = "0.8.1";
-    }
-
-    if (semanticVersionComparison(data.settings.version, "0.10.0") == -1) {
-        let startupCommands = [];
-
-        // update bookmarks
-        const bookmarks = [];
-        let f, bookmark;
-        for (const prop in data.commands.bookmark) {
-            f = new File(data.commands.bookmark[prop].path);
-            if (!f.exists) continue;
-            const bookmarkName = decodeURI(f.name);
-            bookmark = {
-                id: prop,
-                name: bookmarkName,
-                action: "bookmark",
-                type: data.commands.bookmark[prop].bookmarkType,
-                path: f.fsName,
-                docRequired: false,
-                selRequired: false,
-                hidden: false,
-            };
-            bookmarks.push(bookmark);
-            startupCommands.push(prop);
-        }
-        prefs.bookmarks = bookmarks;
-
-        // update scripts
-        const scripts = [];
-        let script;
-        for (const prop in data.commands.script) {
-            f = new File(data.commands.script[prop].path);
-            if (!f.exists) continue;
-            const scriptParent = decodeURI(f.parent.name);
-            const scriptName = decodeURI(f.name);
-            script = {
-                id: prop,
-                name: `${scriptParent} > ${scriptName}`,
-                action: "script",
-                type: "script",
-                path: f.fsName,
-                docRequired: false,
-                selRequired: false,
-                hidden: false,
-            };
-            scripts.push(script);
-            startupCommands.push(prop);
-        }
-        prefs.scripts = scripts;
-
-        // update workflows
-        const oldCommandIdsLUT = {}; // TODO: find in old commits
-        const workflows = [];
-        let workflow, actions, action;
-        for (const prop in data.commands.workflow) {
-            // make sure actions are using the new command id format
-            actions = [];
-            for (let i = 0; i < data.commands.workflow[prop].actions.length; i++) {
-                action = data.commands.workflow[prop].actions[i];
-                if (
-                    !commandsData.hasOwnProperty(action) &&
-                    oldCommandIdsLUT.hasOwnProperty(action)
-                )
-                    action = oldCommandIdsLUT[action];
-                actions.push(action);
-            }
-
-            const workflow = {
-                id: prop,
-                name: prop,
-                actions: actions,
-                type: "workflow",
-                docRequired: false,
-                selRequired: false,
-                hidden: false,
-            };
-            workflows.push(workflow);
-            startupCommands.push(prop);
-        }
-        prefs.workflows = workflows;
-
-        // add the base startup commands
-        startupCommands = startupCommands.concat([
-            "builtin_recentCommands",
-            "config_settings",
-        ]);
-        prefs.startupCommands = startupCommands;
-
-        // update hidden commands
-        const hiddenCommands = data.settings.hidden;
-        prefs.hiddenCommands = hiddenCommands;
-
-        userPrefs.save();
-    }
-}

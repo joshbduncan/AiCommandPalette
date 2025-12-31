@@ -29,10 +29,22 @@ function filterCommands(
 
         const command = commandsData[id];
 
-        if (!commandVersionCheck(command)) continue;
-        if (!showHidden && prefs.hiddenCommands.includes(id)) continue;
-        if (!showNonRelevant && !relevantCommand(command)) continue;
-        if (hideSpecificCommands && hideSpecificCommands.includes(id)) continue;
+        if (!commandVersionCheck(command)) {
+            // logger.log(`incompatible version command: ${command.name["en"]} (${id})`);
+            continue;
+        }
+        if (!showHidden && prefs.hiddenCommands.includes(id)) {
+            // logger.log(`hidden command: ${command.name["en"]} (${id})`);
+            continue;
+        }
+        if (!showNonRelevant && !relevantCommand(command)) {
+            // logger.log(`not relevant command: ${command.name["en"]} (${id})`);
+            continue;
+        }
+        if (hideSpecificCommands && hideSpecificCommands.includes(id)) {
+            // logger.log(`user hidden command: ${command.name["en"]} (${id})`);
+            continue;
+        }
         if (!types || types.includes(command.type.toLowerCase()))
             filteredCommands.push(id);
     }
