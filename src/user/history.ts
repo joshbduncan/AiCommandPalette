@@ -38,12 +38,14 @@ const userHistory: UserHistory = {
         // try true JSON first
         try {
             data = JSON.parse(s);
+            logger.log("history loaded as valid JSON");
         } catch (e) {}
 
         // try json-like eval second
         if (data === undefined) {
             try {
                 data = eval(s);
+                logger.log("history loaded as old JSON-like, saving as true JSON");
                 // write true JSON back to disk
                 writeTextFile(JSON.stringify(data), file);
             } catch (e) {

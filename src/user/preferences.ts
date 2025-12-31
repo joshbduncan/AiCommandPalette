@@ -76,12 +76,14 @@ const userPrefs: UserPrefs = {
         // try true JSON first
         try {
             data = JSON.parse(s);
+            logger.log("prefs loaded as valid JSON");
         } catch (e) {}
 
         // try json-like eval second
         if (data === undefined) {
             try {
                 data = eval(s);
+                logger.log("prefs loaded as old JSON-like, saving as true JSON");
                 // write true JSON back to disk
                 writeTextFile(JSON.stringify(data), file);
             } catch (e) {
@@ -98,7 +100,8 @@ const userPrefs: UserPrefs = {
         if (Object.keys(data).length === 0) return;
 
         // update stored command ids to v0.15.0 unique ids
-        if (semanticVersionComparison(prefs.version, "0.16.0") == -1) {
+        logger.log(`loaded prefs saved from ${_title} v${data.version}`);
+        if (semanticVersionComparison(data.version, "0.16.0") == -1) {
             logger.log("applying v0.16.0 prefs command id update");
             updateVersion0_16_0 = true;
 

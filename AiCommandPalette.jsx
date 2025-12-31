@@ -11860,11 +11860,13 @@ See the LICENSE file for details.
             // try true JSON first
             try {
                 data = JSON.parse(s);
+                logger.log("prefs loaded as valid JSON");
             } catch (e) {}
             // try json-like eval second
             if (data === undefined) {
                 try {
                     data = eval(s);
+                    logger.log("prefs loaded as old JSON-like, saving as true JSON");
                     // write true JSON back to disk
                     writeTextFile(JSON.stringify(data), file);
                 } catch (e) {
@@ -11878,7 +11880,10 @@ See the LICENSE file for details.
             if (!data || typeof data !== "object") return;
             if (Object.keys(data).length === 0) return;
             // update stored command ids to v0.15.0 unique ids
-            if (semanticVersionComparison(prefs.version, "0.16.0") == -1) {
+            logger.log(
+                "loaded prefs saved from ".concat(_title, " v").concat(data.version)
+            );
+            if (semanticVersionComparison(data.version, "0.16.0") == -1) {
                 logger.log("applying v0.16.0 prefs command id update");
                 updateVersion0_16_0 = true;
                 // build lut to convert old menu command ids to updated versions
@@ -12069,11 +12074,13 @@ See the LICENSE file for details.
             // try true JSON first
             try {
                 data = JSON.parse(s);
+                logger.log("history loaded as valid JSON");
             } catch (e) {}
             // try json-like eval second
             if (data === undefined) {
                 try {
                     data = eval(s);
+                    logger.log("history loaded as old JSON-like, saving as true JSON");
                     // write true JSON back to disk
                     writeTextFile(JSON.stringify(data), file);
                 } catch (e) {
