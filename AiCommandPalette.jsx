@@ -13408,6 +13408,11 @@ See the LICENSE file for details.
             name: "cancel",
         });
         cancel.preferredSize.width = 100;
+        if (windowsFlickerFix) {
+            simulateKeypress("TAB", 1);
+        } else {
+            q.active = true;
+        }
         // catch escape key and close window to stop default startup command reload/flicker on escape
         win.addEventListener("keydown", function (e) {
             if (e.keyName === "Escape") {
