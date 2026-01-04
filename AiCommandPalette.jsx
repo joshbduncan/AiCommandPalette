@@ -22,7 +22,7 @@ See the LICENSE file for details.
     //@target illustrator
     // SCRIPT INFORMATION
     var _title = "Ai Command Palette";
-    var _version = "0.15.0";
+    var _version = "0.16.0";
     var _copyright = "Copyright 2025 Josh Duncan";
     var _website = "joshbduncan.com";
     var _github = "https://github.com/joshbduncan";
@@ -1667,6 +1667,21 @@ See the LICENSE file for details.
                 "zh-cn": "\u6587\u4ef6>\u5173\u95ed\u2026",
             },
             hidden: false,
+        },
+        menu_2000: {
+            id: "menu_closeAll",
+            action: "closeAll",
+            type: "menu",
+            docRequired: true,
+            selRequired: false,
+            name: {
+                en: "Close All",
+                de: "Close All",
+                ru: "Close All",
+                "zh-cn": "Close All",
+            },
+            hidden: false,
+            minVersion: 29.4,
         },
         menu_1005: {
             id: "menu_save",
@@ -4931,6 +4946,21 @@ See the LICENSE file for details.
             },
             hidden: false,
             minVersion: 27.1,
+        },
+        menu_2001: {
+            id: "menu_~bullet",
+            action: "~bullet",
+            type: "menu",
+            docRequired: true,
+            selRequired: true,
+            name: {
+                en: "Type > Insert Special Character > Symbols > Bullet",
+                de: "Type > Insert Special Character > Symbols > Bullet",
+                ru: "Type > Insert Special Character > Symbols > Bullet",
+                "zh-cn": "Type > Insert Special Character > Symbols > Bullet",
+            },
+            hidden: false,
+            minVersion: 29.4,
         },
         menu_1235: {
             id: "menu_showHiddenChar",
@@ -11152,22 +11182,44 @@ See the LICENSE file for details.
         },
     };
     /**
-     * Determine the base calling script from the current stack.
-     * @returns {String} Initial script name.
+     * Extracts the base calling script identifier from an Adobe ExtendScript stack trace.
+     *
+     * ExtendScript exposes the current stack as `$.stack`, where entries may include lines
+     * like `[SomeScript.jsx]` or `[123]`. This function returns the first bracketed entry
+     * that is *not* purely numeric (i.e., likely a script name/path).
+     *
+     * This implementation is ES3-safe when compiled (no `Number.isFinite`, no ES2015 APIs).
+     *
+     * @param stack Optional stack trace text to parse. Defaults to `$.stack` when available.
+     * @returns The first non-numeric bracketed entry (e.g. `"MyScript.jsx"`), or `undefined` if none found.
      */
-    function resolveBaseScriptFromStack() {
-        var stack = $.stack.split("\n");
-        var foo, bar;
-        for (var i = 0; i < stack.length; i++) {
-            foo = stack[i];
-            if (foo[0] == "[" && foo[foo.length - 1] == "]") {
-                bar = foo.slice(1, foo.length - 1);
-                if (isNaN(bar)) {
-                    break;
-                }
+    function resolveBaseScriptFromStack(stack) {
+        var raw =
+            stack !== null && stack !== void 0
+                ? stack
+                : typeof $ !== "undefined" && $.stack
+                  ? String($.stack)
+                  : "";
+        if (!raw) return undefined;
+        var lines = raw.split(/\r?\n/);
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (
+                !line ||
+                line.charAt(0) !== "[" ||
+                line.charAt(line.length - 1) !== "]"
+            ) {
+                continue;
+            }
+            var inner = line.slice(1, line.length - 1).replace(/^\s+|\s+$/g, "");
+            if (!inner) continue;
+            // ES3-safe numeric check
+            // `isNaN()` coerces; numeric strings => false, non-numeric => true
+            if (isNaN(inner)) {
+                return inner;
             }
         }
-        return bar;
+        return undefined;
     }
     var Logger = /** @class */ (function () {
         /**
@@ -11306,7 +11358,7 @@ See the LICENSE file for details.
      * @param s - The string to search within.
      * @returns The position just after the last `' > '` or 0 if not found.
      */
-    function findLastCarrot(s) {
+    function findLastBreadcrumbSeparator(s) {
         var p = 0;
         var re = / > /g;
         if (re.test(s)) {
@@ -11824,21 +11876,12 @@ See the LICENSE file for details.
         columnSets: {
             standard:
                 ((_a = {}),
-                (_a[localize(strings.name_title_case)] = {
-                    width: 450,
-                    key: "name",
-                }),
-                (_a[localize(strings.type_title_case)] = {
-                    width: 100,
-                    key: "type",
-                }),
+                (_a[localize(strings.name_title_case)] = { width: 450, key: "name" }),
+                (_a[localize(strings.type_title_case)] = { width: 100, key: "type" }),
                 _a),
             customCommand:
                 ((_b = {}),
-                (_b[localize(strings.name_title_case)] = {
-                    width: 450,
-                    key: "name",
-                }),
+                (_b[localize(strings.name_title_case)] = { width: 450, key: "name" }),
                 (_b[localize(strings.type_title_case)] = {
                     width: 100,
                     key: "actionType",
@@ -11847,11 +11890,20 @@ See the LICENSE file for details.
         },
     };
     // MISCELLANEOUS SETTINGS
+    // Number of items visible in the listbox viewport without scrolling.
+    // Based on the listbox height (paletteHeight) and standard row height in ScriptUI.
     var visibleListItems = 9;
+    // Maximum number of recent commands to track in user history.
+    // Keeps the recent commands list manageable and performant.
     var mostRecentCommandsCount = 25;
+    // Maximum number of named objects to load from a document.
+    // Prevents performance issues when documents have thousands of objects.
+    // If exceeded, user is shown a warning and objects are still loaded.
     var namedObjectLimit = 2000;
+    // Regex to match trailing ellipsis in menu command names (e.g., "Save As...")
     var regexEllipsis = /\.\.\.$/;
-    var regexCarrot = /\s>\s/g;
+    // Regex to match the breadcrumb separator (greater-than sign) in menu paths (e.g., "File > Open")
+    var regexBreadcrumbSeparator = /\s>\s/g;
     var prefs = {
         startupCommands: null,
         hiddenCommands: [],
@@ -12385,7 +12437,7 @@ See the LICENSE file for details.
      * Calculates a fuzzy-match relevance score for a command string.
      *
      * This scoring function considers both the positional context of each match
-     * span (e.g., word boundaries and sections after the last `>` carrot) and the
+     * span (e.g., word boundaries and sections after the last `>` separator) and the
      * quality of the match itself. Longer contiguous spans earn exponentially
      * higher scores, and exact matches against query chunks (when provided) receive
      * an additional bonus — even when embedded inside larger tokens (e.g. inside
@@ -12404,7 +12456,7 @@ See the LICENSE file for details.
      *          fuzzy match.
      */
     function calculateScore(command, spans, chunks) {
-        var lastCarrot = findLastCarrot(command);
+        var lastSeparator = findLastBreadcrumbSeparator(command);
         var score = 0;
         var _loop_1 = function (s, e) {
             var len = e - s;
@@ -12424,7 +12476,7 @@ See the LICENSE file for details.
                     spanScore += len * 3;
                 }
             }
-            if (s >= lastCarrot) spanScore += 0.5 * len;
+            if (s >= lastSeparator) spanScore += 0.5 * len;
             score += spanScore;
         };
         for (var _i = 0, spans_1 = spans; _i < spans_1.length; _i++) {
@@ -12510,7 +12562,7 @@ See the LICENSE file for details.
                 : command.type.toLowerCase();
             var strippedName = name
                 .replace(regexEllipsis, "")
-                .replace(regexCarrot, " ");
+                .replace(regexBreadcrumbSeparator, " ");
             if (!name) {
                 name = id.toLowerCase().replace("_", " ");
             }
@@ -15191,7 +15243,7 @@ See the LICENSE file for details.
     userHistory.load();
     userPrefs.loadWatchedScripts();
     // debugging flag
-    // devMode && devInfo.save();
+    devMode && devInfo.save();
     // set command palette matching algo
     var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
     logger.log("fuzzy matcher ".concat(prefs["fuzzy"] ? "enabled" : "disabled"));

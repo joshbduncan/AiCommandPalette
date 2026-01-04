@@ -1,20 +1,40 @@
 /**
- * Determine the base calling script from the current stack.
- * @returns {String} Initial script name.
+ * Extracts the base calling script identifier from an Adobe ExtendScript stack trace.
+ *
+ * ExtendScript exposes the current stack as `$.stack`, where entries may include lines
+ * like `[SomeScript.jsx]` or `[123]`. This function returns the first bracketed entry
+ * that is *not* purely numeric (i.e., likely a script name/path).
+ *
+ * This implementation is ES3-safe when compiled (no `Number.isFinite`, no ES2015 APIs).
+ *
+ * @param stack Optional stack trace text to parse. Defaults to `$.stack` when available.
+ * @returns The first non-numeric bracketed entry (e.g. `"MyScript.jsx"`), or `undefined` if none found.
  */
-function resolveBaseScriptFromStack() {
-    var stack = $.stack.split("\n");
-    var foo, bar;
-    for (var i = 0; i < stack.length; i++) {
-        foo = stack[i];
-        if (foo[0] == "[" && foo[foo.length - 1] == "]") {
-            bar = foo.slice(1, foo.length - 1);
-            if (isNaN(bar)) {
-                break;
-            }
+function resolveBaseScriptFromStack(stack?: string): string | undefined {
+    const raw =
+        stack ??
+        (typeof $ !== "undefined" && ($ as any).stack ? String(($ as any).stack) : "");
+
+    if (!raw) return undefined;
+
+    const lines = raw.split(/\r?\n/);
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (!line || line.charAt(0) !== "[" || line.charAt(line.length - 1) !== "]") {
+            continue;
+        }
+
+        const inner = line.slice(1, line.length - 1).replace(/^\s+|\s+$/g, "");
+        if (!inner) continue;
+
+        // ES3-safe numeric check
+        // `isNaN()` coerces; numeric strings => false, non-numeric => true
+        if (isNaN(inner as any)) {
+            return inner;
         }
     }
-    return bar;
+
+    return undefined;
 }
 
 class Logger {

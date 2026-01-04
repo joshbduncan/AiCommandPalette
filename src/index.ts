@@ -7,7 +7,7 @@ userHistory.load();
 userPrefs.loadWatchedScripts();
 
 // debugging flag
-// devMode && devInfo.save();
+devMode && devInfo.save();
 
 // set command palette matching algo
 const matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
@@ -23,7 +23,7 @@ let queryableCommands = filterCommands(null, null, false, false, null);
 
 let startupCommands = filterCommands(prefs.startupCommands, null, false, false, null);
 
-var result = commandPalette(
+let result = commandPalette(
     queryableCommands,
     localize(strings.title),
     paletteSettings.columnSets.standard,

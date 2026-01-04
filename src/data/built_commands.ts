@@ -99,6 +99,21 @@ const commandsData = {
         },
         hidden: false,
     },
+    menu_2000: {
+        id: "menu_closeAll",
+        action: "closeAll",
+        type: "menu",
+        docRequired: true,
+        selRequired: false,
+        name: {
+            en: "Close All",
+            de: "Close All",
+            ru: "Close All",
+            "zh-cn": "Close All",
+        },
+        hidden: false,
+        minVersion: 29.4,
+    },
     menu_1005: {
         id: "menu_save",
         action: "save",
@@ -3361,6 +3376,21 @@ const commandsData = {
         },
         hidden: false,
         minVersion: 27.1,
+    },
+    menu_2001: {
+        id: "menu_~bullet",
+        action: "~bullet",
+        type: "menu",
+        docRequired: true,
+        selRequired: true,
+        name: {
+            en: "Type > Insert Special Character > Symbols > Bullet",
+            de: "Type > Insert Special Character > Symbols > Bullet",
+            ru: "Type > Insert Special Character > Symbols > Bullet",
+            "zh-cn": "Type > Insert Special Character > Symbols > Bullet",
+        },
+        hidden: false,
+        minVersion: 29.4,
     },
     menu_1235: {
         id: "menu_showHiddenChar",

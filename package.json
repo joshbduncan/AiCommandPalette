@@ -1,6 +1,6 @@
 {
     "name": "ai-command-palette",
-    "version": "0.15.0",
+    "version": "0.16.0",
     "description": "Adobe Illustrator Command Palette",
     "main": "src/index.ts",
     "scripts": {
@@ -15,8 +15,10 @@
         "postbuild:prettier": "zsh -c \"prettier --parser=babel --write AiCommandPalette.jsx\"",
         "dev": "chokidar 'src/**/*.ts' -c 'npm-run-all build postbuild copy-to-ai'"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "adobe illustrator"
+    ],
+    "author": "Josh Duncan",
     "license": "MIT",
     "type": "commonjs",
     "dependencies": {

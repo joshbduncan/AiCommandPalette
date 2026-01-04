@@ -52,7 +52,7 @@ function fuzzy(q: string, commands: string[]): string[] {
  * Calculates a fuzzy-match relevance score for a command string.
  *
  * This scoring function considers both the positional context of each match
- * span (e.g., word boundaries and sections after the last `>` carrot) and the
+ * span (e.g., word boundaries and sections after the last `>` separator) and the
  * quality of the match itself. Longer contiguous spans earn exponentially
  * higher scores, and exact matches against query chunks (when provided) receive
  * an additional bonus — even when embedded inside larger tokens (e.g. inside
@@ -75,7 +75,7 @@ function calculateScore(
     spans: [number, number][],
     chunks?: string[]
 ): number {
-    const lastCarrot = findLastCarrot(command);
+    const lastSeparator = findLastBreadcrumbSeparator(command);
     let score = 0;
 
     for (const [s, e] of spans) {
@@ -96,7 +96,7 @@ function calculateScore(
             }
         }
 
-        if (s >= lastCarrot) spanScore += 0.5 * len;
+        if (s >= lastSeparator) spanScore += 0.5 * len;
 
         score += spanScore;
     }

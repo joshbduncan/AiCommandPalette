@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- True JSON preferences (Issue #30)
+- New Menu commands for Ai versions 30.0 and 30.1 
+
+### Changed
+
+- BREAKING: No longer supports updates from preferences files saved by versions < 0.11.0
+- Menu commands now have unique numerical ids to reduce collisions across Ai versions
+
+### Fixed
+
+- Preferences version check
+
 ## [0.15.0] 2025-08-11
 
 ### Added

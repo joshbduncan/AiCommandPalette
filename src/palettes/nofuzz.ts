@@ -27,7 +27,7 @@ function scoreMatches(query: string, commands: string[]): string[] {
             ? localize(strings[command.type]).toLowerCase()
             : command.type.toLowerCase();
 
-        const strippedName = name.replace(regexEllipsis, "").replace(regexCarrot, " ");
+        const strippedName = name.replace(regexEllipsis, "").replace(regexBreadcrumbSeparator, " ");
 
         if (!name) {
             name = id.toLowerCase().replace("_", " ");

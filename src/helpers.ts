@@ -41,7 +41,7 @@ function isLocalizedEntry(value: any): value is LocalizedStringEntry {
  * @param s - The string to search within.
  * @returns The position just after the last `' > '` or 0 if not found.
  */
-function findLastCarrot(s: string): number {
+function findLastBreadcrumbSeparator(s: string): number {
     let p = 0;
     const re = / > /g;
 

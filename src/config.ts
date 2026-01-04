@@ -32,14 +32,7 @@ if (devMode || debugLogging) {
     };
 }
 
-interface DevInfo {
-    folder(): Folder;
-    prefsFile(): File;
-    commandsFile(): File;
-    save(): void;
-}
-
-const devInfo: DevInfo = {
+const devInfo = {
     folder(): Folder {
         return pluginDataFolder;
     },
@@ -61,23 +54,21 @@ const devInfo: DevInfo = {
 };
 
 // PALETTE SETTINGS
-interface ColumnConfig {
+type ColumnConfig = {
     width: number;
     key: string;
-}
+};
 
-interface ColumnSet {
+type ColumnSet = {
     [columnLabel: string]: ColumnConfig;
-}
+};
 
-interface PaletteSettings {
+type PaletteSettings = {
     paletteWidth: number;
     paletteHeight: number;
     bounds: [number, number, number, number];
-    columnSets: {
-        [setName: string]: ColumnSet;
-    };
-}
+    columnSets: Record<string, ColumnSet>;
+};
 
 const paletteSettings: PaletteSettings = {
     paletteWidth: 600,
@@ -85,32 +76,33 @@ const paletteSettings: PaletteSettings = {
     bounds: [0, 0, 600, sysOS === "win" ? 211 : 201],
     columnSets: {
         standard: {
-            [localize(strings.name_title_case)]: {
-                width: 450,
-                key: "name",
-            },
-            [localize(strings.type_title_case)]: {
-                width: 100,
-                key: "type",
-            },
+            [localize(strings.name_title_case)]: { width: 450, key: "name" },
+            [localize(strings.type_title_case)]: { width: 100, key: "type" },
         },
         customCommand: {
-            [localize(strings.name_title_case)]: {
-                width: 450,
-                key: "name",
-            },
-            [localize(strings.type_title_case)]: {
-                width: 100,
-                key: "actionType",
-            },
+            [localize(strings.name_title_case)]: { width: 450, key: "name" },
+            [localize(strings.type_title_case)]: { width: 100, key: "actionType" },
         },
     },
 };
 
 // MISCELLANEOUS SETTINGS
 
+// Number of items visible in the listbox viewport without scrolling.
+// Based on the listbox height (paletteHeight) and standard row height in ScriptUI.
 const visibleListItems = 9;
+
+// Maximum number of recent commands to track in user history.
+// Keeps the recent commands list manageable and performant.
 const mostRecentCommandsCount = 25;
+
+// Maximum number of named objects to load from a document.
+// Prevents performance issues when documents have thousands of objects.
+// If exceeded, user is shown a warning and objects are still loaded.
 const namedObjectLimit = 2000;
+
+// Regex to match trailing ellipsis in menu command names (e.g., "Save As...")
 const regexEllipsis = /\.\.\.$/;
-const regexCarrot = /\s>\s/g;
+
+// Regex to match the breadcrumb separator (greater-than sign) in menu paths (e.g., "File > Open")
+const regexBreadcrumbSeparator = /\s>\s/g;
