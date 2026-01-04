@@ -6,4 +6,4 @@ working
 .prettierignore
 scratchpad.*
 node_modules
-agentic-sessions
+sessions
