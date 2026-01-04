@@ -12,6 +12,7 @@ interface CommandEntry {
     layer?: string;
     maxVersion?: number;
     minVersion?: number;
+    multiselect?: boolean;
     name: LocalizedStringEntry | string;
     pageItem?: PageItem;
     path?: string;

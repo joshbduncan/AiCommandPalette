@@ -2,12 +2,12 @@
 interface Prefs {
     startupCommands: string[];
     hiddenCommands: string[];
-    workflows: any[];
-    customCommands: any[];
-    bookmarks: any[];
-    scripts: any[];
+    workflows: CommandEntry[];
+    customCommands: CommandEntry[];
+    bookmarks: CommandEntry[];
+    scripts: CommandEntry[];
     watchedFolders: string[];
-    pickers: any[];
+    pickers: CommandEntry[];
     fuzzy: boolean;
     version: string;
     os: string;
@@ -219,7 +219,7 @@ const userPrefs: UserPrefs = {
             logger.log(`loading watched script folder: ${folder.fsName}`);
 
             // find all scripts
-            var files = findScriptFiles(folder, true);
+            let files = findScriptFiles(folder, true);
 
             const scripts: CommandEntry[] = [];
 

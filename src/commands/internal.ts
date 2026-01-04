@@ -105,7 +105,7 @@ function buildPicker(editPickerId?: string): PickerCommandEntry | undefined {
                 prefs.pickers[i].commands = result.commands;
                 prefs.pickers[i].multiselect = result.multiselect;
                 id = prefs.pickers[i].id;
-                picker = prefs.pickers[i];
+                picker = prefs.pickers[i] as PickerCommandEntry;
                 break;
             }
         }
@@ -1293,7 +1293,7 @@ function loadFolderBookmark(): void {
  */
 function watchScriptFolder(): void {
     // pick a folder
-    var folder = Folder.selectDialog(localize(strings.watched_folder_select));
+    let folder = Folder.selectDialog(localize(strings.watched_folder_select));
     if (!folder) return;
 
     // check prefs to see if folder is already watched
