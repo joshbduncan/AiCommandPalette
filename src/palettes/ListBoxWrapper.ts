@@ -75,6 +75,145 @@ function swapListboxItems(x: ListItemWithId, y: ListItemWithId): void {
     y.id = tempId;
 }
 
+interface ListboxNavigationCallbacks {
+    /**
+     * Called when the user navigates with arrow keys.
+     * Used to disable history scrolling in commandPalette.
+     */
+    onNavigate?: () => void;
+    /**
+     * Called before handling Up arrow key navigation.
+     * Return true to prevent default listbox scrolling behavior.
+     * Used for history scrolling in commandPalette.
+     */
+    shouldBlockUpNavigation?: () => boolean;
+}
+
+/**
+ * Add arrow key navigation support to an EditText field for controlling a ListBoxWrapper.
+ * Allows users to navigate the listbox using arrow keys from the EditText input field.
+ *
+ * Features:
+ * - Up/Down arrows: Navigate through listbox items with frame scrolling
+ * - Shift+Up/Down: Simple navigation without frame adjustments
+ * - End-to-end wrapping: Jump from top to bottom or vice versa
+ * - Smart frame positioning: Keeps selected item visible in the listbox viewport
+ *
+ * @param q - The EditText field to attach navigation to
+ * @param list - The ListBoxWrapper instance to control
+ * @param callbacks - Optional callbacks for custom behavior (e.g., history scrolling)
+ */
+function addListboxArrowKeyNavigation(
+    q: EditText,
+    list: ListBoxWrapper,
+    callbacks?: ListboxNavigationCallbacks
+): void {
+    q.addEventListener("keydown", (e: KeyboardEvent) => {
+        const listbox = list.listbox as ListBoxWithFrame;
+        const listboxSelection = listbox.selection as ListItemWithId;
+
+        if (e.keyName === "Up" || e.keyName === "Down") {
+            e.preventDefault();
+
+            if (typeof listboxSelection === "number" || Array.isArray(listboxSelection))
+                return;
+
+            if (!listboxSelection) {
+                listbox.selection = 0;
+                return;
+            }
+
+            // Check if Up navigation should be blocked (e.g., for history scrolling)
+            if (
+                e.keyName === "Up" &&
+                callbacks?.shouldBlockUpNavigation &&
+                callbacks.shouldBlockUpNavigation()
+            ) {
+                return;
+            }
+
+            // Notify callback that navigation occurred
+            if (callbacks?.onNavigate) {
+                callbacks.onNavigate();
+            }
+
+            if (e.getModifierState("Shift")) {
+                // Simple navigation without frame adjustments
+                if (e.keyName === "Up") {
+                    if (listboxSelection.index === 0) {
+                        listbox.selection = listbox.items.length - 1;
+                    } else {
+                        listbox.selection = listboxSelection.index - 1;
+                    }
+                } else if (e.keyName === "Down") {
+                    if (listboxSelection.index === listbox.items.length - 1) {
+                        listbox.selection = 0;
+                    } else {
+                        listbox.selection = listboxSelection.index + 1;
+                    }
+                }
+            } else {
+                // Full navigation with frame scrolling
+                if (e.keyName === "Up") {
+                    if (listboxSelection.index == 0) {
+                        // jump to the bottom it at top
+                        listbox.selection = listbox.items.length - 1;
+                        listbox.frameStart = listbox.items.length - 1 - visibleListItems;
+                    } else if (listboxSelection.index > 0) {
+                        listbox.selection = listboxSelection.index - 1;
+                        if (listboxSelection.index < listbox.frameStart)
+                            listbox.frameStart--;
+                    }
+                } else if (e.keyName === "Down") {
+                    if (listboxSelection.index === listbox.items.length - 1) {
+                        // jump to the top if at the bottom
+                        listbox.selection = 0;
+                        listbox.frameStart = 0;
+                    } else {
+                        if (listboxSelection.index < listbox.items.length) {
+                            listbox.selection = listboxSelection.index + 1;
+                            if (
+                                listboxSelection.index >
+                                listbox.frameStart + visibleListItems - 1
+                            ) {
+                                if (
+                                    listbox.frameStart <
+                                    listbox.items.length - visibleListItems
+                                ) {
+                                    listbox.frameStart++;
+                                } else {
+                                    listbox.frameStart = listbox.frameStart;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                /*
+                If a selection is made inside of the actual listbox frame by the user,
+                the API doesn't offer any way to know which part of the list is currently
+                visible in the listbox "frame". If the user was to re-enter the `q` edittext
+                and then hit an arrow key the above event listener will not work correctly so
+                I just move the next selection (be it up or down) to the middle of the "frame".
+                */
+                const updatedListboxSelection = listbox.selection as ListItemWithId;
+                if (
+                    updatedListboxSelection.index < listbox.frameStart ||
+                    updatedListboxSelection.index >
+                        listbox.frameStart + visibleListItems - 1
+                )
+                    listbox.frameStart =
+                        updatedListboxSelection.index - Math.floor(visibleListItems / 2);
+                // don't move the frame if list items don't fill the available rows
+                if (listbox.items.length <= visibleListItems) return;
+                // move the frame by revealing the calculated `listbox.frameStart`
+                // @ts-ignore
+                listbox.revealItem(listbox.frameStart);
+            }
+        }
+    });
+}
+
 /**
  * A custom wrapper for a ScriptUI ListBox that supports multiple columns,
  * optional tooltips, multiselect, and command loading.
