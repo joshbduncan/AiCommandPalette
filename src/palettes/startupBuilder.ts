@@ -203,21 +203,6 @@ function startupBuilder(commands: string[]): string[] | false {
         steps.listbox.selection = null;
     };
 
-    /**
-     * Sort selection indexes from listbox items.
-     * @param sel Selected items.
-     */
-    function sortIndexes(sel: ListItem[]): number[] {
-        return sel.map((item) => item.index).sort((a, b) => a - b);
-    }
-    /**
-     * Check whether selection indexes are contiguous.
-     * @param sel Sorted indexes.
-     */
-    function contiguous(sel: number[]): boolean {
-        return sel.length === sel[sel.length - 1] - sel[0] + 1;
-    }
-
     if (win.show() === 1) {
         const items: string[] = [];
         for (let i = 0; i < steps.listbox.items.length; i++) {

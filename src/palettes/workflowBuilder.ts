@@ -281,12 +281,4 @@ function workflowBuilder(
     }
 
     return false;
-
-    function sortIndexes(sel: ListItem[]): number[] {
-        return sel.map((s) => s.index).sort((a, b) => a - b);
-    }
-
-    function contiguous(sel: number[]): boolean {
-        return sel.length === sel[sel.length - 1] - sel[0] + 1;
-    }
 }

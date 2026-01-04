@@ -11671,20 +11671,54 @@ See the LICENSE file for details.
         return result;
     }
     /**
-     * Generate a simple hash string from input.
-     * Safe for ExtendScript (ES3).
-     * @param str - The input string to hash.
-     * @returns A base36 hash string.
+     * Generates a deterministic base-36 hash from a string.
+     *
+     * This is a lightweight, non-cryptographic hash intended for identifiers,
+     * cache keys, or filenames. It is safe to compile down to ES3 for
+     * Adobe ExtendScript.
+     *
+     * @param str - Input string to hash.
+     * @returns Base-36 encoded hash string (always non-negative).
      */
     function hashString(str) {
-        var hash = 0;
         if (str.length === 0) return "0";
+        var hash = 0;
         for (var i = 0; i < str.length; i++) {
-            var chr = str.charCodeAt(i);
-            hash = (hash << 5) - hash + chr;
-            hash |= 0; // Convert to 32-bit int
+            var code = str.charCodeAt(i);
+            hash = (hash << 5) - hash + code;
+            hash |= 0; // force 32-bit signed int (ES3-safe)
         }
+        // Normalize to positive and encode compactly
         return Math.abs(hash).toString(36);
+    }
+    /**
+     * Sort listbox selection items by their index positions.
+     *
+     * @param sel - Array of selected ListItem objects.
+     * @returns Sorted array of index numbers in ascending order.
+     */
+    function sortIndexes(sel) {
+        return sel
+            .map(function (item) {
+                return item.index;
+            })
+            .sort(function (a, b) {
+                return a - b;
+            });
+    }
+    /**
+     * Check whether an array of sorted indexes represents a contiguous range.
+     *
+     * For example:
+     * - [0, 1, 2] → true (contiguous)
+     * - [0, 2, 3] → false (missing index 1)
+     * - [5, 6, 7, 8] → true (contiguous)
+     *
+     * @param sel - Array of sorted index numbers.
+     * @returns True if indexes form a contiguous sequence, false otherwise.
+     */
+    function contiguous(sel) {
+        return sel.length === sel[sel.length - 1] - sel[0] + 1;
     }
     // FILE/FOLDER OPERATIONS
     /**
@@ -13333,18 +13367,6 @@ See the LICENSE file for details.
             };
         }
         return false;
-        function sortIndexes(sel) {
-            return sel
-                .map(function (s) {
-                    return s.index;
-                })
-                .sort(function (a, b) {
-                    return a - b;
-                });
-        }
-        function contiguous(sel) {
-            return sel.length === sel[sel.length - 1] - sel[0] + 1;
-        }
     }
     /**
      * Launch the Startup Command Builder dialog for selecting and ordering startup commands.
@@ -13495,26 +13517,6 @@ See the LICENSE file for details.
             }
             steps.listbox.selection = null;
         };
-        /**
-         * Sort selection indexes from listbox items.
-         * @param sel Selected items.
-         */
-        function sortIndexes(sel) {
-            return sel
-                .map(function (item) {
-                    return item.index;
-                })
-                .sort(function (a, b) {
-                    return a - b;
-                });
-        }
-        /**
-         * Check whether selection indexes are contiguous.
-         * @param sel Sorted indexes.
-         */
-        function contiguous(sel) {
-            return sel.length === sel[sel.length - 1] - sel[0] + 1;
-        }
         if (win.show() === 1) {
             var items = [];
             for (var i = 0; i < steps.listbox.items.length; i++) {
@@ -14715,7 +14717,12 @@ See the LICENSE file for details.
         );
         if (!result) return;
         var commandId = Array.isArray(result) ? result[0] : result;
-        var idx = Number(commandsData[commandId].idx) - 1;
+        var command = commandsData[commandId];
+        if (!command.idx) {
+            logger.log("idx not found for command:", commandId);
+            return;
+        }
+        var idx = Number(command.idx) - 1;
         app.activeDocument.artboards.setActiveArtboardIndex(idx);
         app.executeMenuCommand("fitin");
     }
@@ -14783,7 +14790,13 @@ See the LICENSE file for details.
         );
         if (!result) return;
         var commandId = Array.isArray(result) ? result[0] : result;
-        var pageItem = commandsData[commandId].pageItem;
+        var command = commandsData[commandId];
+        var pageItem = command.pageItem;
+        if (!pageItem) {
+            logger.log("pageItem not found for command:", commandId);
+            alert(localize(strings.go_to_named_object_no_objects));
+            return;
+        }
         doc.selection = null;
         pageItem.selected = true;
         // reset zoom for current document
@@ -15115,8 +15128,14 @@ See the LICENSE file for details.
         );
         if (!result) return;
         var commandId = Array.isArray(result) ? result[0] : result;
+        var documentFile = commandsData[commandId].document;
+        if (!documentFile) {
+            logger.log("document not found for command:", commandId);
+            alert(localize(strings.fl_error_loading, result));
+            return;
+        }
         try {
-            app.open(commandsData[commandId].document);
+            app.open(documentFile);
         } catch (e) {
             alert(localize(strings.fl_error_loading, result));
         }

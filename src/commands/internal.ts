@@ -997,7 +997,13 @@ function goToArtboard(): void {
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);
 
-    const idx = Number(commandsData[commandId].idx) - 1;
+    const command = commandsData[commandId];
+    if (!command.idx) {
+        logger.log("idx not found for command:", commandId);
+        return;
+    }
+
+    const idx = Number(command.idx) - 1;
     app.activeDocument.artboards.setActiveArtboardIndex(idx);
     app.executeMenuCommand("fitin");
 }
@@ -1077,7 +1083,14 @@ function goToNamedObject(): void {
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);
 
-    const pageItem = (commandsData[commandId] as CommandEntry).pageItem;
+    const command = commandsData[commandId] as CommandEntry;
+    const pageItem = command.pageItem;
+
+    if (!pageItem) {
+        logger.log("pageItem not found for command:", commandId);
+        alert(localize(strings.go_to_named_object_no_objects));
+        return;
+    }
 
     doc.selection = null;
     pageItem.selected = true;
@@ -1434,8 +1447,16 @@ function recentFiles(): void {
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);
 
+    const documentFile = commandsData[commandId].document;
+
+    if (!documentFile) {
+        logger.log("document not found for command:", commandId);
+        alert(localize(strings.fl_error_loading, result));
+        return;
+    }
+
     try {
-        app.open(commandsData[commandId].document);
+        app.open(documentFile);
     } catch (e) {
         alert(localize(strings.fl_error_loading, result));
     }
