@@ -10202,9 +10202,9 @@ const commandsData = {
         docRequired: false,
         selRequired: false,
         name: {
-            en: "Recent Commands...",
+            en: "Recent Commands (History)...",
             de: "Letzte Befehle \u2026",
-            ru: "Recent Commands...",
+            ru: "Recent Commands (History)...",
         },
         hidden: false,
     },
