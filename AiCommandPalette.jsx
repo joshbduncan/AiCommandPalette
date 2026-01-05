@@ -12913,7 +12913,7 @@ See the LICENSE file for details.
                 var commandsLUT = {};
                 for (var key in commandsData) {
                     var command = commandsData[key];
-                    // only add command where the is new (menu commands for now)
+                    // only add commands where the is new (menu commands for now)
                     if (key == command.id) continue;
                     // skip any ids already added to the LUT
                     if (commandsLUT.hasOwnProperty(command.id)) continue;
@@ -12985,9 +12985,8 @@ See the LICENSE file for details.
                 this.inject();
             }
             if (updateVersion0_16_0) {
-                // TODO: alert use of clean history
-                // userHistory.backup();
-                // userHistory.clear();
+                userHistory.backup();
+                userHistory.update("0.16.0");
                 this.save();
             }
         },
@@ -13214,6 +13213,81 @@ See the LICENSE file for details.
                     return b[1] - a[1];
                 });
                 latches[query] = commands[0][0];
+            }
+        },
+        update: function (version) {
+            var file = this.file();
+            logger.log("updating user history:", file.fsName);
+            if (!file.exists) return;
+            var queryCommandsLUT = {};
+            var s = readTextFile(file);
+            var data;
+            // try true JSON first
+            try {
+                data = JSON.parse(s);
+                logger.log("history loaded as valid JSON");
+            } catch (e) {
+                logger.log(
+                    "history not valid JSON, will try eval fallback:",
+                    e.message
+                );
+            }
+            // try json-like eval second
+            if (data === undefined) {
+                try {
+                    data = eval(s);
+                    logger.log("history loaded as old JSON-like, saving as true JSON");
+                    // write true JSON back to disk
+                    writeTextFile(JSON.stringify(data), file);
+                } catch (e) {
+                    file.rename(file.name + ".bak");
+                    this.reveal();
+                    Error.runtimeError(1, localize(strings.history_file_loading_error));
+                }
+            }
+            if (!data || typeof data !== "object") return;
+            if (Object.keys(data).length === 0) return;
+            if (data === 0) return;
+            switch (version) {
+                case "0.16.0":
+                    // build lut to convert old menu command ids to updated versions
+                    var commandsLUT = {};
+                    for (var key in commandsData) {
+                        var command = commandsData[key];
+                        // only add commands where the is new (menu commands for now)
+                        if (key == command.id) continue;
+                        // skip any ids already added to the LUT
+                        if (commandsLUT.hasOwnProperty(command.id)) continue;
+                        commandsLUT[command.id] = key;
+                    }
+                    var entry = void 0;
+                    var updatedHistory = [];
+                    var updatedEntry = {};
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        entry = data[i];
+                        updatedEntry["query"] = entry.query;
+                        updatedEntry["timestamp"] = entry.timestamp;
+                        updatedEntry["command"] = entry.command;
+                        // update command
+                        var oldId = entry.command;
+                        if (
+                            !commandsLUT.hasOwnProperty(oldId) ||
+                            oldId == commandsLUT[oldId]
+                        )
+                            continue;
+                        logger.log(
+                            "- updating history command: "
+                                .concat(oldId, " -> ")
+                                .concat(commandsLUT[oldId])
+                        );
+                        updatedEntry["command"] = commandsLUT[oldId];
+                        updatedHistory.push(updatedEntry);
+                    }
+                    history = data;
+                    userHistory.save();
+                    break;
+                default:
+                    break;
             }
         },
         /**

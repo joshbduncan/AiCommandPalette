@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.16.0] 2026-01-04
 
 ### Added
 
 - True JSON preferences (Issue #30)
 - New Menu commands for Ai versions 30.0 and 30.1
+- New Menu commands for Ai versions 29.4+ from [@sttk3](https://community.adobe.com/t5/illustrator-discussions/executemenucommand-command-list/m-p/15646212/page/3#M460298)
 - Comprehensive JSDoc documentation for 40+ functions across the codebase
   - Core I/O and user data management functions (`io.ts`, `user/preferences.ts`, `user/history.ts`)
   - Command execution and action handler functions (`commands/processing.ts`, `commands/internal.ts`)

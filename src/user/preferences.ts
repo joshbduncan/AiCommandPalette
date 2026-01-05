@@ -124,7 +124,7 @@ const userPrefs: UserPrefs = {
             for (const key in commandsData) {
                 const command = commandsData[key] as CommandEntry;
 
-                // only add command where the is new (menu commands for now)
+                // only add commands where the is new (menu commands for now)
                 if (key == command.id) continue;
 
                 // skip any ids already added to the LUT
@@ -138,6 +138,7 @@ const userPrefs: UserPrefs = {
                 const oldId = data.startupCommands[i];
                 if (!commandsLUT.hasOwnProperty(oldId) || oldId == commandsLUT[oldId])
                     continue;
+
                 logger.log(
                     `- updating startup command: ${oldId} -> ${commandsLUT[oldId]}`
                 );
@@ -191,9 +192,8 @@ const userPrefs: UserPrefs = {
         }
 
         if (updateVersion0_16_0) {
-            // TODO: alert use of clean history
-            // userHistory.backup();
-            // userHistory.clear();
+            userHistory.backup();
+            userHistory.update("0.16.0");
             this.save();
         }
     },
