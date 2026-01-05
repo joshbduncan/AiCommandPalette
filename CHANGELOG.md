@@ -9,16 +9,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - True JSON preferences (Issue #30)
-- New Menu commands for Ai versions 30.0 and 30.1 
+- New Menu commands for Ai versions 30.0 and 30.1
+- Comprehensive JSDoc documentation for 40+ functions across the codebase
+  - Core I/O and user data management functions (`io.ts`, `user/preferences.ts`, `user/history.ts`)
+  - Command execution and action handler functions (`commands/processing.ts`, `commands/internal.ts`)
+  - Helper utilities and class methods (`helpers.ts`, `palettes/ListBoxWrapper.ts`, `config.ts`, `user/actions.ts`)
+  - `@throws` tags documenting exception handling behavior
+- Comprehensive error logging throughout the codebase
+  - All try-catch blocks now log errors with context for debugging
+  - Standardized error handling pattern: `logger.log()` + user alert
 
 ### Changed
 
 - BREAKING: No longer supports updates from preferences files saved by versions < 0.11.0
 - Menu commands now have unique numerical ids to reduce collisions across Ai versions
+- Improved type safety by replacing `any[]` with `CommandEntry[]` for typed arrays in preferences
+  - Affects workflows, customCommands, bookmarks, scripts, and pickers
+- Centralized helper functions `sortIndexes()` and `contiguous()` to reduce code duplication
+- Renamed configuration constants for clarity
+  - `findLastCarrot()` → `findLastBreadcrumbSeparator()` (the `>` symbol is a breadcrumb separator, not a caret)
+  - `regexCarrot` → `regexBreadcrumbSeparator`
+- Added explanatory comments for all configuration constants (`visibleListItems`, `mostRecentCommandsCount`, `namedObjectLimit`)
 
 ### Fixed
 
 - Preferences version check
+- Extracted ~100 lines of duplicated arrow key navigation logic to shared `addListboxArrowKeyNavigation()` function
+  - Reduces code duplication across `commandPalette.ts`, `startupBuilder.ts`, and `workflowBuilder.ts`
+- Added null safety checks for potentially undefined properties (`pageItem`, `document`, `idx`)
+- Startup builder query box now auto-focuses on launch for consistent UX
+- Silent catch blocks in preferences and history loading now log errors for debugging
 
 ## [0.15.0] 2025-08-11
 
