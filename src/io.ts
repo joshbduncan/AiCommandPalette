@@ -1,7 +1,13 @@
 // FILE/FOLDER OPERATIONS
 
 /**
- * Setup folder object or create if doesn't exist.
+ * Create a Folder object, creating the folder on disk if it doesn't exist.
+ *
+ * This is a convenience wrapper around ExtendScript's Folder constructor that
+ * ensures the folder exists before returning the object.
+ *
+ * @param path - Absolute file system path to the folder.
+ * @returns Folder object representing the path.
  */
 function setupFolderObject(path: string): Folder {
     const folder = new Folder(path);
@@ -10,14 +16,27 @@ function setupFolderObject(path: string): Folder {
 }
 
 /**
- * Setup file object.
+ * Create a File object from a folder and filename.
+ *
+ * This is a convenience wrapper that constructs the full file path by combining
+ * the folder path with the filename.
+ *
+ * @param path - Parent folder object.
+ * @param name - Name of the file (including extension).
+ * @returns File object representing the combined path.
  */
 function setupFileObject(path: Folder, name: string): File {
     return new File(`${path}/${name}`);
 }
 
 /**
- * Read string data from disk.
+ * Read the entire contents of a text file as a UTF-8 string.
+ *
+ * The file is automatically opened, read, and closed. If an error occurs during
+ * reading, the user is shown an alert and the error is logged.
+ *
+ * @param f - File object to read from.
+ * @returns The file contents as a string, or undefined if reading fails.
  */
 function readTextFile(f: File): string {
     let data;
@@ -35,9 +54,17 @@ function readTextFile(f: File): string {
 }
 
 /**
- * Write string data to disk.
+ * Write string data to a text file with UTF-8 encoding.
+ *
+ * The file is automatically opened, written, and closed. If an error occurs during
+ * writing, the user is shown an alert and the error is logged. The file will be
+ * created if it doesn't exist.
+ *
+ * @param data - String data to write to the file.
+ * @param fp - File path (as string) or File object to write to.
+ * @param mode - File open mode: "w" for write (overwrite) or "a" for append. Defaults to "w".
  */
-function writeTextFile(data: string, fp: string | File, mode: string = "w") {
+function writeTextFile(data: string, fp: string | File, mode: string = "w"): void {
     const f = new File(typeof fp === "string" ? fp : fp.fsName);
     try {
         f.encoding = "UTF-8";

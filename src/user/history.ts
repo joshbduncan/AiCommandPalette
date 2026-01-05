@@ -16,16 +16,37 @@ interface UserHistory {
 }
 
 const userHistory: UserHistory = {
-    folder() {
+    /**
+     * Get the folder where user history is stored.
+     *
+     * @returns Folder object for the plugin data directory.
+     */
+    folder(): Folder {
         return pluginDataFolder;
     },
 
-    file() {
+    /**
+     * Get the File object for the user history JSON file.
+     *
+     * @returns File object for the history file.
+     */
+    file(): File {
         const folder = this.folder();
         return setupFileObject(folder, userHistoryFileName);
     },
 
-    load() {
+    /**
+     * Load user command history from disk and populate tracking data structures.
+     *
+     * This method reads the history file and builds several lookup tables:
+     * - Recent commands with usage counts (for boosting search results)
+     * - Recent queries (for history scrolling with up arrow)
+     * - Most recent N commands (for "Recent Commands" feature)
+     * - Query latches (most common command for each query string)
+     *
+     * Supports legacy JSON-like format and migrates to proper JSON automatically.
+     */
+    load(): void {
         const file = this.file();
         logger.log("loading user history:", file.fsName);
         if (!file.exists) return;
@@ -104,20 +125,40 @@ const userHistory: UserHistory = {
         }
     },
 
-    clear() {
+    /**
+     * Clear all user command history by deleting the history file.
+     *
+     * This permanently removes all tracked queries, command usage, and latches.
+     * The file will be recreated on the next save() call.
+     */
+    clear(): void {
         const file = this.file();
         logger.log("clearing user history");
         file.remove();
     },
 
-    save() {
+    /**
+     * Save current command history to disk as JSON.
+     *
+     * Automatically trims the history to the most recent 500 entries to prevent
+     * unbounded growth. Writes with pretty-printing (4-space indentation).
+     */
+    save(): void {
         const file = this.file();
         logger.log("writing user history");
         if (history.length > 500) history = history.slice(-500);
         writeTextFile(JSON.stringify(history, undefined, 4), file);
     },
 
-    backup() {
+    /**
+     * Create a timestamped backup of the history file.
+     *
+     * Copies the current history file to a new file with the format:
+     * `{filename}.{timestamp}.bak`
+     *
+     * @returns File object representing the backup file.
+     */
+    backup(): File {
         const file = this.file();
         const ts = Date.now();
         const backupFile = new File(`${file}.${ts}.bak`);
@@ -126,7 +167,13 @@ const userHistory: UserHistory = {
         return backupFile;
     },
 
-    reveal() {
+    /**
+     * Open the history folder in the system file browser.
+     *
+     * This is useful for users who want to manually inspect or manage their
+     * history file.
+     */
+    reveal(): void {
         const folder = this.folder();
         logger.log("revealing history file");
         folder.execute();

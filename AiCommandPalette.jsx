@@ -11779,7 +11779,13 @@ See the LICENSE file for details.
     }
     // FILE/FOLDER OPERATIONS
     /**
-     * Setup folder object or create if doesn't exist.
+     * Create a Folder object, creating the folder on disk if it doesn't exist.
+     *
+     * This is a convenience wrapper around ExtendScript's Folder constructor that
+     * ensures the folder exists before returning the object.
+     *
+     * @param path - Absolute file system path to the folder.
+     * @returns Folder object representing the path.
      */
     function setupFolderObject(path) {
         var folder = new Folder(path);
@@ -11787,13 +11793,26 @@ See the LICENSE file for details.
         return folder;
     }
     /**
-     * Setup file object.
+     * Create a File object from a folder and filename.
+     *
+     * This is a convenience wrapper that constructs the full file path by combining
+     * the folder path with the filename.
+     *
+     * @param path - Parent folder object.
+     * @param name - Name of the file (including extension).
+     * @returns File object representing the combined path.
      */
     function setupFileObject(path, name) {
         return new File("".concat(path, "/").concat(name));
     }
     /**
-     * Read string data from disk.
+     * Read the entire contents of a text file as a UTF-8 string.
+     *
+     * The file is automatically opened, read, and closed. If an error occurs during
+     * reading, the user is shown an alert and the error is logged.
+     *
+     * @param f - File object to read from.
+     * @returns The file contents as a string, or undefined if reading fails.
      */
     function readTextFile(f) {
         var data;
@@ -11810,7 +11829,15 @@ See the LICENSE file for details.
         return data;
     }
     /**
-     * Write string data to disk.
+     * Write string data to a text file with UTF-8 encoding.
+     *
+     * The file is automatically opened, written, and closed. If an error occurs during
+     * writing, the user is shown an alert and the error is logged. The file will be
+     * created if it doesn't exist.
+     *
+     * @param data - String data to write to the file.
+     * @param fp - File path (as string) or File object to write to.
+     * @param mode - File open mode: "w" for write (overwrite) or "a" for append. Defaults to "w".
      */
     function writeTextFile(data, fp, mode) {
         if (mode === void 0) {
@@ -11928,9 +11955,19 @@ See the LICENSE file for details.
         timestamp: Date.now(),
     };
     var userPrefs = {
+        /**
+         * Get the folder where user preferences are stored.
+         *
+         * @returns Folder object for the plugin data directory.
+         */
         folder: function () {
             return pluginDataFolder;
         },
+        /**
+         * Get the File object for the user preferences JSON file.
+         *
+         * @returns File object for the preferences file.
+         */
         file: function () {
             var folder = this.folder();
             return setupFileObject(folder, userPrefsFileName);
@@ -12064,7 +12101,11 @@ See the LICENSE file for details.
             }
         },
         /**
-         * Inject commands loaded from user preference file into `commandsData`.
+         * Inject user-created commands into the global commandsData object.
+         *
+         * This method takes workflows, bookmarks, scripts, pickers, and custom commands
+         * from the loaded preferences and adds them to the main command registry so they
+         * can be executed by the command palette.
          */
         inject: function () {
             var typesToInject = [
@@ -12082,6 +12123,13 @@ See the LICENSE file for details.
                 }
             }
         },
+        /**
+         * Load scripts from all watched folders into the command palette.
+         *
+         * Recursively scans each watched folder for .jsx and .js files, creates command
+         * entries for them, and adds them to commandsData. If a watched folder doesn't
+         * exist, the user is notified.
+         */
         loadWatchedScripts: function () {
             for (var _i = 0, _a = prefs.watchedFolders; _i < _a.length; _i++) {
                 var path = _a[_i];
@@ -12126,11 +12174,25 @@ See the LICENSE file for details.
                 }
             }
         },
+        /**
+         * Save current preferences to disk as JSON.
+         *
+         * Writes the global `prefs` object to the preferences file with pretty-printing
+         * (4-space indentation) for better readability.
+         */
         save: function () {
             var file = this.file();
             logger.log("writing user prefs");
             writeTextFile(JSON.stringify(prefs, undefined, 4), file);
         },
+        /**
+         * Create a timestamped backup of the preferences file.
+         *
+         * Copies the current preferences file to a new file with the format:
+         * `{filename}.{timestamp}.bak`
+         *
+         * @returns File object representing the backup file.
+         */
         backup: function () {
             var file = this.file();
             var ts = Date.now();
@@ -12139,6 +12201,12 @@ See the LICENSE file for details.
             logger.log("user prefs backed up to:", backupFile.fsName);
             return backupFile;
         },
+        /**
+         * Open the preferences folder in the system file browser.
+         *
+         * This is useful for users who want to manually inspect or edit their
+         * preferences and related files.
+         */
         reveal: function () {
             var folder = this.folder();
             logger.log("revealing user prefs");
@@ -12152,13 +12220,34 @@ See the LICENSE file for details.
     var mostRecentCommands = [];
     var latches = {};
     var userHistory = {
+        /**
+         * Get the folder where user history is stored.
+         *
+         * @returns Folder object for the plugin data directory.
+         */
         folder: function () {
             return pluginDataFolder;
         },
+        /**
+         * Get the File object for the user history JSON file.
+         *
+         * @returns File object for the history file.
+         */
         file: function () {
             var folder = this.folder();
             return setupFileObject(folder, userHistoryFileName);
         },
+        /**
+         * Load user command history from disk and populate tracking data structures.
+         *
+         * This method reads the history file and builds several lookup tables:
+         * - Recent commands with usage counts (for boosting search results)
+         * - Recent queries (for history scrolling with up arrow)
+         * - Most recent N commands (for "Recent Commands" feature)
+         * - Query latches (most common command for each query string)
+         *
+         * Supports legacy JSON-like format and migrates to proper JSON automatically.
+         */
         load: function () {
             var file = this.file();
             logger.log("loading user history:", file.fsName);
@@ -12232,17 +12321,37 @@ See the LICENSE file for details.
                 latches[query] = commands[0][0];
             }
         },
+        /**
+         * Clear all user command history by deleting the history file.
+         *
+         * This permanently removes all tracked queries, command usage, and latches.
+         * The file will be recreated on the next save() call.
+         */
         clear: function () {
             var file = this.file();
             logger.log("clearing user history");
             file.remove();
         },
+        /**
+         * Save current command history to disk as JSON.
+         *
+         * Automatically trims the history to the most recent 500 entries to prevent
+         * unbounded growth. Writes with pretty-printing (4-space indentation).
+         */
         save: function () {
             var file = this.file();
             logger.log("writing user history");
             if (history.length > 500) history = history.slice(-500);
             writeTextFile(JSON.stringify(history, undefined, 4), file);
         },
+        /**
+         * Create a timestamped backup of the history file.
+         *
+         * Copies the current history file to a new file with the format:
+         * `{filename}.{timestamp}.bak`
+         *
+         * @returns File object representing the backup file.
+         */
         backup: function () {
             var file = this.file();
             var ts = Date.now();
@@ -12251,6 +12360,12 @@ See the LICENSE file for details.
             logger.log("user history backed up to:", backupFile.fsName);
             return backupFile;
         },
+        /**
+         * Open the history folder in the system file browser.
+         *
+         * This is useful for users who want to manually inspect or manage their
+         * history file.
+         */
         reveal: function () {
             var folder = this.folder();
             logger.log("revealing history file");

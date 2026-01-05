@@ -45,11 +45,21 @@ interface UserPrefs {
 }
 
 const userPrefs: UserPrefs = {
-    folder() {
+    /**
+     * Get the folder where user preferences are stored.
+     *
+     * @returns Folder object for the plugin data directory.
+     */
+    folder(): Folder {
         return pluginDataFolder;
     },
 
-    file() {
+    /**
+     * Get the File object for the user preferences JSON file.
+     *
+     * @returns File object for the preferences file.
+     */
+    file(): File {
         const folder = this.folder();
         return setupFileObject(folder, userPrefsFileName);
     },
@@ -187,9 +197,13 @@ const userPrefs: UserPrefs = {
     },
 
     /**
-     * Inject commands loaded from user preference file into `commandsData`.
+     * Inject user-created commands into the global commandsData object.
+     *
+     * This method takes workflows, bookmarks, scripts, pickers, and custom commands
+     * from the loaded preferences and adds them to the main command registry so they
+     * can be executed by the command palette.
      */
-    inject() {
+    inject(): void {
         const typesToInject = [
             "workflows",
             "bookmarks",
@@ -206,7 +220,14 @@ const userPrefs: UserPrefs = {
         }
     },
 
-    loadWatchedScripts() {
+    /**
+     * Load scripts from all watched folders into the command palette.
+     *
+     * Recursively scans each watched folder for .jsx and .js files, creates command
+     * entries for them, and adds them to commandsData. If a watched folder doesn't
+     * exist, the user is notified.
+     */
+    loadWatchedScripts(): void {
         for (const path of prefs.watchedFolders) {
             const folder = new Folder(path);
 
@@ -254,13 +275,27 @@ const userPrefs: UserPrefs = {
         }
     },
 
-    save() {
+    /**
+     * Save current preferences to disk as JSON.
+     *
+     * Writes the global `prefs` object to the preferences file with pretty-printing
+     * (4-space indentation) for better readability.
+     */
+    save(): void {
         const file = this.file();
         logger.log("writing user prefs");
         writeTextFile(JSON.stringify(prefs, undefined, 4), file);
     },
 
-    backup() {
+    /**
+     * Create a timestamped backup of the preferences file.
+     *
+     * Copies the current preferences file to a new file with the format:
+     * `{filename}.{timestamp}.bak`
+     *
+     * @returns File object representing the backup file.
+     */
+    backup(): File {
         const file = this.file();
         const ts = Date.now();
         const backupFile = new File(`${file}.${ts}.bak`);
@@ -269,7 +304,13 @@ const userPrefs: UserPrefs = {
         return backupFile;
     },
 
-    reveal() {
+    /**
+     * Open the preferences folder in the system file browser.
+     *
+     * This is useful for users who want to manually inspect or edit their
+     * preferences and related files.
+     */
+    reveal(): void {
         const folder = this.folder();
         logger.log("revealing user prefs");
         folder.execute();
