@@ -11711,9 +11711,11 @@ See the LICENSE file for details.
     }
     /**
      * Get all `.js` and `.jsx` files in a folder.
+     *
      * @param folder - The starting folder object.
      * @param recursive - If true, searches subfolders recursively.
      * @returns An array of matching File objects.
+     * @throws {Error} If the folder parameter is invalid or the folder does not exist.
      */
     function findScriptFiles(folder, recursive) {
         if (recursive === void 0) {
@@ -12015,8 +12017,10 @@ See the LICENSE file for details.
          * Loads user preferences from disk (migrates legacy formats as needed).
          * If `inject` is true, calls `this.inject()` after loading.
          *
-         * @param inject Inject user commands into `commandsData`.
-         * @returns {void} Nothing.
+         * @param inject - Inject user commands into `commandsData`.
+         * @throws {Error} Throws a runtime error if the preferences file is corrupted and cannot
+         *                 be parsed. The corrupted file is renamed to .bak and the preferences
+         *                 folder is revealed to the user.
          */
         load: function (inject) {
             var file = this.file();
@@ -12286,6 +12290,10 @@ See the LICENSE file for details.
          * - Query latches (most common command for each query string)
          *
          * Supports legacy JSON-like format and migrates to proper JSON automatically.
+         *
+         * @throws {Error} Throws a runtime error if the history file is corrupted and cannot
+         *                 be parsed. The corrupted file is renamed to .bak and the history
+         *                 folder is revealed to the user.
          */
         load: function () {
             var file = this.file();

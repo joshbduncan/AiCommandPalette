@@ -45,6 +45,10 @@ const userHistory: UserHistory = {
      * - Query latches (most common command for each query string)
      *
      * Supports legacy JSON-like format and migrates to proper JSON automatically.
+     *
+     * @throws {Error} Throws a runtime error if the history file is corrupted and cannot
+     *                 be parsed. The corrupted file is renamed to .bak and the history
+     *                 folder is revealed to the user.
      */
     load(): void {
         const file = this.file();

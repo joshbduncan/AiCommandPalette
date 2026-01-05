@@ -68,10 +68,12 @@ const userPrefs: UserPrefs = {
      * Loads user preferences from disk (migrates legacy formats as needed).
      * If `inject` is true, calls `this.inject()` after loading.
      *
-     * @param inject Inject user commands into `commandsData`.
-     * @returns {void} Nothing.
+     * @param inject - Inject user commands into `commandsData`.
+     * @throws {Error} Throws a runtime error if the preferences file is corrupted and cannot
+     *                 be parsed. The corrupted file is renamed to .bak and the preferences
+     *                 folder is revealed to the user.
      */
-    load(inject?: boolean) {
+    load(inject?: boolean): void {
         const file = this.file();
         logger.log("loading user preferences:", file.fsName);
 

@@ -456,9 +456,11 @@ function openURL(url: string): void {
 
 /**
  * Get all `.js` and `.jsx` files in a folder.
+ *
  * @param folder - The starting folder object.
  * @param recursive - If true, searches subfolders recursively.
  * @returns An array of matching File objects.
+ * @throws {Error} If the folder parameter is invalid or the folder does not exist.
  */
 function findScriptFiles(folder: Folder, recursive: boolean = true): File[] {
     const result: File[] = [];
