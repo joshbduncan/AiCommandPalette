@@ -32,11 +32,11 @@ function fuzzy(q: string, commands: string[]): string[] {
         let score = calculateScore(commandName, spans, chunks);
         let bonus = 0;
 
-        if (latches.hasOwnProperty(q) && latches[q] == command.id) {
+        if (latches.hasOwnProperty(q) && latches[q] == id) {
             bonus += 1;
         }
 
-        if (recentCommands.hasOwnProperty(command.id)) {
+        if (recentCommands.hasOwnProperty(id)) {
             bonus += 0.5;
         }
 

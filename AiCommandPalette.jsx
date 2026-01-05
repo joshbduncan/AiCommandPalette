@@ -12616,10 +12616,10 @@ See the LICENSE file for details.
             if (!spans.length) continue;
             var score = calculateScore(commandName, spans, chunks);
             var bonus = 0;
-            if (latches.hasOwnProperty(q) && latches[q] == command.id) {
+            if (latches.hasOwnProperty(q) && latches[q] == id) {
                 bonus += 1;
             }
-            if (recentCommands.hasOwnProperty(command.id)) {
+            if (recentCommands.hasOwnProperty(id)) {
                 bonus += 0.5;
             }
             scores[id] = score + bonus;
