@@ -11,7 +11,7 @@ echo "Post-processing compiled bundle..."
 
 # Step 1: Strip TypeScript-specific comments (@ts-ignore, @ts-nocheck, @ts-expect-error)
 echo "  - Stripping TS comments..."
-sed -E '/\/\/[[:space:]]*(@ ts-(ignore|nocheck|expect-error))/d' "$INFILE" > "$TMPFILE"
+sed -E '/\/\/[[:space:]]*@ts-(ignore|nocheck|expect-error)/d' "$INFILE" > "$TMPFILE"
 
 # Step 2: Wrap in IIFE with header
 echo "  - Wrapping in IIFE..."
