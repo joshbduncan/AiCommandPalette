@@ -446,6 +446,7 @@ See the LICENSE file for details.
             };
         }
     })();
+    // @ts-nocheck
     // Array.prototype.indexOf
     if (!Array.prototype.indexOf) {
         Array.prototype.indexOf = function (searchElement, fromIndex) {
@@ -678,6 +679,7 @@ See the LICENSE file for details.
             return Object.prototype.toString.call(arg) === "[object Array]";
         };
     }
+    // @ts-nocheck
     Number.prototype.toRadians = function () {
         return this * (Math.PI / 180);
     };
@@ -702,6 +704,7 @@ See the LICENSE file for details.
     function round2(num) {
         return Math.round(num * 100) / 100;
     }
+    // @ts-nocheck
     if (!Object.keys) {
         Object.keys = (function () {
             var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -778,6 +781,7 @@ See the LICENSE file for details.
         };
     }
     if (!("assign" in Object)) {
+        ///@ts-ignore
         Object.assign = (function (has) {
             "use strict";
             return function assign(target) {
@@ -835,6 +839,7 @@ See the LICENSE file for details.
         }
         return true;
     }
+    // @ts-nocheck
     String.prototype.trim = function () {
         return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
     };
@@ -11521,8 +11526,10 @@ See the LICENSE file for details.
     function getAllPlacedFilePaths(xmp) {
         var paths = [];
         // Iterate over all items in the xmpMM:Manifest array
+        // @ts-ignore
         for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
             var xpath = "xmpMM:Manifest[".concat(i, "]/stMfs:reference/stRef:filePath");
+            // @ts-ignore
             var prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
             if (prop != null && typeof prop.value === "string") {
                 paths.push(prop.value);
@@ -11541,12 +11548,14 @@ See the LICENSE file for details.
      */
     function getBrokenFilePaths(xmp) {
         var paths = [];
+        // @ts-ignore
         for (
             var i = 1;
             i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Ingredients");
             i++
         ) {
             var xpath = "xmpMM:Ingredients[".concat(i, "]/stRef:filePath");
+            // @ts-ignore
             var prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
             if (prop != null && typeof prop.value === "string") {
                 paths.push(prop.value);
@@ -12049,6 +12058,7 @@ See the LICENSE file for details.
                     logger.log("error loading user prefs", e);
                     logger.log("renaming prefs file:", file.fsName);
                     this.reveal();
+                    // @ts-ignore
                     Error.runtimeError(1, localize(strings.pref_file_loading_error, e));
                 }
             }
@@ -12322,6 +12332,7 @@ See the LICENSE file for details.
                 } catch (e) {
                     file.rename(file.name + ".bak");
                     this.reveal();
+                    // @ts-ignore
                     Error.runtimeError(1, localize(strings.history_file_loading_error));
                 }
             }
@@ -12820,6 +12831,7 @@ See the LICENSE file for details.
     function addToStepsOnDoubleClick(listbox) {
         listbox.onDoubleClick = function () {
             var win = listbox.window;
+            // @ts-ignore
             var steps = win.findElement("steps");
             var selection = listbox.selection;
             var command = commandsData[selection.id];
@@ -12976,6 +12988,7 @@ See the LICENSE file for details.
                     // don't move the frame if list items don't fill the available rows
                     if (listbox.items.length <= visibleListItems) return;
                     // move the frame by revealing the calculated `listbox.frameStart`
+                    // @ts-ignore
                     listbox.revealItem(listbox.frameStart);
                 }
             }
@@ -13323,6 +13336,7 @@ See the LICENSE file for details.
         win.alignChildren = "fill";
         // Header text
         var header = win.add(
+            // @ts-ignore
             "statictext",
             [0, 0, 500, 100],
             localize(strings.custom_commands_header),
@@ -13938,6 +13952,7 @@ See the LICENSE file for details.
      * @param command - Command entry containing the tool identifier.
      */
     function toolAction(command) {
+        // @ts-ignore
         app.selectTool(command.action);
     }
     /**
@@ -14729,6 +14744,7 @@ See the LICENSE file for details.
             );
             warning.justify = "center";
             warning.graphics.foregroundColor = warning.graphics.newPen(
+                // @ts-ignore
                 win.graphics.PenType.SOLID_COLOR,
                 [1, 0, 0],
                 1

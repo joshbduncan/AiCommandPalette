@@ -9,10 +9,7 @@
         "build-commands": "zsh -c \"python3 scripts/build_commands.py | prettier --parser typescript > src/data/built_commands.ts\"",
         "copy-to-ai": "zsh -c \"sudo cp AiCommandPalette.jsx /Applications/Adobe\\ Illustrator\\ 2026/Presets.localized/en_US/Scripts\"",
         "build": "tsc",
-        "postbuild": "npm-run-all postbuild:*",
-        "postbuild:strip-ts-comments": "zsh -c \"scripts/strip_ts_comments.sh\"",
-        "postbuild:wrap-in-anon-func": "zsh -c \"scripts/wrap_in_anon_function.sh\"",
-        "postbuild:prettier": "zsh -c \"prettier --parser=babel --write AiCommandPalette.jsx\"",
+        "postbuild": "zsh -c \"scripts/postbuild.sh\"",
         "dev": "chokidar 'src/**/*.ts' -c 'npm-run-all build postbuild copy-to-ai'"
     },
     "keywords": [
