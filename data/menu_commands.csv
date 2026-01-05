@@ -4,7 +4,7 @@ menu_1001,newFromTemplate,FALSE,menu,FALSE,FALSE,,,File > New from Template...,D
 menu_1002,open,FALSE,menu,FALSE,FALSE,,,File > Open...,Datei > Öffnen …,Файл > Открыть...,文件>打开…
 menu_1003,Adobe Bridge Browse,FALSE,menu,FALSE,FALSE,,,File > Browse in Bridge...,Datei > Bridge durchsuchen …,Файл > Обзор в Bridge...,文件>在Bridge中浏览…
 menu_1004,close,FALSE,menu,TRUE,FALSE,,,File > Close,Datei > Schließen,Файл > Закрыть,文件>关闭…
-menu_2000,closeAll,FALSE,menu,TRUE,FALSE,29.4,,Close All,Close All,Close All,Close All,
+menu_2000,closeAll,FALSE,menu,TRUE,FALSE,29.4,,Close All
 menu_1005,save,FALSE,menu,TRUE,FALSE,,,File > Save,Datei > Speichern,Файл > Сохранить,文件>保存…
 menu_1006,saveas,FALSE,menu,TRUE,FALSE,,,File > Save As...,Datei > Speichern unter …,Файл > Сохранить как...,文件>另存为…
 menu_1007,saveacopy,FALSE,menu,TRUE,FALSE,,,File > Save a Copy...,Datei > Kopie speichern …,Файл > Сохранить копию...,文件>保存副本…
@@ -235,7 +235,25 @@ menu_1231,Adobe Illustrator Smart Punctuation Menu Item,FALSE,menu,TRUE,FALSE,,,
 menu_1232,outline,FALSE,menu,TRUE,TRUE,,,Type > Create Outlines,Schrift > In Pfade umwandeln,Текст > Преобразовать в кривые
 menu_1233,Adobe Optical Alignment Item,FALSE,menu,TRUE,TRUE,,,Type > Optical Margin Alignment,Schrift > Optischer Randausgleich,Текст > Визуальное выравнивание полей
 menu_1234,convert list style to text,FALSE,menu,TRUE,TRUE,27.1,,Type > Bullets and Numbering > Convert to text,Schrift > Aufzählungszeichen und Nummerierung > In Text konvertieren
-menu_2001,~bullet,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Symbols > Bullet,Type > Insert Special Character > Symbols > Bullet,Type > Insert Special Character > Symbols > Bullet
+menu_2001,~bullet,FALSE,menu,TRUE,FALSE,29.4,,Type > Insert Special Character > Symbols > Bullet,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2002,~copyright,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Symbols > Copyright Symbol,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2003,~ellipsis,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Symbols > Ellipsis,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2004,~paragraphSymbol,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Symbols > Paragraph Symbol,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2005,~registeredTrademark,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Symbols > Registered Trademark Symbol,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2006,~sectionSymbol,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Symbols > Section Symbol,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2007,~trademarkSymbol,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Symbols > Trademark Symbol,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2008,~emDash,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Hyphens And Dashes > Em Dash,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2009,~enDash,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Hyphens And Dashes > En Dash,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2010,~discretionaryHyphen,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Hyphens And Dashes > Discretionary Hyphen,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2011,~doubleLeftQuote,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Quotation Marks > Double Left Quotation Marks,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2012,~doubleRightQuote,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Quotation Marks > Double Right Quotation Marks,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2013,~singleLeftQuote,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Quotation Marks > Single Left Quotation Marks,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2014,~singleRightQuote,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Quotation Marks > Single Right Quotation Marks,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2015,~emSpace,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert WhiteSpace Character > Em Space,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2016,~enSpace,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert WhiteSpace Character > En Space,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2017,~hairSpace,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert WhiteSpace Character > Hair Space,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2018,~thinSpace,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert WhiteSpace Character > Thin Space,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2019,~forcedLineBreak,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Break Character > Forced Line Break,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
 menu_1235,showHiddenChar,FALSE,menu,TRUE,FALSE,,,Type > Show Hidden Characters,Schrift > Verborgene Zeichen einblenden / ausblenden,Текст > Показать скрытые символы
 menu_1236,type-horizontal,FALSE,menu,TRUE,TRUE,,,Type > Type Orientation > Horizontal,Schrift > Textausrichtung > Horizontal,Текст > Ориентация текста > Горизонтальная
 menu_1237,type-vertical,FALSE,menu,TRUE,TRUE,,,Type > Type Orientation > Vertical,Schrift > Textausrichtung > Vertikal,Текст > Ориентация текста > Вертикальная
@@ -721,3 +739,49 @@ menu_1716,ClipboardPref,FALSE,menu,FALSE,FALSE,25,,Preferences > Clipboard Handl
 menu_1717,BlackPref,FALSE,menu,FALSE,FALSE,,,Preferences > Appearance of Black...,Bearbeiten > Voreinstellungen > Aussehen von Schwarz …,Установки > Воспроизведение черного цвета...
 menu_1718,DevicesPref,FALSE,menu,FALSE,FALSE,24,,Preferences > Devices,Voreinstellungen > Geräte …,Установки > Устройства…
 menu_1719,Debug Panel,FALSE,menu,FALSE,FALSE,,,Debug Panel
+menu_2020,faceSizeUp,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Point Size Up
+menu_2021,faceSizeDown,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Point Size Down
+menu_2022,sizeStepUp,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Font Size Step Up
+menu_2023,sizeStepDown,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Font Size Step Down
+menu_2024,~kernFurther,FALSE,menu,TRUE,FALSE,29.4,,Other Text > Kern Looser,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2025,~kernCloser,FALSE,menu,TRUE,FALSE,29.4,,Other Text > Kern Tighter,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2026,tracking,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Tracking
+menu_2027,clearTrack,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Clear Tracking
+menu_2028,spacing,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Spacing
+menu_2029,clearTypeScale,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Uniform Type
+menu_2030,highlightFont,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Highlight Font
+menu_2031,highlightFont2,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Highlight Font (Secondary)
+menu_2032,leftAlign,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Left Align Text
+menu_2033,centerAlign,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Center Text
+menu_2034,rightAlign,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Right Align Text
+menu_2035,justify,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Justify Text Left
+menu_2036,justifyCenter,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Justify Text Center
+menu_2037,justifyRight,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Justify Text Right
+menu_2038,justifyAll,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Justify All Lines
+menu_2039,toggleAutoHyphen,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Toggle Auto Hyphenation
+menu_2040,toggleLineComposer,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Toggle Line Composer
+menu_2041,~subscript,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Subscript
+menu_2042,~superScript,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Superscript
+menu_2043,~textBold,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Bold
+menu_2044,~textItalic,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Italic
+menu_2045,~textUnderline,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Underline
+menu_2046,lock2,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Lock Others
+menu_2047,hide2,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Hide Others
+menu_2048,repeatPathfinder,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Repeat Pathfinder
+menu_2049,avgAndJoin,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Average & Join
+menu_2050,enterFocus,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Isolate Selected Object
+menu_2051,exitFocus,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Exit Isolation Mode
+menu_2052,switchSelTool,FALSE,menu,TRUE,FALSE,29.4,,Other Misc > Switch Units
+menu_2053,new2,FALSE,menu,FALSE,FALSE,29.4,,Other Misc > New File (No Dialog)
+menu_2054,helpcontent2,TRUE,menu,FALSE,FALSE,29.4,,Other Misc > Help (Secondary)
+menu_2055,undo2,TRUE,menu,TRUE,FALSE,29.4,,Other Misc > Undo (Secondary)
+menu_2056,cut2,TRUE,menu,TRUE,TRUE,29.4,,Other Misc > Cut (Secondary)
+menu_2057,copy2,TRUE,menu,TRUE,TRUE,29.4,,Other Misc > Copy (Secondary)
+menu_2058,paste2,TRUE,menu,TRUE,FALSE,29.4,,Other Misc > Paste (Secondary)
+menu_2059,zoomin2,TRUE,menu,TRUE,FALSE,29.4,,Other Misc > Zoom In (Secondary)
+menu_2060,navigateToNextDocument,FALSE,menu,TRUE,FALSE,29.4,,Other Misc > Navigate to Next Document
+menu_2061,navigateToPreviousDocument,FALSE,menu,TRUE,FALSE,29.4,,Other Misc > Navigate to Previous Document
+menu_2062,navigateToNextDocumentGroup,FALSE,menu,TRUE,FALSE,29.4,,Other Misc > Navigate to Next Document Group
+menu_2063,navigateToPreviousDocumentGroup,FALSE,menu,TRUE,FALSE,29.4,,Other Misc > Navigate to Previous Document Group
+menu_2064,~subscript2,TRUE,menu,TRUE,TRUE,29.4,,Other Misc > Subscript (Secondary)
+menu_2065,~superScript2,TRUE,menu,TRUE,TRUE,29.4,,Other Misc > Superscript (Secondary)
