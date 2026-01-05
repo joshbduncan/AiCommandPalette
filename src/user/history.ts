@@ -39,7 +39,9 @@ const userHistory: UserHistory = {
         try {
             data = JSON.parse(s);
             logger.log("history loaded as valid JSON");
-        } catch (e) {}
+        } catch (e) {
+            logger.log("history not valid JSON, will try eval fallback:", e.message);
+        }
 
         // try json-like eval second
         if (data === undefined) {

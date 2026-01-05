@@ -77,7 +77,9 @@ const userPrefs: UserPrefs = {
         try {
             data = JSON.parse(s);
             logger.log("prefs loaded as valid JSON");
-        } catch (e) {}
+        } catch (e) {
+            logger.log("prefs not valid JSON, will try eval fallback:", e.message);
+        }
 
         // try json-like eval second
         if (data === undefined) {

@@ -26,6 +26,7 @@ function readTextFile(f: File): string {
         f.open("r");
         data = f.read();
     } catch (e) {
+        logger.log("Error reading file:", f.fsName, e.message);
         alert(localize(strings.fl_error_loading, f));
     } finally {
         f.close();
@@ -43,6 +44,7 @@ function writeTextFile(data: string, fp: string | File, mode: string = "w") {
         f.open(mode);
         f.write(data);
     } catch (e) {
+        logger.log("Error writing file:", f.fsName, e.message);
         alert(localize(strings.fl_error_writing, f));
     } finally {
         f.close();

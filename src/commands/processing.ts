@@ -95,6 +95,7 @@ function executeAction(command: CommandEntry): void {
         const name = isLocalizedEntry(command.name)
             ? localize(command.name)
             : command.name;
+        logger.log("Error executing command:", command.id, "-", e.message);
         alert(localize(alertString, name, e.message));
     }
 }

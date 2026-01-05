@@ -11296,7 +11296,11 @@ See the LICENSE file for details.
                 f.open(this.mode);
                 f.writeln(args.join(" "));
             } catch (e) {
-                $.writeln("Error writing file: ".concat(f.fullName));
+                $.writeln(
+                    "Error writing log file: "
+                        .concat(f.fullName, " - ")
+                        .concat(e.message)
+                );
                 return false;
             } finally {
                 f.close();
@@ -11669,6 +11673,7 @@ See the LICENSE file for details.
             }
             f.execute();
         } catch (e) {
+            logger.log("Error running script:", e.message);
             $.writeln(e);
         } finally {
             if (f) f.close();
@@ -11797,6 +11802,7 @@ See the LICENSE file for details.
             f.open("r");
             data = f.read();
         } catch (e) {
+            logger.log("Error reading file:", f.fsName, e.message);
             alert(localize(strings.fl_error_loading, f));
         } finally {
             f.close();
@@ -11816,6 +11822,7 @@ See the LICENSE file for details.
             f.open(mode);
             f.write(data);
         } catch (e) {
+            logger.log("Error writing file:", f.fsName, e.message);
             alert(localize(strings.fl_error_writing, f));
         } finally {
             f.close();
@@ -11947,7 +11954,9 @@ See the LICENSE file for details.
             try {
                 data = JSON.parse(s);
                 logger.log("prefs loaded as valid JSON");
-            } catch (e) {}
+            } catch (e) {
+                logger.log("prefs not valid JSON, will try eval fallback:", e.message);
+            }
             // try json-like eval second
             if (data === undefined) {
                 try {
@@ -12161,7 +12170,12 @@ See the LICENSE file for details.
             try {
                 data = JSON.parse(s);
                 logger.log("history loaded as valid JSON");
-            } catch (e) {}
+            } catch (e) {
+                logger.log(
+                    "history not valid JSON, will try eval fallback:",
+                    e.message
+                );
+            }
             // try json-like eval second
             if (data === undefined) {
                 try {
@@ -13670,6 +13684,7 @@ See the LICENSE file for details.
             var name = isLocalizedEntry(command.name)
                 ? localize(command.name)
                 : command.name;
+            logger.log("Error executing command:", command.id, "-", e.message);
             alert(localize(alertString, name, e.message));
         }
     }
@@ -14460,6 +14475,7 @@ See the LICENSE file for details.
                     f.open("w");
                     f.write(info.text);
                 } catch (e) {
+                    logger.log("Error writing document report file:", e.message);
                     alert(localize(strings.fl_error_writing, f));
                 } finally {
                     f.close();
@@ -14683,6 +14699,7 @@ See the LICENSE file for details.
         try {
             app.activeDocument.imageCapture(file);
         } catch (e) {
+            logger.log("Error capturing document image:", e.message);
             alert(localize(strings.fl_error_writing, file));
             return;
         }
@@ -14709,6 +14726,7 @@ See the LICENSE file for details.
         try {
             doc.exportVariables(file);
         } catch (e) {
+            logger.log("Error exporting variables:", e.message);
             alert(localize(strings.fl_error_writing, file));
             return;
         }
@@ -15189,6 +15207,7 @@ See the LICENSE file for details.
         try {
             app.open(documentFile);
         } catch (e) {
+            logger.log("Error opening recent file:", documentFile.fsName, e.message);
             alert(localize(strings.fl_error_loading, result));
         }
     }

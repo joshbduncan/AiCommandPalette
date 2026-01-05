@@ -636,6 +636,7 @@ function documentReport(): void {
                 f.open("w");
                 f.write(info.text);
             } catch (e) {
+                logger.log("Error writing document report file:", e.message);
                 alert(localize(strings.fl_error_writing, f));
             } finally {
                 f.close();
@@ -897,6 +898,7 @@ function imageCapture(): void {
     try {
         app.activeDocument.imageCapture(file);
     } catch (e) {
+        logger.log("Error capturing document image:", e.message);
         alert(localize(strings.fl_error_writing, file));
         return;
     }
@@ -929,6 +931,7 @@ function exportVariables(): void {
     try {
         doc.exportVariables(file);
     } catch (e) {
+        logger.log("Error exporting variables:", e.message);
         alert(localize(strings.fl_error_writing, file));
         return;
     }
@@ -1458,6 +1461,7 @@ function recentFiles(): void {
     try {
         app.open(documentFile);
     } catch (e) {
+        logger.log("Error opening recent file:", documentFile.fsName, e.message);
         alert(localize(strings.fl_error_loading, result));
     }
 }

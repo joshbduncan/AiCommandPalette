@@ -107,7 +107,7 @@ class Logger {
             f.open(this.mode);
             f.writeln(args.join(" "));
         } catch (e) {
-            $.writeln(`Error writing file: ${f.fullName}`);
+            $.writeln(`Error writing log file: ${f.fullName} - ${e.message}`);
             return false;
         } finally {
             f.close();

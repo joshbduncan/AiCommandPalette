@@ -414,6 +414,7 @@ function simulateKeypress(k: string, n: number = 1): void {
 
         f.execute();
     } catch (e) {
+        logger.log("Error running script:", e.message);
         $.writeln(e);
     } finally {
         if (f) f.close();
