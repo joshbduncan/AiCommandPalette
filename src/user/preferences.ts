@@ -125,6 +125,21 @@ const userPrefs = {
         }
     },
 
+    /**
+     * Apply version-specific migrations to user preferences.
+     *
+     * This method updates the preferences data structure when command IDs or
+     * schemas change between plugin versions. It creates a backup before making
+     * changes and updates command references in:
+     * - Startup commands list
+     * - Hidden commands list
+     * - Workflow action steps
+     *
+     * The migration strategy uses a lookup table to map old command IDs to new
+     * ones, ensuring that user configurations remain valid after updates.
+     *
+     * @param version - The version number to migrate to (e.g., "0.16.0").
+     */
     update(version: string): void {
         switch (version) {
             case "0.16.0":

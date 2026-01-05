@@ -12924,6 +12924,21 @@ See the LICENSE file for details.
                 this.inject();
             }
         },
+        /**
+         * Apply version-specific migrations to user preferences.
+         *
+         * This method updates the preferences data structure when command IDs or
+         * schemas change between plugin versions. It creates a backup before making
+         * changes and updates command references in:
+         * - Startup commands list
+         * - Hidden commands list
+         * - Workflow action steps
+         *
+         * The migration strategy uses a lookup table to map old command IDs to new
+         * ones, ensuring that user configurations remain valid after updates.
+         *
+         * @param version - The version number to migrate to (e.g., "0.16.0").
+         */
         update: function (version) {
             switch (version) {
                 case "0.16.0":
@@ -13220,6 +13235,19 @@ See the LICENSE file for details.
                 latches[query] = commands[0][0];
             }
         },
+        /**
+         * Apply version-specific migrations to user command history.
+         *
+         * This method updates historical command references when command IDs change
+         * between plugin versions. It creates a backup before making changes and
+         * updates command IDs in the history entries to match the new ID schema.
+         *
+         * The migration strategy uses a lookup table built from the current
+         * commandsData to map old command IDs to their new equivalents, ensuring
+         * that query latches and usage statistics remain accurate.
+         *
+         * @param version - The version number to migrate to (e.g., "0.16.0").
+         */
         update: function (version) {
             switch (version) {
                 case "0.16.0":
