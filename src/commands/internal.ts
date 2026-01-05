@@ -507,6 +507,20 @@ function unhideCommand(): void {
 
 // AI COMMAND PALETTE BUILT-IN OPERATIONS
 
+/**
+ * Display a comprehensive report about the active document.
+ *
+ * Generates and displays a dialog containing detailed information about the
+ * current document, including:
+ * - File information (name, path, color space, resolution, etc.)
+ * - Document dimensions and artboards
+ * - Layer structure and properties
+ * - Pattern, swatch, and symbol counts
+ * - Font usage and text properties
+ *
+ * The report can be customized by checking/unchecking sections, and can be
+ * saved to a text file.
+ */
 function documentReport(): void {
     const doc = app.activeDocument;
     const rulerUnits = doc.rulerUnits.toString().split(".").pop()! as UnitName;
@@ -803,6 +817,18 @@ function showAllWorkflows(): void {
     processCommand(commandId);
 }
 
+/**
+ * Launch the Workflow Builder to create or edit a command workflow.
+ *
+ * Displays a dialog where users can select commands from a filtered list and
+ * arrange them into a sequential workflow. Workflows allow users to execute
+ * multiple commands with a single palette selection.
+ *
+ * If editWorkflowId is provided, the workflow is opened for editing; otherwise,
+ * a new workflow is created.
+ *
+ * @param editWorkflowId - Optional ID of an existing workflow to edit.
+ */
 function buildWorkflow(editWorkflowId?: string): void {
     const commandsToHide = [
         "builtin_editPicker",

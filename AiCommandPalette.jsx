@@ -13803,18 +13803,51 @@ See the LICENSE file for details.
             alert(localize(alertString, name, e.message));
         }
     }
+    /**
+     * Execute an Adobe Illustrator menu command.
+     *
+     * Calls the native app.executeMenuCommand() with the command's action string.
+     * This is the primary way to trigger Illustrator's built-in menu functionality.
+     *
+     * @param command - Command entry containing the menu command action string.
+     */
     function menuAction(command) {
         app.executeMenuCommand(command.action);
     }
+    /**
+     * Select a tool in Adobe Illustrator.
+     *
+     * Activates a tool using the app.selectTool() API. Note: This API is not
+     * officially documented in ExtendScript, hence the @ts-ignore directive.
+     *
+     * @param command - Command entry containing the tool identifier.
+     */
     function toolAction(command) {
         app.selectTool(command.action);
     }
+    /**
+     * Execute an Adobe Illustrator action (script recorded in Actions panel).
+     *
+     * Runs a user-recorded action using app.doScript(). The action must exist
+     * in the specified action set, or this will fail.
+     *
+     * @param command - Command entry containing the action name and set.
+     */
     function actionAction(command) {
         var actionName = isLocalizedEntry(command.name)
             ? localize(command.name)
             : command.name;
         app.doScript(actionName, command.set);
     }
+    /**
+     * Open a bookmarked file or folder.
+     *
+     * Opens a file in Illustrator (if it's a .ai file) or opens a folder in the
+     * system file browser. Checks that the file/folder exists before attempting
+     * to open it.
+     *
+     * @param command - Command entry containing the file/folder path.
+     */
     function bookmarkAction(command) {
         if (command.type === "file") {
             var f = new File(command.path);
@@ -13832,6 +13865,18 @@ See the LICENSE file for details.
             f.execute();
         }
     }
+    /**
+     * Display a custom picker dialog and store the user's selection(s).
+     *
+     * Creates temporary command entries for each picker option, displays them in
+     * a command palette, and stores the selected option(s) in the environment
+     * variable 'aic_picker_last' for external scripts to access.
+     *
+     * Pickers support both single and multi-select modes based on the picker
+     * configuration.
+     *
+     * @param picker - Picker configuration with name, options, and multiselect flag.
+     */
     function runCustomPicker(picker) {
         var commands = [];
         for (var i = 0; i < picker.commands.length; i++) {
@@ -13863,6 +13908,14 @@ See the LICENSE file for details.
         });
         $.setenv("aic_picker_last", args.toSource());
     }
+    /**
+     * Execute an external ExtendScript (.jsx or .js) file.
+     *
+     * Loads and runs a script file using $.evalFile(). The script is executed
+     * in the current scope. Checks that the file exists before attempting to run it.
+     *
+     * @param command - Command entry containing the script file path.
+     */
     function scriptAction(command) {
         var f = new File(command.path);
         if (!f.exists) {
@@ -14460,6 +14513,20 @@ See the LICENSE file for details.
         }
     }
     // AI COMMAND PALETTE BUILT-IN OPERATIONS
+    /**
+     * Display a comprehensive report about the active document.
+     *
+     * Generates and displays a dialog containing detailed information about the
+     * current document, including:
+     * - File information (name, path, color space, resolution, etc.)
+     * - Document dimensions and artboards
+     * - Layer structure and properties
+     * - Pattern, swatch, and symbol counts
+     * - Font usage and text properties
+     *
+     * The report can be customized by checking/unchecking sections, and can be
+     * saved to a text file.
+     */
     function documentReport() {
         var doc = app.activeDocument;
         var rulerUnits = doc.rulerUnits.toString().split(".").pop();
@@ -14732,6 +14799,18 @@ See the LICENSE file for details.
         var commandId = Array.isArray(result) ? result[0] : result;
         processCommand(commandId);
     }
+    /**
+     * Launch the Workflow Builder to create or edit a command workflow.
+     *
+     * Displays a dialog where users can select commands from a filtered list and
+     * arrange them into a sequential workflow. Workflows allow users to execute
+     * multiple commands with a single palette selection.
+     *
+     * If editWorkflowId is provided, the workflow is opened for editing; otherwise,
+     * a new workflow is created.
+     *
+     * @param editWorkflowId - Optional ID of an existing workflow to edit.
+     */
     function buildWorkflow(editWorkflowId) {
         var commandsToHide = [
             "builtin_editPicker",

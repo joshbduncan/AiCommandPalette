@@ -100,15 +100,39 @@ function executeAction(command: CommandEntry): void {
     }
 }
 
+/**
+ * Execute an Adobe Illustrator menu command.
+ *
+ * Calls the native app.executeMenuCommand() with the command's action string.
+ * This is the primary way to trigger Illustrator's built-in menu functionality.
+ *
+ * @param command - Command entry containing the menu command action string.
+ */
 function menuAction(command: CommandEntry): void {
     app.executeMenuCommand(command.action);
 }
 
+/**
+ * Select a tool in Adobe Illustrator.
+ *
+ * Activates a tool using the app.selectTool() API. Note: This API is not
+ * officially documented in ExtendScript, hence the @ts-ignore directive.
+ *
+ * @param command - Command entry containing the tool identifier.
+ */
 function toolAction(command: CommandEntry): void {
     // @ts-ignore
     app.selectTool(command.action);
 }
 
+/**
+ * Execute an Adobe Illustrator action (script recorded in Actions panel).
+ *
+ * Runs a user-recorded action using app.doScript(). The action must exist
+ * in the specified action set, or this will fail.
+ *
+ * @param command - Command entry containing the action name and set.
+ */
 function actionAction(command: CommandEntry): void {
     const actionName = isLocalizedEntry(command.name)
         ? localize(command.name)
@@ -116,6 +140,15 @@ function actionAction(command: CommandEntry): void {
     app.doScript(actionName, command.set);
 }
 
+/**
+ * Open a bookmarked file or folder.
+ *
+ * Opens a file in Illustrator (if it's a .ai file) or opens a folder in the
+ * system file browser. Checks that the file/folder exists before attempting
+ * to open it.
+ *
+ * @param command - Command entry containing the file/folder path.
+ */
 function bookmarkAction(command: CommandEntry): void {
     if (command.type === "file") {
         const f = new File(command.path);
@@ -140,6 +173,18 @@ interface Picker {
     multiselect: boolean;
 }
 
+/**
+ * Display a custom picker dialog and store the user's selection(s).
+ *
+ * Creates temporary command entries for each picker option, displays them in
+ * a command palette, and stores the selected option(s) in the environment
+ * variable 'aic_picker_last' for external scripts to access.
+ *
+ * Pickers support both single and multi-select modes based on the picker
+ * configuration.
+ *
+ * @param picker - Picker configuration with name, options, and multiselect flag.
+ */
 function runCustomPicker(picker: Picker): void {
     const commands: string[] = [];
 
@@ -178,6 +223,14 @@ function runCustomPicker(picker: Picker): void {
     $.setenv("aic_picker_last", args.toSource());
 }
 
+/**
+ * Execute an external ExtendScript (.jsx or .js) file.
+ *
+ * Loads and runs a script file using $.evalFile(). The script is executed
+ * in the current scope. Checks that the file exists before attempting to run it.
+ *
+ * @param command - Command entry containing the script file path.
+ */
 function scriptAction(command: CommandEntry): void {
     const f = new File(command.path);
     if (!f.exists) {
