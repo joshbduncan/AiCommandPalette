@@ -6,6 +6,16 @@ interface UserActions {
 const userActions: UserActions = {
     loadedActions: false,
 
+    /**
+     * Load all user-installed Illustrator actions into the command data model.
+     *
+     * This method reads action sets from Illustrator's preferences and creates
+     * a command entry for each action. Actions are accessed via the app.preferences
+     * API under the "plugin/Action/SavedSets" path. The loaded actions can then
+     * be executed via the command palette.
+     *
+     * After loading, the `loadedActions` flag is set to true if any actions were found.
+     */
     load(): void {
         logger.log("loading user actions");
 

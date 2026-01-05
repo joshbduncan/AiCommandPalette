@@ -11345,6 +11345,16 @@ See the LICENSE file for details.
         }
         return value;
     }
+    /**
+     * Type guard to check if a value is a valid LocalizedStringEntry object.
+     *
+     * A valid LocalizedStringEntry is a non-null object (not an array) where all keys
+     * are strings and all values are strings. This is used to verify localized string
+     * dictionaries before passing them to the `localize()` function.
+     *
+     * @param value - The value to check.
+     * @returns True if the value is a valid LocalizedStringEntry, false otherwise.
+     */
     function isLocalizedEntry(value) {
         return (
             typeof value === "object" &&
@@ -11883,18 +11893,47 @@ See the LICENSE file for details.
             $.writeln(text);
         };
     }
+    /**
+     * Development utilities for inspecting and exporting plugin state.
+     *
+     * This object provides helper methods for developers to access plugin data
+     * during development. When `devMode` is enabled, these methods can be used
+     * to save preferences and command data to JSON files for inspection.
+     */
     var devInfo = {
+        /**
+         * Get the plugin data folder location.
+         *
+         * @returns The plugin data folder object.
+         */
         folder: function () {
             return pluginDataFolder;
         },
+        /**
+         * Get a File object pointing to the dev prefs export location.
+         *
+         * @returns File object for the development preferences JSON file.
+         */
         prefsFile: function () {
             var folder = this.folder();
             return setupFileObject(folder, "prefs.json");
         },
+        /**
+         * Get a File object pointing to the dev commands export location.
+         *
+         * @returns File object for the development commands JSON file.
+         */
         commandsFile: function () {
             var folder = this.folder();
             return setupFileObject(folder, "commands.json");
         },
+        /**
+         * Save current preferences and command data to JSON files for inspection.
+         *
+         * This method exports the current state of `prefs` and `commandsData` to
+         * prettified JSON files in the plugin data folder. Useful for debugging
+         * and understanding the plugin's runtime state.
+         */
         save: function () {
             writeTextFile(JSON.stringify(prefs, undefined, 4), this.prefsFile());
             writeTextFile(
@@ -12374,6 +12413,16 @@ See the LICENSE file for details.
     };
     var userActions = {
         loadedActions: false,
+        /**
+         * Load all user-installed Illustrator actions into the command data model.
+         *
+         * This method reads action sets from Illustrator's preferences and creates
+         * a command entry for each action. Actions are accessed via the app.preferences
+         * API under the "plugin/Action/SavedSets" path. The loaded actions can then
+         * be executed via the command palette.
+         *
+         * After loading, the `loadedActions` flag is set to true if any actions were found.
+         */
         load: function () {
             logger.log("loading user actions");
             var ct = 0;
@@ -12737,7 +12786,12 @@ See the LICENSE file for details.
     // LISTBOXWRAPPER LISTENERS
     /**
      * Close the window when an item in the listbox is double-clicked.
-     * @param listbox ScriptUI ListBox
+     *
+     * This is the standard behavior for command selection in the main palette.
+     * When a user double-clicks a command in the listbox, the window closes with
+     * a return value of 1, signaling that a selection was made.
+     *
+     * @param listbox - The ScriptUI ListBox to attach the double-click handler to.
      */
     function selectOnDoubleClick(listbox) {
         listbox.onDoubleClick = function () {
@@ -12746,8 +12800,14 @@ See the LICENSE file for details.
         };
     }
     /**
-     * Add listbox command to Workflow when double-clicking.
-     * @param listbox ScriptUI ListBox
+     * Add listbox command to Workflow builder steps when double-clicking.
+     *
+     * This listener is used in the Workflow Builder to allow users to quickly add
+     * commands to their workflow by double-clicking them. The selected command is
+     * added to the "steps" listbox, and special handling is provided for the
+     * "buildPicker" command which requires user input to create a custom picker.
+     *
+     * @param listbox - The ScriptUI ListBox to attach the double-click handler to.
      */
     function addToStepsOnDoubleClick(listbox) {
         listbox.onDoubleClick = function () {
@@ -12770,9 +12830,14 @@ See the LICENSE file for details.
         };
     }
     /**
-     * Swap listbox items in place (along with their corresponding id).
-     * @param x Listbox item to swap.
-     * @param y Listbox item to swap.
+     * Swap two listbox items in place (along with their corresponding IDs).
+     *
+     * This function exchanges all properties between two ListBox items, including
+     * their main text, subitem text, and custom ID property. Used in the Workflow
+     * Builder to reorder workflow steps.
+     *
+     * @param x - First listbox item to swap.
+     * @param y - Second listbox item to swap.
      */
     function swapListboxItems(x, y) {
         var tempText = x.text;
@@ -12944,6 +13009,17 @@ See the LICENSE file for details.
             this.listeners = listeners;
             this.listbox = this.make(commands, this.bounds);
         }
+        /**
+         * Create and configure a new ScriptUI ListBox with columns and commands.
+         *
+         * This private method handles the actual creation of the ListBox ScriptUI element,
+         * configuring columns, loading commands, setting up event listeners, and enabling
+         * end-to-end scrolling (jumping from top to bottom and vice versa with arrow keys).
+         *
+         * @param commands - Array of command IDs to populate the listbox.
+         * @param bounds - The bounds of the listbox [left, top, right, bottom].
+         * @returns The configured ListBox ScriptUI element.
+         */
         ListBoxWrapper.prototype.make = function (commands, bounds) {
             var columnTitles = [];
             var columnWidths = [];
@@ -12994,11 +13070,33 @@ See the LICENSE file for details.
             this.addListeners(listbox);
             return listbox;
         };
+        /**
+         * Update the listbox with a new set of commands.
+         *
+         * This method replaces the current listbox with a new one containing the specified
+         * commands. Used when filtering/searching to update the displayed results. The old
+         * listbox is removed and a new one is created with the same configuration but
+         * different content.
+         *
+         * @param matches - Array of command IDs to display in the updated listbox.
+         */
         ListBoxWrapper.prototype.update = function (matches) {
             var newListbox = this.make(matches, this.listbox.bounds);
             this.container.remove(this.listbox);
             this.listbox = newListbox;
         };
+        /**
+         * Load commands into the listbox by creating ListItem elements.
+         *
+         * For each command ID, this method creates a ListItem and populates it with
+         * data from the command object. The first column shows the main text (usually
+         * the command name), and subsequent columns are populated from the command
+         * properties specified in columnKeys.
+         *
+         * @param listbox - The ListBox to populate with items.
+         * @param commands - Array of command IDs to load.
+         * @param columnKeys - Array of property keys to display in each column.
+         */
         ListBoxWrapper.prototype.loadCommands = function (
             listbox,
             commands,
@@ -13023,6 +13121,15 @@ See the LICENSE file for details.
                 item.id = id;
             }
         };
+        /**
+         * Attach all custom event listeners to the listbox.
+         *
+         * This method iterates through the listeners array provided during construction
+         * and attaches each listener function to the listbox. Common listeners include
+         * double-click handlers and custom navigation behaviors.
+         *
+         * @param listbox - The ListBox to attach listeners to.
+         */
         ListBoxWrapper.prototype.addListeners = function (listbox) {
             for (var _i = 0, _a = this.listeners; _i < _a.length; _i++) {
                 var listener = _a[_i];

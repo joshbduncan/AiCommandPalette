@@ -32,21 +32,50 @@ if (devMode || debugLogging) {
     };
 }
 
+/**
+ * Development utilities for inspecting and exporting plugin state.
+ *
+ * This object provides helper methods for developers to access plugin data
+ * during development. When `devMode` is enabled, these methods can be used
+ * to save preferences and command data to JSON files for inspection.
+ */
 const devInfo = {
+    /**
+     * Get the plugin data folder location.
+     *
+     * @returns The plugin data folder object.
+     */
     folder(): Folder {
         return pluginDataFolder;
     },
 
+    /**
+     * Get a File object pointing to the dev prefs export location.
+     *
+     * @returns File object for the development preferences JSON file.
+     */
     prefsFile(): File {
         const folder = this.folder();
         return setupFileObject(folder, "prefs.json");
     },
 
+    /**
+     * Get a File object pointing to the dev commands export location.
+     *
+     * @returns File object for the development commands JSON file.
+     */
     commandsFile(): File {
         const folder = this.folder();
         return setupFileObject(folder, "commands.json");
     },
 
+    /**
+     * Save current preferences and command data to JSON files for inspection.
+     *
+     * This method exports the current state of `prefs` and `commandsData` to
+     * prettified JSON files in the plugin data folder. Useful for debugging
+     * and understanding the plugin's runtime state.
+     */
     save(): void {
         writeTextFile(JSON.stringify(prefs, undefined, 4), this.prefsFile());
         writeTextFile(JSON.stringify(commandsData, undefined, 4), this.commandsFile());

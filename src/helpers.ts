@@ -23,6 +23,16 @@ function determineCorrectString(command: CommandEntry, prop: string): string {
     return value;
 }
 
+/**
+ * Type guard to check if a value is a valid LocalizedStringEntry object.
+ *
+ * A valid LocalizedStringEntry is a non-null object (not an array) where all keys
+ * are strings and all values are strings. This is used to verify localized string
+ * dictionaries before passing them to the `localize()` function.
+ *
+ * @param value - The value to check.
+ * @returns True if the value is a valid LocalizedStringEntry, false otherwise.
+ */
 function isLocalizedEntry(value: any): value is LocalizedStringEntry {
     return (
         typeof value === "object" &&

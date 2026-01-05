@@ -16,7 +16,12 @@ interface ListBoxWithFrame extends ListBox {
 
 /**
  * Close the window when an item in the listbox is double-clicked.
- * @param listbox ScriptUI ListBox
+ *
+ * This is the standard behavior for command selection in the main palette.
+ * When a user double-clicks a command in the listbox, the window closes with
+ * a return value of 1, signaling that a selection was made.
+ *
+ * @param listbox - The ScriptUI ListBox to attach the double-click handler to.
  */
 function selectOnDoubleClick(listbox: ListBox): void {
     listbox.onDoubleClick = () => {
@@ -25,8 +30,14 @@ function selectOnDoubleClick(listbox: ListBox): void {
 }
 
 /**
- * Add listbox command to Workflow when double-clicking.
- * @param listbox ScriptUI ListBox
+ * Add listbox command to Workflow builder steps when double-clicking.
+ *
+ * This listener is used in the Workflow Builder to allow users to quickly add
+ * commands to their workflow by double-clicking them. The selected command is
+ * added to the "steps" listbox, and special handling is provided for the
+ * "buildPicker" command which requires user input to create a custom picker.
+ *
+ * @param listbox - The ScriptUI ListBox to attach the double-click handler to.
  */
 function addToStepsOnDoubleClick(listbox: ListBox): void {
     listbox.onDoubleClick = function () {
@@ -57,9 +68,14 @@ function addToStepsOnDoubleClick(listbox: ListBox): void {
 }
 
 /**
- * Swap listbox items in place (along with their corresponding id).
- * @param x Listbox item to swap.
- * @param y Listbox item to swap.
+ * Swap two listbox items in place (along with their corresponding IDs).
+ *
+ * This function exchanges all properties between two ListBox items, including
+ * their main text, subitem text, and custom ID property. Used in the Workflow
+ * Builder to reorder workflow steps.
+ *
+ * @param x - First listbox item to swap.
+ * @param y - Second listbox item to swap.
  */
 function swapListboxItems(x: ListItemWithId, y: ListItemWithId): void {
     const tempText = x.text;
@@ -261,6 +277,17 @@ class ListBoxWrapper {
         this.listbox = this.make(commands, this.bounds);
     }
 
+    /**
+     * Create and configure a new ScriptUI ListBox with columns and commands.
+     *
+     * This private method handles the actual creation of the ListBox ScriptUI element,
+     * configuring columns, loading commands, setting up event listeners, and enabling
+     * end-to-end scrolling (jumping from top to bottom and vice versa with arrow keys).
+     *
+     * @param commands - Array of command IDs to populate the listbox.
+     * @param bounds - The bounds of the listbox [left, top, right, bottom].
+     * @returns The configured ListBox ScriptUI element.
+     */
     private make(commands: string[], bounds: number[]): ListBox {
         const columnTitles: string[] = [];
         const columnWidths: number[] = [];
@@ -320,12 +347,34 @@ class ListBoxWrapper {
         return listbox;
     }
 
+    /**
+     * Update the listbox with a new set of commands.
+     *
+     * This method replaces the current listbox with a new one containing the specified
+     * commands. Used when filtering/searching to update the displayed results. The old
+     * listbox is removed and a new one is created with the same configuration but
+     * different content.
+     *
+     * @param matches - Array of command IDs to display in the updated listbox.
+     */
     public update(matches: string[]): void {
         const newListbox = this.make(matches, this.listbox.bounds);
         this.container.remove(this.listbox);
         this.listbox = newListbox;
     }
 
+    /**
+     * Load commands into the listbox by creating ListItem elements.
+     *
+     * For each command ID, this method creates a ListItem and populates it with
+     * data from the command object. The first column shows the main text (usually
+     * the command name), and subsequent columns are populated from the command
+     * properties specified in columnKeys.
+     *
+     * @param listbox - The ListBox to populate with items.
+     * @param commands - Array of command IDs to load.
+     * @param columnKeys - Array of property keys to display in each column.
+     */
     private loadCommands(
         listbox: ListBox,
         commands: string[],
@@ -353,6 +402,15 @@ class ListBoxWrapper {
         }
     }
 
+    /**
+     * Attach all custom event listeners to the listbox.
+     *
+     * This method iterates through the listeners array provided during construction
+     * and attaches each listener function to the listbox. Common listeners include
+     * double-click handlers and custom navigation behaviors.
+     *
+     * @param listbox - The ListBox to attach listeners to.
+     */
     private addListeners(listbox: ListBox): void {
         for (const listener of this.listeners) {
             listener(listbox);
