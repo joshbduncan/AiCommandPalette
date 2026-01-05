@@ -10,7 +10,7 @@
         "copy-to-ai": "zsh -c \"sudo cp AiCommandPalette.jsx /Applications/Adobe\\ Illustrator\\ 2026/Presets.localized/en_US/Scripts\"",
         "build": "tsc",
         "postbuild": "zsh -c \"scripts/postbuild.sh\"",
-        "dev": "chokidar 'src/**/*.ts' -c 'npm-run-all build postbuild copy-to-ai'"
+        "dev": "chokidar 'src/**/*.ts' -c 'npm run build && npm run copy-to-ai'"
     },
     "keywords": [
         "adobe illustrator"
