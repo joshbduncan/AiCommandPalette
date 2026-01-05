@@ -5,18 +5,7 @@ const recentQueries = [];
 const mostRecentCommands = [];
 const latches = {};
 
-interface UserHistory {
-    folder(): Folder;
-    file(): File;
-    update(version: string): void;
-    load(): void;
-    clear(): void;
-    save(): void;
-    backup(): void;
-    reveal(): void;
-}
-
-const userHistory: UserHistory = {
+const userHistory = {
     /**
      * Get the folder where user history is stored.
      *
@@ -132,45 +121,13 @@ const userHistory: UserHistory = {
     },
 
     update(version: string): void {
-        const file = this.file();
-        logger.log("updating user history:", file.fsName);
-        if (!file.exists) return;
-
-        const queryCommandsLUT = {};
-
-        const s: string = readTextFile(file);
-        let data;
-
-        // try true JSON first
-        try {
-            data = JSON.parse(s);
-            logger.log("history loaded as valid JSON");
-        } catch (e) {
-            logger.log("history not valid JSON, will try eval fallback:", e.message);
-        }
-
-        // try json-like eval second
-        if (data === undefined) {
-            try {
-                data = eval(s);
-                logger.log("history loaded as old JSON-like, saving as true JSON");
-                // write true JSON back to disk
-                writeTextFile(JSON.stringify(data), file);
-            } catch (e) {
-                file.rename(file.name + ".bak");
-                this.reveal();
-                // @ts-ignore
-                Error.runtimeError(1, localize(strings.history_file_loading_error));
-            }
-        }
-
-        if (!data || typeof data !== "object") return;
-        if (Object.keys(data).length === 0) return;
-
-        if (data === 0) return;
-
         switch (version) {
             case "0.16.0":
+                logger.log("applying v0.16.0 history command id update");
+
+                // backup current prefs files just in case or error
+                this.backup();
+
                 // build lut to convert old menu command ids to updated versions
                 const commandsLUT: Record<string, string> = {};
                 for (const key in commandsData) {
@@ -186,13 +143,8 @@ const userHistory: UserHistory = {
                 }
 
                 let entry;
-                let updatedHistory = [];
-                let updatedEntry = {};
-                for (let i = data.length - 1; i >= 0; i--) {
-                    entry = data[i];
-                    updatedEntry["query"] = entry.query;
-                    updatedEntry["timestamp"] = entry.timestamp;
-                    updatedEntry["command"] = entry.command;
+                for (let i = history.length - 1; i >= 0; i--) {
+                    entry = history[i];
 
                     // update command
                     const oldId = entry.command;
@@ -206,11 +158,8 @@ const userHistory: UserHistory = {
                     logger.log(
                         `- updating history command: ${oldId} -> ${commandsLUT[oldId]}`
                     );
-                    updatedEntry["command"] = commandsLUT[oldId];
-
-                    updatedHistory.push(updatedEntry);
+                    entry.command = commandsLUT[oldId];
                 }
-                history = data;
                 userHistory.save();
                 break;
             default:

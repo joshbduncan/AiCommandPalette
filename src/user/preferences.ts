@@ -33,18 +33,7 @@ const prefs: Prefs = {
     timestamp: Date.now(),
 };
 
-interface UserPrefs {
-    folder(): Folder;
-    file(): File;
-    load(inject?: boolean): void;
-    inject(): void;
-    loadWatchedScripts(): void;
-    save(): void;
-    backup(): void;
-    reveal(): void;
-}
-
-const userPrefs: UserPrefs = {
+const userPrefs = {
     /**
      * Get the folder where user preferences are stored.
      *
@@ -115,64 +104,8 @@ const userPrefs: UserPrefs = {
 
         // update stored command ids to v0.15.0 unique ids
         logger.log(`loaded prefs saved from ${_title} v${data.version}`);
-        if (semanticVersionComparison(data.version, "0.16.0") == -1) {
-            logger.log("applying v0.16.0 prefs command id update");
-            updateVersion0_16_0 = true;
-
-            // build lut to convert old menu command ids to updated versions
-            const commandsLUT: Record<string, string> = {};
-            for (const key in commandsData) {
-                const command = commandsData[key] as CommandEntry;
-
-                // only add commands where the is new (menu commands for now)
-                if (key == command.id) continue;
-
-                // skip any ids already added to the LUT
-                if (commandsLUT.hasOwnProperty(command.id)) continue;
-
-                commandsLUT[command.id] = key;
-            }
-
-            // update startup commands
-            for (let i = 0; i < data.startupCommands.length; i++) {
-                const oldId = data.startupCommands[i];
-                if (!commandsLUT.hasOwnProperty(oldId) || oldId == commandsLUT[oldId])
-                    continue;
-
-                logger.log(
-                    `- updating startup command: ${oldId} -> ${commandsLUT[oldId]}`
-                );
-                data.startupCommands[i] = commandsLUT[oldId];
-            }
-
-            // update hidden commands
-            for (let i = 0; i < data.hiddenCommands.length; i++) {
-                const oldId = data.hiddenCommands[i];
-                if (!commandsLUT.hasOwnProperty(oldId) || oldId == commandsLUT[oldId])
-                    continue;
-                logger.log(
-                    `- updating hidden command: ${oldId} -> ${commandsLUT[oldId]}`
-                );
-                data.hiddenCommands[i] = commandsLUT[oldId];
-            }
-
-            // update workflow commands
-            for (let i = 0; i < data.workflows.length; i++) {
-                let workflow = data.workflows[i];
-                for (let j = 0; j < data.workflows[i].actions.length; j++) {
-                    const oldId = data.workflows[i].actions[j];
-                    if (
-                        !commandsLUT.hasOwnProperty(oldId) ||
-                        oldId == commandsLUT[oldId]
-                    )
-                        continue;
-                    logger.log(
-                        `- updating ${workflow.id} action: ${oldId} -> ${commandsLUT[oldId]}`
-                    );
-                    data.workflows[i].actions[j] = commandsLUT[oldId];
-                }
-            }
-        }
+        if (semanticVersionComparison(data.version, "0.16.0") == -1)
+            versionUpdate0_16_0 = true;
 
         const propsToSkip = [
             "version",
@@ -190,11 +123,79 @@ const userPrefs: UserPrefs = {
         if (inject) {
             this.inject();
         }
+    },
 
-        if (updateVersion0_16_0) {
-            userHistory.backup();
-            userHistory.update("0.16.0");
-            this.save();
+    update(version: string): void {
+        switch (version) {
+            case "0.16.0":
+                logger.log("applying v0.16.0 prefs command id update");
+
+                // backup current prefs files just in case or error
+                this.backup();
+
+                // build lut to convert old menu command ids to updated versions
+                const commandsLUT: Record<string, string> = {};
+                for (const key in commandsData) {
+                    const command = commandsData[key] as CommandEntry;
+
+                    // only add commands where the is new (menu commands for now)
+                    if (key == command.id) continue;
+
+                    // skip any ids already added to the LUT
+                    if (commandsLUT.hasOwnProperty(command.id)) continue;
+
+                    commandsLUT[command.id] = key;
+                }
+
+                // update startup commands
+                for (let i = 0; i < prefs.startupCommands.length; i++) {
+                    const oldId = prefs.startupCommands[i];
+                    if (
+                        !commandsLUT.hasOwnProperty(oldId) ||
+                        oldId == commandsLUT[oldId]
+                    )
+                        continue;
+
+                    logger.log(
+                        `- updating startup command: ${oldId} -> ${commandsLUT[oldId]}`
+                    );
+                    prefs.startupCommands[i] = commandsLUT[oldId];
+                }
+
+                // update hidden commands
+                for (let i = 0; i < prefs.hiddenCommands.length; i++) {
+                    const oldId = prefs.hiddenCommands[i];
+                    if (
+                        !commandsLUT.hasOwnProperty(oldId) ||
+                        oldId == commandsLUT[oldId]
+                    )
+                        continue;
+                    logger.log(
+                        `- updating hidden command: ${oldId} -> ${commandsLUT[oldId]}`
+                    );
+                    prefs.hiddenCommands[i] = commandsLUT[oldId];
+                }
+
+                // update workflow commands
+                for (let i = 0; i < prefs.workflows.length; i++) {
+                    let workflow = prefs.workflows[i];
+                    for (let j = 0; j < prefs.workflows[i].actions.length; j++) {
+                        const oldId = prefs.workflows[i].actions[j];
+                        if (
+                            !commandsLUT.hasOwnProperty(oldId) ||
+                            oldId == commandsLUT[oldId]
+                        )
+                            continue;
+                        logger.log(
+                            `- updating ${workflow.id} action: ${oldId} -> ${commandsLUT[oldId]}`
+                        );
+                        prefs.workflows[i].actions[j] = commandsLUT[oldId];
+                    }
+                }
+                this.save();
+                break;
+            default:
+                break;
         }
     },
 

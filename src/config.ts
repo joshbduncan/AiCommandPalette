@@ -9,7 +9,7 @@
 const sysOS = /mac/i.test($.os) ? "mac" : "win";
 const windowsFlickerFix =
     sysOS === "win" && parseFloat(app.version) < 26.4 ? true : false;
-const settingsRequiredUpdateVersion = "0.10.0";
+let versionUpdate0_16_0 = false;
 
 // PLUG-IN DATA STORAGE
 const pluginDataFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");

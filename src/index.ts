@@ -6,6 +6,12 @@ userActions.load();
 userHistory.load();
 userPrefs.loadWatchedScripts();
 
+// apply version updates for user preferences
+if (versionUpdate0_16_0) {
+    userPrefs.update("0.16.0");
+    userHistory.update("0.16.0");
+}
+
 // debugging flag
 devMode && devInfo.save();
 

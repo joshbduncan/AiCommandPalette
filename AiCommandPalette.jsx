@@ -12725,7 +12725,7 @@ See the LICENSE file for details.
     var sysOS = /mac/i.test($.os) ? "mac" : "win";
     var windowsFlickerFix =
         sysOS === "win" && parseFloat(app.version) < 26.4 ? true : false;
-    var settingsRequiredUpdateVersion = "0.10.0";
+    var versionUpdate0_16_0 = false;
     // PLUG-IN DATA STORAGE
     var pluginDataFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
     var logFilePath = pluginDataFolder + "/AiCommandPalette.log";
@@ -12906,69 +12906,8 @@ See the LICENSE file for details.
             logger.log(
                 "loaded prefs saved from ".concat(_title, " v").concat(data.version)
             );
-            if (semanticVersionComparison(data.version, "0.16.0") == -1) {
-                logger.log("applying v0.16.0 prefs command id update");
-                updateVersion0_16_0 = true;
-                // build lut to convert old menu command ids to updated versions
-                var commandsLUT = {};
-                for (var key in commandsData) {
-                    var command = commandsData[key];
-                    // only add commands where the is new (menu commands for now)
-                    if (key == command.id) continue;
-                    // skip any ids already added to the LUT
-                    if (commandsLUT.hasOwnProperty(command.id)) continue;
-                    commandsLUT[command.id] = key;
-                }
-                // update startup commands
-                for (var i = 0; i < data.startupCommands.length; i++) {
-                    var oldId = data.startupCommands[i];
-                    if (
-                        !commandsLUT.hasOwnProperty(oldId) ||
-                        oldId == commandsLUT[oldId]
-                    )
-                        continue;
-                    logger.log(
-                        "- updating startup command: "
-                            .concat(oldId, " -> ")
-                            .concat(commandsLUT[oldId])
-                    );
-                    data.startupCommands[i] = commandsLUT[oldId];
-                }
-                // update hidden commands
-                for (var i = 0; i < data.hiddenCommands.length; i++) {
-                    var oldId = data.hiddenCommands[i];
-                    if (
-                        !commandsLUT.hasOwnProperty(oldId) ||
-                        oldId == commandsLUT[oldId]
-                    )
-                        continue;
-                    logger.log(
-                        "- updating hidden command: "
-                            .concat(oldId, " -> ")
-                            .concat(commandsLUT[oldId])
-                    );
-                    data.hiddenCommands[i] = commandsLUT[oldId];
-                }
-                // update workflow commands
-                for (var i = 0; i < data.workflows.length; i++) {
-                    var workflow = data.workflows[i];
-                    for (var j = 0; j < data.workflows[i].actions.length; j++) {
-                        var oldId = data.workflows[i].actions[j];
-                        if (
-                            !commandsLUT.hasOwnProperty(oldId) ||
-                            oldId == commandsLUT[oldId]
-                        )
-                            continue;
-                        logger.log(
-                            "- updating "
-                                .concat(workflow.id, " action: ")
-                                .concat(oldId, " -> ")
-                                .concat(commandsLUT[oldId])
-                        );
-                        data.workflows[i].actions[j] = commandsLUT[oldId];
-                    }
-                }
-            }
+            if (semanticVersionComparison(data.version, "0.16.0") == -1)
+                versionUpdate0_16_0 = true;
             var propsToSkip = [
                 "version",
                 "os",
@@ -12984,10 +12923,76 @@ See the LICENSE file for details.
             if (inject) {
                 this.inject();
             }
-            if (updateVersion0_16_0) {
-                userHistory.backup();
-                userHistory.update("0.16.0");
-                this.save();
+        },
+        update: function (version) {
+            switch (version) {
+                case "0.16.0":
+                    logger.log("applying v0.16.0 prefs command id update");
+                    // backup current prefs files just in case or error
+                    this.backup();
+                    // build lut to convert old menu command ids to updated versions
+                    var commandsLUT = {};
+                    for (var key in commandsData) {
+                        var command = commandsData[key];
+                        // only add commands where the is new (menu commands for now)
+                        if (key == command.id) continue;
+                        // skip any ids already added to the LUT
+                        if (commandsLUT.hasOwnProperty(command.id)) continue;
+                        commandsLUT[command.id] = key;
+                    }
+                    // update startup commands
+                    for (var i = 0; i < prefs.startupCommands.length; i++) {
+                        var oldId = prefs.startupCommands[i];
+                        if (
+                            !commandsLUT.hasOwnProperty(oldId) ||
+                            oldId == commandsLUT[oldId]
+                        )
+                            continue;
+                        logger.log(
+                            "- updating startup command: "
+                                .concat(oldId, " -> ")
+                                .concat(commandsLUT[oldId])
+                        );
+                        prefs.startupCommands[i] = commandsLUT[oldId];
+                    }
+                    // update hidden commands
+                    for (var i = 0; i < prefs.hiddenCommands.length; i++) {
+                        var oldId = prefs.hiddenCommands[i];
+                        if (
+                            !commandsLUT.hasOwnProperty(oldId) ||
+                            oldId == commandsLUT[oldId]
+                        )
+                            continue;
+                        logger.log(
+                            "- updating hidden command: "
+                                .concat(oldId, " -> ")
+                                .concat(commandsLUT[oldId])
+                        );
+                        prefs.hiddenCommands[i] = commandsLUT[oldId];
+                    }
+                    // update workflow commands
+                    for (var i = 0; i < prefs.workflows.length; i++) {
+                        var workflow = prefs.workflows[i];
+                        for (var j = 0; j < prefs.workflows[i].actions.length; j++) {
+                            var oldId = prefs.workflows[i].actions[j];
+                            if (
+                                !commandsLUT.hasOwnProperty(oldId) ||
+                                oldId == commandsLUT[oldId]
+                            )
+                                continue;
+                            logger.log(
+                                "- updating "
+                                    .concat(workflow.id, " action: ")
+                                    .concat(oldId, " -> ")
+                                    .concat(commandsLUT[oldId])
+                            );
+                            prefs.workflows[i].actions[j] = commandsLUT[oldId];
+                        }
+                    }
+                    this.save();
+                    break;
+                default:
+                    break;
             }
         },
         /**
@@ -13216,40 +13221,11 @@ See the LICENSE file for details.
             }
         },
         update: function (version) {
-            var file = this.file();
-            logger.log("updating user history:", file.fsName);
-            if (!file.exists) return;
-            var queryCommandsLUT = {};
-            var s = readTextFile(file);
-            var data;
-            // try true JSON first
-            try {
-                data = JSON.parse(s);
-                logger.log("history loaded as valid JSON");
-            } catch (e) {
-                logger.log(
-                    "history not valid JSON, will try eval fallback:",
-                    e.message
-                );
-            }
-            // try json-like eval second
-            if (data === undefined) {
-                try {
-                    data = eval(s);
-                    logger.log("history loaded as old JSON-like, saving as true JSON");
-                    // write true JSON back to disk
-                    writeTextFile(JSON.stringify(data), file);
-                } catch (e) {
-                    file.rename(file.name + ".bak");
-                    this.reveal();
-                    Error.runtimeError(1, localize(strings.history_file_loading_error));
-                }
-            }
-            if (!data || typeof data !== "object") return;
-            if (Object.keys(data).length === 0) return;
-            if (data === 0) return;
             switch (version) {
                 case "0.16.0":
+                    logger.log("applying v0.16.0 history command id update");
+                    // backup current prefs files just in case or error
+                    this.backup();
                     // build lut to convert old menu command ids to updated versions
                     var commandsLUT = {};
                     for (var key in commandsData) {
@@ -13261,13 +13237,8 @@ See the LICENSE file for details.
                         commandsLUT[command.id] = key;
                     }
                     var entry = void 0;
-                    var updatedHistory = [];
-                    var updatedEntry = {};
-                    for (var i = data.length - 1; i >= 0; i--) {
-                        entry = data[i];
-                        updatedEntry["query"] = entry.query;
-                        updatedEntry["timestamp"] = entry.timestamp;
-                        updatedEntry["command"] = entry.command;
+                    for (var i = history.length - 1; i >= 0; i--) {
+                        entry = history[i];
                         // update command
                         var oldId = entry.command;
                         if (
@@ -13280,10 +13251,8 @@ See the LICENSE file for details.
                                 .concat(oldId, " -> ")
                                 .concat(commandsLUT[oldId])
                         );
-                        updatedEntry["command"] = commandsLUT[oldId];
-                        updatedHistory.push(updatedEntry);
+                        entry.command = commandsLUT[oldId];
                     }
-                    history = data;
                     userHistory.save();
                     break;
                 default:
@@ -16492,6 +16461,11 @@ See the LICENSE file for details.
     userActions.load();
     userHistory.load();
     userPrefs.loadWatchedScripts();
+    // apply version updates for user preferences
+    if (versionUpdate0_16_0) {
+        userPrefs.update("0.16.0");
+        userHistory.update("0.16.0");
+    }
     // debugging flag
     devMode && devInfo.save();
     // set command palette matching algo
