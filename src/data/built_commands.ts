@@ -6522,10 +6522,10 @@ const commandsData = {
         docRequired: true,
         selRequired: false,
         name: {
-            en: "View > Guides > Lock Guides",
+            en: "View > Guides > Lock / Unlock Guides",
             de: "Ansicht > Hilfslinien > Hilfslinien sperren",
             ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
-            "zh-cn": "View > Guides > Lock Guides",
+            "zh-cn": "View > Guides > Lock / Unlock Guides",
         },
         hidden: false,
     },

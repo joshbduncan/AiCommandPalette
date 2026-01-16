@@ -456,7 +456,7 @@ menu_1433,rulerCoordinateSystem,FALSE,menu,TRUE,FALSE,,,View > Rulers > Change t
 menu_1434,videoruler,FALSE,menu,TRUE,FALSE,,,View > Rulers > Show / Hide Video Rulers,Ansicht > Lineale > Videolineale einblenden / ausblenden,Просмотр > Показать / скрыть линейки видео
 menu_1435,textthreads,FALSE,menu,TRUE,FALSE,,,View > Show / Hide Text Threads,Ansicht > Textverkettungen einblenden / ausblenden,Просмотр > Показать / спрятать связи текстовых блоков
 menu_1436,showguide,FALSE,menu,TRUE,FALSE,,,View > Guides > Show / Hide Guides,Ansicht > Hilfslinien > Hilfslinien einblenden / ausblenden,Просмотр > Направляющие > Показать / спрятать направляющие
-menu_1437,lockguide,FALSE,menu,TRUE,FALSE,,,View > Guides > Lock Guides,Ansicht > Hilfslinien > Hilfslinien sperren,Просмотр > Направляющие > Закрепить направляющие
+menu_1437,lockguide,FALSE,menu,TRUE,FALSE,,,View > Guides > Lock / Unlock Guides,Ansicht > Hilfslinien > Hilfslinien sperren,Просмотр > Направляющие > Закрепить направляющие
 menu_1438,makeguide,FALSE,menu,TRUE,TRUE,,,View > Guides > Make Guides,Ansicht > Hilfslinien > Hilfslinien erstellen,Просмотр > Направляющие > Создать направляющие
 menu_1439,releaseguide,FALSE,menu,TRUE,FALSE,,,View > Guides > Release Guides,Ansicht > Hilfslinien > Hilfslinien zurückwandeln,Просмотр > Направляющие > Освободить направляющие
 menu_1440,clearguide,FALSE,menu,TRUE,FALSE,,,View > Guides > Clear Guides,Ansicht > Hilfslinien > Hilfslinien löschen,Просмотр > Направляющие > Удалить направляющие
