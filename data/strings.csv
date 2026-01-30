@@ -44,7 +44,7 @@ cd_revealed_total,Total hidden commands revealed:\n%1,"Anzahl der verborgenen Be
 cd_search_for,"Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen.","Поиск команд, операций и загруженных скриптов"
 close,Close,Schließen,Закрывать
 config,Configuration
-copyright,Copyright 2024 Josh Duncan
+copyright,Copyright 2026 Josh Duncan
 cp_config,Palette Settings and Configuration,Paletteneinstellungen und -konfiguration,Настройка и конфигурация панели
 cp_q_helptip,"Search for commands, actions, and loaded scripts.","Befehle, Aktionen und geladene Skripte suchen.","Поиск команд, операций и загруженных скриптов"
 custom,"Custom"

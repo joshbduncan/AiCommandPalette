@@ -23,7 +23,7 @@ See the LICENSE file for details.
     // SCRIPT INFORMATION
     var _title = "Ai Command Palette";
     var _version = "0.16.0";
-    var _copyright = "Copyright 2025 Josh Duncan";
+    var _copyright = "Copyright 2026 Josh Duncan";
     var _website = "joshbduncan.com";
     var _github = "https://github.com/joshbduncan";
     //  json2.js
@@ -1143,9 +1143,9 @@ See the LICENSE file for details.
         },
         config: { en: "Configuration", de: "Configuration", ru: "Configuration" },
         copyright: {
-            en: "Copyright 2024 Josh Duncan",
-            de: "Copyright 2024 Josh Duncan",
-            ru: "Copyright 2024 Josh Duncan",
+            en: "Copyright 2026 Josh Duncan",
+            de: "Copyright 2026 Josh Duncan",
+            ru: "Copyright 2026 Josh Duncan",
         },
         cp_config: {
             en: "Palette Settings and Configuration",

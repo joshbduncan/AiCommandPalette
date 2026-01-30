@@ -207,9 +207,9 @@ const strings = {
     },
     config: { en: "Configuration", de: "Configuration", ru: "Configuration" },
     copyright: {
-        en: "Copyright 2024 Josh Duncan",
-        de: "Copyright 2024 Josh Duncan",
-        ru: "Copyright 2024 Josh Duncan",
+        en: "Copyright 2026 Josh Duncan",
+        de: "Copyright 2026 Josh Duncan",
+        ru: "Copyright 2026 Josh Duncan",
     },
     cp_config: {
         en: "Palette Settings and Configuration",
