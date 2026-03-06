@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- No result bug in built-in commands palette
+- Bad arg to `filterCommands` calls
+
 ### Changed
 
 - Update menu command `View > Guides > Lock Guides` to `View > Guides > Lock / Unlock Guides` to better match other toggle style menu commands

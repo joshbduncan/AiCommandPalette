@@ -15221,7 +15221,7 @@ See the LICENSE file for details.
      * be opened in the picker builder.
      */
     function editPicker() {
-        var pickers = filterCommands(null, ["picker"], true, false, null);
+        var pickers = filterCommands(null, ["picker"], true, false);
         var result = commandPalette(
             pickers,
             localize(strings.picker_to_edit),
@@ -15345,8 +15345,7 @@ See the LICENSE file for details.
             null,
             ["file", "folder", "script", "workflow", "picker", "custom"],
             false,
-            true,
-            null
+            true
         );
         var result = commandPalette(
             deletableCommands,
@@ -15483,8 +15482,7 @@ See the LICENSE file for details.
                 "picker",
             ],
             false,
-            true,
-            null
+            true
         );
         var result = commandPalette(
             hideableCommands,
@@ -15512,13 +15510,14 @@ See the LICENSE file for details.
      * Present a palette with all built-in commands.
      */
     function builtinCommands() {
-        var builtins = filterCommands(null, ["builtin"], true, false, null);
+        var builtins = filterCommands(null, ["builtin"], true, false);
         var result = commandPalette(
             builtins,
             localize(strings.cd_all),
             paletteSettings.columnSets.standard,
             false
         );
+        if (!result) return;
         var commandId = Array.isArray(result) ? result[0] : result;
         processCommand(commandId);
     }
@@ -15703,7 +15702,7 @@ See the LICENSE file for details.
     }
     function showAllActions() {
         var _a;
-        var actionCommands = filterCommands(null, ["action"], true, false, null);
+        var actionCommands = filterCommands(null, ["action"], true, false);
         var columns =
             ((_a = {}),
             (_a[localize(strings.name_title_case)] = {
@@ -15727,13 +15726,7 @@ See the LICENSE file for details.
     }
     function showAllBookmarks() {
         var _a;
-        var bookmarkCommands = filterCommands(
-            null,
-            ["file", "folder"],
-            true,
-            true,
-            null
-        );
+        var bookmarkCommands = filterCommands(null, ["file", "folder"], true, true);
         var columns =
             ((_a = {}),
             (_a[localize(strings.name_title_case)] = {
@@ -15760,7 +15753,7 @@ See the LICENSE file for details.
         processCommand(commandId);
     }
     function showAllCustomCommands() {
-        var customCommands = filterCommands(null, ["custom"], true, false, null);
+        var customCommands = filterCommands(null, ["custom"], true, false);
         var result = commandPalette(
             customCommands,
             localize(strings.custom_commands_all),
@@ -15772,7 +15765,7 @@ See the LICENSE file for details.
         processCommand(commandId);
     }
     function showAllMenus() {
-        var menus = filterCommands(null, ["menu"], true, false, null);
+        var menus = filterCommands(null, ["menu"], true, false);
         var result = commandPalette(
             menus,
             localize(strings.menu_commands),
@@ -15784,7 +15777,7 @@ See the LICENSE file for details.
         processCommand(commandId);
     }
     function showAllPickers() {
-        var pickers = filterCommands(null, ["picker"], true, false, null);
+        var pickers = filterCommands(null, ["picker"], true, false);
         var result = commandPalette(
             pickers,
             localize(strings.pickers_all),
@@ -15797,7 +15790,7 @@ See the LICENSE file for details.
     }
     function showAllScripts() {
         var _a;
-        var scripts = filterCommands(null, ["script"], true, false, null);
+        var scripts = filterCommands(null, ["script"], true, false);
         var columns =
             ((_a = {}),
             (_a[localize(strings.name_title_case)] = { width: 100, key: "name" }),
@@ -15810,7 +15803,7 @@ See the LICENSE file for details.
         processCommand(commandId);
     }
     function showAllTools() {
-        var tools = filterCommands(null, ["tool"], true, false, null);
+        var tools = filterCommands(null, ["tool"], true, false);
         var result = commandPalette(
             tools,
             localize(strings.tl_all),
@@ -15822,7 +15815,7 @@ See the LICENSE file for details.
         processCommand(commandId);
     }
     function showAllWorkflows() {
-        var workflows = filterCommands(null, ["workflow"], true, false, null);
+        var workflows = filterCommands(null, ["workflow"], true, false);
         var result = commandPalette(
             workflows,
             localize(strings.Workflows),
@@ -15902,7 +15895,7 @@ See the LICENSE file for details.
      * be opened in the workflow builder.
      */
     function editWorkflow() {
-        var workflows = filterCommands(null, ["workflow"], true, false, null);
+        var workflows = filterCommands(null, ["workflow"], true, false);
         var result = commandPalette(
             workflows,
             localize(strings.wf_choose),
@@ -16504,14 +16497,8 @@ See the LICENSE file for details.
         prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
     }
     // SHOW THE COMMAND PALETTE
-    var queryableCommands = filterCommands(null, null, false, false, null);
-    var startupCommands = filterCommands(
-        prefs.startupCommands,
-        null,
-        false,
-        false,
-        null
-    );
+    var queryableCommands = filterCommands(null, null, false, false);
+    var startupCommands = filterCommands(prefs.startupCommands, null, false, false);
     var result = commandPalette(
         queryableCommands,
         localize(strings.title),

@@ -136,7 +136,7 @@ function buildPicker(editPickerId?: string): PickerCommandEntry | undefined {
  * be opened in the picker builder.
  */
 function editPicker(): void {
-    const pickers: string[] = filterCommands(null, ["picker"], true, false, null);
+    const pickers: string[] = filterCommands(null, ["picker"], true, false);
 
     const result = commandPalette(
         pickers,
@@ -282,8 +282,7 @@ function deleteCommand(): void {
         null,
         ["file", "folder", "script", "workflow", "picker", "custom"],
         false,
-        true,
-        null
+        true
     );
 
     const result = commandPalette(
@@ -425,8 +424,7 @@ function hideCommand(): void {
             "picker",
         ],
         false,
-        true,
-        null
+        true
     );
 
     const result = commandPalette(
@@ -463,7 +461,7 @@ function revealPrefFile(): void {
  * Present a palette with all built-in commands.
  */
 function builtinCommands(): void {
-    const builtins = filterCommands(null, ["builtin"], true, false, null);
+    const builtins = filterCommands(null, ["builtin"], true, false);
 
     const result = commandPalette(
         builtins,
@@ -471,6 +469,8 @@ function builtinCommands(): void {
         paletteSettings.columnSets.standard,
         false
     );
+
+    if (!result) return;
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);
 
@@ -663,7 +663,7 @@ function documentReport(): void {
 }
 
 function showAllActions(): void {
-    const actionCommands = filterCommands(null, ["action"], true, false, null);
+    const actionCommands = filterCommands(null, ["action"], true, false);
 
     const columns: Record<string, { width: number; key: string }> = {
         [localize(strings.name_title_case)]: {
@@ -691,7 +691,7 @@ function showAllActions(): void {
 }
 
 function showAllBookmarks(): void {
-    const bookmarkCommands = filterCommands(null, ["file", "folder"], true, true, null);
+    const bookmarkCommands = filterCommands(null, ["file", "folder"], true, true);
 
     const columns: Record<string, { width: number; key: string }> = {
         [localize(strings.name_title_case)]: {
@@ -723,7 +723,7 @@ function showAllBookmarks(): void {
 }
 
 function showAllCustomCommands(): void {
-    const customCommands = filterCommands(null, ["custom"], true, false, null);
+    const customCommands = filterCommands(null, ["custom"], true, false);
 
     const result = commandPalette(
         customCommands,
@@ -740,7 +740,7 @@ function showAllCustomCommands(): void {
 }
 
 function showAllMenus(): void {
-    const menus = filterCommands(null, ["menu"], true, false, null);
+    const menus = filterCommands(null, ["menu"], true, false);
 
     const result = commandPalette(
         menus,
@@ -757,7 +757,7 @@ function showAllMenus(): void {
 }
 
 function showAllPickers(): void {
-    const pickers = filterCommands(null, ["picker"], true, false, null);
+    const pickers = filterCommands(null, ["picker"], true, false);
     const result = commandPalette(
         pickers,
         localize(strings.pickers_all),
@@ -772,7 +772,7 @@ function showAllPickers(): void {
 }
 
 function showAllScripts(): void {
-    const scripts = filterCommands(null, ["script"], true, false, null);
+    const scripts = filterCommands(null, ["script"], true, false);
     const columns = {
         [localize(strings.name_title_case)]: { width: 100, key: "name" },
         [localize(strings.type_title_case)]: { width: 100, key: "type" },
@@ -780,6 +780,7 @@ function showAllScripts(): void {
     };
 
     const result = commandPalette(scripts, localize(strings.Scripts), columns, false);
+
     if (!result) return;
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);
@@ -788,13 +789,14 @@ function showAllScripts(): void {
 }
 
 function showAllTools(): void {
-    const tools = filterCommands(null, ["tool"], true, false, null);
+    const tools = filterCommands(null, ["tool"], true, false);
     const result = commandPalette(
         tools,
         localize(strings.tl_all),
         paletteSettings.columnSets.standard,
         false
     );
+
     if (!result) return;
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);
@@ -803,13 +805,14 @@ function showAllTools(): void {
 }
 
 function showAllWorkflows(): void {
-    const workflows = filterCommands(null, ["workflow"], true, false, null);
+    const workflows = filterCommands(null, ["workflow"], true, false);
     const result = commandPalette(
         workflows,
         localize(strings.Workflows),
         paletteSettings.columnSets.standard,
         false
     );
+
     if (!result) return;
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);
@@ -892,7 +895,7 @@ function buildWorkflow(editWorkflowId?: string): void {
  * be opened in the workflow builder.
  */
 function editWorkflow(): void {
-    const workflows = filterCommands(null, ["workflow"], true, false, null);
+    const workflows = filterCommands(null, ["workflow"], true, false);
 
     const result = commandPalette(
         workflows,
@@ -1472,6 +1475,7 @@ function recentFiles(): void {
         columns,
         false
     );
+
     if (!result) return;
 
     const commandId: string = Array.isArray(result) ? result[0] : (result as string);

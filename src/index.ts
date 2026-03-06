@@ -25,9 +25,9 @@ if (!prefs.startupCommands) {
 }
 
 // SHOW THE COMMAND PALETTE
-let queryableCommands = filterCommands(null, null, false, false, null);
+let queryableCommands = filterCommands(null, null, false, false);
 
-let startupCommands = filterCommands(prefs.startupCommands, null, false, false, null);
+let startupCommands = filterCommands(prefs.startupCommands, null, false, false);
 
 let result = commandPalette(
     queryableCommands,
