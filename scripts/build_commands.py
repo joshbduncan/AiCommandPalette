@@ -6,13 +6,6 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).parent
 
 
-def convert_to_num(n) -> int | float:
-    try:
-        return int(n)
-    except ValueError:
-        return float(n)
-
-
 def read_csv_data(fp: Path) -> list[dict]:
     """Safely read CSV data from a file using `csv.DictReader`.
 
@@ -103,9 +96,10 @@ def build_commands(rows: list[dict]) -> dict:
 
         # only add min and max version if present
         if min_version:
-            command["minVersion"] = convert_to_num(min_version)
+            command["minVersion"] = min_version
+
         if max_version:
-            command["maxVersion"] = convert_to_num(max_version)
+            command["maxVersion"] = max_version
 
         commands[command_id or old_command_id] = command
 
