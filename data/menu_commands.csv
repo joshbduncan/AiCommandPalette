@@ -4,21 +4,25 @@ menu_1001,newFromTemplate,FALSE,menu,FALSE,FALSE,,,File > New from Template...,D
 menu_1002,open,FALSE,menu,FALSE,FALSE,,,File > Open...,Datei > Öffnen …,Файл > Открыть...,文件>打开…
 menu_1003,Adobe Bridge Browse,FALSE,menu,FALSE,FALSE,,,File > Browse in Bridge...,Datei > Bridge durchsuchen …,Файл > Обзор в Bridge...,文件>在Bridge中浏览…
 menu_1004,close,FALSE,menu,TRUE,FALSE,,,File > Close,Datei > Schließen,Файл > Закрыть,文件>关闭…
-menu_2000,closeAll,FALSE,menu,TRUE,FALSE,29.4,,Close All
+menu_2000,closeAll,FALSE,menu,TRUE,FALSE,29.4,,File > Close All
 menu_1005,save,FALSE,menu,TRUE,FALSE,,,File > Save,Datei > Speichern,Файл > Сохранить,文件>保存…
 menu_1006,saveas,FALSE,menu,TRUE,FALSE,,,File > Save As...,Datei > Speichern unter …,Файл > Сохранить как...,文件>另存为…
 menu_1007,saveacopy,FALSE,menu,TRUE,FALSE,,,File > Save a Copy...,Datei > Kopie speichern …,Файл > Сохранить копию...,文件>保存副本…
 menu_1008,saveastemplate,FALSE,menu,TRUE,FALSE,,,File > Save as Template...,Datei > Als Vorlage speichern …,Файл > Сохранить как шаблон...,文件>另存为模板…
 menu_1009,Adobe AI Save Selected Slices,FALSE,menu,TRUE,TRUE,,,File > Save Selected Slices...,Datei > Ausgewählte Slices speichern …,Файл > Файл > Сохранить выделенные фрагменты...,文件>保存选中的切片…
+menu_2070,Adobe Version History File Menu Item,FALSE,menu,FALSE,FALSE,30.5.0,,Window > Version History,Fenster > Versionsverlauf,Окно > Журнал версий
 menu_1010,revert,FALSE,menu,TRUE,FALSE,,,File > Revert,Datei > Zurück zur letzten Version,Файл > Восстановить,文件>还原…
-menu_1011,Search Adobe Stock,FALSE,menu,FALSE,FALSE,19,,File > Search Adobe Stock,Datei > Adobe Stock durchsuchen …,Файл > Поиск в Adobe Stock...,文件>搜索Adobe Stock…
+menu_1011,Search Adobe Stock,FALSE,menu,FALSE,FALSE,19,,File > Search Adobe Stock...,Datei > Adobe Stock durchsuchen …,Файл > Поиск в Adobe Stock...,文件>搜索Adobe Stock…
 menu_1012,AI Place,FALSE,menu,TRUE,FALSE,,,File > Place...,Datei > Platzieren …,Файл > Поместить...,文件>放置…
+menu_2071,Invite People,FALSE,menu,TRUE,FALSE,,,File > Invite to Edit...
+menu_2072,Share For Review,FALSE,menu,TRUE,FALSE,,,File > Share for Review...
 menu_1013,Generate Modal File Menu ,FALSE,menu,TRUE,FALSE,28.6,29.999,File > Generate Vectors...,,,文件>生成矢量…,Note that there is a space after 'Menu'
-menu_1014,exportForScreens,FALSE,menu,TRUE,FALSE,20,,File > Export > Export For Screens...,Datei > Exportieren > Für Bildschirme exportieren …,Файл > Экспорт для экранов...,文件>导出>屏幕导出…
+menu_1014,exportForScreens,FALSE,menu,TRUE,FALSE,20,,File > Export > Export for Screens...,Datei > Exportieren > Für Bildschirme exportieren …,Файл > Экспорт для экранов...,文件>导出>屏幕导出…
 menu_1015,export,FALSE,menu,TRUE,FALSE,,,File > Export > Export As...,Datei > Exportieren …,Файл > Экспортировать как...,文件>导出>导出为…
 menu_1016,Adobe AI Save For Web,FALSE,menu,TRUE,FALSE,,,File > Export > Save for Web (Legacy)...,Datei > Für Web speichern (Legacy) …,Файл > Сохранить для браузеров...,文件>导出>存储为Web格式(旧版)…
 menu_1017,exportSelection,FALSE,menu,TRUE,FALSE,20,,File > Export Selection...,Datei > Auswahl exportieren …,Файл > Экспортировать выделенные элементы...,文件>导出选择…
-menu_1018,Package Menu Item,FALSE,menu,TRUE,FALSE,,,File > Package,Datei > Verpacken …,Файл > Упаковать...,文件>打包…
+menu_2073,,TRUE,menu,TRUE,FALSE,,,File > Open in Firefly Boards
+menu_1018,Package Menu Item,FALSE,menu,TRUE,FALSE,,,File > Package...,Datei > Verpacken …,Файл > Упаковать...,文件>打包…
 menu_1019,ai_browse_for_script,FALSE,menu,FALSE,FALSE,,,File > Scripts > Other Script...,Datei > Skripten > Anderes Skript …,Файл > Сценарии > Другой сценарий...,文件>脚本>其他脚本…
 menu_1020,document,TRUE,menu,TRUE,FALSE,,,File > Document Setup...,Datei > Dokument einrichten …,Файл > Параметры документа...,文件>文档设置…
 menu_1021,doc-color-cmyk,FALSE,menu,TRUE,FALSE,,,File > Document Color Mode > CMYK Color,Datei > Dokumentfarbmodus > CMYK-Farbe,Файл > Цветовой режим документа > CMYK,文件>文档颜色模式> CMYK颜色…
@@ -37,12 +41,17 @@ menu_1033,pasteInPlace,FALSE,menu,TRUE,FALSE,,,Edit > Paste in Place,Bearbeiten 
 menu_1034,pasteInAllArtboard,FALSE,menu,TRUE,FALSE,,,Edit > Paste on All Artboards,Bearbeiten > In alle Zeichenflächen einfügen,Редактирование > Вставить на все монтажные области
 menu_1035,pasteWithoutFormatting,FALSE,menu,TRUE,FALSE,25.3,,Edit > Paste without Formatting,Bearbeiten > Ohne Formatierung einfügen,Редактирование > Вставить без форматирования
 menu_1036,clear,FALSE,menu,TRUE,TRUE,,,Edit > Clear,Bearbeiten > Löschen,Редактирование > Очистить
-menu_1037,Find and Replace,FALSE,menu,TRUE,FALSE,,,Edit > Find & Replace...,Bearbeiten > Suchen und ersetzen …,Редактирование > Найти и заменить...
+menu_1037,Find and Replace,FALSE,menu,TRUE,FALSE,,,Edit > Find and Replace...,Bearbeiten > Suchen und ersetzen …,Редактирование > Найти и заменить...
 menu_1038,Find Next,FALSE,menu,TRUE,FALSE,,,Edit > Find Next,Bearbeiten > Weitersuchen,Редактирование > Найти следующий
 menu_1039,Auto Spell Check,FALSE,menu,FALSE,FALSE,24,,Edit > Spelling > Auto Spell Check,Bearbeiten > Rechtschreibung > Automatische Rechtschreibprüfung,Редактирование > Орфография > Автоматическая проверка орфографии
 menu_1040,Check Spelling,FALSE,menu,TRUE,FALSE,24,,Edit > Spelling > Check Spelling...,Bearbeiten > Rechtschreibung > Rechtschreibprüfung …,Редактирование > Орфография > Проверка орфографии…
 menu_1041,Edit Custom Dictionary...,FALSE,menu,TRUE,FALSE,,,Edit > Edit Custom Dictionary...,Bearbeiten > Eigenes Wörterbuch bearbeiten …,Редактирование > Редактировать заказной словарь...
 menu_1042,Recolor Art Dialog,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Recolor Artwork...,Bearbeiten > Farben bearbeiten > Bildmaterial neu färben …,Редактирование > Редактировать цвета > Перекрасить графический объект...
+menu_2074,_GenericPluginMenuItem 62,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Recolor with Preset > Color library...
+menu_2075,_GenericPluginMenuItem 63,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Recolor with Preset > Single Color
+menu_2076,_GenericPluginMenuItem 64,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Recolor with Preset > Two Color
+menu_2077,_GenericPluginMenuItem 65,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Recolor with Preset > Three Color
+menu_2078,_GenericPluginMenuItem 66,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Recolor with Preset > Color Harmony
 menu_1043,Adjust3,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Adjust Color Balance...,Bearbeiten > Farben bearbeiten > Farbbalance einstellen …,Редактирование > Редактировать цвета > Коррекция цветового баланса...
 menu_1044,Colors3,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Blend Front to Back,Bearbeiten > Farben bearbeiten > Vorne -> Hinten angleichen,Редактирование > Редактировать цвета > Переход от верхнего к нижнему
 menu_1045,Colors4,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Blend Horizontally,Bearbeiten > Farben bearbeiten > Horizontal angleichen,Редактирование > Редактировать цвета > Переход по горизонтали
@@ -54,7 +63,9 @@ menu_1050,Generative Recolor Art Dialog,FALSE,menu,TRUE,TRUE,27.6,,Edit > Edit C
 menu_1051,Colors6,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Invert Colors,Bearbeiten > Farben bearbeiten > Farben invertieren,Редактирование > Редактировать цвета > Негатив
 menu_1052,Overprint2,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Overprint Black...,Bearbeiten > Farben bearbeiten > Schwarz überdrucken …,Редактирование > Редактировать цвета > Наложение черного цвета...
 menu_1053,Saturate3,FALSE,menu,TRUE,TRUE,,,Edit > Edit Colors > Saturate...,Bearbeiten > Farben bearbeiten > Sättigung erhöhen …,Редактирование > Редактировать цвета > Изменить насыщенность...
-menu_1054,EditOriginal Menu Item,FALSE,menu,TRUE,TRUE,,,Edit > Edit Original,Bearbeiten > Original bearbeiten,Редактирование > Редактировать оригинал
+menu_1054,EditOriginal Menu Item,FALSE,menu,TRUE,TRUE,,,Edit > Edit Original,Bearbeiten > Original bearbeiten,Редактирование > Редактировать оригинал,,generic name since menu item changes per selection e.g. Edit In Photoshop
+menu_2079,EditGeneratedObjectEditMenu,FALSE,menu,TRUE,TRUE,,,Edit > Prompt to edit
+menu_2080,,TRUE,menu,TRUE,TRUE,,30.4.999,Edit > Edit Generated Object
 menu_1055,Transparency Presets,FALSE,menu,FALSE,FALSE,,,Edit > Transparency Flattener Presets...,Bearbeiten > Transparenzreduzierungsvorgaben …,Редактирование > Стили обработки прозрачности...
 menu_1056,Print Presets,FALSE,menu,FALSE,FALSE,,,Edit > Print Presets...,Bearbeiten > Druckvorgaben …,Редактирование > Стили печати...
 menu_1057,PDF Presets,FALSE,menu,FALSE,FALSE,,,Edit > Adobe PDF Presets...,Bearbeiten > Adobe PDF-Vorgaben …,Редактирование > Стили преобразования в Adobe PDF...
@@ -62,27 +73,30 @@ menu_1058,PerspectiveGridPresets,FALSE,menu,FALSE,FALSE,,,Edit > Perspective Gri
 menu_1059,color,FALSE,menu,FALSE,FALSE,,,Edit > Color Settings...,Bearbeiten > Farbeinstellungen …,Редактирование > Настройка цветов...
 menu_1060,assignprofile,FALSE,menu,TRUE,FALSE,,,Edit > Assign Profile...,Bearbeiten > Profil zuweisen …,Редактирование > Назначить профиль...
 menu_1061,KBSC Menu Item,FALSE,menu,FALSE,FALSE,,,Edit > Keyboard Shortcuts...,Bearbeiten > Tastaturbefehle …,Редактирование > Комбинации клавиш...
+menu_2081,,TRUE,menu,TRUE,FALSE,,,Edit > My Settings > Export Settings...
+menu_2082,,TRUE,menu,TRUE,FALSE,,,Edit > My Settings > Import Settings...
 menu_1062,SWFPresets,FALSE,menu,FALSE,FALSE,22,25.9,Edit > SWF Presets...,Bearbeiten > SWF-Vorgaben …
-menu_1063,TouchPref,TRUE,menu,FALSE,FALSE,,,Edit > Preferences > Touch Workspace
+menu_1063,TouchPref,TRUE,menu,FALSE,FALSE,,30.4.999,Edit > Preferences > Touch Workspace
 menu_1064,transformagain,FALSE,menu,TRUE,TRUE,,,Object > Transform > Transform Again,Objekt > Transformieren > Erneut transformieren,Объект > Трансформировать > Повторить трансформирование
 menu_1065,transformmove,FALSE,menu,TRUE,TRUE,,,Object > Transform > Move...,Objekt > Transformieren > Verschieben …,Объект > Трансформировать > Перемещение...
 menu_1066,transformrotate,FALSE,menu,TRUE,TRUE,,,Object > Transform > Rotate...,Objekt > Transformieren > Drehen …,Объект > Трансформировать > Поворот...
 menu_1067,transformreflect,FALSE,menu,TRUE,TRUE,,,Object > Transform > Reflect...,Objekt > Transformieren > Spiegeln …,Объект > Трансформировать > Зеркальное отражение...
 menu_1068,transformscale,FALSE,menu,TRUE,TRUE,,,Object > Transform > Scale...,Objekt > Transformieren > Skalieren …,Объект > Трансформировать > Масштабирование...
 menu_1069,transformshear,FALSE,menu,TRUE,TRUE,,,Object > Transform > Shear...,Objekt > Transformieren > Verbiegen …,Объект > Трансформировать > Наклон...
-menu_1070,Transform v23,FALSE,menu,TRUE,TRUE,,,Object > Transform Each...,Objekt > Transformieren > Einzeln transformieren …,Объект > Трансформировать > Трансформировать каждый...
+menu_1070,Transform v23,FALSE,menu,TRUE,TRUE,,,Object > Transform > Transform Each...,Objekt > Transformieren > Einzeln transformieren …,Объект > Трансформировать > Трансформировать каждый...
 menu_1071,AI Reset Bounding Box,FALSE,menu,TRUE,TRUE,,,Object > Transform > Reset Bounding Box,Objekt > Transform > Begrenzungsrahmen zurücksetzen,Объект > Трансформировать > Восстановить настройки по умолчанию ограничительной рамки
 menu_1072,sendToFront,FALSE,menu,TRUE,TRUE,,,Object > Arrange > Bring to Front,Objekt > Anordnen > In den Vordergrund,Объект > Монтаж > На передний план
 menu_1073,sendForward,FALSE,menu,TRUE,TRUE,,,Object > Arrange > Bring Forward,Objekt > Anordnen > Schrittweise nach vorne,Объект > Монтаж > На задний план
 menu_1074,sendBackward,FALSE,menu,TRUE,TRUE,,,Object > Arrange > Send Backward,Objekt > Anordnen > Schrittweise nach hinten,Объект > Монтаж > Переложить вперед
 menu_1075,sendToBack,FALSE,menu,TRUE,TRUE,,,Object > Arrange > Send to Back,Objekt > Anordnen > In den Hintergrund,Объект > Монтаж > Переложить назад
 menu_1076,Selection Hat 2,FALSE,menu,TRUE,TRUE,,,Object > Arrange > Send to Current Layer,Objekt > Anordnen > In aktuelle Ebene verschieben,Объект > Монтаж > Отправить на текущий слой
-menu_1077,Horizontal Align Left,FALSE,menu,TRUE,FALSE,24,,Object > Align > Horizontal Align Left,Objekt > Ausrichten > Horizontal links ausrichten,"Объект > Выравнивание > Горизонтальное выравнивание, влево"
-menu_1078,Horizontal Align Center,FALSE,menu,TRUE,FALSE,24,,Object > Align > Horizontal Align Center,Objekt > Ausrichten > Horizontal zentriert ausrichten,"Объект > Выравнивание > Горизонтальное выравнивание, центр"
-menu_1079,Horizontal Align Right,FALSE,menu,TRUE,FALSE,24,,Object > Align > Horizontal Align Right,Objekt > Ausrichten > Horizontal rechts ausrichten,"Объект > Выравнивание > Горизонтальное выравнивание, вправо"
-menu_1080,Vertical Align Top,FALSE,menu,TRUE,FALSE,24,,Object > Align > Vertical Align Top,Objekt > Ausrichten > Vertikal oben ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, вверх"
-menu_1081,Vertical Align Center,FALSE,menu,TRUE,FALSE,24,,Object > Align > Vertical Align Center,Objekt > Ausrichten > Vertikal zentriert ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, центр"
-menu_1082,Vertical Align Bottom,FALSE,menu,TRUE,FALSE,24,,Object > Align > Vertical Align Bottom,Objekt > Ausrichten > Vertikal unten ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, вниз"
+menu_1077,Horizontal Align Left,FALSE,menu,TRUE,TRUE,24,,Object > Align > Horizontal Align Left,Objekt > Ausrichten > Horizontal links ausrichten,"Объект > Выравнивание > Горизонтальное выравнивание, влево"
+menu_1078,Horizontal Align Center,FALSE,menu,TRUE,TRUE,24,,Object > Align > Horizontal Align Center,Objekt > Ausrichten > Horizontal zentriert ausrichten,"Объект > Выравнивание > Горизонтальное выравнивание, центр"
+menu_1079,Horizontal Align Right,FALSE,menu,TRUE,TRUE,24,,Object > Align > Horizontal Align Right,Objekt > Ausrichten > Horizontal rechts ausrichten,"Объект > Выравнивание > Горизонтальное выравнивание, вправо"
+menu_2083,Horizontal && Vertical Align Center,FALSE,menu,TRUE,TRUE,30.5.0,,Horizontal & Vertical Align Center
+menu_1080,Vertical Align Top,FALSE,menu,TRUE,TRUE,24,,Object > Align > Vertical Align Top,Objekt > Ausrichten > Vertikal oben ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, вверх"
+menu_1081,Vertical Align Center,FALSE,menu,TRUE,TRUE,24,,Object > Align > Vertical Align Center,Objekt > Ausrichten > Vertikal zentriert ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, центр"
+menu_1082,Vertical Align Bottom,FALSE,menu,TRUE,TRUE,24,,Object > Align > Vertical Align Bottom,Objekt > Ausrichten > Vertikal unten ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, вниз"
 menu_1083,Vertical Distribute Top,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Vertical Distribute Top
 menu_1084,Vertical Distribute Center,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Vertical Distribute Center
 menu_1085,Vertical Distribute Bottom,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Vertical Distribute Bottom
@@ -100,21 +114,28 @@ menu_1096,hide,FALSE,menu,TRUE,TRUE,,,Object > Hide > Selection,Objekt > Ausblen
 menu_1097,Selection Hat 4,FALSE,menu,TRUE,TRUE,,,Object > Hide > All Artwork Above,Objekt > Ausblenden > Sämtliches Bildmaterial darüber,Объект > Скрыть > Все объекты выше
 menu_1098,Selection Hat 6,FALSE,menu,TRUE,TRUE,,,Object > Hide > Other Layers,Objekt > Ausblenden > Andere Ebenen,Объект > Скрыть > Остальные слои
 menu_1099,showAll,FALSE,menu,TRUE,FALSE,,,Object > Show All,Objekt > Alles einblenden,Объект > Показать все
+menu_2085,Remove Background Object Menu,FALSE,menu,TRUE,TRUE,,,Object > Remove Background
 menu_1100,Crop Image,FALSE,menu,TRUE,TRUE,23,,Object > Crop Image,Objekt > Bild zuschneiden,Объект > Обрезать изображение
 menu_1101,Rasterize 8 menu item,FALSE,menu,TRUE,TRUE,,,Object > Rasterize...,Objekt > In Pixelbild umwandeln …,Объект > Растрировать...
 menu_1102,make mesh,FALSE,menu,TRUE,TRUE,,,Object > Create Gradient Mesh...,Objekt > Verlaufsgitter erstellen …,Объект > Создать сетчатый градиент...
 menu_1103,AI Object Mosaic Plug-in4,FALSE,menu,TRUE,TRUE,,,Object > Create Object Mosaic...,Objekt > Objektmosaik erstellen …,Объект > Создать фрагментацию...
-menu_1104,TrimMark v25,FALSE,menu,TRUE,TRUE,,,Object > Create Trim Marks...,Objekt > Schnittmarken erstellen,Объект > Создать метки обреза
+menu_1104,TrimMark v25,FALSE,menu,TRUE,TRUE,,,Object > Create Trim Marks,Objekt > Schnittmarken erstellen,Объект > Создать метки обреза
 menu_1105,Flatten Transparency,FALSE,menu,TRUE,TRUE,,,Object > Flatten Transparency...,Objekt > Transparenz reduzieren …,Объект > Обработка прозрачности...
 menu_1106,Make Pixel Perfect,FALSE,menu,TRUE,TRUE,,,Object > Make Pixel Perfect,Objekt > Pixelgenaue Darstellung anwenden,Объект > Коррекция на уровне пикселов
 menu_1107,GenAIConsolidatedGenerateVectors,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generate Vectors...,,,,"Moved to Generative submenu in v30.0, Changed from 'Generate Modal File Menu ' at v30.0"
-menu_1108,GenAIConsolidatedShapeFill,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Gen Shape Fill...,,,,"Moved to Generative submenu in v30.0, Changed from 'Shape Fill Object Menu' at v30.0"
-menu_1109,Gen Expand Object Make,FALSE,menu,TRUE,FALSE,30.0,,Object > Generative > Generative Expand... > Make...
-menu_1110,Gen Expand Object Combine,FALSE,menu,TRUE,FALSE,30.0,,Object > Generative > Generative Expand... > Combine
-menu_1111,GenAIConsolidatedBleed,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Print Bleed...,,,,"Moved to Generative submenu in v30.0, Changed from 'Shape Fill Object Menu' at v30.0"
-menu_1112,GenAIConsolidatedRecolor,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generative Recolor...
-menu_1113,GenAIConsolidatedPatterns,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generate Patterns...,,,,"Moved to Generative submenu in v30.0, Changed from 'Adobe Generative Patterns Panel' at v30.0"
-menu_1114,GenAIConsolidatedVariations,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generation History...
+menu_1108,GenAIConsolidatedShapeFill,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generative Shape Fill...,,,,"Moved to Generative submenu in v30.0, Changed from 'Shape Fill Object Menu' at v30.0"
+menu_2086,SketchToVectorUnified,FALSE,menu,TRUE,FALSE,30.5.0,,Object > Generative > Concept to Vector
+menu_2087,GenAIConsolidatedTurntable,FALSE,menu,TRUE,TRUE,,,Object > Generative > Turntable,,,,"Name changed to Turntable in v30.5.0"
+menu_2088,GenerateTextTypeMenu,FALSE,menu,TRUE,TRUE,30.5.0,,Object > Generative > Text > Rewrite...
+menu_2089,GenAIConsolidatedGenerateTextTranslate,FALSE,menu,TRUE,TRUE,30.5.0,,Object > Generative > Text > Translate...
+menu_2090,GenAIConsolidatedGenerateTextProofread,FALSE,menu,TRUE,TRUE,30.5.0,,Object > Generative > Text > Proofread
+menu_2091,GenAIConsolidatedGenerateTextRephraseToFit,FALSE,menu,TRUE,TRUE,30.5.0,,Object > Generative > Text > Fit text
+menu_1109,Gen Expand Object Make,FALSE,menu,TRUE,FALSE,30.0,,Object > Generative > Generative Expand > Make
+menu_1110,Gen Expand Object Combine,FALSE,menu,TRUE,FALSE,30.0,,Object > Generative > Generative Expand > Combine
+menu_1111,GenAIConsolidatedBleed,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Print Bleed,,,,"Moved to Generative submenu in v30.0, Changed from 'Shape Fill Object Menu' at v30.0"
+menu_1112,GenAIConsolidatedRecolor,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generative Recolor
+menu_1113,GenAIConsolidatedPatterns,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generate Patterns,,,,"Moved to Generative submenu in v30.0, Changed from 'Adobe Generative Patterns Panel' at v30.0"
+menu_1114,GenAIConsolidatedVariations,FALSE,menu,TRUE,TRUE,30.0,,Object > Generative > Generation History
 menu_1115,AISlice Make Slice,FALSE,menu,TRUE,TRUE,,,Object > Slice > Make,Objekt > Slice > Erstellen,Объект > Фрагменты > Создать
 menu_1116,AISlice Release Slice,FALSE,menu,TRUE,TRUE,,,Object > Slice > Release,Objekt > Slice > Zurückwandeln,Объект > Фрагменты > Расформировать
 menu_1117,AISlice Create from Guides,FALSE,menu,TRUE,FALSE,,,Object > Slice > Create from Guides,Objekt > Slice > Aus Hilfslinien erstellen,Объект > Фрагменты > Создать по направляющим
@@ -139,12 +160,12 @@ menu_1135,Remove Anchor Points menu,FALSE,menu,TRUE,TRUE,,,Object > Path > Remov
 menu_1136,Knife Tool2,FALSE,menu,TRUE,TRUE,,,Object > Path > Divide Objects Below,Objekt > Pfad > Darunter liegende Objekte aufteilen,Объект > Контур > Разделить нижние объекты
 menu_1137,Rows and Columns....,FALSE,menu,TRUE,TRUE,,,Object > Path > Split Into Grid...,Objekt > Pfad > In Raster teilen …,Объект > Контур > Создать сетку...
 menu_1138,cleanup menu item,FALSE,menu,TRUE,FALSE,,,Object > Path > Clean Up...,Objekt > Pfad > Aufräumen …,Объект > Контур > Вычистить…
-menu_1139,smooth menu item,FALSE,menu,TRUE,TRUE,28,,Object > Path > Smooth
-menu_1140,Convert to Shape,FALSE,menu,TRUE,TRUE,18,,Object > Shape > Convert to Shapes,Objekt > Form > In Form umwandeln,Объект > Фигура > Преобразовать в фигуры
-menu_1141,Expand Shape,FALSE,menu,TRUE,TRUE,18,,Object > Shape > Expand Shapes,Objekt > Form > Form umwandeln,Объект > Фигура > Разобрать фигуру
+menu_1139,smooth menu item,FALSE,menu,TRUE,TRUE,28,,Object > Path > Smooth...
+menu_1140,Convert to Shape,FALSE,menu,TRUE,TRUE,18,,Object > Shape > Convert to Shape,Objekt > Form > In Form umwandeln,Объект > Фигура > Преобразовать в фигуры
+menu_1141,Expand Shape,FALSE,menu,TRUE,TRUE,18,,Object > Shape > Expand Shape,Objekt > Form > Form umwandeln,Объект > Фигура > Разобрать фигуру
 menu_1142,Shape Fill Object Menu,FALSE,menu,TRUE,TRUE,28.6,29.999,Object > Gen Shape Fill...
-menu_1143,Gen Expand Object Make,FALSE,menu,TRUE,TRUE,29.6,29.999,Object > Generative Expand... > Make...
-menu_1144,Gen Expand Object Combine,FALSE,menu,TRUE,TRUE,29.6,29.999,Object > Generative Expand... > Combine
+menu_1143,Gen Expand Object Make,FALSE,menu,TRUE,TRUE,29.6,29.999,Object > Generative Expand > Make...
+menu_1144,Gen Expand Object Combine,FALSE,menu,TRUE,TRUE,29.6,29.999,Object > Generative Expand > Combine
 menu_1145,Gen Bleed Object Menu,FALSE,menu,TRUE,TRUE,29.6,29.999,Object > Print Bleed...
 menu_1146,Adobe Make Pattern,FALSE,menu,TRUE,FALSE,,,Object > Pattern > Make,Objekt > Muster > Erstellen,Объект > Узор > Создать
 menu_1147,Adobe Edit Pattern,FALSE,menu,TRUE,TRUE,,,Object > Pattern > Edit Pattern,Objekt > Muster > Muster bearbeiten,Объект > Узор > Редактировать узор
@@ -154,11 +175,11 @@ menu_1150,GenAIConsolidatedPatterns,FALSE,menu,TRUE,FALSE,30.0,,Object > Pattern
 menu_1151,Partial Rearrange Make,FALSE,menu,TRUE,TRUE,27,,Object > Intertwine > Make,Objekt > Verflechtung > Erstellen
 menu_1152,Partial Rearrange Release,FALSE,menu,TRUE,TRUE,27,,Object > Intertwine > Release,Objekt > Verflechtung > Zurückwandeln
 menu_1153,Partial Rearrange Edit,FALSE,menu,TRUE,TRUE,27,,Object > Intertwine > Edit,Objekt > Verflechtung > Bearbeiten
-menu_1154,Make Radial Repeat,FALSE,menu,TRUE,TRUE,25.1,,Object > Repeat > Make Radial,Objekt > Wiederholen > Radial,Объект > Повторить > Радиальный
-menu_1155,Make Grid Repeat,FALSE,menu,TRUE,TRUE,25.1,,Object > Repeat > Make Grid,Objekt > Wiederholen > Raster,Объект > Повторить > Сетка
-menu_1156,Make Symmetry Repeat,FALSE,menu,TRUE,TRUE,25.1,,Object > Repeat > Make Symmetry,Objekt > Wiederholen > Spiegeln,Объект > Повторить > Зеркально
+menu_1154,Make Radial Repeat,FALSE,menu,TRUE,TRUE,25.1,,Object > Repeat > Radial,Objekt > Wiederholen > Radial,Объект > Повторить > Радиальный
+menu_1155,Make Grid Repeat,FALSE,menu,TRUE,TRUE,25.1,,Object > Repeat > Grid,Objekt > Wiederholen > Raster,Объект > Повторить > Сетка
+menu_1156,Make Symmetry Repeat,FALSE,menu,TRUE,TRUE,25.1,,Object > Repeat > Mirror,Objekt > Wiederholen > Spiegeln,Объект > Повторить > Зеркально
 menu_1157,Release Repeat Art,FALSE,menu,TRUE,TRUE,25.1,,Object > Repeat > Release,Objekt > Wiederholen > Zurückwandeln,Объект > Повторить > Освободить
-menu_1158,Repeat Art Options,FALSE,menu,TRUE,FALSE,25.1,,Object > Repeat > Repeat Options...,Objekt > Wiederholen > Optionen …,Объект > Повторить > Параметры…
+menu_1158,Repeat Art Options,FALSE,menu,TRUE,FALSE,25.1,,Object > Repeat > Options...,Objekt > Wiederholen > Optionen …,Объект > Повторить > Параметры…
 menu_1159,Attach Objects on Path,FALSE,menu,TRUE,TRUE,29,,Object > Objects on Path > Attach...
 menu_1160,Options Objects on Path,FALSE,menu,TRUE,TRUE,29,,Object > Objects on Path > Options...
 menu_1161,Expand Objects on Path,FALSE,menu,TRUE,TRUE,29,,Object > Objects on Path > Expand
@@ -189,7 +210,7 @@ menu_1185,Make Image Tracing,FALSE,menu,TRUE,TRUE,,,Object > Image Trace > Make,
 menu_1186,Make and Expand Image Tracing,FALSE,menu,TRUE,TRUE,,,Object > Image Trace > Make and Expand,Objekt > Bildnachzeichner > Erstellen und umwandeln,Объект > Трассировка изображения > Создать и разобрать
 menu_1187,Release Image Tracing,FALSE,menu,TRUE,TRUE,,,Object > Image Trace > Release,Objekt > Bildnachzeichner > Zurückwandeln,Объект > Трассировка изображения > Расформировать
 menu_1188,Expand Image Tracing,FALSE,menu,TRUE,TRUE,,,Object > Image Trace > Expand,Objekt > Bildnachzeichner > Umwandeln,Объект > Трассировка изображения > Разобрать
-menu_1189,Make Vector Edge,FALSE,menu,TRUE,TRUE,28,,Object > Mockup > Make
+menu_1189,Make Vector Edge,FALSE,menu,TRUE,TRUE,28,,Object > Mockup > Make / Preview
 menu_1190,Release Vector Edge,FALSE,menu,TRUE,TRUE,28,,Object > Mockup > Release
 menu_1191,Edit Vector Edge,FALSE,menu,TRUE,TRUE,28,,Object > Mockup > Edit
 menu_1192,Make Text Wrap,FALSE,menu,TRUE,TRUE,,,Object > Text Wrap > Make,Objekt > Textumfluss > Erstellen,Объект > Обтекание текстом > Создать
@@ -201,7 +222,7 @@ menu_1197,editMask,FALSE,menu,TRUE,TRUE,,,Object > Clipping Mask > Edit Mask,Obj
 menu_1198,compoundPath,FALSE,menu,TRUE,TRUE,,,Object > Compound Path > Make,Objekt > Zusammengesetzter Pfad > Erstellen,Объект > Составной контур > Создать
 menu_1199,noCompoundPath,FALSE,menu,TRUE,TRUE,,,Object > Compound Path > Release,Objekt > Zusammengesetzter Pfad > Zurückwandeln,Объект > Составной контур > Отменить
 menu_1200,setCropMarks,FALSE,menu,TRUE,TRUE,,,Object > Artboards > Convert to Artboards,Objekt > Zeichenflächen > In Zeichenflächen konvertieren,Объект > Монтажные области > Преобразовать в монтажные области
-menu_1201,ReArrange Artboards,FALSE,menu,TRUE,FALSE,,,Object > Artboards > Rearrange All Artboards,Objekt > Zeichenflächen > Alle Zeichenflächen neu anordnen,Объект > Монтажные области > Переупорядочить все монт. обл.
+menu_1201,ReArrange Artboards,FALSE,menu,TRUE,FALSE,,,Object > Artboards > Rearrange Artboards,Objekt > Zeichenflächen > Alle Zeichenflächen neu anordnen,Объект > Монтажные области > Переупорядочить все монт. обл.
 menu_1202,Fit Artboard to artwork bounds,FALSE,menu,TRUE,FALSE,,,Object > Artboards > Fit to Artwork Bounds,Objekt > Zeichenflächen > An Bildmaterialbegrenzungen anpassen,Объект > Монтажные области > Подогнать по границам иллюстрации
 menu_1203,Switch Orientation,FALSE,menu,TRUE,FALSE,30.0,,Object > Artboards > Switch Orientation
 menu_1204,Fit Artboard to selected Art,FALSE,menu,TRUE,TRUE,,,Object > Artboards > Fit to Selected Art,Objekt > Zeichenflächen > An ausgewählte Grafik anpassen,Объект > Монтажные области > Подогнать по границам выделенной иллюстрации
@@ -210,9 +231,11 @@ menu_1206,editGraphData,FALSE,menu,TRUE,TRUE,,,Object > Graph > Data...,Objekt >
 menu_1207,graphDesigns,FALSE,menu,TRUE,TRUE,,,Object > Graph > Design...,Objekt > Diagramm > Designs …,Объект > Диаграмма > Оформление…
 menu_1208,setBarDesign,FALSE,menu,TRUE,TRUE,,,Object > Graph > Column...,Objekt > Diagramm > Balken …,Объект > Диаграмма > Столбец…
 menu_1209,setIconDesign,FALSE,menu,TRUE,TRUE,,,Object > Graph > Marker...,Objekt > Diagramm > Punkte …,Объект > Диаграмма > Маркер…
+menu_2092,,TRUE,menu,TRUE,TRUE,,,Object > Collect For Export > As Single Asset
+menu_2093,,TRUE,menu,TRUE,TRUE,,,Object > Collect For Export > As Multiple Assets
 menu_1210,Browse Typekit Fonts Menu IllustratorUI,FALSE,menu,FALSE,FALSE,17.1,,Type > More from Adobe Fonts...,Schrift > Mehr bei Adobe Fonts …,Текст > Найти больше в Adobe Fonts...
 menu_1211,alternate glyph palette plugin,FALSE,menu,FALSE,FALSE,,,Type > Glyphs,Schrift > Glyphen,Текст > Глифы
-menu_1212,point-area,FALSE,menu,TRUE,TRUE,29.4,,Type > Convert to Area Type / Point Type
+menu_1212,point-area,FALSE,menu,TRUE,TRUE,29.4,,Type > Convert to Area Type / Point Type,,,,also called Type Conversion
 menu_1213,area-type-options,FALSE,menu,TRUE,TRUE,,,Type > Area Type Options...,Schrift > Flächentextoptionen …,Текст > Параметры текста в области…
 menu_1214,Rainbow,FALSE,menu,TRUE,TRUE,,,Type > Type on a Path > Rainbow,Schrift > Pfadtext > Regenbogen,Текст > Текст по контуру > Радуга
 menu_1215,Skew,FALSE,menu,TRUE,TRUE,,,Type > Type on a Path > Skew,Schrift > Pfadtext > Asymmetrie,Текст > Текст по контуру > Наклон
@@ -234,6 +257,10 @@ menu_1230,Sentence case Change Case Item,FALSE,menu,TRUE,TRUE,,,Type > Change Ca
 menu_1231,Adobe Illustrator Smart Punctuation Menu Item,FALSE,menu,TRUE,FALSE,,,Type > Smart Punctuation...,Schrift > Satz-/Sonderzeichen …,Текст > Типографская пунктуация...
 menu_1232,outline,FALSE,menu,TRUE,TRUE,,,Type > Create Outlines,Schrift > In Pfade umwandeln,Текст > Преобразовать в кривые
 menu_1233,Adobe Optical Alignment Item,FALSE,menu,TRUE,TRUE,,,Type > Optical Margin Alignment,Schrift > Optischer Randausgleich,Текст > Визуальное выравнивание полей
+menu_2094,ReTypeTypeMenu,FALSE,menu,TRUE,TRUE,,,Type > Retype
+menu_2095,GenerateTextTypeMenu,FALSE,menu,TRUE,TRUE,30.5.0,,Type > Rewrite...
+menu_2096,,TRUE,menu,TRUE,TRUE,,,Type > Bullets and Numbering > Apply Bullets
+menu_2097,,TRUE,menu,TRUE,TRUE,,,Type > Bullets and Numbering > Apply Numbers
 menu_1234,convert list style to text,FALSE,menu,TRUE,TRUE,27.1,,Type > Bullets and Numbering > Convert to text,Schrift > Aufzählungszeichen und Nummerierung > In Text konvertieren
 menu_2001,~bullet,FALSE,menu,TRUE,FALSE,29.4,,Type > Insert Special Character > Symbols > Bullet,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
 menu_2002,~copyright,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Symbols > Copyright Symbol,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
@@ -251,12 +278,19 @@ menu_2013,~singleLeftQuote,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Char
 menu_2014,~singleRightQuote,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Special Character > Quotation Marks > Single Right Quotation Marks,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
 menu_2015,~emSpace,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert WhiteSpace Character > Em Space,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
 menu_2016,~enSpace,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert WhiteSpace Character > En Space,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2098,,TRUE,menu,TRUE,TRUE,,,Type > Insert WhiteSpace Character > Nonbreaking Space
 menu_2017,~hairSpace,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert WhiteSpace Character > Hair Space,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
 menu_2018,~thinSpace,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert WhiteSpace Character > Thin Space,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
 menu_2019,~forcedLineBreak,FALSE,menu,TRUE,TRUE,29.4,,Type > Insert Break Character > Forced Line Break,,,,A selection is technically required but Illustrator does not recognize an active text selection when the text cursor is placed inside text (which is what these commands expect)
+menu_2099,,TRUE,menu,TRUE,TRUE,,,Type > Fill With PlaceHolder Text
 menu_1235,showHiddenChar,FALSE,menu,TRUE,FALSE,,,Type > Show Hidden Characters,Schrift > Verborgene Zeichen einblenden / ausblenden,Текст > Показать скрытые символы
 menu_1236,type-horizontal,FALSE,menu,TRUE,TRUE,,,Type > Type Orientation > Horizontal,Schrift > Textausrichtung > Horizontal,Текст > Ориентация текста > Горизонтальная
 menu_1237,type-vertical,FALSE,menu,TRUE,TRUE,,,Type > Type Orientation > Vertical,Schrift > Textausrichtung > Vertikal,Текст > Ориентация текста > Вертикальная
+menu_2100,,TRUE,menu,TRUE,FALSE,,,Type > Legacy Text > Update All Legacy Text
+menu_2101,,TRUE,menu,TRUE,TRUE,,,Type > Legacy Text > Update Selected Legacy Text
+menu_2102,,TRUE,menu,TRUE,TRUE,,,Type > Legacy Text > Show Copies
+menu_2103,,TRUE,menu,TRUE,TRUE,,,Type > Legacy Text > Delete Copies
+menu_2104,,TRUE,menu,TRUE,TRUE,,,Type > Legacy Text > Select Copies
 menu_1238,selectall,FALSE,menu,TRUE,FALSE,,,Select > All,Auswahl > Alles auswählen,Выделение > Все
 menu_1239,selectallinartboard,FALSE,menu,TRUE,FALSE,,,Select > All on Active Artboard,Auswahl > Alles auf der aktiven Zeichenfläche,Выделение > Все объекты в активной монтажной области
 menu_1240,deselectall,FALSE,menu,TRUE,TRUE,,,Select > Deselect,Auswahl > Auswahl aufheben,Выделение > Отменить выделение
@@ -290,8 +324,8 @@ menu_1267,Brush Strokes menu item,FALSE,menu,TRUE,FALSE,,,Select > Object > Brus
 menu_1268,Clipping Masks menu item,FALSE,menu,TRUE,FALSE,,,Select > Object > Clipping Masks,Auswahl > Objekt > Schnittmasken,Выделение > По типу объектов > Обтравочные маски
 menu_1269,Stray Points menu item,FALSE,menu,TRUE,FALSE,,,Select > Object > Stray Points,Auswahl > Objekt > Einzelne Ankerpunkte,Выделение > По типу объектов > Изолированные точки
 menu_1270,Text Objects menu item,FALSE,menu,TRUE,FALSE,,,Select > Object > All Text Objects,Auswahl > Objekt > Alle Textobjekte,Выделение > По типу объектов > Все объекты текста
-menu_1271,Point Text Objects menu item,FALSE,menu,TRUE,FALSE,,,Select > Object > Point Text Objects,Auswahl > Objekt > Punkttextobjekte,Выделение > По типу объектов > Объекты текста из точки
-menu_1272,Area Text Objects menu item,FALSE,menu,TRUE,FALSE,,,Select > Object > Area Text Objects,Auswahl > Objekt > Flächenttextobjekte,Выделение > По типу объектов > Объекты текста в области
+menu_1271,Point Text Objects menu item,FALSE,menu,TRUE,FALSE,,,Select > Object > Point Type Objects,Auswahl > Objekt > Punkttextobjekte,Выделение > По типу объектов > Объекты текста из точки
+menu_1272,Area Text Objects menu item,FALSE,menu,TRUE,FALSE,,,Select > Object > Area Type Objects,Auswahl > Objekt > Flächenttextobjekte,Выделение > По типу объектов > Объекты текста в области
 menu_1273,SmartEdit Menu Item,FALSE,menu,TRUE,TRUE,23,,Select > Start/Stop Global Edit,Auswahl > Globale Bearbeitung starten/anhalten,Выделение > Начать глобальное изменение
 menu_1274,Selection Hat 10,FALSE,menu,TRUE,TRUE,,,Select > Save Selection...,Auswahl > Auswahl speichern …,Выделение > Сохранить выделенную область…
 menu_1275,Selection Hat 11,FALSE,menu,TRUE,TRUE,,,Select > Edit Selection...,Auswahl > Auswahl bearbeiten …,Выделение > Редактировать выделенную область…
@@ -343,6 +377,24 @@ menu_1320,Live Adobe Round Corners,FALSE,menu,TRUE,FALSE,,,Effect > Stylize > Ro
 menu_1321,Live Scribble Fill,FALSE,menu,TRUE,FALSE,,,Effect > Stylize > Scribble...,Effekt > Stilisierungsfilter > Scribble …,Эффект > Стилизация > Каракули…
 menu_1322,Live SVG Filters,FALSE,menu,TRUE,FALSE,,,Effect > SVG Filters > Apply SVG Filter...,Effekt > SVG-Filter > SVG-Filter anwenden …,Эффект > Фильтры SVG > Применить SVG-фильтр...
 menu_1323,SVG Filter Import,FALSE,menu,TRUE,FALSE,,,Effect > SVG Filters > Import SVG Filter...,Effekt > SVG-Filter > SVG-Filter importieren …,Эффект > Фильтры SVG > Импортировать фильтр SVG...
+menu_2107,AI_Alpha_1,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Alpha_1
+menu_2108,AI_Alpha_4,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Alpha_4
+menu_2109,AI_BevelShadow_1,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_BevelShadow_1
+menu_2110,AI_CoolBreeze,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_CoolBreeze
+menu_2111,AI_Dilate_3,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Dilate_3
+menu_2112,AI_Dilate_6,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Dilate_6
+menu_2113,AI_Erode_3,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Erode_3
+menu_2114,AI_Erode_6,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Erode_6
+menu_2115,AI_GaussianBlur_4,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_GaussianBlur_4
+menu_2116,AI_GaussianBlur_7,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_GaussianBlur_7
+menu_2117,AI_PixelPlay_1,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_PixelPlay_1
+menu_2118,AI_PixelPlay_2,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_PixelPlay_2
+menu_2119,AI_Shadow_1,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Shadow_1
+menu_2120,AI_Shadow_2,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Shadow_2
+menu_2121,AI_Static,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Static
+menu_2122,AI_Turbulence_3,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Turbulence_3
+menu_2123,AI_Turbulence_5,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Turbulence_5
+menu_2124,AI_Woodgrain,FALSE,menu,TRUE,TRUE,30.5.0,,Effect > SVG Filters > AI_Woodgrain
 menu_1324,Live Deform Arc,FALSE,menu,TRUE,FALSE,,,Effect > Warp > Arc...,Effekt > Verkrümmungsfilter > Bogen …,Эффект > Деформация > Дуга…
 menu_1325,Live Deform Arc Lower,FALSE,menu,TRUE,FALSE,,,Effect > Warp > Arc Lower...,Effekt > Verkrümmungsfilter > Bogen unten …,Эффект > Деформация > Дуга вниз…
 menu_1326,Live Deform Arc Upper,FALSE,menu,TRUE,FALSE,,,Effect > Warp > Arc Upper...,Effekt > Verkrümmungsfilter > Bogen oben …,Эффект > Деформация > Дуга вверх…
@@ -416,9 +468,14 @@ menu_1393,Live PSAdapter_plugin_Txtz,FALSE,menu,TRUE,FALSE,,,Effect > Texture > 
 menu_1394,Live PSAdapter_plugin_Dntr,FALSE,menu,TRUE,FALSE,,,Effect > Video > De-Interlace...,Effekt > Videofilter > De-Interlace …,Эффект > Видео > Устранение чересстрочной развертки...
 menu_1395,Live PSAdapter_plugin_NTSC,FALSE,menu,TRUE,FALSE,,,Effect > Video > NTSC Colors,Effekt > Videofilter > NTSC-Farben,Эффект > Видео > Цвета NTSC
 menu_1396,preview,FALSE,menu,TRUE,FALSE,,,View > Outline / Preview,Ansicht > Vorschau / Pfadansicht,Просмотр > Контуры / Иллюстрация
-menu_1397,GPU Preview,FALSE,menu,TRUE,FALSE,,,View > GPU Preview / Preview on CPU,Ansicht > Mit GPU anzeigen / Mit CPU anzeigen,Просмотр > Просмотр с использованием ЦП / ГП
+menu_1397,GPU Preview,FALSE,menu,TRUE,FALSE,,,View using GPU / CPU,Ansicht > Mit GPU anzeigen / Mit CPU anzeigen,Просмотр > Просмотр с использованием ЦП / ГП
 menu_1398,ink,FALSE,menu,TRUE,FALSE,,,View > Overprint Preview,Ansicht > Überdruckenvorschau,Просмотр > Просмотр наложения цветов
 menu_1399,raster,FALSE,menu,TRUE,FALSE,,,View > Pixel Preview,Ansicht > Pixelvorschau,Просмотр > Просмотр в виде пикселов
+menu_2125,,TRUE,menu,TRUE,FALSE,,,View > Trim View
+menu_2126,,TRUE,menu,TRUE,FALSE,,,View > Presentation Mode
+menu_2127,,TRUE,menu,TRUE,FALSE,,,View > Screen Mode > Normal Screen Mode
+menu_2128,,TRUE,menu,TRUE,FALSE,,,View > Screen Mode > Full Screen with Menu Bar Mode
+menu_2129,,TRUE,menu,TRUE,FALSE,,,View > Screen Mode > Full Screen Mode
 menu_1400,proof-document,FALSE,menu,TRUE,FALSE,,,View > Proof Setup > Working CMYK,Ansicht > Proof einrichten > Dokument-CMYK,Просмотр > Параметры цветопробы > Рабочее пространство CMYK
 menu_1401,proof-mac-rgb,FALSE,menu,TRUE,FALSE,,,View > Proof Setup > Legacy Macintosh RGB (Gamma 1.8),Ansicht > Proof einrichten > Altes Macintosh-RGB (Gamma 1.8),Просмотр > Параметры цветопробы > Ранняя версия Macintosh RGB (Gamma 1.8)
 menu_1402,proof-win-rgb,FALSE,menu,TRUE,FALSE,,,View > Proof Setup > Internet Standard RGB (sRGB),Ansicht > Proof einrichten > Internet-Standard-RGB (sRGB),Просмотр > Параметры цветопробы > Стандартная палитра RGB (sRGB) для сети Интернет
@@ -431,6 +488,27 @@ menu_1408,zoomin,FALSE,menu,TRUE,FALSE,,,View > Zoom In,Ansicht > Einzoomen,Пр
 menu_1409,zoomout,FALSE,menu,TRUE,FALSE,,,View > Zoom Out,Ansicht > Auszoomen,Просмотр > Уменьшение
 menu_1410,fitin,FALSE,menu,TRUE,FALSE,,,View > Fit Artboard in Window,Ansicht > Zeichenfläche in Fenster einpassen,Просмотр > Подогнать монтажную область по размеру окна
 menu_1411,fitall,FALSE,menu,TRUE,FALSE,,,View > Fit All in Window,Ansicht > Alle in Fenster einpassen,Просмотр > Подогнать все по размеру окна
+menu_2130,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 180
+menu_2131,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 150
+menu_2132,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 135
+menu_2133,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 120
+menu_2134,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 90
+menu_2135,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 60
+menu_2136,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 45
+menu_2137,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 30
+menu_2138,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > 15
+menu_2139,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > O
+menu_2140,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -15
+menu_2141,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -30
+menu_2142,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -45
+menu_2143,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -60
+menu_2144,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -90
+menu_2145,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -120
+menu_2146,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -135
+menu_2147,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -150
+menu_2148,,TRUE,menu,TRUE,FALSE,,,View > Rotate View > -180
+menu_2149,,TRUE,menu,TRUE,FALSE,30.5.0,,View > Reset Rotate View
+menu_2150,,TRUE,menu,TRUE,TRUE,,,View > Rotate View To Selection
 menu_1412,AISlice Feedback Menu,FALSE,menu,FALSE,FALSE,,,View > Show / Hide Slices,Ansicht > Slices einblenden / ausblenden,Просмотр > Показать / спрятать фрагменты
 menu_1413,AISlice Lock Menu,FALSE,menu,FALSE,FALSE,,,View > Lock Slices,Ansicht > Slices fixieren,Просмотр > Закрепить фрагменты
 menu_1414,AI Bounding Box Toggle,FALSE,menu,FALSE,FALSE,,,View > Show / Hide Bounding Box,Ansicht > Begrenzungsrahmen einblenden / ausblenden,Просмотр > Показать / спрятать ограничительную рамку
@@ -446,8 +524,11 @@ menu_1423,Show Ruler,FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Show / Hi
 menu_1424,Snap to Grid,FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Snap to Grid,Ansicht > Perspektivenraster > Am Raster ausrichten,Просмотр > Сетка перспективы > Привязать к сетке
 menu_1425,Lock Perspective Grid,FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Lock Grid,Ansicht > Perspektivenraster > Raster sperren,Просмотр > Сетка перспективы > Закрепить сетку
 menu_1426,Lock Station Point,FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Lock Station Point,Ansicht > Perspektivenraster > Bezugspunkt sperren,Просмотр > Сетка перспективы > Закрепить точку наблюдения
-menu_1427,Define Perspective Grid,FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Define Grid,Ansicht > Perspektivenraster > Raster definieren,Просмотр > Сетка перспективы > Определить сетку...
-menu_1428,Save Perspective Grid as Preset,FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Save Grid as Preset,Ansicht > Perspektivenraster > Raster als Vorgabe speichern,Просмотр > Сетка перспективы > Сохранить сетку как стиль...
+menu_1427,Define Perspective Grid,FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Define Grid...,Ansicht > Perspektivenraster > Raster definieren,Просмотр > Сетка перспективы > Определить сетку...
+menu_2151,XOnePointX[1P-Normal View],FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > One Point Perspective > [1P-Normal View]
+menu_2152,XTwoPointX[2P-Normal View],FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Two Point Perspective > [2P-Normal View]
+menu_2153,XThreePointX[3P-Normal View],FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Three Point Perspective > [3P-Normal View]
+menu_1428,Save Perspective Grid as Preset,FALSE,menu,TRUE,FALSE,,,View > Perspective Grid > Save Grid as Preset...,Ansicht > Perspektivenraster > Raster als Vorgabe speichern,Просмотр > Сетка перспективы > Сохранить сетку как стиль...
 menu_1429,artboard,FALSE,menu,TRUE,FALSE,,,View > Show / Hide Artboards,Ansicht > Zeichenflächen einblenden / ausblenden,Просмотр > Показать / скрыть монтажные области
 menu_1430,pagetiling,FALSE,menu,TRUE,FALSE,,,View > Show / Hide Print Tiling,Ansicht > Druckaufteilung einblenden / ausblenden,Просмотр > Показать / спрятать разбиение для печати
 menu_1431,showtemplate,FALSE,menu,TRUE,,,,View > Show / Hide Template,Ansicht > Vorlage einblenden / ausblenden,Просмотр > Спрятать шаблон
@@ -462,7 +543,10 @@ menu_1439,releaseguide,FALSE,menu,TRUE,FALSE,,,View > Guides > Release Guides,An
 menu_1440,clearguide,FALSE,menu,TRUE,FALSE,,,View > Guides > Clear Guides,Ansicht > Hilfslinien > Hilfslinien löschen,Просмотр > Направляющие > Удалить направляющие
 menu_1441,showgrid,FALSE,menu,TRUE,FALSE,,,View > Show / Hide Grid,Ansicht > Raster einblenden / ausblenden,Просмотр > Показать / спрятать сетку
 menu_1442,snapgrid,FALSE,menu,TRUE,FALSE,,,View > Snap to Grid,Ansicht > Am Raster ausrichten,Просмотр > Выравнивать по сетке
+menu_2154,,TRUE,menu,TRUE,FALSE,,,View > Snap to Pixel
 menu_1443,snappoint,FALSE,menu,TRUE,FALSE,,,View > Snap to Point,Ansicht > An Punkt ausrichten,Просмотр > Выравнивать по точкам
+menu_2155,Snapomatic on-off menu item,FALSE,menu,TRUE,FALSE,,,View > Smart Guides
+menu_2156,,TRUE,menu,TRUE,FALSE,,,View > Snap to Glyph
 menu_1444,newview,FALSE,menu,TRUE,FALSE,,,View > New View...,Ansicht > Neue Ansicht …,Просмотр > Новый вид…
 menu_1445,editview,FALSE,menu,TRUE,FALSE,,,View > Edit Views...,Ansicht > Ansicht bearbeiten …,Просмотр > Редактировать виды…
 menu_1446,newwindow,FALSE,menu,TRUE,FALSE,,,Window > New Window,Fenster > Neues Fenster,Окно > Новое окно
@@ -477,11 +561,13 @@ menu_1454,Adobe New Workspace,FALSE,menu,FALSE,FALSE,,,Window > Workspace > New 
 menu_1455,Adobe Manage Workspace,FALSE,menu,FALSE,FALSE,,,Window > Workspace > Manage Workspaces...,Fenster > Arbeitsbereich > Arbeitsbereiche verwalten …,Окно > Рабочая среда > Управление рабочими средами...
 menu_1456,_GenericPluginMenuItem 25,TRUE,menu,FALSE,FALSE,27.9,,Window > Contextual Task Bar,Fenster > Kontextbezogene Taskleiste
 menu_1457,drover control palette plugin,FALSE,menu,FALSE,FALSE,,,Window > Control,Fenster > Steuerung,Окно > Панель управления
+menu_2158,_GenericPluginMenuItem 53,FALSE,menu,TRUE,FALSE,,,Window > Help Bar
+menu_2159,_GenericPluginMenuItem 51,FALSE,menu,TRUE,FALSE,30.5.0,,Window > Show Generative Menu
 menu_1458,Adobe Advanced Toolbar Menu,FALSE,menu,FALSE,FALSE,23,,Window > Toolbars > Advanced,Fenster > Werkzeugleisten > Erweitert,Окно > Панели инструментов > Дополнительные
 menu_1459,Adobe Basic Toolbar Menu,FALSE,menu,FALSE,FALSE,23,,Window > Toolbars > Basic,Fenster > Werkzeugleisten > Einfach,Окно > Панели инструментов > Основные
 menu_1460,Adobe Quick Toolbar Menu,FALSE,menu,FALSE,FALSE,29.3,,Window > Toolbars > Getting Started
 menu_1461,New Tools Panel,FALSE,menu,FALSE,FALSE,17,,Window > Toolbars > New Toolbar...,Fenster > Werkzeugleisten > Neue Werkzeugleiste …,Окно > Панели инструментов > Новая панель инструментов...
-menu_1462,Manage Tools Panel,FALSE,menu,FALSE,FALSE,17,,Window > Toolbars > Manage Toolbar...,Fenster > Werkzeugleisten > Werkzeugleisten verwalten …,Окно > Панели инструментов > Управление панелями инструментов...
+menu_1462,Manage Tools Panel,FALSE,menu,FALSE,FALSE,17,,Window > Toolbars > Manage Toolbars...,Fenster > Werkzeugleisten > Werkzeugleisten verwalten …,Окно > Панели инструментов > Управление панелями инструментов...
 menu_1463,Adobe 3D Panel,FALSE,menu,FALSE,FALSE,26,,Window > 3D and Materials,Fenster > 3D und Materialien,Окно > 3D и материалы
 menu_1464,Adobe Action Palette,FALSE,menu,FALSE,FALSE,,,Window > Actions,Fenster > Aktionen,Окно > Операции
 menu_1465,AdobeAlignObjects2,FALSE,menu,FALSE,FALSE,,,Window > Align,Fenster > Ausrichten,Окно > Выравнивание
@@ -494,11 +580,12 @@ menu_1471,Adobe Color Palette,FALSE,menu,FALSE,FALSE,,,Window > Color,Fenster > 
 menu_1472,Adobe Harmony Palette,FALSE,menu,FALSE,FALSE,,,Window > Color Guide,Fenster > Farbhilfe,Окно > Каталог цветов
 menu_1473,Adobe Illustrator Kuler Panel,FALSE,menu,FALSE,FALSE,22,25.9,Window > Color Themes
 menu_1474,Adobe Commenting Palette,FALSE,menu,FALSE,FALSE,26,,Window > Comments,Fenster > Kommentare,Окно > Комментарии
-menu_1475,CSS Menu Item,FALSE,menu,FALSE,FALSE,,,Window > CSS Properties,CSS-Eigenschaften,Окно > Свойства CSS
+menu_2160,SketchToVectorUnified,FALSE,menu,TRUE,FALSE,30.5.0,,Window > Concept to Vector
+menu_1475,CSS Menu Item,FALSE,menu,FALSE,FALSE,,,Window > CSS Properties (Deprecated),CSS-Eigenschaften,Окно > Свойства CSS
 menu_1476,DocInfo1,FALSE,menu,FALSE,FALSE,,,Window > Document Info,Fenster > Dokumentinformationen,Окно > Информация о документе
 menu_1477,Adobe Flattening Preview,FALSE,menu,FALSE,FALSE,,,Window > Flattener Preview,Fenster > Reduzierungsvorschau,Окно > Просмотр результатов сведения
-menu_1478,Adobe Generative Patterns Panel,FALSE,menu,TRUE,FALSE,28.6,29.999,Window > Generate Patterns
-menu_1479,Generate,FALSE,menu,FALSE,FALSE,28,,Window > Generated Variations
+menu_1478,Adobe Generative Patterns Panel,FALSE,menu,TRUE,FALSE,28.6,,Window > Generation History
+menu_1479,Generate,FALSE,menu,FALSE,FALSE,28,30.4.999,Window > Generated Variations
 menu_1480,Adobe Gradient Palette,FALSE,menu,FALSE,FALSE,,,Window > Gradient,Fenster > Verlauf,Окно > Градиент
 menu_1481,Adobe Style Palette,FALSE,menu,FALSE,FALSE,,,Window > Graphic Styles,Fenster > Grafikstile,Окно > Стили графики
 menu_1482,Adobe HistoryPanel Menu Item,FALSE,menu,FALSE,FALSE,26.4,26.9,Window > History,Fenster > Versionsverlauf,Окно > История
@@ -558,7 +645,7 @@ menu_1535,_Brush Library Menu Item 27,TRUE,menu,FALSE,FALSE,,,Window > Brush Lib
 menu_1536,_Brush Library Menu Item 29,TRUE,menu,FALSE,FALSE,,,Window > Brush Libraries > Vector Packs > Grunge brushes vector pack,Fenster > Pinsel-Bibliotheken > Vektorpakete > Schmutzpinsel Vektorpaket
 menu_1537,_Brush Library Menu Item 30,TRUE,menu,FALSE,FALSE,,,Window > Brush Libraries > Vector Packs > Hand Drawn brushes vector pack,Fenster > Pinsel-Bibliotheken > Vektorpakete > Handgemalte Pinsel Vektorpaket
 menu_1538,_Brush Library Menu Item 32,TRUE,menu,FALSE,FALSE,,,Window > Brush Libraries > Wacom 6D Brushes > 6d Art Pen Brushes,Fenster > Pinsel-Bibliotheken > Wacom 6D-Pinsel > 6D-Grafik Zeichenstiftpinsel
-menu_1539,AdobeBrushMgrUI Other libraries menu item,FALSE,menu,FALSE,FALSE,,,Window > Brush Libraries > Other Library,Fenster > Pinsel-Bibliotheken > Andere Bibliothek …,Окно > Библиотеки кистей > Другая библиотека...
+menu_1539,AdobeBrushMgrUI Other libraries menu item,FALSE,menu,FALSE,FALSE,,,Window > Brush Libraries > Other Library...,Fenster > Pinsel-Bibliotheken > Andere Bibliothek …,Окно > Библиотеки кистей > Другая библиотека...
 menu_1540,_Art Style Library Menu Item 0,TRUE,menu,FALSE,FALSE,,,Window > Graphic Style Libraries > 3D Effects,Fenster > Grafikstil-Bibliotheken > 3D-Effekte
 menu_1541,_Art Style Library Menu Item 1,TRUE,menu,FALSE,FALSE,,,Window > Graphic Style Libraries > Additive for Blob Brush,Fenster > Grafikstil-Bibliotheken > Zusatz für Tropfenpinsel
 menu_1542,_Art Style Library Menu Item 2,TRUE,menu,FALSE,FALSE,,,Window > Graphic Style Libraries > Additive,Fenster > Grafikstil-Bibliotheken > Zusatz
@@ -705,14 +792,17 @@ menu_1682,_Base Library Menu Item 27,TRUE,menu,FALSE,FALSE,,,Window > Symbol Lib
 menu_1683,Adobe Symbol Palette Plugin Other libraries menu item,FALSE,menu,FALSE,FALSE,,,Window > Symbol Libraries > Other Library...,Fenster > Symbol-Bibliotheken > Andere Bibliothek …,Окно > Библиотеки символов > Другая библиотека...
 menu_1684,helpcontent,FALSE,menu,FALSE,FALSE,,,Help > Illustrator Help...,Hilfe > Illustrator-Hilfe …,Справка > Справка программы Illustrator...
 menu_1685,whatsNewContent,FALSE,menu,FALSE,FALSE,27.9,,Help > Tutorials...
+menu_2161,whatsNewContent,FALSE,menu,FALSE,FALSE,,,Help > What's New...
 menu_1686,supportCommunity,FALSE,menu,FALSE,FALSE,26,,Help > Support Community,Hilfe > Support-Community,Справка > Сообщество службы поддержки
 menu_1687,wishform,FALSE,menu,FALSE,FALSE,25,,Help > Submit Bug/Feature Request...,Hilfe > Fehlermeldung / Funktionswunsch senden …,Справка > Сообщение об ошибке/запрос на добавление новых функций...
 menu_1688,System Info,FALSE,menu,FALSE,FALSE,,,Help > System Info...,Hilfe > Systeminformationen …,Справка > Информация о системе…
+menu_2162,_GenericPluginMenuItem 68,FALSE,menu,FALSE,FALSE,,,Help > Generative Al User Guidelines
+menu_2163,_GenericPluginMenuItem 69,FALSE,menu,FALSE,FALSE,,,Help > About Generative Credits
 menu_1689,_GenericPluginMenuItem 1,TRUE,menu,FALSE,FALSE,,,Help > Manage My Account...,Hilfe > Mein Konto verwalten …,,,These seem to correspond to different menu items depending on Ai version and installed plug-ins. Number at the end may also be off by 1 as well.
 menu_1690,_GenericPluginMenuItem 2,TRUE,menu,FALSE,FALSE,,,Help > Manage My Account...,Hilfe > Mein Konto verwalten …,,,These seem to correspond to different menu items depending on Ai version and installed plug-ins. Number at the end may also be off by 1 as well.
 menu_1691,_GenericPluginMenuItem 3,TRUE,menu,FALSE,FALSE,,,Help > Sign In... / Sign Out...,Hilfe> Anmelden … / Abmelden …,,,These seem to correspond to different menu items depending on Ai version and installed plug-ins. Number at the end may also be off by 1 as well.
 menu_1692,_GenericPluginMenuItem 4,TRUE,menu,FALSE,FALSE,,,Help > Updates...,Hilfe > Update …,,,These seem to correspond to different menu items depending on Ai version and installed plug-ins. Number at the end may also be off by 1 as well.
-menu_1693,Help Menu Beta log file,TRUE,menu,FALSE,FALSE,,,Help > Beta log file
+menu_1693,Help Menu Beta log file,TRUE,menu,FALSE,FALSE,,30.4.999,Help > Beta log file
 menu_1694,Adobe Actions Batch,FALSE,menu,FALSE,FALSE,,,Palette > Actions > Batch...,Anderes Bedienfeld > Aktionsstapel …,Палитра > Операции > Пакетная обработка…
 menu_1695,Adobe New Fill Shortcut,FALSE,menu,FALSE,FALSE,,,Palette > Appearance > Add New Fill,Anderes Bedienfeld > Neue Fläche hinzufügen,Палитра > Оформление > Добавить новую заливку
 menu_1696,Adobe New Stroke Shortcut,FALSE,menu,FALSE,FALSE,,,Palette > Appearance > Add New Stroke,Anderes Bedienfeld > Neue Kontur hinzufügen,Палитра > Оформление > Добавить новую обводку
