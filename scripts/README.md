@@ -59,3 +59,51 @@ var locStrings = {
   about: { en: "About", de: "Über Kurzbefehle …", ru: "О скрипте" },
 }
 ```
+
+## Finding New Commands (extract_ai_menu_items_from_app.py)
+
+To find new Illustrator menu commands from the app...
+
+```
+python scripts/extract_ai_menu_items_from_app.py
+```
+
+## Comparing New Commands With Current Commands (extract_ai_menu_commands_from_csv.py)
+
+To extract the currently known menu commands for comparison/diff with the a new Illustrator version...
+
+```
+python scripts/extract_ai_menu_commands_from_csv.py data/menu_commands.csv
+```
+
+### Find Next Menu Command ID
+
+```bash
+cut -d',' -f1 data/menu_commands.csv |
+tail -n +2 |
+sed 's/.*_//' |
+sort -n |
+tail -1
+```
+
+### Find Duplicate Menu Command IDs
+
+```bash
+cut -d',' -f1 data/menu_commands.csv |
+tail -n +2 |
+sort |
+uniq -c |
+awk '$1 > 1'
+```
+
+### Adding IDs to New Menu Commands
+
+```bash
+awk -F, -v OFS=, '
+BEGIN { id = 2070 }
+$1 == "menu_????" {
+    $1 = "menu_" id++
+}
+{ print }
+' data/menu_commands.csv
+```
