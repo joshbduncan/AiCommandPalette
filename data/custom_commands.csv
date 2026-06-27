@@ -1,4 +1,91 @@
 Command Name,Command Action,Command Type
+Astute Graphics - Edit > Rasterino > Edit Image,_GenericPluginMenuItem 14,menu
+Astute Graphics - Edit > Rasterino > Update Image,_GenericPluginMenuItem 15,menu
+Astute Graphics - Edit > Rasterino > Link Images,_GenericPluginMenuItem 16,menu
+Astute Graphics - Object > Filters > Phantasm > Brightness/Contrast...,Phantasm CS Brightness Contrast Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Curves...,Phantasm CS Curves Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Desaturate...,Phantasm CS Desaturate Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Duotone...,Phantasm CS Duotone Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Exposure...,Phantasm CS Exposure Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Halftone...,Phantasm CS Halftone Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Hue/Saturation...,Phantasm CS Hue Saturation Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Invert...,Phantasm CS Invert Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Levels...,Phantasm CS Levels Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Prepress Correct...,Phantasm CS Prepress Correct Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Shift to Color...,Phantasm CS Color Shift Filter,menu
+Astute Graphics - Object > Filters > Phantasm > Temperature/Tint...,Phantasm CS Temperature Tint Filter,menu
+Astute Graphics - Object > Pixels to Vector,AGPixelsToVector,menu
+Astute Graphics - Select > Phantasm Effects,Phantasm Select Effects,menu
+Astute Graphics - Select > Stipplism Effects,Stipplism SelectLE,menu
+Astute Graphics - Select > AG Architect Effects,Stylism Select Architect,menu
+Astute Graphics - Select > AG Block Shadow Effects > All,AGBSAll Menu Item,menu
+Astute Graphics - Select > AG Block Shadow Effects > Standard,AGBSStandard Menu Item,menu
+Astute Graphics - Select > AG Block Shadow Effects > Vanishing Point,AGBSVP Menu Item,menu
+Astute Graphics - Select > AG Offset Effects,Stylism Select Offset,menu
+Astute Graphics - Select > AG Splatter Effects,Stylism Select Splatter,menu
+Astute Graphics - Select > Perturb Effects,Randomino Select Perturb,menu
+Astute Graphics - Select > Dynamic Shapes > All,DSAll Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Squares & Rectangles,DSSquRec Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Circles & Ellipses,DSCirEll Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Squares,DSSquares Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Circles,DSCircles Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Rectangles,DSRectangles Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Ellipses,DSEllipses Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Polygons,DSPolygons Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Stars,DSStars Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Donuts,DSDonuts Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Arrows,DSArrows Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Clouds,DSClouds Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Crescents,DSCrescents Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Crosses,DSCrosses Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Gears,DSGears Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Hearts,DSHearts Menu Item,menu
+Astute Graphics - Select > Dynamic Shapes > Speech Bubbles,DSSpeech Bubbles Menu Item,menu
+Astute Graphics - Effect > AG Utilities > Add Points...,Live ASTGVSLEAddPoints,menu
+Astute Graphics - Effect > AG Utilities > AG Array...,Live ASTGVSLEAGArray,menu
+Astute Graphics - Effect > AG Utilities > AG Shear...,Live ASTGVSLEAGShear,menu
+Astute Graphics - Effect > AG Utilities > AG Transform...,Live ASTGVSLEAGTransform,menu
+Astute Graphics - Effect > AG Utilities > Angle Cap...,Live ASTGVSLEAngleCap,menu
+Astute Graphics - Effect > AG Utilities > Close Path...,Live ASTGVSLEClosePath,menu
+Astute Graphics - Effect > AG Utilities > Convert to Smooth...,Live ASTGVSLEConvertToSmooth,menu
+Astute Graphics - Effect > AG Utilities > Dashify...,Live ASTGVSLEDashify,menu
+Astute Graphics - Effect > AG Utilities > Extend Path...,Live ASTGVSLEExtendPath,menu
+Astute Graphics - Effect > AG Utilities > Make Compound Path,Live ASTGVSLEMakeCompoundPath,menu
+Astute Graphics - Effect > AG Utilities > Make Shape...,Live ASTGVSLEMakeShape,menu
+Astute Graphics - Effect > AG Utilities > Path Removal...,Live ASTGVSLEPathRemoval,menu
+Astute Graphics - Effect > AG Utilities > Path Visualizer...,Live ASTGVSLEPathVisualizer,menu
+Astute Graphics - Effect > AG Utilities > Point Removal...,Live ASTGVSLEPointRemoval,menu
+Astute Graphics - Effect > AG Utilities > Release Compound Path,Live ASTGVSLEReleaseCompoundPath,menu
+Astute Graphics - Effect > AG Utilities > Retract Handles...,Live ASTGVSLERetractHandles,menu
+Astute Graphics - Effect > AG Utilities > Reverse Path Direction,Live ASTGVSLEReversePathDirection,menu
+Astute Graphics - Effect > AG Utilities > Segment Removal...,Live ASTGVSLESegmentRemoval,menu
+Astute Graphics - Effect > AG Utilities > Smart Remove Points...,Live ASTGVSLESmartRemovePoints,menu
+Astute Graphics - Effect > AG Utilities > Split Path to Segments...,Live ASTGVSLESplitPathToSegments,menu
+Astute Graphics - Effect > AG Utilities > Stroke Attributes...,Live ASTGVSLEStrokeAttributes,menu
+Astute Graphics - Effect > Phantasm > Brightness/Contrast...,Live Phantasm CS Brightness Contrast,menu
+Astute Graphics - Effect > Phantasm > Curves...,Live Phantasm CS Curves,menu
+Astute Graphics - Effect > Phantasm > Desaturate...,Live Phantasm CS Desaturate,menu
+Astute Graphics - Effect > Phantasm > Duotone...,Live Phantasm CS Duotone,menu
+Astute Graphics - Effect > Phantasm > Exposure...,Live Phantasm CS Exposure,menu
+Astute Graphics - Effect > Phantasm > Halftone...,Live Phantasm CS Halftone,menu
+Astute Graphics - Effect > Phantasm > Hue/Saturation...,Live Phantasm CS Hue Saturation,menu
+Astute Graphics - Effect > Phantasm > Invert...,Live Phantasm CS Invert,menu
+Astute Graphics - Effect > Phantasm > Levels...,Live Phantasm CS Levels,menu
+Astute Graphics - Effect > Phantasm > Prepress Correct...,Live Phantasm CS Prepress Correct,menu
+Astute Graphics - Effect > Phantasm > Shift to Color...,Live Phantasm CS Color Shift,menu
+Astute Graphics - Effect > Phantasm > Temperature/Tint...,Live Phantasm CS Temperature Tint,menu
+Astute Graphics - Effect > Randomino > Color Randomizer...,Live ASTGRAColorRandomizer,menu
+Astute Graphics - Effect > Randomino > Opacity Randomizer...,Live ASTGRAOpacityRandomizer,menu
+Astute Graphics - Effect > Randomino > Perturb...,Live ASTGRAPerturb,menu
+Astute Graphics - Effect > Stipplism > Stipple...,Live ASTGStipple,menu
+Astute Graphics - Effect > Stipplism > Symbol Stipple...,Live ASTGSymbolStipple,menu
+Astute Graphics - Effect > Stylism > AG Architect...,Live AG Architect,menu
+Astute Graphics - Effect > Stylism > AG Block Shadow...,Live AG Block Shadow,menu
+Astute Graphics - Effect > Stylism > AG Curvature Visualizer...,Live AG Curvature Visualizer,menu
+Astute Graphics - Effect > Stylism > AG Offset...,Live AG Offset,menu
+Astute Graphics - Effect > Stylism > AG Splatter...,Live AG Splatter,menu
+Astute Graphics - Effect > Texturino > Texture...,Live ASTGTexture,menu
+Astute Graphics - Effect > VectorScribe > AG Corners...,Live ASTGVSAGCorners,menu
 Astute Graphics - Arc by Points,Arc by Points Tool,tool
 Astute Graphics - Block Shadow,AG Block Shadow Tool,tool
 Astute Graphics - Circle by Points,Circle by Points Tool,tool
