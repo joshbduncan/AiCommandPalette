@@ -97,12 +97,17 @@ menu_2083,Horizontal && Vertical Align Center,FALSE,menu,TRUE,TRUE,30.5.0,,Horiz
 menu_1080,Vertical Align Top,FALSE,menu,TRUE,TRUE,24,,Object > Align > Vertical Align Top,Objekt > Ausrichten > Vertikal oben ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, вверх"
 menu_1081,Vertical Align Center,FALSE,menu,TRUE,TRUE,24,,Object > Align > Vertical Align Center,Objekt > Ausrichten > Vertikal zentriert ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, центр"
 menu_1082,Vertical Align Bottom,FALSE,menu,TRUE,TRUE,24,,Object > Align > Vertical Align Bottom,Objekt > Ausrichten > Vertikal unten ausrichten,"Объект > Выравнивание > Вертикальное выравнивание, вниз"
+menu_2170,Align To Selection,FALSE,menu,TRUE,TRUE,30.6,,Object > Align > Align To Selection
+menu_2171,Align To Key Object,FALSE,menu,TRUE,TRUE,30.6,,Object > Align > Align To Key Object
+menu_2172,Align To Artboard,FALSE,menu,TRUE,TRUE,30.6,,Object > Align > Align To Artboard
 menu_1083,Vertical Distribute Top,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Vertical Distribute Top
 menu_1084,Vertical Distribute Center,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Vertical Distribute Center
 menu_1085,Vertical Distribute Bottom,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Vertical Distribute Bottom
 menu_1086,Horizontal Distribute Left,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Horizontal Distribute Left
 menu_1087,Horizontal Distribute Center,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Horizontal Distribute Center
 menu_1088,Horizontal Distribute Right,FALSE,menu,TRUE,TRUE,27,,Object > Distribute > Horizontal Distribute Right
+menu_2173,Vertical Distribute Space,FALSE,menu,TRUE,TRUE,30.6,,Object > Distribute > Vertical Distribute Space
+menu_2174,Horizontal Distribute Space,FALSE,menu,TRUE,TRUE,30.6,,Object > Distribute > Horizontal Distribute Space
 menu_1089,group,FALSE,menu,TRUE,TRUE,,,Object > Group,Objekt > Gruppieren,Объект > Сгруппировать
 menu_1090,ungroup,FALSE,menu,TRUE,TRUE,,,Object > Ungroup,Objekt > Gruppierung aufheben,Объект > Разгруппировать
 menu_1091,ungroup all,FALSE,menu,TRUE,TRUE,29.3,,Object > Ungroup All
