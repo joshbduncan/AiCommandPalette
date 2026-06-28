@@ -866,7 +866,7 @@ menu_2048,repeatPathfinder,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Repeat Path
 menu_2049,avgAndJoin,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Average & Join
 menu_2050,enterFocus,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Isolate Selected Object
 menu_2051,exitFocus,FALSE,menu,TRUE,TRUE,29.4,,Other Object > Exit Isolation Mode
-menu_2052,switchSelTool,FALSE,menu,TRUE,FALSE,29.4,,Other Misc > Switch Units
+menu_2052,switchSelTool,FALSE,menu,TRUE,FALSE,29.4,,Other Select > Switch Selection Tool
 menu_2053,new2,FALSE,menu,FALSE,FALSE,29.4,,Other Misc > New File (No Dialog)
 menu_2054,helpcontent2,TRUE,menu,FALSE,FALSE,29.4,,Other Misc > Help (Secondary)
 menu_2055,undo2,TRUE,menu,TRUE,FALSE,29.4,,Other Misc > Undo (Secondary)
