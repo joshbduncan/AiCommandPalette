@@ -280,7 +280,7 @@ const userPrefs = {
                     id,
                     name: `${scriptParent} > ${scriptName}`,
                     action: "script",
-                    type: "Script",
+                    type: "script",
                     path: f.fsName,
                     docRequired: false,
                     selRequired: false,

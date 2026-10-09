@@ -12,15 +12,17 @@
 function determineCorrectString(command: CommandEntry, prop: string): string {
     const value = command[prop];
 
-    if (typeof value === "object") {
-        return localize(value);
+    if (isLocalizedEntry(value)) {
+        const localizedValue = localize(value);
+        return localizedValue || value.en || "";
     }
 
     if (strings.hasOwnProperty(value)) {
-        return localize(strings[value as keyof typeof strings]);
+        const localizedValue = localize(strings[value as keyof typeof strings]);
+        return localizedValue || strings[value as keyof typeof strings].en || "";
     }
 
-    return value;
+    return typeof value === "string" ? value : "";
 }
 
 /**
@@ -42,6 +44,41 @@ function isLocalizedEntry(value: any): value is LocalizedStringEntry {
             (key) => typeof key === "string" && typeof (value as any)[key] === "string"
         )
     );
+}
+
+/**
+ * Return every name that should be searchable for a command.
+ *
+ * The UI still displays the active locale (with English fallback), but search
+ * includes every bundled localization, the command action, and the command ID.
+ * This keeps English command names searchable in a localized Illustrator and
+ * lets zh_TW aliases coexist with their English names.
+ */
+function getCommandSearchNames(command: CommandEntry, fallbackId: string): string[] {
+    const names: string[] = [];
+    const value = command.name;
+
+    if (isLocalizedEntry(value)) {
+        for (const locale in value) {
+            if (!value.hasOwnProperty(locale)) continue;
+            const name = value[locale];
+            if (name && names.indexOf(name) === -1) names.push(name);
+        }
+    } else if (typeof value === "string" && value) {
+        names.push(value);
+    }
+
+    const displayedName = determineCorrectString(command, "name");
+    if (displayedName && names.indexOf(displayedName) === -1) {
+        names.unshift(displayedName);
+    }
+
+    if (command.action && names.indexOf(command.action) === -1) {
+        names.push(command.action);
+    }
+
+    if (!names.length) names.push(fallbackId.replace(/_/g, " "));
+    return names;
 }
 
 /**

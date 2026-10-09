@@ -194,7 +194,7 @@ function runCustomPicker(picker: Picker): void {
         const command: CommandEntry = {
             id,
             action: "picker_option",
-            type: "Option",
+            type: "picker_option_type",
             docRequired: false,
             selRequired: false,
             name: picker.commands[i],
@@ -213,6 +213,7 @@ function runCustomPicker(picker: Picker): void {
 
     if (!result) {
         $.setenv("aic_picker_last", null);
+        return;
     }
 
     const commandIds: string[] = Array.isArray(result)

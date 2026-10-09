@@ -51,17 +51,20 @@ function workflowBuilder(
     pSteps.alignChildren = ["fill", "center"];
     pSteps.margins = 20;
 
-    let actionSteps: string[] = [];
+    const actionSteps: string[] = [];
+    const actionStepStatuses: string[] = [];
     if (editWorkflowId) {
         const editWorkflow = commandsData[editWorkflowId];
         for (let i = 0; i < editWorkflow.actions.length; i++) {
-            let step = editWorkflow.actions[i];
+            const step = editWorkflow.actions[i];
+            let status = "";
             if (!commandsData.hasOwnProperty(step)) {
-                step += " [NOT FOUND]";
-            } else if (!commandVersionCheck(step)) {
-                step += " [INCOMPATIBLE AI VERSION]";
+                status = localize(strings.wf_step_not_found);
+            } else if (!commandVersionCheck(commandsData[step])) {
+                status = localize(strings.wf_step_incompatible_ai_version);
             }
             actionSteps.push(step);
+            actionStepStatuses.push(status);
         }
     }
 
@@ -76,14 +79,26 @@ function workflowBuilder(
         []
     );
 
+    for (let i = 0; i < actionStepStatuses.length; i++) {
+        if (actionStepStatuses[i]) {
+            steps.listbox.items[i].text += ` [${actionStepStatuses[i]}]`;
+        }
+    }
+
     steps.listbox.onDoubleClick = function () {
-        const selectedItem = steps.listbox.selection[0];
+        const rawSelection = steps.listbox.selection;
+        if (!rawSelection || typeof rawSelection === "number") return;
+
+        const selectedItem = Array.isArray(rawSelection)
+            ? (rawSelection[0] as ListItemWithId)
+            : (rawSelection as ListItemWithId);
         const command = commandsData[selectedItem.id];
-        if (!editableCommandTypes.includes(command.type.toLowerCase())) {
+        if (!command || !editableCommandTypes.includes(command.type.toLowerCase())) {
             alert(localize(strings.wf_step_not_editable));
             return;
         }
         const updatedPicker = buildPicker(command.id);
+        if (!updatedPicker) return;
         if (updatedPicker.id !== command.id) selectedItem.id = updatedPicker.id;
         if (updatedPicker.name !== command.name) selectedItem.text = updatedPicker.name;
     };

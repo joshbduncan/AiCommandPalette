@@ -7,7 +7,7 @@
         "allowJs": true,
         "noLib": true,
         "types": ["types-for-adobe/Illustrator/2022"],
-        "removeComments": false,
+        "removeComments": true,
         "sourceMap": false,
         "alwaysStrict": false
     },

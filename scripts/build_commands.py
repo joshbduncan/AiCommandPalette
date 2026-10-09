@@ -106,6 +106,59 @@ def build_commands(rows: list[dict]) -> dict:
     return commands
 
 
+def apply_zh_tw_aliases(commands: dict, rows: list[dict]) -> None:
+    """Attach zh_TW names to built-in command entries."""
+    for row in rows:
+        command_id = row.get("id", "").strip()
+        name = row.get("zh_TW", "").strip()
+
+        if not command_id or not name:
+            continue
+        if command_id not in commands:
+            raise ValueError(f"Unknown command ID in zh_TW aliases: {command_id}")
+
+        commands[command_id]["name"]["zh_TW"] = name
+
+
+def build_localized_custom_commands(
+    english_rows: list[dict], zh_tw_rows: list[dict]
+) -> dict:
+    """Build bundled custom commands with English and zh_TW search names."""
+    if len(english_rows) != len(zh_tw_rows):
+        raise ValueError("Custom command localization row counts do not match")
+
+    commands = {}
+    for index, (english_row, zh_tw_row) in enumerate(
+        zip(english_rows, zh_tw_rows), start=1
+    ):
+        action = english_row.get("Command Action", "").strip()
+        action_type = english_row.get("Command Type", "").strip().lower()
+        english_name = english_row.get("Command Name", "").strip()
+        zh_tw_name = zh_tw_row.get("Command Name", "").strip()
+
+        if action != zh_tw_row.get("Command Action", "").strip():
+            raise ValueError(f"Custom command action mismatch at row {index + 1}")
+        if action_type != zh_tw_row.get("Command Type", "").strip().lower():
+            raise ValueError(f"Custom command type mismatch at row {index + 1}")
+        if action_type not in {"menu", "tool"}:
+            raise ValueError(f"Invalid custom command type at row {index + 1}")
+        if not action or not english_name or not zh_tw_name:
+            raise ValueError(f"Incomplete custom command at row {index + 1}")
+
+        command_id = f"custom_astute_{index:04d}"
+        commands[command_id] = {
+            "id": command_id,
+            "action": action,
+            "type": action_type,
+            "docRequired": False,
+            "selRequired": False,
+            "name": {"en": english_name, "zh_TW": zh_tw_name},
+            "hidden": False,
+        }
+
+    return commands
+
+
 def main() -> int:
     csv_files = [
         Path(SCRIPT_DIR / "../data/menu_commands.csv"),
@@ -124,6 +177,18 @@ def main() -> int:
 
         all_commands = all_commands | commands
         assert all_commands
+
+    zh_tw_alias_rows = read_csv_data(
+        Path(SCRIPT_DIR / "../data/command_names_zh_TW.csv")
+    )
+    apply_zh_tw_aliases(all_commands, zh_tw_alias_rows)
+
+    custom_commands = build_localized_custom_commands(
+        read_csv_data(Path(SCRIPT_DIR / "../data/custom_commands.csv")),
+        read_csv_data(Path(SCRIPT_DIR / "../data/custom_commands_zh_TW.csv")),
+    )
+    assert len(custom_commands) == 134
+    all_commands = all_commands | custom_commands
 
     interface = """
 interface CommandEntry {

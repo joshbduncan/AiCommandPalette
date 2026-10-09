@@ -16,11 +16,13 @@ bm_total_loaded,Total bookmarks loaded:\n%1,Anzahl der geladenen Lesezeichen:\n%
 bookmark,Bookmark,Lesezeichen
 Bookmarks,Bookmarks,Lesezeichen
 builtin,Built-In
+button_ok,OK
 cancel,Cancel,Abbrechen,Отмена
 cd_active_document_required,Command '%1' requires an active document. Continue Anyway?,Der Befehl '%1' erfordert ein geöffnetes Dokument. Trotzdem fortfahren?
 cd_active_selection_required,Command '%1' requires an active selection. Continue Anyway?,Der Befehl '%1' erfordert eine Auswahl. Trotzdem fortfahren?
 cd_all,Built-In Commands
-cd_clear_history_confirm,Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.
+cd_clear_history_confirm,Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.
+cd_clear_history_title,Clear History
 cd_add_to_startup,Add new command(s) to your startup?
 cd_add_to_startup_title,Add To Startup Commands
 cd_delete_confirm,Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n%1,Befehle löschen?\nGelöschte Befehle werden in bestehenden Arbeitsabläufen nicht mehr funktionieren.\n\n%1,"Удалить команду?\nУдаленные команды больше не будут работать в любых созданных наборах, где они использовались\n\n%1"
@@ -61,6 +63,7 @@ dr_file_created,File Created: ,Datei erstellt am:
 dr_file_found,File Found: ,Datei gefunden: 
 dr_filename,File: ,Datei: 
 dr_header,File Information\n-----\n,Datei-Information\n-----\n
+dr_include,Include
 dr_height,Height: ,Höhe: 
 dr_info_string,Ai Document Information,AI-Dokument-Information
 dr_name,Name: 
@@ -82,6 +85,7 @@ go_to_open_document,Go To Open Document,Geöffnete Dokumente auswählen
 history_cleared,History cleared!,Zuletzt verwendete Befehle wurden gelöscht!
 layer_title_case,Layer
 layers,Layers,Ebenen
+listbox_missing,Missing
 menu,Menu
 menu_commands,Menu Commands
 name_title_case,Name
@@ -90,6 +94,7 @@ no_document_variables,No document variables.,Keine Variablen vorhanden.
 none,None,Ohne
 open_recent_file,Open Recent File,Zuletzt benutzte Datei öffnen
 picker,Picker
+picker_option_type,Option
 placed_items,Placed Items,Platzierte Objecte
 history_file_loading_error,Error Loading History\nA backup copy of your history has been created.
 path_title_case,Path
@@ -140,6 +145,7 @@ type_title_case,Type
 user_prefs_inconsistency,User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.
 version,Version %1,Ausführung %1,версия %1
 watched_folder_not_found,Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.
+watched_folder_title_case,Watched Folder
 wf_already_exists,A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?,Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf überschrieben werden?,Набор с таким именем уже существует\nХотите перезаписать предыдущий?
 wf_already_exists_title,Save Workflow Conflict,Arbeitsablauf-Konflikt speichern?,Проблема сохранения набора
 wf_builder,Workflow Builder,Arbeitsabläufe erstellen,Редактор наборов команд
@@ -151,6 +157,8 @@ wf_none_edit,There are no workflows to edit.,Es gibt keine Arbeitsabläufe zum B
 wf_not_saved,Workflow not saved.,Arbeitsablauf nicht gespeichert,Набор не сохранен
 wf_save,Save
 wf_save_as,Save Workflow As,Arbeitsablauf speichern als,Сохранить набор как
+wf_step_incompatible_ai_version,INCOMPATIBLE ILLUSTRATOR VERSION
+wf_step_not_found,NOT FOUND
 wf_step_not_editable,Selected Step Not Editable
 wf_steps,Workflow Steps,Befehlskombinationen,Шаги набора
 wf_steps_helptip,Workflows will run in order from top to bottom.,Die Befehlskombinationen werden in der Reihenfolge von oben nach unten ausgeführt.,Набор выполняется сверху вниз

@@ -1,5 +1,7 @@
 # Ai Command Palette
 
+[繁體中文說明](README.zh-TW.md)
+
 Boost your Adobe Illustrator efficiency with quick access to **most Menu Commands** and **Tools**, all of your **Actions**, **Bookmarked** file or folder, and any **Scripts** right from your keyboard.
 
 And, with custom **Workflows**, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.

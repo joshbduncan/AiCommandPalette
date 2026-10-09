@@ -34,7 +34,11 @@ function about(): void {
     winButtons.orientation = "row";
     winButtons.alignChildren = ["center", "center"];
 
-    const ok = winButtons.add("button", undefined, "OK") as Button;
+    const ok = winButtons.add(
+        "button",
+        undefined,
+        localize(strings.button_ok)
+    ) as Button;
     ok.preferredSize.width = 100;
 
     // Event: click GitHub link
@@ -159,7 +163,7 @@ function clearHistory(): void {
     const confirmed = confirm(
         localize(strings.cd_clear_history_confirm),
         false,
-        localize(strings.cd_exception)
+        localize(strings.cd_clear_history_title)
     );
 
     if (confirmed) {
@@ -345,7 +349,8 @@ function removeWatchedFolders(): void {
             id,
             name: folder.fsName,
             action: "Remove Watched Folder",
-            type: "Watched Folder",
+            type: "watched_folder_title_case",
+            path: folder.fsName,
             docRequired: false,
             selRequired: false,
             hidden: false,
@@ -527,6 +532,26 @@ function documentReport(): void {
     const docUnitValue = new UnitValue(1, rulerUnits);
     const docUnitNameAbbrev = docUnitValue.type == "?" ? "pt" : docUnitValue.type;
 
+    function formatReportTimestamp(date: Date): string {
+        function pad2(value: number): string {
+            return value < 10 ? "0" + value.toString() : value.toString();
+        }
+
+        return (
+            date.getFullYear().toString() +
+            "/" +
+            pad2(date.getMonth() + 1) +
+            "/" +
+            pad2(date.getDate()) +
+            " " +
+            pad2(date.getHours()) +
+            ":" +
+            pad2(date.getMinutes()) +
+            ":" +
+            pad2(date.getSeconds())
+        );
+    }
+
     const fileInfo = [
         localize(strings.dr_header),
         `${localize(strings.dr_filename)}${doc.name}`,
@@ -540,7 +565,7 @@ function documentReport(): void {
         )} ${docUnitNameAbbrev}`,
         `${localize(strings.dr_height)}${UnitValue(`${doc.height} pt`).as(
             docUnitNameAbbrev
-        )} ${docUnitValue.type}`,
+        )} ${docUnitNameAbbrev}`,
     ].join("\n");
 
     const artboards = getCollectionObjectNames(doc.artboards);
@@ -582,7 +607,9 @@ function documentReport(): void {
                 }`;
             }
         }
-        return `${info}\n\n${localize(strings.dr_file_created)}${new Date()}`;
+        return `${info}\n\n${localize(strings.dr_file_created)}${formatReportTimestamp(
+            new Date()
+        )}`;
     }
 
     const win = new Window("dialog");
@@ -607,13 +634,17 @@ function documentReport(): void {
         );
     }
 
-    const pOptions = win.add("panel", undefined, "Include?");
+    const pOptions = win.add("panel", undefined, localize(strings.dr_include));
     pOptions.orientation = "row";
     pOptions.margins = 20;
 
     for (const key in reportOptions) {
         const option = reportOptions[key];
-        const cb = pOptions.add("checkbox", undefined, key) as Checkbox;
+        const cb = pOptions.add(
+            "checkbox",
+            undefined,
+            localize(strings[key.toLowerCase()])
+        ) as Checkbox;
         cb.value = !!option.str;
         cb.enabled = !!option.str;
         cb.onClick = function () {

@@ -19,6 +19,49 @@ def read_csv_data(fp: Path) -> list[dict]:
         return list(csv.DictReader(f))
 
 
+def apply_locale_overrides(rows: list[dict], fps: list[Path]) -> list[dict]:
+    """Merge locale-specific CSV files into the main strings data.
+
+    Locale files use ``value`` as their lookup key and one or more locale codes
+    as the remaining columns. Missing translations are left blank so
+    ``build_strings`` can fall back to English.
+
+    Args:
+        rows: Main strings CSV rows.
+        fps: Locale override CSV files.
+
+    Returns:
+        Rows with locale columns added.
+
+    Raises:
+        ValueError: If an override references an unknown string key.
+    """
+    rows_by_value = {row["value"]: row for row in rows}
+    locales: set[str] = set()
+
+    for fp in fps:
+        override_rows = read_csv_data(fp)
+        if not override_rows:
+            continue
+
+        locale_columns = [key for key in override_rows[0] if key != "value"]
+        locales.update(locale_columns)
+
+        for override in override_rows:
+            value = override.get("value")
+            if value not in rows_by_value:
+                raise ValueError(f"Unknown localization key {value!r} in {fp}")
+
+            for locale in locale_columns:
+                rows_by_value[value][locale] = override.get(locale, "")
+
+    for row in rows:
+        for locale in locales:
+            row.setdefault(locale, "")
+
+    return rows
+
+
 def build_strings(rows: list[dict]) -> dict:
     """Build a dictionary of string objects from CSV data in the following format.
 
@@ -64,6 +107,8 @@ def main() -> int:
     # read and parse csv data
     fp = Path(SCRIPT_DIR / "../data/strings.csv")
     rows = read_csv_data(fp)
+    locale_fps = sorted(fp.parent.glob("strings.*.csv"))
+    rows = apply_locale_overrides(rows, locale_fps)
     strings = build_strings(rows)
     assert strings
 
@@ -79,7 +124,12 @@ interface LocalizedStringEntry {
   de?: string;
   ru?: string;
   [langCode: string]: string | undefined;
-}"""
+}
+
+declare function localize(
+  what: LocalizedStringEntry,
+  ...arguments: any[]
+): string;"""
 
     output = f"""{interface}
 

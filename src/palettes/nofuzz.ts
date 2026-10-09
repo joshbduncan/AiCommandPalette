@@ -22,19 +22,21 @@ function scoreMatches(query: string, commands: string[]): string[] {
         if (!command) continue;
 
         let score = 0;
-        let name = determineCorrectString(command, "name").toLowerCase();
+        const names = getCommandSearchNames(command, id).map((name) => name.toLowerCase());
         const type = strings.hasOwnProperty(command.type)
-            ? localize(strings[command.type]).toLowerCase()
+            ? (localize(strings[command.type]) || strings[command.type].en).toLowerCase()
             : command.type.toLowerCase();
 
-        const strippedName = name.replace(regexEllipsis, "").replace(regexBreadcrumbSeparator, " ");
-
-        if (!name) {
-            name = id.toLowerCase().replace("_", " ");
-        }
-
         // Exact match checks
-        if (query === name || query === strippedName || query === type) {
+        if (
+            query === type ||
+            names.some((name) => {
+                const strippedName = name
+                    .replace(regexEllipsis, "")
+                    .replace(regexBreadcrumbSeparator, " ");
+                return query === name || query === strippedName;
+            })
+        ) {
             score += query.length;
         }
 
@@ -47,8 +49,14 @@ function scoreMatches(query: string, commands: string[]): string[] {
         // Word-by-word matching
         for (const word of words) {
             if (!word) continue;
-            const re = new RegExp("\\b" + word, "gi");
-            if (re.test(name) || re.test(strippedName)) {
+            if (
+                names.some((name) => {
+                    const strippedName = name
+                        .replace(regexEllipsis, "")
+                        .replace(regexBreadcrumbSeparator, " ");
+                    return name.indexOf(word) !== -1 || strippedName.indexOf(word) !== -1;
+                })
+            ) {
                 score += word.length;
             }
         }

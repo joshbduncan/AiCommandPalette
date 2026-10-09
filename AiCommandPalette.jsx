@@ -1,3 +1,5 @@
+//@target illustrator
+
 /*
 Ai Command Palette
 Copyright 2026 Josh Duncan
@@ -6,6 +8,7 @@ https://joshbduncan.com
 This script is distributed under the MIT License.
 See the LICENSE file for details.
 */
+
 (function () {
     var __spreadArray =
         (this && this.__spreadArray) ||
@@ -19,142 +22,11 @@ See the LICENSE file for details.
                 }
             return to.concat(ar || Array.prototype.slice.call(from));
         };
-    //@target illustrator
-    // SCRIPT INFORMATION
     var _title = "Ai Command Palette";
     var _version = "0.16.1";
     var _copyright = "Copyright 2026 Josh Duncan";
     var _website = "joshbduncan.com";
     var _github = "https://github.com/joshbduncan";
-    //  json2.js
-    //  2023-05-10
-    //  Public Domain.
-    //  NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
-    //  USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
-    //  NOT CONTROL.
-    //  This file creates a global JSON object containing two methods: stringify
-    //  and parse. This file provides the ES5 JSON capability to ES3 systems.
-    //  If a project might run on IE8 or earlier, then this file should be included.
-    //  This file does nothing on ES5 systems.
-    //      JSON.stringify(value, replacer, space)
-    //          value       any JavaScript value, usually an object or array.
-    //          replacer    an optional parameter that determines how object
-    //                      values are stringified for objects. It can be a
-    //                      function or an array of strings.
-    //          space       an optional parameter that specifies the indentation
-    //                      of nested structures. If it is omitted, the text will
-    //                      be packed without extra whitespace. If it is a number,
-    //                      it will specify the number of spaces to indent at each
-    //                      level. If it is a string (such as "\t" or "&nbsp;"),
-    //                      it contains the characters used to indent at each level.
-    //          This method produces a JSON text from a JavaScript value.
-    //          When an object value is found, if the object contains a toJSON
-    //          method, its toJSON method will be called and the result will be
-    //          stringified. A toJSON method does not serialize: it returns the
-    //          value represented by the name/value pair that should be serialized,
-    //          or undefined if nothing should be serialized. The toJSON method
-    //          will be passed the key associated with the value, and this will be
-    //          bound to the value.
-    //          For example, this would serialize Dates as ISO strings.
-    //              Date.prototype.toJSON = function (key) {
-    //                  function f(n) {
-    //                      // Format integers to have at least two digits.
-    //                      return (n < 10)
-    //                          ? "0" + n
-    //                          : n;
-    //                  }
-    //                  return this.getUTCFullYear()   + "-" +
-    //                       f(this.getUTCMonth() + 1) + "-" +
-    //                       f(this.getUTCDate())      + "T" +
-    //                       f(this.getUTCHours())     + ":" +
-    //                       f(this.getUTCMinutes())   + ":" +
-    //                       f(this.getUTCSeconds())   + "Z";
-    //              };
-    //          You can provide an optional replacer method. It will be passed the
-    //          key and value of each member, with this bound to the containing
-    //          object. The value that is returned from your method will be
-    //          serialized. If your method returns undefined, then the member will
-    //          be excluded from the serialization.
-    //          If the replacer parameter is an array of strings, then it will be
-    //          used to select the members to be serialized. It filters the results
-    //          such that only members with keys listed in the replacer array are
-    //          stringified.
-    //          Values that do not have JSON representations, such as undefined or
-    //          functions, will not be serialized. Such values in objects will be
-    //          dropped; in arrays they will be replaced with null. You can use
-    //          a replacer function to replace those with JSON values.
-    //          JSON.stringify(undefined) returns undefined.
-    //          The optional space parameter produces a stringification of the
-    //          value that is filled with line breaks and indentation to make it
-    //          easier to read.
-    //          If the space parameter is a non-empty string, then that string will
-    //          be used for indentation. If the space parameter is a number, then
-    //          the indentation will be that many spaces.
-    //          Example:
-    //          text = JSON.stringify(["e", {pluribus: "unum"}]);
-    //          // text is '["e",{"pluribus":"unum"}]'
-    //          text = JSON.stringify(["e", {pluribus: "unum"}], null, "\t");
-    //          // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
-    //          text = JSON.stringify([new Date()], function (key, value) {
-    //              return this[key] instanceof Date
-    //                  ? "Date(" + this[key] + ")"
-    //                  : value;
-    //          });
-    //          // text is '["Date(---current time---)"]'
-    //      JSON.parse(text, reviver)
-    //          This method parses a JSON text to produce an object or array.
-    //          It can throw a SyntaxError exception.
-    //          The optional reviver parameter is a function that can filter and
-    //          transform the results. It receives each of the keys and values,
-    //          and its return value is used instead of the original value.
-    //          If it returns what it received, then the structure is not modified.
-    //          If it returns undefined then the member is deleted.
-    //          Example:
-    //          // Parse the text. Values that look like ISO date strings will
-    //          // be converted to Date objects.
-    //          myData = JSON.parse(text, function (key, value) {
-    //              var a;
-    //              if (typeof value === "string") {
-    //                  a =
-    //   /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-    //                  if (a) {
-    //                      return new Date(Date.UTC(
-    //                         +a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]
-    //                      ));
-    //                  }
-    //                  return value;
-    //              }
-    //          });
-    //          myData = JSON.parse(
-    //              "[\"Date(09/09/2001)\"]",
-    //              function (key, value) {
-    //                  var d;
-    //                  if (
-    //                      typeof value === "string"
-    //                      && value.slice(0, 5) === "Date("
-    //                      && value.slice(-1) === ")"
-    //                  ) {
-    //                      d = new Date(value.slice(5, -1));
-    //                      if (d) {
-    //                          return d;
-    //                      }
-    //                  }
-    //                  return value;
-    //              }
-    //          );
-    //  This is a reference implementation. You are free to copy, modify, or
-    //  redistribute.
-    /*jslint
-    eval, for, this
-*/
-    /*property
-    JSON, apply, call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
-    getUTCMinutes, getUTCMonth, getUTCSeconds, hasOwnProperty, join,
-    lastIndex, length, parse, prototype, push, replace, slice, stringify,
-    test, toJSON, toString, valueOf
-*/
-    // Create a JSON object only if one does not already exist. We create the
-    // methods in a closure to avoid creating global variables.
     if (typeof JSON !== "object") {
         JSON = {};
     }
@@ -170,7 +42,6 @@ See the LICENSE file for details.
         var rx_dangerous =
             /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
         function f(n) {
-            // Format integers to have at least two digits.
             return n < 10 ? "0" + n : n;
         }
         function this_value() {
@@ -202,10 +73,6 @@ See the LICENSE file for details.
         var meta;
         var rep;
         function quote(string) {
-            // If the string contains no control characters, no quote characters, and no
-            // backslash characters, then we can safely slap some quotes around it.
-            // Otherwise we must also replace the offending characters with safe escape
-            // sequences.
             rx_escapable.lastIndex = 0;
             return rx_escapable.test(string)
                 ? '"' +
@@ -220,15 +87,13 @@ See the LICENSE file for details.
                 : '"' + string + '"';
         }
         function str(key, holder) {
-            // Produce a string from holder[key].
-            var i; // The loop counter.
-            var k; // The member key.
-            var v; // The member value.
+            var i;
+            var k;
+            var v;
             var length;
             var mind = gap;
             var partial;
             var value = holder[key];
-            // If the value has a toJSON method, call it to obtain a replacement value.
             if (
                 value &&
                 typeof value === "object" &&
@@ -236,45 +101,28 @@ See the LICENSE file for details.
             ) {
                 value = value.toJSON(key);
             }
-            // If we were called with a replacer function, then call the replacer to
-            // obtain a replacement value.
             if (typeof rep === "function") {
                 value = rep.call(holder, key, value);
             }
-            // What happens next depends on the value's type.
             switch (typeof value) {
                 case "string":
                     return quote(value);
                 case "number":
-                    // JSON numbers must be finite. Encode non-finite numbers as null.
                     return isFinite(value) ? String(value) : "null";
                 case "boolean":
                 case "null":
-                    // If the value is a boolean or null, convert it to a string. Note:
-                    // typeof null does not produce "null". The case is included here in
-                    // the remote chance that this gets fixed someday.
                     return String(value);
-                // If the type is "object", we might be dealing with an object or an array or
-                // null.
                 case "object":
-                    // Due to a specification blunder in ECMAScript, typeof null is "object",
-                    // so watch out for that case.
                     if (!value) {
                         return "null";
                     }
-                    // Make an array to hold the partial results of stringifying this object value.
                     gap += indent;
                     partial = [];
-                    // Is the value an array?
                     if (Object.prototype.toString.apply(value) === "[object Array]") {
-                        // The value is an array. Stringify every element. Use null as a placeholder
-                        // for non-JSON values.
                         length = value.length;
                         for (i = 0; i < length; i += 1) {
                             partial[i] = str(i, value) || "null";
                         }
-                        // Join all of the elements together, separated with commas, and wrap them in
-                        // brackets.
                         v =
                             partial.length === 0
                                 ? "[]"
@@ -289,7 +137,6 @@ See the LICENSE file for details.
                         gap = mind;
                         return v;
                     }
-                    // If the replacer is an array, use it to select the members to be stringified.
                     if (rep && typeof rep === "object") {
                         length = rep.length;
                         for (i = 0; i < length; i += 1) {
@@ -302,7 +149,6 @@ See the LICENSE file for details.
                             }
                         }
                     } else {
-                        // Otherwise, iterate through all of the keys in the object.
                         for (k in value) {
                             if (Object.prototype.hasOwnProperty.call(value, k)) {
                                 v = str(k, value);
@@ -312,8 +158,6 @@ See the LICENSE file for details.
                             }
                         }
                     }
-                    // Join all of the member texts together, separated with commas,
-                    // and wrap them in braces.
                     v =
                         partial.length === 0
                             ? "{}"
@@ -329,7 +173,6 @@ See the LICENSE file for details.
                     return v;
             }
         }
-        // If the JSON object does not yet have a stringify method, give it one.
         if (typeof JSON.stringify !== "function") {
             meta = {
                 "\b": "\\b",
@@ -341,26 +184,16 @@ See the LICENSE file for details.
                 "\\": "\\\\",
             };
             JSON.stringify = function (value, replacer, space) {
-                // The stringify method takes a value and an optional replacer, and an optional
-                // space parameter, and returns a JSON text. The replacer can be a function
-                // that can replace values, or an array of strings that will select the keys.
-                // A default replacer method can be provided. Use of the space parameter can
-                // produce text that is more easily readable.
                 var i;
                 gap = "";
                 indent = "";
-                // If the space parameter is a number, make an indent string containing that
-                // many spaces.
                 if (typeof space === "number") {
                     for (i = 0; i < space; i += 1) {
                         indent += " ";
                     }
-                    // If the space parameter is a string, it will be used as the indent string.
                 } else if (typeof space === "string") {
                     indent = space;
                 }
-                // If there is a replacer, it must be a function or an array.
-                // Otherwise, throw an error.
                 rep = replacer;
                 if (
                     replacer &&
@@ -370,20 +203,13 @@ See the LICENSE file for details.
                 ) {
                     throw new Error("JSON.stringify");
                 }
-                // Make a fake root object containing our value under the key of "".
-                // Return the result of stringifying the value.
                 return str("", { "": value });
             };
         }
-        // If the JSON object does not yet have a parse method, give it one.
         if (typeof JSON.parse !== "function") {
             JSON.parse = function (text, reviver) {
-                // The parse method takes a text and an optional reviver function, and returns
-                // a JavaScript value if the text is a valid JSON text.
                 var j;
                 function walk(holder, key) {
-                    // The walk method is used to recursively walk the resulting structure so
-                    // that modifications can be made.
                     var k;
                     var v;
                     var value = holder[key];
@@ -401,9 +227,6 @@ See the LICENSE file for details.
                     }
                     return reviver.call(holder, key, value);
                 }
-                // Parsing happens in four stages. In the first stage, we replace certain
-                // Unicode characters with escape sequences. JavaScript handles many characters
-                // incorrectly, either silently deleting them, or treating them as line endings.
                 text = String(text);
                 rx_dangerous.lastIndex = 0;
                 if (rx_dangerous.test(text)) {
@@ -413,17 +236,6 @@ See the LICENSE file for details.
                         );
                     });
                 }
-                // In the second stage, we run the text against regular expressions that look
-                // for non-JSON patterns. We are especially concerned with "()" and "new"
-                // because they can cause invocation, and "=" because it can cause mutation.
-                // But just to be safe, we want to reject all unexpected forms.
-                // We split the second stage into 4 regexp operations in order to work around
-                // crippling inefficiencies in IE's and Safari's regexp engines. First we
-                // replace the JSON backslash pairs with "@" (a non-JSON character). Second, we
-                // replace all simple value tokens with "]" characters. Third, we delete all
-                // open brackets that follow a colon or comma or that begin the text. Finally,
-                // we look to see that the remaining characters are only whitespace or "]" or
-                // "," or ":" or "{" or "}". If that is so, then the text is safe for eval.
                 if (
                     rx_one.test(
                         text
@@ -432,21 +244,13 @@ See the LICENSE file for details.
                             .replace(rx_four, "")
                     )
                 ) {
-                    // In the third stage we use the eval function to compile the text into a
-                    // JavaScript structure. The "{" operator is subject to a syntactic ambiguity
-                    // in JavaScript: it can begin a block or an object literal. We wrap the text
-                    // in parens to eliminate the ambiguity.
                     j = eval("(" + text + ")");
-                    // In the optional fourth stage, we recursively walk the new structure, passing
-                    // each name/value pair to a reviver function for possible transformation.
                     return typeof reviver === "function" ? walk({ "": j }, "") : j;
                 }
-                // If the text is not JSON parseable, then a SyntaxError is thrown.
                 throw new SyntaxError("JSON.parse");
             };
         }
     })();
-    // Array.prototype.indexOf
     if (!Array.prototype.indexOf) {
         Array.prototype.indexOf = function (searchElement, fromIndex) {
             var k;
@@ -465,7 +269,6 @@ See the LICENSE file for details.
             return -1;
         };
     }
-    // Array.prototype.every
     if (!Array.prototype.every) {
         Array.prototype.every = function (callbackfn, thisArg) {
             "use strict";
@@ -489,7 +292,6 @@ See the LICENSE file for details.
             return true;
         };
     }
-    // Array.prototype.map
     if (!Array.prototype.map) {
         Array.prototype.map = function (callback, thisArg) {
             var T, A, k;
@@ -510,7 +312,6 @@ See the LICENSE file for details.
             return A;
         };
     }
-    // Array.prototype.filter
     if (!Array.prototype.filter) {
         Array.prototype.filter = function (func, thisArg) {
             "use strict";
@@ -530,7 +331,6 @@ See the LICENSE file for details.
             return res;
         };
     }
-    // Array.prototype.findIndex
     if (!Array.prototype.findIndex) {
         Array.prototype.findIndex = function (callback, thisArg) {
             if (this === null) throw new TypeError("called on null or undefined");
@@ -544,7 +344,6 @@ See the LICENSE file for details.
             return -1;
         };
     }
-    // Array.prototype.find
     if (!Array.prototype.find) {
         Array.prototype.find = function (predicate, thisArg) {
             if (this == null) throw new TypeError('"this" is null or not defined');
@@ -559,19 +358,16 @@ See the LICENSE file for details.
             return undefined;
         };
     }
-    // Array.prototype.includes
     if (!Array.prototype.includes) {
         Array.prototype.includes = function (search) {
             return this.indexOf(search) !== -1;
         };
     }
-    // Array.prototype.last
     if (!Array.prototype.last) {
         Array.prototype.last = function () {
             return this.length > 0 ? this[this.length - 1] : null;
         };
     }
-    // Array.prototype.forEach
     if (!Array.prototype.forEach) {
         Array.prototype.forEach = function (callback, thisArg) {
             if (this == null) throw new TypeError("this is null or not defined");
@@ -584,7 +380,6 @@ See the LICENSE file for details.
             }
         };
     }
-    // Array.from
     if (!Array.from) {
         Array.from = function (arrayLikeObject) {
             var arr = [];
@@ -594,7 +389,6 @@ See the LICENSE file for details.
             return arr;
         };
     }
-    // Array.prototype.some
     if (!Array.prototype.some) {
         Array.prototype.some = function (fun, thisArg) {
             if (this == null)
@@ -608,7 +402,6 @@ See the LICENSE file for details.
             return false;
         };
     }
-    // Array.prototype.reduce
     if (!Array.prototype.reduce) {
         Array.prototype.reduce = function (callback, initialValue) {
             if (this === null) throw new TypeError("called on null or undefined");
@@ -633,7 +426,6 @@ See the LICENSE file for details.
             return value;
         };
     }
-    // Array.prototype.addUnique
     if (!Array.prototype.addUnique) {
         Array.prototype.addUnique = function (searchElement) {
             if (this.indexOf(searchElement) < 0) {
@@ -643,7 +435,6 @@ See the LICENSE file for details.
             return false;
         };
     }
-    // Array.prototype.removeUnique
     if (!Array.prototype.removeUnique) {
         Array.prototype.removeUnique = function (searchElement) {
             var idx = this.indexOf(searchElement);
@@ -654,7 +445,6 @@ See the LICENSE file for details.
             return false;
         };
     }
-    // Array.prototype.removeAtIndex
     if (!Array.prototype.removeAtIndex) {
         Array.prototype.removeAtIndex = function (idx) {
             if (idx > -1) {
@@ -664,7 +454,6 @@ See the LICENSE file for details.
             return false;
         };
     }
-    // Array.prototype.makeUnique
     if (!Array.prototype.makeUnique) {
         Array.prototype.makeUnique = function () {
             return this.sort().filter(function (current, index, array) {
@@ -672,7 +461,6 @@ See the LICENSE file for details.
             });
         };
     }
-    // Array.isArray polyfill
     if (!Array.isArray) {
         Array.isArray = function (arg) {
             return Object.prototype.toString.call(arg) === "[object Array]";
@@ -758,7 +546,7 @@ See the LICENSE file for details.
         Object.entries = function (obj) {
             var ownProps = Object.keys(obj);
             var resArray = new Array(ownProps.length);
-            for (var i = ownProps.length; i--; ) {
+            for (var i = ownProps.length; i--;) {
                 resArray[i] = [ownProps[i], obj[ownProps[i]]];
             }
             return resArray;
@@ -885,7 +673,7 @@ See the LICENSE file for details.
         var string = "";
         number = number.slice(2);
         var length = number.length;
-        for (var i = 0; i < length; ) {
+        for (var i = 0; i < length;) {
             var code = number.slice(i, (i += 2));
             string += String.fromCharCode(parseInt(code, 16));
         }
@@ -947,656 +735,934 @@ See the LICENSE file for details.
         }
         return filledMessage;
     }
-    // GENERATED FROM CSV DATA FILES
     var strings = {
         about: {
             en: "About",
             de: "\u00dcber Kurzbefehle \u2026",
             ru: "\u041e \u0441\u043a\u0440\u0438\u043f\u0442\u0435",
+            zh_TW: "\u95dc\u65bc",
         },
         ac_error_execution: {
             en: "Error executing action:\n%1\n\n%2",
             de: "Fehler beim Ausf\u00fchren der Aktion:\n%1\n\n%2",
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438:\n%1\n\n%2",
+            zh_TW: "\u57f7\u884c\u52d5\u4f5c\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1\n\n%2",
         },
-        action: { en: "Action", de: "Action", ru: "Action" },
-        Actions: { en: "Actions", de: "Aktionen", ru: "Actions" },
+        action: { en: "Action", de: "Action", ru: "Action", zh_TW: "\u52d5\u4f5c" },
+        Actions: {
+            en: "Actions",
+            de: "Aktionen",
+            ru: "Actions",
+            zh_TW: "\u52d5\u4f5c",
+        },
         active_document_not_saved: {
             en: "Active document not yet saved to the file system.",
             de: "Das aktuelle Dokument wurde noch nicht gespeichert.",
             ru: "Active document not yet saved to the file system.",
+            zh_TW: "\u76ee\u524d\u7684\u6587\u4ef6\u5c1a\u672a\u5132\u5b58\u5230\u6a94\u6848\u7cfb\u7d71\u3002",
         },
         add_custom_commands_dialog_title: {
             en: "Add Custom Commands",
             de: "Add Custom Commands",
             ru: "Add Custom Commands",
+            zh_TW: "\u65b0\u589e\u81ea\u8a02\u6307\u4ee4",
         },
-        artboard: { en: "Artboard", de: "Artboard", ru: "Artboard" },
-        artboards: { en: "Artboards", de: "Zeichenfl\u00e4chen", ru: "Artboards" },
+        artboard: {
+            en: "Artboard",
+            de: "Artboard",
+            ru: "Artboard",
+            zh_TW: "\u5de5\u4f5c\u5340\u57df",
+        },
+        artboards: {
+            en: "Artboards",
+            de: "Zeichenfl\u00e4chen",
+            ru: "Artboards",
+            zh_TW: "\u5de5\u4f5c\u5340\u57df",
+        },
         bm_already_loaded: {
             en: "Bookmark already loaded.",
             de: "Dieses Lesezeichen wurde bereits erstellt.",
             ru: "Bookmark already loaded.",
+            zh_TW: "\u66f8\u7c64\u5df2\u8f09\u5165\u3002",
         },
         bm_error_execution: {
             en: "Error opening bookmark:\n%1\n\n%2",
             de: "Fehler beim \u00d6ffnen des Lesezeichens:\n%1\n\n%2",
             ru: "Error opening bookmark:\n%1\n\n%2",
+            zh_TW: "\u958b\u555f\u66f8\u7c64\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1\n\n%2",
         },
         bm_error_exists: {
             en: "Bookmark no longer exists at original path. Try reloading.\n%1",
             de: "Das Lesezeichen ist an dieser Stelle nicht mehr vorhanden. Versuchen Sie, es nochmal zu laden.\n%1",
             ru: "Bookmark no longer exists at original path. Try reloading.\n%1",
+            zh_TW: "\u539f\u59cb\u8def\u5f91\u4e2d\u7684\u66f8\u7c64\u5df2\u4e0d\u5b58\u5728\u3002\u8acb\u5617\u8a66\u91cd\u65b0\u8f09\u5165\u3002\n%1",
         },
         bm_error_loading: {
             en: "Error loading bookmark:\n%1",
             de: "Fehler beim Ladenn des Lesezeichens:\n%1",
             ru: "Error loading bookmark:\n%1",
+            zh_TW: "\u8f09\u5165\u66f8\u7c64\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1",
         },
         bm_load_bookmark: {
             en: "Load Bookmark(s)",
             de: "Lesezeichen erstellen",
             ru: "Load Bookmark(s)",
+            zh_TW: "\u8f09\u5165\u66f8\u7c64",
         },
         bm_total_loaded: {
             en: "Total bookmarks loaded:\n%1",
             de: "Anzahl der geladenen Lesezeichen:\n%1",
             ru: "Total bookmarks loaded:\n%1",
+            zh_TW: "\u5df2\u8f09\u5165\u7684\u66f8\u7c64\u7e3d\u6578\uff1a\n%1",
         },
-        bookmark: { en: "Bookmark", de: "Lesezeichen", ru: "Bookmark" },
-        Bookmarks: { en: "Bookmarks", de: "Lesezeichen", ru: "Bookmarks" },
-        builtin: { en: "Built-In", de: "Built-In", ru: "Built-In" },
+        bookmark: {
+            en: "Bookmark",
+            de: "Lesezeichen",
+            ru: "Bookmark",
+            zh_TW: "\u66f8\u7c64",
+        },
+        Bookmarks: {
+            en: "Bookmarks",
+            de: "Lesezeichen",
+            ru: "Bookmarks",
+            zh_TW: "\u66f8\u7c64",
+        },
+        builtin: {
+            en: "Built-In",
+            de: "Built-In",
+            ru: "Built-In",
+            zh_TW: "\u5167\u5efa",
+        },
+        button_ok: { en: "OK", de: "OK", ru: "OK", zh_TW: "\u78ba\u5b9a" },
         cancel: {
             en: "Cancel",
             de: "Abbrechen",
             ru: "\u041e\u0442\u043c\u0435\u043d\u0430",
+            zh_TW: "\u53d6\u6d88",
         },
         cd_active_document_required: {
             en: "Command '%1' requires an active document. Continue Anyway?",
             de: "Der Befehl '%1' erfordert ein ge\u00f6ffnetes Dokument. Trotzdem fortfahren?",
             ru: "Command '%1' requires an active document. Continue Anyway?",
+            zh_TW: "\u6307\u4ee4\u300c%1\u300d\u9700\u8981\u5148\u958b\u555f\u6587\u4ef6\u3002\u4ecd\u8981\u7e7c\u7e8c\u55ce\uff1f",
         },
         cd_active_selection_required: {
             en: "Command '%1' requires an active selection. Continue Anyway?",
             de: "Der Befehl '%1' erfordert eine Auswahl. Trotzdem fortfahren?",
             ru: "Command '%1' requires an active selection. Continue Anyway?",
+            zh_TW: "\u6307\u4ee4\u300c%1\u300d\u9700\u8981\u5148\u9078\u53d6\u7269\u4ef6\u3002\u4ecd\u8981\u7e7c\u7e8c\u55ce\uff1f",
         },
         cd_all: {
             en: "Built-In Commands",
             de: "Built-In Commands",
             ru: "Built-In Commands",
+            zh_TW: "\u5167\u5efa\u6307\u4ee4",
         },
         cd_clear_history_confirm: {
-            en: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
-            de: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
-            ru: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.\n\nLearn more using builtin 'Documentation' command.",
+            en: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.",
+            de: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.",
+            ru: "Are you sure you want to clear your history?\n\n PLEASE NOTE: This will remove any keyword latches you have.",
+            zh_TW: "\u78ba\u5b9a\u8981\u6e05\u9664\u6b77\u53f2\u7d00\u9304\u55ce\uff1f\n\n\u6ce8\u610f\uff1a\u9019\u4e5f\u6703\u79fb\u9664\u5df2\u8a18\u9304\u7684\u641c\u5c0b\u95dc\u9375\u5b57\u504f\u597d\u3002",
+        },
+        cd_clear_history_title: {
+            en: "Clear History",
+            de: "Clear History",
+            ru: "Clear History",
+            zh_TW: "\u6e05\u9664\u6b77\u53f2\u7d00\u9304",
         },
         cd_add_to_startup: {
             en: "Add new command(s) to your startup?",
             de: "Add new command(s) to your startup?",
             ru: "Add new command(s) to your startup?",
+            zh_TW: "\u8981\u5c07\u65b0\u6307\u4ee4\u52a0\u5165\u555f\u52d5\u756b\u9762\u55ce\uff1f",
         },
         cd_add_to_startup_title: {
             en: "Add To Startup Commands",
             de: "Add To Startup Commands",
             ru: "Add To Startup Commands",
+            zh_TW: "\u52a0\u5165\u555f\u52d5\u756b\u9762",
         },
         cd_delete_confirm: {
             en: "Delete Commands?\nDeleted commands will longer work in any workflows you previously created where they were used as a step.\n\n%1",
             de: "Befehle l\u00f6schen?\nGel\u00f6schte Befehle werden in bestehenden Arbeitsabl\u00e4ufen nicht mehr funktionieren.\n\n%1",
             ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u0443?\n\u0423\u0434\u0430\u043b\u0435\u043d\u043d\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b \u0431\u043e\u043b\u044c\u0448\u0435 \u043d\u0435 \u0431\u0443\u0434\u0443\u0442 \u0440\u0430\u0431\u043e\u0442\u0430\u0442\u044c \u0432 \u043b\u044e\u0431\u044b\u0445 \u0441\u043e\u0437\u0434\u0430\u043d\u043d\u044b\u0445 \u043d\u0430\u0431\u043e\u0440\u0430\u0445, \u0433\u0434\u0435 \u043e\u043d\u0438 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043b\u0438\u0441\u044c\n\n%1",
+            zh_TW: "\u8981\u522a\u9664\u6307\u4ee4\u55ce\uff1f\n\u82e5\u5148\u524d\u5efa\u7acb\u7684\u5de5\u4f5c\u6d41\u7a0b\u4f7f\u7528\u4e86\u9019\u4e9b\u6307\u4ee4\uff0c\u522a\u9664\u5f8c\u76f8\u95dc\u6b65\u9a5f\u5c07\u7121\u6cd5\u518d\u57f7\u884c\u3002\n\n%1",
         },
         cd_delete_confirm_title: {
             en: "Confirm Commands To Delete",
             de: "Best\u00e4tigen Sie die zu l\u00f6schenden Befehle.",
             ru: "\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u0435 \u043a\u043e\u043c\u0430\u043d\u0434",
+            zh_TW: "\u78ba\u8a8d\u522a\u9664\u6307\u4ee4",
         },
         cd_delete_select: {
             en: "Select Commands To Delete",
             de: "W\u00e4hlen Sie die zu l\u00f6schenden Men\u00fcbefehle aus.",
             ru: "\u0412\u044b\u0431\u0440\u0430\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b \u043c\u0435\u043d\u044e \u0434\u043b\u044f \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u044f",
+            zh_TW: "\u9078\u64c7\u8981\u522a\u9664\u7684\u6307\u4ee4",
         },
         cd_error_delete: {
             en: "Command couldn't be deleted.\n%1",
             de: "Befehl konnte nicht gel\u00f6scht werden.\n%1",
             ru: "\u041a\u043e\u043c\u0430\u043d\u0434\u0430 \u043d\u0435 \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u0443\u0434\u0430\u043b\u0435\u043d\u0430\n%1",
+            zh_TW: "\u7121\u6cd5\u522a\u9664\u6307\u4ee4\u3002\n%1",
         },
         cd_error_executing: {
             en: "Error executing command:\n%1\n\n%2",
             de: "Fehler beim Ausf\u00fchren des Befehls:\n%1\n\n%2",
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u044b:\n%1\n\n%2",
+            zh_TW: "\u57f7\u884c\u6307\u4ee4\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1\n\n%2",
         },
         cd_exception: {
             en: "Command Exception",
             de: "Befehls-Ausnahme",
             ru: "Command Exception",
+            zh_TW: "\u6307\u4ee4\u4f8b\u5916\u932f\u8aa4",
         },
         cd_helptip: {
             en: "Double-click a command to add it as a workflow step below.",
             de: "Doppelklicken Sie auf einen Befehl, um ihn unten als benutzerdefinierten Schritt hinzuzuf\u00fcgen.",
             ru: "\u041d\u0430\u0436\u043c\u0438\u0442\u0435 \u0434\u0432\u0430\u0436\u0434\u044b \u043d\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0443, \u0447\u0442\u043e\u0431\u044b \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0435\u0435 \u043a\u0430\u043a \u0448\u0430\u0433 \u043d\u0430\u0431\u043e\u0440\u0430",
+            zh_TW: "\u9023\u6309\u5169\u4e0b\u6307\u4ee4\uff0c\u53ef\u5c07\u5b83\u52a0\u5165\u4e0b\u65b9\u7684\u5de5\u4f5c\u6d41\u7a0b\u6b65\u9a5f\u3002",
         },
         cd_hide_confirm_title: {
             en: "Confirm Commands To Hide",
             de: "Auszublendende Befehle best\u00e4tigen",
             ru: "\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u0441\u043a\u0440\u044b\u0442\u0438\u0435 \u043a\u043e\u043c\u0430\u043d\u0434",
+            zh_TW: "\u78ba\u8a8d\u96b1\u85cf\u6307\u4ee4",
         },
         cd_hide_select: {
             en: "Select Commands To Hide",
             de: "W\u00e4hlen Sie die auszublendenden Men\u00fcbefehle aus.",
             ru: "\u0412\u044b\u0431\u0440\u0430\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b \u043c\u0435\u043d\u044e \u0434\u043b\u044f \u0441\u043a\u0440\u044b\u0442\u0438\u044f",
+            zh_TW: "\u9078\u64c7\u8981\u96b1\u85cf\u7684\u6307\u4ee4",
         },
         cd_invalid: {
             en: "Invalid command type:\n%1",
             de: "Ung\u00fcltiger Befehlstyp:\n%1",
             ru: "\u041d\u0435\u043f\u0440\u0430\u0432\u0438\u043b\u044c\u043d\u044b\u0439 \u0442\u0438\u043f:\n%1",
+            zh_TW: "\u7121\u6548\u7684\u6307\u4ee4\u985e\u578b\uff1a\n%1",
         },
         cd_none_delete: {
             en: "There are no commands to delete.",
             de: "Es gibt keine Befehle zum L\u00f6schen.",
             ru: "\u041d\u0435\u0442 \u043a\u043e\u043c\u0430\u043d\u0434 \u0434\u043b\u044f \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u044f",
+            zh_TW: "\u6c92\u6709\u53ef\u522a\u9664\u7684\u6307\u4ee4\u3002",
         },
         cd_none_hide: {
             en: "There are no commands to hide.",
             de: "Es gibt keine Befehle zum Ausblenden.",
             ru: "\u041d\u0435\u0442 \u043a\u043e\u043c\u0430\u043d\u0434 \u0434\u043b\u044f \u0441\u043a\u0440\u044b\u0442\u0438\u044f",
+            zh_TW: "\u6c92\u6709\u53ef\u96b1\u85cf\u7684\u6307\u4ee4\u3002",
         },
         cd_none_reveal: {
             en: "There are no hidden commands to reveal.",
             de: "Keine verborgenen Befehle vorhanden.",
             ru: "\u041d\u0435\u0442 \u0441\u043a\u0440\u044b\u0442\u044b\u0445 \u043a\u043e\u043c\u0430\u043d\u0434",
+            zh_TW: "\u6c92\u6709\u53ef\u91cd\u65b0\u986f\u793a\u7684\u96b1\u85cf\u6307\u4ee4\u3002",
         },
         cd_q_helptip: {
             en: "Search for commands, actions, and loaded scripts.",
             de: "Befehle, Aktionen und geladene Skripte suchen.",
             ru: "\u041f\u043e\u0438\u0441\u043a \u043a\u043e\u043c\u0430\u043d\u0434, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u0445 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432",
+            zh_TW: "\u641c\u5c0b\u6307\u4ee4\u3001\u52d5\u4f5c\u8207\u5df2\u8f09\u5165\u7684\u6307\u4ee4\u78bc\u3002",
         },
         cd_reveal_confirm: {
             en: "Unhide Commands?\n%1",
             de: "Verborgene Befehle anzeigen?\n%1",
             ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0441\u043a\u0440\u044b\u0442\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b?\n%1",
+            zh_TW: "\u8981\u91cd\u65b0\u986f\u793a\u6307\u4ee4\u55ce\uff1f\n%1",
         },
         cd_reveal_confirm_title: {
             en: "Confirm Commands To Unhide",
             de: "Die ausgew\u00e4hlten Befehle anzeigen?",
             ru: "\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u044c \u043f\u043e\u043a\u0430\u0437 \u043a\u043e\u043c\u0430\u043d\u0434",
+            zh_TW: "\u78ba\u8a8d\u91cd\u65b0\u986f\u793a\u6307\u4ee4",
         },
         cd_reveal_menu_select: {
             en: "Select Hidden Menu Commands To Unhide",
             de: "W\u00e4hlen Sie die ausgeblendeten Men\u00fcbefehle aus, die angezeigt werden sollen.",
             ru: "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043a\u0440\u044b\u0442\u044b\u0435 \u043a\u043e\u043c\u0430\u043d\u0434\u044b \u0434\u043b\u044f \u043f\u043e\u043a\u0430\u0437\u0430",
+            zh_TW: "\u9078\u64c7\u8981\u91cd\u65b0\u986f\u793a\u7684\u96b1\u85cf\u6307\u4ee4",
         },
         cd_revealed_total: {
             en: "Total hidden commands revealed:\n%1",
             de: "Anzahl der verborgenen Befehle, die wieder angezeigt werden:\n%1",
             ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u043d\u043e \u0441\u043a\u0440\u044b\u0442\u044b\u0445 \u043a\u043e\u043c\u0430\u043d\u0434:\n%1",
+            zh_TW: "\u5df2\u91cd\u65b0\u986f\u793a\u7684\u96b1\u85cf\u6307\u4ee4\u7e3d\u6578\uff1a\n%1",
         },
         cd_search_for: {
             en: "Search for commands, actions, and loaded scripts.",
             de: "Befehle, Aktionen und geladene Skripte suchen.",
             ru: "\u041f\u043e\u0438\u0441\u043a \u043a\u043e\u043c\u0430\u043d\u0434, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u0445 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432",
+            zh_TW: "\u641c\u5c0b\u6307\u4ee4\u3001\u52d5\u4f5c\u8207\u5df2\u8f09\u5165\u7684\u6307\u4ee4\u78bc\u3002",
         },
         close: {
             en: "Close",
             de: "Schlie\u00dfen",
             ru: "\u0417\u0430\u043a\u0440\u044b\u0432\u0430\u0442\u044c",
+            zh_TW: "\u95dc\u9589",
         },
-        config: { en: "Configuration", de: "Configuration", ru: "Configuration" },
+        config: {
+            en: "Configuration",
+            de: "Configuration",
+            ru: "Configuration",
+            zh_TW: "\u8a2d\u5b9a",
+        },
         copyright: {
             en: "Copyright 2026 Josh Duncan",
             de: "Copyright 2026 Josh Duncan",
             ru: "Copyright 2026 Josh Duncan",
+            zh_TW: "Copyright 2026 Josh Duncan",
         },
         cp_config: {
             en: "Palette Settings and Configuration",
             de: "Paletteneinstellungen und -konfiguration",
             ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u0438 \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f \u043f\u0430\u043d\u0435\u043b\u0438",
+            zh_TW: "\u6307\u4ee4\u9762\u677f\u8a2d\u5b9a",
         },
         cp_q_helptip: {
             en: "Search for commands, actions, and loaded scripts.",
             de: "Befehle, Aktionen und geladene Skripte suchen.",
             ru: "\u041f\u043e\u0438\u0441\u043a \u043a\u043e\u043c\u0430\u043d\u0434, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u0445 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432",
+            zh_TW: "\u641c\u5c0b\u6307\u4ee4\u3001\u52d5\u4f5c\u8207\u5df2\u8f09\u5165\u7684\u6307\u4ee4\u78bc\u3002",
         },
-        custom: { en: "Custom", de: "Custom", ru: "Custom" },
+        custom: { en: "Custom", de: "Custom", ru: "Custom", zh_TW: "\u81ea\u8a02" },
         custom_commands_all: {
             en: "All Custom Commands",
             de: "All Custom Commands",
             ru: "All Custom Commands",
+            zh_TW: "\u6240\u6709\u81ea\u8a02\u6307\u4ee4",
         },
         custom_commands_header: {
             en: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
             de: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
             ru: "Enter your custom commands below (one per line).\n\nCommands should be in the comma separated (CSV) format:\n'Command Name,Command Action,Command Type'\n\n* No extraneous spaces between commands.",
+            zh_TW: "\u8acb\u5728\u4e0b\u65b9\u8f38\u5165\u81ea\u8a02\u6307\u4ee4\uff0c\u6bcf\u884c\u4e00\u500b\u3002\n\n\u6307\u4ee4\u8acb\u4f7f\u7528\u9017\u865f\u5206\u9694\uff08CSV\uff09\u683c\u5f0f\uff1a\n\u300c\u986f\u793a\u540d\u7a31,Command Action,\u985e\u578b\uff08menu \u6216 tool\uff09\u300d\n\n* \u9017\u865f\u524d\u5f8c\u8acb\u52ff\u52a0\u5165\u7a7a\u683c\u3002",
         },
-        defaults: { en: "Defaults", de: "Defaults", ru: "Defaults" },
+        defaults: {
+            en: "Defaults",
+            de: "Defaults",
+            ru: "Defaults",
+            zh_TW: "\u9810\u8a2d\u503c",
+        },
         description: {
             en: "Boost your Adobe Illustrator efficiency with quick access to most menu commands and tools, all of your actions, and any scripts right from your keyboard. And, with custom workflows, you can combine multiple commands, actions, and scripts to get things done in your own way. Replace repetitive tasks with workflows and boost your productivity.",
             de: "Steigern Sie Ihre Effizienz in Adobe Illustrator mit schnellem Zugriff auf die meisten Men\u00fcbefehle und Werkzeuge sowie alle Aktionen und Skripte, die direkt \u00fcber die Tastatur ausgef\u00fchrt werden k\u00f6nnen. Mit benutzerdefinierten Arbeitsabl\u00e4ufen k\u00f6nnen Sie mehrere Befehle, Aktionen und Skripte kombinieren. Erledigen Sie wiederkehrende Aufgaben mit Arbeitsabl\u00e4ufen und steigern Sie Ihre Produktivit\u00e4t.",
             ru: "\u041f\u043e\u0432\u044b\u0441\u044c\u0442\u0435 \u0441\u043a\u043e\u0440\u043e\u0441\u0442\u044c \u0440\u0430\u0431\u043e\u0442\u044b \u0432 Adobe Illustrator \u0431\u043b\u0430\u0433\u043e\u0434\u0430\u0440\u044f \u0431\u044b\u0441\u0442\u0440\u043e\u043c\u0443 \u0434\u043e\u0441\u0442\u0443\u043f\u0443 \u043a \u0431\u043e\u043b\u044c\u0448\u0438\u043d\u0441\u0442\u0432\u0443 \u043a\u043e\u043c\u0430\u043d\u0434 \u043c\u0435\u043d\u044e, \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u0430\u043c, \u0432\u0441\u0435\u043c \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u044f\u043c \u0438 \u043b\u044e\u0431\u044b\u043c \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u043c \u0441\u043a\u0440\u0438\u043f\u0442\u0430\u043c \u043f\u0440\u044f\u043c\u043e \u0441 \u043a\u043b\u0430\u0432\u0438\u0430\u0442\u0443\u0440\u044b. \u0410 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u0441\u043a\u0438\u0435 \u043d\u0430\u0431\u043e\u0440\u044b \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u044e\u0442 \u043a\u043e\u043c\u0431\u0438\u043d\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u043a\u043e\u043c\u0430\u043d\u0434, \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0439 \u0438 \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432. \u0417\u0430\u043c\u0435\u043d\u0438\u0442\u0435 \u043f\u043e\u0432\u0442\u043e\u0440\u044f\u044e\u0449\u0438\u0435\u0441\u044f \u0437\u0430\u0434\u0430\u0447\u0438 \u043d\u0430\u0431\u043e\u0440\u0430\u043c\u0438 \u043a\u043e\u043c\u0430\u043d\u0434 \u0438 \u043f\u043e\u0432\u044b\u0441\u044c\u0442\u0435 \u0441\u0432\u043e\u044e \u043f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c.",
+            zh_TW: "\u900f\u904e\u9375\u76e4\u5feb\u901f\u5b58\u53d6 Adobe Illustrator \u7684\u5927\u591a\u6578\u9078\u55ae\u6307\u4ee4\u3001\u5de5\u5177\u3001\u6240\u6709\u52d5\u4f5c\u8207\u6307\u4ee4\u78bc\u3002\u4e5f\u53ef\u4ee5\u4f7f\u7528\u81ea\u8a02\u5de5\u4f5c\u6d41\u7a0b\u7d44\u5408\u591a\u500b\u6307\u4ee4\u3001\u52d5\u4f5c\u8207\u6307\u4ee4\u78bc\uff0c\u4f9d\u7167\u81ea\u5df1\u7684\u65b9\u5f0f\u5b8c\u6210\u5de5\u4f5c\uff0c\u6e1b\u5c11\u91cd\u8907\u64cd\u4f5c\u4e26\u63d0\u5347\u6548\u7387\u3002",
         },
-        document: { en: "Document", de: "Document", ru: "Document" },
+        document: {
+            en: "Document",
+            de: "Document",
+            ru: "Document",
+            zh_TW: "\u6587\u4ef6",
+        },
         document_report: {
             en: "Active Document Report",
             de: "Dokumentinformationen",
             ru: "Active Document Report",
+            zh_TW: "\u76ee\u524d\u6587\u4ef6\u5831\u544a",
         },
         document_report_warning: {
             en: "FILE NOT SAVED. Save and rerun report for updated information.",
             de: "FILE NOT SAVED. Save and rerun report for updated information.",
             ru: "FILE NOT SAVED. Save and rerun report for updated information.",
+            zh_TW: "\u6587\u4ef6\u5c1a\u672a\u5132\u5b58\u3002\u8acb\u5148\u5132\u5b58\uff0c\u518d\u91cd\u65b0\u7522\u751f\u5831\u544a\u4ee5\u53d6\u5f97\u6700\u65b0\u8cc7\u8a0a\u3002",
         },
         color_space_title_case: {
             en: "Color Space",
             de: "Color Space",
             ru: "Color Space",
+            zh_TW: "\u8272\u5f69\u7a7a\u9593",
         },
-        dr_color_space: { en: "Color Space: ", de: "Farbmodus: ", ru: "Color Space: " },
+        dr_color_space: {
+            en: "Color Space: ",
+            de: "Farbmodus: ",
+            ru: "Color Space: ",
+            zh_TW: "\u8272\u5f69\u7a7a\u9593\uff1a",
+        },
         dr_file_created: {
             en: "File Created: ",
             de: "Datei erstellt am: ",
             ru: "File Created: ",
+            zh_TW: "\u5831\u544a\u7522\u751f\u6642\u9593\uff1a",
         },
         dr_file_found: {
             en: "File Found: ",
             de: "Datei gefunden: ",
             ru: "File Found: ",
+            zh_TW: "\u627e\u5230\u6a94\u6848\uff1a",
         },
-        dr_filename: { en: "File: ", de: "Datei: ", ru: "File: " },
+        dr_filename: {
+            en: "File: ",
+            de: "Datei: ",
+            ru: "File: ",
+            zh_TW: "\u6a94\u6848\uff1a",
+        },
         dr_header: {
             en: "File Information\n-----\n",
             de: "Datei-Information\n-----\n",
             ru: "File Information\n-----\n",
+            zh_TW: "\u6a94\u6848\u8cc7\u8a0a\n-----\n",
         },
-        dr_height: { en: "Height: ", de: "H\u00f6he: ", ru: "Height: " },
+        dr_include: {
+            en: "Include",
+            de: "Include",
+            ru: "Include",
+            zh_TW: "\u5305\u542b\u9805\u76ee",
+        },
+        dr_height: {
+            en: "Height: ",
+            de: "H\u00f6he: ",
+            ru: "Height: ",
+            zh_TW: "\u9ad8\u5ea6\uff1a",
+        },
         dr_info_string: {
             en: "Ai Document Information",
             de: "AI-Dokument-Information",
             ru: "Ai Document Information",
+            zh_TW: "Illustrator \u6587\u4ef6\u8cc7\u8a0a",
         },
-        dr_name: { en: "Name: ", de: "Name: ", ru: "Name: " },
-        dr_path: { en: "Path: ", de: "Pfad: ", ru: "Path: " },
-        dr_width: { en: "Width: ", de: "Breite: ", ru: "Width: " },
-        file: { en: "File", de: "File", ru: "File" },
+        dr_name: {
+            en: "Name: ",
+            de: "Name: ",
+            ru: "Name: ",
+            zh_TW: "\u540d\u7a31\uff1a",
+        },
+        dr_path: {
+            en: "Path: ",
+            de: "Pfad: ",
+            ru: "Path: ",
+            zh_TW: "\u8def\u5f91\uff1a",
+        },
+        dr_width: {
+            en: "Width: ",
+            de: "Breite: ",
+            ru: "Width: ",
+            zh_TW: "\u5bec\u5ea6\uff1a",
+        },
+        file: { en: "File", de: "File", ru: "File", zh_TW: "\u6a94\u6848" },
         file_saved: {
             en: "File Saved:\n%1",
             de: "Datei gespeichert:\n%1",
             ru: "File Saved:\n%1",
+            zh_TW: "\u6a94\u6848\u5df2\u5132\u5b58\uff1a\n%1",
         },
         fl_error_loading: {
             en: "Error loading file:\n%1",
             de: "Fehler beim Laden der Datei:\n%1",
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
+            zh_TW: "\u8f09\u5165\u6a94\u6848\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1",
         },
         fl_error_writing: {
             en: "Error writing file:\n%1",
             de: "Fehler beim Schreiben der Datei:\n%1",
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0438\u0441\u0438 \u0444\u0430\u0439\u043b\u0430:\n%1",
+            zh_TW: "\u5beb\u5165\u6a94\u6848\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1",
         },
-        folder: { en: "Folder", de: "Folder", ru: "Folder" },
+        folder: {
+            en: "Folder",
+            de: "Folder",
+            ru: "Folder",
+            zh_TW: "\u8cc7\u6599\u593e",
+        },
         folder_already_watched: {
             en: "Folder $1 already watched.",
             de: "Folder $1 already watched.",
             ru: "Folder $1 already watched.",
+            zh_TW: "\u8cc7\u6599\u593e\u300c%1\u300d\u5df2\u5728\u76e3\u770b\u4e2d\u3002",
         },
-        fonts: { en: "Fonts", de: "Schriften", ru: "Fonts" },
+        fonts: { en: "Fonts", de: "Schriften", ru: "Fonts", zh_TW: "\u5b57\u9ad4" },
         github: {
             en: "Click here to learn more",
             de: "Klicken Sie hier f\u00fcr weitere Informationen",
             ru: "\u041d\u0430\u0436\u043c\u0438\u0442\u0435, \u0447\u0442\u043e\u0431\u044b \u0443\u0437\u043d\u0430\u0442\u044c \u0431\u043e\u043b\u044c\u0448\u0435",
+            zh_TW: "\u6309\u4e00\u4e0b\u4ee5\u9032\u4e00\u6b65\u4e86\u89e3",
         },
         go_to_artboard: {
             en: "Go To Artboard",
             de: "Gehen Sie zur Zeichenfl\u00e4che",
             ru: "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
+            zh_TW: "\u524d\u5f80\u5de5\u4f5c\u5340\u57df",
         },
         go_to_named_object: {
             en: "Go To Named Object",
             de: "Gehen Sie zum benannten Objekt",
             ru: "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u043e\u043c\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u0443",
+            zh_TW: "\u524d\u5f80\u5df2\u547d\u540d\u7269\u4ef6",
         },
         go_to_named_object_limit: {
             en: "Attention:\nThis document contains a lot of page items (%1). Please be patient while they load.",
             de: "Attention:\nThis document contains a lot of page items (%1). Please be patient while they load.",
             ru: "Attention:\nThis document contains a lot of page items (%1). Please be patient while they load.",
+            zh_TW: "\u6ce8\u610f\uff1a\n\u9019\u4efd\u6587\u4ef6\u5305\u542b\u5927\u91cf\u9801\u9762\u9805\u76ee\uff08%1\uff09\u3002\u8f09\u5165\u6642\u8acb\u7a0d\u5019\u3002",
         },
         go_to_named_object_no_objects: {
             en: "No named page items found.",
             de: "Keine benannten Objekte vorhanden.",
             ru: "No named page items found.",
+            zh_TW: "\u627e\u4e0d\u5230\u5df2\u547d\u540d\u7684\u9801\u9762\u9805\u76ee\u3002",
         },
         go_to_open_document: {
             en: "Go To Open Document",
             de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen",
             ru: "Go To Open Document",
+            zh_TW: "\u524d\u5f80\u5df2\u958b\u555f\u7684\u6587\u4ef6",
         },
         history_cleared: {
             en: "History cleared!",
             de: "Zuletzt verwendete Befehle wurden gel\u00f6scht!",
             ru: "History cleared!",
+            zh_TW: "\u6b77\u53f2\u7d00\u9304\u5df2\u6e05\u9664\uff01",
         },
-        layer_title_case: { en: "Layer", de: "Layer", ru: "Layer" },
-        layers: { en: "Layers", de: "Ebenen", ru: "Layers" },
-        menu: { en: "Menu", de: "Menu", ru: "Menu" },
+        layer_title_case: {
+            en: "Layer",
+            de: "Layer",
+            ru: "Layer",
+            zh_TW: "\u5716\u5c64",
+        },
+        layers: { en: "Layers", de: "Ebenen", ru: "Layers", zh_TW: "\u5716\u5c64" },
+        listbox_missing: {
+            en: "Missing",
+            de: "Missing",
+            ru: "Missing",
+            zh_TW: "\u7f3a\u5c11\u8cc7\u6599",
+        },
+        menu: { en: "Menu", de: "Menu", ru: "Menu", zh_TW: "\u9078\u55ae" },
         menu_commands: {
             en: "Menu Commands",
             de: "Menu Commands",
             ru: "Menu Commands",
+            zh_TW: "\u9078\u55ae\u6307\u4ee4",
         },
-        name_title_case: { en: "Name", de: "Name", ru: "Name" },
+        name_title_case: { en: "Name", de: "Name", ru: "Name", zh_TW: "\u540d\u7a31" },
         no_active_document: {
             en: "No active documents.",
             de: "Keine ge\u00f6ffneten Dokumente vorhanden..",
             ru: "No active documents.",
+            zh_TW: "\u76ee\u524d\u6c92\u6709\u958b\u555f\u4e2d\u7684\u6587\u4ef6\u3002",
         },
         no_document_variables: {
             en: "No document variables.",
             de: "Keine Variablen vorhanden.",
             ru: "No document variables.",
+            zh_TW: "\u6587\u4ef6\u4e2d\u6c92\u6709\u8b8a\u6578\u3002",
         },
-        none: { en: "None", de: "Ohne", ru: "None" },
+        none: { en: "None", de: "Ohne", ru: "None", zh_TW: "\u7121" },
         open_recent_file: {
             en: "Open Recent File",
             de: "Zuletzt benutzte Datei \u00f6ffnen",
             ru: "Open Recent File",
+            zh_TW: "\u958b\u555f\u6700\u8fd1\u4f7f\u7528\u7684\u6a94\u6848",
         },
-        picker: { en: "Picker", de: "Picker", ru: "Picker" },
+        picker: {
+            en: "Picker",
+            de: "Picker",
+            ru: "Picker",
+            zh_TW: "\u9078\u64c7\u5668",
+        },
+        picker_option_type: {
+            en: "Option",
+            de: "Option",
+            ru: "Option",
+            zh_TW: "\u9078\u9805",
+        },
         placed_items: {
             en: "Placed Items",
             de: "Platzierte Objecte",
             ru: "Placed Items",
+            zh_TW: "\u7f6e\u5165\u9805\u76ee",
         },
         history_file_loading_error: {
             en: "Error Loading History\nA backup copy of your history has been created.",
             de: "Error Loading History\nA backup copy of your history has been created.",
             ru: "Error Loading History\nA backup copy of your history has been created.",
+            zh_TW: "\u8f09\u5165\u6b77\u53f2\u7d00\u9304\u6642\u767c\u751f\u932f\u8aa4\n\u5df2\u5efa\u7acb\u6b77\u53f2\u7d00\u9304\u7684\u5099\u4efd\u3002",
         },
-        path_title_case: { en: "Path", de: "Path", ru: "Path" },
+        path_title_case: { en: "Path", de: "Path", ru: "Path", zh_TW: "\u8def\u5f91" },
         picker_builder_header: {
             en: "Enter your custom commands below (one per line).",
             de: "Enter your custom commands below (one per line).",
             ru: "Enter your custom commands below (one per line).",
+            zh_TW: "\u8acb\u5728\u4e0b\u65b9\u8f38\u5165\u9078\u9805\uff0c\u6bcf\u884c\u4e00\u500b\u3002",
         },
         picker_builder_multi_select: {
             en: "Multi-Select Enabled?",
             de: "Multi-Select Enabled?",
             ru: "Multi-Select Enabled?",
+            zh_TW: "\u5141\u8a31\u591a\u91cd\u9078\u53d6",
         },
         picker_builder_name: {
             en: "Custom Picker Name",
             de: "Custom Picker Name",
             ru: "Custom Picker Name",
+            zh_TW: "\u81ea\u8a02\u9078\u64c7\u5668\u540d\u7a31",
         },
         picker_builder_title: {
             en: "Custom Picker Builder",
             de: "Custom Picker Builder",
             ru: "Custom Picker Builder",
+            zh_TW: "\u81ea\u8a02\u9078\u64c7\u5668\u5efa\u7acb\u5de5\u5177",
         },
         picker_builder_save_conflict_message: {
             en: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
             de: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
             ru: "A custom picker with that name already exists.\nWould you like to overwrite the previous picker with the new one?\n%1",
+            zh_TW: "\u5df2\u6709\u76f8\u540c\u540d\u7a31\u7684\u81ea\u8a02\u9078\u64c7\u5668\u3002\n\u8981\u7528\u65b0\u7684\u9078\u64c7\u5668\u8986\u5beb\u539f\u6709\u5167\u5bb9\u55ce\uff1f\n%1",
         },
         picker_builder_save_conflict_title: {
             en: "Save Custom Picker Conflict",
             de: "Save Custom Picker Conflict",
             ru: "Save Custom Picker Conflict",
+            zh_TW: "\u5132\u5b58\u81ea\u8a02\u9078\u64c7\u5668\u6642\u767c\u751f\u885d\u7a81",
         },
         picker_to_edit: {
             en: "Choose a custom picker to edit.",
             de: "Choose a custom picker to edit.",
             ru: "Choose a custom picker to edit.",
+            zh_TW: "\u9078\u64c7\u8981\u7de8\u8f2f\u7684\u81ea\u8a02\u9078\u64c7\u5668\u3002",
         },
-        pickers_all: { en: "All Pickers", de: "All Pickers", ru: "All Pickers" },
+        pickers_all: {
+            en: "All Pickers",
+            de: "All Pickers",
+            ru: "All Pickers",
+            zh_TW: "\u6240\u6709\u9078\u64c7\u5668",
+        },
         pref_file_loading_error: {
             en: "Error Loading Preferences\nA backup copy of your settings has been created.\n\n%1",
             de: "Fehler beim Laden der Voreinstellungen\nEine Sicherungskopie Ihrer Einstellungen wurde erstellt.\n\n%1",
             ru: "Error Loading Preferences\nA backup copy of your settings has been created.\n\n%1",
+            zh_TW: "\u8f09\u5165\u504f\u597d\u8a2d\u5b9a\u6642\u767c\u751f\u932f\u8aa4\n\u5df2\u5efa\u7acb\u8a2d\u5b9a\u7684\u5099\u4efd\u3002\n\n%1",
         },
         pref_file_non_compatible: {
             en: "Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.",
             de: "Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.",
             ru: "Incompatible Preferences\nYour preferences file isn't compatible with your current version of Ai Command Palette. Your preferences file will be updated.\n\nA backup copy of your settings has been created.",
+            zh_TW: "\u504f\u597d\u8a2d\u5b9a\u4e0d\u76f8\u5bb9\n\u504f\u597d\u8a2d\u5b9a\u6a94\u8207\u76ee\u524d\u7248\u672c\u7684 Ai Command Palette \u4e0d\u76f8\u5bb9\uff0c\u7cfb\u7d71\u5c07\u66f4\u65b0\u6b64\u6a94\u6848\u3002\n\n\u5df2\u5efa\u7acb\u8a2d\u5b9a\u7684\u5099\u4efd\u3002",
         },
         pref_update_complete: {
             en: "Preferences Update Complete.",
             de: "Aktualisierung der Voreinstellungen fertiggestellt",
             ru: "Preferences Update Complete",
+            zh_TW: "\u504f\u597d\u8a2d\u5b9a\u66f4\u65b0\u5b8c\u6210\u3002",
         },
         recent_commands: {
             en: "Recent Commands",
             de: "Zuletzt verwendete Befehle",
             ru: "Recent Commands",
+            zh_TW: "\u6700\u8fd1\u4f7f\u7528\u7684\u6307\u4ee4",
         },
         remove_watched_folders: {
             en: "Select Watched Folder(s) To Remove...",
             de: "Select Watched Folder(s) To Remove...",
             ru: "Select Watched Folder(s) To Remove...",
+            zh_TW: "\u9078\u64c7\u8981\u79fb\u9664\u7684\u76e3\u770b\u8cc7\u6599\u593e\u2026",
         },
         remove_watched_folders_confirm: {
             en: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
             de: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
             ru: "Remove Watched Folder(s)?\nScripts from removed folders will longer load or work in any workflows you previously created where they were used as a step.\n\n%1",
+            zh_TW: "\u8981\u79fb\u9664\u76e3\u770b\u8cc7\u6599\u593e\u55ce\uff1f\n\u79fb\u9664\u8cc7\u6599\u593e\u5f8c\uff0c\u5176\u4e2d\u7684\u6307\u4ee4\u78bc\u5c07\u4e0d\u518d\u8f09\u5165\uff1b\u5148\u524d\u5de5\u4f5c\u6d41\u7a0b\u4e2d\u4f7f\u7528\u9019\u4e9b\u6307\u4ee4\u78bc\u7684\u6b65\u9a5f\u4e5f\u5c07\u7121\u6cd5\u57f7\u884c\u3002\n\n%1",
         },
         remove_watched_folders_confirm_title: {
             en: "Confirm Watched Folder(s) To Delete",
             de: "Confirm Watched Folder(s) To Delete",
             ru: "Confirm Watched Folder(s) To Delete",
+            zh_TW: "\u78ba\u8a8d\u79fb\u9664\u76e3\u770b\u8cc7\u6599\u593e",
         },
         ruler_units_title_case: {
             en: "Ruler Units",
             de: "Ruler Units",
             ru: "Ruler Units",
+            zh_TW: "\u5c3a\u6a19\u55ae\u4f4d",
         },
         save: {
             en: "Save",
             de: "Speichern",
             ru: "\u0421\u043e\u0445\u0440\u0430\u043d\u044f\u0442\u044c",
+            zh_TW: "\u5132\u5b58",
         },
         save_active_document_report: {
             en: "Save Active Document Report",
             de: "Save Active Document Report",
             ru: "Save Active Document Report",
+            zh_TW: "\u5132\u5b58\u76ee\u524d\u6587\u4ef6\u5831\u544a",
         },
         sc_already_loaded_title: {
             en: "Script Load Conflict",
             de: "Skriptladekonflikt",
             ru: "\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0441\u043a\u0440\u0438\u043f\u0442\u0430",
+            zh_TW: "\u6307\u4ee4\u78bc\u8f09\u5165\u885d\u7a81",
         },
         sc_error_execution: {
             en: "Error executing script:\n%1\n\n%2",
             de: "Fehler beim Ausf\u00fchren des Skripts:\n%1\n\n%2",
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u0441\u043a\u0440\u0438\u043f\u0442\u0430:\n%1\n\n%2",
+            zh_TW: "\u57f7\u884c\u6307\u4ee4\u78bc\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1\n\n%2",
         },
         sc_error_exists: {
             en: "Script no longer exists at original path. Try reloading.\n%1",
             de: "Skript existiert nicht mehr am urspr\u00fcnglichen Ort.\n%1",
             ru: "\u0421\u043a\u0440\u0438\u043f\u0442 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d \u0432 \u0443\u043a\u0430\u0437\u0430\u043d\u043d\u043e\u0439 \u043f\u0430\u043f\u043a\u0435\n%1",
+            zh_TW: "\u539f\u59cb\u8def\u5f91\u4e2d\u7684\u6307\u4ee4\u78bc\u5df2\u4e0d\u5b58\u5728\u3002\u8acb\u5617\u8a66\u91cd\u65b0\u8f09\u5165\u3002\n%1",
         },
         sc_error_loading: {
             en: "Error loading script:\n%1",
             de: "Fehler beim Laden des Skripts:\n%1",
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0438 \u0441\u043a\u0440\u0438\u043f\u0442\u0430:\n%1",
+            zh_TW: "\u8f09\u5165\u6307\u4ee4\u78bc\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1",
         },
         sc_load_script: {
             en: "Load Script(s)",
             de: "Skripte laden",
             ru: "Load Script(s)",
+            zh_TW: "\u8f09\u5165\u6307\u4ee4\u78bc",
         },
         sc_none_selected: {
             en: "No script files selected.\nMust be JavaScript '.js' or '.jsx' files.",
             de: "Keine Skriptdateien ausgew\u00e4hlt.\nEs m\u00fcssen JavaScript-'.js'- oder '.jsx'-Dateien sein.",
             ru: "\u041d\u0435 \u0432\u044b\u0431\u0440\u0430\u043d\u044b \u0441\u043a\u0440\u0438\u043f\u0442\u044b\n\u0424\u0430\u0439\u043b\u044b JavaScript \u0438\u043c\u0435\u044e\u0442 \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u0435 '.js' \u0438\u043b\u0438 '.jsx'",
+            zh_TW: "\u672a\u9078\u53d6\u6307\u4ee4\u78bc\u6a94\u6848\u3002\n\u8acb\u9078\u64c7 JavaScript\u300c.js\u300d\u6216\u300c.jsx\u300d\u6a94\u6848\u3002",
         },
         sc_total_loaded: {
             en: "Total scripts loaded:\n%1",
             de: "Geladene Skripte insgesamt:\n%1",
             ru: "\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e \u0441\u043a\u0440\u0438\u043f\u0442\u043e\u0432:\n%1",
+            zh_TW: "\u5df2\u8f09\u5165\u7684\u6307\u4ee4\u78bc\u7e3d\u6578\uff1a\n%1",
         },
         script: {
             en: "Script",
             de: "Skript",
             ru: "\u0421\u043a\u0440\u0438\u043f\u0442",
+            zh_TW: "\u6307\u4ee4\u78bc",
         },
-        Scripts: { en: "Scripts", de: "Skripte laden", ru: "Scripts" },
-        set_title_case: { en: "Set", de: "Set", ru: "Set" },
-        spot_colors: { en: "Spot Colors", de: "Volltonfarben", ru: "Spot Colors" },
+        Scripts: {
+            en: "Scripts",
+            de: "Skripte laden",
+            ru: "Scripts",
+            zh_TW: "\u6307\u4ee4\u78bc",
+        },
+        set_title_case: {
+            en: "Set",
+            de: "Set",
+            ru: "Set",
+            zh_TW: "\u52d5\u4f5c\u96c6",
+        },
+        spot_colors: {
+            en: "Spot Colors",
+            de: "Volltonfarben",
+            ru: "Spot Colors",
+            zh_TW: "\u7279\u5225\u8272",
+        },
         startup_builder: {
             en: "Startup Screen Customizer",
             de: "Startup Screen Customizer",
             ru: "Startup Screen Customizer",
+            zh_TW: "\u555f\u52d5\u756b\u9762\u81ea\u8a02\u5de5\u5177",
         },
         startup_error_saving: {
             en: "Error saving startup commands.\nPrevious settings were reloaded.",
             de: "Error saving startup commands.\nPrevious settings were reloaded.",
             ru: "Error saving startup commands.\nPrevious settings were reloaded.",
+            zh_TW: "\u5132\u5b58\u555f\u52d5\u756b\u9762\u6307\u4ee4\u6642\u767c\u751f\u932f\u8aa4\u3002\n\u5df2\u91cd\u65b0\u8f09\u5165\u5148\u524d\u7684\u8a2d\u5b9a\u3002",
         },
         startup_helptip: {
             en: "Double-click a command to add it to your startup command list below.",
             de: "Double-click a command to add it to your startup command list below.",
             ru: "Double-click a command to add it to your startup command list below.",
+            zh_TW: "\u9023\u6309\u5169\u4e0b\u6307\u4ee4\uff0c\u53ef\u5c07\u5b83\u52a0\u5165\u4e0b\u65b9\u7684\u555f\u52d5\u756b\u9762\u6307\u4ee4\u6e05\u55ae\u3002",
         },
         startup_steps: {
             en: "Startup Commands",
             de: "Startup Commands",
             ru: "Startup Commands",
+            zh_TW: "\u555f\u52d5\u756b\u9762\u6307\u4ee4",
         },
         startup_steps_helptip: {
             en: "Startup commands will displayed in order from top to bottom.",
             de: "Startup commands will displayed in order from top to bottom.",
             ru: "Startup commands will displayed in order from top to bottom.",
+            zh_TW: "\u555f\u52d5\u756b\u9762\u6307\u4ee4\u6703\u4f9d\u7167\u7531\u4e0a\u5230\u4e0b\u7684\u9806\u5e8f\u986f\u793a\u3002",
         },
         step_delete: {
             en: "Delete",
             de: "L\u00f6schen",
             ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c",
+            zh_TW: "\u522a\u9664",
         },
         step_down: {
             en: "Move Down",
             de: "Nach unten",
             ru: "\u0412\u043d\u0438\u0437",
+            zh_TW: "\u4e0b\u79fb",
         },
-        step_edit: { en: "Edit", de: "Edit", ru: "Edit" },
+        step_edit: { en: "Edit", de: "Edit", ru: "Edit", zh_TW: "\u7de8\u8f2f" },
         step_up: {
             en: "Move Up",
             de: "Nach oben",
             ru: "\u041d\u0430\u0432\u0435\u0440\u0445",
+            zh_TW: "\u4e0a\u79fb",
         },
         title: {
             en: "Ai Command Palette",
             de: "Kurzbefehle",
             ru: "Ai Command Palette",
+            zh_TW: "Ai Command Palette",
         },
         tl_all: {
             en: "Tools",
             de: "Alle integrierten Werkzeuge",
             ru: "\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u044b\u0435 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b",
+            zh_TW: "\u5de5\u5177",
         },
         tl_error_selecting: {
             en: "Error selecting tool:\n%1\n\n%2",
             de: "Fehler beim Ausw\u00e4hlen des Werkzeugs:\n%1\n\n%2",
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0432\u044b\u0431\u043e\u0440\u0430 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u0430:\n%1\n\n%2",
+            zh_TW: "\u9078\u53d6\u5de5\u5177\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1\n\n%2",
         },
         tl_none_available: {
             en: "No tools are currently available.",
             de: "Zurzeit sind keine Werkzeuge verf\u00fcgbar.",
             ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b \u0432 \u0434\u0430\u043d\u043d\u044b\u0439 \u043c\u043e\u043c\u0435\u043d\u0442 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b",
+            zh_TW: "\u76ee\u524d\u6c92\u6709\u53ef\u7528\u7684\u5de5\u5177\u3002",
         },
-        tool: { en: "Tool", de: "Tool", ru: "Tool" },
-        type_title_case: { en: "Type", de: "Type", ru: "Type" },
+        tool: { en: "Tool", de: "Tool", ru: "Tool", zh_TW: "\u5de5\u5177" },
+        type_title_case: { en: "Type", de: "Type", ru: "Type", zh_TW: "\u985e\u578b" },
         user_prefs_inconsistency: {
             en: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
             de: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
             ru: "User Preferences Inconsistency\nIt seems your preferences file may be from a different computer than this one.\n\n PLEASE NOTE: There is a small chance this could cause some features to break.",
+            zh_TW: "\u4f7f\u7528\u8005\u504f\u597d\u8a2d\u5b9a\u4e0d\u4e00\u81f4\n\u504f\u597d\u8a2d\u5b9a\u6a94\u53ef\u80fd\u4f86\u81ea\u53e6\u4e00\u90e8\u96fb\u8166\u3002\n\n\u6ce8\u610f\uff1a\u5c11\u6578\u60c5\u6cc1\u4e0b\u53ef\u80fd\u9020\u6210\u90e8\u5206\u529f\u80fd\u7121\u6cd5\u6b63\u5e38\u904b\u4f5c\u3002",
         },
         version: {
             en: "Version %1",
             de: "Ausf\u00fchrung %1",
             ru: "\u0432\u0435\u0440\u0441\u0438\u044f %1",
+            zh_TW: "\u7248\u672c %1",
         },
         watched_folder_not_found: {
             en: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
             de: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
             ru: "Watched folder '%1' not found!\nYou can remove this folder using the 'Remove Watched Folders' command.",
+            zh_TW: "\u627e\u4e0d\u5230\u76e3\u770b\u8cc7\u6599\u593e\u300c%1\u300d\uff01\n\u53ef\u4ee5\u4f7f\u7528\u300c\u79fb\u9664\u76e3\u770b\u8cc7\u6599\u593e\uff08Remove Watched Folder(s)\uff09\u300d\u6307\u4ee4\u79fb\u9664\u6b64\u8cc7\u6599\u593e\u3002",
+        },
+        watched_folder_title_case: {
+            en: "Watched Folder",
+            de: "Watched Folder",
+            ru: "Watched Folder",
+            zh_TW: "\u76e3\u770b\u8cc7\u6599\u593e",
         },
         wf_already_exists: {
             en: "A workflow with that name already exists.\nWould you like to overwrite the previous workflow with the new one?",
             de: "Ein Arbeitsablauf mit diesem Namen existiert bereits.\nSoll der bestehende Arbeitsablauf \u00fcberschrieben werden?",
             ru: "\u041d\u0430\u0431\u043e\u0440 \u0441 \u0442\u0430\u043a\u0438\u043c \u0438\u043c\u0435\u043d\u0435\u043c \u0443\u0436\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442\n\u0425\u043e\u0442\u0438\u0442\u0435 \u043f\u0435\u0440\u0435\u0437\u0430\u043f\u0438\u0441\u0430\u0442\u044c \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0438\u0439?",
+            zh_TW: "\u5df2\u6709\u76f8\u540c\u540d\u7a31\u7684\u5de5\u4f5c\u6d41\u7a0b\u3002\n\u8981\u7528\u65b0\u7684\u5de5\u4f5c\u6d41\u7a0b\u8986\u5beb\u539f\u6709\u5167\u5bb9\u55ce\uff1f",
         },
         wf_already_exists_title: {
             en: "Save Workflow Conflict",
             de: "Arbeitsablauf-Konflikt speichern?",
             ru: "\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u0430 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u043d\u0430\u0431\u043e\u0440\u0430",
+            zh_TW: "\u5132\u5b58\u5de5\u4f5c\u6d41\u7a0b\u6642\u767c\u751f\u885d\u7a81",
         },
         wf_builder: {
             en: "Workflow Builder",
             de: "Arbeitsabl\u00e4ufe erstellen",
             ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u043e\u0440 \u043d\u0430\u0431\u043e\u0440\u043e\u0432 \u043a\u043e\u043c\u0430\u043d\u0434",
+            zh_TW: "\u5de5\u4f5c\u6d41\u7a0b\u5efa\u7acb\u5de5\u5177",
         },
         wf_choose: {
             en: "Choose A Workflow To Edit",
             de: "W\u00e4hlen Sie einen Arbeitsablauf zum Bearbeiten aus.",
             ru: "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u043d\u0430\u0431\u043e\u0440 \u0434\u043b\u044f \u0440\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f",
+            zh_TW: "\u9078\u64c7\u8981\u7de8\u8f2f\u7684\u5de5\u4f5c\u6d41\u7a0b",
         },
         wf_error_saving: {
             en: "Error saving workflow:\n%1",
             de: "Fehler beim Speichern des Arbeitsablaufs:\n%1",
             ru: "\u041e\u0448\u0438\u0431\u043a\u0430 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u043d\u0430\u0431\u043e\u0440\u0430:\n%1",
+            zh_TW: "\u5132\u5b58\u5de5\u4f5c\u6d41\u7a0b\u6642\u767c\u751f\u932f\u8aa4\uff1a\n%1",
         },
         wf_needs_attention: {
             en: "Workflow needs attention.\nThe following action steps from your workflow are not currently available.\n\n%1",
             de: "Achtung!\nDie folgenden Aktionsschritte sind nicht mehr vorhanden\n\n%1",
             ru: "\u041d\u0430\u0431\u043e\u0440 \u0442\u0440\u0435\u0431\u0443\u0435\u0442 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u044f\n\u0423\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0435 \u0448\u0430\u0433\u0438 \u0432 \u0432\u0430\u0448\u0435\u043c \u043d\u0430\u0431\u043e\u0440\u0435 \u043a\u043e\u043c\u0430\u043d\u0434 \u0431\u043e\u043b\u044c\u0448\u0435 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b.\n\n%1",
+            zh_TW: "\u5de5\u4f5c\u6d41\u7a0b\u9700\u8981\u8655\u7406\u3002\n\u4e0b\u5217\u6b65\u9a5f\u76ee\u524d\u7121\u6cd5\u4f7f\u7528\uff1a\n\n%1",
         },
         wf_none_attention: {
             en: "There are no workflows that need attention.",
             de: "Es gibt keine Arbeitsabl\u00e4ufe, die beachtet werden m\u00fcssen.",
             ru: "\u041d\u0435\u0442 \u043d\u0430\u0431\u043e\u0440\u043e\u0432 \u0442\u0440\u0435\u0431\u0443\u044e\u0449\u0438\u0445 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u044f",
+            zh_TW: "\u6c92\u6709\u9700\u8981\u8655\u7406\u7684\u5de5\u4f5c\u6d41\u7a0b\u3002",
         },
         wf_none_edit: {
             en: "There are no workflows to edit.",
             de: "Es gibt keine Arbeitsabl\u00e4ufe zum Bearbeiten.",
             ru: "\u041d\u0435\u0442 \u043d\u0430\u0431\u043e\u0440\u043e\u0432 \u0434\u043b\u044f \u0440\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f",
+            zh_TW: "\u6c92\u6709\u53ef\u7de8\u8f2f\u7684\u5de5\u4f5c\u6d41\u7a0b\u3002",
         },
         wf_not_saved: {
             en: "Workflow not saved.",
             de: "Arbeitsablauf nicht gespeichert",
             ru: "\u041d\u0430\u0431\u043e\u0440 \u043d\u0435 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d",
+            zh_TW: "\u5de5\u4f5c\u6d41\u7a0b\u5c1a\u672a\u5132\u5b58\u3002",
         },
-        wf_save: { en: "Save", de: "Save", ru: "Save" },
+        wf_save: { en: "Save", de: "Save", ru: "Save", zh_TW: "\u5132\u5b58" },
         wf_save_as: {
             en: "Save Workflow As",
             de: "Arbeitsablauf speichern als",
             ru: "\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u0430\u043a",
+            zh_TW: "\u5de5\u4f5c\u6d41\u7a0b\u53e6\u5b58\u70ba",
+        },
+        wf_step_incompatible_ai_version: {
+            en: "INCOMPATIBLE ILLUSTRATOR VERSION",
+            de: "INCOMPATIBLE ILLUSTRATOR VERSION",
+            ru: "INCOMPATIBLE ILLUSTRATOR VERSION",
+            zh_TW: "Illustrator \u7248\u672c\u4e0d\u76f8\u5bb9",
+        },
+        wf_step_not_found: {
+            en: "NOT FOUND",
+            de: "NOT FOUND",
+            ru: "NOT FOUND",
+            zh_TW: "\u627e\u4e0d\u5230\u6307\u4ee4",
         },
         wf_step_not_editable: {
             en: "Selected Step Not Editable",
             de: "Selected Step Not Editable",
             ru: "Selected Step Not Editable",
+            zh_TW: "\u7121\u6cd5\u7de8\u8f2f\u6240\u9078\u6b65\u9a5f",
         },
         wf_steps: {
             en: "Workflow Steps",
             de: "Befehlskombinationen",
             ru: "\u0428\u0430\u0433\u0438 \u043d\u0430\u0431\u043e\u0440\u0430",
+            zh_TW: "\u5de5\u4f5c\u6d41\u7a0b\u6b65\u9a5f",
         },
         wf_steps_helptip: {
             en: "Workflows will run in order from top to bottom.",
             de: "Die Befehlskombinationen werden in der Reihenfolge von oben nach unten ausgef\u00fchrt.",
             ru: "\u041d\u0430\u0431\u043e\u0440 \u0432\u044b\u043f\u043e\u043b\u043d\u044f\u0435\u0442\u0441\u044f \u0441\u0432\u0435\u0440\u0445\u0443 \u0432\u043d\u0438\u0437",
+            zh_TW: "\u5de5\u4f5c\u6d41\u7a0b\u6703\u4f9d\u7167\u7531\u4e0a\u5230\u4e0b\u7684\u9806\u5e8f\u57f7\u884c\u3002",
         },
         watched_folder_select: {
             en: "Select script a folder to watch.",
             de: "Select script a folder to watch.",
             ru: "Select script a folder to watch.",
+            zh_TW: "\u9078\u64c7\u8981\u76e3\u770b\u7684\u6307\u4ee4\u78bc\u8cc7\u6599\u593e\u3002",
         },
         workflow: {
             en: "Workflow",
             de: "Arbeitsablauf",
             ru: "\u041d\u0430\u0431\u043e\u0440\u044b",
+            zh_TW: "\u5de5\u4f5c\u6d41\u7a0b",
         },
-        Workflows: { en: "Workflows", de: "Arbeitsabl\u00e4ufe", ru: "Workflows" },
+        Workflows: {
+            en: "Workflows",
+            de: "Arbeitsabl\u00e4ufe",
+            ru: "Workflows",
+            zh_TW: "\u5de5\u4f5c\u6d41\u7a0b",
+        },
     };
-    // GENERATED FROM CSV DATA FILES
     var commandsData = {
         menu_1000: {
             id: "menu_new",
@@ -1609,6 +1675,7 @@ See the LICENSE file for details.
                 de: "Datei > Neu \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u041d\u043e\u0432\u044b\u0439...",
                 "zh-cn": "\u6587\u4ef6>\u65b0\u5efa\u2026",
+                zh_TW: "\u6a94\u6848 > \u65b0\u5efa\u2026",
             },
             hidden: false,
         },
@@ -1623,6 +1690,7 @@ See the LICENSE file for details.
                 de: "Datei > Neu aus Vorlage \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u041d\u043e\u0432\u044b\u0439 \u0438\u0437 \u0448\u0430\u0431\u043b\u043e\u043d\u0430...",
                 "zh-cn": "\u6587\u4ef6>\u4ece\u6a21\u677f\u65b0\u5efa\u2026",
+                zh_TW: "\u6a94\u6848 > \u5f9e\u6a21\u677f\u65b0\u5efa\u2026",
             },
             hidden: false,
         },
@@ -1637,6 +1705,7 @@ See the LICENSE file for details.
                 de: "Datei > \u00d6ffnen \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u041e\u0442\u043a\u0440\u044b\u0442\u044c...",
                 "zh-cn": "\u6587\u4ef6>\u6253\u5f00\u2026",
+                zh_TW: "\u6a94\u6848 > \u958b\u555f\u2026",
             },
             hidden: false,
         },
@@ -1651,6 +1720,7 @@ See the LICENSE file for details.
                 de: "Datei > Bridge durchsuchen \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u041e\u0431\u0437\u043e\u0440 \u0432 Bridge...",
                 "zh-cn": "\u6587\u4ef6>\u5728Bridge\u4e2d\u6d4f\u89c8\u2026",
+                zh_TW: "\u6a94\u6848 > \u5728Bridge\u4e2d\u700f\u89bd\u2026",
             },
             hidden: false,
         },
@@ -1665,6 +1735,7 @@ See the LICENSE file for details.
                 de: "Datei > Schlie\u00dfen",
                 ru: "\u0424\u0430\u0439\u043b > \u0417\u0430\u043a\u0440\u044b\u0442\u044c",
                 "zh-cn": "\u6587\u4ef6>\u5173\u95ed\u2026",
+                zh_TW: "\u6a94\u6848 > \u95dc\u9589\u2026",
             },
             hidden: false,
         },
@@ -1679,6 +1750,7 @@ See the LICENSE file for details.
                 de: "File > Close All",
                 ru: "File > Close All",
                 "zh-cn": "File > Close All",
+                zh_TW: "\u6a94\u6848 > Close All",
             },
             hidden: false,
             minVersion: "29.4",
@@ -1694,6 +1766,7 @@ See the LICENSE file for details.
                 de: "Datei > Speichern",
                 ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c",
                 "zh-cn": "\u6587\u4ef6>\u4fdd\u5b58\u2026",
+                zh_TW: "\u6a94\u6848 > \u5132\u5b58\u2026",
             },
             hidden: false,
         },
@@ -1708,6 +1781,7 @@ See the LICENSE file for details.
                 de: "Datei > Speichern unter \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043a\u0430\u043a...",
                 "zh-cn": "\u6587\u4ef6>\u53e6\u5b58\u4e3a\u2026",
+                zh_TW: "\u6a94\u6848 > \u53e6\u5b58\u65b0\u6a94\u2026",
             },
             hidden: false,
         },
@@ -1722,6 +1796,7 @@ See the LICENSE file for details.
                 de: "Datei > Kopie speichern \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043a\u043e\u043f\u0438\u044e...",
                 "zh-cn": "\u6587\u4ef6>\u4fdd\u5b58\u526f\u672c\u2026",
+                zh_TW: "\u6a94\u6848 > \u5132\u5b58\u526f\u672c\u2026",
             },
             hidden: false,
         },
@@ -1736,6 +1811,7 @@ See the LICENSE file for details.
                 de: "Datei > Als Vorlage speichern \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u043a\u0430\u043a \u0448\u0430\u0431\u043b\u043e\u043d...",
                 "zh-cn": "\u6587\u4ef6>\u53e6\u5b58\u4e3a\u6a21\u677f\u2026",
+                zh_TW: "\u6a94\u6848 > \u53e6\u5b58\u65b0\u6a94\u6a21\u677f\u2026",
             },
             hidden: false,
         },
@@ -1751,6 +1827,7 @@ See the LICENSE file for details.
                 ru: "\u0424\u0430\u0439\u043b > \u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0435 \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b...",
                 "zh-cn":
                     "\u6587\u4ef6>\u4fdd\u5b58\u9009\u4e2d\u7684\u5207\u7247\u2026",
+                zh_TW: "\u6a94\u6848 > \u5132\u5b58\u9078\u4e2d\u7684\u5207\u7247\u2026",
             },
             hidden: false,
         },
@@ -1765,6 +1842,7 @@ See the LICENSE file for details.
                 de: "Fenster > Versionsverlauf",
                 ru: "\u041e\u043a\u043d\u043e > \u0416\u0443\u0440\u043d\u0430\u043b \u0432\u0435\u0440\u0441\u0438\u0439",
                 "zh-cn": "Window > Version History",
+                zh_TW: "\u8996\u7a97 > Version History",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -1780,6 +1858,7 @@ See the LICENSE file for details.
                 de: "Datei > Zur\u00fcck zur letzten Version",
                 ru: "\u0424\u0430\u0439\u043b > \u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c",
                 "zh-cn": "\u6587\u4ef6>\u8fd8\u539f\u2026",
+                zh_TW: "\u6a94\u6848 > \u9084\u539f\u2026",
             },
             hidden: false,
         },
@@ -1794,6 +1873,7 @@ See the LICENSE file for details.
                 de: "Datei > Adobe Stock durchsuchen \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u041f\u043e\u0438\u0441\u043a \u0432 Adobe Stock...",
                 "zh-cn": "\u6587\u4ef6>\u641c\u7d22Adobe Stock\u2026",
+                zh_TW: "\u6a94\u6848 > \u641c\u7d22Adobe Stock\u2026",
             },
             hidden: false,
             minVersion: "19",
@@ -1809,6 +1889,7 @@ See the LICENSE file for details.
                 de: "Datei > Platzieren \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u041f\u043e\u043c\u0435\u0441\u0442\u0438\u0442\u044c...",
                 "zh-cn": "\u6587\u4ef6>\u653e\u7f6e\u2026",
+                zh_TW: "\u6a94\u6848 > \u653e\u7f6e\u2026",
             },
             hidden: false,
         },
@@ -1823,6 +1904,7 @@ See the LICENSE file for details.
                 de: "File > Invite to Edit...",
                 ru: "File > Invite to Edit...",
                 "zh-cn": "File > Invite to Edit...",
+                zh_TW: "\u6a94\u6848 > Invite to Edit...",
             },
             hidden: false,
             minVersion: "27.0",
@@ -1838,6 +1920,7 @@ See the LICENSE file for details.
                 de: "File > Share for Review...",
                 ru: "File > Share for Review...",
                 "zh-cn": "File > Share for Review...",
+                zh_TW: "\u6a94\u6848 > Share for Review...",
             },
             hidden: false,
             minVersion: "27.0",
@@ -1853,6 +1936,7 @@ See the LICENSE file for details.
                 de: "File > Generate Vectors...",
                 ru: "File > Generate Vectors...",
                 "zh-cn": "\u6587\u4ef6>\u751f\u6210\u77e2\u91cf\u2026",
+                zh_TW: "\u6a94\u6848 > \u751f\u6210\u77e2\u91cf\u2026",
             },
             hidden: false,
             minVersion: "28.6",
@@ -1869,6 +1953,7 @@ See the LICENSE file for details.
                 de: "Datei > Exportieren > F\u00fcr Bildschirme exportieren \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u042d\u043a\u0441\u043f\u043e\u0440\u0442 \u0434\u043b\u044f \u044d\u043a\u0440\u0430\u043d\u043e\u0432...",
                 "zh-cn": "\u6587\u4ef6>\u5bfc\u51fa>\u5c4f\u5e55\u5bfc\u51fa\u2026",
+                zh_TW: "\u6a94\u6848 > \u5c0e\u51fa > \u5c4f\u5e55\u5c0e\u51fa\u2026",
             },
             hidden: false,
             minVersion: "20",
@@ -1884,6 +1969,7 @@ See the LICENSE file for details.
                 de: "Datei > Exportieren \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u042d\u043a\u0441\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043a\u0430\u043a...",
                 "zh-cn": "\u6587\u4ef6>\u5bfc\u51fa>\u5bfc\u51fa\u4e3a\u2026",
+                zh_TW: "\u6a94\u6848 > \u5c0e\u51fa > \u5c0e\u51fa\u70ba\u2026",
             },
             hidden: false,
         },
@@ -1899,6 +1985,7 @@ See the LICENSE file for details.
                 ru: "\u0424\u0430\u0439\u043b > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0434\u043b\u044f \u0431\u0440\u0430\u0443\u0437\u0435\u0440\u043e\u0432...",
                 "zh-cn":
                     "\u6587\u4ef6>\u5bfc\u51fa>\u5b58\u50a8\u4e3aWeb\u683c\u5f0f(\u65e7\u7248)\u2026",
+                zh_TW: "\u6a94\u6848 > \u5c0e\u51fa > \u5b58\u5132\u70baWeb\u683c\u5f0f(\u820a\u7248)\u2026",
             },
             hidden: false,
         },
@@ -1913,6 +2000,7 @@ See the LICENSE file for details.
                 de: "Datei > Auswahl exportieren \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u042d\u043a\u0441\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0435 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u044b...",
                 "zh-cn": "\u6587\u4ef6>\u5bfc\u51fa\u9009\u62e9\u2026",
+                zh_TW: "\u6a94\u6848 > \u5c0e\u51fa\u9078\u53d6\u2026",
             },
             hidden: false,
             minVersion: "20",
@@ -1928,6 +2016,7 @@ See the LICENSE file for details.
                 de: "Datei > Verpacken \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u0423\u043f\u0430\u043a\u043e\u0432\u0430\u0442\u044c...",
                 "zh-cn": "\u6587\u4ef6>\u6253\u5305\u2026",
+                zh_TW: "\u6a94\u6848 > \u6253\u5305\u2026",
             },
             hidden: false,
         },
@@ -1942,6 +2031,7 @@ See the LICENSE file for details.
                 de: "Datei > Skripten > Anderes Skript \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u0421\u0446\u0435\u043d\u0430\u0440\u0438\u0438 > \u0414\u0440\u0443\u0433\u043e\u0439 \u0441\u0446\u0435\u043d\u0430\u0440\u0438\u0439...",
                 "zh-cn": "\u6587\u4ef6>\u811a\u672c>\u5176\u4ed6\u811a\u672c\u2026",
+                zh_TW: "\u6a94\u6848 > \u8173\u672c > \u5176\u4ed6\u8173\u672c\u2026",
             },
             hidden: false,
         },
@@ -1957,6 +2047,7 @@ See the LICENSE file for details.
                 ru: "\u0424\u0430\u0439\u043b > \u0426\u0432\u0435\u0442\u043e\u0432\u043e\u0439 \u0440\u0435\u0436\u0438\u043c \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 > CMYK",
                 "zh-cn":
                     "\u6587\u4ef6>\u6587\u6863\u989c\u8272\u6a21\u5f0f> CMYK\u989c\u8272\u2026",
+                zh_TW: "\u6a94\u6848 > \u6587\u6a94\u984f\u8272\u6a21\u5f0f > CMYK\u984f\u8272\u2026",
             },
             hidden: false,
         },
@@ -1972,6 +2063,7 @@ See the LICENSE file for details.
                 ru: "\u0424\u0430\u0439\u043b > \u0426\u0432\u0435\u0442\u043e\u0432\u043e\u0439 \u0440\u0435\u0436\u0438\u043c \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 > RGB",
                 "zh-cn":
                     "\u6587\u4ef6>\u6587\u6863\u989c\u8272\u6a21\u5f0f> RGB\u989c\u8272\u2026",
+                zh_TW: "\u6a94\u6848 > \u6587\u6a94\u984f\u8272\u6a21\u5f0f > RGB\u984f\u8272\u2026",
             },
             hidden: false,
         },
@@ -1986,6 +2078,7 @@ See the LICENSE file for details.
                 de: "Datei > Dateiinformationen \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u0421\u0432\u0435\u0434\u0435\u043d\u0438\u044f \u043e \u0444\u0430\u0439\u043b\u0435...",
                 "zh-cn": "\u6587\u4ef6>\u6587\u4ef6\u4fe1\u606f\u2026",
+                zh_TW: "\u6a94\u6848 > \u6a94\u6848\u4fe1\u606f\u2026",
             },
             hidden: false,
         },
@@ -2000,6 +2093,7 @@ See the LICENSE file for details.
                 de: "Datei > Drucken \u2026",
                 ru: "\u0424\u0430\u0439\u043b > \u041f\u0435\u0447\u0430\u0442\u044c...",
                 "zh-cn": "\u6587\u4ef6>\u6253\u5370\u2026",
+                zh_TW: "\u6a94\u6848 > \u6253\u5370\u2026",
             },
             hidden: false,
         },
@@ -2014,6 +2108,7 @@ See the LICENSE file for details.
                 de: "Datei > Illustrator beenden",
                 ru: "\u0424\u0430\u0439\u043b > \u0412\u044b\u0445\u043e\u0434",
                 "zh-cn": "\u6587\u4ef6>\u9000\u51fa\u2026",
+                zh_TW: "\u6a94\u6848 > \u9000\u51fa\u2026",
             },
             hidden: false,
         },
@@ -2028,6 +2123,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > R\u00fcckg\u00e4ngig",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c",
                 "zh-cn": "\u7f16\u8f91>\u64a4\u9500\u2026",
+                zh_TW: "\u7de8\u8f2f > \u64a4\u92b7\u2026",
             },
             hidden: false,
         },
@@ -2042,6 +2138,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Wiederholen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c",
                 "zh-cn": "\u7f16\u8f91>\u91cd\u505a\u2026",
+                zh_TW: "\u7de8\u8f2f > \u91cd\u505a\u2026",
             },
             hidden: false,
         },
@@ -2056,6 +2153,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Ausschneiden",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u044b\u0440\u0435\u0437\u0430\u0442\u044c",
                 "zh-cn": "\u7f16\u8f91>\u526a\u5207\u2026",
+                zh_TW: "\u7de8\u8f2f > \u526a\u5207\u2026",
             },
             hidden: false,
         },
@@ -2070,6 +2168,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Kopieren",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
                 "zh-cn": "\u7f16\u8f91>\u590d\u5236\u2026",
+                zh_TW: "\u7de8\u8f2f > \u5fa9\u5236\u2026",
             },
             hidden: false,
         },
@@ -2084,6 +2183,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Einf\u00fcgen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c",
                 "zh-cn": "\u7f16\u8f91>\u7c98\u8d34\u2026",
+                zh_TW: "\u7de8\u8f2f > \u7c98\u8cbc\u2026",
             },
             hidden: false,
         },
@@ -2098,6 +2198,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Davor einf\u00fcgen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u043f\u0435\u0440\u0435\u0434\u043d\u0438\u0439 \u043f\u043b\u0430\u043d",
                 "zh-cn": "Edit > Paste in Front",
+                zh_TW: "\u7de8\u8f2f > Paste in Front",
             },
             hidden: false,
         },
@@ -2112,6 +2213,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Dahinter einf\u00fcgen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u0437\u0430\u0434\u043d\u0438\u0439 \u043f\u043b\u0430\u043d",
                 "zh-cn": "Edit > Paste in Back",
+                zh_TW: "\u7de8\u8f2f > Paste in Back",
             },
             hidden: false,
         },
@@ -2126,6 +2228,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > An Originalposition einf\u00fcgen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u0442\u043e \u0436\u0435 \u043c\u0435\u0441\u0442\u043e",
                 "zh-cn": "Edit > Paste in Place",
+                zh_TW: "\u7de8\u8f2f > Paste in Place",
             },
             hidden: false,
         },
@@ -2140,6 +2243,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > In alle Zeichenfl\u00e4chen einf\u00fcgen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u0432\u0441\u0435 \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "Edit > Paste on All Artboards",
+                zh_TW: "\u7de8\u8f2f > Paste on All Artboards",
             },
             hidden: false,
         },
@@ -2154,6 +2258,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Ohne Formatierung einf\u00fcgen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u0431\u0435\u0437 \u0444\u043e\u0440\u043c\u0430\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f",
                 "zh-cn": "Edit > Paste without Formatting",
+                zh_TW: "\u7de8\u8f2f > Paste without Formatting",
             },
             hidden: false,
             minVersion: "25.3",
@@ -2169,6 +2274,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > L\u00f6schen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041e\u0447\u0438\u0441\u0442\u0438\u0442\u044c",
                 "zh-cn": "Edit > Clear",
+                zh_TW: "\u7de8\u8f2f > Clear",
             },
             hidden: false,
         },
@@ -2183,6 +2289,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Suchen und ersetzen \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041d\u0430\u0439\u0442\u0438 \u0438 \u0437\u0430\u043c\u0435\u043d\u0438\u0442\u044c...",
                 "zh-cn": "Edit > Find and Replace...",
+                zh_TW: "\u7de8\u8f2f > Find and Replace...",
             },
             hidden: false,
         },
@@ -2197,6 +2304,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Weitersuchen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041d\u0430\u0439\u0442\u0438 \u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439",
                 "zh-cn": "Edit > Find Next",
+                zh_TW: "\u7de8\u8f2f > Find Next",
             },
             hidden: false,
         },
@@ -2211,6 +2319,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Rechtschreibung > Automatische Rechtschreibpr\u00fcfung",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u044f > \u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u0438",
                 "zh-cn": "Edit > Spelling > Auto Spell Check",
+                zh_TW: "\u7de8\u8f2f > Spelling > Auto Spell Check",
             },
             hidden: false,
             minVersion: "24",
@@ -2226,6 +2335,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Rechtschreibung > Rechtschreibpr\u00fcfung \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u044f > \u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u0438\u2026",
                 "zh-cn": "Edit > Spelling > Check Spelling...",
+                zh_TW: "\u7de8\u8f2f > Spelling > Check Spelling...",
             },
             hidden: false,
             minVersion: "24",
@@ -2241,6 +2351,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Eigenes W\u00f6rterbuch bearbeiten \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0437\u0430\u043a\u0430\u0437\u043d\u043e\u0439 \u0441\u043b\u043e\u0432\u0430\u0440\u044c...",
                 "zh-cn": "Edit > Edit Custom Dictionary...",
+                zh_TW: "\u7de8\u8f2f > Edit Custom Dictionary...",
             },
             hidden: false,
         },
@@ -2255,6 +2366,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > Bildmaterial neu f\u00e4rben \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0435\u0440\u0435\u043a\u0440\u0430\u0441\u0438\u0442\u044c \u0433\u0440\u0430\u0444\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043e\u0431\u044a\u0435\u043a\u0442...",
                 "zh-cn": "Edit > Edit Colors > Recolor Artwork...",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Recolor Artwork...",
             },
             hidden: false,
         },
@@ -2269,6 +2381,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > Farbbalance einstellen \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041a\u043e\u0440\u0440\u0435\u043a\u0446\u0438\u044f \u0446\u0432\u0435\u0442\u043e\u0432\u043e\u0433\u043e \u0431\u0430\u043b\u0430\u043d\u0441\u0430...",
                 "zh-cn": "Edit > Edit Colors > Adjust Color Balance...",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Adjust Color Balance...",
             },
             hidden: false,
         },
@@ -2283,6 +2396,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > Vorne -> Hinten angleichen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 \u043e\u0442 \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u043a \u043d\u0438\u0436\u043d\u0435\u043c\u0443",
                 "zh-cn": "Edit > Edit Colors > Blend Front to Back",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Blend Front to Back",
             },
             hidden: false,
         },
@@ -2297,6 +2411,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > Horizontal angleichen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 \u043f\u043e \u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u0438",
                 "zh-cn": "Edit > Edit Colors > Blend Horizontally",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Blend Horizontally",
             },
             hidden: false,
         },
@@ -2311,6 +2426,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > Vertikal angleichen",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 \u043f\u043e \u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u0438",
                 "zh-cn": "Edit > Edit Colors > Blend Vertically",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Blend Vertically",
             },
             hidden: false,
         },
@@ -2325,6 +2441,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > In CMYK konvertieren",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 CMYK",
                 "zh-cn": "Edit > Edit Colors > Convert to CMYK",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Convert to CMYK",
             },
             hidden: false,
         },
@@ -2339,6 +2456,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > In Graustufen konvertieren",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0433\u0440\u0430\u0434\u0430\u0446\u0438\u0438 \u0441\u0435\u0440\u043e\u0433\u043e",
                 "zh-cn": "Edit > Edit Colors > Convert to Grayscale",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Convert to Grayscale",
             },
             hidden: false,
         },
@@ -2353,6 +2471,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > In RGB konvertieren",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 RGB",
                 "zh-cn": "Edit > Edit Colors > Convert to RGB",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Convert to RGB",
             },
             hidden: false,
         },
@@ -2367,6 +2486,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > Generative Neuf\u00e4rbung",
                 ru: "Edit > Edit Colors > Generative Recolor",
                 "zh-cn": "Edit > Edit Colors > Generative Recolor",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Generative Recolor",
             },
             hidden: false,
             minVersion: "27.6",
@@ -2382,6 +2502,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > Farben invertieren",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041d\u0435\u0433\u0430\u0442\u0438\u0432",
                 "zh-cn": "Edit > Edit Colors > Invert Colors",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Invert Colors",
             },
             hidden: false,
         },
@@ -2396,6 +2517,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > Schwarz \u00fcberdrucken \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u041d\u0430\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u0447\u0435\u0440\u043d\u043e\u0433\u043e \u0446\u0432\u0435\u0442\u0430...",
                 "zh-cn": "Edit > Edit Colors > Overprint Black...",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Overprint Black...",
             },
             hidden: false,
         },
@@ -2410,6 +2532,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farben bearbeiten > S\u00e4ttigung erh\u00f6hen \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0446\u0432\u0435\u0442\u0430 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043d\u0430\u0441\u044b\u0449\u0435\u043d\u043d\u043e\u0441\u0442\u044c...",
                 "zh-cn": "Edit > Edit Colors > Saturate...",
+                zh_TW: "\u7de8\u8f2f > Edit Colors > Saturate...",
             },
             hidden: false,
         },
@@ -2424,6 +2547,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Original bearbeiten",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043e\u0440\u0438\u0433\u0438\u043d\u0430\u043b",
                 "zh-cn": "Edit > Edit Original",
+                zh_TW: "\u7de8\u8f2f > Edit Original",
             },
             hidden: false,
         },
@@ -2438,6 +2562,7 @@ See the LICENSE file for details.
                 de: "Edit > Prompt to edit",
                 ru: "Edit > Prompt to edit",
                 "zh-cn": "Edit > Prompt to edit",
+                zh_TW: "\u7de8\u8f2f > Prompt to edit",
             },
             hidden: false,
             minVersion: "30.5",
@@ -2453,6 +2578,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Transparenzreduzierungsvorgaben \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0421\u0442\u0438\u043b\u0438 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u0438...",
                 "zh-cn": "Edit > Transparency Flattener Presets...",
+                zh_TW: "\u7de8\u8f2f > Transparency Flattener Presets...",
             },
             hidden: false,
         },
@@ -2467,6 +2593,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Druckvorgaben \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0421\u0442\u0438\u043b\u0438 \u043f\u0435\u0447\u0430\u0442\u0438...",
                 "zh-cn": "Edit > Print Presets...",
+                zh_TW: "\u7de8\u8f2f > Print Presets...",
             },
             hidden: false,
         },
@@ -2481,6 +2608,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Adobe PDF-Vorgaben \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0421\u0442\u0438\u043b\u0438 \u043f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u044f \u0432 Adobe PDF...",
                 "zh-cn": "Edit > Adobe PDF Presets...",
+                zh_TW: "\u7de8\u8f2f > Adobe PDF Presets...",
             },
             hidden: false,
         },
@@ -2495,6 +2623,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Vorgaben f\u00fcr Perspektivenraster \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u0421\u0442\u0438\u043b\u0438 \u0441\u0435\u0442\u043a\u0438 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b...",
                 "zh-cn": "Edit > Perspective Grid Presets...",
+                zh_TW: "\u7de8\u8f2f > Perspective Grid Presets...",
             },
             hidden: false,
         },
@@ -2509,6 +2638,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Farbeinstellungen \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u0446\u0432\u0435\u0442\u043e\u0432...",
                 "zh-cn": "Edit > Color Settings...",
+                zh_TW: "\u7de8\u8f2f > Color Settings...",
             },
             hidden: false,
         },
@@ -2523,6 +2653,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Profil zuweisen \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041d\u0430\u0437\u043d\u0430\u0447\u0438\u0442\u044c \u043f\u0440\u043e\u0444\u0438\u043b\u044c...",
                 "zh-cn": "Edit > Assign Profile...",
+                zh_TW: "\u7de8\u8f2f > Assign Profile...",
             },
             hidden: false,
         },
@@ -2537,6 +2668,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Tastaturbefehle \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 > \u041a\u043e\u043c\u0431\u0438\u043d\u0430\u0446\u0438\u0438 \u043a\u043b\u0430\u0432\u0438\u0448...",
                 "zh-cn": "Edit > Keyboard Shortcuts...",
+                zh_TW: "\u7de8\u8f2f > Keyboard Shortcuts...",
             },
             hidden: false,
         },
@@ -2551,6 +2683,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > SWF-Vorgaben \u2026",
                 ru: "Edit > SWF Presets...",
                 "zh-cn": "Edit > SWF Presets...",
+                zh_TW: "\u7de8\u8f2f > SWF Presets...",
             },
             hidden: false,
             minVersion: "22",
@@ -2567,6 +2700,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transformieren > Erneut transformieren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435",
                 "zh-cn": "Object > Transform > Transform Again",
+                zh_TW: "\u7269\u4ef6 > Transform > Transform Again",
             },
             hidden: false,
         },
@@ -2581,6 +2715,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transformieren > Verschieben \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u0435\u0440\u0435\u043c\u0435\u0449\u0435\u043d\u0438\u0435...",
                 "zh-cn": "Object > Transform > Move...",
+                zh_TW: "\u7269\u4ef6 > Transform > Move...",
             },
             hidden: false,
         },
@@ -2595,6 +2730,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transformieren > Drehen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u043e\u0432\u043e\u0440\u043e\u0442...",
                 "zh-cn": "Object > Transform > Rotate...",
+                zh_TW: "\u7269\u4ef6 > Transform > Rotate...",
             },
             hidden: false,
         },
@@ -2609,6 +2745,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transformieren > Spiegeln \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0417\u0435\u0440\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u043e\u0442\u0440\u0430\u0436\u0435\u043d\u0438\u0435...",
                 "zh-cn": "Object > Transform > Reflect...",
+                zh_TW: "\u7269\u4ef6 > Transform > Reflect...",
             },
             hidden: false,
         },
@@ -2623,6 +2760,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transformieren > Skalieren \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041c\u0430\u0441\u0448\u0442\u0430\u0431\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435...",
                 "zh-cn": "Object > Transform > Scale...",
+                zh_TW: "\u7269\u4ef6 > Transform > Scale...",
             },
             hidden: false,
         },
@@ -2637,6 +2775,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transformieren > Verbiegen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041d\u0430\u043a\u043b\u043e\u043d...",
                 "zh-cn": "Object > Transform > Shear...",
+                zh_TW: "\u7269\u4ef6 > Transform > Shear...",
             },
             hidden: false,
         },
@@ -2651,6 +2790,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transformieren > Einzeln transformieren \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043a\u0430\u0436\u0434\u044b\u0439...",
                 "zh-cn": "Object > Transform > Transform Each...",
+                zh_TW: "\u7269\u4ef6 > Transform > Transform Each...",
             },
             hidden: false,
         },
@@ -2665,6 +2805,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transform > Begrenzungsrahmen zur\u00fccksetzen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u0440\u0430\u043c\u043a\u0438",
                 "zh-cn": "Object > Transform > Reset Bounding Box",
+                zh_TW: "\u7269\u4ef6 > Transform > Reset Bounding Box",
             },
             hidden: false,
         },
@@ -2679,6 +2820,7 @@ See the LICENSE file for details.
                 de: "Objekt > Anordnen > In den Vordergrund",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041d\u0430 \u043f\u0435\u0440\u0435\u0434\u043d\u0438\u0439 \u043f\u043b\u0430\u043d",
                 "zh-cn": "Object > Arrange > Bring to Front",
+                zh_TW: "\u7269\u4ef6 > Arrange > Bring to Front",
             },
             hidden: false,
         },
@@ -2693,6 +2835,7 @@ See the LICENSE file for details.
                 de: "Objekt > Anordnen > Schrittweise nach vorne",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041d\u0430 \u0437\u0430\u0434\u043d\u0438\u0439 \u043f\u043b\u0430\u043d",
                 "zh-cn": "Object > Arrange > Bring Forward",
+                zh_TW: "\u7269\u4ef6 > Arrange > Bring Forward",
             },
             hidden: false,
         },
@@ -2707,6 +2850,7 @@ See the LICENSE file for details.
                 de: "Objekt > Anordnen > Schrittweise nach hinten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041f\u0435\u0440\u0435\u043b\u043e\u0436\u0438\u0442\u044c \u0432\u043f\u0435\u0440\u0435\u0434",
                 "zh-cn": "Object > Arrange > Send Backward",
+                zh_TW: "\u7269\u4ef6 > Arrange > Send Backward",
             },
             hidden: false,
         },
@@ -2721,6 +2865,7 @@ See the LICENSE file for details.
                 de: "Objekt > Anordnen > In den Hintergrund",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041f\u0435\u0440\u0435\u043b\u043e\u0436\u0438\u0442\u044c \u043d\u0430\u0437\u0430\u0434",
                 "zh-cn": "Object > Arrange > Send to Back",
+                zh_TW: "\u7269\u4ef6 > Arrange > Send to Back",
             },
             hidden: false,
         },
@@ -2735,6 +2880,7 @@ See the LICENSE file for details.
                 de: "Objekt > Anordnen > In aktuelle Ebene verschieben",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436 > \u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c \u043d\u0430 \u0442\u0435\u043a\u0443\u0449\u0438\u0439 \u0441\u043b\u043e\u0439",
                 "zh-cn": "Object > Arrange > Send to Current Layer",
+                zh_TW: "\u7269\u4ef6 > Arrange > Send to Current Layer",
             },
             hidden: false,
         },
@@ -2749,6 +2895,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausrichten > Horizontal links ausrichten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0413\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0432\u043b\u0435\u0432\u043e",
                 "zh-cn": "Object > Align > Horizontal Align Left",
+                zh_TW: "\u7269\u4ef6 > Align > Horizontal Align Left",
             },
             hidden: false,
             minVersion: "24",
@@ -2764,6 +2911,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausrichten > Horizontal zentriert ausrichten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0413\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0446\u0435\u043d\u0442\u0440",
                 "zh-cn": "Object > Align > Horizontal Align Center",
+                zh_TW: "\u7269\u4ef6 > Align > Horizontal Align Center",
             },
             hidden: false,
             minVersion: "24",
@@ -2779,6 +2927,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausrichten > Horizontal rechts ausrichten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0413\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0432\u043f\u0440\u0430\u0432\u043e",
                 "zh-cn": "Object > Align > Horizontal Align Right",
+                zh_TW: "\u7269\u4ef6 > Align > Horizontal Align Right",
             },
             hidden: false,
             minVersion: "24",
@@ -2794,6 +2943,7 @@ See the LICENSE file for details.
                 de: "Horizontal & Vertical Align Center",
                 ru: "Horizontal & Vertical Align Center",
                 "zh-cn": "Horizontal & Vertical Align Center",
+                zh_TW: "Horizontal & Vertical Align Center",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -2809,6 +2959,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausrichten > Vertikal oben ausrichten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0432\u0432\u0435\u0440\u0445",
                 "zh-cn": "Object > Align > Vertical Align Top",
+                zh_TW: "\u7269\u4ef6 > Align > Vertical Align Top",
             },
             hidden: false,
             minVersion: "24",
@@ -2824,6 +2975,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausrichten > Vertikal zentriert ausrichten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0446\u0435\u043d\u0442\u0440",
                 "zh-cn": "Object > Align > Vertical Align Center",
+                zh_TW: "\u7269\u4ef6 > Align > Vertical Align Center",
             },
             hidden: false,
             minVersion: "24",
@@ -2839,6 +2991,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausrichten > Vertikal unten ausrichten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 > \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435, \u0432\u043d\u0438\u0437",
                 "zh-cn": "Object > Align > Vertical Align Bottom",
+                zh_TW: "\u7269\u4ef6 > Align > Vertical Align Bottom",
             },
             hidden: false,
             minVersion: "24",
@@ -2854,6 +3007,7 @@ See the LICENSE file for details.
                 de: "Object > Align > Align To Selection",
                 ru: "Object > Align > Align To Selection",
                 "zh-cn": "Object > Align > Align To Selection",
+                zh_TW: "\u7269\u4ef6 > Align > Align To Selection",
             },
             hidden: false,
             minVersion: "30.6",
@@ -2869,6 +3023,7 @@ See the LICENSE file for details.
                 de: "Object > Align > Align To Key Object",
                 ru: "Object > Align > Align To Key Object",
                 "zh-cn": "Object > Align > Align To Key Object",
+                zh_TW: "\u7269\u4ef6 > Align > Align To Key Object",
             },
             hidden: false,
             minVersion: "30.6",
@@ -2884,6 +3039,7 @@ See the LICENSE file for details.
                 de: "Object > Align > Align To Artboard",
                 ru: "Object > Align > Align To Artboard",
                 "zh-cn": "Object > Align > Align To Artboard",
+                zh_TW: "\u7269\u4ef6 > Align > Align To Artboard",
             },
             hidden: false,
             minVersion: "30.6",
@@ -2899,6 +3055,7 @@ See the LICENSE file for details.
                 de: "Object > Distribute > Vertical Distribute Top",
                 ru: "Object > Distribute > Vertical Distribute Top",
                 "zh-cn": "Object > Distribute > Vertical Distribute Top",
+                zh_TW: "\u7269\u4ef6 > Distribute > Vertical Distribute Top",
             },
             hidden: false,
             minVersion: "27",
@@ -2914,6 +3071,7 @@ See the LICENSE file for details.
                 de: "Object > Distribute > Vertical Distribute Center",
                 ru: "Object > Distribute > Vertical Distribute Center",
                 "zh-cn": "Object > Distribute > Vertical Distribute Center",
+                zh_TW: "\u7269\u4ef6 > Distribute > Vertical Distribute Center",
             },
             hidden: false,
             minVersion: "27",
@@ -2929,6 +3087,7 @@ See the LICENSE file for details.
                 de: "Object > Distribute > Vertical Distribute Bottom",
                 ru: "Object > Distribute > Vertical Distribute Bottom",
                 "zh-cn": "Object > Distribute > Vertical Distribute Bottom",
+                zh_TW: "\u7269\u4ef6 > Distribute > Vertical Distribute Bottom",
             },
             hidden: false,
             minVersion: "27",
@@ -2944,6 +3103,7 @@ See the LICENSE file for details.
                 de: "Object > Distribute > Horizontal Distribute Left",
                 ru: "Object > Distribute > Horizontal Distribute Left",
                 "zh-cn": "Object > Distribute > Horizontal Distribute Left",
+                zh_TW: "\u7269\u4ef6 > Distribute > Horizontal Distribute Left",
             },
             hidden: false,
             minVersion: "27",
@@ -2959,6 +3119,7 @@ See the LICENSE file for details.
                 de: "Object > Distribute > Horizontal Distribute Center",
                 ru: "Object > Distribute > Horizontal Distribute Center",
                 "zh-cn": "Object > Distribute > Horizontal Distribute Center",
+                zh_TW: "\u7269\u4ef6 > Distribute > Horizontal Distribute Center",
             },
             hidden: false,
             minVersion: "27",
@@ -2974,6 +3135,7 @@ See the LICENSE file for details.
                 de: "Object > Distribute > Horizontal Distribute Right",
                 ru: "Object > Distribute > Horizontal Distribute Right",
                 "zh-cn": "Object > Distribute > Horizontal Distribute Right",
+                zh_TW: "\u7269\u4ef6 > Distribute > Horizontal Distribute Right",
             },
             hidden: false,
             minVersion: "27",
@@ -2989,6 +3151,7 @@ See the LICENSE file for details.
                 de: "Object > Distribute > Vertical Distribute Space",
                 ru: "Object > Distribute > Vertical Distribute Space",
                 "zh-cn": "Object > Distribute > Vertical Distribute Space",
+                zh_TW: "\u7269\u4ef6 > Distribute > Vertical Distribute Space",
             },
             hidden: false,
             minVersion: "30.6",
@@ -3004,6 +3167,7 @@ See the LICENSE file for details.
                 de: "Object > Distribute > Horizontal Distribute Space",
                 ru: "Object > Distribute > Horizontal Distribute Space",
                 "zh-cn": "Object > Distribute > Horizontal Distribute Space",
+                zh_TW: "\u7269\u4ef6 > Distribute > Horizontal Distribute Space",
             },
             hidden: false,
             minVersion: "30.6",
@@ -3019,6 +3183,7 @@ See the LICENSE file for details.
                 de: "Objekt > Gruppieren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u0433\u0440\u0443\u043f\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
                 "zh-cn": "Object > Group",
+                zh_TW: "\u7269\u4ef6 > Group",
             },
             hidden: false,
         },
@@ -3033,6 +3198,7 @@ See the LICENSE file for details.
                 de: "Objekt > Gruppierung aufheben",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0420\u0430\u0437\u0433\u0440\u0443\u043f\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
                 "zh-cn": "Object > Ungroup",
+                zh_TW: "\u7269\u4ef6 > Ungroup",
             },
             hidden: false,
         },
@@ -3047,6 +3213,7 @@ See the LICENSE file for details.
                 de: "Object > Ungroup All",
                 ru: "Object > Ungroup All",
                 "zh-cn": "Object > Ungroup All",
+                zh_TW: "\u7269\u4ef6 > Ungroup All",
             },
             hidden: false,
             minVersion: "29.3",
@@ -3062,6 +3229,7 @@ See the LICENSE file for details.
                 de: "Objekt > Sperren > Auswahl",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c > \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u043e\u0435",
                 "zh-cn": "Object > Lock > Selection",
+                zh_TW: "\u7269\u4ef6 > Lock > Selection",
             },
             hidden: false,
         },
@@ -3076,6 +3244,7 @@ See the LICENSE file for details.
                 de: "Objekt > Sperren > S\u00e4mtliches Bildmaterial dar\u00fcber",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c > \u0412\u0441\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0432\u044b\u0448\u0435",
                 "zh-cn": "Object > Lock > All Artwork Above",
+                zh_TW: "\u7269\u4ef6 > Lock > All Artwork Above",
             },
             hidden: false,
         },
@@ -3090,6 +3259,7 @@ See the LICENSE file for details.
                 de: "Objekt > Sperren > Andere Ebenen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c > \u041e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u0435 \u0441\u043b\u043e\u0438",
                 "zh-cn": "Object > Lock > Other Layers",
+                zh_TW: "\u7269\u4ef6 > Lock > Other Layers",
             },
             hidden: false,
         },
@@ -3104,6 +3274,7 @@ See the LICENSE file for details.
                 de: "Objekt > Alle entsperren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0441\u0432\u043e\u0431\u043e\u0434\u0438\u0442\u044c \u0432\u0441\u0435",
                 "zh-cn": "Object > Unlock All",
+                zh_TW: "\u7269\u4ef6 > Unlock All",
             },
             hidden: false,
         },
@@ -3118,6 +3289,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausblenden > Auswahl",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043a\u0440\u044b\u0442\u044c > \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u043e\u0435",
                 "zh-cn": "Object > Hide > Selection",
+                zh_TW: "\u7269\u4ef6 > Hide > Selection",
             },
             hidden: false,
         },
@@ -3132,6 +3304,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausblenden > S\u00e4mtliches Bildmaterial dar\u00fcber",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043a\u0440\u044b\u0442\u044c > \u0412\u0441\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0432\u044b\u0448\u0435",
                 "zh-cn": "Object > Hide > All Artwork Above",
+                zh_TW: "\u7269\u4ef6 > Hide > All Artwork Above",
             },
             hidden: false,
         },
@@ -3146,6 +3319,7 @@ See the LICENSE file for details.
                 de: "Objekt > Ausblenden > Andere Ebenen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043a\u0440\u044b\u0442\u044c > \u041e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u0435 \u0441\u043b\u043e\u0438",
                 "zh-cn": "Object > Hide > Other Layers",
+                zh_TW: "\u7269\u4ef6 > Hide > Other Layers",
             },
             hidden: false,
         },
@@ -3160,6 +3334,7 @@ See the LICENSE file for details.
                 de: "Objekt > Alles einblenden",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0432\u0441\u0435",
                 "zh-cn": "Object > Show All",
+                zh_TW: "\u7269\u4ef6 > Show All",
             },
             hidden: false,
         },
@@ -3174,6 +3349,7 @@ See the LICENSE file for details.
                 de: "Object > Remove Background",
                 ru: "Object > Remove Background",
                 "zh-cn": "Object > Remove Background",
+                zh_TW: "\u7269\u4ef6 > Remove Background",
             },
             hidden: false,
             minVersion: "30.4",
@@ -3189,6 +3365,7 @@ See the LICENSE file for details.
                 de: "Objekt > Bild zuschneiden",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0440\u0435\u0437\u0430\u0442\u044c \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435",
                 "zh-cn": "Object > Crop Image",
+                zh_TW: "\u7269\u4ef6 > Crop Image",
             },
             hidden: false,
             minVersion: "23",
@@ -3204,6 +3381,7 @@ See the LICENSE file for details.
                 de: "Objekt > In Pixelbild umwandeln \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0420\u0430\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c...",
                 "zh-cn": "Object > Rasterize...",
+                zh_TW: "\u7269\u4ef6 > Rasterize...",
             },
             hidden: false,
         },
@@ -3218,6 +3396,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verlaufsgitter erstellen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0441\u0435\u0442\u0447\u0430\u0442\u044b\u0439 \u0433\u0440\u0430\u0434\u0438\u0435\u043d\u0442...",
                 "zh-cn": "Object > Create Gradient Mesh...",
+                zh_TW: "\u7269\u4ef6 > Create Gradient Mesh...",
             },
             hidden: false,
         },
@@ -3232,6 +3411,7 @@ See the LICENSE file for details.
                 de: "Objekt > Objektmosaik erstellen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044e...",
                 "zh-cn": "Object > Create Object Mosaic...",
+                zh_TW: "\u7269\u4ef6 > Create Object Mosaic...",
             },
             hidden: false,
         },
@@ -3246,6 +3426,7 @@ See the LICENSE file for details.
                 de: "Objekt > Schnittmarken erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043c\u0435\u0442\u043a\u0438 \u043e\u0431\u0440\u0435\u0437\u0430",
                 "zh-cn": "Object > Create Trim Marks",
+                zh_TW: "\u7269\u4ef6 > Create Trim Marks",
             },
             hidden: false,
         },
@@ -3260,6 +3441,7 @@ See the LICENSE file for details.
                 de: "Objekt > Transparenz reduzieren \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u0438...",
                 "zh-cn": "Object > Flatten Transparency...",
+                zh_TW: "\u7269\u4ef6 > Flatten Transparency...",
             },
             hidden: false,
         },
@@ -3274,6 +3456,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pixelgenaue Darstellung anwenden",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u0440\u0440\u0435\u043a\u0446\u0438\u044f \u043d\u0430 \u0443\u0440\u043e\u0432\u043d\u0435 \u043f\u0438\u043a\u0441\u0435\u043b\u043e\u0432",
                 "zh-cn": "Object > Make Pixel Perfect",
+                zh_TW: "\u7269\u4ef6 > Make Pixel Perfect",
             },
             hidden: false,
         },
@@ -3288,6 +3471,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Generate Vectors...",
                 ru: "Object > Generative > Generate Vectors...",
                 "zh-cn": "Object > Generative > Generate Vectors...",
+                zh_TW: "\u7269\u4ef6 > Generative > Generate Vectors...",
             },
             hidden: false,
             minVersion: "30.0",
@@ -3303,6 +3487,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Generative Shape Fill...",
                 ru: "Object > Generative > Generative Shape Fill...",
                 "zh-cn": "Object > Generative > Generative Shape Fill...",
+                zh_TW: "\u7269\u4ef6 > Generative > Generative Shape Fill...",
             },
             hidden: false,
             minVersion: "30.0",
@@ -3318,6 +3503,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Concept to Vector",
                 ru: "Object > Generative > Concept to Vector",
                 "zh-cn": "Object > Generative > Concept to Vector",
+                zh_TW: "\u7269\u4ef6 > Generative > Concept to Vector",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -3333,6 +3519,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Turntable",
                 ru: "Object > Generative > Turntable",
                 "zh-cn": "Object > Generative > Turntable",
+                zh_TW: "\u7269\u4ef6 > Generative > Turntable",
             },
             hidden: false,
             minVersion: "30.3",
@@ -3348,6 +3535,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Text > Rewrite...",
                 ru: "Object > Generative > Text > Rewrite...",
                 "zh-cn": "Object > Generative > Text > Rewrite...",
+                zh_TW: "\u7269\u4ef6 > Generative > Text > Rewrite...",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -3364,6 +3552,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Rewrite > Generate Text...",
                 ru: "Object > Generative > Rewrite > Generate Text...",
                 "zh-cn": "Object > Generative > Rewrite > Generate Text...",
+                zh_TW: "\u7269\u4ef6 > Generative > Rewrite > Generate Text...",
             },
             hidden: false,
             minVersion: "30.6",
@@ -3379,6 +3568,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Rewrite > Fit text",
                 ru: "Object > Generative > Rewrite > Fit text",
                 "zh-cn": "Object > Generative > Rewrite > Fit text",
+                zh_TW: "\u7269\u4ef6 > Generative > Rewrite > Fit text",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -3394,6 +3584,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Rewrite > Proofread",
                 ru: "Object > Generative > Rewrite > Proofread",
                 "zh-cn": "Object > Generative > Rewrite > Proofread",
+                zh_TW: "\u7269\u4ef6 > Generative > Rewrite > Proofread",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -3409,6 +3600,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Rewrite > Translate...",
                 ru: "Object > Generative > Rewrite > Translate...",
                 "zh-cn": "Object > Generative > Rewrite > Translate...",
+                zh_TW: "\u7269\u4ef6 > Generative > Rewrite > Translate...",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -3424,6 +3616,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Generative Expand > Make",
                 ru: "Object > Generative > Generative Expand > Make",
                 "zh-cn": "Object > Generative > Generative Expand > Make",
+                zh_TW: "\u7269\u4ef6 > Generative > Generative Expand > \u5efa\u7acb",
             },
             hidden: false,
             minVersion: "30.0",
@@ -3439,6 +3632,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Generative Expand > Combine",
                 ru: "Object > Generative > Generative Expand > Combine",
                 "zh-cn": "Object > Generative > Generative Expand > Combine",
+                zh_TW: "\u7269\u4ef6 > Generative > Generative Expand > Combine",
             },
             hidden: false,
             minVersion: "30.0",
@@ -3454,6 +3648,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Print Bleed",
                 ru: "Object > Generative > Print Bleed",
                 "zh-cn": "Object > Generative > Print Bleed",
+                zh_TW: "\u7269\u4ef6 > Generative > Print Bleed",
             },
             hidden: false,
             minVersion: "30.0",
@@ -3469,6 +3664,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Generative Recolor",
                 ru: "Object > Generative > Generative Recolor",
                 "zh-cn": "Object > Generative > Generative Recolor",
+                zh_TW: "\u7269\u4ef6 > Generative > Generative Recolor",
             },
             hidden: false,
             minVersion: "30.0",
@@ -3484,6 +3680,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Generate Patterns",
                 ru: "Object > Generative > Generate Patterns",
                 "zh-cn": "Object > Generative > Generate Patterns",
+                zh_TW: "\u7269\u4ef6 > Generative > Generate Patterns",
             },
             hidden: false,
             minVersion: "30.0",
@@ -3499,6 +3696,7 @@ See the LICENSE file for details.
                 de: "Object > Generative > Generation History",
                 ru: "Object > Generative > Generation History",
                 "zh-cn": "Object > Generative > Generation History",
+                zh_TW: "\u7269\u4ef6 > Generative > Generation History",
             },
             hidden: false,
             minVersion: "30.0",
@@ -3514,6 +3712,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
                 "zh-cn": "Object > Slice > Make",
+                zh_TW: "\u7269\u4ef6 > Slice > \u5efa\u7acb",
             },
             hidden: false,
         },
@@ -3528,6 +3727,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0420\u0430\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
                 "zh-cn": "Object > Slice > Release",
+                zh_TW: "\u7269\u4ef6 > Slice > \u91cb\u653e",
             },
             hidden: false,
         },
@@ -3542,6 +3742,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Aus Hilfslinien erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u043e \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u043c",
                 "zh-cn": "Object > Slice > Create from Guides",
+                zh_TW: "\u7269\u4ef6 > Slice > Create from Guides",
             },
             hidden: false,
         },
@@ -3556,6 +3757,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Aus Auswahl erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u043e \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "Object > Slice > Create from Selection",
+                zh_TW: "\u7269\u4ef6 > Slice > Create from Selection",
             },
             hidden: false,
         },
@@ -3570,6 +3772,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Slice duplizieren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0434\u0443\u0431\u043b\u0438\u043a\u0430\u0442 \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u0430",
                 "zh-cn": "Object > Slice > Duplicate Slice",
+                zh_TW: "\u7269\u4ef6 > Slice > Duplicate Slice",
             },
             hidden: false,
         },
@@ -3584,6 +3787,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Slices kombinieren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u041e\u0431\u044a\u0435\u0434\u0438\u043d\u0438\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b",
                 "zh-cn": "Object > Slice > Combine Slices",
+                zh_TW: "\u7269\u4ef6 > Slice > Combine Slices",
             },
             hidden: false,
         },
@@ -3598,6 +3802,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Slices unterteilen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0420\u0430\u0437\u0434\u0435\u043b\u0438\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b...",
                 "zh-cn": "Object > Slice > Divide Slices...",
+                zh_TW: "\u7269\u4ef6 > Slice > Divide Slices...",
             },
             hidden: false,
         },
@@ -3612,6 +3817,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Alle l\u00f6schen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0432\u0441\u0435",
                 "zh-cn": "Object > Slice > Delete All",
+                zh_TW: "\u7269\u4ef6 > Slice > Delete All",
             },
             hidden: false,
         },
@@ -3626,6 +3832,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Slice-Optionen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u0430...",
                 "zh-cn": "Object > Slice > Slice Options...",
+                zh_TW: "\u7269\u4ef6 > Slice > Slice Options...",
             },
             hidden: false,
         },
@@ -3640,6 +3847,7 @@ See the LICENSE file for details.
                 de: "Objekt > Slice > Ganze Zeichenfl\u00e4che exportieren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b > \u041e\u0431\u0440\u0435\u0437\u0430\u0442\u044c \u043f\u043e \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "Object > Slice > Clip to Artboard",
+                zh_TW: "\u7269\u4ef6 > Slice > Clip to Artboard",
             },
             hidden: false,
         },
@@ -3654,6 +3862,7 @@ See the LICENSE file for details.
                 de: "Object > Generate Vectors...",
                 ru: "Object > Generate Vectors...",
                 "zh-cn": "Object > Generate Vectors...",
+                zh_TW: "\u7269\u4ef6 > Generate Vectors...",
             },
             hidden: false,
             minVersion: "28.6",
@@ -3670,6 +3879,7 @@ See the LICENSE file for details.
                 de: "Objekt > Umwandeln \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c\u2026",
                 "zh-cn": "Object > Expand...",
+                zh_TW: "\u7269\u4ef6 > Expand...",
             },
             hidden: false,
         },
@@ -3684,6 +3894,7 @@ See the LICENSE file for details.
                 de: "Objekt > Aussehen umwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435",
                 "zh-cn": "Object > Expand Appearance",
+                zh_TW: "\u7269\u4ef6 > Expand Appearance",
             },
             hidden: false,
         },
@@ -3698,6 +3909,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Zusammenf\u00fcgen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0435\u0434\u0438\u043d\u0438\u0442\u044c",
                 "zh-cn": "Object > Path > Join",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u9023\u63a5",
             },
             hidden: false,
         },
@@ -3712,6 +3924,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Durchschnitt berechnen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0423\u0441\u0440\u0435\u0434\u043d\u0438\u0442\u044c\u2026",
                 "zh-cn": "Object > Path > Average...",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u5e73\u5747\u2026",
             },
             hidden: false,
         },
@@ -3726,6 +3939,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Konturlinie",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u043e\u0431\u0432\u043e\u0434\u043a\u0443 \u0432 \u043a\u0440\u0438\u0432\u044b\u0435",
                 "zh-cn": "Object > Path > Outline Stroke",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u5916\u6846\u7b46\u756b",
             },
             hidden: false,
         },
@@ -3740,6 +3954,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Pfad verschieben \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u0430\u0440\u0430\u043b\u043b\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440\u2026",
                 "zh-cn": "Object > Path > Offset Path...",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u4f4d\u79fb\u8def\u5f91\u2026",
             },
             hidden: false,
         },
@@ -3754,6 +3969,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Pfadrichtung umkehren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0418\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u043a\u043e\u043d\u0442\u0443\u0440\u0430",
                 "zh-cn": "Object > Path > Reverse Path Direction",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u53cd\u8f49\u8def\u5f91\u65b9\u5411",
             },
             hidden: false,
             minVersion: "21",
@@ -3769,6 +3985,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Vereinfachen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0423\u043f\u0440\u043e\u0441\u0442\u0438\u0442\u044c\u2026",
                 "zh-cn": "Object > Path > Simplify...",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u7c21\u5316\u2026",
             },
             hidden: false,
         },
@@ -3783,6 +4000,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Ankerpunkte hinzuf\u00fcgen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
                 "zh-cn": "Object > Path > Add Anchor Points",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u589e\u52a0\u9328\u9ede",
             },
             hidden: false,
         },
@@ -3797,6 +4015,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Ankerpunkte entfernen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
                 "zh-cn": "Object > Path > Remove Anchor Points",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u79fb\u9664\u9328\u9ede",
             },
             hidden: false,
         },
@@ -3811,6 +4030,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Darunter liegende Objekte aufteilen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0420\u0430\u0437\u0434\u0435\u043b\u0438\u0442\u044c \u043d\u0438\u0436\u043d\u0438\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b",
                 "zh-cn": "Object > Path > Divide Objects Below",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u5206\u5272\u4e0b\u65b9\u7269\u4ef6",
             },
             hidden: false,
         },
@@ -3825,6 +4045,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > In Raster teilen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0441\u0435\u0442\u043a\u0443...",
                 "zh-cn": "Object > Path > Split Into Grid...",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u5206\u5272\u6210\u7db2\u683c\u2026",
             },
             hidden: false,
         },
@@ -3839,6 +4060,7 @@ See the LICENSE file for details.
                 de: "Objekt > Pfad > Aufr\u00e4umen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0412\u044b\u0447\u0438\u0441\u0442\u0438\u0442\u044c\u2026",
                 "zh-cn": "Object > Path > Clean Up...",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u6e05\u9664\u2026",
             },
             hidden: false,
         },
@@ -3853,6 +4075,7 @@ See the LICENSE file for details.
                 de: "Object > Path > Smooth...",
                 ru: "Object > Path > Smooth...",
                 "zh-cn": "Object > Path > Smooth...",
+                zh_TW: "\u7269\u4ef6 > \u8def\u5f91 > \u5e73\u6ed1\u2026",
             },
             hidden: false,
             minVersion: "28",
@@ -3868,6 +4091,7 @@ See the LICENSE file for details.
                 de: "Objekt > Form > In Form umwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0438\u0433\u0443\u0440\u0430 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0444\u0438\u0433\u0443\u0440\u044b",
                 "zh-cn": "Object > Shape > Convert to Shape",
+                zh_TW: "\u7269\u4ef6 > Shape > Convert to Shape",
             },
             hidden: false,
             minVersion: "18",
@@ -3883,6 +4107,7 @@ See the LICENSE file for details.
                 de: "Objekt > Form > Form umwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0424\u0438\u0433\u0443\u0440\u0430 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c \u0444\u0438\u0433\u0443\u0440\u0443",
                 "zh-cn": "Object > Shape > Expand Shape",
+                zh_TW: "\u7269\u4ef6 > Shape > Expand Shape",
             },
             hidden: false,
             minVersion: "18",
@@ -3898,6 +4123,7 @@ See the LICENSE file for details.
                 de: "Object > Gen Shape Fill...",
                 ru: "Object > Gen Shape Fill...",
                 "zh-cn": "Object > Gen Shape Fill...",
+                zh_TW: "\u7269\u4ef6 > Gen Shape Fill...",
             },
             hidden: false,
             minVersion: "28.6",
@@ -3914,6 +4140,7 @@ See the LICENSE file for details.
                 de: "Object > Generative Expand > Make...",
                 ru: "Object > Generative Expand > Make...",
                 "zh-cn": "Object > Generative Expand > Make...",
+                zh_TW: "\u7269\u4ef6 > Generative Expand > Make...",
             },
             hidden: false,
             minVersion: "29.6",
@@ -3930,6 +4157,7 @@ See the LICENSE file for details.
                 de: "Object > Generative Expand > Combine",
                 ru: "Object > Generative Expand > Combine",
                 "zh-cn": "Object > Generative Expand > Combine",
+                zh_TW: "\u7269\u4ef6 > Generative Expand > Combine",
             },
             hidden: false,
             minVersion: "29.6",
@@ -3946,6 +4174,7 @@ See the LICENSE file for details.
                 de: "Object > Print Bleed...",
                 ru: "Object > Print Bleed...",
                 "zh-cn": "Object > Print Bleed...",
+                zh_TW: "\u7269\u4ef6 > Print Bleed...",
             },
             hidden: false,
             minVersion: "29.6",
@@ -3962,6 +4191,7 @@ See the LICENSE file for details.
                 de: "Objekt > Muster > Erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0423\u0437\u043e\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
                 "zh-cn": "Object > Pattern > Make",
+                zh_TW: "\u7269\u4ef6 > Pattern > \u5efa\u7acb",
             },
             hidden: false,
         },
@@ -3976,6 +4206,7 @@ See the LICENSE file for details.
                 de: "Objekt > Muster > Muster bearbeiten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0423\u0437\u043e\u0440 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0443\u0437\u043e\u0440",
                 "zh-cn": "Object > Pattern > Edit Pattern",
+                zh_TW: "\u7269\u4ef6 > Pattern > Edit Pattern",
             },
             hidden: false,
         },
@@ -3990,6 +4221,7 @@ See the LICENSE file for details.
                 de: "Objekt > Muster > Farbe f\u00fcr Musterelement-Kante",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0423\u0437\u043e\u0440 > \u0426\u0432\u0435\u0442 \u043a\u0440\u0430\u044f \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u0430...",
                 "zh-cn": "Object > Pattern > Tile Edge Color...",
+                zh_TW: "\u7269\u4ef6 > Pattern > Tile Edge Color...",
             },
             hidden: false,
         },
@@ -4004,6 +4236,7 @@ See the LICENSE file for details.
                 de: "Object > Pattern > Generate Patterns",
                 ru: "Object > Pattern > Generate Patterns",
                 "zh-cn": "Object > Pattern > Generate Patterns",
+                zh_TW: "\u7269\u4ef6 > Pattern > Generate Patterns",
             },
             hidden: false,
             minVersion: "28.6",
@@ -4020,6 +4253,7 @@ See the LICENSE file for details.
                 de: "Object > Pattern > Generate Patterns",
                 ru: "Object > Pattern > Generate Patterns",
                 "zh-cn": "Object > Pattern > Generate Patterns",
+                zh_TW: "\u7269\u4ef6 > Pattern > Generate Patterns",
             },
             hidden: false,
             minVersion: "30.0",
@@ -4035,6 +4269,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verflechtung > Erstellen",
                 ru: "Object > Intertwine > Make",
                 "zh-cn": "Object > Intertwine > Make",
+                zh_TW: "\u7269\u4ef6 > Intertwine > \u5efa\u7acb",
             },
             hidden: false,
             minVersion: "27",
@@ -4050,6 +4285,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verflechtung > Zur\u00fcckwandeln",
                 ru: "Object > Intertwine > Release",
                 "zh-cn": "Object > Intertwine > Release",
+                zh_TW: "\u7269\u4ef6 > Intertwine > \u91cb\u653e",
             },
             hidden: false,
             minVersion: "27",
@@ -4065,6 +4301,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verflechtung > Bearbeiten",
                 ru: "Object > Intertwine > Edit",
                 "zh-cn": "Object > Intertwine > Edit",
+                zh_TW: "\u7269\u4ef6 > Intertwine > \u7de8\u8f2f",
             },
             hidden: false,
             minVersion: "27",
@@ -4080,6 +4317,7 @@ See the LICENSE file for details.
                 de: "Objekt > Wiederholen > Radial",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u0420\u0430\u0434\u0438\u0430\u043b\u044c\u043d\u044b\u0439",
                 "zh-cn": "Object > Repeat > Radial",
+                zh_TW: "\u7269\u4ef6 > Repeat > Radial",
             },
             hidden: false,
             minVersion: "25.1",
@@ -4095,6 +4333,7 @@ See the LICENSE file for details.
                 de: "Objekt > Wiederholen > Raster",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u0421\u0435\u0442\u043a\u0430",
                 "zh-cn": "Object > Repeat > Grid",
+                zh_TW: "\u7269\u4ef6 > Repeat > Grid",
             },
             hidden: false,
             minVersion: "25.1",
@@ -4110,6 +4349,7 @@ See the LICENSE file for details.
                 de: "Objekt > Wiederholen > Spiegeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u0417\u0435\u0440\u043a\u0430\u043b\u044c\u043d\u043e",
                 "zh-cn": "Object > Repeat > Mirror",
+                zh_TW: "\u7269\u4ef6 > Repeat > Mirror",
             },
             hidden: false,
             minVersion: "25.1",
@@ -4125,6 +4365,7 @@ See the LICENSE file for details.
                 de: "Objekt > Wiederholen > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u041e\u0441\u0432\u043e\u0431\u043e\u0434\u0438\u0442\u044c",
                 "zh-cn": "Object > Repeat > Release",
+                zh_TW: "\u7269\u4ef6 > Repeat > \u91cb\u653e",
             },
             hidden: false,
             minVersion: "25.1",
@@ -4140,6 +4381,7 @@ See the LICENSE file for details.
                 de: "Objekt > Wiederholen > Optionen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u043e\u0432\u0442\u043e\u0440\u0438\u0442\u044c > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b\u2026",
                 "zh-cn": "Object > Repeat > Options...",
+                zh_TW: "\u7269\u4ef6 > Repeat > \u9078\u9805\u2026",
             },
             hidden: false,
             minVersion: "25.1",
@@ -4155,6 +4397,7 @@ See the LICENSE file for details.
                 de: "Object > Objects on Path > Attach...",
                 ru: "Object > Objects on Path > Attach...",
                 "zh-cn": "Object > Objects on Path > Attach...",
+                zh_TW: "\u7269\u4ef6 > \u6cbf\u8def\u5f91\u6392\u5217\u7269\u4ef6 > \u9644\u52a0\u2026",
             },
             hidden: false,
             minVersion: "29",
@@ -4170,6 +4413,7 @@ See the LICENSE file for details.
                 de: "Object > Objects on Path > Options...",
                 ru: "Object > Objects on Path > Options...",
                 "zh-cn": "Object > Objects on Path > Options...",
+                zh_TW: "\u7269\u4ef6 > \u6cbf\u8def\u5f91\u6392\u5217\u7269\u4ef6 > \u9078\u9805\u2026",
             },
             hidden: false,
             minVersion: "29",
@@ -4185,6 +4429,7 @@ See the LICENSE file for details.
                 de: "Object > Objects on Path > Expand",
                 ru: "Object > Objects on Path > Expand",
                 "zh-cn": "Object > Objects on Path > Expand",
+                zh_TW: "\u7269\u4ef6 > \u6cbf\u8def\u5f91\u6392\u5217\u7269\u4ef6 > \u5c55\u958b",
             },
             hidden: false,
             minVersion: "29",
@@ -4200,6 +4445,7 @@ See the LICENSE file for details.
                 de: "Objekt > Angleichen > Erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
                 "zh-cn": "Object > Blend > Make",
+                zh_TW: "\u7269\u4ef6 > Blend > \u5efa\u7acb",
             },
             hidden: false,
         },
@@ -4214,6 +4460,7 @@ See the LICENSE file for details.
                 de: "Objekt > Angleichen > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c",
                 "zh-cn": "Object > Blend > Release",
+                zh_TW: "\u7269\u4ef6 > Blend > \u91cb\u653e",
             },
             hidden: false,
         },
@@ -4228,6 +4475,7 @@ See the LICENSE file for details.
                 de: "Objekt > Angleichen > Angleichung-Optionen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043f\u0435\u0440\u0435\u0445\u043e\u0434\u0430\u2026",
                 "zh-cn": "Object > Blend > Blend Options...",
+                zh_TW: "\u7269\u4ef6 > Blend > Blend Options...",
             },
             hidden: false,
         },
@@ -4242,6 +4490,7 @@ See the LICENSE file for details.
                 de: "Objekt > Angleichen > Umwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
                 "zh-cn": "Object > Blend > Expand",
+                zh_TW: "\u7269\u4ef6 > Blend > \u5c55\u958b",
             },
             hidden: false,
         },
@@ -4256,6 +4505,7 @@ See the LICENSE file for details.
                 de: "Objekt > Angleichen > Achse ersetzen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0417\u0430\u043c\u0435\u043d\u0438\u0442\u044c \u0442\u0440\u0430\u0435\u043a\u0442\u043e\u0440\u0438\u044e",
                 "zh-cn": "Object > Blend > Replace Spine",
+                zh_TW: "\u7269\u4ef6 > Blend > Replace Spine",
             },
             hidden: false,
         },
@@ -4270,6 +4520,7 @@ See the LICENSE file for details.
                 de: "Objekt > Angleichen > Achse umkehren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435",
                 "zh-cn": "Object > Blend > Reverse Spine",
+                zh_TW: "\u7269\u4ef6 > Blend > Reverse Spine",
             },
             hidden: false,
         },
@@ -4284,6 +4535,7 @@ See the LICENSE file for details.
                 de: "Objekt > Angleichen > Farbrichtung umkehren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0435\u0445\u043e\u0434 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043f\u043e\u0440\u044f\u0434\u043e\u043a",
                 "zh-cn": "Object > Blend > Reverse Front to Back",
+                zh_TW: "\u7269\u4ef6 > Blend > Reverse Front to Back",
             },
             hidden: false,
         },
@@ -4298,6 +4550,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verzerrungsh\u00fclle > Mit Verkr\u00fcmmung erstellen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f...",
                 "zh-cn": "Object > Envelope Distort > Make with Warp...",
+                zh_TW: "\u7269\u4ef6 > Envelope Distort > Make with Warp...",
             },
             hidden: false,
         },
@@ -4312,6 +4565,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verzerrungsh\u00fclle > Mit Gitter erstellen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u041f\u043e \u0441\u0435\u0442\u043a\u0435...",
                 "zh-cn": "Object > Envelope Distort > Make with Mesh...",
+                zh_TW: "\u7269\u4ef6 > Envelope Distort > Make with Mesh...",
             },
             hidden: false,
         },
@@ -4326,6 +4580,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verzerrungsh\u00fclle > Mit oberstem Objekt erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u041f\u043e \u0444\u043e\u0440\u043c\u0435 \u0432\u0435\u0440\u0445\u043d\u0435\u0433\u043e \u043e\u0431\u044a\u0435\u043a\u0442\u0430",
                 "zh-cn": "Object > Envelope Distort > Make with Top Object",
+                zh_TW: "\u7269\u4ef6 > Envelope Distort > Make with Top Object",
             },
             hidden: false,
         },
@@ -4340,6 +4595,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verzerrungsh\u00fclle > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u041e\u0442\u0434\u0435\u043b\u0438\u0442\u044c",
                 "zh-cn": "Object > Envelope Distort > Release",
+                zh_TW: "\u7269\u4ef6 > Envelope Distort > \u91cb\u653e",
             },
             hidden: false,
         },
@@ -4354,6 +4610,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verzerrungsh\u00fclle > H\u00fcllen-Optionen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438...",
                 "zh-cn": "Object > Envelope Distort > Envelope Options...",
+                zh_TW: "\u7269\u4ef6 > Envelope Distort > Envelope Options...",
             },
             hidden: false,
         },
@@ -4368,6 +4625,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verzerrungsh\u00fclle > Umwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
                 "zh-cn": "Object > Envelope Distort > Expand",
+                zh_TW: "\u7269\u4ef6 > Envelope Distort > \u5c55\u958b",
             },
             hidden: false,
         },
@@ -4382,6 +4640,7 @@ See the LICENSE file for details.
                 de: "Objekt > Verzerrungsh\u00fclle > Inhalt bearbeiten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u043e\u0431\u043e\u043b\u043e\u0447\u043a\u0438 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0441\u043e\u0434\u0435\u0440\u0436\u0438\u043c\u043e\u0435",
                 "zh-cn": "Object > Envelope Distort > Edit Contents",
+                zh_TW: "\u7269\u4ef6 > Envelope Distort > Edit Contents",
             },
             hidden: false,
         },
@@ -4396,6 +4655,7 @@ See the LICENSE file for details.
                 de: "Objekt > Perspektive > Aktiver Ebene anh\u00e4ngen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u0430 > \u041f\u0440\u0438\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u043a \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0439 \u043f\u043b\u043e\u0441\u043a\u043e\u0441\u0442\u0438",
                 "zh-cn": "Object > Perspective > Attach to Active Plane",
+                zh_TW: "\u7269\u4ef6 > Perspective > Attach to Active Plane",
             },
             hidden: false,
         },
@@ -4410,6 +4670,7 @@ See the LICENSE file for details.
                 de: "Objekt > Perspektive > Aus Perspektive freigeben",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u0430 > \u041e\u0442\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0441 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u0435\u043c \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b",
                 "zh-cn": "Object > Perspective > Release with Perspective",
+                zh_TW: "\u7269\u4ef6 > Perspective > Release with Perspective",
             },
             hidden: false,
         },
@@ -4424,6 +4685,7 @@ See the LICENSE file for details.
                 de: "Objekt > Perspektive > Ebene an Objekt ausrichten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u0430 > \u041f\u0435\u0440\u0435\u043c\u0435\u0441\u0442\u0438\u0442\u044c \u043f\u043b\u043e\u0441\u043a\u043e\u0441\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0433\u043e\u043d\u043a\u0438 \u043f\u043e \u043e\u0431\u044a\u0435\u043a\u0442\u0443",
                 "zh-cn": "Object > Perspective > Move Plane to Match Object",
+                zh_TW: "\u7269\u4ef6 > Perspective > Move Plane to Match Object",
             },
             hidden: false,
         },
@@ -4438,6 +4700,7 @@ See the LICENSE file for details.
                 de: "Objekt > Perspektive > Text bearbeiten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u0430 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0442\u0435\u043a\u0441\u0442",
                 "zh-cn": "Object > Perspective > Edit Text",
+                zh_TW: "\u7269\u4ef6 > Perspective > Edit Text",
             },
             hidden: false,
         },
@@ -4452,6 +4715,7 @@ See the LICENSE file for details.
                 de: "Objekt > Interaktiv malen > Erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
                 "zh-cn": "Object > Live Paint > Make",
+                zh_TW: "\u7269\u4ef6 > Live Paint > \u5efa\u7acb",
             },
             hidden: false,
         },
@@ -4466,6 +4730,7 @@ See the LICENSE file for details.
                 de: "Objekt > Interaktiv malen > Zusammenf\u00fcgen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u041e\u0431\u044a\u0435\u0434\u0438\u043d\u0438\u0442\u044c",
                 "zh-cn": "Object > Live Paint > Merge",
+                zh_TW: "\u7269\u4ef6 > Live Paint > Merge",
             },
             hidden: false,
         },
@@ -4480,6 +4745,7 @@ See the LICENSE file for details.
                 de: "Objekt > Interaktiv malen > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u0420\u0430\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
                 "zh-cn": "Object > Live Paint > Release",
+                zh_TW: "\u7269\u4ef6 > Live Paint > \u91cb\u653e",
             },
             hidden: false,
         },
@@ -4494,6 +4760,7 @@ See the LICENSE file for details.
                 de: "Objekt > Interaktiv malen > L\u00fcckenoptionen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0437\u0430\u0437\u043e\u0440\u043e\u0432\u2026",
                 "zh-cn": "Object > Live Paint > Gap Options...",
+                zh_TW: "\u7269\u4ef6 > Live Paint > Gap Options...",
             },
             hidden: false,
         },
@@ -4508,6 +4775,7 @@ See the LICENSE file for details.
                 de: "Objekt > Interaktiv malen > Umwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430 > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
                 "zh-cn": "Object > Live Paint > Expand",
+                zh_TW: "\u7269\u4ef6 > Live Paint > \u5c55\u958b",
             },
             hidden: false,
         },
@@ -4522,6 +4790,7 @@ See the LICENSE file for details.
                 de: "Objekt > Bildnachzeichner > Erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
                 "zh-cn": "Object > Image Trace > Make",
+                zh_TW: "\u7269\u4ef6 > Image Trace > \u5efa\u7acb",
             },
             hidden: false,
         },
@@ -4536,6 +4805,7 @@ See the LICENSE file for details.
                 de: "Objekt > Bildnachzeichner > Erstellen und umwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0438 \u0440\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
                 "zh-cn": "Object > Image Trace > Make and Expand",
+                zh_TW: "\u7269\u4ef6 > Image Trace > Make and Expand",
             },
             hidden: false,
         },
@@ -4550,6 +4820,7 @@ See the LICENSE file for details.
                 de: "Objekt > Bildnachzeichner > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0420\u0430\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
                 "zh-cn": "Object > Image Trace > Release",
+                zh_TW: "\u7269\u4ef6 > Image Trace > \u91cb\u653e",
             },
             hidden: false,
         },
@@ -4564,6 +4835,7 @@ See the LICENSE file for details.
                 de: "Objekt > Bildnachzeichner > Umwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0422\u0440\u0430\u0441\u0441\u0438\u0440\u043e\u0432\u043a\u0430 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f > \u0420\u0430\u0437\u043e\u0431\u0440\u0430\u0442\u044c",
                 "zh-cn": "Object > Image Trace > Expand",
+                zh_TW: "\u7269\u4ef6 > Image Trace > \u5c55\u958b",
             },
             hidden: false,
         },
@@ -4578,6 +4850,7 @@ See the LICENSE file for details.
                 de: "Object > Mockup > Make / Preview",
                 ru: "Object > Mockup > Make / Preview",
                 "zh-cn": "Object > Mockup > Make / Preview",
+                zh_TW: "\u7269\u4ef6 > Mockup > Make / Preview",
             },
             hidden: false,
             minVersion: "28",
@@ -4593,6 +4866,7 @@ See the LICENSE file for details.
                 de: "Object > Mockup > Release",
                 ru: "Object > Mockup > Release",
                 "zh-cn": "Object > Mockup > Release",
+                zh_TW: "\u7269\u4ef6 > Mockup > \u91cb\u653e",
             },
             hidden: false,
             minVersion: "28",
@@ -4608,6 +4882,7 @@ See the LICENSE file for details.
                 de: "Object > Mockup > Edit",
                 ru: "Object > Mockup > Edit",
                 "zh-cn": "Object > Mockup > Edit",
+                zh_TW: "\u7269\u4ef6 > Mockup > \u7de8\u8f2f",
             },
             hidden: false,
             minVersion: "28",
@@ -4623,6 +4898,7 @@ See the LICENSE file for details.
                 de: "Objekt > Textumfluss > Erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0435\u043a\u0430\u043d\u0438\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u043c > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
                 "zh-cn": "Object > Text Wrap > Make",
+                zh_TW: "\u7269\u4ef6 > Text Wrap > \u5efa\u7acb",
             },
             hidden: false,
         },
@@ -4637,6 +4913,7 @@ See the LICENSE file for details.
                 de: "Objekt > Textumfluss > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0435\u043a\u0430\u043d\u0438\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u043c > \u041e\u0441\u0432\u043e\u0431\u043e\u0434\u0438\u0442\u044c",
                 "zh-cn": "Object > Text Wrap > Release",
+                zh_TW: "\u7269\u4ef6 > Text Wrap > \u91cb\u653e",
             },
             hidden: false,
         },
@@ -4651,6 +4928,7 @@ See the LICENSE file for details.
                 de: "Objekt > Textumfluss > Textumflussoptionen \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0435\u043a\u0430\u043d\u0438\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u043c > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043e\u0431\u0442\u0435\u043a\u0430\u043d\u0438\u044f \u0442\u0435\u043a\u0441\u0442\u043e\u043c...",
                 "zh-cn": "Object > Text Wrap > Text Wrap Options...",
+                zh_TW: "\u7269\u4ef6 > Text Wrap > Text Wrap Options...",
             },
             hidden: false,
         },
@@ -4665,6 +4943,7 @@ See the LICENSE file for details.
                 de: "Objekt > Schnittmaske > Erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0440\u0430\u0432\u043e\u0447\u043d\u0430\u044f \u043c\u0430\u0441\u043a\u0430 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
                 "zh-cn": "Object > Clipping Mask > Make",
+                zh_TW: "\u7269\u4ef6 > Clipping Mask > \u5efa\u7acb",
             },
             hidden: false,
         },
@@ -4679,6 +4958,7 @@ See the LICENSE file for details.
                 de: "Objekt > Schnittmaske > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0440\u0430\u0432\u043e\u0447\u043d\u0430\u044f \u043c\u0430\u0441\u043a\u0430 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c",
                 "zh-cn": "Object > Clipping Mask > Release",
+                zh_TW: "\u7269\u4ef6 > Clipping Mask > \u91cb\u653e",
             },
             hidden: false,
         },
@@ -4693,6 +4973,7 @@ See the LICENSE file for details.
                 de: "Objekt > Schnittmaske > Maske bearbeiten",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041e\u0431\u0442\u0440\u0430\u0432\u043e\u0447\u043d\u0430\u044f \u043c\u0430\u0441\u043a\u0430 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043c\u0430\u0441\u043a\u0443",
                 "zh-cn": "Object > Clipping Mask > Edit Mask",
+                zh_TW: "\u7269\u4ef6 > Clipping Mask > Edit Mask",
             },
             hidden: false,
         },
@@ -4707,6 +4988,7 @@ See the LICENSE file for details.
                 de: "Objekt > Zusammengesetzter Pfad > Erstellen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0441\u0442\u0430\u0432\u043d\u043e\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c",
                 "zh-cn": "Object > Compound Path > Make",
+                zh_TW: "\u7269\u4ef6 > \u8907\u5408\u8def\u5f91 > \u5efa\u7acb",
             },
             hidden: false,
         },
@@ -4721,6 +5003,7 @@ See the LICENSE file for details.
                 de: "Objekt > Zusammengesetzter Pfad > Zur\u00fcckwandeln",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0421\u043e\u0441\u0442\u0430\u0432\u043d\u043e\u0439 \u043a\u043e\u043d\u0442\u0443\u0440 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c",
                 "zh-cn": "Object > Compound Path > Release",
+                zh_TW: "\u7269\u4ef6 > \u8907\u5408\u8def\u5f91 > \u91cb\u653e",
             },
             hidden: false,
         },
@@ -4735,6 +5018,7 @@ See the LICENSE file for details.
                 de: "Objekt > Zeichenfl\u00e4chen > In Zeichenfl\u00e4chen konvertieren",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "Object > Artboards > Convert to Artboards",
+                zh_TW: "\u7269\u4ef6 > Artboards > Convert to Artboards",
             },
             hidden: false,
         },
@@ -4749,6 +5033,7 @@ See the LICENSE file for details.
                 de: "Objekt > Zeichenfl\u00e4chen > Alle Zeichenfl\u00e4chen neu anordnen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438 > \u041f\u0435\u0440\u0435\u0443\u043f\u043e\u0440\u044f\u0434\u043e\u0447\u0438\u0442\u044c \u0432\u0441\u0435 \u043c\u043e\u043d\u0442. \u043e\u0431\u043b.",
                 "zh-cn": "Object > Artboards > Rearrange Artboards",
+                zh_TW: "\u7269\u4ef6 > Artboards > Rearrange Artboards",
             },
             hidden: false,
         },
@@ -4763,6 +5048,7 @@ See the LICENSE file for details.
                 de: "Objekt > Zeichenfl\u00e4chen > An Bildmaterialbegrenzungen anpassen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438 > \u041f\u043e\u0434\u043e\u0433\u043d\u0430\u0442\u044c \u043f\u043e \u0433\u0440\u0430\u043d\u0438\u0446\u0430\u043c \u0438\u043b\u043b\u044e\u0441\u0442\u0440\u0430\u0446\u0438\u0438",
                 "zh-cn": "Object > Artboards > Fit to Artwork Bounds",
+                zh_TW: "\u7269\u4ef6 > Artboards > Fit to Artwork Bounds",
             },
             hidden: false,
         },
@@ -4777,6 +5063,7 @@ See the LICENSE file for details.
                 de: "Object > Artboards > Switch Orientation",
                 ru: "Object > Artboards > Switch Orientation",
                 "zh-cn": "Object > Artboards > Switch Orientation",
+                zh_TW: "\u7269\u4ef6 > Artboards > Switch Orientation",
             },
             hidden: false,
             minVersion: "30.0",
@@ -4792,6 +5079,7 @@ See the LICENSE file for details.
                 de: "Objekt > Zeichenfl\u00e4chen > An ausgew\u00e4hlte Grafik anpassen",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438 > \u041f\u043e\u0434\u043e\u0433\u043d\u0430\u0442\u044c \u043f\u043e \u0433\u0440\u0430\u043d\u0438\u0446\u0430\u043c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u043e\u0439 \u0438\u043b\u043b\u044e\u0441\u0442\u0440\u0430\u0446\u0438\u0438",
                 "zh-cn": "Object > Artboards > Fit to Selected Art",
+                zh_TW: "\u7269\u4ef6 > Artboards > Fit to Selected Art",
             },
             hidden: false,
         },
@@ -4806,6 +5094,7 @@ See the LICENSE file for details.
                 de: "Objekt > Diagramm > Art \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u0422\u0438\u043f\u2026",
                 "zh-cn": "Object > Graph > Type...",
+                zh_TW: "\u7269\u4ef6 > Graph > Type...",
             },
             hidden: false,
         },
@@ -4820,6 +5109,7 @@ See the LICENSE file for details.
                 de: "Objekt > Diagramm > Daten \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u0414\u0430\u043d\u043d\u044b\u0435\u2026",
                 "zh-cn": "Object > Graph > Data...",
+                zh_TW: "\u7269\u4ef6 > Graph > Data...",
             },
             hidden: false,
         },
@@ -4834,6 +5124,7 @@ See the LICENSE file for details.
                 de: "Objekt > Diagramm > Designs \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435\u2026",
                 "zh-cn": "Object > Graph > Design...",
+                zh_TW: "\u7269\u4ef6 > Graph > Design...",
             },
             hidden: false,
         },
@@ -4848,6 +5139,7 @@ See the LICENSE file for details.
                 de: "Objekt > Diagramm > Balken \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u0421\u0442\u043e\u043b\u0431\u0435\u0446\u2026",
                 "zh-cn": "Object > Graph > Column...",
+                zh_TW: "\u7269\u4ef6 > Graph > Column...",
             },
             hidden: false,
         },
@@ -4862,6 +5154,7 @@ See the LICENSE file for details.
                 de: "Objekt > Diagramm > Punkte \u2026",
                 ru: "\u041e\u0431\u044a\u0435\u043a\u0442 > \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 > \u041c\u0430\u0440\u043a\u0435\u0440\u2026",
                 "zh-cn": "Object > Graph > Marker...",
+                zh_TW: "\u7269\u4ef6 > Graph > Marker...",
             },
             hidden: false,
         },
@@ -4876,6 +5169,7 @@ See the LICENSE file for details.
                 de: "Schrift > Mehr bei Adobe Fonts \u2026",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u041d\u0430\u0439\u0442\u0438 \u0431\u043e\u043b\u044c\u0448\u0435 \u0432 Adobe Fonts...",
                 "zh-cn": "Type > More from Adobe Fonts...",
+                zh_TW: "\u6587\u5b57 > More from Adobe Fonts...",
             },
             hidden: false,
             minVersion: "17.1",
@@ -4891,6 +5185,7 @@ See the LICENSE file for details.
                 de: "Schrift > Glyphen",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0413\u043b\u0438\u0444\u044b",
                 "zh-cn": "Type > Glyphs",
+                zh_TW: "\u6587\u5b57 > Glyphs",
             },
             hidden: false,
         },
@@ -4905,6 +5200,7 @@ See the LICENSE file for details.
                 de: "Type > Convert to Area Type / Point Type",
                 ru: "Type > Convert to Area Type / Point Type",
                 "zh-cn": "Type > Convert to Area Type / Point Type",
+                zh_TW: "\u6587\u5b57 > Convert to Area Type / Point Type",
             },
             hidden: false,
             minVersion: "29.4",
@@ -4920,6 +5216,7 @@ See the LICENSE file for details.
                 de: "Schrift > Fl\u00e4chentextoptionen \u2026",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0442\u0435\u043a\u0441\u0442\u0430 \u0432 \u043e\u0431\u043b\u0430\u0441\u0442\u0438\u2026",
                 "zh-cn": "Type > Area Type Options...",
+                zh_TW: "\u6587\u5b57 > Area Type Options...",
             },
             hidden: false,
         },
@@ -4934,6 +5231,7 @@ See the LICENSE file for details.
                 de: "Schrift > Pfadtext > Regenbogen",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u0420\u0430\u0434\u0443\u0433\u0430",
                 "zh-cn": "Type > Type on a Path > Rainbow",
+                zh_TW: "\u6587\u5b57 > \u8def\u5f91\u6587\u5b57 > Rainbow",
             },
             hidden: false,
         },
@@ -4948,6 +5246,7 @@ See the LICENSE file for details.
                 de: "Schrift > Pfadtext > Asymmetrie",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041d\u0430\u043a\u043b\u043e\u043d",
                 "zh-cn": "Type > Type on a Path > Skew",
+                zh_TW: "\u6587\u5b57 > \u8def\u5f91\u6587\u5b57 > Skew",
             },
             hidden: false,
         },
@@ -4962,6 +5261,7 @@ See the LICENSE file for details.
                 de: "Schrift > Pfadtext > 3D-Band",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041a\u0430\u0441\u043a\u0430\u0434",
                 "zh-cn": "Type > Type on a Path > 3D Ribbon",
+                zh_TW: "\u6587\u5b57 > \u8def\u5f91\u6587\u5b57 > 3D Ribbon",
             },
             hidden: false,
         },
@@ -4976,6 +5276,7 @@ See the LICENSE file for details.
                 de: "Schrift > Pfadtext > Treppenstufe",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041b\u0435\u0441\u0435\u043d\u043a\u0430",
                 "zh-cn": "Type > Type on a Path > Stair Step",
+                zh_TW: "\u6587\u5b57 > \u8def\u5f91\u6587\u5b57 > Stair Step",
             },
             hidden: false,
         },
@@ -4990,6 +5291,7 @@ See the LICENSE file for details.
                 de: "Schrift > Pfadtext > Schwerkraft",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u0413\u0440\u0430\u0432\u0438\u0442\u0430\u0446\u0438\u044f",
                 "zh-cn": "Type > Type on a Path > Gravity",
+                zh_TW: "\u6587\u5b57 > \u8def\u5f91\u6587\u5b57 > Gravity",
             },
             hidden: false,
         },
@@ -5004,6 +5306,7 @@ See the LICENSE file for details.
                 de: "Schrift > Pfadtext > Pfadtextoptionen \u2026",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0442\u0435\u043a\u0441\u0442\u0430 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443...",
                 "zh-cn": "Type > Type on a Path > Type on a Path Options...",
+                zh_TW: "\u6587\u5b57 > \u8def\u5f91\u6587\u5b57 > \u8def\u5f91\u6587\u5b57\u9078\u9805\u2026",
             },
             hidden: false,
         },
@@ -5018,6 +5321,7 @@ See the LICENSE file for details.
                 de: "Schrift > Pfadtext > Alten Pfadtext aktualisieren",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443 > \u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c \u043f\u0440\u0435\u0436\u043d\u044e\u044e \u0432\u0435\u0440\u0441\u0438\u044e \u0442\u0435\u043a\u0441\u0442\u0430 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443",
                 "zh-cn": "Type > Type on a Path > Update Legacy Type on a Path",
+                zh_TW: "\u6587\u5b57 > \u8def\u5f91\u6587\u5b57 > \u66f4\u65b0\u820a\u7248\u8def\u5f91\u6587\u5b57",
             },
             hidden: false,
         },
@@ -5032,6 +5336,7 @@ See the LICENSE file for details.
                 de: "Schrift > Verketteter Text > Erstellen",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0421\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0435 \u0431\u043b\u043e\u043a\u0438 > \u0421\u0432\u044f\u0437\u0430\u0442\u044c",
                 "zh-cn": "Type > Threaded Text > Create",
+                zh_TW: "\u6587\u5b57 > Threaded Text > Create",
             },
             hidden: false,
         },
@@ -5046,6 +5351,7 @@ See the LICENSE file for details.
                 de: "Schrift > Verketteter Text > Auswahl zur\u00fcckwandeln",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0421\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0435 \u0431\u043b\u043e\u043a\u0438 > \u0418\u0441\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0435",
                 "zh-cn": "Type > Threaded Text > Release Selection",
+                zh_TW: "\u6587\u5b57 > Threaded Text > Release Selection",
             },
             hidden: false,
         },
@@ -5060,6 +5366,7 @@ See the LICENSE file for details.
                 de: "Schrift > Verketteter Text > Verkettung entfernen",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0421\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0435 \u0431\u043b\u043e\u043a\u0438 > \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0441\u0432\u044f\u0437\u044c \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0445 \u0431\u043b\u043e\u043a\u043e\u0432",
                 "zh-cn": "Type > Threaded Text > Remove Threading",
+                zh_TW: "\u6587\u5b57 > Threaded Text > Remove Threading",
             },
             hidden: false,
         },
@@ -5074,6 +5381,7 @@ See the LICENSE file for details.
                 de: "Schrift > \u00dcberschrift einpassen",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0420\u0430\u0437\u043e\u0433\u043d\u0430\u0442\u044c \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a",
                 "zh-cn": "Type > Fit Headline",
+                zh_TW: "\u6587\u5b57 > Fit Headline",
             },
             hidden: false,
         },
@@ -5088,6 +5396,7 @@ See the LICENSE file for details.
                 de: "Schrift > Fehlende Schriftarten aufl\u00f6sen \u2026",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0421\u043e\u043f\u043e\u0441\u0442\u0430\u0432\u0438\u0442\u044c \u043e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0435 \u0448\u0440\u0438\u0444\u0442\u044b...",
                 "zh-cn": "Type > Resolve Missing Fonts...",
+                zh_TW: "\u6587\u5b57 > Resolve Missing Fonts...",
             },
             hidden: false,
         },
@@ -5102,6 +5411,7 @@ See the LICENSE file for details.
                 de: "Schrift > Schriftart suchen/ersetzen \u2026",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u041d\u0430\u0439\u0442\u0438/\u0437\u0430\u043c\u0435\u043d\u0438\u0442\u044c \u0448\u0440\u0438\u0444\u0442...",
                 "zh-cn": "Type > Find/Replace Font...",
+                zh_TW: "\u6587\u5b57 > Find/Replace Font...",
             },
             hidden: false,
         },
@@ -5116,6 +5426,7 @@ See the LICENSE file for details.
                 de: "Schrift > Gro\u00df-/Kleinschreibung \u00e4ndern > GROSSBUCHSTABEN",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u0440\u0435\u0433\u0438\u0441\u0442\u0440 > \u0412\u0421\u0415 \u041f\u0420\u041e\u041f\u0418\u0421\u041d\u042b\u0415",
                 "zh-cn": "Type > Change Case > UPPERCASE",
+                zh_TW: "\u6587\u5b57 > Change Case > UPPERCASE",
             },
             hidden: false,
         },
@@ -5130,6 +5441,7 @@ See the LICENSE file for details.
                 de: "Schrift > Gro\u00df-/Kleinschreibung \u00e4ndern > kleinbuchstaben",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u0440\u0435\u0433\u0438\u0441\u0442\u0440 > \u0432\u0441\u0435 \u0441\u0442\u0440\u043e\u0447\u043d\u044b\u0435",
                 "zh-cn": "Type > Change Case > lowercase",
+                zh_TW: "\u6587\u5b57 > Change Case > lowercase",
             },
             hidden: false,
         },
@@ -5144,6 +5456,7 @@ See the LICENSE file for details.
                 de: "Schrift > Gro\u00df-/Kleinschreibung \u00e4ndern > Erster Buchstabe Im Wort Gro\u00df",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u0440\u0435\u0433\u0438\u0441\u0442\u0440 > \u041f\u0440\u043e\u043f\u0438\u0441\u043d\u0430\u044f \u0412 \u041d\u0430\u0447\u0430\u043b\u0435 \u041a\u0430\u0436\u0434\u043e\u0433\u043e \u0421\u043b\u043e\u0432\u0430",
                 "zh-cn": "Type > Change Case > Title Case",
+                zh_TW: "\u6587\u5b57 > Change Case > Title Case",
             },
             hidden: false,
         },
@@ -5158,6 +5471,7 @@ See the LICENSE file for details.
                 de: "Schrift > Gro\u00df-/Kleinschreibung \u00e4ndern > Erster buchstabe im satz gro\u00df",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u0440\u0435\u0433\u0438\u0441\u0442\u0440 > \u041f\u0440\u043e\u043f\u0438\u0441\u043d\u0430\u044f \u0432 \u043d\u0430\u0447\u0430\u043b\u0435 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u044f",
                 "zh-cn": "Type > Change Case > Sentence case",
+                zh_TW: "\u6587\u5b57 > Change Case > Sentence case",
             },
             hidden: false,
         },
@@ -5172,6 +5486,7 @@ See the LICENSE file for details.
                 de: "Schrift > Satz-/Sonderzeichen \u2026",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0422\u0438\u043f\u043e\u0433\u0440\u0430\u0444\u0441\u043a\u0430\u044f \u043f\u0443\u043d\u043a\u0442\u0443\u0430\u0446\u0438\u044f...",
                 "zh-cn": "Type > Smart Punctuation...",
+                zh_TW: "\u6587\u5b57 > Smart Punctuation...",
             },
             hidden: false,
         },
@@ -5186,6 +5501,7 @@ See the LICENSE file for details.
                 de: "Schrift > In Pfade umwandeln",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u043a\u0440\u0438\u0432\u044b\u0435",
                 "zh-cn": "Type > Create Outlines",
+                zh_TW: "\u6587\u5b57 > Create Outlines",
             },
             hidden: false,
         },
@@ -5200,6 +5516,7 @@ See the LICENSE file for details.
                 de: "Schrift > Optischer Randausgleich",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u0412\u0438\u0437\u0443\u0430\u043b\u044c\u043d\u043e\u0435 \u0432\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435 \u043f\u043e\u043b\u0435\u0439",
                 "zh-cn": "Type > Optical Margin Alignment",
+                zh_TW: "\u6587\u5b57 > Optical Margin Alignment",
             },
             hidden: false,
         },
@@ -5214,6 +5531,7 @@ See the LICENSE file for details.
                 de: "Type > Retype",
                 ru: "Type > Retype",
                 "zh-cn": "Type > Retype",
+                zh_TW: "\u6587\u5b57 > Retype",
             },
             hidden: false,
             minVersion: "30.5",
@@ -5229,6 +5547,7 @@ See the LICENSE file for details.
                 de: "Type > Rewrite...",
                 ru: "Type > Rewrite...",
                 "zh-cn": "Type > Rewrite...",
+                zh_TW: "\u6587\u5b57 > Rewrite...",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -5244,6 +5563,7 @@ See the LICENSE file for details.
                 de: "Schrift > Aufz\u00e4hlungszeichen und Nummerierung > In Text konvertieren",
                 ru: "Type > Bullets and Numbering > Convert to text",
                 "zh-cn": "Type > Bullets and Numbering > Convert to text",
+                zh_TW: "\u6587\u5b57 > Bullets and Numbering > Convert to text",
             },
             hidden: false,
             minVersion: "27.1",
@@ -5259,6 +5579,7 @@ See the LICENSE file for details.
                 de: "Type > Insert Special Character > Symbols > Bullet",
                 ru: "Type > Insert Special Character > Symbols > Bullet",
                 "zh-cn": "Type > Insert Special Character > Symbols > Bullet",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Symbols > Bullet",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5274,6 +5595,7 @@ See the LICENSE file for details.
                 de: "Type > Insert Special Character > Symbols > Copyright Symbol",
                 ru: "Type > Insert Special Character > Symbols > Copyright Symbol",
                 "zh-cn": "Type > Insert Special Character > Symbols > Copyright Symbol",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Symbols > Copyright Symbol",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5289,6 +5611,7 @@ See the LICENSE file for details.
                 de: "Type > Insert Special Character > Symbols > Ellipsis",
                 ru: "Type > Insert Special Character > Symbols > Ellipsis",
                 "zh-cn": "Type > Insert Special Character > Symbols > Ellipsis",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Symbols > Ellipsis",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5304,6 +5627,7 @@ See the LICENSE file for details.
                 de: "Type > Insert Special Character > Symbols > Paragraph Symbol",
                 ru: "Type > Insert Special Character > Symbols > Paragraph Symbol",
                 "zh-cn": "Type > Insert Special Character > Symbols > Paragraph Symbol",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Symbols > Paragraph Symbol",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5320,6 +5644,7 @@ See the LICENSE file for details.
                 ru: "Type > Insert Special Character > Symbols > Registered Trademark Symbol",
                 "zh-cn":
                     "Type > Insert Special Character > Symbols > Registered Trademark Symbol",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Symbols > Registered Trademark Symbol",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5335,6 +5660,7 @@ See the LICENSE file for details.
                 de: "Type > Insert Special Character > Symbols > Section Symbol",
                 ru: "Type > Insert Special Character > Symbols > Section Symbol",
                 "zh-cn": "Type > Insert Special Character > Symbols > Section Symbol",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Symbols > Section Symbol",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5350,6 +5676,7 @@ See the LICENSE file for details.
                 de: "Type > Insert Special Character > Symbols > Trademark Symbol",
                 ru: "Type > Insert Special Character > Symbols > Trademark Symbol",
                 "zh-cn": "Type > Insert Special Character > Symbols > Trademark Symbol",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Symbols > Trademark Symbol",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5366,6 +5693,7 @@ See the LICENSE file for details.
                 ru: "Type > Insert Special Character > Hyphens And Dashes > Em Dash",
                 "zh-cn":
                     "Type > Insert Special Character > Hyphens And Dashes > Em Dash",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Hyphens And Dashes > Em Dash",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5382,6 +5710,7 @@ See the LICENSE file for details.
                 ru: "Type > Insert Special Character > Hyphens And Dashes > En Dash",
                 "zh-cn":
                     "Type > Insert Special Character > Hyphens And Dashes > En Dash",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Hyphens And Dashes > En Dash",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5398,6 +5727,7 @@ See the LICENSE file for details.
                 ru: "Type > Insert Special Character > Hyphens And Dashes > Discretionary Hyphen",
                 "zh-cn":
                     "Type > Insert Special Character > Hyphens And Dashes > Discretionary Hyphen",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Hyphens And Dashes > Discretionary Hyphen",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5414,6 +5744,7 @@ See the LICENSE file for details.
                 ru: "Type > Insert Special Character > Quotation Marks > Double Left Quotation Marks",
                 "zh-cn":
                     "Type > Insert Special Character > Quotation Marks > Double Left Quotation Marks",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Quotation Marks > Double Left Quotation Marks",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5430,6 +5761,7 @@ See the LICENSE file for details.
                 ru: "Type > Insert Special Character > Quotation Marks > Double Right Quotation Marks",
                 "zh-cn":
                     "Type > Insert Special Character > Quotation Marks > Double Right Quotation Marks",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Quotation Marks > Double Right Quotation Marks",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5446,6 +5778,7 @@ See the LICENSE file for details.
                 ru: "Type > Insert Special Character > Quotation Marks > Single Left Quotation Marks",
                 "zh-cn":
                     "Type > Insert Special Character > Quotation Marks > Single Left Quotation Marks",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Quotation Marks > Single Left Quotation Marks",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5462,6 +5795,7 @@ See the LICENSE file for details.
                 ru: "Type > Insert Special Character > Quotation Marks > Single Right Quotation Marks",
                 "zh-cn":
                     "Type > Insert Special Character > Quotation Marks > Single Right Quotation Marks",
+                zh_TW: "\u6587\u5b57 > Insert Special Character > Quotation Marks > Single Right Quotation Marks",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5477,6 +5811,7 @@ See the LICENSE file for details.
                 de: "Type > Insert WhiteSpace Character > Em Space",
                 ru: "Type > Insert WhiteSpace Character > Em Space",
                 "zh-cn": "Type > Insert WhiteSpace Character > Em Space",
+                zh_TW: "\u6587\u5b57 > Insert WhiteSpace Character > Em Space",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5492,6 +5827,7 @@ See the LICENSE file for details.
                 de: "Type > Insert WhiteSpace Character > En Space",
                 ru: "Type > Insert WhiteSpace Character > En Space",
                 "zh-cn": "Type > Insert WhiteSpace Character > En Space",
+                zh_TW: "\u6587\u5b57 > Insert WhiteSpace Character > En Space",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5507,6 +5843,7 @@ See the LICENSE file for details.
                 de: "Type > Insert WhiteSpace Character > Hair Space",
                 ru: "Type > Insert WhiteSpace Character > Hair Space",
                 "zh-cn": "Type > Insert WhiteSpace Character > Hair Space",
+                zh_TW: "\u6587\u5b57 > Insert WhiteSpace Character > Hair Space",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5522,6 +5859,7 @@ See the LICENSE file for details.
                 de: "Type > Insert WhiteSpace Character > Thin Space",
                 ru: "Type > Insert WhiteSpace Character > Thin Space",
                 "zh-cn": "Type > Insert WhiteSpace Character > Thin Space",
+                zh_TW: "\u6587\u5b57 > Insert WhiteSpace Character > Thin Space",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5537,6 +5875,7 @@ See the LICENSE file for details.
                 de: "Type > Insert Break Character > Forced Line Break",
                 ru: "Type > Insert Break Character > Forced Line Break",
                 "zh-cn": "Type > Insert Break Character > Forced Line Break",
+                zh_TW: "\u6587\u5b57 > Insert Break Character > Forced Line Break",
             },
             hidden: false,
             minVersion: "29.4",
@@ -5552,6 +5891,7 @@ See the LICENSE file for details.
                 de: "Schrift > Verborgene Zeichen einblenden / ausblenden",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0441\u043a\u0440\u044b\u0442\u044b\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u044b",
                 "zh-cn": "Type > Show Hidden Characters",
+                zh_TW: "\u6587\u5b57 > Show Hidden Characters",
             },
             hidden: false,
         },
@@ -5566,6 +5906,7 @@ See the LICENSE file for details.
                 de: "Schrift > Textausrichtung > Horizontal",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u041e\u0440\u0438\u0435\u043d\u0442\u0430\u0446\u0438\u044f \u0442\u0435\u043a\u0441\u0442\u0430 > \u0413\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u0430\u044f",
                 "zh-cn": "Type > Type Orientation > Horizontal",
+                zh_TW: "\u6587\u5b57 > Type Orientation > Horizontal",
             },
             hidden: false,
         },
@@ -5580,6 +5921,7 @@ See the LICENSE file for details.
                 de: "Schrift > Textausrichtung > Vertikal",
                 ru: "\u0422\u0435\u043a\u0441\u0442 > \u041e\u0440\u0438\u0435\u043d\u0442\u0430\u0446\u0438\u044f \u0442\u0435\u043a\u0441\u0442\u0430 > \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u0430\u044f",
                 "zh-cn": "Type > Type Orientation > Vertical",
+                zh_TW: "\u6587\u5b57 > Type Orientation > Vertical",
             },
             hidden: false,
         },
@@ -5594,6 +5936,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Alles ausw\u00e4hlen",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0412\u0441\u0435",
                 "zh-cn": "Select > All",
+                zh_TW: "\u9078\u53d6 > All",
             },
             hidden: false,
         },
@@ -5608,6 +5951,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Alles auf der aktiven Zeichenfl\u00e4che",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0412\u0441\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0432 \u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0439 \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "Select > All on Active Artboard",
+                zh_TW: "\u9078\u53d6 > All on Active Artboard",
             },
             hidden: false,
         },
@@ -5622,6 +5966,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Auswahl aufheben",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
                 "zh-cn": "Select > Deselect",
+                zh_TW: "\u9078\u53d6 > Deselect",
             },
             hidden: false,
         },
@@ -5636,6 +5981,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Erneut ausw\u00e4hlen",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0412\u044b\u0434\u0435\u043b\u0438\u0442\u044c \u0441\u043d\u043e\u0432\u0430",
                 "zh-cn": "Select > Reselect",
+                zh_TW: "\u9078\u53d6 > Reselect",
             },
             hidden: false,
         },
@@ -5650,6 +5996,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Auswahl umkehren",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0418\u043d\u0432\u0435\u0440\u0441\u0438\u044f",
                 "zh-cn": "Select > Inverse",
+                zh_TW: "\u9078\u53d6 > Inverse",
             },
             hidden: false,
         },
@@ -5664,6 +6011,7 @@ See the LICENSE file for details.
                 de: "Auswahl > N\u00e4chstes Objekt dar\u00fcber",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0421\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439 \u043e\u0431\u044a\u0435\u043a\u0442 \u0441\u0432\u0435\u0440\u0445\u0443",
                 "zh-cn": "Select > Next Object Above",
+                zh_TW: "\u9078\u53d6 > Next Object Above",
             },
             hidden: false,
         },
@@ -5678,6 +6026,7 @@ See the LICENSE file for details.
                 de: "Auswahl > N\u00e4chstes Objekt darunter",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0421\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0439 \u043e\u0431\u044a\u0435\u043a\u0442 \u0441\u043d\u0438\u0437\u0443",
                 "zh-cn": "Select > Next Object Below",
+                zh_TW: "\u9078\u53d6 > Next Object Below",
             },
             hidden: false,
         },
@@ -5692,6 +6041,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Aussehen",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435",
                 "zh-cn": "Select > Same > Appearance",
+                zh_TW: "\u9078\u53d6 > Same > Appearance",
             },
             hidden: false,
         },
@@ -5706,6 +6056,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Aussehensattribute",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044b \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f",
                 "zh-cn": "Select > Same > Appearance Attribute",
+                zh_TW: "\u9078\u53d6 > Same > Appearance Attribute",
             },
             hidden: false,
         },
@@ -5720,6 +6071,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > F\u00fcllmethode",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0440\u0435\u0436\u0438\u043c\u043e\u043c \u043d\u0430\u043b\u043e\u0436\u0435\u043d\u0438\u044f",
                 "zh-cn": "Select > Same > Blending Mode",
+                zh_TW: "\u9078\u53d6 > Same > Blending Mode",
             },
             hidden: false,
         },
@@ -5734,6 +6086,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Fl\u00e4che und Kontur",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c\u0438 \u0437\u0430\u043b\u0438\u0432\u043a\u043e\u0439 \u0438 \u043e\u0431\u0432\u043e\u0434\u043a\u043e\u0439",
                 "zh-cn": "Select > Same > Fill & Stroke",
+                zh_TW: "\u9078\u53d6 > Same > Fill & Stroke",
             },
             hidden: false,
         },
@@ -5748,6 +6101,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Fl\u00e4chenfarbe",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0446\u0432\u0435\u0442\u043e\u043c \u0437\u0430\u043b\u0438\u0432\u043a\u0438",
                 "zh-cn": "Select > Same > Fill Color",
+                zh_TW: "\u9078\u53d6 > Same > Fill Color",
             },
             hidden: false,
         },
@@ -5762,6 +6116,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Deckkraft",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e\u0439 \u043d\u0435\u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c\u044e",
                 "zh-cn": "Select > Same > Opacity",
+                zh_TW: "\u9078\u53d6 > Same > Opacity",
             },
             hidden: false,
         },
@@ -5776,6 +6131,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Konturfarbe",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u043c \u0446\u0432\u0435\u0442\u043e\u043c \u043e\u0431\u0432\u043e\u0434\u043a\u0438",
                 "zh-cn": "Select > Same > Stroke Color",
+                zh_TW: "\u9078\u53d6 > Same > Stroke Color",
             },
             hidden: false,
         },
@@ -5790,6 +6146,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Konturst\u00e4rke",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421 \u043e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u043e\u0439 \u0442\u043e\u043b\u0449\u0438\u043d\u043e\u0439 \u043e\u0431\u0432\u043e\u0434\u043a\u0438",
                 "zh-cn": "Select > Same > Stroke Weight",
+                zh_TW: "\u9078\u53d6 > Same > Stroke Weight",
             },
             hidden: false,
         },
@@ -5804,6 +6161,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Grafikstil",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0442\u0438\u043b\u044c \u0433\u0440\u0430\u0444\u0438\u043a\u0438",
                 "zh-cn": "Select > Same > Graphic Style",
+                zh_TW: "\u9078\u53d6 > Same > Graphic Style",
             },
             hidden: false,
         },
@@ -5818,6 +6176,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Form",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0424\u0438\u0433\u0443\u0440\u0430",
                 "zh-cn": "Select > Same > Shape",
+                zh_TW: "\u9078\u53d6 > Same > Shape",
             },
             hidden: false,
         },
@@ -5832,6 +6191,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Symbolinstanz",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041e\u0434\u0438\u043d\u0430\u043a\u043e\u0432\u044b\u0435 \u043e\u0431\u0440\u0430\u0437\u0446\u044b \u0441\u0438\u043c\u0432\u043e\u043b\u0430",
                 "zh-cn": "Select > Same > Symbol Instance",
+                zh_TW: "\u9078\u53d6 > Same > Symbol Instance",
             },
             hidden: false,
         },
@@ -5846,6 +6206,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Verkn\u00fcpfungsblockreihen",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u041f\u043e\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0445 \u0431\u043b\u043e\u043a\u043e\u0432",
                 "zh-cn": "Select > Same > Link Block Series",
+                zh_TW: "\u9078\u53d6 > Same > Link Block Series",
             },
             hidden: false,
         },
@@ -5860,6 +6221,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Schriftfamilie",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e \u0448\u0440\u0438\u0444\u0442\u043e\u0432",
                 "zh-cn": "Select > Same > Font Family",
+                zh_TW: "\u9078\u53d6 > Same > Font Family",
             },
             hidden: false,
             minVersion: "26",
@@ -5875,6 +6237,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Schriftfamilie und -schnitt",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e \u0438 \u0441\u0442\u0438\u043b\u044c \u0448\u0440\u0438\u0444\u0442\u043e\u0432",
                 "zh-cn": "Select > Same > Font Family & Style",
+                zh_TW: "\u9078\u53d6 > Same > Font Family & Style",
             },
             hidden: false,
             minVersion: "26",
@@ -5890,6 +6253,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Schriftfamilie, -schnitt und -grad",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0421\u0435\u043c\u0435\u0439\u0441\u0442\u0432\u043e, \u0441\u0442\u0438\u043b\u044c \u0438 \u0440\u0430\u0437\u043c\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u043e\u0432",
                 "zh-cn": "Select > Same > Font Family, Style & Size",
+                zh_TW: "\u9078\u53d6 > Same > Font Family, Style & Size",
             },
             hidden: false,
             minVersion: "26",
@@ -5905,6 +6269,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Schriftgrad",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0420\u0430\u0437\u043c\u0435\u0440 \u0448\u0440\u0438\u0444\u0442\u0430",
                 "zh-cn": "Select > Same > Font Size",
+                zh_TW: "\u9078\u53d6 > Same > Font Size",
             },
             hidden: false,
             minVersion: "26",
@@ -5920,6 +6285,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Textfl\u00e4chenfarbe",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0426\u0432\u0435\u0442 \u0437\u0430\u043b\u0438\u0432\u043a\u0438 \u0442\u0435\u043a\u0441\u0442\u0430",
                 "zh-cn": "Select > Same > Text Fill Color",
+                zh_TW: "\u9078\u53d6 > Same > Text Fill Color",
             },
             hidden: false,
             minVersion: "26",
@@ -5935,6 +6301,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Textkonturfarbe",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0426\u0432\u0435\u0442 \u043e\u0431\u0432\u043e\u0434\u043a\u0438 \u0442\u0435\u043a\u0441\u0442\u0430",
                 "zh-cn": "Select > Same > Text Stroke Color",
+                zh_TW: "\u9078\u53d6 > Same > Text Stroke Color",
             },
             hidden: false,
             minVersion: "26",
@@ -5950,6 +6317,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Gleich > Textfl\u00e4chen- und -konturfarbe",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u043e\u0431\u0449\u0435\u043c\u0443 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0443 > \u0426\u0432\u0435\u0442 \u0437\u0430\u043b\u0438\u0432\u043a\u0438 \u0438 \u043e\u0431\u0432\u043e\u0434\u043a\u0438 \u0442\u0435\u043a\u0441\u0442\u0430",
                 "zh-cn": "Select > Same > Text Fill & Stroke Color",
+                zh_TW: "\u9078\u53d6 > Same > Text Fill & Stroke Color",
             },
             hidden: false,
             minVersion: "26",
@@ -5965,6 +6333,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Alles auf denselben Ebenen",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u0412\u0441\u0435 \u043d\u0430 \u044d\u0442\u043e\u043c \u0436\u0435 \u0441\u043b\u043e\u0435",
                 "zh-cn": "Select > Object > All on Same Layers",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > All on Same Layers",
             },
             hidden: false,
         },
@@ -5979,6 +6348,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Richtungsgriffe",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u0423\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 \u043c\u0430\u043d\u0438\u043f\u0443\u043b\u044f\u0442\u043e\u0440\u044b",
                 "zh-cn": "Select > Object > Direction Handles",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > Direction Handles",
             },
             hidden: false,
         },
@@ -5993,6 +6363,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Borstenpinselstriche",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041c\u0430\u0437\u043a\u0438 \u0434\u043b\u044f \u043a\u0438\u0441\u0442\u0438 \u0438\u0437 \u0449\u0435\u0442\u0438\u043d\u044b",
                 "zh-cn": "Select > Object > Bristle Brush Strokes",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > Bristle Brush Strokes",
             },
             hidden: false,
         },
@@ -6007,6 +6378,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Pinselkonturen",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041c\u0430\u0437\u043a\u0438 \u043a\u0438\u0441\u0442\u0438",
                 "zh-cn": "Select > Object > Brush Strokes",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > Brush Strokes",
             },
             hidden: false,
         },
@@ -6021,6 +6393,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Schnittmasken",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041e\u0431\u0442\u0440\u0430\u0432\u043e\u0447\u043d\u044b\u0435 \u043c\u0430\u0441\u043a\u0438",
                 "zh-cn": "Select > Object > Clipping Masks",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > Clipping Masks",
             },
             hidden: false,
         },
@@ -6035,6 +6408,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Einzelne Ankerpunkte",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u0418\u0437\u043e\u043b\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0442\u043e\u0447\u043a\u0438",
                 "zh-cn": "Select > Object > Stray Points",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > Stray Points",
             },
             hidden: false,
         },
@@ -6049,6 +6423,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Alle Textobjekte",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u0412\u0441\u0435 \u043e\u0431\u044a\u0435\u043a\u0442\u044b \u0442\u0435\u043a\u0441\u0442\u0430",
                 "zh-cn": "Select > Object > All Text Objects",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > All Text Objects",
             },
             hidden: false,
         },
@@ -6063,6 +6438,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Punkttextobjekte",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041e\u0431\u044a\u0435\u043a\u0442\u044b \u0442\u0435\u043a\u0441\u0442\u0430 \u0438\u0437 \u0442\u043e\u0447\u043a\u0438",
                 "zh-cn": "Select > Object > Point Type Objects",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > Point Type Objects",
             },
             hidden: false,
         },
@@ -6077,6 +6453,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Objekt > Fl\u00e4chenttextobjekte",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041f\u043e \u0442\u0438\u043f\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043e\u0432 > \u041e\u0431\u044a\u0435\u043a\u0442\u044b \u0442\u0435\u043a\u0441\u0442\u0430 \u0432 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "Select > Object > Area Type Objects",
+                zh_TW: "\u9078\u53d6 > \u7269\u4ef6 > Area Type Objects",
             },
             hidden: false,
         },
@@ -6091,6 +6468,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Globale Bearbeitung starten/anhalten",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u041d\u0430\u0447\u0430\u0442\u044c \u0433\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u043e\u0435 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435",
                 "zh-cn": "Select > Start/Stop Global Edit",
+                zh_TW: "\u9078\u53d6 > Start/Stop Global Edit",
             },
             hidden: false,
             minVersion: "23",
@@ -6106,6 +6484,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Auswahl speichern \u2026",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c\u2026",
                 "zh-cn": "Select > Save Selection...",
+                zh_TW: "\u9078\u53d6 > Save Selection...",
             },
             hidden: false,
         },
@@ -6120,6 +6499,7 @@ See the LICENSE file for details.
                 de: "Auswahl > Auswahl bearbeiten \u2026",
                 ru: "\u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u043d\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c\u2026",
                 "zh-cn": "Select > Edit Selection...",
+                zh_TW: "\u9078\u53d6 > Edit Selection...",
             },
             hidden: false,
         },
@@ -6134,6 +6514,7 @@ See the LICENSE file for details.
                 de: "Select > Update Selection",
                 ru: "Select > Update Selection",
                 "zh-cn": "Select > Update Selection",
+                zh_TW: "\u9078\u53d6 > Update Selection",
             },
             hidden: false,
             minVersion: "28",
@@ -6149,6 +6530,7 @@ See the LICENSE file for details.
                 de: "Effekt > Letzten Effekt anwenden",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0440\u0438\u043c\u0435\u043d\u0438\u0442\u044c \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u044d\u0444\u0444\u0435\u043a\u0442",
                 "zh-cn": "Effect > Apply Last Effect",
+                zh_TW: "\u6548\u679c > Apply Last Effect",
             },
             hidden: false,
         },
@@ -6163,6 +6545,7 @@ See the LICENSE file for details.
                 de: "Effekt > Letzter Effekt",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u044d\u0444\u0444\u0435\u043a\u0442",
                 "zh-cn": "Effect > Last Effect",
+                zh_TW: "\u6548\u679c > Last Effect",
             },
             hidden: false,
         },
@@ -6177,6 +6560,7 @@ See the LICENSE file for details.
                 de: "Effekt > Dokument-Rastereffekt-Einstellungen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0440\u0430\u0441\u0442\u0440\u043e\u0432\u044b\u0445 \u044d\u0444\u0444\u0435\u043a\u0442\u043e\u0432 \u0432 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0435...",
                 "zh-cn": "Effect > Document Raster Effects Settings...",
+                zh_TW: "\u6548\u679c > Document Raster Effects Settings...",
             },
             hidden: false,
         },
@@ -6191,6 +6575,7 @@ See the LICENSE file for details.
                 de: "Effekt > 3D und Materialien > Extrudieren und abgeflachte Kante \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u0412\u044b\u0442\u044f\u0433\u0438\u0432\u0430\u043d\u0438\u0435 \u0438 \u0444\u0430\u0441\u043a\u0430...",
                 "zh-cn": "Effect > 3D and Materials > Extrude & Bevel...",
+                zh_TW: "\u6548\u679c > 3D and Materials > Extrude & Bevel...",
             },
             hidden: false,
             minVersion: "26",
@@ -6206,6 +6591,7 @@ See the LICENSE file for details.
                 de: "Effekt > 3D und Materialien > Kreiseln \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u0412\u0440\u0430\u0449\u0435\u043d\u0438\u0435\u2026",
                 "zh-cn": "Effect > 3D and Materials > Revolve...",
+                zh_TW: "\u6548\u679c > 3D and Materials > Revolve...",
             },
             hidden: false,
             minVersion: "26",
@@ -6221,6 +6607,7 @@ See the LICENSE file for details.
                 de: "Effekt > 3D und Materialien > Aufblasen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u0420\u0430\u0437\u0434\u0443\u0432\u0430\u043d\u0438\u0435\u2026",
                 "zh-cn": "Effect > 3D and Materials > Inflate...",
+                zh_TW: "\u6548\u679c > 3D and Materials > Inflate...",
             },
             hidden: false,
             minVersion: "26",
@@ -6236,6 +6623,7 @@ See the LICENSE file for details.
                 de: "Effekt > 3D und Materialien > Drehen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u041f\u043e\u0432\u043e\u0440\u043e\u0442\u2026",
                 "zh-cn": "Effect > 3D and Materials > Rotate...",
+                zh_TW: "\u6548\u679c > 3D and Materials > Rotate...",
             },
             hidden: false,
             minVersion: "26",
@@ -6251,6 +6639,7 @@ See the LICENSE file for details.
                 de: "Effekt > 3D und Materialien > Materialien \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b > \u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b\u2026",
                 "zh-cn": "Effect > 3D and Materials > Materials...",
+                zh_TW: "\u6548\u679c > 3D and Materials > Materials...",
             },
             hidden: false,
             minVersion: "26",
@@ -6267,6 +6656,7 @@ See the LICENSE file for details.
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0435) > \u0412\u044b\u0442\u044f\u0433\u0438\u0432\u0430\u043d\u0438\u0435 \u0438 \u0444\u0430\u0441\u043a\u0430 (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u0438\u0439)\u2026",
                 "zh-cn":
                     "Effect > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...",
+                zh_TW: "\u6548\u679c > 3D and Materials > 3D (Classic) > Extrude & Bevel (Classic)...",
             },
             hidden: false,
             minVersion: "26",
@@ -6283,6 +6673,7 @@ See the LICENSE file for details.
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0435) > \u0412\u0440\u0430\u0449\u0435\u043d\u0438\u0435 (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0435)\u2026",
                 "zh-cn":
                     "Effect > 3D and Materials > 3D (Classic) > Revolve (Classic)...",
+                zh_TW: "\u6548\u679c > 3D and Materials > 3D (Classic) > Revolve (Classic)...",
             },
             hidden: false,
             minVersion: "26",
@@ -6299,6 +6690,7 @@ See the LICENSE file for details.
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > 3D (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0435) > \u041f\u043e\u0432\u043e\u0440\u043e\u0442 (\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u0438\u0439)\u2026",
                 "zh-cn":
                     "Effect > 3D and Materials > 3D (Classic) > Rotate (Classic)...",
+                zh_TW: "\u6548\u679c > 3D and Materials > 3D (Classic) > Rotate (Classic)...",
             },
             hidden: false,
             minVersion: "26",
@@ -6314,6 +6706,7 @@ See the LICENSE file for details.
                 de: "Effekt > In Form umwandeln > Rechteck \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0444\u0438\u0433\u0443\u0440\u0443> \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a\u2026",
                 "zh-cn": "Effect > Convert to Shape > Rectangle...",
+                zh_TW: "\u6548\u679c > Convert to Shape > Rectangle...",
             },
             hidden: false,
         },
@@ -6328,6 +6721,7 @@ See the LICENSE file for details.
                 de: "Effekt > In Form umwandeln > Abgerundetes Rechteck \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0444\u0438\u0433\u0443\u0440\u0443> \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a \u0441\u043e \u0441\u043a\u0440\u0443\u0433\u043b\u0435\u043d\u043d\u044b\u043c\u0438 \u0443\u0433\u043b\u0430\u043c\u0438\u2026",
                 "zh-cn": "Effect > Convert to Shape > Rounded Rectangle...",
+                zh_TW: "\u6548\u679c > Convert to Shape > Rounded Rectangle...",
             },
             hidden: false,
         },
@@ -6342,6 +6736,7 @@ See the LICENSE file for details.
                 de: "Effekt > In Form umwandeln > Ellipse \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u0432 \u0444\u0438\u0433\u0443\u0440\u0443> \u042d\u043b\u043b\u0438\u043f\u0441\u2026",
                 "zh-cn": "Effect > Convert to Shape > Ellipse...",
+                zh_TW: "\u6548\u679c > Convert to Shape > Ellipse...",
             },
             hidden: false,
         },
@@ -6356,6 +6751,7 @@ See the LICENSE file for details.
                 de: "Effekt > Schnittmarken",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041c\u0435\u0442\u043a\u0438 \u043e\u0431\u0440\u0435\u0437\u043a\u0438",
                 "zh-cn": "Effect > Crop Marks",
+                zh_TW: "\u6548\u679c > Crop Marks",
             },
             hidden: false,
         },
@@ -6370,6 +6766,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungs- und Transformationsfilter > Frei verzerren \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u043b\u044c\u043d\u043e\u0435 \u0438\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435...",
                 "zh-cn": "Effect > Distort & Transform > Free Distort...",
+                zh_TW: "\u6548\u679c > Distort & Transform > Free Distort...",
             },
             hidden: false,
         },
@@ -6384,6 +6781,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungs- und Transformationsfilter > Zusammenziehen und aufblasen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0412\u0442\u044f\u0433\u0438\u0432\u0430\u043d\u0438\u0435 \u0438 \u0440\u0430\u0437\u0434\u0443\u0432\u0430\u043d\u0438\u0435...",
                 "zh-cn": "Effect > Distort & Transform > Pucker & Bloat...",
+                zh_TW: "\u6548\u679c > Distort & Transform > Pucker & Bloat...",
             },
             hidden: false,
         },
@@ -6398,6 +6796,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungs- und Transformationsfilter > Aufrauen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041e\u0433\u0440\u0443\u0431\u043b\u0435\u043d\u0438\u0435...",
                 "zh-cn": "Effect > Distort & Transform > Roughen...",
+                zh_TW: "\u6548\u679c > Distort & Transform > Roughen...",
             },
             hidden: false,
         },
@@ -6412,6 +6811,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungs- und Transformationsfilter > Transformieren \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c...",
                 "zh-cn": "Effect > Distort & Transform > Transform...",
+                zh_TW: "\u6548\u679c > Distort & Transform > Transform...",
             },
             hidden: false,
         },
@@ -6426,6 +6826,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungs- und Transformationsfilter > Tweak \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u041f\u043e\u043c\u0430\u0440\u043a\u0438...",
                 "zh-cn": "Effect > Distort & Transform > Tweak...",
+                zh_TW: "\u6548\u679c > Distort & Transform > Tweak...",
             },
             hidden: false,
         },
@@ -6440,6 +6841,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungs- und Transformationsfilter > Wirbel \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0421\u043a\u0440\u0443\u0447\u0438\u0432\u0430\u043d\u0438\u0435...",
                 "zh-cn": "Effect > Distort & Transform > Twist...",
+                zh_TW: "\u6548\u679c > Distort & Transform > Twist...",
             },
             hidden: false,
         },
@@ -6454,6 +6856,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungs- und Transformationsfilter > Zickzack \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0437\u0438\u0442\u044c \u0438 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u0442\u044c > \u0417\u0438\u0433\u0437\u0430\u0433...",
                 "zh-cn": "Effect > Distort & Transform > Zig Zag...",
+                zh_TW: "\u6548\u679c > Distort & Transform > Zig Zag...",
             },
             hidden: false,
         },
@@ -6468,6 +6871,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pfad > Pfad verschieben \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043f\u0430\u0440\u0430\u043b\u043b\u0435\u043b\u044c\u043d\u044b\u0439 \u043a\u043e\u043d\u0442\u0443\u0440...",
                 "zh-cn": "Effect > Path > Offset Path...",
+                zh_TW: "\u6548\u679c > \u8def\u5f91 > \u4f4d\u79fb\u8def\u5f91\u2026",
             },
             hidden: false,
         },
@@ -6482,6 +6886,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pfad > Kontur nachzeichnen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u041a\u043e\u043d\u0442\u0443\u0440\u043d\u044b\u0439 \u043e\u0431\u044a\u0435\u043a\u0442",
                 "zh-cn": "Effect > Path > Outline Object",
+                zh_TW: "\u6548\u679c > \u8def\u5f91 > \u7269\u4ef6\u5916\u6846",
             },
             hidden: false,
         },
@@ -6496,6 +6901,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pfad > Konturlinie",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041a\u043e\u043d\u0442\u0443\u0440 > \u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u044c \u043e\u0431\u0432\u043e\u0434\u043a\u0443 \u0432 \u043a\u0440\u0438\u0432\u044b\u0435",
                 "zh-cn": "Effect > Path > Outline Stroke",
+                zh_TW: "\u6548\u679c > \u8def\u5f91 > \u5916\u6846\u7b46\u756b",
             },
             hidden: false,
         },
@@ -6510,6 +6916,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Hinzuf\u00fcgen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c",
                 "zh-cn": "Effect > Pathfinder > Add",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Add",
             },
             hidden: false,
         },
@@ -6524,6 +6931,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Schnittmenge bilden",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041f\u0435\u0440\u0435\u0441\u0435\u0447\u0435\u043d\u0438\u0435",
                 "zh-cn": "Effect > Pathfinder > Intersect",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Intersect",
             },
             hidden: false,
         },
@@ -6538,6 +6946,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Schnittmenge entfernen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0418\u0441\u043a\u043b\u044e\u0447\u0435\u043d\u0438\u0435",
                 "zh-cn": "Effect > Pathfinder > Exclude",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Exclude",
             },
             hidden: false,
         },
@@ -6552,6 +6961,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Subtrahieren",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0412\u044b\u0447\u0438\u0442\u0430\u043d\u0438\u0435",
                 "zh-cn": "Effect > Pathfinder > Subtract",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Subtract",
             },
             hidden: false,
         },
@@ -6566,6 +6976,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Hinteres Objekt abziehen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041c\u0438\u043d\u0443\u0441 \u043d\u0438\u0436\u043d\u0438\u0439",
                 "zh-cn": "Effect > Pathfinder > Minus Back",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Minus Back",
             },
             hidden: false,
         },
@@ -6580,6 +6991,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Unterteilen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0420\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
                 "zh-cn": "Effect > Pathfinder > Divide",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Divide",
             },
             hidden: false,
         },
@@ -6594,6 +7006,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > \u00dcberlappungsbereich entfernen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041e\u0431\u0440\u0435\u0437\u043a\u0430",
                 "zh-cn": "Effect > Pathfinder > Trim",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Trim",
             },
             hidden: false,
         },
@@ -6608,6 +7021,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Verdeckte Fl\u00e4che entfernen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041e\u0431\u044a\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435",
                 "zh-cn": "Effect > Pathfinder > Merge",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Merge",
             },
             hidden: false,
         },
@@ -6622,6 +7036,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Schnittmengenfl\u00e4che",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041a\u0430\u0434\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c",
                 "zh-cn": "Effect > Pathfinder > Crop",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Crop",
             },
             hidden: false,
         },
@@ -6636,6 +7051,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Kontur aufteilen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041a\u043e\u043d\u0442\u0443\u0440",
                 "zh-cn": "Effect > Pathfinder > Outline",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Outline",
             },
             hidden: false,
         },
@@ -6650,6 +7066,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Hart mischen",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0416\u0435\u0441\u0442\u043a\u043e\u0435 \u0441\u043c\u0435\u0448\u0438\u0432\u0430\u043d\u0438\u0435",
                 "zh-cn": "Effect > Pathfinder > Hard Mix",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Hard Mix",
             },
             hidden: false,
         },
@@ -6664,6 +7081,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > Weich mischen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u041d\u0435\u0436\u0435\u0441\u0442\u043a\u043e\u0435 \u0441\u043c\u0435\u0448\u0438\u0432\u0430\u043d\u0438\u0435...",
                 "zh-cn": "Effect > Pathfinder > Soft Mix...",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Soft Mix...",
             },
             hidden: false,
         },
@@ -6678,6 +7096,7 @@ See the LICENSE file for details.
                 de: "Effekt > Pathfinder > \u00dcberf\u00fcllen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432 > \u0422\u0440\u0435\u043f\u043f\u0438\u043d\u0433\u2026",
                 "zh-cn": "Effect > Pathfinder > Trap...",
+                zh_TW: "\u6548\u679c > \u8def\u5f91\u7ba1\u7406\u54e1 > Trap...",
             },
             hidden: false,
         },
@@ -6692,6 +7111,7 @@ See the LICENSE file for details.
                 de: "Effekt > In Pixelbild umwandeln \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0420\u0430\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c...",
                 "zh-cn": "Effect > Rasterize...",
+                zh_TW: "\u6548\u679c > Rasterize...",
             },
             hidden: false,
         },
@@ -6706,6 +7126,7 @@ See the LICENSE file for details.
                 de: "Effekt > Stilisierungsfilter > Schlagschatten \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0422\u0435\u043d\u044c...",
                 "zh-cn": "Effect > Stylize > Drop Shadow...",
+                zh_TW: "\u6548\u679c > Stylize > Drop Shadow...",
             },
             hidden: false,
         },
@@ -6720,6 +7141,7 @@ See the LICENSE file for details.
                 de: "Effekt > Stilisierungsfilter > Weiche Kante \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0420\u0430\u0441\u0442\u0443\u0448\u0435\u0432\u043a\u0430...",
                 "zh-cn": "Effect > Stylize > Feather...",
+                zh_TW: "\u6548\u679c > Stylize > Feather...",
             },
             hidden: false,
         },
@@ -6734,6 +7156,7 @@ See the LICENSE file for details.
                 de: "Effekt > Stilisierungsfilter > Schein nach innen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0435\u0435 \u0441\u0432\u0435\u0447\u0435\u043d\u0438\u0435...",
                 "zh-cn": "Effect > Stylize > Inner Glow...",
+                zh_TW: "\u6548\u679c > Stylize > Inner Glow...",
             },
             hidden: false,
         },
@@ -6748,6 +7171,7 @@ See the LICENSE file for details.
                 de: "Effekt > Stilisierungsfilter > Schein nach au\u00dfen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0412\u043d\u0435\u0448\u043d\u0435\u0435 \u0441\u0432\u0435\u0447\u0435\u043d\u0438\u0435...",
                 "zh-cn": "Effect > Stylize > Outer Glow...",
+                zh_TW: "\u6548\u679c > Stylize > Outer Glow...",
             },
             hidden: false,
         },
@@ -6762,6 +7186,7 @@ See the LICENSE file for details.
                 de: "Effekt > Stilisierungsfilter > Ecken abrunden \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0421\u043a\u0440\u0443\u0433\u043b\u0435\u043d\u043d\u044b\u0435 \u0443\u0433\u043b\u044b...",
                 "zh-cn": "Effect > Stylize > Round Corners...",
+                zh_TW: "\u6548\u679c > Stylize > Round Corners...",
             },
             hidden: false,
         },
@@ -6776,6 +7201,7 @@ See the LICENSE file for details.
                 de: "Effekt > Stilisierungsfilter > Scribble \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u041a\u0430\u0440\u0430\u043a\u0443\u043b\u0438\u2026",
                 "zh-cn": "Effect > Stylize > Scribble...",
+                zh_TW: "\u6548\u679c > Stylize > Scribble...",
             },
             hidden: false,
         },
@@ -6790,6 +7216,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Bogen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0414\u0443\u0433\u0430\u2026",
                 "zh-cn": "Effect > Warp > Arc...",
+                zh_TW: "\u6548\u679c > Warp > Arc...",
             },
             hidden: false,
         },
@@ -6804,6 +7231,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Bogen unten \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0414\u0443\u0433\u0430 \u0432\u043d\u0438\u0437\u2026",
                 "zh-cn": "Effect > Warp > Arc Lower...",
+                zh_TW: "\u6548\u679c > Warp > Arc Lower...",
             },
             hidden: false,
         },
@@ -6818,6 +7246,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Bogen oben \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0414\u0443\u0433\u0430 \u0432\u0432\u0435\u0440\u0445\u2026",
                 "zh-cn": "Effect > Warp > Arc Upper...",
+                zh_TW: "\u6548\u679c > Warp > Arc Upper...",
             },
             hidden: false,
         },
@@ -6832,6 +7261,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Torbogen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0410\u0440\u043a\u0430\u2026",
                 "zh-cn": "Effect > Warp > Arch...",
+                zh_TW: "\u6548\u679c > Warp > Arch...",
             },
             hidden: false,
         },
@@ -6846,6 +7276,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Wulst \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0412\u044b\u043f\u0443\u043a\u043b\u043e\u0441\u0442\u044c\u2026",
                 "zh-cn": "Effect > Warp > Bulge...",
+                zh_TW: "\u6548\u679c > Warp > Bulge...",
             },
             hidden: false,
         },
@@ -6860,6 +7291,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Muschel unten \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u041f\u0430\u043d\u0446\u0438\u0440\u044c \u0432\u043d\u0438\u0437\u2026",
                 "zh-cn": "Effect > Warp > Shell Lower...",
+                zh_TW: "\u6548\u679c > Warp > Shell Lower...",
             },
             hidden: false,
         },
@@ -6874,6 +7306,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Muschel oben \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u041f\u0430\u043d\u0446\u0438\u0440\u044c \u0432\u0432\u0435\u0440\u0445\u2026",
                 "zh-cn": "Effect > Warp > Shell Upper...",
+                zh_TW: "\u6548\u679c > Warp > Shell Upper...",
             },
             hidden: false,
         },
@@ -6888,6 +7321,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Flagge \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0424\u043b\u0430\u0433\u2026",
                 "zh-cn": "Effect > Warp > Flag...",
+                zh_TW: "\u6548\u679c > Warp > Flag...",
             },
             hidden: false,
         },
@@ -6902,6 +7336,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Schwingungen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0412\u043e\u043b\u043d\u0430\u2026",
                 "zh-cn": "Effect > Warp > Wave...",
+                zh_TW: "\u6548\u679c > Warp > Wave...",
             },
             hidden: false,
         },
@@ -6916,6 +7351,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Fisch \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0420\u044b\u0431\u0430\u2026",
                 "zh-cn": "Effect > Warp > Fish...",
+                zh_TW: "\u6548\u679c > Warp > Fish...",
             },
             hidden: false,
         },
@@ -6930,6 +7366,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Ansteigend \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u041f\u043e\u0434\u044a\u0435\u043c\u2026",
                 "zh-cn": "Effect > Warp > Rise...",
+                zh_TW: "\u6548\u679c > Warp > Rise...",
             },
             hidden: false,
         },
@@ -6944,6 +7381,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Fischauge \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0420\u044b\u0431\u0438\u0439 \u0433\u043b\u0430\u0437\u2026",
                 "zh-cn": "Effect > Warp > Fisheye...",
+                zh_TW: "\u6548\u679c > Warp > Fisheye...",
             },
             hidden: false,
         },
@@ -6958,6 +7396,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Aufblasen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0420\u0430\u0437\u0434\u0443\u0432\u0430\u043d\u0438\u0435\u2026",
                 "zh-cn": "Effect > Warp > Inflate...",
+                zh_TW: "\u6548\u679c > Warp > Inflate...",
             },
             hidden: false,
         },
@@ -6972,6 +7411,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Stauchen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0421\u0436\u0430\u0442\u0438\u0435\u2026",
                 "zh-cn": "Effect > Warp > Squeeze...",
+                zh_TW: "\u6548\u679c > Warp > Squeeze...",
             },
             hidden: false,
         },
@@ -6986,6 +7426,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verkr\u00fcmmungsfilter > Wirbel \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f > \u0421\u043a\u0440\u0443\u0447\u0438\u0432\u0430\u043d\u0438\u0435\u2026",
                 "zh-cn": "Effect > Warp > Twist...",
+                zh_TW: "\u6548\u679c > Warp > Twist...",
             },
             hidden: false,
         },
@@ -7000,6 +7441,7 @@ See the LICENSE file for details.
                 de: "Effekt > Effekte-Galerie \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0413\u0430\u043b\u0435\u0440\u0435\u044f \u044d\u0444\u0444\u0435\u043a\u0442\u043e\u0432\u2026",
                 "zh-cn": "Effect > Effect Gallery...",
+                zh_TW: "\u6548\u679c > Effect Gallery...",
             },
             hidden: false,
         },
@@ -7014,6 +7456,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Buntstiftschraffur \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0426\u0432\u0435\u0442\u043d\u044b\u0435 \u043a\u0430\u0440\u0430\u043d\u0434\u0430\u0448\u0438\u2026",
                 "zh-cn": "Effect > Artistic > Colored Pencil...",
+                zh_TW: "\u6548\u679c > Artistic > Colored Pencil...",
             },
             hidden: false,
         },
@@ -7028,6 +7471,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Farbpapier-Collage \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0410\u043f\u043f\u043b\u0438\u043a\u0430\u0446\u0438\u044f\u2026",
                 "zh-cn": "Effect > Artistic > Cutout...",
+                zh_TW: "\u6548\u679c > Artistic > Cutout...",
             },
             hidden: false,
         },
@@ -7042,6 +7486,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Grobe Malerei \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0421\u0443\u0445\u0430\u044f \u043a\u0438\u0441\u0442\u044c\u2026",
                 "zh-cn": "Effect > Artistic > Dry Brush...",
+                zh_TW: "\u6548\u679c > Artistic > Dry Brush...",
             },
             hidden: false,
         },
@@ -7056,6 +7501,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > K\u00f6rnung & Aufhellung \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0417\u0435\u0440\u043d\u0438\u0441\u0442\u043e\u0441\u0442\u044c \u043f\u043b\u0435\u043d\u043a\u0438\u2026",
                 "zh-cn": "Effect > Artistic > Film Grain...",
+                zh_TW: "\u6548\u679c > Artistic > Film Grain...",
             },
             hidden: false,
         },
@@ -7070,6 +7516,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Fresko \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0424\u0440\u0435\u0441\u043a\u0430\u2026",
                 "zh-cn": "Effect > Artistic > Fresco...",
+                zh_TW: "\u6548\u679c > Artistic > Fresco...",
             },
             hidden: false,
         },
@@ -7084,6 +7531,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Neonschein \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u041d\u0435\u043e\u043d\u043e\u0432\u044b\u0439 \u0441\u0432\u0435\u0442\u2026",
                 "zh-cn": "Effect > Artistic > Neon Glow...",
+                zh_TW: "\u6548\u679c > Artistic > Neon Glow...",
             },
             hidden: false,
         },
@@ -7098,6 +7546,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > \u00d6lfarbe getupft \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u041c\u0430\u0441\u043b\u044f\u043d\u0430\u044f \u0436\u0438\u0432\u043e\u043f\u0438\u0441\u044c\u2026",
                 "zh-cn": "Effect > Artistic > Paint Daubs...",
+                zh_TW: "\u6548\u679c > Artistic > Paint Daubs...",
             },
             hidden: false,
         },
@@ -7112,6 +7561,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Malmesser \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0428\u043f\u0430\u0442\u0435\u043b\u044c\u2026",
                 "zh-cn": "Effect > Artistic > Palette Knife...",
+                zh_TW: "\u6548\u679c > Artistic > Palette Knife...",
             },
             hidden: false,
         },
@@ -7126,6 +7576,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Kunststofffolie \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0426\u0435\u043b\u043b\u043e\u0444\u0430\u043d\u043e\u0432\u0430\u044f \u0443\u043f\u0430\u043a\u043e\u0432\u043a\u0430\u2026",
                 "zh-cn": "Effect > Artistic > Plastic Wrap...",
+                zh_TW: "\u6548\u679c > Artistic > Plastic Wrap...",
             },
             hidden: false,
         },
@@ -7140,6 +7591,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Tontrennung & Kantenbetonung \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u041e\u0447\u0435\u0440\u0447\u0435\u043d\u043d\u044b\u0435 \u043a\u0440\u0430\u044f\u2026",
                 "zh-cn": "Effect > Artistic > Poster Edges...",
+                zh_TW: "\u6548\u679c > Artistic > Poster Edges...",
             },
             hidden: false,
         },
@@ -7154,6 +7606,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Grobes Pastell \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u041f\u0430\u0441\u0442\u0435\u043b\u044c\u2026",
                 "zh-cn": "Effect > Artistic > Rough Pastels...",
+                zh_TW: "\u6548\u679c > Artistic > Rough Pastels...",
             },
             hidden: false,
         },
@@ -7168,6 +7621,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Diagonal verwischen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0420\u0430\u0441\u0442\u0443\u0448\u0435\u0432\u043a\u0430\u2026",
                 "zh-cn": "Effect > Artistic > Smudge Stick...",
+                zh_TW: "\u6548\u679c > Artistic > Smudge Stick...",
             },
             hidden: false,
         },
@@ -7182,6 +7636,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Schwamm \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0413\u0443\u0431\u043a\u0430\u2026",
                 "zh-cn": "Effect > Artistic > Sponge...",
+                zh_TW: "\u6548\u679c > Artistic > Sponge...",
             },
             hidden: false,
         },
@@ -7196,6 +7651,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Malgrund \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0420\u0438\u0441\u043e\u0432\u0430\u043d\u0438\u0435 \u043d\u0430 \u043e\u0431\u043e\u0440\u043e\u0442\u0435\u2026",
                 "zh-cn": "Effect > Artistic > Underpainting...",
+                zh_TW: "\u6548\u679c > Artistic > Underpainting...",
             },
             hidden: false,
         },
@@ -7210,6 +7666,7 @@ See the LICENSE file for details.
                 de: "Effekt > Kunstfilter > Aquarell \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u043c\u0438\u0442\u0430\u0446\u0438\u044f > \u0410\u043a\u0432\u0430\u0440\u0435\u043b\u044c\u2026",
                 "zh-cn": "Effect > Artistic > Watercolor...",
+                zh_TW: "\u6548\u679c > Artistic > Watercolor...",
             },
             hidden: false,
         },
@@ -7224,6 +7681,7 @@ See the LICENSE file for details.
                 de: "Effekt > Weichzeichnungsfilter > Gau\u00dfscher Weichzeichner \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0420\u0430\u0437\u043c\u044b\u0442\u0438\u0435 > \u0420\u0430\u0437\u043c\u044b\u0442\u0438\u0435 \u043f\u043e \u0413\u0430\u0443\u0441\u0441\u0443...",
                 "zh-cn": "Effect > Blur > Gaussian Blur...",
+                zh_TW: "\u6548\u679c > Blur > Gaussian Blur...",
             },
             hidden: false,
         },
@@ -7238,6 +7696,7 @@ See the LICENSE file for details.
                 de: "Effekt > Weichzeichnungsfilter > Radialer Weichzeichner \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0420\u0430\u0437\u043c\u044b\u0442\u0438\u0435 > \u0420\u0430\u0434\u0438\u0430\u043b\u044c\u043d\u043e\u0435 \u0440\u0430\u0437\u043c\u044b\u0442\u0438\u0435...",
                 "zh-cn": "Effect > Blur > Radial Blur...",
+                zh_TW: "\u6548\u679c > Blur > Radial Blur...",
             },
             hidden: false,
         },
@@ -7252,6 +7711,7 @@ See the LICENSE file for details.
                 de: "Effekt > Weichzeichnungsfilter > Selektiver Weichzeichner \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0420\u0430\u0437\u043c\u044b\u0442\u0438\u0435 > \u0423\u043c\u043d\u043e\u0435 \u0440\u0430\u0437\u043c\u044b\u0442\u0438\u0435...",
                 "zh-cn": "Effect > Blur > Smart Blur...",
+                zh_TW: "\u6548\u679c > Blur > Smart Blur...",
             },
             hidden: false,
         },
@@ -7266,6 +7726,7 @@ See the LICENSE file for details.
                 de: "Effekt > Malfilter > Kanten betonen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0410\u043a\u0446\u0435\u043d\u0442 \u043d\u0430 \u043a\u0440\u0430\u044f\u0445\u2026",
                 "zh-cn": "Effect > Brush Strokes > Accented Edges...",
+                zh_TW: "\u6548\u679c > Brush Strokes > Accented Edges...",
             },
             hidden: false,
         },
@@ -7280,6 +7741,7 @@ See the LICENSE file for details.
                 de: "Effekt > Malfilter > Gekreuzte Malstriche \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u041d\u0430\u043a\u043b\u043e\u043d\u043d\u044b\u0435 \u0448\u0442\u0440\u0438\u0445\u0438\u2026",
                 "zh-cn": "Effect > Brush Strokes > Angled Strokes...",
+                zh_TW: "\u6548\u679c > Brush Strokes > Angled Strokes...",
             },
             hidden: false,
         },
@@ -7294,6 +7756,7 @@ See the LICENSE file for details.
                 de: "Effekt > Malfilter > Kreuzschraffur \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u041f\u0435\u0440\u0435\u043a\u0440\u0435\u0441\u0442\u043d\u044b\u0435 \u0448\u0442\u0440\u0438\u0445\u0438\u2026",
                 "zh-cn": "Effect > Brush Strokes > Crosshatch...",
+                zh_TW: "\u6548\u679c > Brush Strokes > Crosshatch...",
             },
             hidden: false,
         },
@@ -7308,6 +7771,7 @@ See the LICENSE file for details.
                 de: "Effekt > Malfilter > Dunkle Malstriche \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0422\u0435\u043c\u043d\u044b\u0435 \u0448\u0442\u0440\u0438\u0445\u0438\u2026",
                 "zh-cn": "Effect > Brush Strokes > Dark Strokes...",
+                zh_TW: "\u6548\u679c > Brush Strokes > Dark Strokes...",
             },
             hidden: false,
         },
@@ -7322,6 +7786,7 @@ See the LICENSE file for details.
                 de: "Effekt > Malfilter > Konturen mit Tinte nachzeichnen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u041e\u0431\u0432\u043e\u0434\u043a\u0430\u2026",
                 "zh-cn": "Effect > Brush Strokes > Ink Outlines...",
+                zh_TW: "\u6548\u679c > Brush Strokes > Ink Outlines...",
             },
             hidden: false,
         },
@@ -7336,6 +7801,7 @@ See the LICENSE file for details.
                 de: "Effekt > Malfilter > Spritzer \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0420\u0430\u0437\u0431\u0440\u044b\u0437\u0433\u0438\u0432\u0430\u043d\u0438\u0435\u2026",
                 "zh-cn": "Effect > Brush Strokes > Spatter...",
+                zh_TW: "\u6548\u679c > Brush Strokes > Spatter...",
             },
             hidden: false,
         },
@@ -7350,6 +7816,7 @@ See the LICENSE file for details.
                 de: "Effekt > Malfilter > Verwackelte Striche \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0410\u044d\u0440\u043e\u0433\u0440\u0430\u0444\u2026",
                 "zh-cn": "Effect > Brush Strokes > Sprayed Strokes...",
+                zh_TW: "\u6548\u679c > Brush Strokes > Sprayed Strokes...",
             },
             hidden: false,
         },
@@ -7364,6 +7831,7 @@ See the LICENSE file for details.
                 de: "Effekt > Malfilter > Sumi-e \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0428\u0442\u0440\u0438\u0445\u0438 > \u0421\u0443\u043c\u0438-\u044d\u2026",
                 "zh-cn": "Effect > Brush Strokes > Sumi-e...",
+                zh_TW: "\u6548\u679c > Brush Strokes > Sumi-e...",
             },
             hidden: false,
         },
@@ -7378,6 +7846,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungsfilter > Weiches Licht \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 > \u0420\u0430\u0441\u0441\u0435\u044f\u043d\u043d\u043e\u0435 \u0441\u0432\u0435\u0447\u0435\u043d\u0438\u0435\u2026",
                 "zh-cn": "Effect > Distort > Diffuse Glow...",
+                zh_TW: "\u6548\u679c > Distort > Diffuse Glow...",
             },
             hidden: false,
         },
@@ -7392,6 +7861,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungsfilter > Glas \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 > \u0421\u0442\u0435\u043a\u043b\u043e\u2026",
                 "zh-cn": "Effect > Distort > Glass...",
+                zh_TW: "\u6548\u679c > Distort > Glass...",
             },
             hidden: false,
         },
@@ -7406,6 +7876,7 @@ See the LICENSE file for details.
                 de: "Effekt > Verzerrungsfilter > Ozeanwellen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0418\u0441\u043a\u0430\u0436\u0435\u043d\u0438\u0435 > \u041e\u043a\u0435\u0430\u043d\u0441\u043a\u0438\u0435 \u0432\u043e\u043b\u043d\u044b\u2026",
                 "zh-cn": "Effect > Distort > Ocean Ripple...",
+                zh_TW: "\u6548\u679c > Distort > Ocean Ripple...",
             },
             hidden: false,
         },
@@ -7420,6 +7891,7 @@ See the LICENSE file for details.
                 de: "Effekt > Vergr\u00f6berungsfilter > Farbraster \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u0426\u0432\u0435\u0442\u043d\u044b\u0435 \u043f\u043e\u043b\u0443\u0442\u043e\u043d\u0430\u2026",
                 "zh-cn": "Effect > Pixelate > Color Halftone...",
+                zh_TW: "\u6548\u679c > Pixelate > Color Halftone...",
             },
             hidden: false,
         },
@@ -7434,6 +7906,7 @@ See the LICENSE file for details.
                 de: "Effekt > Vergr\u00f6berungsfilter > Kristallisieren \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u041a\u0440\u0438\u0441\u0442\u0430\u043b\u043b\u0438\u0437\u0430\u0446\u0438\u044f\u2026",
                 "zh-cn": "Effect > Pixelate > Crystallize...",
+                zh_TW: "\u6548\u679c > Pixelate > Crystallize...",
             },
             hidden: false,
         },
@@ -7448,6 +7921,7 @@ See the LICENSE file for details.
                 de: "Effekt > Vergr\u00f6berungsfilter > Mezzotint \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u041c\u0435\u0446\u0446\u043e-\u0442\u0438\u043d\u0442\u043e\u2026",
                 "zh-cn": "Effect > Pixelate > Mezzotint...",
+                zh_TW: "\u6548\u679c > Pixelate > Mezzotint...",
             },
             hidden: false,
         },
@@ -7462,6 +7936,7 @@ See the LICENSE file for details.
                 de: "Effekt > Vergr\u00f6berungsfilter > Punktieren \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u041f\u0443\u0430\u043d\u0442\u0438\u043b\u0438\u0437\u043c\u2026",
                 "zh-cn": "Effect > Pixelate > Pointillize...",
+                zh_TW: "\u6548\u679c > Pixelate > Pointillize...",
             },
             hidden: false,
         },
@@ -7476,6 +7951,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Basrelief \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0420\u0435\u043b\u044c\u0435\u0444\u2026",
                 "zh-cn": "Effect > Sketch > Bas Relief...",
+                zh_TW: "\u6548\u679c > Sketch > Bas Relief...",
             },
             hidden: false,
         },
@@ -7490,6 +7966,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Chalk & Charcoal \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041c\u0435\u043b \u0438 \u0443\u0433\u043e\u043b\u044c\u2026",
                 "zh-cn": "Effect > Sketch > Chalk & Charcoal...",
+                zh_TW: "\u6548\u679c > Sketch > Chalk & Charcoal...",
             },
             hidden: false,
         },
@@ -7504,6 +7981,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Kohleumsetzung \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0423\u0433\u043e\u043b\u044c\u2026",
                 "zh-cn": "Effect > Sketch > Charcoal...",
+                zh_TW: "\u6548\u679c > Sketch > Charcoal...",
             },
             hidden: false,
         },
@@ -7518,6 +7996,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Chrom \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0425\u0440\u043e\u043c\u2026",
                 "zh-cn": "Effect > Sketch > Chrome...",
+                zh_TW: "\u6548\u679c > Sketch > Chrome...",
             },
             hidden: false,
         },
@@ -7532,6 +8011,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Cont\\u00E9-Stifte \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0412\u043e\u043b\u0448\u0435\u0431\u043d\u044b\u0439 \u043a\u0430\u0440\u0430\u043d\u0434\u0430\u0448\u2026",
                 "zh-cn": "Effect > Sketch > Cont\u00e9 Crayon...",
+                zh_TW: "\u6548\u679c > Sketch > Cont\u00e9 Crayon...",
             },
             hidden: false,
         },
@@ -7546,6 +8026,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Strichumsetzung \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0422\u0443\u0448\u044c\u2026",
                 "zh-cn": "Effect > Sketch > Graphic Pen...",
+                zh_TW: "\u6548\u679c > Sketch > Graphic Pen...",
             },
             hidden: false,
         },
@@ -7560,6 +8041,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Rasterungseffekt \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041f\u043e\u043b\u0443\u0442\u043e\u043d\u043e\u0432\u044b\u0439 \u0443\u0437\u043e\u0440\u2026",
                 "zh-cn": "Effect > Sketch > Halftone Pattern...",
+                zh_TW: "\u6548\u679c > Sketch > Halftone Pattern...",
             },
             hidden: false,
         },
@@ -7574,6 +8056,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Pr\u00e4gepapier \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041f\u043e\u0447\u0442\u043e\u0432\u0430\u044f \u0431\u0443\u043c\u0430\u0433\u0430\u2026",
                 "zh-cn": "Effect > Sketch > Note Paper...",
+                zh_TW: "\u6548\u679c > Sketch > Note Paper...",
             },
             hidden: false,
         },
@@ -7588,6 +8071,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Fotokopie \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041a\u0441\u0435\u0440\u043e\u043a\u043e\u043f\u0438\u044f\u2026",
                 "zh-cn": "Effect > Sketch > Photocopy...",
+                zh_TW: "\u6548\u679c > Sketch > Photocopy...",
             },
             hidden: false,
         },
@@ -7602,6 +8086,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Stuck \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0413\u0438\u043f\u0441\u2026",
                 "zh-cn": "Effect > Sketch > Plaster...",
+                zh_TW: "\u6548\u679c > Sketch > Plaster...",
             },
             hidden: false,
         },
@@ -7616,6 +8101,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Punktierstich \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0420\u0435\u0442\u0438\u043a\u0443\u043b\u044f\u0446\u0438\u044f\u2026",
                 "zh-cn": "Effect > Sketch > Reticulation...",
+                zh_TW: "\u6548\u679c > Sketch > Reticulation...",
             },
             hidden: false,
         },
@@ -7630,6 +8116,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Stempel \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041b\u0438\u043d\u043e\u0433\u0440\u0430\u0432\u044e\u0440\u0430\u2026",
                 "zh-cn": "Effect > Sketch > Stamp...",
+                zh_TW: "\u6548\u679c > Sketch > Stamp...",
             },
             hidden: false,
         },
@@ -7644,6 +8131,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Gerissene Kanten \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u0420\u0432\u0430\u043d\u044b\u0435 \u043a\u0440\u0430\u044f\u2026",
                 "zh-cn": "Effect > Sketch > Torn Edges...",
+                zh_TW: "\u6548\u679c > Sketch > Torn Edges...",
             },
             hidden: false,
         },
@@ -7658,6 +8146,7 @@ See the LICENSE file for details.
                 de: "Effekt > Zeichenfilter > Feuchtes Papier \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u042d\u0441\u043a\u0438\u0437 > \u041c\u043e\u043a\u0440\u0430\u044f \u0431\u0443\u043c\u0430\u0433\u0430\u2026",
                 "zh-cn": "Effect > Sketch > Water Paper...",
+                zh_TW: "\u6548\u679c > Sketch > Water Paper...",
             },
             hidden: false,
         },
@@ -7672,6 +8161,7 @@ See the LICENSE file for details.
                 de: "Effekt > Stilisierungsfilter > Leuchtende Konturen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0421\u0442\u0438\u043b\u0438\u0437\u0430\u0446\u0438\u044f > \u0421\u0432\u0435\u0447\u0435\u043d\u0438\u0435 \u043a\u0440\u0430\u0435\u0432\u2026",
                 "zh-cn": "Effect > Stylize > Glowing Edges...",
+                zh_TW: "\u6548\u679c > Stylize > Glowing Edges...",
             },
             hidden: false,
         },
@@ -7686,6 +8176,7 @@ See the LICENSE file for details.
                 de: "Effekt > Strukturierungsfilter > Risse \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u041a\u0440\u0430\u043a\u0435\u043b\u044e\u0440\u044b\u2026",
                 "zh-cn": "Effect > Texture > Craquelure...",
+                zh_TW: "\u6548\u679c > Texture > Craquelure...",
             },
             hidden: false,
         },
@@ -7700,6 +8191,7 @@ See the LICENSE file for details.
                 de: "Effekt > Strukturierungsfilter > K\u00f6rnung \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u0417\u0435\u0440\u043d\u043e\u2026",
                 "zh-cn": "Effect > Texture > Grain...",
+                zh_TW: "\u6548\u679c > Texture > Grain...",
             },
             hidden: false,
         },
@@ -7714,6 +8206,7 @@ See the LICENSE file for details.
                 de: "Effekt > Strukturierungsfilter > Kacheln \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u041c\u043e\u0437\u0430\u0438\u0447\u043d\u044b\u0435 \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b\u2026",
                 "zh-cn": "Effect > Texture > Mosaic Tiles...",
+                zh_TW: "\u6548\u679c > Texture > Mosaic Tiles...",
             },
             hidden: false,
         },
@@ -7728,6 +8221,7 @@ See the LICENSE file for details.
                 de: "Effekt > Strukturierungsfilter > Patchwork \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u0426\u0432\u0435\u0442\u043d\u0430\u044f \u043f\u043b\u0438\u0442\u043a\u0430\u2026",
                 "zh-cn": "Effect > Texture > Patchwork...",
+                zh_TW: "\u6548\u679c > Texture > Patchwork...",
             },
             hidden: false,
         },
@@ -7742,6 +8236,7 @@ See the LICENSE file for details.
                 de: "Effekt > Strukturierungsfilter > Buntglas-Mosaik \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u0412\u0438\u0442\u0440\u0430\u0436\u2026",
                 "zh-cn": "Effect > Texture > Stained Glass...",
+                zh_TW: "\u6548\u679c > Texture > Stained Glass...",
             },
             hidden: false,
         },
@@ -7756,6 +8251,7 @@ See the LICENSE file for details.
                 de: "Effekt > Strukturierungsfilter > Mit Struktur versehen \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0430 > \u0422\u0435\u043a\u0441\u0442\u0443\u0440\u0438\u0437\u0430\u0442\u043e\u0440\u2026",
                 "zh-cn": "Effect > Texture > Texturizer...",
+                zh_TW: "\u6548\u679c > Texture > Texturizer...",
             },
             hidden: false,
         },
@@ -7770,6 +8266,7 @@ See the LICENSE file for details.
                 de: "Effekt > Videofilter > De-Interlace \u2026",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0412\u0438\u0434\u0435\u043e > \u0423\u0441\u0442\u0440\u0430\u043d\u0435\u043d\u0438\u0435 \u0447\u0435\u0440\u0435\u0441\u0441\u0442\u0440\u043e\u0447\u043d\u043e\u0439 \u0440\u0430\u0437\u0432\u0435\u0440\u0442\u043a\u0438...",
                 "zh-cn": "Effect > Video > De-Interlace...",
+                zh_TW: "\u6548\u679c > Video > De-Interlace...",
             },
             hidden: false,
         },
@@ -7784,6 +8281,7 @@ See the LICENSE file for details.
                 de: "Effekt > Videofilter > NTSC-Farben",
                 ru: "\u042d\u0444\u0444\u0435\u043a\u0442 > \u0412\u0438\u0434\u0435\u043e > \u0426\u0432\u0435\u0442\u0430 NTSC",
                 "zh-cn": "Effect > Video > NTSC Colors",
+                zh_TW: "\u6548\u679c > Video > NTSC Colors",
             },
             hidden: false,
         },
@@ -7798,6 +8296,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Vorschau / Pfadansicht",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041a\u043e\u043d\u0442\u0443\u0440\u044b / \u0418\u043b\u043b\u044e\u0441\u0442\u0440\u0430\u0446\u0438\u044f",
                 "zh-cn": "View > Outline / Preview",
+                zh_TW: "\u6aa2\u8996 > Outline / Preview",
             },
             hidden: false,
         },
@@ -7812,6 +8311,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Mit GPU anzeigen / Mit CPU anzeigen",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0441 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435\u043c \u0426\u041f / \u0413\u041f",
                 "zh-cn": "View using GPU / CPU",
+                zh_TW: "View using GPU / CPU",
             },
             hidden: false,
         },
@@ -7826,6 +8326,7 @@ See the LICENSE file for details.
                 de: "Ansicht > \u00dcberdruckenvorschau",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u043d\u0430\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0446\u0432\u0435\u0442\u043e\u0432",
                 "zh-cn": "View > Overprint Preview",
+                zh_TW: "\u6aa2\u8996 > Overprint Preview",
             },
             hidden: false,
         },
@@ -7840,6 +8341,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Pixelvorschau",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0432 \u0432\u0438\u0434\u0435 \u043f\u0438\u043a\u0441\u0435\u043b\u043e\u0432",
                 "zh-cn": "View > Pixel Preview",
+                zh_TW: "\u6aa2\u8996 > Pixel Preview",
             },
             hidden: false,
         },
@@ -7854,6 +8356,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Proof einrichten > Dokument-CMYK",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0420\u0430\u0431\u043e\u0447\u0435\u0435 \u043f\u0440\u043e\u0441\u0442\u0440\u0430\u043d\u0441\u0442\u0432\u043e CMYK",
                 "zh-cn": "View > Proof Setup > Working CMYK",
+                zh_TW: "\u6aa2\u8996 > Proof Setup > Working CMYK",
             },
             hidden: false,
         },
@@ -7868,6 +8371,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Proof einrichten > Altes Macintosh-RGB (Gamma 1.8)",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0420\u0430\u043d\u043d\u044f\u044f \u0432\u0435\u0440\u0441\u0438\u044f Macintosh RGB (Gamma 1.8)",
                 "zh-cn": "View > Proof Setup > Legacy Macintosh RGB (Gamma 1.8)",
+                zh_TW: "\u6aa2\u8996 > Proof Setup > Legacy Macintosh RGB (Gamma 1.8)",
             },
             hidden: false,
         },
@@ -7882,6 +8386,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Proof einrichten > Internet-Standard-RGB (sRGB)",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u0430\u044f \u043f\u0430\u043b\u0438\u0442\u0440\u0430 RGB (sRGB) \u0434\u043b\u044f \u0441\u0435\u0442\u0438 \u0418\u043d\u0442\u0435\u0440\u043d\u0435\u0442",
                 "zh-cn": "View > Proof Setup > Internet Standard RGB (sRGB)",
+                zh_TW: "\u6aa2\u8996 > Proof Setup > Internet Standard RGB (sRGB)",
             },
             hidden: false,
         },
@@ -7896,6 +8401,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Proof einrichten > Monitor-RGB",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u041f\u0430\u043b\u0438\u0442\u0440\u0430 RGB \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0430",
                 "zh-cn": "View > Proof Setup > Monitor RGB",
+                zh_TW: "\u6aa2\u8996 > Proof Setup > Monitor RGB",
             },
             hidden: false,
         },
@@ -7910,6 +8416,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Proof einrichten > Farbenblindheit (Protanopie)",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0414\u0430\u043b\u044c\u0442\u043e\u043d\u0438\u0437\u043c - \u043f\u0440\u043e\u0442\u0430\u043d\u043e\u043f\u0438\u044f",
                 "zh-cn": "View > Proof Setup > Color blindness - Protanopia-type",
+                zh_TW: "\u6aa2\u8996 > Proof Setup > Color blindness - Protanopia-type",
             },
             hidden: false,
         },
@@ -7924,6 +8431,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Proof einrichten > Farbenblindheit (Deuteranopie)",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0414\u0430\u043b\u044c\u0442\u043e\u043d\u0438\u0437\u043c - \u0434\u0435\u0439\u0442\u0435\u0440\u0430\u043d\u043e\u043f\u0438\u044f",
                 "zh-cn": "View > Proof Setup > Color blindness - Deuteranopia-type",
+                zh_TW: "\u6aa2\u8996 > Proof Setup > Color blindness - Deuteranopia-type",
             },
             hidden: false,
         },
@@ -7938,6 +8446,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Proof einrichten > Anpassen \u2026",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0446\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u044b > \u0417\u0430\u043a\u0430\u0437\u043d\u044b\u0435 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b\u2026",
                 "zh-cn": "View > Proof Setup > Customize...",
+                zh_TW: "\u6aa2\u8996 > Proof Setup > Customize...",
             },
             hidden: false,
         },
@@ -7952,6 +8461,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Farbproof",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0426\u0432\u0435\u0442\u043e\u043f\u0440\u043e\u0431\u0430",
                 "zh-cn": "View > Proof Colors",
+                zh_TW: "\u6aa2\u8996 > Proof Colors",
             },
             hidden: false,
         },
@@ -7966,6 +8476,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Einzoomen",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0423\u0432\u0435\u043b\u0438\u0447\u0435\u043d\u0438\u0435",
                 "zh-cn": "View > Zoom In",
+                zh_TW: "\u6aa2\u8996 > Zoom In",
             },
             hidden: false,
         },
@@ -7980,6 +8491,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Auszoomen",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0423\u043c\u0435\u043d\u044c\u0448\u0435\u043d\u0438\u0435",
                 "zh-cn": "View > Zoom Out",
+                zh_TW: "\u6aa2\u8996 > Zoom Out",
             },
             hidden: false,
         },
@@ -7994,6 +8506,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Zeichenfl\u00e4che in Fenster einpassen",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u0434\u043e\u0433\u043d\u0430\u0442\u044c \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c \u043f\u043e \u0440\u0430\u0437\u043c\u0435\u0440\u0443 \u043e\u043a\u043d\u0430",
                 "zh-cn": "View > Fit Artboard in Window",
+                zh_TW: "\u6aa2\u8996 > Fit Artboard in Window",
             },
             hidden: false,
         },
@@ -8008,6 +8521,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Alle in Fenster einpassen",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u0434\u043e\u0433\u043d\u0430\u0442\u044c \u0432\u0441\u0435 \u043f\u043e \u0440\u0430\u0437\u043c\u0435\u0440\u0443 \u043e\u043a\u043d\u0430",
                 "zh-cn": "View > Fit All in Window",
+                zh_TW: "\u6aa2\u8996 > Fit All in Window",
             },
             hidden: false,
         },
@@ -8022,6 +8536,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Slices einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b",
                 "zh-cn": "View > Show / Hide Slices",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Slices",
             },
             hidden: false,
         },
@@ -8036,6 +8551,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Slices fixieren",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b",
                 "zh-cn": "View > Lock Slices",
+                zh_TW: "\u6aa2\u8996 > Lock Slices",
             },
             hidden: false,
         },
@@ -8050,6 +8566,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Begrenzungsrahmen einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0438\u0442\u0435\u043b\u044c\u043d\u0443\u044e \u0440\u0430\u043c\u043a\u0443",
                 "zh-cn": "View > Show / Hide Bounding Box",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Bounding Box",
             },
             hidden: false,
         },
@@ -8064,6 +8581,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Transparenzraster einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0441\u0435\u0442\u043a\u0443 \u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u0438",
                 "zh-cn": "View > Show / Hide Transparency Grid",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Transparency Grid",
             },
             hidden: false,
         },
@@ -8078,6 +8596,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Originalgr\u00f6\u00dfe",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0420\u0435\u0430\u043b\u044c\u043d\u044b\u0439 \u0440\u0430\u0437\u043c\u0435\u0440",
                 "zh-cn": "View > Actual Size",
+                zh_TW: "\u6aa2\u8996 > Actual Size",
             },
             hidden: false,
         },
@@ -8092,6 +8611,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Interaktive Mall\u00fccken einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0437\u0430\u0437\u043e\u0440\u044b \u0431\u044b\u0441\u0442\u0440\u044b\u0445 \u0437\u0430\u043b\u0438\u0432\u043e\u043a",
                 "zh-cn": "View > Show / Hide Live Paint Gaps",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Live Paint Gaps",
             },
             hidden: false,
         },
@@ -8106,6 +8626,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Verlaufsoptimierer einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0433\u0440\u0430\u0434\u0438\u0435\u043d\u0442\u043d\u044b\u0439 \u0430\u043d\u043d\u043e\u0442\u0430\u0442\u043e\u0440",
                 "zh-cn": "View > Show / Hide Gradient Annotator",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Gradient Annotator",
             },
             hidden: false,
         },
@@ -8120,6 +8641,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Ecken-Widget einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u0432\u0438\u0434\u0436\u0435\u0442 \u0443\u0433\u043b\u043e\u0432",
                 "zh-cn": "View > Show / Hide Corner Widget",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Corner Widget",
             },
             hidden: false,
             minVersion: "17.1",
@@ -8135,6 +8657,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Ecken einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0433\u0440\u0430\u043d\u0438\u0446\u044b",
                 "zh-cn": "View > Show / Hide Edges",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Edges",
             },
             hidden: false,
         },
@@ -8149,6 +8672,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Intelligente Hilfslinien",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0411\u044b\u0441\u0442\u0440\u044b\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
                 "zh-cn": "View > Smart Guides",
+                zh_TW: "\u6aa2\u8996 > Smart Guides",
             },
             hidden: false,
             minVersion: "16.0",
@@ -8164,6 +8688,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Perspektivenraster > Raster einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u0441\u0435\u0442\u043a\u0443",
                 "zh-cn": "View > Perspective Grid > Show / Hide Grid",
+                zh_TW: "\u6aa2\u8996 > Perspective Grid > Show / Hide Grid",
             },
             hidden: false,
         },
@@ -8178,6 +8703,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Perspektivenraster > Lineale einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u043b\u0438\u043d\u0435\u0439\u043a\u0438",
                 "zh-cn": "View > Perspective Grid > Show / Hide Rulers",
+                zh_TW: "\u6aa2\u8996 > Perspective Grid > Show / Hide Rulers",
             },
             hidden: false,
         },
@@ -8192,6 +8718,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Perspektivenraster > Am Raster ausrichten",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u041f\u0440\u0438\u0432\u044f\u0437\u0430\u0442\u044c \u043a \u0441\u0435\u0442\u043a\u0435",
                 "zh-cn": "View > Perspective Grid > Snap to Grid",
+                zh_TW: "\u6aa2\u8996 > Perspective Grid > Snap to Grid",
             },
             hidden: false,
         },
@@ -8206,6 +8733,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Perspektivenraster > Raster sperren",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0441\u0435\u0442\u043a\u0443",
                 "zh-cn": "View > Perspective Grid > Lock Grid",
+                zh_TW: "\u6aa2\u8996 > Perspective Grid > Lock Grid",
             },
             hidden: false,
         },
@@ -8220,6 +8748,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Perspektivenraster > Bezugspunkt sperren",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u0442\u043e\u0447\u043a\u0443 \u043d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u044f",
                 "zh-cn": "View > Perspective Grid > Lock Station Point",
+                zh_TW: "\u6aa2\u8996 > Perspective Grid > Lock Station Point",
             },
             hidden: false,
         },
@@ -8234,6 +8763,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Perspektivenraster > Raster definieren",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b > \u041e\u043f\u0440\u0435\u0434\u0435\u043b\u0438\u0442\u044c \u0441\u0435\u0442\u043a\u0443...",
                 "zh-cn": "View > Perspective Grid > Define Grid...",
+                zh_TW: "\u6aa2\u8996 > Perspective Grid > Define Grid...",
             },
             hidden: false,
         },
@@ -8248,6 +8778,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Zeichenfl\u00e4chen einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "View > Show / Hide Artboards",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Artboards",
             },
             hidden: false,
         },
@@ -8262,6 +8793,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Druckaufteilung einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0440\u0430\u0437\u0431\u0438\u0435\u043d\u0438\u0435 \u0434\u043b\u044f \u043f\u0435\u0447\u0430\u0442\u0438",
                 "zh-cn": "View > Show / Hide Print Tiling",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Print Tiling",
             },
             hidden: false,
         },
@@ -8276,6 +8808,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Vorlage einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0421\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d",
                 "zh-cn": "View > Show / Hide Template",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Template",
             },
             hidden: false,
         },
@@ -8290,6 +8823,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Lineale > Lineale einblende / ausblendenn",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u043b\u0438\u043d\u0435\u0439\u043a\u0438",
                 "zh-cn": "View > Rulers > Show / Hide Rulers",
+                zh_TW: "\u6aa2\u8996 > Rulers > Show / Hide Rulers",
             },
             hidden: false,
         },
@@ -8304,6 +8838,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Lineale > In globale Lineale \u00e4ndern",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041b\u0438\u043d\u0435\u0439\u043a\u0438 > \u0421\u043c\u0435\u043d\u0438\u0442\u044c \u043d\u0430 \u043e\u0431\u0449\u0438\u0435 \u043b\u0438\u043d\u0435\u0439\u043a\u0438 / \u043c\u043e\u043d\u0442\u0430\u0436\u043d\u043e\u0439 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "View > Rulers > Change to Global Rulers",
+                zh_TW: "\u6aa2\u8996 > Rulers > Change to Global Rulers",
             },
             hidden: false,
         },
@@ -8318,6 +8853,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Lineale > Videolineale einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043a\u0440\u044b\u0442\u044c \u043b\u0438\u043d\u0435\u0439\u043a\u0438 \u0432\u0438\u0434\u0435\u043e",
                 "zh-cn": "View > Rulers > Show / Hide Video Rulers",
+                zh_TW: "\u6aa2\u8996 > Rulers > Show / Hide Video Rulers",
             },
             hidden: false,
         },
@@ -8332,6 +8868,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Textverkettungen einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0441\u0432\u044f\u0437\u0438 \u0442\u0435\u043a\u0441\u0442\u043e\u0432\u044b\u0445 \u0431\u043b\u043e\u043a\u043e\u0432",
                 "zh-cn": "View > Show / Hide Text Threads",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Text Threads",
             },
             hidden: false,
         },
@@ -8346,6 +8883,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Hilfslinien > Hilfslinien einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
                 "zh-cn": "View > Guides > Show / Hide Guides",
+                zh_TW: "\u6aa2\u8996 > Guides > Show / Hide Guides",
             },
             hidden: false,
         },
@@ -8360,6 +8898,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Hilfslinien > Hilfslinien sperren",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u0417\u0430\u043a\u0440\u0435\u043f\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
                 "zh-cn": "View > Guides > Lock / Unlock Guides",
+                zh_TW: "\u6aa2\u8996 > Guides > Lock / Unlock Guides",
             },
             hidden: false,
         },
@@ -8374,6 +8913,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Hilfslinien > Hilfslinien erstellen",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
                 "zh-cn": "View > Guides > Make Guides",
+                zh_TW: "\u6aa2\u8996 > Guides > Make Guides",
             },
             hidden: false,
         },
@@ -8388,6 +8928,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Hilfslinien > Hilfslinien zur\u00fcckwandeln",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u041e\u0441\u0432\u043e\u0431\u043e\u0434\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
                 "zh-cn": "View > Guides > Release Guides",
+                zh_TW: "\u6aa2\u8996 > Guides > Release Guides",
             },
             hidden: false,
         },
@@ -8402,6 +8943,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Hilfslinien > Hilfslinien l\u00f6schen",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 > \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435",
                 "zh-cn": "View > Guides > Clear Guides",
+                zh_TW: "\u6aa2\u8996 > Guides > Clear Guides",
             },
             hidden: false,
         },
@@ -8416,6 +8958,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Raster einblenden / ausblenden",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c / \u0441\u043f\u0440\u044f\u0442\u0430\u0442\u044c \u0441\u0435\u0442\u043a\u0443",
                 "zh-cn": "View > Show / Hide Grid",
+                zh_TW: "\u6aa2\u8996 > Show / Hide Grid",
             },
             hidden: false,
         },
@@ -8430,6 +8973,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Am Raster ausrichten",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u0442\u044c \u043f\u043e \u0441\u0435\u0442\u043a\u0435",
                 "zh-cn": "View > Snap to Grid",
+                zh_TW: "\u6aa2\u8996 > Snap to Grid",
             },
             hidden: false,
         },
@@ -8444,6 +8988,7 @@ See the LICENSE file for details.
                 de: "Ansicht > An Punkt ausrichten",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u0442\u044c \u043f\u043e \u0442\u043e\u0447\u043a\u0430\u043c",
                 "zh-cn": "View > Snap to Point",
+                zh_TW: "\u6aa2\u8996 > Snap to Point",
             },
             hidden: false,
         },
@@ -8458,6 +9003,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Neue Ansicht \u2026",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u041d\u043e\u0432\u044b\u0439 \u0432\u0438\u0434\u2026",
                 "zh-cn": "View > New View...",
+                zh_TW: "\u6aa2\u8996 > New View...",
             },
             hidden: false,
         },
@@ -8472,6 +9018,7 @@ See the LICENSE file for details.
                 de: "Ansicht > Ansicht bearbeiten \u2026",
                 ru: "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 > \u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432\u0438\u0434\u044b\u2026",
                 "zh-cn": "View > Edit Views...",
+                zh_TW: "\u6aa2\u8996 > Edit Views...",
             },
             hidden: false,
         },
@@ -8486,6 +9033,7 @@ See the LICENSE file for details.
                 de: "Fenster > Neues Fenster",
                 ru: "\u041e\u043a\u043d\u043e > \u041d\u043e\u0432\u043e\u0435 \u043e\u043a\u043d\u043e",
                 "zh-cn": "Window > New Window",
+                zh_TW: "\u8996\u7a97 > New Window",
             },
             hidden: false,
         },
@@ -8500,6 +9048,7 @@ See the LICENSE file for details.
                 de: "Fenster > Anordnen > \u00dcberlappend",
                 ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u041a\u0430\u0441\u043a\u0430\u0434\u043e\u043c",
                 "zh-cn": "Window > Arrange > Cascade",
+                zh_TW: "\u8996\u7a97 > Arrange > Cascade",
             },
             hidden: false,
         },
@@ -8514,6 +9063,7 @@ See the LICENSE file for details.
                 de: "Fenster > Anordnen > Nebeneinander",
                 ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u041c\u043e\u0437\u0430\u0438\u043a\u043e\u0439",
                 "zh-cn": "Window > Arrange > Tile",
+                zh_TW: "\u8996\u7a97 > Arrange > Tile",
             },
             hidden: false,
         },
@@ -8528,6 +9078,7 @@ See the LICENSE file for details.
                 de: "Fenster > Anordnen > In Fenster verschiebbar machen",
                 ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u041f\u043b\u0430\u0432\u0430\u044e\u0449\u0435\u0435 \u0432 \u043e\u043a\u043d\u0435",
                 "zh-cn": "Window > Arrange > Float in Window",
+                zh_TW: "\u8996\u7a97 > Arrange > Float in Window",
             },
             hidden: false,
         },
@@ -8542,6 +9093,7 @@ See the LICENSE file for details.
                 de: "Fenster > Anordnen > Alle in Fenstern verschiebbar machen",
                 ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u0412\u0441\u0435 \u043f\u043b\u0430\u0432\u0430\u044e\u0449\u0438\u0435 \u0432 \u043e\u043a\u043d\u0430\u0445",
                 "zh-cn": "Window > Arrange > Float All in Windows",
+                zh_TW: "\u8996\u7a97 > Arrange > Float All in Windows",
             },
             hidden: false,
         },
@@ -8556,6 +9108,7 @@ See the LICENSE file for details.
                 de: "Fenster > Anordnen > Alle Fenster zusammenf\u00fchren",
                 ru: "\u041e\u043a\u043d\u043e > \u0423\u043f\u043e\u0440\u044f\u0434\u0438\u0442\u044c > \u041e\u0431\u044a\u0435\u0434\u0438\u043d\u0438\u0442\u044c \u0432\u0441\u0435 \u043e\u043a\u043d\u0430",
                 "zh-cn": "Window > Arrange > Consolidate All Windows",
+                zh_TW: "\u8996\u7a97 > Arrange > Consolidate All Windows",
             },
             hidden: false,
         },
@@ -8570,6 +9123,7 @@ See the LICENSE file for details.
                 de: "Fenster > Erweiterungen auf Exchange suchen \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u043e\u0438\u0441\u043a \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u0439 \u043d\u0430 Exchange...",
                 "zh-cn": "Window > Find Extensions on Exchange...",
+                zh_TW: "\u8996\u7a97 > Find Extensions on Exchange...",
             },
             hidden: false,
             minVersion: "19",
@@ -8585,6 +9139,7 @@ See the LICENSE file for details.
                 de: "Fenster > Arbeitsbereich > Zur\u00fccksetzen",
                 ru: "\u041e\u043a\u043d\u043e > \u0412\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c \u0440\u0430\u0431\u043e\u0447\u0443\u044e \u0441\u0440\u0435\u0434\u0443",
                 "zh-cn": "Window > Reset Workspace",
+                zh_TW: "\u8996\u7a97 > Reset Workspace",
             },
             hidden: false,
         },
@@ -8599,6 +9154,7 @@ See the LICENSE file for details.
                 de: "Fenster > Arbeitsbereich > Neuer Arbeitsbereich \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u0420\u0430\u0431\u043e\u0447\u0430\u044f \u0441\u0440\u0435\u0434\u0430 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0440\u0430\u0431\u043e\u0447\u0443\u044e \u0441\u0440\u0435\u0434\u0443...",
                 "zh-cn": "Window > Workspace > New Workspace...",
+                zh_TW: "\u8996\u7a97 > Workspace > New Workspace...",
             },
             hidden: false,
         },
@@ -8613,6 +9169,7 @@ See the LICENSE file for details.
                 de: "Fenster > Arbeitsbereich > Arbeitsbereiche verwalten \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u0420\u0430\u0431\u043e\u0447\u0430\u044f \u0441\u0440\u0435\u0434\u0430 > \u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0440\u0430\u0431\u043e\u0447\u0438\u043c\u0438 \u0441\u0440\u0435\u0434\u0430\u043c\u0438...",
                 "zh-cn": "Window > Workspace > Manage Workspaces...",
+                zh_TW: "\u8996\u7a97 > Workspace > Manage Workspaces...",
             },
             hidden: false,
         },
@@ -8627,6 +9184,7 @@ See the LICENSE file for details.
                 de: "Fenster > Steuerung",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u044c \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f",
                 "zh-cn": "Window > Control",
+                zh_TW: "\u8996\u7a97 > Control",
             },
             hidden: false,
         },
@@ -8641,6 +9199,7 @@ See the LICENSE file for details.
                 de: "Fenster > Werkzeugleisten > Erweitert",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432 > \u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435",
                 "zh-cn": "Window > Toolbars > Advanced",
+                zh_TW: "\u8996\u7a97 > Toolbars > Advanced",
             },
             hidden: false,
             minVersion: "23",
@@ -8656,6 +9215,7 @@ See the LICENSE file for details.
                 de: "Fenster > Werkzeugleisten > Einfach",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432 > \u041e\u0441\u043d\u043e\u0432\u043d\u044b\u0435",
                 "zh-cn": "Window > Toolbars > Basic",
+                zh_TW: "\u8996\u7a97 > Toolbars > Basic",
             },
             hidden: false,
             minVersion: "23",
@@ -8671,6 +9231,7 @@ See the LICENSE file for details.
                 de: "Window > Toolbars > Getting Started",
                 ru: "Window > Toolbars > Getting Started",
                 "zh-cn": "Window > Toolbars > Getting Started",
+                zh_TW: "\u8996\u7a97 > Toolbars > Getting Started",
             },
             hidden: false,
             minVersion: "29.3",
@@ -8686,6 +9247,7 @@ See the LICENSE file for details.
                 de: "Fenster > Werkzeugleisten > Neue Werkzeugleiste \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432 > \u041d\u043e\u0432\u0430\u044f \u043f\u0430\u043d\u0435\u043b\u044c \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432...",
                 "zh-cn": "Window > Toolbars > New Toolbar...",
+                zh_TW: "\u8996\u7a97 > Toolbars > New Toolbar...",
             },
             hidden: false,
             minVersion: "17",
@@ -8701,6 +9263,7 @@ See the LICENSE file for details.
                 de: "Fenster > Werkzeugleisten > Werkzeugleisten verwalten \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u043d\u0435\u043b\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432 > \u0423\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043f\u0430\u043d\u0435\u043b\u044f\u043c\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u043e\u0432...",
                 "zh-cn": "Window > Toolbars > Manage Toolbars...",
+                zh_TW: "\u8996\u7a97 > Toolbars > Manage Toolbars...",
             },
             hidden: false,
             minVersion: "17",
@@ -8716,6 +9279,7 @@ See the LICENSE file for details.
                 de: "Fenster > 3D und Materialien",
                 ru: "\u041e\u043a\u043d\u043e > 3D \u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
                 "zh-cn": "Window > 3D and Materials",
+                zh_TW: "\u8996\u7a97 > 3D and Materials",
             },
             hidden: false,
             minVersion: "26",
@@ -8731,6 +9295,7 @@ See the LICENSE file for details.
                 de: "Fenster > Aktionen",
                 ru: "\u041e\u043a\u043d\u043e > \u041e\u043f\u0435\u0440\u0430\u0446\u0438\u0438",
                 "zh-cn": "Window > Actions",
+                zh_TW: "\u8996\u7a97 > Actions",
             },
             hidden: false,
         },
@@ -8745,6 +9310,7 @@ See the LICENSE file for details.
                 de: "Fenster > Ausrichten",
                 ru: "\u041e\u043a\u043d\u043e > \u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435",
                 "zh-cn": "Window > Align",
+                zh_TW: "\u8996\u7a97 > Align",
             },
             hidden: false,
         },
@@ -8759,6 +9325,7 @@ See the LICENSE file for details.
                 de: "Fenster > Aussehen",
                 ru: "\u041e\u043a\u043d\u043e > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435",
                 "zh-cn": "Window > Appearance",
+                zh_TW: "\u8996\u7a97 > Appearance",
             },
             hidden: false,
         },
@@ -8773,6 +9340,7 @@ See the LICENSE file for details.
                 de: "Fenster > Zeichenfl\u00e4chen",
                 ru: "\u041e\u043a\u043d\u043e > \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u044b\u0435 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
                 "zh-cn": "Window > Artboards",
+                zh_TW: "\u8996\u7a97 > Artboards",
             },
             hidden: false,
         },
@@ -8787,6 +9355,7 @@ See the LICENSE file for details.
                 de: "Fenster > Export von Element",
                 ru: "\u041e\u043a\u043d\u043e > \u042d\u043a\u0441\u043f\u043e\u0440\u0442 \u0440\u0435\u0441\u0443\u0440\u0441\u043e\u0432",
                 "zh-cn": "Window > Asset Export",
+                zh_TW: "\u8996\u7a97 > Asset Export",
             },
             hidden: false,
             minVersion: "20",
@@ -8802,6 +9371,7 @@ See the LICENSE file for details.
                 de: "Fenster > Attribute",
                 ru: "\u041e\u043a\u043d\u043e > \u0410\u0442\u0440\u0438\u0431\u0443\u0442\u044b",
                 "zh-cn": "Window > Attributes",
+                zh_TW: "\u8996\u7a97 > Attributes",
             },
             hidden: false,
         },
@@ -8816,6 +9386,7 @@ See the LICENSE file for details.
                 de: "Window > Blend",
                 ru: "Window > Blend",
                 "zh-cn": "Window > Blend",
+                zh_TW: "\u8996\u7a97 > Blend",
             },
             hidden: false,
             minVersion: "30.7",
@@ -8831,6 +9402,7 @@ See the LICENSE file for details.
                 de: "Fenster > Pinsel",
                 ru: "\u041e\u043a\u043d\u043e > \u041a\u0438\u0441\u0442\u0438",
                 "zh-cn": "Window > Brushes",
+                zh_TW: "\u8996\u7a97 > Brushes",
             },
             hidden: false,
         },
@@ -8845,6 +9417,7 @@ See the LICENSE file for details.
                 de: "Fenster > Farbe",
                 ru: "\u041e\u043a\u043d\u043e > \u0426\u0432\u0435\u0442",
                 "zh-cn": "Window > Color",
+                zh_TW: "\u8996\u7a97 > Color",
             },
             hidden: false,
         },
@@ -8859,6 +9432,7 @@ See the LICENSE file for details.
                 de: "Fenster > Farbhilfe",
                 ru: "\u041e\u043a\u043d\u043e > \u041a\u0430\u0442\u0430\u043b\u043e\u0433 \u0446\u0432\u0435\u0442\u043e\u0432",
                 "zh-cn": "Window > Color Guide",
+                zh_TW: "\u8996\u7a97 > Color Guide",
             },
             hidden: false,
         },
@@ -8873,6 +9447,7 @@ See the LICENSE file for details.
                 de: "Window > Color Themes",
                 ru: "Window > Color Themes",
                 "zh-cn": "Window > Color Themes",
+                zh_TW: "\u8996\u7a97 > Color Themes",
             },
             hidden: false,
             minVersion: "22",
@@ -8889,6 +9464,7 @@ See the LICENSE file for details.
                 de: "Fenster > Kommentare",
                 ru: "\u041e\u043a\u043d\u043e > \u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438",
                 "zh-cn": "Window > Comments",
+                zh_TW: "\u8996\u7a97 > Comments",
             },
             hidden: false,
             minVersion: "26",
@@ -8904,6 +9480,7 @@ See the LICENSE file for details.
                 de: "Window > Concept to Vector",
                 ru: "Window > Concept to Vector",
                 "zh-cn": "Window > Concept to Vector",
+                zh_TW: "\u8996\u7a97 > Concept to Vector",
             },
             hidden: false,
             minVersion: "30.5.0",
@@ -8919,6 +9496,7 @@ See the LICENSE file for details.
                 de: "CSS-Eigenschaften",
                 ru: "\u041e\u043a\u043d\u043e > \u0421\u0432\u043e\u0439\u0441\u0442\u0432\u0430 CSS",
                 "zh-cn": "Window > CSS Properties (Deprecated)",
+                zh_TW: "\u8996\u7a97 > CSS Properties (Deprecated)",
             },
             hidden: false,
         },
@@ -8933,6 +9511,7 @@ See the LICENSE file for details.
                 de: "Fenster > Dokumentinformationen",
                 ru: "\u041e\u043a\u043d\u043e > \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043e \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0435",
                 "zh-cn": "Window > Document Info",
+                zh_TW: "\u8996\u7a97 > Document Info",
             },
             hidden: false,
         },
@@ -8947,6 +9526,7 @@ See the LICENSE file for details.
                 de: "Fenster > Reduzierungsvorschau",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u043e\u0432 \u0441\u0432\u0435\u0434\u0435\u043d\u0438\u044f",
                 "zh-cn": "Window > Flattener Preview",
+                zh_TW: "\u8996\u7a97 > Flattener Preview",
             },
             hidden: false,
         },
@@ -8961,6 +9541,7 @@ See the LICENSE file for details.
                 de: "Window > Generation History",
                 ru: "Window > Generation History",
                 "zh-cn": "Window > Generation History",
+                zh_TW: "\u8996\u7a97 > Generation History",
             },
             hidden: false,
             minVersion: "28.6",
@@ -8976,6 +9557,7 @@ See the LICENSE file for details.
                 de: "Window > Generated Variations",
                 ru: "Window > Generated Variations",
                 "zh-cn": "Window > Generated Variations",
+                zh_TW: "\u8996\u7a97 > Generated Variations",
             },
             hidden: false,
             minVersion: "28",
@@ -8992,6 +9574,7 @@ See the LICENSE file for details.
                 de: "Fenster > Verlauf",
                 ru: "\u041e\u043a\u043d\u043e > \u0413\u0440\u0430\u0434\u0438\u0435\u043d\u0442",
                 "zh-cn": "Window > Gradient",
+                zh_TW: "\u8996\u7a97 > Gradient",
             },
             hidden: false,
         },
@@ -9006,6 +9589,7 @@ See the LICENSE file for details.
                 de: "Fenster > Grafikstile",
                 ru: "\u041e\u043a\u043d\u043e > \u0421\u0442\u0438\u043b\u0438 \u0433\u0440\u0430\u0444\u0438\u043a\u0438",
                 "zh-cn": "Window > Graphic Styles",
+                zh_TW: "\u8996\u7a97 > Graphic Styles",
             },
             hidden: false,
         },
@@ -9020,6 +9604,7 @@ See the LICENSE file for details.
                 de: "Fenster > Versionsverlauf",
                 ru: "\u041e\u043a\u043d\u043e > \u0418\u0441\u0442\u043e\u0440\u0438\u044f",
                 "zh-cn": "Window > History",
+                zh_TW: "\u8996\u7a97 > History",
             },
             hidden: false,
             minVersion: "26.4",
@@ -9036,6 +9621,7 @@ See the LICENSE file for details.
                 de: "Fenster > Versionsverlauf",
                 ru: "\u041e\u043a\u043d\u043e > \u0418\u0441\u0442\u043e\u0440\u0438\u044f",
                 "zh-cn": "Window > History",
+                zh_TW: "\u8996\u7a97 > History",
             },
             hidden: false,
             minVersion: "27",
@@ -9051,6 +9637,7 @@ See the LICENSE file for details.
                 de: "Fenster > Bildnachzeichner",
                 ru: "Window > Image Trace",
                 "zh-cn": "Window > Image Trace",
+                zh_TW: "\u8996\u7a97 > Image Trace",
             },
             hidden: false,
         },
@@ -9065,6 +9652,7 @@ See the LICENSE file for details.
                 de: "Fenster > Info",
                 ru: "\u041e\u043a\u043d\u043e > \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f",
                 "zh-cn": "Window > Info",
+                zh_TW: "\u8996\u7a97 > Info",
             },
             hidden: false,
         },
@@ -9079,6 +9667,7 @@ See the LICENSE file for details.
                 de: "Fenster > Ebenen",
                 ru: "\u041e\u043a\u043d\u043e > \u0421\u043b\u043e\u0438",
                 "zh-cn": "Window > Layers",
+                zh_TW: "\u8996\u7a97 > Layers",
             },
             hidden: false,
         },
@@ -9093,6 +9682,7 @@ See the LICENSE file for details.
                 de: "Window > Learn",
                 ru: "Window > Learn",
                 "zh-cn": "Window > Learn",
+                zh_TW: "\u8996\u7a97 > Learn",
             },
             hidden: false,
             minVersion: "22",
@@ -9109,6 +9699,7 @@ See the LICENSE file for details.
                 de: "Fenster > Bibliotheken",
                 ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438",
                 "zh-cn": "Window > Libraries",
+                zh_TW: "\u8996\u7a97 > Libraries",
             },
             hidden: false,
         },
@@ -9123,6 +9714,7 @@ See the LICENSE file for details.
                 de: "Fenster > Verkn\u00fcpfungen",
                 ru: "\u041e\u043a\u043d\u043e > \u0421\u0432\u044f\u0437\u0438",
                 "zh-cn": "Window > Links",
+                zh_TW: "\u8996\u7a97 > Links",
             },
             hidden: false,
         },
@@ -9137,6 +9729,7 @@ See the LICENSE file for details.
                 de: "Fenster > Zauberstab",
                 ru: "\u041e\u043a\u043d\u043e > \u0412\u043e\u043b\u0448\u0435\u0431\u043d\u0430\u044f \u043f\u0430\u043b\u043e\u0447\u043a\u0430",
                 "zh-cn": "Window > Magic Wand",
+                zh_TW: "\u8996\u7a97 > Magic Wand",
             },
             hidden: false,
         },
@@ -9151,6 +9744,7 @@ See the LICENSE file for details.
                 de: "Window > Mockup",
                 ru: "Window > Mockup",
                 "zh-cn": "Window > Mockup",
+                zh_TW: "\u8996\u7a97 > Mockup",
             },
             hidden: false,
             minVersion: "28",
@@ -9166,6 +9760,7 @@ See the LICENSE file for details.
                 de: "Fenster > Navigator",
                 ru: "\u041e\u043a\u043d\u043e > \u041d\u0430\u0432\u0438\u0433\u0430\u0442\u043e\u0440",
                 "zh-cn": "Window > Navigator",
+                zh_TW: "\u8996\u7a97 > Navigator",
             },
             hidden: false,
         },
@@ -9180,6 +9775,7 @@ See the LICENSE file for details.
                 de: "Fenster > Pathfinder",
                 ru: "\u041e\u043a\u043d\u043e > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u043a\u043e\u043d\u0442\u0443\u0440\u043e\u0432",
                 "zh-cn": "Window > Pathfinder",
+                zh_TW: "\u8996\u7a97 > \u8def\u5f91\u7ba1\u7406\u54e1",
             },
             hidden: false,
         },
@@ -9194,6 +9790,7 @@ See the LICENSE file for details.
                 de: "Fenster > Musteroptionen",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0443\u0437\u043e\u0440\u0430",
                 "zh-cn": "Window > Pattern Options",
+                zh_TW: "\u8996\u7a97 > Pattern Options",
             },
             hidden: false,
         },
@@ -9208,6 +9805,7 @@ See the LICENSE file for details.
                 de: "Fenster > Retype",
                 ru: "Window > Retype",
                 "zh-cn": "Window > Retype",
+                zh_TW: "\u8996\u7a97 > Retype",
             },
             hidden: false,
             minVersion: "27.6",
@@ -9223,6 +9821,7 @@ See the LICENSE file for details.
                 de: "Fenster > Separationenvorschau",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u0446\u0432\u0435\u0442\u043e\u0434\u0435\u043b\u0435\u043d\u0438\u0439",
                 "zh-cn": "Window > Separations Preview",
+                zh_TW: "\u8996\u7a97 > Separations Preview",
             },
             hidden: false,
         },
@@ -9237,6 +9836,7 @@ See the LICENSE file for details.
                 de: "Fenster > Kontur",
                 ru: "\u041e\u043a\u043d\u043e > \u041e\u0431\u0432\u043e\u0434\u043a\u0430",
                 "zh-cn": "Window > Stroke",
+                zh_TW: "\u8996\u7a97 > Stroke",
             },
             hidden: false,
         },
@@ -9251,6 +9851,7 @@ See the LICENSE file for details.
                 de: "Fenster > SVG-Interaktivit\u00e4t",
                 ru: "\u041e\u043a\u043d\u043e > \u0418\u043d\u0442\u0435\u0440\u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c SVG",
                 "zh-cn": "Window > SVG Interactivity",
+                zh_TW: "\u8996\u7a97 > SVG Interactivity",
             },
             hidden: false,
         },
@@ -9265,6 +9866,7 @@ See the LICENSE file for details.
                 de: "Fenster > Farbfelder",
                 ru: "\u041e\u043a\u043d\u043e > \u041e\u0431\u0440\u0430\u0437\u0446\u044b",
                 "zh-cn": "Window > Swatches",
+                zh_TW: "\u8996\u7a97 > Swatches",
             },
             hidden: false,
         },
@@ -9279,6 +9881,7 @@ See the LICENSE file for details.
                 de: "Fenster > Symbole",
                 ru: "\u041e\u043a\u043d\u043e > \u0421\u0438\u043c\u0432\u043e\u043b\u044b",
                 "zh-cn": "Window > Symbols",
+                zh_TW: "\u8996\u7a97 > Symbols",
             },
             hidden: false,
         },
@@ -9293,6 +9896,7 @@ See the LICENSE file for details.
                 de: "Fenster > Transformieren",
                 ru: "\u041e\u043a\u043d\u043e > \u0422\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435",
                 "zh-cn": "Window > Transform",
+                zh_TW: "\u8996\u7a97 > Transform",
             },
             hidden: false,
         },
@@ -9307,6 +9911,7 @@ See the LICENSE file for details.
                 de: "Fenster > Transparenz",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c",
                 "zh-cn": "Window > Transparency",
+                zh_TW: "\u8996\u7a97 > Transparency",
             },
             hidden: false,
         },
@@ -9321,6 +9926,7 @@ See the LICENSE file for details.
                 de: "Fenster > Schrift > Zeichen",
                 ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0421\u0438\u043c\u0432\u043e\u043b",
                 "zh-cn": "Window > Type > Character",
+                zh_TW: "\u8996\u7a97 > \u6587\u5b57 > Character",
             },
             hidden: false,
         },
@@ -9335,6 +9941,7 @@ See the LICENSE file for details.
                 de: "Fenster > Schrift > Zeichenformate",
                 ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0421\u0442\u0438\u043b\u0438 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
                 "zh-cn": "Window > Type > Character Styles",
+                zh_TW: "\u8996\u7a97 > \u6587\u5b57 > Character Styles",
             },
             hidden: false,
         },
@@ -9349,6 +9956,7 @@ See the LICENSE file for details.
                 de: "Fenster > Schrift > Glyphen",
                 ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0413\u043b\u0438\u0444\u044b",
                 "zh-cn": "Window > Type > Glyphs",
+                zh_TW: "\u8996\u7a97 > \u6587\u5b57 > Glyphs",
             },
             hidden: false,
         },
@@ -9363,6 +9971,7 @@ See the LICENSE file for details.
                 de: "Fenster > Schrift > OpenType",
                 ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > OpenType",
                 "zh-cn": "Window > Type > OpenType",
+                zh_TW: "\u8996\u7a97 > \u6587\u5b57 > OpenType",
             },
             hidden: false,
         },
@@ -9377,6 +9986,7 @@ See the LICENSE file for details.
                 de: "Fenster > Schrift > Absatz",
                 ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0410\u0431\u0437\u0430\u0446",
                 "zh-cn": "Window > Type > Paragraph",
+                zh_TW: "\u8996\u7a97 > \u6587\u5b57 > Paragraph",
             },
             hidden: false,
         },
@@ -9391,6 +10001,7 @@ See the LICENSE file for details.
                 de: "Fenster > Schrift > Absatzformate",
                 ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0421\u0442\u0438\u043b\u0438 \u0430\u0431\u0437\u0430\u0446\u0435\u0432",
                 "zh-cn": "Window > Type > Paragraph Styles",
+                zh_TW: "\u8996\u7a97 > \u6587\u5b57 > Paragraph Styles",
             },
             hidden: false,
         },
@@ -9405,6 +10016,7 @@ See the LICENSE file for details.
                 de: "Window > Type > Reflow Viewer",
                 ru: "Window > Type > Reflow Viewer",
                 "zh-cn": "Window > Type > Reflow Viewer",
+                zh_TW: "\u8996\u7a97 > \u6587\u5b57 > Reflow Viewer",
             },
             hidden: false,
             minVersion: "29",
@@ -9420,6 +10032,7 @@ See the LICENSE file for details.
                 de: "Fenster > Schrift > Tabulatoren",
                 ru: "\u041e\u043a\u043d\u043e > \u0422\u0435\u043a\u0441\u0442 > \u0422\u0430\u0431\u0443\u043b\u044f\u0446\u0438\u044f",
                 "zh-cn": "Window > Type > Tabs",
+                zh_TW: "\u8996\u7a97 > \u6587\u5b57 > Tabs",
             },
             hidden: false,
         },
@@ -9434,6 +10047,7 @@ See the LICENSE file for details.
                 de: "Fenster > Variablen",
                 ru: "\u041e\u043a\u043d\u043e > \u041f\u0435\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0435",
                 "zh-cn": "Window > Variables",
+                zh_TW: "\u8996\u7a97 > Variables",
             },
             hidden: false,
         },
@@ -9448,6 +10062,7 @@ See the LICENSE file for details.
                 de: "Fenster > Versionsverlauf",
                 ru: "\u041e\u043a\u043d\u043e > \u0416\u0443\u0440\u043d\u0430\u043b \u0432\u0435\u0440\u0441\u0438\u0439",
                 "zh-cn": "Window > Version History",
+                zh_TW: "\u8996\u7a97 > Version History",
             },
             hidden: false,
             minVersion: "26",
@@ -9463,6 +10078,7 @@ See the LICENSE file for details.
                 de: "Fenster > Pinsel-Bibliotheken > Andere Bibliothek \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438 \u043a\u0438\u0441\u0442\u0435\u0439 > \u0414\u0440\u0443\u0433\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430...",
                 "zh-cn": "Window > Brush Libraries > Other Library...",
+                zh_TW: "\u8996\u7a97 > Brush Libraries > Other Library...",
             },
             hidden: false,
         },
@@ -9477,6 +10093,7 @@ See the LICENSE file for details.
                 de: "Fenster > Grafikstil-Bibliotheken > Andere Bibliothek \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438 \u0441\u0442\u0438\u043b\u0435\u0439 \u0433\u0440\u0430\u0444\u0438\u043a\u0438 > \u0414\u0440\u0443\u0433\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430...",
                 "zh-cn": "Window > Graphic Style Libraries > Other Library...",
+                zh_TW: "\u8996\u7a97 > Graphic Style Libraries > Other Library...",
             },
             hidden: false,
         },
@@ -9491,6 +10108,7 @@ See the LICENSE file for details.
                 de: "Fenster > Farbfeld-Bibliotheken > Andere Bibliothek \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438 \u043e\u0431\u0440\u0430\u0437\u0446\u043e\u0432 > \u0414\u0440\u0443\u0433\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430...",
                 "zh-cn": "Window > Swatch Libraries > Other Library...",
+                zh_TW: "\u8996\u7a97 > Swatch Libraries > Other Library...",
             },
             hidden: false,
         },
@@ -9505,6 +10123,7 @@ See the LICENSE file for details.
                 de: "Fenster > Symbol-Bibliotheken > Andere Bibliothek \u2026",
                 ru: "\u041e\u043a\u043d\u043e > \u0411\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0438 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432 > \u0414\u0440\u0443\u0433\u0430\u044f \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430...",
                 "zh-cn": "Window > Symbol Libraries > Other Library...",
+                zh_TW: "\u8996\u7a97 > Symbol Libraries > Other Library...",
             },
             hidden: false,
         },
@@ -9519,6 +10138,7 @@ See the LICENSE file for details.
                 de: "Hilfe > Illustrator-Hilfe \u2026",
                 ru: "\u0421\u043f\u0440\u0430\u0432\u043a\u0430 > \u0421\u043f\u0440\u0430\u0432\u043a\u0430 \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u044b Illustrator...",
                 "zh-cn": "Help > Illustrator Help...",
+                zh_TW: "\u8aaa\u660e > Illustrator Help...",
             },
             hidden: false,
         },
@@ -9533,6 +10153,7 @@ See the LICENSE file for details.
                 de: "Help > Tutorials...",
                 ru: "Help > Tutorials...",
                 "zh-cn": "Help > Tutorials...",
+                zh_TW: "\u8aaa\u660e > Tutorials...",
             },
             hidden: false,
             minVersion: "27.9",
@@ -9548,6 +10169,7 @@ See the LICENSE file for details.
                 de: "Help > What's New...",
                 ru: "Help > What's New...",
                 "zh-cn": "Help > What's New...",
+                zh_TW: "\u8aaa\u660e > What's New...",
             },
             hidden: false,
             minVersion: "27.9",
@@ -9563,6 +10185,7 @@ See the LICENSE file for details.
                 de: "Hilfe > Support-Community",
                 ru: "\u0421\u043f\u0440\u0430\u0432\u043a\u0430 > \u0421\u043e\u043e\u0431\u0449\u0435\u0441\u0442\u0432\u043e \u0441\u043b\u0443\u0436\u0431\u044b \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0438",
                 "zh-cn": "Help > Support Community",
+                zh_TW: "\u8aaa\u660e > Support Community",
             },
             hidden: false,
             minVersion: "26",
@@ -9578,6 +10201,7 @@ See the LICENSE file for details.
                 de: "Hilfe > Fehlermeldung / Funktionswunsch senden \u2026",
                 ru: "\u0421\u043f\u0440\u0430\u0432\u043a\u0430 > \u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u043e\u0431 \u043e\u0448\u0438\u0431\u043a\u0435/\u0437\u0430\u043f\u0440\u043e\u0441 \u043d\u0430 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u043d\u043e\u0432\u044b\u0445 \u0444\u0443\u043d\u043a\u0446\u0438\u0439...",
                 "zh-cn": "Help > Submit Bug/Feature Request...",
+                zh_TW: "\u8aaa\u660e > Submit Bug/Feature Request...",
             },
             hidden: false,
             minVersion: "25",
@@ -9593,6 +10217,7 @@ See the LICENSE file for details.
                 de: "Hilfe > Systeminformationen \u2026",
                 ru: "\u0421\u043f\u0440\u0430\u0432\u043a\u0430 > \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043e \u0441\u0438\u0441\u0442\u0435\u043c\u0435\u2026",
                 "zh-cn": "Help > System Info...",
+                zh_TW: "\u8aaa\u660e > System Info...",
             },
             hidden: false,
         },
@@ -9607,6 +10232,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Aktionsstapel \u2026",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u041e\u043f\u0435\u0440\u0430\u0446\u0438\u0438 > \u041f\u0430\u043a\u0435\u0442\u043d\u0430\u044f \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u2026",
                 "zh-cn": "Palette > Actions > Batch...",
+                zh_TW: "Palette > Actions > Batch...",
             },
             hidden: false,
         },
@@ -9621,6 +10247,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Neue Fl\u00e4che hinzuf\u00fcgen",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043d\u043e\u0432\u0443\u044e \u0437\u0430\u043b\u0438\u0432\u043a\u0443",
                 "zh-cn": "Palette > Appearance > Add New Fill",
+                zh_TW: "Palette > Appearance > Add New Fill",
             },
             hidden: false,
         },
@@ -9635,6 +10262,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Neue Kontur hinzuf\u00fcgen",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u041e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u0435 > \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043d\u043e\u0432\u0443\u044e \u043e\u0431\u0432\u043e\u0434\u043a\u0443",
                 "zh-cn": "Palette > Appearance > Add New Stroke",
+                zh_TW: "Palette > Appearance > Add New Stroke",
             },
             hidden: false,
         },
@@ -9649,6 +10277,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Neuer Grafikstil \u2026",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u0442\u0438\u043b\u0438 \u0433\u0440\u0430\u0444\u0438\u043a\u0438 > \u041d\u043e\u0432\u044b\u0439 \u0441\u0442\u0438\u043b\u044c \u0433\u0440\u0430\u0444\u0438\u043a\u0438",
                 "zh-cn": "Palette > Graphic Styles > New Graphic Style...",
+                zh_TW: "Palette > Graphic Styles > New Graphic Style...",
             },
             hidden: false,
         },
@@ -9663,6 +10292,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Neue Ebene",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u043b\u043e\u0438 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u044b\u0439 \u0441\u043b\u043e\u0439",
                 "zh-cn": "Palette > Layers > New Layer",
+                zh_TW: "Palette > Layers > New Layer",
             },
             hidden: false,
         },
@@ -9677,6 +10307,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Neue Ebene mit Dialog \u2026",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u043b\u043e\u0438 > \u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u043e\u0432\u044b\u0439 \u0441 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u0430\u043c\u0438...",
                 "zh-cn": "Palette > Layers > New Layer with Dialog...",
+                zh_TW: "Palette > Layers > New Layer with Dialog...",
             },
             hidden: false,
         },
@@ -9691,6 +10322,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Verkn\u00fcpfung aktualisieren",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u0432\u044f\u0437\u0438 > \u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c \u0441\u0432\u044f\u0437\u044c",
                 "zh-cn": "Palette > Links > Update Link",
+                zh_TW: "Palette > Links > Update Link",
             },
             hidden: false,
         },
@@ -9705,6 +10337,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Neues Farbfeld \u2026",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u041e\u0431\u0440\u0430\u0437\u0446\u044b > \u041d\u043e\u0432\u044b\u0439 \u043e\u0431\u0440\u0430\u0437\u0435\u0446",
                 "zh-cn": "Palette > Swatches > New Swatch...",
+                zh_TW: "Palette > Swatches > New Swatch...",
             },
             hidden: false,
         },
@@ -9719,6 +10352,7 @@ See the LICENSE file for details.
                 de: "Anderes Bedienfeld > Neues Symbol \u2026",
                 ru: "\u041f\u0430\u043b\u0438\u0442\u0440\u0430 > \u0421\u0438\u043c\u0432\u043e\u043b\u044b > \u041d\u043e\u0432\u044b\u0439 \u0441\u0438\u043c\u0432\u043e\u043b",
                 "zh-cn": "Palette > Symbols > New Symbol...",
+                zh_TW: "Palette > Symbols > New Symbol...",
             },
             hidden: false,
         },
@@ -9733,6 +10367,7 @@ See the LICENSE file for details.
                 de: "\u00dcber Illustrator \u2026",
                 ru: "\u041e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435 Illustrator\u2026",
                 "zh-cn": "About Illustrator...",
+                zh_TW: "About Illustrator...",
             },
             hidden: false,
         },
@@ -9747,6 +10382,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Allgemein \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041e\u0441\u043d\u043e\u0432\u043d\u044b\u0435\u2026",
                 "zh-cn": "Preferences > General...",
+                zh_TW: "Preferences > General...",
             },
             hidden: false,
         },
@@ -9761,6 +10397,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Auswahl und Ankerpunkt-Anzeige \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041e\u0442\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435 \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u044f \u0438 \u043e\u043f\u043e\u0440\u043d\u044b\u0445 \u0442\u043e\u0447\u0435\u043a\u2026",
                 "zh-cn": "Preferences > Selection & Anchor Display...",
+                zh_TW: "Preferences > Selection & Anchor Display...",
             },
             hidden: false,
         },
@@ -9775,6 +10412,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Schrift \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0422\u0435\u043a\u0441\u0442\u2026",
                 "zh-cn": "Preferences > Type...",
+                zh_TW: "Preferences > Type...",
             },
             hidden: false,
         },
@@ -9789,6 +10427,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Einheit \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0415\u0434\u0438\u043d\u0438\u0446\u044b \u0438\u0437\u043c\u0435\u0440\u0435\u043d\u0438\u044f\u2026",
                 "zh-cn": "Preferences > Units...",
+                zh_TW: "Preferences > Units...",
             },
             hidden: false,
         },
@@ -9803,6 +10442,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Hilfslinien und Raster \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435 \u0438 \u0441\u0435\u0442\u043a\u0430\u2026",
                 "zh-cn": "Preferences > Guides & Grid...",
+                zh_TW: "Preferences > Guides & Grid...",
             },
             hidden: false,
         },
@@ -9817,6 +10457,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Intelligente Hilfslinien \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0411\u044b\u0441\u0442\u0440\u044b\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0435\u2026",
                 "zh-cn": "Preferences > Smart Guides...",
+                zh_TW: "Preferences > Smart Guides...",
             },
             hidden: false,
         },
@@ -9831,6 +10472,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Slices \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b\u2026",
                 "zh-cn": "Preferences > Slices...",
+                zh_TW: "Preferences > Slices...",
             },
             hidden: false,
         },
@@ -9845,6 +10487,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Silbentrennung \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0420\u0430\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0430 \u043f\u0435\u0440\u0435\u043d\u043e\u0441\u043e\u0432\u2026",
                 "zh-cn": "Preferences > Hyphenation...",
+                zh_TW: "Preferences > Hyphenation...",
             },
             hidden: false,
         },
@@ -9859,6 +10502,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Zusatzmodule und virtueller Speicher \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0412\u043d\u0435\u0448\u043d\u0438\u0435 \u043c\u043e\u0434\u0443\u043b\u0438 \u0438 \u0440\u0430\u0431\u043e\u0447\u0438\u0435 \u0434\u0438\u0441\u043a\u0438\u2026",
                 "zh-cn": "Preferences > Plug-ins & Scratch Disks...",
+                zh_TW: "Preferences > Plug-ins & Scratch Disks...",
             },
             hidden: false,
         },
@@ -9873,6 +10517,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Benutzeroberfl\u00e4che \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0418\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f\u2026",
                 "zh-cn": "Preferences > User Interface...",
+                zh_TW: "Preferences > User Interface...",
             },
             hidden: false,
         },
@@ -9887,6 +10532,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Leistung \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c\u2026",
                 "zh-cn": "Preferences > Performance",
+                zh_TW: "Preferences > Performance",
             },
             hidden: false,
             minVersion: "19",
@@ -9902,6 +10548,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Dateihandhabung\u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u0444\u0430\u0439\u043b\u043e\u0432\u2026",
                 "zh-cn": "Preferences > File Handling...",
+                zh_TW: "Preferences > File Handling...",
             },
             hidden: false,
         },
@@ -9916,6 +10563,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Zwischenablageoptionen \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u0431\u0443\u0444\u0435\u0440\u0430\u2026",
                 "zh-cn": "Preferences > Clipboard Handling",
+                zh_TW: "Preferences > Clipboard Handling",
             },
             hidden: false,
             minVersion: "25",
@@ -9931,6 +10579,7 @@ See the LICENSE file for details.
                 de: "Bearbeiten > Voreinstellungen > Aussehen von Schwarz \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0412\u043e\u0441\u043f\u0440\u043e\u0438\u0437\u0432\u0435\u0434\u0435\u043d\u0438\u0435 \u0447\u0435\u0440\u043d\u043e\u0433\u043e \u0446\u0432\u0435\u0442\u0430...",
                 "zh-cn": "Preferences > Appearance of Black...",
+                zh_TW: "Preferences > Appearance of Black...",
             },
             hidden: false,
         },
@@ -9945,6 +10594,7 @@ See the LICENSE file for details.
                 de: "Voreinstellungen > Ger\u00e4te \u2026",
                 ru: "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0438 > \u0423\u0441\u0442\u0440\u043e\u0439\u0441\u0442\u0432\u0430\u2026",
                 "zh-cn": "Preferences > Devices",
+                zh_TW: "Preferences > Devices",
             },
             hidden: false,
             minVersion: "24",
@@ -9960,6 +10610,7 @@ See the LICENSE file for details.
                 de: "Debug Panel",
                 ru: "Debug Panel",
                 "zh-cn": "Debug Panel",
+                zh_TW: "Debug Panel",
             },
             hidden: false,
         },
@@ -9974,6 +10625,7 @@ See the LICENSE file for details.
                 de: "Other Text > Point Size Up",
                 ru: "Other Text > Point Size Up",
                 "zh-cn": "Other Text > Point Size Up",
+                zh_TW: "Other Text > Point Size Up",
             },
             hidden: false,
             minVersion: "29.4",
@@ -9989,6 +10641,7 @@ See the LICENSE file for details.
                 de: "Other Text > Point Size Down",
                 ru: "Other Text > Point Size Down",
                 "zh-cn": "Other Text > Point Size Down",
+                zh_TW: "Other Text > Point Size Down",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10004,6 +10657,7 @@ See the LICENSE file for details.
                 de: "Other Text > Font Size Step Up",
                 ru: "Other Text > Font Size Step Up",
                 "zh-cn": "Other Text > Font Size Step Up",
+                zh_TW: "Other Text > Font Size Step Up",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10019,6 +10673,7 @@ See the LICENSE file for details.
                 de: "Other Text > Font Size Step Down",
                 ru: "Other Text > Font Size Step Down",
                 "zh-cn": "Other Text > Font Size Step Down",
+                zh_TW: "Other Text > Font Size Step Down",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10034,6 +10689,7 @@ See the LICENSE file for details.
                 de: "Other Text > Kern Looser",
                 ru: "Other Text > Kern Looser",
                 "zh-cn": "Other Text > Kern Looser",
+                zh_TW: "Other Text > Kern Looser",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10049,6 +10705,7 @@ See the LICENSE file for details.
                 de: "Other Text > Kern Tighter",
                 ru: "Other Text > Kern Tighter",
                 "zh-cn": "Other Text > Kern Tighter",
+                zh_TW: "Other Text > Kern Tighter",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10064,6 +10721,7 @@ See the LICENSE file for details.
                 de: "Other Text > Tracking",
                 ru: "Other Text > Tracking",
                 "zh-cn": "Other Text > Tracking",
+                zh_TW: "Other Text > Tracking",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10079,6 +10737,7 @@ See the LICENSE file for details.
                 de: "Other Text > Clear Tracking",
                 ru: "Other Text > Clear Tracking",
                 "zh-cn": "Other Text > Clear Tracking",
+                zh_TW: "Other Text > Clear Tracking",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10094,6 +10753,7 @@ See the LICENSE file for details.
                 de: "Other Text > Spacing",
                 ru: "Other Text > Spacing",
                 "zh-cn": "Other Text > Spacing",
+                zh_TW: "Other Text > Spacing",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10109,6 +10769,7 @@ See the LICENSE file for details.
                 de: "Other Text > Uniform Type",
                 ru: "Other Text > Uniform Type",
                 "zh-cn": "Other Text > Uniform Type",
+                zh_TW: "Other Text > Uniform Type",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10124,6 +10785,7 @@ See the LICENSE file for details.
                 de: "Other Text > Highlight Font",
                 ru: "Other Text > Highlight Font",
                 "zh-cn": "Other Text > Highlight Font",
+                zh_TW: "Other Text > Highlight Font",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10139,6 +10801,7 @@ See the LICENSE file for details.
                 de: "Other Text > Highlight Font (Secondary)",
                 ru: "Other Text > Highlight Font (Secondary)",
                 "zh-cn": "Other Text > Highlight Font (Secondary)",
+                zh_TW: "Other Text > Highlight Font (Secondary)",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10154,6 +10817,7 @@ See the LICENSE file for details.
                 de: "Other Text > Left Align Text",
                 ru: "Other Text > Left Align Text",
                 "zh-cn": "Other Text > Left Align Text",
+                zh_TW: "Other Text > Left Align Text",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10169,6 +10833,7 @@ See the LICENSE file for details.
                 de: "Other Text > Center Text",
                 ru: "Other Text > Center Text",
                 "zh-cn": "Other Text > Center Text",
+                zh_TW: "Other Text > Center Text",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10184,6 +10849,7 @@ See the LICENSE file for details.
                 de: "Other Text > Right Align Text",
                 ru: "Other Text > Right Align Text",
                 "zh-cn": "Other Text > Right Align Text",
+                zh_TW: "Other Text > Right Align Text",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10199,6 +10865,7 @@ See the LICENSE file for details.
                 de: "Other Text > Justify Text Left",
                 ru: "Other Text > Justify Text Left",
                 "zh-cn": "Other Text > Justify Text Left",
+                zh_TW: "Other Text > Justify Text Left",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10214,6 +10881,7 @@ See the LICENSE file for details.
                 de: "Other Text > Justify Text Center",
                 ru: "Other Text > Justify Text Center",
                 "zh-cn": "Other Text > Justify Text Center",
+                zh_TW: "Other Text > Justify Text Center",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10229,6 +10897,7 @@ See the LICENSE file for details.
                 de: "Other Text > Justify Text Right",
                 ru: "Other Text > Justify Text Right",
                 "zh-cn": "Other Text > Justify Text Right",
+                zh_TW: "Other Text > Justify Text Right",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10244,6 +10913,7 @@ See the LICENSE file for details.
                 de: "Other Text > Justify All Lines",
                 ru: "Other Text > Justify All Lines",
                 "zh-cn": "Other Text > Justify All Lines",
+                zh_TW: "Other Text > Justify All Lines",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10259,6 +10929,7 @@ See the LICENSE file for details.
                 de: "Other Text > Toggle Auto Hyphenation",
                 ru: "Other Text > Toggle Auto Hyphenation",
                 "zh-cn": "Other Text > Toggle Auto Hyphenation",
+                zh_TW: "Other Text > Toggle Auto Hyphenation",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10274,6 +10945,7 @@ See the LICENSE file for details.
                 de: "Other Text > Toggle Line Composer",
                 ru: "Other Text > Toggle Line Composer",
                 "zh-cn": "Other Text > Toggle Line Composer",
+                zh_TW: "Other Text > Toggle Line Composer",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10289,6 +10961,7 @@ See the LICENSE file for details.
                 de: "Other Text > Subscript",
                 ru: "Other Text > Subscript",
                 "zh-cn": "Other Text > Subscript",
+                zh_TW: "Other Text > Subscript",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10304,6 +10977,7 @@ See the LICENSE file for details.
                 de: "Other Text > Superscript",
                 ru: "Other Text > Superscript",
                 "zh-cn": "Other Text > Superscript",
+                zh_TW: "Other Text > Superscript",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10319,6 +10993,7 @@ See the LICENSE file for details.
                 de: "Other Text > Bold",
                 ru: "Other Text > Bold",
                 "zh-cn": "Other Text > Bold",
+                zh_TW: "Other Text > Bold",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10334,6 +11009,7 @@ See the LICENSE file for details.
                 de: "Other Text > Italic",
                 ru: "Other Text > Italic",
                 "zh-cn": "Other Text > Italic",
+                zh_TW: "Other Text > Italic",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10349,6 +11025,7 @@ See the LICENSE file for details.
                 de: "Other Text > Underline",
                 ru: "Other Text > Underline",
                 "zh-cn": "Other Text > Underline",
+                zh_TW: "Other Text > Underline",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10364,6 +11041,7 @@ See the LICENSE file for details.
                 de: "Other Object > Lock Others",
                 ru: "Other Object > Lock Others",
                 "zh-cn": "Other Object > Lock Others",
+                zh_TW: "Other Object > Lock Others",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10379,6 +11057,7 @@ See the LICENSE file for details.
                 de: "Other Object > Hide Others",
                 ru: "Other Object > Hide Others",
                 "zh-cn": "Other Object > Hide Others",
+                zh_TW: "Other Object > Hide Others",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10394,6 +11073,7 @@ See the LICENSE file for details.
                 de: "Other Object > Repeat Pathfinder",
                 ru: "Other Object > Repeat Pathfinder",
                 "zh-cn": "Other Object > Repeat Pathfinder",
+                zh_TW: "Other Object > Repeat Pathfinder",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10409,6 +11089,7 @@ See the LICENSE file for details.
                 de: "Other Object > Average & Join",
                 ru: "Other Object > Average & Join",
                 "zh-cn": "Other Object > Average & Join",
+                zh_TW: "Other Object > Average & Join",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10424,6 +11105,7 @@ See the LICENSE file for details.
                 de: "Other Object > Isolate Selected Object",
                 ru: "Other Object > Isolate Selected Object",
                 "zh-cn": "Other Object > Isolate Selected Object",
+                zh_TW: "Other Object > Isolate Selected Object",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10439,6 +11121,7 @@ See the LICENSE file for details.
                 de: "Other Object > Exit Isolation Mode",
                 ru: "Other Object > Exit Isolation Mode",
                 "zh-cn": "Other Object > Exit Isolation Mode",
+                zh_TW: "Other Object > Exit Isolation Mode",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10454,6 +11137,7 @@ See the LICENSE file for details.
                 de: "Other Select > Switch Selection Tool",
                 ru: "Other Select > Switch Selection Tool",
                 "zh-cn": "Other Select > Switch Selection Tool",
+                zh_TW: "Other Select > Switch Selection Tool",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10469,6 +11153,7 @@ See the LICENSE file for details.
                 de: "Other Misc > New File (No Dialog)",
                 ru: "Other Misc > New File (No Dialog)",
                 "zh-cn": "Other Misc > New File (No Dialog)",
+                zh_TW: "Other Misc > New File (No Dialog)",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10484,6 +11169,7 @@ See the LICENSE file for details.
                 de: "Other Misc > Navigate to Next Document",
                 ru: "Other Misc > Navigate to Next Document",
                 "zh-cn": "Other Misc > Navigate to Next Document",
+                zh_TW: "Other Misc > Navigate to Next Document",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10499,6 +11185,7 @@ See the LICENSE file for details.
                 de: "Other Misc > Navigate to Previous Document",
                 ru: "Other Misc > Navigate to Previous Document",
                 "zh-cn": "Other Misc > Navigate to Previous Document",
+                zh_TW: "Other Misc > Navigate to Previous Document",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10514,6 +11201,7 @@ See the LICENSE file for details.
                 de: "Other Misc > Navigate to Next Document Group",
                 ru: "Other Misc > Navigate to Next Document Group",
                 "zh-cn": "Other Misc > Navigate to Next Document Group",
+                zh_TW: "Other Misc > Navigate to Next Document Group",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10529,6 +11217,7 @@ See the LICENSE file for details.
                 de: "Other Misc > Navigate to Previous Document Group",
                 ru: "Other Misc > Navigate to Previous Document Group",
                 "zh-cn": "Other Misc > Navigate to Previous Document Group",
+                zh_TW: "Other Misc > Navigate to Previous Document Group",
             },
             hidden: false,
             minVersion: "29.4",
@@ -10543,6 +11232,7 @@ See the LICENSE file for details.
                 en: "Add Anchor Point Tool",
                 de: "Ankerpunkt-hinzuf\u00fcgen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u0443\u044e \u0442\u043e\u0447\u043a\u0443",
+                zh_TW: "Add Anchor Point Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10557,6 +11247,7 @@ See the LICENSE file for details.
                 en: "Anchor Point Tool",
                 de: "Ankerpunkt-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041e\u043f\u043e\u0440\u043d\u0430\u044f \u0442\u043e\u0447\u043a\u0430",
+                zh_TW: "Anchor Point Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10571,6 +11262,7 @@ See the LICENSE file for details.
                 en: "Arc Tool",
                 de: "Bogen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0443\u0433\u0430",
+                zh_TW: "Arc Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10585,6 +11277,7 @@ See the LICENSE file for details.
                 en: "Area Graph Tool",
                 de: "Fl\u00e4chendiagramm",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0441 \u043e\u0431\u043b\u0430\u0441\u0442\u044f\u043c\u0438",
+                zh_TW: "Area Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10599,6 +11292,7 @@ See the LICENSE file for details.
                 en: "Area Type Tool",
                 de: "Fl\u00e4chentext-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0422\u0435\u043a\u0441\u0442 \u0432 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
+                zh_TW: "Area Type Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10613,6 +11307,7 @@ See the LICENSE file for details.
                 en: "Objects on Path",
                 de: "Objects on Path",
                 ru: "Objects on Path",
+                zh_TW: "\u6cbf\u8def\u5f91\u6392\u5217\u7269\u4ef6",
             },
             hidden: false,
             minVersion: "29",
@@ -10627,6 +11322,7 @@ See the LICENSE file for details.
                 en: "Artboard Tool",
                 de: "Zeichenfl\u00e4chen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u043e\u043d\u0442\u0430\u0436\u043d\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                zh_TW: "Artboard Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10641,6 +11337,7 @@ See the LICENSE file for details.
                 en: "Bar Graph Tool",
                 de: "Horizontales Balkendiagramm",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043b\u043e\u0441\u044b",
+                zh_TW: "Bar Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10655,6 +11352,7 @@ See the LICENSE file for details.
                 en: "Blend Tool",
                 de: "Angleichen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0435\u0440\u0435\u0445\u043e\u0434",
+                zh_TW: "Blend Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10669,6 +11367,7 @@ See the LICENSE file for details.
                 en: "Bloat Tool",
                 de: "Aufblasen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0430\u0437\u0434\u0443\u0432\u0430\u043d\u0438\u0435",
+                zh_TW: "Bloat Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10683,6 +11382,7 @@ See the LICENSE file for details.
                 en: "Blob Brush Tool",
                 de: "Tropfenpinsel-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0438\u0441\u0442\u044c-\u043a\u043b\u044f\u043a\u0441\u0430",
+                zh_TW: "Blob Brush Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10697,6 +11397,7 @@ See the LICENSE file for details.
                 en: "Column Graph Tool",
                 de: "Vertikales Balkendiagramm",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043b\u043e\u0441\u044b",
+                zh_TW: "Column Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10711,6 +11412,7 @@ See the LICENSE file for details.
                 en: "Crystallize Tool",
                 de: "Kristallisieren-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0440\u0438\u0441\u0442\u0430\u043b\u043b\u0438\u0437\u0430\u0446\u0438\u044f",
+                zh_TW: "Crystallize Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10725,6 +11427,7 @@ See the LICENSE file for details.
                 en: "Curvature Tool",
                 de: "Kurvenzeichner",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0440\u0438\u0432\u0438\u0437\u043d\u0430",
+                zh_TW: "Curvature Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10739,6 +11442,7 @@ See the LICENSE file for details.
                 en: "Delete Anchor Point Tool",
                 de: "Ankerpunkt-l\u00f6schen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043e\u043f\u043e\u0440\u043d\u0443\u044e \u0442\u043e\u0447\u043a\u0443",
+                zh_TW: "Delete Anchor Point Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10749,7 +11453,12 @@ See the LICENSE file for details.
             type: "tool",
             docRequired: true,
             selRequired: false,
-            name: { en: "Dimension Tool", de: "Dimension Tool", ru: "Dimension Tool" },
+            name: {
+                en: "Dimension Tool",
+                de: "Dimension Tool",
+                ru: "Dimension Tool",
+                zh_TW: "Dimension Tool",
+            },
             hidden: false,
             minVersion: "28.1",
         },
@@ -10763,6 +11472,7 @@ See the LICENSE file for details.
                 en: "Direct Selection Tool",
                 de: "Direktauswahl-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u044f\u043c\u043e\u0435 \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
+                zh_TW: "Direct Selection Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10777,6 +11487,7 @@ See the LICENSE file for details.
                 en: "Ellipse Tool",
                 de: "Ellipse-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u042d\u043b\u043b\u0438\u043f\u0441",
+                zh_TW: "Ellipse Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10791,6 +11502,7 @@ See the LICENSE file for details.
                 en: "Eraser Tool",
                 de: "Radiergummi-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041b\u0430\u0441\u0442\u0438\u043a",
+                zh_TW: "Eraser Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10805,6 +11517,7 @@ See the LICENSE file for details.
                 en: "Eyedropper Tool",
                 de: "Pipette-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0438\u043f\u0435\u0442\u043a\u0430",
+                zh_TW: "Eyedropper Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10819,6 +11532,7 @@ See the LICENSE file for details.
                 en: "Flare Tool",
                 de: "Blendenflecke-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0411\u043b\u0438\u043a",
+                zh_TW: "Flare Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10833,6 +11547,7 @@ See the LICENSE file for details.
                 en: "Free Transform Tool",
                 de: "Frei-transformieren-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0432\u043e\u0431\u043e\u0434\u043d\u043e\u0435 \u0442\u0440\u0430\u043d\u0441\u0444\u043e\u0440\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435",
+                zh_TW: "Free Transform Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10847,6 +11562,7 @@ See the LICENSE file for details.
                 en: "Gradient Tool",
                 de: "Verlauf-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0413\u0440\u0430\u0434\u0438\u0435\u043d\u0442",
+                zh_TW: "Gradient Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10861,6 +11577,7 @@ See the LICENSE file for details.
                 en: "Group Selection Tool",
                 de: "Gruppenauswahl-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0413\u0440\u0443\u043f\u043f\u043e\u0432\u043e\u0435 \u0432\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
+                zh_TW: "Group Selection Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10875,6 +11592,7 @@ See the LICENSE file for details.
                 en: "Hand Tool",
                 de: "Hand-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0443\u043a\u0430",
+                zh_TW: "Hand Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10889,6 +11607,7 @@ See the LICENSE file for details.
                 en: "Intertwine Tool",
                 de: "Intertwine Tool",
                 ru: "Intertwine Tool",
+                zh_TW: "Intertwine Tool",
             },
             hidden: false,
             minVersion: "27",
@@ -10903,6 +11622,7 @@ See the LICENSE file for details.
                 en: "Join Tool",
                 de: "Zusammenf\u00fcgen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u0435",
+                zh_TW: "Join Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10917,6 +11637,7 @@ See the LICENSE file for details.
                 en: "Knife Tool",
                 de: "Messer-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041d\u043e\u0436",
+                zh_TW: "Knife Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10931,6 +11652,7 @@ See the LICENSE file for details.
                 en: "Lasso Tool",
                 de: "Lasso-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041b\u0430\u0441\u0441\u043e",
+                zh_TW: "Lasso Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10945,6 +11667,7 @@ See the LICENSE file for details.
                 en: "Line Graph Tool",
                 de: "Liniendiagramm",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041b\u0438\u043d\u0435\u0439\u043d\u0430\u044f \u0434\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430",
+                zh_TW: "Line Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10959,6 +11682,7 @@ See the LICENSE file for details.
                 en: "Line Segment Tool",
                 de: "Liniensegment-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041e\u0442\u0440\u0435\u0437\u043e\u043a \u043b\u0438\u043d\u0438\u0438",
+                zh_TW: "Line Segment Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10973,6 +11697,7 @@ See the LICENSE file for details.
                 en: "Live Paint Bucket Tool",
                 de: "Interaktiv-malen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0411\u044b\u0441\u0442\u0440\u0430\u044f \u0437\u0430\u043b\u0438\u0432\u043a\u0430",
+                zh_TW: "Live Paint Bucket Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -10987,6 +11712,7 @@ See the LICENSE file for details.
                 en: "Live Paint Selection Tool",
                 de: "Interaktiv-malen-Auswahlwerkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0431\u044b\u0441\u0442\u0440\u044b\u0445 \u0437\u0430\u043b\u0438\u0432\u043e\u043a",
+                zh_TW: "Live Paint Selection Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11001,6 +11727,7 @@ See the LICENSE file for details.
                 en: "Magic Wand Tool",
                 de: "Zauberstab-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u043e\u043b\u0448\u0435\u0431\u043d\u0430\u044f \u043f\u0430\u043b\u043e\u0447\u043a\u0430",
+                zh_TW: "Magic Wand Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11015,6 +11742,7 @@ See the LICENSE file for details.
                 en: "Measure Tool",
                 de: "Mess-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041b\u0438\u043d\u0435\u0439\u043a\u0430",
+                zh_TW: "Measure Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11029,6 +11757,7 @@ See the LICENSE file for details.
                 en: "Mesh Tool",
                 de: "Gitter-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0435\u0442\u043a\u0430",
+                zh_TW: "Mesh Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11043,6 +11772,7 @@ See the LICENSE file for details.
                 en: "Paintbrush Tool",
                 de: "Pinsel-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0438\u0441\u0442\u044c",
+                zh_TW: "Paintbrush Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11057,6 +11787,7 @@ See the LICENSE file for details.
                 en: "Path Eraser Tool",
                 de: "L\u00f6schen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0442\u0438\u0440\u0430\u043d\u0438\u0435 \u043a\u043e\u043d\u0442\u0443\u0440\u0430",
+                zh_TW: "Path Eraser Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11071,6 +11802,7 @@ See the LICENSE file for details.
                 en: "Pattern Tile Tool",
                 de: "Musterelement-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u042d\u043b\u0435\u043c\u0435\u043d\u0442 \u0443\u0437\u043e\u0440\u0430",
+                zh_TW: "Pattern Tile Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11085,6 +11817,7 @@ See the LICENSE file for details.
                 en: "Pen Tool",
                 de: "Zeichenstift-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0435\u0440\u043e",
+                zh_TW: "Pen Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11099,6 +11832,7 @@ See the LICENSE file for details.
                 en: "Pencil Tool",
                 de: "Buntstift-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0430\u0440\u0430\u043d\u0434\u0430\u0448",
+                zh_TW: "Pencil Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11113,6 +11847,7 @@ See the LICENSE file for details.
                 en: "Perspective Grid Tool",
                 de: "Perspektivenraster-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0435\u0442\u043a\u0430 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b",
+                zh_TW: "Perspective Grid Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11127,6 +11862,7 @@ See the LICENSE file for details.
                 en: "Perspective Selection Tool",
                 de: "Perspektivenauswahl-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u044b\u0431\u043e\u0440 \u043f\u0435\u0440\u0441\u043f\u0435\u043a\u0442\u0438\u0432\u044b",
+                zh_TW: "Perspective Selection Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11141,6 +11877,7 @@ See the LICENSE file for details.
                 en: "Pie Graph Tool",
                 de: "Kreisdiagramm-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041a\u0440\u0443\u0433\u043e\u0432\u0430\u044f \u0434\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430",
+                zh_TW: "Pie Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11155,6 +11892,7 @@ See the LICENSE file for details.
                 en: "Polar Grid Tool",
                 de: "Radiales-Raster-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u043e\u043b\u044f\u0440\u043d\u0430\u044f \u0441\u0435\u0442\u043a\u0430",
+                zh_TW: "Polar Grid Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11169,6 +11907,7 @@ See the LICENSE file for details.
                 en: "Polygon Tool",
                 de: "Polygon-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u043d\u043e\u0433\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a",
+                zh_TW: "Polygon Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11183,6 +11922,7 @@ See the LICENSE file for details.
                 en: "Print Tiling Tool",
                 de: "Druckaufteilungs-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0430\u0437\u0431\u0438\u0435\u043d\u0438\u0435 \u0434\u043b\u044f \u043f\u0435\u0447\u0430\u0442\u0438",
+                zh_TW: "Print Tiling Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11197,6 +11937,7 @@ See the LICENSE file for details.
                 en: "Pucker Tool",
                 de: "Zusammenziehen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0442\u044f\u0433\u0438\u0432\u0430\u043d\u0438\u0435",
+                zh_TW: "Pucker Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11211,6 +11952,7 @@ See the LICENSE file for details.
                 en: "Puppet Warp Tool",
                 de: "Formgitter-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u0430\u0440\u0438\u043e\u043d\u0435\u0442\u043e\u0447\u043d\u0430\u044f \u0434\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f",
+                zh_TW: "Puppet Warp Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11225,6 +11967,7 @@ See the LICENSE file for details.
                 en: "Radar Graph Tool",
                 de: "Netzdiagramm",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0440\u0430\u0434\u0430\u0440",
+                zh_TW: "Radar Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11239,6 +11982,7 @@ See the LICENSE file for details.
                 en: "Rectangle Tool",
                 de: "Rechteck-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a",
+                zh_TW: "Rectangle Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11253,6 +11997,7 @@ See the LICENSE file for details.
                 en: "Rectangular Grid Tool",
                 de: "Rechteckiges-Raster-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0430\u044f \u0441\u0435\u0442\u043a\u0430",
+                zh_TW: "Rectangular Grid Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11267,6 +12012,7 @@ See the LICENSE file for details.
                 en: "Reflect Tool",
                 de: "Spiegeln-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0417\u0435\u0440\u043a\u0430\u043b\u044c\u043d\u043e\u0435 \u043e\u0442\u0440\u0430\u0436\u0435\u043d\u0438\u0435",
+                zh_TW: "Reflect Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11281,6 +12027,7 @@ See the LICENSE file for details.
                 en: "Reshape Tool",
                 de: "Form-\u00e4ndern-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0435\u0440\u0435\u0440\u0438\u0441\u043e\u0432\u043a\u0430",
+                zh_TW: "Reshape Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11295,6 +12042,7 @@ See the LICENSE file for details.
                 en: "Rotate Tool",
                 de: "Drehen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u043e\u0432\u043e\u0440\u043e\u0442",
+                zh_TW: "Rotate Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11309,6 +12057,7 @@ See the LICENSE file for details.
                 en: "Rotate View Tool",
                 de: "Ansichtdrehung-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u043e\u0432\u043e\u0440\u043e\u0442 \u0432\u0438\u0434\u0430",
+                zh_TW: "Rotate View Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11323,6 +12072,7 @@ See the LICENSE file for details.
                 en: "Rounded Rectangle Tool",
                 de: "Abgerundetes-Rechteck-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a \u0441\u043e \u0441\u043a\u0440\u0443\u0433\u043b\u0435\u043d\u043d\u044b\u043c\u0438 \u0443\u0433\u043b\u0430\u043c\u0438",
+                zh_TW: "Rounded Rectangle Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11337,6 +12087,7 @@ See the LICENSE file for details.
                 en: "Scale Tool",
                 de: "Skalieren-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u0430\u0441\u0448\u0442\u0430\u0431",
+                zh_TW: "Scale Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11351,6 +12102,7 @@ See the LICENSE file for details.
                 en: "Scallop Tool",
                 de: "Ausbuchten-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0417\u0443\u0431\u0446\u044b",
+                zh_TW: "Scallop Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11365,6 +12117,7 @@ See the LICENSE file for details.
                 en: "Scatter Graph Tool",
                 de: "Streudiagramm",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0422\u043e\u0447\u0435\u0447\u043d\u0430\u044f \u0434\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430",
+                zh_TW: "Scatter Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11379,6 +12132,7 @@ See the LICENSE file for details.
                 en: "Scissors Tool",
                 de: "Schere-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041d\u043e\u0436\u043d\u0438\u0446\u044b",
+                zh_TW: "Scissors Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11393,6 +12147,7 @@ See the LICENSE file for details.
                 en: "Selection Tool",
                 de: "Auswahl-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435",
+                zh_TW: "Selection Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11407,6 +12162,7 @@ See the LICENSE file for details.
                 en: "Shape Builder Tool",
                 de: "Formerstellungs-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u043e\u0437\u0434\u0430\u043d\u0438\u0435 \u0444\u0438\u0433\u0443\u0440",
+                zh_TW: "Shape Builder Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11421,6 +12177,7 @@ See the LICENSE file for details.
                 en: "Shaper Tool",
                 de: "Shaper-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u043b\u044c\u043d\u0430\u044f \u043a\u0440\u0438\u0432\u0430\u044f",
+                zh_TW: "Shaper Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11435,6 +12192,7 @@ See the LICENSE file for details.
                 en: "Shear Tool",
                 de: "Verbiegen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041d\u0430\u043a\u043b\u043e\u043d",
+                zh_TW: "Shear Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11449,6 +12207,7 @@ See the LICENSE file for details.
                 en: "Slice Tool",
                 de: "Slice-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0424\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u044b",
+                zh_TW: "Slice Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11463,6 +12222,7 @@ See the LICENSE file for details.
                 en: "Slice Selection Tool",
                 de: "Slice-Auswahl-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u044b\u0434\u0435\u043b\u0435\u043d\u0438\u0435 \u0444\u0440\u0430\u0433\u043c\u0435\u043d\u0442\u0430",
+                zh_TW: "Slice Selection Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11477,6 +12237,7 @@ See the LICENSE file for details.
                 en: "Smooth Tool",
                 de: "Gl\u00e4tten-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0433\u043b\u0430\u0436\u0438\u0432\u0430\u043d\u0438\u0435",
+                zh_TW: "Smooth Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11491,6 +12252,7 @@ See the LICENSE file for details.
                 en: "Spiral Tool",
                 de: "Spirale-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u043f\u0438\u0440\u0430\u043b\u044c",
+                zh_TW: "Spiral Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11505,6 +12267,7 @@ See the LICENSE file for details.
                 en: "Stacked Bar Graph Tool",
                 de: "Gestapeltes horizontales Balkendiagramm",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u044b\u0439 \u0441\u0442\u0435\u043a",
+                zh_TW: "Stacked Bar Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11519,6 +12282,7 @@ See the LICENSE file for details.
                 en: "Stacked Column Graph Tool",
                 de: "Gestapeltes vertikales Balkendiagramm",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0438\u0430\u0433\u0440\u0430\u043c\u043c\u0430 \u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0441\u0442\u0435\u043a",
+                zh_TW: "Stacked Column Graph Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11533,6 +12297,7 @@ See the LICENSE file for details.
                 en: "Star Tool",
                 de: "Stern-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0417\u0432\u0435\u0437\u0434\u0430",
+                zh_TW: "Star Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11547,6 +12312,7 @@ See the LICENSE file for details.
                 en: "Symbol Screener Tool",
                 de: "Symbol-transparent-gestalten-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
+                zh_TW: "Symbol Screener Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11561,6 +12327,7 @@ See the LICENSE file for details.
                 en: "Symbol Scruncher Tool",
                 de: "Symbol-stauchen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0423\u043f\u043b\u043e\u0442\u043d\u0435\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
+                zh_TW: "Symbol Scruncher Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11575,6 +12342,7 @@ See the LICENSE file for details.
                 en: "Symbol Shifter Tool",
                 de: "Symbol-verschieben-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u043c\u0435\u0449\u0435\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
+                zh_TW: "Symbol Shifter Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11589,6 +12357,7 @@ See the LICENSE file for details.
                 en: "Symbol Sizer Tool",
                 de: "Symbol-skalieren-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0430\u0437\u043c\u0435\u0440 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
+                zh_TW: "Symbol Sizer Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11603,6 +12372,7 @@ See the LICENSE file for details.
                 en: "Symbol Spinner Tool",
                 de: "Symbol-drehen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0440\u0430\u0449\u0435\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
+                zh_TW: "Symbol Spinner Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11617,6 +12387,7 @@ See the LICENSE file for details.
                 en: "Symbol Sprayer Tool",
                 de: "Symbol-aufspr\u00fchen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0420\u0430\u0441\u043f\u044b\u043b\u0435\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
+                zh_TW: "Symbol Sprayer Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11631,6 +12402,7 @@ See the LICENSE file for details.
                 en: "Symbol Stainer Tool",
                 de: "Symbol-f\u00e4rben-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041e\u0431\u0435\u0441\u0446\u0432\u0435\u0447\u0438\u0432\u0430\u043d\u0438\u0435 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
+                zh_TW: "Symbol Stainer Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11645,6 +12417,7 @@ See the LICENSE file for details.
                 en: "Symbol Styler Tool",
                 de: "Symbol-gestalten-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0421\u0442\u0438\u043b\u0438 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432",
+                zh_TW: "Symbol Styler Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11659,6 +12432,7 @@ See the LICENSE file for details.
                 en: "Touch Type Tool",
                 de: "Touch-Type-Textwerkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0418\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u0442\u0435\u043a\u0441\u0442\u0430",
+                zh_TW: "Touch Type Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11673,6 +12447,7 @@ See the LICENSE file for details.
                 en: "Twirl Tool",
                 de: "Strudel-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u043e\u0440\u043e\u043d\u043a\u0430",
+                zh_TW: "Twirl Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11687,6 +12462,7 @@ See the LICENSE file for details.
                 en: "Type Tool",
                 de: "Text-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0422\u0435\u043a\u0441\u0442",
+                zh_TW: "Type Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11701,6 +12477,7 @@ See the LICENSE file for details.
                 en: "Type on a Path Tool",
                 de: "Pfadtext-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0422\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443",
+                zh_TW: "Type on a Path Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11715,6 +12492,7 @@ See the LICENSE file for details.
                 en: "Vertical Area Type Tool",
                 de: "Vertikaler-Fl\u00e4chentext-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442 \u0432 \u043e\u0431\u043b\u0430\u0441\u0442\u0438",
+                zh_TW: "Vertical Area Type Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11729,6 +12507,7 @@ See the LICENSE file for details.
                 en: "Vertical Type Tool",
                 de: "Vertikaler-Text-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442",
+                zh_TW: "Vertical Type Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11743,6 +12522,7 @@ See the LICENSE file for details.
                 en: "Vertical Type on a Path Tool",
                 de: "Vertikaler-Pfadtext-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0412\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442 \u043f\u043e \u043a\u043e\u043d\u0442\u0443\u0440\u0443",
+                zh_TW: "Vertical Type on a Path Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11757,6 +12537,7 @@ See the LICENSE file for details.
                 en: "Warp Tool",
                 de: "Verkr\u00fcmmen-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f",
+                zh_TW: "Warp Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11771,6 +12552,7 @@ See the LICENSE file for details.
                 en: "Width Tool",
                 de: "Breiten-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u0428\u0438\u0440\u0438\u043d\u0430",
+                zh_TW: "Width Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11785,6 +12567,7 @@ See the LICENSE file for details.
                 en: "Wrinkle Tool",
                 de: "Zerknittern-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u043e\u0440\u0449\u0438\u043d\u044b",
+                zh_TW: "Wrinkle Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11799,6 +12582,7 @@ See the LICENSE file for details.
                 en: "Zoom Tool",
                 de: "Zoom-Werkzeug",
                 ru: "\u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442: \u041c\u0430\u0441\u0448\u0442\u0430\u0431",
+                zh_TW: "Zoom Tool",
             },
             hidden: false,
             minVersion: "24",
@@ -11813,6 +12597,7 @@ See the LICENSE file for details.
                 en: "Active Document Report",
                 de: "Active Document Report",
                 ru: "Active Document Report",
+                zh_TW: "Active Document Report",
             },
             hidden: false,
         },
@@ -11826,6 +12611,7 @@ See the LICENSE file for details.
                 en: "Add Custom Commands...",
                 de: "Add Custom Commands...",
                 ru: "Add Custom Commands...",
+                zh_TW: "Add Custom Commands...",
             },
             hidden: false,
         },
@@ -11839,6 +12625,7 @@ See the LICENSE file for details.
                 en: "All Actions...",
                 de: "Alle Aktionen \u2026",
                 ru: "All Actions...",
+                zh_TW: "All Actions...",
             },
             hidden: false,
         },
@@ -11852,6 +12639,7 @@ See the LICENSE file for details.
                 en: "All Bookmarks...",
                 de: "Alle Lesezeichen \u2026",
                 ru: "All Bookmarks...",
+                zh_TW: "All Bookmarks...",
             },
             hidden: false,
         },
@@ -11865,6 +12653,7 @@ See the LICENSE file for details.
                 en: "All Custom Commands...",
                 de: "All Custom Commands...",
                 ru: "All Custom Commands...",
+                zh_TW: "All Custom Commands...",
             },
             hidden: false,
         },
@@ -11878,6 +12667,7 @@ See the LICENSE file for details.
                 en: "All Menu Commands...",
                 de: "All Menu Commands...",
                 ru: "All Menu Commands...",
+                zh_TW: "All Menu Commands...",
             },
             hidden: false,
         },
@@ -11887,7 +12677,12 @@ See the LICENSE file for details.
             type: "builtin",
             docRequired: false,
             selRequired: false,
-            name: { en: "All Pickers...", de: "All Pickers...", ru: "All Pickers..." },
+            name: {
+                en: "All Pickers...",
+                de: "All Pickers...",
+                ru: "All Pickers...",
+                zh_TW: "All Pickers...",
+            },
             hidden: false,
         },
         builtin_allScripts: {
@@ -11900,6 +12695,7 @@ See the LICENSE file for details.
                 en: "All Scripts...",
                 de: "Alle Skripte \u2026",
                 ru: "All Scripts...",
+                zh_TW: "All Scripts...",
             },
             hidden: false,
         },
@@ -11909,7 +12705,12 @@ See the LICENSE file for details.
             type: "builtin",
             docRequired: true,
             selRequired: false,
-            name: { en: "All Tools...", de: "All Tools...", ru: "All Tools..." },
+            name: {
+                en: "All Tools...",
+                de: "All Tools...",
+                ru: "All Tools...",
+                zh_TW: "All Tools...",
+            },
             hidden: false,
         },
         builtin_allWorkflows: {
@@ -11922,6 +12723,7 @@ See the LICENSE file for details.
                 en: "All Workflows...",
                 de: "Alle Arbeitsabl\u00e4ufe \u2026",
                 ru: "All Workflows...",
+                zh_TW: "All Workflows...",
             },
             hidden: false,
         },
@@ -11935,6 +12737,7 @@ See the LICENSE file for details.
                 en: "Build Workflow...",
                 de: "Arbeitsablauf erstellen \u2026",
                 ru: "\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
+                zh_TW: "Build Workflow...",
             },
             hidden: false,
         },
@@ -11948,6 +12751,7 @@ See the LICENSE file for details.
                 en: "Edit Workflow...",
                 de: "Arbeitsablauf bearbeiten \u2026",
                 ru: "\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u0430\u0431\u043e\u0440 \u043a\u043e\u043c\u0430\u043d\u0434",
+                zh_TW: "Edit Workflow...",
             },
             hidden: false,
         },
@@ -11961,6 +12765,7 @@ See the LICENSE file for details.
                 en: "Build Picker...",
                 de: "Build Picker...",
                 ru: "Build Picker...",
+                zh_TW: "Build Picker...",
             },
             hidden: false,
         },
@@ -11970,7 +12775,12 @@ See the LICENSE file for details.
             type: "builtin",
             docRequired: false,
             selRequired: false,
-            name: { en: "Edit Picker...", de: "Edit Picker...", ru: "Edit Picker..." },
+            name: {
+                en: "Edit Picker...",
+                de: "Edit Picker...",
+                ru: "Edit Picker...",
+                zh_TW: "Edit Picker...",
+            },
             hidden: false,
         },
         builtin_imageCapture: {
@@ -11983,6 +12793,7 @@ See the LICENSE file for details.
                 en: "Export Active Artboard As PNG",
                 de: "Ausgew\u00e4hlte Zeichenfl\u00e4che als PNG exportieren",
                 ru: "Export Active Artboard As PNG",
+                zh_TW: "Export Active Artboard As PNG",
             },
             hidden: false,
         },
@@ -11996,6 +12807,7 @@ See the LICENSE file for details.
                 en: "Export Document Variables As XML",
                 de: "Variablen als XML exportieren",
                 ru: "Export Document Variables As XML",
+                zh_TW: "Export Document Variables As XML",
             },
             hidden: false,
         },
@@ -12009,6 +12821,7 @@ See the LICENSE file for details.
                 en: "Go To Artboard...",
                 de: "Zeichenfl\u00e4chen ausw\u00e4hlen \u2026",
                 ru: "Gehen Sie zur Zeichenfl\u00e4che...",
+                zh_TW: "Go To Artboard...",
             },
             hidden: false,
         },
@@ -12022,6 +12835,7 @@ See the LICENSE file for details.
                 en: "Go To Named Object...",
                 de: "Benannte Objekte ausw\u00e4hlen \u2026",
                 ru: "\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u043a \u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u043d\u043e\u043c\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u0443...",
+                zh_TW: "Go To Named Object...",
             },
             hidden: false,
         },
@@ -12035,6 +12849,7 @@ See the LICENSE file for details.
                 en: "Go To Open Document",
                 de: "Ge\u00f6ffnete Dokumente ausw\u00e4hlen \u2026",
                 ru: "Go To Open Document",
+                zh_TW: "Go To Open Document",
             },
             hidden: false,
         },
@@ -12048,6 +12863,7 @@ See the LICENSE file for details.
                 en: "Load File Bookmark(s)...",
                 de: "Lesezeichen erstellen \u2026",
                 ru: "Load File Bookmark(s)...",
+                zh_TW: "Load File Bookmark(s)...",
             },
             hidden: false,
         },
@@ -12061,6 +12877,7 @@ See the LICENSE file for details.
                 en: "Load Folder Bookmark...",
                 de: "Lesezeichen-Ordner erstellen \u2026",
                 ru: "Load Folder Bookmark...",
+                zh_TW: "Load Folder Bookmark...",
             },
             hidden: false,
         },
@@ -12074,6 +12891,7 @@ See the LICENSE file for details.
                 en: "Load Script(s)...",
                 de: "Skripte laden \u2026",
                 ru: "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0441\u043a\u0440\u0438\u043f\u0442\u044b",
+                zh_TW: "Load Script(s)...",
             },
             hidden: false,
         },
@@ -12087,6 +12905,7 @@ See the LICENSE file for details.
                 en: "Open Recent File...",
                 de: "Letzte Datei \u00f6ffnen \u2026",
                 ru: "Open Recent File...",
+                zh_TW: "Open Recent File...",
             },
             hidden: false,
         },
@@ -12100,6 +12919,7 @@ See the LICENSE file for details.
                 en: "Recent Commands (History)...",
                 de: "Letzte Befehle \u2026",
                 ru: "Recent Commands (History)...",
+                zh_TW: "Recent Commands (History)...",
             },
             hidden: false,
         },
@@ -12113,6 +12933,7 @@ See the LICENSE file for details.
                 en: "Redraw Windows",
                 de: "Fenster aktualisieren",
                 ru: "Redraw Windows",
+                zh_TW: "Redraw Windows",
             },
             hidden: false,
         },
@@ -12126,6 +12947,7 @@ See the LICENSE file for details.
                 en: "Reveal Active Document On System",
                 de: "Aktuelles Dokument im Dateimanager anzeigen",
                 ru: "Reveal Active Document On System",
+                zh_TW: "Reveal Active Document On System",
             },
             hidden: false,
         },
@@ -12139,6 +12961,7 @@ See the LICENSE file for details.
                 en: "Watch Script Folder...",
                 de: "Watch Script Folder...",
                 ru: "Watch Script Folder...",
+                zh_TW: "Watch Script Folder...",
             },
             hidden: false,
         },
@@ -12152,6 +12975,7 @@ See the LICENSE file for details.
                 en: "About Ai Command Palette...",
                 de: "\u00dcber Kurzbefehle \u2026",
                 ru: "\u041e\u0431 Ai Command Palette",
+                zh_TW: "About Ai Command Palette...",
             },
             hidden: false,
         },
@@ -12165,6 +12989,7 @@ See the LICENSE file for details.
                 en: "Built-in Commands...",
                 de: "Built-in Commands...",
                 ru: "Built-in Commands...",
+                zh_TW: "Built-in Commands...",
             },
             hidden: false,
         },
@@ -12178,6 +13003,7 @@ See the LICENSE file for details.
                 en: "Clear History",
                 de: "Die letzten Befehle l\u00f6schen",
                 ru: "Clear History",
+                zh_TW: "Clear History",
             },
             hidden: false,
         },
@@ -12191,6 +13017,7 @@ See the LICENSE file for details.
                 en: "Customize Startup Commands...",
                 de: "Customize Startup Commands...",
                 ru: "Customize Startup Commands...",
+                zh_TW: "Customize Startup Commands...",
             },
             hidden: false,
         },
@@ -12204,6 +13031,7 @@ See the LICENSE file for details.
                 en: "Delete Commands...",
                 de: "Befehle l\u00f6schen \u2026",
                 ru: "\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+                zh_TW: "Delete Commands...",
             },
             hidden: false,
         },
@@ -12217,6 +13045,7 @@ See the LICENSE file for details.
                 en: "Enable Fuzzy Matching",
                 de: "Enable Fuzzy Matching",
                 ru: "Enable Fuzzy Matching",
+                zh_TW: "Enable Fuzzy Matching",
             },
             hidden: false,
         },
@@ -12230,6 +13059,7 @@ See the LICENSE file for details.
                 en: "Disable Fuzzy Matching",
                 de: "Disable Fuzzy Matching",
                 ru: "Disable Fuzzy Matching",
+                zh_TW: "Disable Fuzzy Matching",
             },
             hidden: false,
         },
@@ -12243,6 +13073,7 @@ See the LICENSE file for details.
                 en: "Enable Debug Logging",
                 de: "Enable Debug Logging",
                 ru: "Enable Debug Logging",
+                zh_TW: "Enable Debug Logging",
             },
             hidden: false,
         },
@@ -12256,6 +13087,7 @@ See the LICENSE file for details.
                 en: "Disable Debug Logging",
                 de: "Disable Debug Logging",
                 ru: "Disable Debug Logging",
+                zh_TW: "Disable Debug Logging",
             },
             hidden: false,
         },
@@ -12269,6 +13101,7 @@ See the LICENSE file for details.
                 en: "Hide Commands...",
                 de: "Befehle ausblenden \u2026",
                 ru: "\u0421\u043a\u0440\u044b\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+                zh_TW: "Hide Commands...",
             },
             hidden: false,
         },
@@ -12278,7 +13111,12 @@ See the LICENSE file for details.
             type: "config",
             docRequired: false,
             selRequired: false,
-            name: { en: "Reveal Log", de: "Reveal Log", ru: "Reveal Log" },
+            name: {
+                en: "Reveal Log",
+                de: "Reveal Log",
+                ru: "Reveal Log",
+                zh_TW: "Reveal Log",
+            },
             hidden: false,
         },
         config_revealPrefFile: {
@@ -12291,6 +13129,7 @@ See the LICENSE file for details.
                 en: "Reveal Preferences File",
                 de: "Einstellungen-Datei anzeigen",
                 ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0444\u0430\u0439\u043b \u043d\u0430\u0441\u0442\u0440\u043e\u0435\u043a",
+                zh_TW: "Reveal Preferences File",
             },
             hidden: false,
         },
@@ -12304,6 +13143,7 @@ See the LICENSE file for details.
                 en: "Remove Watched Folder(s)...",
                 de: "Remove Watched Folder(s)...",
                 ru: "Remove Watched Folder(s)...",
+                zh_TW: "Remove Watched Folder(s)...",
             },
             hidden: false,
         },
@@ -12317,6 +13157,7 @@ See the LICENSE file for details.
                 en: "Ai Command Palette Settings...",
                 de: "Kurzbefehle \u2013 Einstellungen \u2026",
                 ru: "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+                zh_TW: "Ai Command Palette Settings...",
             },
             hidden: false,
         },
@@ -12330,22 +13171,1616 @@ See the LICENSE file for details.
                 en: "Unhide Commands...",
                 de: "Befehle einblenden \u2026",
                 ru: "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043a\u043e\u043c\u0430\u043d\u0434\u044b",
+                zh_TW: "Unhide Commands...",
+            },
+            hidden: false,
+        },
+        custom_astute_0001: {
+            id: "custom_astute_0001",
+            action: "_GenericPluginMenuItem 14",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Edit > Rasterino > Edit Image",
+                zh_TW: "Rasterino\uff5c\u7de8\u8f2f\u5f71\u50cf",
+            },
+            hidden: false,
+        },
+        custom_astute_0002: {
+            id: "custom_astute_0002",
+            action: "_GenericPluginMenuItem 15",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Edit > Rasterino > Update Image",
+                zh_TW: "Rasterino\uff5c\u66f4\u65b0\u5f71\u50cf",
+            },
+            hidden: false,
+        },
+        custom_astute_0003: {
+            id: "custom_astute_0003",
+            action: "_GenericPluginMenuItem 16",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Edit > Rasterino > Link Images",
+                zh_TW: "Rasterino\uff5c\u5c07\u5d4c\u5165\u5f71\u50cf\u8f49\u70ba\u9023\u7d50",
+            },
+            hidden: false,
+        },
+        custom_astute_0004: {
+            id: "custom_astute_0004",
+            action: "Phantasm CS Brightness Contrast Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Brightness/Contrast...",
+                zh_TW: "Phantasm\uff5c\u4eae\u5ea6\uff0f\u5c0d\u6bd4\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0005: {
+            id: "custom_astute_0005",
+            action: "Phantasm CS Curves Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Curves...",
+                zh_TW: "Phantasm\uff5c\u66f2\u7dda\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0006: {
+            id: "custom_astute_0006",
+            action: "Phantasm CS Desaturate Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Desaturate...",
+                zh_TW: "Phantasm\uff5c\u53bb\u98fd\u548c\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0007: {
+            id: "custom_astute_0007",
+            action: "Phantasm CS Duotone Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Duotone...",
+                zh_TW: "Phantasm\uff5c\u96d9\u8272\u8abf\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0008: {
+            id: "custom_astute_0008",
+            action: "Phantasm CS Exposure Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Exposure...",
+                zh_TW: "Phantasm\uff5c\u66dd\u5149\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0009: {
+            id: "custom_astute_0009",
+            action: "Phantasm CS Halftone Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Halftone...",
+                zh_TW: "Phantasm\uff5c\u7db2\u9ede\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0010: {
+            id: "custom_astute_0010",
+            action: "Phantasm CS Hue Saturation Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Hue/Saturation...",
+                zh_TW: "Phantasm\uff5c\u8272\u76f8\uff0f\u98fd\u548c\u5ea6\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0011: {
+            id: "custom_astute_0011",
+            action: "Phantasm CS Invert Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Invert...",
+                zh_TW: "Phantasm\uff5c\u53cd\u76f8\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0012: {
+            id: "custom_astute_0012",
+            action: "Phantasm CS Levels Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Levels...",
+                zh_TW: "Phantasm\uff5c\u8272\u968e\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0013: {
+            id: "custom_astute_0013",
+            action: "Phantasm CS Prepress Correct Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Prepress Correct...",
+                zh_TW: "Phantasm\uff5c\u5370\u524d\u6821\u6b63\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0014: {
+            id: "custom_astute_0014",
+            action: "Phantasm CS Color Shift Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Shift to Color...",
+                zh_TW: "Phantasm\uff5c\u5411\u6307\u5b9a\u984f\u8272\u504f\u79fb\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0015: {
+            id: "custom_astute_0015",
+            action: "Phantasm CS Temperature Tint Filter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Filters > Phantasm > Temperature/Tint...",
+                zh_TW: "Phantasm\uff5c\u8272\u6eab\uff0f\u8272\u8abf\uff08\u6ffe\u93e1\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0016: {
+            id: "custom_astute_0016",
+            action: "AGPixelsToVector",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Object > Pixels to Vector",
+                zh_TW: "SubScribe\uff5c\u50cf\u7d20\u8f49\u5411\u91cf Pixels to Vector",
+            },
+            hidden: false,
+        },
+        custom_astute_0017: {
+            id: "custom_astute_0017",
+            action: "Phantasm Select Effects",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Phantasm Effects",
+                zh_TW: "Phantasm\uff5c\u9078\u53d6 Phantasm \u6548\u679c",
+            },
+            hidden: false,
+        },
+        custom_astute_0018: {
+            id: "custom_astute_0018",
+            action: "Stipplism SelectLE",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Stipplism Effects",
+                zh_TW: "Stipplism\uff5c\u9078\u53d6\u9ede\u63cf\u6548\u679c",
+            },
+            hidden: false,
+        },
+        custom_astute_0019: {
+            id: "custom_astute_0019",
+            action: "Stylism Select Architect",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > AG Architect Effects",
+                zh_TW: "Stylism\uff5c\u9078\u53d6 AG Architect \u6548\u679c",
+            },
+            hidden: false,
+        },
+        custom_astute_0020: {
+            id: "custom_astute_0020",
+            action: "AGBSAll Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > AG Block Shadow Effects > All",
+                zh_TW: "Stylism\uff5c\u9078\u53d6\u9577\u9670\u5f71\u6548\u679c\uff1a\u5168\u90e8",
+            },
+            hidden: false,
+        },
+        custom_astute_0021: {
+            id: "custom_astute_0021",
+            action: "AGBSStandard Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > AG Block Shadow Effects > Standard",
+                zh_TW: "Stylism\uff5c\u9078\u53d6\u9577\u9670\u5f71\u6548\u679c\uff1a\u6a19\u6e96",
+            },
+            hidden: false,
+        },
+        custom_astute_0022: {
+            id: "custom_astute_0022",
+            action: "AGBSVP Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > AG Block Shadow Effects > Vanishing Point",
+                zh_TW: "Stylism\uff5c\u9078\u53d6\u9577\u9670\u5f71\u6548\u679c\uff1a\u6d88\u5931\u9ede",
+            },
+            hidden: false,
+        },
+        custom_astute_0023: {
+            id: "custom_astute_0023",
+            action: "Stylism Select Offset",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > AG Offset Effects",
+                zh_TW: "Stylism\uff5c\u9078\u53d6\u504f\u79fb\u6548\u679c",
+            },
+            hidden: false,
+        },
+        custom_astute_0024: {
+            id: "custom_astute_0024",
+            action: "Stylism Select Splatter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > AG Splatter Effects",
+                zh_TW: "Stylism\uff5c\u9078\u53d6\u98db\u6ffa\u6548\u679c",
+            },
+            hidden: false,
+        },
+        custom_astute_0025: {
+            id: "custom_astute_0025",
+            action: "Randomino Select Perturb",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Perturb Effects",
+                zh_TW: "Randomino\uff5c\u9078\u53d6 Perturb \u6548\u679c",
+            },
+            hidden: false,
+        },
+        custom_astute_0026: {
+            id: "custom_astute_0026",
+            action: "DSAll Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > All",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u5168\u90e8",
+            },
+            hidden: false,
+        },
+        custom_astute_0027: {
+            id: "custom_astute_0027",
+            action: "DSSquRec Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Squares & Rectangles",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u6b63\u65b9\u5f62\u8207\u77e9\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0028: {
+            id: "custom_astute_0028",
+            action: "DSCirEll Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Circles & Ellipses",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u5713\u5f62\u8207\u6a62\u5713\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0029: {
+            id: "custom_astute_0029",
+            action: "DSSquares Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Squares",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u6b63\u65b9\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0030: {
+            id: "custom_astute_0030",
+            action: "DSCircles Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Circles",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u5713\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0031: {
+            id: "custom_astute_0031",
+            action: "DSRectangles Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Rectangles",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u77e9\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0032: {
+            id: "custom_astute_0032",
+            action: "DSEllipses Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Ellipses",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u6a62\u5713\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0033: {
+            id: "custom_astute_0033",
+            action: "DSPolygons Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Polygons",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u591a\u908a\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0034: {
+            id: "custom_astute_0034",
+            action: "DSStars Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Stars",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u661f\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0035: {
+            id: "custom_astute_0035",
+            action: "DSDonuts Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Donuts",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u5713\u74b0",
+            },
+            hidden: false,
+        },
+        custom_astute_0036: {
+            id: "custom_astute_0036",
+            action: "DSArrows Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Arrows",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u7bad\u982d",
+            },
+            hidden: false,
+        },
+        custom_astute_0037: {
+            id: "custom_astute_0037",
+            action: "DSClouds Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Clouds",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u96f2\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0038: {
+            id: "custom_astute_0038",
+            action: "DSCrescents Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Crescents",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u65b0\u6708\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0039: {
+            id: "custom_astute_0039",
+            action: "DSCrosses Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Crosses",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u5341\u5b57\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0040: {
+            id: "custom_astute_0040",
+            action: "DSGears Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Gears",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u9f52\u8f2a",
+            },
+            hidden: false,
+        },
+        custom_astute_0041: {
+            id: "custom_astute_0041",
+            action: "DSHearts Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Hearts",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u5fc3\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0042: {
+            id: "custom_astute_0042",
+            action: "DSSpeech Bubbles Menu Item",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Select > Dynamic Shapes > Speech Bubbles",
+                zh_TW: "VectorScribe\uff5c\u9078\u53d6\u52d5\u614b\u5f62\u72c0\uff1a\u5c0d\u8a71\u6ce1\u6ce1",
+            },
+            hidden: false,
+        },
+        custom_astute_0043: {
+            id: "custom_astute_0043",
+            action: "Live ASTGVSLEAddPoints",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Add Points...",
+                zh_TW: "VectorScribe\uff5c\u589e\u52a0\u9328\u9ede\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0044: {
+            id: "custom_astute_0044",
+            action: "Live ASTGVSLEAGArray",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > AG Array...",
+                zh_TW: "VectorScribe\uff5c\u9663\u5217\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0045: {
+            id: "custom_astute_0045",
+            action: "Live ASTGVSLEAGShear",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > AG Shear...",
+                zh_TW: "VectorScribe\uff5c\u50be\u659c\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0046: {
+            id: "custom_astute_0046",
+            action: "Live ASTGVSLEAGTransform",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > AG Transform...",
+                zh_TW: "VectorScribe\uff5c\u8b8a\u5f62\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0047: {
+            id: "custom_astute_0047",
+            action: "Live ASTGVSLEAngleCap",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Angle Cap...",
+                zh_TW: "VectorScribe\uff5c\u50be\u659c\u7aef\u9ede Angle Cap\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0048: {
+            id: "custom_astute_0048",
+            action: "Live ASTGVSLEClosePath",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Close Path...",
+                zh_TW: "VectorScribe\uff5c\u5c01\u9589\u8def\u5f91\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0049: {
+            id: "custom_astute_0049",
+            action: "Live ASTGVSLEConvertToSmooth",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Convert to Smooth...",
+                zh_TW: "VectorScribe\uff5c\u8f49\u70ba\u5e73\u6ed1\u9ede\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0050: {
+            id: "custom_astute_0050",
+            action: "Live ASTGVSLEDashify",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Dashify...",
+                zh_TW: "VectorScribe\uff5c\u865b\u7dda\u5316\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0051: {
+            id: "custom_astute_0051",
+            action: "Live ASTGVSLEExtendPath",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Extend Path...",
+                zh_TW: "VectorScribe\uff5c\u5ef6\u4f38\u8def\u5f91\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0052: {
+            id: "custom_astute_0052",
+            action: "Live ASTGVSLEMakeCompoundPath",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Make Compound Path",
+                zh_TW: "VectorScribe\uff5c\u5efa\u7acb\u8907\u5408\u8def\u5f91\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0053: {
+            id: "custom_astute_0053",
+            action: "Live ASTGVSLEMakeShape",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Make Shape...",
+                zh_TW: "VectorScribe\uff5c\u5efa\u7acb\u5f62\u72c0\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0054: {
+            id: "custom_astute_0054",
+            action: "Live ASTGVSLEPathRemoval",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Path Removal...",
+                zh_TW: "VectorScribe\uff5c\u79fb\u9664\u8def\u5f91\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0055: {
+            id: "custom_astute_0055",
+            action: "Live ASTGVSLEPathVisualizer",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Path Visualizer...",
+                zh_TW: "VectorScribe\uff5c\u8def\u5f91\u8996\u89ba\u5316\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0056: {
+            id: "custom_astute_0056",
+            action: "Live ASTGVSLEPointRemoval",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Point Removal...",
+                zh_TW: "VectorScribe\uff5c\u79fb\u9664\u9328\u9ede\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0057: {
+            id: "custom_astute_0057",
+            action: "Live ASTGVSLEReleaseCompoundPath",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Release Compound Path",
+                zh_TW: "VectorScribe\uff5c\u91cb\u653e\u8907\u5408\u8def\u5f91\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0058: {
+            id: "custom_astute_0058",
+            action: "Live ASTGVSLERetractHandles",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Retract Handles...",
+                zh_TW: "VectorScribe\uff5c\u6536\u56de\u65b9\u5411\u63a7\u5236\u628a\u624b\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0059: {
+            id: "custom_astute_0059",
+            action: "Live ASTGVSLEReversePathDirection",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Reverse Path Direction",
+                zh_TW: "VectorScribe\uff5c\u53cd\u8f49\u8def\u5f91\u65b9\u5411\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0060: {
+            id: "custom_astute_0060",
+            action: "Live ASTGVSLESegmentRemoval",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Segment Removal...",
+                zh_TW: "VectorScribe\uff5c\u79fb\u9664\u7dda\u6bb5\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0061: {
+            id: "custom_astute_0061",
+            action: "Live ASTGVSLESmartRemovePoints",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Smart Remove Points...",
+                zh_TW: "VectorScribe\uff5c\u667a\u6167\u79fb\u9664\u9328\u9ede\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0062: {
+            id: "custom_astute_0062",
+            action: "Live ASTGVSLESplitPathToSegments",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Split Path to Segments...",
+                zh_TW: "VectorScribe\uff5c\u5c07\u8def\u5f91\u5206\u5272\u70ba\u7dda\u6bb5\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0063: {
+            id: "custom_astute_0063",
+            action: "Live ASTGVSLEStrokeAttributes",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > AG Utilities > Stroke Attributes...",
+                zh_TW: "VectorScribe\uff5c\u7b46\u756b\u5c6c\u6027\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0064: {
+            id: "custom_astute_0064",
+            action: "Live Phantasm CS Brightness Contrast",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Brightness/Contrast...",
+                zh_TW: "Phantasm\uff5c\u4eae\u5ea6\uff0f\u5c0d\u6bd4\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0065: {
+            id: "custom_astute_0065",
+            action: "Live Phantasm CS Curves",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Curves...",
+                zh_TW: "Phantasm\uff5c\u66f2\u7dda\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0066: {
+            id: "custom_astute_0066",
+            action: "Live Phantasm CS Desaturate",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Desaturate...",
+                zh_TW: "Phantasm\uff5c\u53bb\u98fd\u548c\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0067: {
+            id: "custom_astute_0067",
+            action: "Live Phantasm CS Duotone",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Duotone...",
+                zh_TW: "Phantasm\uff5c\u96d9\u8272\u8abf\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0068: {
+            id: "custom_astute_0068",
+            action: "Live Phantasm CS Exposure",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Exposure...",
+                zh_TW: "Phantasm\uff5c\u66dd\u5149\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0069: {
+            id: "custom_astute_0069",
+            action: "Live Phantasm CS Halftone",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Halftone...",
+                zh_TW: "Phantasm\uff5c\u7db2\u9ede\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0070: {
+            id: "custom_astute_0070",
+            action: "Live Phantasm CS Hue Saturation",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Hue/Saturation...",
+                zh_TW: "Phantasm\uff5c\u8272\u76f8\uff0f\u98fd\u548c\u5ea6\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0071: {
+            id: "custom_astute_0071",
+            action: "Live Phantasm CS Invert",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Invert...",
+                zh_TW: "Phantasm\uff5c\u53cd\u76f8\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0072: {
+            id: "custom_astute_0072",
+            action: "Live Phantasm CS Levels",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Levels...",
+                zh_TW: "Phantasm\uff5c\u8272\u968e\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0073: {
+            id: "custom_astute_0073",
+            action: "Live Phantasm CS Prepress Correct",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Prepress Correct...",
+                zh_TW: "Phantasm\uff5c\u5370\u524d\u6821\u6b63\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0074: {
+            id: "custom_astute_0074",
+            action: "Live Phantasm CS Color Shift",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Shift to Color...",
+                zh_TW: "Phantasm\uff5c\u5411\u6307\u5b9a\u984f\u8272\u504f\u79fb\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0075: {
+            id: "custom_astute_0075",
+            action: "Live Phantasm CS Temperature Tint",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Phantasm > Temperature/Tint...",
+                zh_TW: "Phantasm\uff5c\u8272\u6eab\uff0f\u8272\u8abf\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0076: {
+            id: "custom_astute_0076",
+            action: "Live ASTGRAColorRandomizer",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Randomino > Color Randomizer...",
+                zh_TW: "Randomino\uff5c\u96a8\u6a5f\u984f\u8272",
+            },
+            hidden: false,
+        },
+        custom_astute_0077: {
+            id: "custom_astute_0077",
+            action: "Live ASTGRAOpacityRandomizer",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Randomino > Opacity Randomizer...",
+                zh_TW: "Randomino\uff5c\u96a8\u6a5f\u4e0d\u900f\u660e\u5ea6",
+            },
+            hidden: false,
+        },
+        custom_astute_0078: {
+            id: "custom_astute_0078",
+            action: "Live ASTGRAPerturb",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Randomino > Perturb...",
+                zh_TW: "Randomino\uff5c\u96a8\u6a5f\u64fe\u52d5 Perturb",
+            },
+            hidden: false,
+        },
+        custom_astute_0079: {
+            id: "custom_astute_0079",
+            action: "Live ASTGStipple",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Stipplism > Stipple...",
+                zh_TW: "Stipplism\uff5c\u5411\u91cf\u9ede\u63cf",
+            },
+            hidden: false,
+        },
+        custom_astute_0080: {
+            id: "custom_astute_0080",
+            action: "Live ASTGSymbolStipple",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Stipplism > Symbol Stipple...",
+                zh_TW: "Stipplism\uff5c\u7b26\u865f\u9ede\u63cf",
+            },
+            hidden: false,
+        },
+        custom_astute_0081: {
+            id: "custom_astute_0081",
+            action: "Live AG Architect",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Stylism > AG Architect...",
+                zh_TW: "Stylism\uff5cAG Architect \u5ef6\u4f38\u7dda",
+            },
+            hidden: false,
+        },
+        custom_astute_0082: {
+            id: "custom_astute_0082",
+            action: "Live AG Block Shadow",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Stylism > AG Block Shadow...",
+                zh_TW: "Stylism\uff5c\u9577\u9670\u5f71 Block Shadow",
+            },
+            hidden: false,
+        },
+        custom_astute_0083: {
+            id: "custom_astute_0083",
+            action: "Live AG Curvature Visualizer",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Stylism > AG Curvature Visualizer...",
+                zh_TW: "Stylism\uff5c\u66f2\u7387\u8996\u89ba\u5316",
+            },
+            hidden: false,
+        },
+        custom_astute_0084: {
+            id: "custom_astute_0084",
+            action: "Live AG Offset",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Stylism > AG Offset...",
+                zh_TW: "Stylism\uff5c\u504f\u79fb Offset",
+            },
+            hidden: false,
+        },
+        custom_astute_0085: {
+            id: "custom_astute_0085",
+            action: "Live AG Splatter",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Stylism > AG Splatter...",
+                zh_TW: "Stylism\uff5c\u98db\u6ffa Splatter",
+            },
+            hidden: false,
+        },
+        custom_astute_0086: {
+            id: "custom_astute_0086",
+            action: "Live ASTGTexture",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > Texturino > Texture...",
+                zh_TW: "Texturino\uff5c\u5957\u7528\u6750\u8cea",
+            },
+            hidden: false,
+        },
+        custom_astute_0087: {
+            id: "custom_astute_0087",
+            action: "Live ASTGVSAGCorners",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Effect > VectorScribe > AG Corners...",
+                zh_TW: "VectorScribe\uff5cAG Corners \u8f49\u89d2\uff08\u5373\u6642\u6548\u679c\uff09",
+            },
+            hidden: false,
+        },
+        custom_astute_0088: {
+            id: "custom_astute_0088",
+            action: "Arc by Points Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Arc by Points",
+                zh_TW: "SubScribe\uff5c\u4f9d\u9ede\u756b\u5f27 Arc by Points",
+            },
+            hidden: false,
+        },
+        custom_astute_0089: {
+            id: "custom_astute_0089",
+            action: "AG Block Shadow Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Block Shadow",
+                zh_TW: "Stylism\uff5c\u9577\u9670\u5f71\u5de5\u5177",
+            },
+            hidden: false,
+        },
+        custom_astute_0090: {
+            id: "custom_astute_0090",
+            action: "Circle by Points Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Circle by Points",
+                zh_TW: "SubScribe\uff5c\u4f9d\u9ede\u756b\u5713 Circle by Points",
+            },
+            hidden: false,
+        },
+        custom_astute_0091: {
+            id: "custom_astute_0091",
+            action: "AG Color Select Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Color Select",
+                zh_TW: "SubScribe\uff5c\u984f\u8272\u53d6\u6a23 AG Color Select",
+            },
+            hidden: false,
+        },
+        custom_astute_0092: {
+            id: "custom_astute_0092",
+            action: "Connect Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Connect",
+                zh_TW: "SubScribe\uff5c\u9023\u63a5",
+            },
+            hidden: false,
+        },
+        custom_astute_0093: {
+            id: "custom_astute_0093",
+            action: "Crop Image Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Crop Image",
+                zh_TW: "Rasterino\uff5c\u88c1\u5207\u5f71\u50cf",
+            },
+            hidden: false,
+        },
+        custom_astute_0094: {
+            id: "custom_astute_0094",
+            action: "Curvature Circle Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Curvature Circle",
+                zh_TW: "SubScribe\uff5c\u66f2\u7387\u5713",
+            },
+            hidden: false,
+        },
+        custom_astute_0095: {
+            id: "custom_astute_0095",
+            action: "Dynamic Corners Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Dynamic Corners",
+                zh_TW: "VectorScribe\uff5c\u52d5\u614b\u8f49\u89d2\u5de5\u5177",
+            },
+            hidden: false,
+        },
+        custom_astute_0096: {
+            id: "custom_astute_0096",
+            action: "Dynamic Measure Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Dynamic Measure",
+                zh_TW: "VectorScribe\uff5c\u52d5\u614b\u6e2c\u91cf",
+            },
+            hidden: false,
+        },
+        custom_astute_0097: {
+            id: "custom_astute_0097",
+            action: "Dynamic Shapes Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Dynamic Shapes",
+                zh_TW: "VectorScribe\uff5c\u52d5\u614b\u5f62\u72c0",
+            },
+            hidden: false,
+        },
+        custom_astute_0098: {
+            id: "custom_astute_0098",
+            action: "Dynamic Sketch Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Dynamic Sketch",
+                zh_TW: "DynamicSketch\uff5c\u52d5\u614b\u624b\u7e6a",
+            },
+            hidden: false,
+        },
+        custom_astute_0099: {
+            id: "custom_astute_0099",
+            action: "Extend Path Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Extend Path",
+                zh_TW: "VectorScribe\uff5c\u5ef6\u4f38\u8def\u5f91\u5de5\u5177",
+            },
+            hidden: false,
+        },
+        custom_astute_0100: {
+            id: "custom_astute_0100",
+            action: "Gradient From Art Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Gradient From Art",
+                zh_TW: "SubScribe\uff5c\u5f9e\u5716\u7a3f\u5efa\u7acb\u6f38\u5c64",
+            },
+            hidden: false,
+        },
+        custom_astute_0101: {
+            id: "custom_astute_0101",
+            action: "Inflate Deflate Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Inflate Deflate",
+                zh_TW: "ColliderScribe\uff5c\u64f4\u6563\uff0f\u805a\u650f Inflate Deflate",
+            },
+            hidden: false,
+        },
+        custom_astute_0102: {
+            id: "custom_astute_0102",
+            action: "InkFlow Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - InkFlow",
+                zh_TW: "InkFlow\uff5c\u7b46\u58a8\u6d41\u52d5",
+            },
+            hidden: false,
+        },
+        custom_astute_0103: {
+            id: "custom_astute_0103",
+            action: "InkScribe Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - InkScribe",
+                zh_TW: "InkScribe\uff5c\u7cbe\u6e96\u92fc\u7b46",
+            },
+            hidden: false,
+        },
+        custom_astute_0104: {
+            id: "custom_astute_0104",
+            action: "Lock Unlock Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Lock Unlock",
+                zh_TW: "SubScribe\uff5c\u9396\u5b9a\uff0f\u89e3\u9396",
+            },
+            hidden: false,
+        },
+        custom_astute_0105: {
+            id: "custom_astute_0105",
+            action: "MirrorMe Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - MirrorMe",
+                zh_TW: "MirrorMe\uff5c\u93e1\u50cf\u5c0d\u7a31",
+            },
+            hidden: false,
+        },
+        custom_astute_0106: {
+            id: "custom_astute_0106",
+            action: "AG Offset Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Offset",
+                zh_TW: "Stylism\uff5c\u504f\u79fb\u5de5\u5177",
+            },
+            hidden: false,
+        },
+        custom_astute_0107: {
+            id: "custom_astute_0107",
+            action: "OpacityBrushTool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Opacity Brush",
+                zh_TW: "Texturino\uff5c\u4e0d\u900f\u660e\u5ea6\u7b46\u5237",
+            },
+            hidden: false,
+        },
+        custom_astute_0108: {
+            id: "custom_astute_0108",
+            action: "Orient Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Orient",
+                zh_TW: "SubScribe\uff5c\u65b9\u5411\u5c0d\u9f4a",
+            },
+            hidden: false,
+        },
+        custom_astute_0109: {
+            id: "custom_astute_0109",
+            action: "Orient Transform Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Orient Transform",
+                zh_TW: "SubScribe\uff5c\u65b9\u5411\u8b8a\u5f62",
+            },
+            hidden: false,
+        },
+        custom_astute_0110: {
+            id: "custom_astute_0110",
+            action: "PathScribe Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - PathScribe",
+                zh_TW: "VectorScribe\uff5c\u8def\u5f91\u7de8\u4fee PathScribe",
+            },
+            hidden: false,
+        },
+        custom_astute_0111: {
+            id: "custom_astute_0111",
+            action: "Perpendicular Line Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Perpendicular Line",
+                zh_TW: "SubScribe\uff5c\u5782\u7dda",
+            },
+            hidden: false,
+        },
+        custom_astute_0112: {
+            id: "custom_astute_0112",
+            action: "Quick Orient Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Quick Orient",
+                zh_TW: "SubScribe\uff5c\u5feb\u901f\u6821\u6b63\u65b9\u5411",
+            },
+            hidden: false,
+        },
+        custom_astute_0113: {
+            id: "custom_astute_0113",
+            action: "RandominiTool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Randomini",
+                zh_TW: "Randomino\uff5c\u96a8\u6a5f\u5de5\u5177 Randomini",
+            },
+            hidden: false,
+        },
+        custom_astute_0114: {
+            id: "custom_astute_0114",
+            action: "Reference Point Setter Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Randomino Start Point",
+                zh_TW: "Randomino\uff5c\u8a2d\u5b9a\u96a8\u6a5f\u57fa\u6e96\u9ede",
+            },
+            hidden: false,
+        },
+        custom_astute_0115: {
+            id: "custom_astute_0115",
+            action: "Reform Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: { en: "Astute Graphics - Reform", zh_TW: "Reform\uff5c\u91cd\u5851" },
+            hidden: false,
+        },
+        custom_astute_0116: {
+            id: "custom_astute_0116",
+            action: "Reform Text Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Reform Text",
+                zh_TW: "Reform\uff5c\u6587\u5b57\u91cd\u5851",
+            },
+            hidden: false,
+        },
+        custom_astute_0117: {
+            id: "custom_astute_0117",
+            action: "Reprofile Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Reprofile",
+                zh_TW: "Reform\uff5c\u91cd\u5851\u8f2a\u5ed3 Reprofile",
+            },
+            hidden: false,
+        },
+        custom_astute_0118: {
+            id: "custom_astute_0118",
+            action: "Reposition Point Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Reposition Point",
+                zh_TW: "VectorScribe\uff5c\u91cd\u65b0\u5b9a\u4f4d\u9328\u9ede",
+            },
+            hidden: false,
+        },
+        custom_astute_0119: {
+            id: "custom_astute_0119",
+            action: "Rotate At Collision Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Rotate At Collision",
+                zh_TW: "ColliderScribe\uff5c\u78b0\u649e\u6642\u65cb\u8f49",
+            },
+            hidden: false,
+        },
+        custom_astute_0120: {
+            id: "custom_astute_0120",
+            action: "Rotate To Collision Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Rotate To Collision",
+                zh_TW: "ColliderScribe\uff5c\u65cb\u8f49\u81f3\u78b0\u649e",
+            },
+            hidden: false,
+        },
+        custom_astute_0121: {
+            id: "custom_astute_0121",
+            action: "Smart Remove Brush Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Smart Remove Brush",
+                zh_TW: "VectorScribe\uff5c\u667a\u6167\u522a\u9664\u7b46\u5237",
+            },
+            hidden: false,
+        },
+        custom_astute_0122: {
+            id: "custom_astute_0122",
+            action: "Snap To Collisions Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Snap To Collisions",
+                zh_TW: "ColliderScribe\uff5c\u78b0\u649e\u5438\u9644",
+            },
+            hidden: false,
+        },
+        custom_astute_0123: {
+            id: "custom_astute_0123",
+            action: "Straighten Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Straighten",
+                zh_TW: "SubScribe\uff5c\u62c9\u76f4",
+            },
+            hidden: false,
+        },
+        custom_astute_0124: {
+            id: "custom_astute_0124",
+            action: "Stylism Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Stylism",
+                zh_TW: "Stylism\uff5c\u6548\u679c\u64cd\u63a7\u5de5\u5177",
+            },
+            hidden: false,
+        },
+        custom_astute_0125: {
+            id: "custom_astute_0125",
+            action: "Super Marquee Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Super Marquee",
+                zh_TW: "ColliderScribe\uff5c\u8d85\u7d1a\u6846\u9078",
+            },
+            hidden: false,
+        },
+        custom_astute_0126: {
+            id: "custom_astute_0126",
+            action: "Tangent Circle Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Tangent Circle",
+                zh_TW: "SubScribe\uff5c\u76f8\u5207\u5713",
+            },
+            hidden: false,
+        },
+        custom_astute_0127: {
+            id: "custom_astute_0127",
+            action: "Tangent Line Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Tangent Line",
+                zh_TW: "SubScribe\uff5c\u5207\u7dda",
+            },
+            hidden: false,
+        },
+        custom_astute_0128: {
+            id: "custom_astute_0128",
+            action: "TextureTool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Texture",
+                zh_TW: "Texturino\uff5c\u6750\u8cea\u5de5\u5177",
+            },
+            hidden: false,
+        },
+        custom_astute_0129: {
+            id: "custom_astute_0129",
+            action: "TextureBrushTool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Texture Brush",
+                zh_TW: "Texturino\uff5c\u6750\u8cea\u7b46\u5237",
+            },
+            hidden: false,
+        },
+        custom_astute_0130: {
+            id: "custom_astute_0130",
+            action: "AG Trim and Join Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Trim and Join",
+                zh_TW: "DynamicSketch\uff5c\u4fee\u526a\u4e26\u63a5\u5408 Trim and Join",
+            },
+            hidden: false,
+        },
+        custom_astute_0131: {
+            id: "custom_astute_0131",
+            action: "Width Brush Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Width Brush",
+                zh_TW: "WidthScribe\uff5c\u5bec\u5ea6\u7b46\u5237",
+            },
+            hidden: false,
+        },
+        custom_astute_0132: {
+            id: "custom_astute_0132",
+            action: "Width Eraser Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Width Eraser",
+                zh_TW: "WidthScribe\uff5c\u5bec\u5ea6\u6a61\u76ae\u64e6",
+            },
+            hidden: false,
+        },
+        custom_astute_0133: {
+            id: "custom_astute_0133",
+            action: "Width Gradient Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Width Gradient",
+                zh_TW: "WidthScribe\uff5c\u5bec\u5ea6\u6f38\u5c64",
+            },
+            hidden: false,
+        },
+        custom_astute_0134: {
+            id: "custom_astute_0134",
+            action: "Width Selector Tool",
+            type: "tool",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Astute Graphics - Width Selector",
+                zh_TW: "WidthScribe\uff5c\u5bec\u5ea6\u9078\u53d6",
             },
             hidden: false,
         },
     };
-    /**
-     * Extracts the base calling script identifier from an Adobe ExtendScript stack trace.
-     *
-     * ExtendScript exposes the current stack as `$.stack`, where entries may include lines
-     * like `[SomeScript.jsx]` or `[123]`. This function returns the first bracketed entry
-     * that is *not* purely numeric (i.e., likely a script name/path).
-     *
-     * This implementation is ES3-safe when compiled (no `Number.isFinite`, no ES2015 APIs).
-     *
-     * @param stack Optional stack trace text to parse. Defaults to `$.stack` when available.
-     * @returns The first non-numeric bracketed entry (e.g. `"MyScript.jsx"`), or `undefined` if none found.
-     */
     function resolveBaseScriptFromStack(stack) {
         var raw =
             stack !== null && stack !== void 0
@@ -12366,22 +14801,13 @@ See the LICENSE file for details.
             }
             var inner = line.slice(1, line.length - 1).replace(/^\s+|\s+$/g, "");
             if (!inner) continue;
-            // ES3-safe numeric check
-            // `isNaN()` coerces; numeric strings => false, non-numeric => true
             if (isNaN(inner)) {
                 return inner;
             }
         }
         return undefined;
     }
-    var Logger = /** @class */ (function () {
-        /**
-         * Class for easy file logging from within Adobe ExtendScript.
-         * @param fp File path for the log file. Defaults to `Folder.userData/{base_script_file_name}.log`.
-         * @param mode Optional log file write mode. Write `w` mode or append `a` mode. If write mode 'w', the log file will be overwritten on each script run. Defaults to `w`.
-         * @param sizeLimit Log file size limit (in bytes) for rotation. Defaults to 5,000,000.
-         * @param consoleOutput Forward calls to `Logger.log()` to the JavaScript Console via `$.writeln()`. Defaults to `false`.
-         */
+    var Logger = (function () {
         function Logger(fp, mode, sizeLimit, consoleOutput) {
             if (mode === void 0) {
                 mode = "w";
@@ -12403,14 +14829,10 @@ See the LICENSE file for details.
             this.mode = mode.toLowerCase();
             this.consoleOutput = consoleOutput;
             this.file = new File(fp);
-            // Rotate log if too big
             if (this.file.length > sizeLimit) {
                 this.backup(true);
             }
         }
-        /**
-         * Backup the log file.
-         */
         Logger.prototype.backup = function (removeOriginal) {
             if (removeOriginal === void 0) {
                 removeOriginal = false;
@@ -12423,9 +14845,6 @@ See the LICENSE file for details.
             if (removeOriginal) this.file.remove();
             return backupFile;
         };
-        /**
-         * Write data to the log file.
-         */
         Logger.prototype.log = function () {
             var text = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -12434,7 +14853,6 @@ See the LICENSE file for details.
             if (this.badPath) return false;
             var f = this.file;
             var ts = new Date().toLocaleString();
-            // Ensure parent folder exists
             if (!f.parent.exists) {
                 if (!f.parent.parent.exists) {
                     alert("Bad log file path!\n'" + f.fullName + "'");
@@ -12463,51 +14881,26 @@ See the LICENSE file for details.
             }
             return true;
         };
-        /**
-         * Open the log file.
-         */
         Logger.prototype.open = function () {
             this.file.execute();
         };
-        /**
-         * Reveal the log file location.
-         */
         Logger.prototype.reveal = function () {
             this.file.parent.execute();
         };
         return Logger;
     })();
-    /**
-     * Attempts to resolve the correct localized string for a given property
-     * on a command object. If the property is a language map, it is passed
-     * directly to `localize()`. If the property is a string that matches a key
-     * in the global `strings` map, the corresponding localized string is returned.
-     * Otherwise, the original string is returned as-is.
-     *
-     * @param command - The command object containing the property to resolve.
-     * @param prop - The property name to check and localize.
-     * @returns The resolved string, either localized or raw.
-     */
     function determineCorrectString(command, prop) {
         var value = command[prop];
-        if (typeof value === "object") {
-            return localize(value);
+        if (isLocalizedEntry(value)) {
+            var localizedValue = localize(value);
+            return localizedValue || value.en || "";
         }
         if (strings.hasOwnProperty(value)) {
-            return localize(strings[value]);
+            var localizedValue = localize(strings[value]);
+            return localizedValue || strings[value].en || "";
         }
-        return value;
+        return typeof value === "string" ? value : "";
     }
-    /**
-     * Type guard to check if a value is a valid LocalizedStringEntry object.
-     *
-     * A valid LocalizedStringEntry is a non-null object (not an array) where all keys
-     * are strings and all values are strings. This is used to verify localized string
-     * dictionaries before passing them to the `localize()` function.
-     *
-     * @param value - The value to check.
-     * @returns True if the value is a valid LocalizedStringEntry, false otherwise.
-     */
     function isLocalizedEntry(value) {
         return (
             typeof value === "object" &&
@@ -12518,13 +14911,28 @@ See the LICENSE file for details.
             })
         );
     }
-    /**
-     * Finds the index position after the last occurrence of `' > '` in the given string.
-     * Useful for locating the final breadcrumb separator in a path-like string.
-     *
-     * @param s - The string to search within.
-     * @returns The position just after the last `' > '` or 0 if not found.
-     */
+    function getCommandSearchNames(command, fallbackId) {
+        var names = [];
+        var value = command.name;
+        if (isLocalizedEntry(value)) {
+            for (var locale in value) {
+                if (!value.hasOwnProperty(locale)) continue;
+                var name = value[locale];
+                if (name && names.indexOf(name) === -1) names.push(name);
+            }
+        } else if (typeof value === "string" && value) {
+            names.push(value);
+        }
+        var displayedName = determineCorrectString(command, "name");
+        if (displayedName && names.indexOf(displayedName) === -1) {
+            names.unshift(displayedName);
+        }
+        if (command.action && names.indexOf(command.action) === -1) {
+            names.push(command.action);
+        }
+        if (!names.length) names.push(fallbackId.replace(/_/g, " "));
+        return names;
+    }
     function findLastBreadcrumbSeparator(s) {
         var p = 0;
         var re = / > /g;
@@ -12538,13 +14946,6 @@ See the LICENSE file for details.
         }
         return p;
     }
-    /**
-     * Generate a unique command ID for the data model by replacing whitespace and periods,
-     * and appending a number if necessary to ensure uniqueness.
-     *
-     * @param s - Base string to generate the ID from.
-     * @returns A valid, unique command ID.
-     */
     function generateCommandId(s) {
         var re = /\s|\./gi;
         var id = s.replace(re, "_");
@@ -12555,14 +14956,7 @@ See the LICENSE file for details.
         }
         return id;
     }
-    /**
-     * Ask the user if they want to add their new commands to their startup screen.
-     *
-     * @param newCommandIds - Array of new command IDs to add.
-     * @returns `false` if the user declines to add commands, `undefined` otherwise.
-     */
     function addToStartup(newCommandIds) {
-        // Remove any command already in startupCommands
         for (var i = newCommandIds.length - 1; i >= 0; i--) {
             var newCommandId = newCommandIds[i];
             if (prefs.startupCommands.includes(newCommandId)) {
@@ -12578,12 +14972,6 @@ See the LICENSE file for details.
         if (!confirmed) return false;
         prefs.startupCommands = newCommandIds.concat(prefs.startupCommands);
     }
-    /**
-     * Get every unique font used inside the Illustrator document.
-     *
-     * @param doc - The Illustrator document object.
-     * @returns An array of unique fonts used in the document.
-     */
     function getDocumentFonts(doc) {
         var fonts = [];
         for (var i = 0; i < doc.textFrames.length; i++) {
@@ -12597,56 +14985,35 @@ See the LICENSE file for details.
         }
         return fonts;
     }
-    /**
-     * Reset view and zoom in on a specific page item in the active Illustrator document.
-     *
-     * @param pageItem - The page item to focus the view on.
-     */
     function zoomIntoPageItem(pageItem) {
         var view = app.activeDocument.views[0];
-        // Get current screen dimensions
         var screenBounds = view.bounds;
         var screenW = screenBounds[2] - screenBounds[0];
         var screenH = screenBounds[1] - screenBounds[3];
-        // Get page item's visible bounds and center
         var bounds = pageItem.visibleBounds;
         var itemW = bounds[2] - bounds[0];
         var itemH = bounds[1] - bounds[3];
         var itemCX = bounds[0] + itemW / 2;
         var itemCY = bounds[1] - itemH / 2;
-        // Center the view on the page item
         view.centerPoint = [itemCX, itemCY];
-        // Calculate zoom ratio
         var ratioW = screenW / itemW;
         var ratioH = screenH / itemH;
         var zoomRatio = itemW * (screenH / screenW) >= itemH ? ratioW : ratioH;
-        // Apply zoom with a padding factor
         var padding = 0.9;
         view.zoom = zoomRatio * padding;
     }
-    /**
-     * Get information for all placed files in the current Illustrator document.
-     * This includes file name, file path, and whether the file exists.
-     *
-     * @returns An array of localized strings containing file info for reporting.
-     */
     function getPlacedFileInfoForReport() {
-        // Load AdobeXMPScript if not already available
         if (ExternalObject.AdobeXMPScript === undefined) {
             ExternalObject.AdobeXMPScript = new ExternalObject("lib:AdobeXMPScript");
         }
-        // Parse XMP metadata from the current document
         var xmp = new XMPMeta(app.activeDocument.XMPString);
         var allFilePaths = getAllPlacedFilePaths(xmp);
-        // Convert paths to File objects
         var fileObjects = allFilePaths.map(function (path) {
             return new File(path);
         });
-        // Sort files by name
         fileObjects.sort(function (a, b) {
             return a.name.localeCompare(b.name);
         });
-        // Build localized strings for each file
         var result = fileObjects.map(function (f, index) {
             var fileInfo =
                 localize(strings.dr_name) +
@@ -12661,19 +15028,8 @@ See the LICENSE file for details.
         });
         return result;
     }
-    /**
-     * Get all placed file paths (linked and embedded) from the document XMP metadata.
-     * This bypasses issues with the `placedItems` collection in the Illustrator API.
-     *
-     * Credit to @pixxxelschubser via Adobe forums:
-     * https://community.adobe.com/t5/user/viewprofilepage/user-id/7720512
-     *
-     * @param xmp - The parsed XMP metadata object for the current document.
-     * @returns An array of file path strings.
-     */
     function getAllPlacedFilePaths(xmp) {
         var paths = [];
-        // Iterate over all items in the xmpMM:Manifest array
         for (var i = 1; i <= xmp.countArrayItems(XMPConst.NS_XMP_MM, "Manifest"); i++) {
             var xpath = "xmpMM:Manifest[".concat(i, "]/stMfs:reference/stRef:filePath");
             var prop = xmp.getProperty(XMPConst.NS_XMP_MM, xpath);
@@ -12683,15 +15039,6 @@ See the LICENSE file for details.
         }
         return paths;
     }
-    /**
-     * Check for any placed files with broken links in the current Illustrator document.
-     *
-     * This function parses the document's XMP metadata to find broken links listed under
-     * `xmpMM:Ingredients`, which includes externally referenced files (e.g., missing linked images).
-     *
-     * @param xmp - The parsed XMP metadata object for the current document.
-     * @returns An array of file path strings for the broken linked files.
-     */
     function getBrokenFilePaths(xmp) {
         var paths = [];
         for (
@@ -12707,15 +15054,6 @@ See the LICENSE file for details.
         }
         return paths;
     }
-    /**
-     * Check whether a command is compatible with the current Illustrator version.
-     *
-     * Compares the system's Illustrator version against optional `minVersion` and `maxVersion`
-     * properties on the command to determine if the command should be available.
-     *
-     * @param command - The command object to validate.
-     * @returns True if the command is valid for the current Illustrator version, false otherwise.
-     */
     function commandVersionCheck(command) {
         var aiVersion = parseFloat(app.version);
         if (
@@ -12726,13 +15064,6 @@ See the LICENSE file for details.
         }
         return true;
     }
-    /**
-     * Compare two semantic version strings.
-     *
-     * @param a - First semantic version string (e.g. "1.2.3").
-     * @param b - Second semantic version string (e.g. "1.2.0").
-     * @returns 1 if `a` > `b`, -1 if `b` > `a`, 0 if they are equal.
-     */
     function semanticVersionComparison(a, b) {
         if (a === b) {
             return 0;
@@ -12750,7 +15081,6 @@ See the LICENSE file for details.
                 return -1;
             }
         }
-        // If one's a prefix of the other, the longer one is considered greater
         if (a_components.length > b_components.length) {
             return 1;
         }
@@ -12759,14 +15089,6 @@ See the LICENSE file for details.
         }
         return 0;
     }
-    /**
-     * Return the names of each object in an Illustrator collection object.
-     * https://ai-scripting.docsforadobe.dev/scripting/workingWithObjects.html#collection-objects
-     *
-     * @param collection - Illustrator collection object with a `length` and `name` property on each item.
-     * @param sorted - Whether the results should be sorted alphabetically.
-     * @returns An array of names from the collection.
-     */
     function getCollectionObjectNames(collection, sorted) {
         if (sorted === void 0) {
             sorted = false;
@@ -12786,14 +15108,6 @@ See the LICENSE file for details.
         }
         return sorted ? names.sort() : names;
     }
-    /**
-     * Present File.openDialog() for user to select files to load.
-     *
-     * @param prompt - Prompt text for the open dialog.
-     * @param multiselect - Whether multiple files can be selected.
-     * @param fileFilter - A file filter string (e.g., "*.js;*.jsx" or "JavaScript Files:*.js,*.jsx").
-     * @returns An array of selected `File` objects, or an empty array if none selected.
-     */
     function loadFileTypes(prompt, multiselect, fileFilter) {
         var results = [];
         var files = File.openDialog(prompt, fileFilter, multiselect);
@@ -12805,19 +15119,6 @@ See the LICENSE file for details.
         }
         return results;
     }
-    /**
-     * Simulate a key press for Windows users to fix a ScriptUI focus bug.
-     *
-     * This function addresses a known issue where, on some Windows versions of Illustrator,
-     * setting `active = true` on a ScriptUI field causes a brief flash of Windows Explorer
-     * before the Illustrator dialog comes to the front. This workaround, created by Sergey Osokin,
-     * uses a temporary `.vbs` script to simulate a keypress and bring focus back cleanly.
-     *
-     * See: https://github.com/joshbduncan/AiCommandPalette/issues/8
-     *
-     * @param k - The key to simulate (e.g. "TAB", "ESC", etc.).
-     * @param n - Number of times to simulate the keypress. Defaults to 1.
-     */
     function simulateKeypress(k, n) {
         if (n === void 0) {
             n = 1;
@@ -12842,15 +15143,6 @@ See the LICENSE file for details.
             if (f) f.close();
         }
     }
-    /**
-     * Open a URL in the system default browser.
-     *
-     * This function creates a temporary HTML file that redirects to the given URL,
-     * and then opens it using the default system browser. Useful workaround for
-     * opening links from ExtendScript (since `File.execute()` works on HTML files).
-     *
-     * @param url - The URL to open.
-     */
     function openURL(url) {
         var html = new File(Folder.temp.absoluteURI + "/aisLink.html");
         html.open("w");
@@ -12862,14 +15154,6 @@ See the LICENSE file for details.
         html.close();
         html.execute();
     }
-    /**
-     * Get all `.js` and `.jsx` files in a folder.
-     *
-     * @param folder - The starting folder object.
-     * @param recursive - If true, searches subfolders recursively.
-     * @returns An array of matching File objects.
-     * @throws {Error} If the folder parameter is invalid or the folder does not exist.
-     */
     function findScriptFiles(folder, recursive) {
         if (recursive === void 0) {
             recursive = true;
@@ -12892,33 +15176,16 @@ See the LICENSE file for details.
         }
         return result;
     }
-    /**
-     * Generates a deterministic base-36 hash from a string.
-     *
-     * This is a lightweight, non-cryptographic hash intended for identifiers,
-     * cache keys, or filenames. It is safe to compile down to ES3 for
-     * Adobe ExtendScript.
-     *
-     * @param str - Input string to hash.
-     * @returns Base-36 encoded hash string (always non-negative).
-     */
     function hashString(str) {
         if (str.length === 0) return "0";
         var hash = 0;
         for (var i = 0; i < str.length; i++) {
             var code = str.charCodeAt(i);
             hash = (hash << 5) - hash + code;
-            hash |= 0; // force 32-bit signed int (ES3-safe)
+            hash |= 0;
         }
-        // Normalize to positive and encode compactly
         return Math.abs(hash).toString(36);
     }
-    /**
-     * Sort listbox selection items by their index positions.
-     *
-     * @param sel - Array of selected ListItem objects.
-     * @returns Sorted array of index numbers in ascending order.
-     */
     function sortIndexes(sel) {
         return sel
             .map(function (item) {
@@ -12928,57 +15195,17 @@ See the LICENSE file for details.
                 return a - b;
             });
     }
-    /**
-     * Check whether an array of sorted indexes represents a contiguous range.
-     *
-     * For example:
-     * - [0, 1, 2] → true (contiguous)
-     * - [0, 2, 3] → false (missing index 1)
-     * - [5, 6, 7, 8] → true (contiguous)
-     *
-     * @param sel - Array of sorted index numbers.
-     * @returns True if indexes form a contiguous sequence, false otherwise.
-     */
     function contiguous(sel) {
         return sel.length === sel[sel.length - 1] - sel[0] + 1;
     }
-    // FILE/FOLDER OPERATIONS
-    /**
-     * Create a Folder object, creating the folder on disk if it doesn't exist.
-     *
-     * This is a convenience wrapper around ExtendScript's Folder constructor that
-     * ensures the folder exists before returning the object.
-     *
-     * @param path - Absolute file system path to the folder.
-     * @returns Folder object representing the path.
-     */
     function setupFolderObject(path) {
         var folder = new Folder(path);
         if (!folder.exists) folder.create();
         return folder;
     }
-    /**
-     * Create a File object from a folder and filename.
-     *
-     * This is a convenience wrapper that constructs the full file path by combining
-     * the folder path with the filename.
-     *
-     * @param path - Parent folder object.
-     * @param name - Name of the file (including extension).
-     * @returns File object representing the combined path.
-     */
     function setupFileObject(path, name) {
         return new File("".concat(path, "/").concat(name));
     }
-    /**
-     * Read the entire contents of a text file as a UTF-8 string.
-     *
-     * The file is automatically opened, read, and closed. If an error occurs during
-     * reading, the user is shown an alert and the error is logged.
-     *
-     * @param f - File object to read from.
-     * @returns The file contents as a string, or undefined if reading fails.
-     */
     function readTextFile(f) {
         var data;
         try {
@@ -12993,17 +15220,6 @@ See the LICENSE file for details.
         }
         return data;
     }
-    /**
-     * Write string data to a text file with UTF-8 encoding.
-     *
-     * The file is automatically opened, written, and closed. If an error occurs during
-     * writing, the user is shown an alert and the error is logged. The file will be
-     * created if it doesn't exist.
-     *
-     * @param data - String data to write to the file.
-     * @param fp - File path (as string) or File object to write to.
-     * @param mode - File open mode: "w" for write (overwrite) or "a" for append. Defaults to "w".
-     */
     function writeTextFile(data, fp, mode) {
         if (mode === void 0) {
             mode = "w";
@@ -13020,23 +15236,15 @@ See the LICENSE file for details.
             f.close();
         }
     }
-    // DEVELOPMENT SETTINGS
     var _a, _b;
-    // localization testing
-    // $.locale = false;
-    // $.locale = "de";
-    // $.locale = "ru";
-    // ENVIRONMENT VARIABLES
     var sysOS = /mac/i.test($.os) ? "mac" : "win";
     var windowsFlickerFix =
         sysOS === "win" && parseFloat(app.version) < 26.4 ? true : false;
     var versionUpdate0_16_0 = false;
-    // PLUG-IN DATA STORAGE
     var pluginDataFolder = setupFolderObject(Folder.userData + "/JBD/AiCommandPalette");
     var logFilePath = pluginDataFolder + "/AiCommandPalette.log";
     var userPrefsFileName = "Preferences.json";
     var userHistoryFileName = "History.json";
-    // DEVELOPMENT SETTINGS
     var devMode = $.getenv("USER") === "jbd" ? true : false;
     var debugLogging = $.getenv("AICP_DEBUG_LOGGING") !== "false" ? true : false;
     var logger;
@@ -13048,47 +15256,18 @@ See the LICENSE file for details.
             $.writeln(text);
         };
     }
-    /**
-     * Development utilities for inspecting and exporting plugin state.
-     *
-     * This object provides helper methods for developers to access plugin data
-     * during development. When `devMode` is enabled, these methods can be used
-     * to save preferences and command data to JSON files for inspection.
-     */
     var devInfo = {
-        /**
-         * Get the plugin data folder location.
-         *
-         * @returns The plugin data folder object.
-         */
         folder: function () {
             return pluginDataFolder;
         },
-        /**
-         * Get a File object pointing to the dev prefs export location.
-         *
-         * @returns File object for the development preferences JSON file.
-         */
         prefsFile: function () {
             var folder = this.folder();
             return setupFileObject(folder, "prefs.json");
         },
-        /**
-         * Get a File object pointing to the dev commands export location.
-         *
-         * @returns File object for the development commands JSON file.
-         */
         commandsFile: function () {
             var folder = this.folder();
             return setupFileObject(folder, "commands.json");
         },
-        /**
-         * Save current preferences and command data to JSON files for inspection.
-         *
-         * This method exports the current state of `prefs` and `commandsData` to
-         * prettified JSON files in the plugin data folder. Useful for debugging
-         * and understanding the plugin's runtime state.
-         */
         save: function () {
             writeTextFile(JSON.stringify(prefs, undefined, 4), this.prefsFile());
             writeTextFile(
@@ -13117,20 +15296,10 @@ See the LICENSE file for details.
                 _b),
         },
     };
-    // MISCELLANEOUS SETTINGS
-    // Number of items visible in the listbox viewport without scrolling.
-    // Based on the listbox height (paletteHeight) and standard row height in ScriptUI.
     var visibleListItems = 9;
-    // Maximum number of recent commands to track in user history.
-    // Keeps the recent commands list manageable and performant.
     var mostRecentCommandsCount = 25;
-    // Maximum number of named objects to load from a document.
-    // Prevents performance issues when documents have thousands of objects.
-    // If exceeded, user is shown a warning and objects are still loaded.
     var namedObjectLimit = 2000;
-    // Regex to match trailing ellipsis in menu command names (e.g., "Save As...")
     var regexEllipsis = /\.\.\.$/;
-    // Regex to match the breadcrumb separator (greater-than sign) in menu paths (e.g., "File > Open")
     var regexBreadcrumbSeparator = /\s>\s/g;
     var prefs = {
         startupCommands: null,
@@ -13141,7 +15310,7 @@ See the LICENSE file for details.
         scripts: [],
         watchedFolders: [],
         pickers: [],
-        fuzzy: true, // set to new fuzzy matcher as default
+        fuzzy: true,
         version: _version,
         os: $.os,
         locale: $.locale,
@@ -13149,53 +15318,30 @@ See the LICENSE file for details.
         timestamp: Date.now(),
     };
     var userPrefs = {
-        /**
-         * Get the folder where user preferences are stored.
-         *
-         * @returns Folder object for the plugin data directory.
-         */
         folder: function () {
             return pluginDataFolder;
         },
-        /**
-         * Get the File object for the user preferences JSON file.
-         *
-         * @returns File object for the preferences file.
-         */
         file: function () {
             var folder = this.folder();
             return setupFileObject(folder, userPrefsFileName);
         },
-        /**
-         * Loads user preferences from disk (migrates legacy formats as needed).
-         * If `inject` is true, calls `this.inject()` after loading.
-         *
-         * @param inject - Inject user commands into `commandsData`.
-         * @throws {Error} Throws a runtime error if the preferences file is corrupted and cannot
-         *                 be parsed. The corrupted file is renamed to .bak and the preferences
-         *                 folder is revealed to the user.
-         */
         load: function (inject) {
             var file = this.file();
             logger.log("loading user preferences:", file.fsName);
             if (!file.exists) return;
-            // Track which updates have been applied
             var updateVersion0_16_0 = false;
             var s = readTextFile(file);
             var data;
-            // try true JSON first
             try {
                 data = JSON.parse(s);
                 logger.log("prefs loaded as valid JSON");
             } catch (e) {
                 logger.log("prefs not valid JSON, will try eval fallback:", e.message);
             }
-            // try json-like eval second
             if (data === undefined) {
                 try {
                     data = eval(s);
                     logger.log("prefs loaded as old JSON-like, saving as true JSON");
-                    // write true JSON back to disk
                     writeTextFile(JSON.stringify(data), file);
                 } catch (e) {
                     file.rename(file.name + ".bak");
@@ -13207,7 +15353,6 @@ See the LICENSE file for details.
             }
             if (!data || typeof data !== "object") return;
             if (Object.keys(data).length === 0) return;
-            // update stored command ids to v0.15.0 unique ids
             logger.log(
                 "loaded prefs saved from ".concat(_title, " v").concat(data.version)
             );
@@ -13229,38 +15374,18 @@ See the LICENSE file for details.
                 this.inject();
             }
         },
-        /**
-         * Apply version-specific migrations to user preferences.
-         *
-         * This method updates the preferences data structure when command IDs or
-         * schemas change between plugin versions. It creates a backup before making
-         * changes and updates command references in:
-         * - Startup commands list
-         * - Hidden commands list
-         * - Workflow action steps
-         *
-         * The migration strategy uses a lookup table to map old command IDs to new
-         * ones, ensuring that user configurations remain valid after updates.
-         *
-         * @param version - The version number to migrate to (e.g., "0.16.0").
-         */
         update: function (version) {
             switch (version) {
                 case "0.16.0":
                     logger.log("applying v0.16.0 prefs command id update");
-                    // backup current prefs files just in case or error
                     this.backup();
-                    // build lut to convert old menu command ids to updated versions
                     var commandsLUT = {};
                     for (var key in commandsData) {
                         var command = commandsData[key];
-                        // only add commands where the is new (menu commands for now)
                         if (key == command.id) continue;
-                        // skip any ids already added to the LUT
                         if (commandsLUT.hasOwnProperty(command.id)) continue;
                         commandsLUT[command.id] = key;
                     }
-                    // update startup commands
                     for (var i = 0; i < prefs.startupCommands.length; i++) {
                         var oldId = prefs.startupCommands[i];
                         if (
@@ -13275,7 +15400,6 @@ See the LICENSE file for details.
                         );
                         prefs.startupCommands[i] = commandsLUT[oldId];
                     }
-                    // update hidden commands
                     for (var i = 0; i < prefs.hiddenCommands.length; i++) {
                         var oldId = prefs.hiddenCommands[i];
                         if (
@@ -13290,7 +15414,6 @@ See the LICENSE file for details.
                         );
                         prefs.hiddenCommands[i] = commandsLUT[oldId];
                     }
-                    // update workflow commands
                     for (var i = 0; i < prefs.workflows.length; i++) {
                         var workflow = prefs.workflows[i];
                         for (var j = 0; j < prefs.workflows[i].actions.length; j++) {
@@ -13315,13 +15438,6 @@ See the LICENSE file for details.
                     break;
             }
         },
-        /**
-         * Inject user-created commands into the global commandsData object.
-         *
-         * This method takes workflows, bookmarks, scripts, pickers, and custom commands
-         * from the loaded preferences and adds them to the main command registry so they
-         * can be executed by the command palette.
-         */
         inject: function () {
             var typesToInject = [
                 "workflows",
@@ -13338,13 +15454,6 @@ See the LICENSE file for details.
                 }
             }
         },
-        /**
-         * Load scripts from all watched folders into the command palette.
-         *
-         * Recursively scans each watched folder for .jsx and .js files, creates command
-         * entries for them, and adds them to commandsData. If a watched folder doesn't
-         * exist, the user is notified.
-         */
         loadWatchedScripts: function () {
             for (var _i = 0, _a = prefs.watchedFolders; _i < _a.length; _i++) {
                 var path = _a[_i];
@@ -13360,7 +15469,6 @@ See the LICENSE file for details.
                     continue;
                 }
                 logger.log("loading watched script folder: ".concat(folder.fsName));
-                // find all scripts
                 var files = findScriptFiles(folder, true);
                 var scripts = [];
                 for (var _b = 0, files_1 = files; _b < files_1.length; _b++) {
@@ -13378,7 +15486,7 @@ See the LICENSE file for details.
                         id: id,
                         name: "".concat(scriptParent, " > ").concat(scriptName),
                         action: "script",
-                        type: "Script",
+                        type: "script",
                         path: f.fsName,
                         docRequired: false,
                         selRequired: false,
@@ -13389,25 +15497,11 @@ See the LICENSE file for details.
                 }
             }
         },
-        /**
-         * Save current preferences to disk as JSON.
-         *
-         * Writes the global `prefs` object to the preferences file with pretty-printing
-         * (4-space indentation) for better readability.
-         */
         save: function () {
             var file = this.file();
             logger.log("writing user prefs");
             writeTextFile(JSON.stringify(prefs, undefined, 4), file);
         },
-        /**
-         * Create a timestamped backup of the preferences file.
-         *
-         * Copies the current preferences file to a new file with the format:
-         * `{filename}.{timestamp}.bak`
-         *
-         * @returns File object representing the backup file.
-         */
         backup: function () {
             var file = this.file();
             var ts = Date.now();
@@ -13416,57 +15510,25 @@ See the LICENSE file for details.
             logger.log("user prefs backed up to:", backupFile.fsName);
             return backupFile;
         },
-        /**
-         * Open the preferences folder in the system file browser.
-         *
-         * This is useful for users who want to manually inspect or edit their
-         * preferences and related files.
-         */
         reveal: function () {
             var folder = this.folder();
             logger.log("revealing user prefs");
             folder.execute();
         },
     };
-    // setup the base prefs model
     var history = [];
     var recentCommands = {};
     var recentQueries = [];
     var mostRecentCommands = [];
     var latches = {};
     var userHistory = {
-        /**
-         * Get the folder where user history is stored.
-         *
-         * @returns Folder object for the plugin data directory.
-         */
         folder: function () {
             return pluginDataFolder;
         },
-        /**
-         * Get the File object for the user history JSON file.
-         *
-         * @returns File object for the history file.
-         */
         file: function () {
             var folder = this.folder();
             return setupFileObject(folder, userHistoryFileName);
         },
-        /**
-         * Load user command history from disk and populate tracking data structures.
-         *
-         * This method reads the history file and builds several lookup tables:
-         * - Recent commands with usage counts (for boosting search results)
-         * - Recent queries (for history scrolling with up arrow)
-         * - Most recent N commands (for "Recent Commands" feature)
-         * - Query latches (most common command for each query string)
-         *
-         * Supports legacy JSON-like format and migrates to proper JSON automatically.
-         *
-         * @throws {Error} Throws a runtime error if the history file is corrupted and cannot
-         *                 be parsed. The corrupted file is renamed to .bak and the history
-         *                 folder is revealed to the user.
-         */
         load: function () {
             var file = this.file();
             logger.log("loading user history:", file.fsName);
@@ -13474,7 +15536,6 @@ See the LICENSE file for details.
             var queryCommandsLUT = {};
             var s = readTextFile(file);
             var data;
-            // try true JSON first
             try {
                 data = JSON.parse(s);
                 logger.log("history loaded as valid JSON");
@@ -13484,12 +15545,10 @@ See the LICENSE file for details.
                     e.message
                 );
             }
-            // try json-like eval second
             if (data === undefined) {
                 try {
                     data = eval(s);
                     logger.log("history loaded as old JSON-like, saving as true JSON");
-                    // write true JSON back to disk
                     writeTextFile(JSON.stringify(data), file);
                 } catch (e) {
                     file.rename(file.name + ".bak");
@@ -13504,21 +15563,17 @@ See the LICENSE file for details.
             history = data;
             for (var i = data.length - 1; i >= 0; i--) {
                 entry = data[i];
-                // track how many times a query ties to a command
                 if (!queryCommandsLUT.hasOwnProperty(entry.query))
                     queryCommandsLUT[entry.query] = {};
                 if (!queryCommandsLUT[entry.query].hasOwnProperty(entry.command))
                     queryCommandsLUT[entry.query][entry.command] = 0;
                 queryCommandsLUT[entry.query][entry.command]++;
-                // track how often recent command have been ran
                 if (!recentCommands.hasOwnProperty(entry.command))
                     recentCommands[entry.command] = 0;
                 recentCommands[entry.command]++;
-                // track recent queries
                 if (!recentQueries.includes(entry.query)) {
                     recentQueries.push(entry.query);
                 }
-                // track the past 25 most recent commands
                 if (
                     mostRecentCommands.length <= mostRecentCommandsCount &&
                     commandsData.hasOwnProperty(entry.command) &&
@@ -13526,53 +15581,33 @@ See the LICENSE file for details.
                 )
                     mostRecentCommands.push(entry.command);
             }
-            // build latches with most common command for each query
             var commands;
             for (var query in queryCommandsLUT) {
                 commands = [];
                 for (var command in queryCommandsLUT[query]) {
                     commands.push([command, queryCommandsLUT[query][command]]);
                 }
-                // sort by most used
                 commands.sort(function (a, b) {
                     return b[1] - a[1];
                 });
                 latches[query] = commands[0][0];
             }
         },
-        /**
-         * Apply version-specific migrations to user command history.
-         *
-         * This method updates historical command references when command IDs change
-         * between plugin versions. It creates a backup before making changes and
-         * updates command IDs in the history entries to match the new ID schema.
-         *
-         * The migration strategy uses a lookup table built from the current
-         * commandsData to map old command IDs to their new equivalents, ensuring
-         * that query latches and usage statistics remain accurate.
-         *
-         * @param version - The version number to migrate to (e.g., "0.16.0").
-         */
         update: function (version) {
             switch (version) {
                 case "0.16.0":
                     logger.log("applying v0.16.0 history command id update");
-                    // backup current prefs files just in case or error
                     this.backup();
-                    // build lut to convert old menu command ids to updated versions
                     var commandsLUT = {};
                     for (var key in commandsData) {
                         var command = commandsData[key];
-                        // only add commands where the is new (menu commands for now)
                         if (key == command.id) continue;
-                        // skip any ids already added to the LUT
                         if (commandsLUT.hasOwnProperty(command.id)) continue;
                         commandsLUT[command.id] = key;
                     }
                     var entry = void 0;
                     for (var i = history.length - 1; i >= 0; i--) {
                         entry = history[i];
-                        // update command
                         var oldId = entry.command;
                         if (
                             !commandsLUT.hasOwnProperty(oldId) ||
@@ -13592,37 +15627,17 @@ See the LICENSE file for details.
                     break;
             }
         },
-        /**
-         * Clear all user command history by deleting the history file.
-         *
-         * This permanently removes all tracked queries, command usage, and latches.
-         * The file will be recreated on the next save() call.
-         */
         clear: function () {
             var file = this.file();
             logger.log("clearing user history");
             file.remove();
         },
-        /**
-         * Save current command history to disk as JSON.
-         *
-         * Automatically trims the history to the most recent 500 entries to prevent
-         * unbounded growth. Writes with pretty-printing (4-space indentation).
-         */
         save: function () {
             var file = this.file();
             logger.log("writing user history");
             if (history.length > 500) history = history.slice(-500);
             writeTextFile(JSON.stringify(history, undefined, 4), file);
         },
-        /**
-         * Create a timestamped backup of the history file.
-         *
-         * Copies the current history file to a new file with the format:
-         * `{filename}.{timestamp}.bak`
-         *
-         * @returns File object representing the backup file.
-         */
         backup: function () {
             var file = this.file();
             var ts = Date.now();
@@ -13631,12 +15646,6 @@ See the LICENSE file for details.
             logger.log("user history backed up to:", backupFile.fsName);
             return backupFile;
         },
-        /**
-         * Open the history folder in the system file browser.
-         *
-         * This is useful for users who want to manually inspect or manage their
-         * history file.
-         */
         reveal: function () {
             var folder = this.folder();
             logger.log("revealing history file");
@@ -13645,16 +15654,6 @@ See the LICENSE file for details.
     };
     var userActions = {
         loadedActions: false,
-        /**
-         * Load all user-installed Illustrator actions into the command data model.
-         *
-         * This method reads action sets from Illustrator's preferences and creates
-         * a command entry for each action. Actions are accessed via the app.preferences
-         * API under the "plugin/Action/SavedSets" path. The loaded actions can then
-         * be executed via the command palette.
-         *
-         * After loading, the `loadedActions` flag is set to true if any actions were found.
-         */
         load: function () {
             logger.log("loading user actions");
             var ct = 0;
@@ -13666,10 +15665,8 @@ See the LICENSE file for details.
             var path = "plugin/Action/SavedSets/set-";
             for (var i = 1; i <= 100; i++) {
                 currentPath = "".concat(path).concat(i, "/");
-                // get action set
                 set = pref.getStringPreference("".concat(currentPath, "name"));
                 if (!set) break;
-                // get actions in set
                 actionCount = Number(
                     pref.getIntegerPreference("".concat(currentPath, "actionCount"))
                 );
@@ -13681,7 +15678,7 @@ See the LICENSE file for details.
                     var id = generateCommandId(
                         "action_".concat(set, "_").concat(name.toLowerCase())
                     );
-                    id = "".concat(set, "_").concat(name); // FIXME: why?
+                    id = "".concat(set, "_").concat(name);
                     var obj = {
                         id: id,
                         action: "action",
@@ -13698,15 +15695,6 @@ See the LICENSE file for details.
             this.loadedActions = ct > 0;
         },
     };
-    /**
-     * Filter the supplied commands by multiple factors.
-     * @param commands Command `id`s to filter through. If `null`, all commands are checked.
-     * @param types Types of commands to include in the results (e.g. builtin, tool, config, etc.).
-     * @param showHidden Should user-hidden commands be included?
-     * @param showNonRelevant Should non-relevant commands be included?
-     * @param hideSpecificCommands Specific commands to exclude from results.
-     * @returns Filtered command IDs.
-     */
     function filterCommands(
         commands,
         types,
@@ -13724,19 +15712,15 @@ See the LICENSE file for details.
             if (!commandsData.hasOwnProperty(id)) continue;
             var command = commandsData[id];
             if (!commandVersionCheck(command)) {
-                // logger.log(`incompatible version command: ${command.name["en"]} (${id})`);
                 continue;
             }
             if (!showHidden && prefs.hiddenCommands.includes(id)) {
-                // logger.log(`hidden command: ${command.name["en"]} (${id})`);
                 continue;
             }
             if (!showNonRelevant && !relevantCommand(command)) {
-                // logger.log(`not relevant command: ${command.name["en"]} (${id})`);
                 continue;
             }
             if (hideSpecificCommands && hideSpecificCommands.includes(id)) {
-                // logger.log(`user hidden command: ${command.name["en"]} (${id})`);
                 continue;
             }
             if (!types || types.includes(command.type.toLowerCase()))
@@ -13744,53 +15728,32 @@ See the LICENSE file for details.
         }
         return filteredCommands;
     }
-    /**
-     * Determine if a command is relevant at the current moment.
-     * @param command Command object to check.
-     * @returns Whether the command is relevant.
-     */
     function relevantCommand(command) {
-        // hide commands requiring an active documents if requested
         if (command.docRequired && app.documents.length < 1) return false;
-        // hide commands requiring an active selection if requested
         if (command.selRequired && app.activeDocument.selection.length < 1)
             return false;
-        // hide `Remove Watched Folder...`
         if (
             command.id === "config_removeWatchedFolders" &&
             !prefs.watchedFolders.length
         )
             return false;
-        // hide `Edit Workflow...` command if no workflows
         if (command.id === "builtin_editWorkflow" && !prefs.workflows.length)
             return false;
-        // hide `All Workflows...` command if no workflows
         if (command.id === "builtin_allWorkflows" && !prefs.workflows.length)
             return false;
-        // hide `All Scripts...` command if no scripts
         if (command.id === "builtin_allScripts" && !prefs.scripts.length) return false;
-        // hide `All Bookmarks...` command if no bookmarks
         if (command.id === "builtin_allBookmarks" && !prefs.bookmarks.length)
             return false;
-        // hide `All Actions...` command if no actions
         if (command.id === "builtin_allActions" && !userActions.loadedActions)
             return false;
-        // hide `Edit Picker...` command if no pickers
         if (command.id === "builtin_editPicker" && !prefs.pickers.length) return false;
-        // hide `All Pickers...` command if no pickers
         if (command.id === "builtin_allPickers" && !prefs.pickers.length) return false;
-        // hide `Enable Fuzzy Matching` command if already enabled
         if (command.id === "config_enableFuzzyMatching" && prefs.fuzzy) return false;
-        // hide `Disable Fuzzy Matching` command if already disabled
         if (command.id === "config_disableFuzzyMatching" && !prefs.fuzzy) return false;
-        // hide `Enable Debug Logging` command if already enabled
         if (command.id === "config_enableDebugLogging" && debugLogging) return false;
-        // hide `Disable Debug Logging` command if already disabled
         if (command.id === "config_disableDebugLogging" && !debugLogging) return false;
-        // hide `Unhide Commands...` command if no hidden commands
         if (command.id === "config_unhideCommand" && !prefs.hiddenCommands.length)
             return false;
-        // hide `Recent Commands...` and `Clear History` if no recent commands
         if (
             command.id === "builtin_recentCommands" &&
             Object.keys(recentCommands).length === 0
@@ -13799,21 +15762,9 @@ See the LICENSE file for details.
         }
         return true;
     }
-    /**
-     * Remove regex-special characters from input string.
-     * @param input The input string to sanitize.
-     * @returns A string safe for regex usage.
-     */
     function stripRegExpChars(input) {
         return input.replace(/[.*+?^=!:${}()|[\]\/\\]/g, "");
     }
-    /**
-     * Fuzzy match a query string against a list of command IDs.
-     * Scores and sorts matches based on relevance.
-     * @param q The user input query.
-     * @param commands List of command IDs to match against.
-     * @returns A sorted array of matching command IDs.
-     */
     function fuzzy(q, commands) {
         var sanitizedQuery = stripRegExpChars(q.toLowerCase());
         var scores = {};
@@ -13821,13 +15772,24 @@ See the LICENSE file for details.
         for (var _i = 0, commands_1 = commands; _i < commands_1.length; _i++) {
             var id = commands_1[_i];
             var command = commandsData[id];
-            var commandName = determineCorrectString(command, "name").toLowerCase();
-            if (!commandName) commandName = id.toLowerCase().replace("_", " ");
-            commandName = stripRegExpChars(commandName).replace(regexEllipsis, "");
             var chunks = sanitizedQuery.split(" ");
-            var spans = findMatches(chunks, commandName);
-            if (!spans.length) continue;
-            var score = calculateScore(commandName, spans, chunks);
+            var commandNames = getCommandSearchNames(command, id);
+            var score = -1;
+            for (
+                var _a = 0, commandNames_1 = commandNames;
+                _a < commandNames_1.length;
+                _a++
+            ) {
+                var rawName = commandNames_1[_a];
+                var commandName = stripRegExpChars(rawName.toLowerCase()).replace(
+                    regexEllipsis,
+                    ""
+                );
+                var spans = findMatches(chunks, commandName);
+                if (!spans.length) continue;
+                score = Math.max(score, calculateScore(commandName, spans, chunks));
+            }
+            if (score < 0) continue;
             var bonus = 0;
             if (latches.hasOwnProperty(q) && latches[q] == id) {
                 bonus += 1;
@@ -13843,28 +15805,6 @@ See the LICENSE file for details.
         });
         return matches;
     }
-    /**
-     * Calculates a fuzzy-match relevance score for a command string.
-     *
-     * This scoring function considers both the positional context of each match
-     * span (e.g., word boundaries and sections after the last `>` separator) and the
-     * quality of the match itself. Longer contiguous spans earn exponentially
-     * higher scores, and exact matches against query chunks (when provided) receive
-     * an additional bonus — even when embedded inside larger tokens (e.g. inside
-     * camelCase or compound identifiers).
-     *
-     * Intended use: highlight spans, boost meaningful exact matches, and emulate
-     * modern command-palette ranking where complete token matches outrank scattered
-     * partial matches.
-     *
-     * @param command The command text being evaluated.
-     * @param spans Array of `[start, end)` tuples representing fuzzy-matched
-     *        character ranges within `command`.
-     * @param chunks (Optional) Original query chunks; used to award extra credit
-     *        when a span exactly equals a user-typed chunk, regardless of position.
-     * @returns A numeric relevance score where higher values indicate a stronger
-     *          fuzzy match.
-     */
     function calculateScore(command, spans, chunks) {
         var lastSeparator = findLastBreadcrumbSeparator(command);
         var score = 0;
@@ -13874,7 +15814,7 @@ See the LICENSE file for details.
             var endBoundary = e === command.length || command.charAt(e) === " ";
             var boundaryMult = startBoundary && endBoundary ? 3 : startBoundary ? 2 : 1;
             var spanScore = len * boundaryMult;
-            spanScore += len * len; // contiguity boost
+            spanScore += len * len;
             if (chunks) {
                 var spanText_1 = command.slice(s, e).toLowerCase();
                 if (
@@ -13882,7 +15822,6 @@ See the LICENSE file for details.
                         return c.toLowerCase() === spanText_1;
                     })
                 ) {
-                    // Exact-chunk bonus (tune the factor as you like)
                     spanScore += len * 3;
                 }
             }
@@ -13897,13 +15836,6 @@ See the LICENSE file for details.
         }
         return score;
     }
-    /**
-     * Finds fuzzy match spans for chunks within a target string.
-     * Each span is a pair of indices [start, end].
-     * @param chunks Query words to match.
-     * @param str The target string to search.
-     * @returns Array of matching spans or empty array if no match.
-     */
     function findMatches(chunks, str) {
         var spans = [];
         for (var _i = 0, chunks_1 = chunks; _i < chunks_1.length; _i++) {
@@ -13944,18 +15876,11 @@ See the LICENSE file for details.
         }
         return spans;
     }
-    /**
-     * Score array items based on regex string match.
-     * @param query String to search for.
-     * @param commands Command IDs to match `query` against.
-     * @returns Matching command IDs sorted by relevance score.
-     */
     function scoreMatches(query, commands) {
         var words = query.toLowerCase().split(" ");
         var matches = [];
         var scores = {};
         var maxScore = 0;
-        // Prioritize latched query
         if (latches.hasOwnProperty(query) && commands.includes(latches[query])) {
             var latchedId = latches[query];
             scores[latchedId] = 1000;
@@ -13966,35 +15891,45 @@ See the LICENSE file for details.
             var command = commandsData[id];
             if (!command) continue;
             var score = 0;
-            var name = determineCorrectString(command, "name").toLowerCase();
+            var names = getCommandSearchNames(command, id).map(function (name) {
+                return name.toLowerCase();
+            });
             var type = strings.hasOwnProperty(command.type)
-                ? localize(strings[command.type]).toLowerCase()
+                ? (
+                      localize(strings[command.type]) || strings[command.type].en
+                  ).toLowerCase()
                 : command.type.toLowerCase();
-            var strippedName = name
-                .replace(regexEllipsis, "")
-                .replace(regexBreadcrumbSeparator, " ");
-            if (!name) {
-                name = id.toLowerCase().replace("_", " ");
-            }
-            // Exact match checks
-            if (query === name || query === strippedName || query === type) {
+            if (
+                query === type ||
+                names.some(function (name) {
+                    var strippedName = name
+                        .replace(regexEllipsis, "")
+                        .replace(regexBreadcrumbSeparator, " ");
+                    return query === name || query === strippedName;
+                })
+            ) {
                 score += query.length;
             }
-            // add the command type to the name if user requested searching type
-            // if (prefs.searchIncludesType) {
-            //   name += " " + type;
-            // }
-            // TODO: maybe allow searching on all columns (pulled from paletteSettings.columnSets)
-            // Word-by-word matching
-            for (var _a = 0, words_1 = words; _a < words_1.length; _a++) {
-                var word = words_1[_a];
-                if (!word) continue;
-                var re = new RegExp("\\b" + word, "gi");
-                if (re.test(name) || re.test(strippedName)) {
+            var _loop_2 = function (word) {
+                if (!word) return "continue";
+                if (
+                    names.some(function (name) {
+                        var strippedName = name
+                            .replace(regexEllipsis, "")
+                            .replace(regexBreadcrumbSeparator, " ");
+                        return (
+                            name.indexOf(word) !== -1 ||
+                            strippedName.indexOf(word) !== -1
+                        );
+                    })
+                ) {
                     score += word.length;
                 }
+            };
+            for (var _a = 0, words_1 = words; _a < words_1.length; _a++) {
+                var word = words_1[_a];
+                _loop_2(word);
             }
-            // Score boost for recent commands
             if (score > 0) {
                 if (recentCommands.hasOwnProperty(command.id)) {
                     score += recentCommands[command.id];
@@ -14006,41 +15941,20 @@ See the LICENSE file for details.
                 }
             }
         }
-        // Sort matches by score descending
         return matches
             .filter(function (id, i, self) {
                 return self.indexOf(id) === i;
-            }) // remove duplicates
+            })
             .sort(function (a, b) {
                 return scores[b] - scores[a];
             });
     }
-    // LISTBOXWRAPPER LISTENERS
-    /**
-     * Close the window when an item in the listbox is double-clicked.
-     *
-     * This is the standard behavior for command selection in the main palette.
-     * When a user double-clicks a command in the listbox, the window closes with
-     * a return value of 1, signaling that a selection was made.
-     *
-     * @param listbox - The ScriptUI ListBox to attach the double-click handler to.
-     */
     function selectOnDoubleClick(listbox) {
         listbox.onDoubleClick = function () {
             var _a;
             (_a = listbox.window) === null || _a === void 0 ? void 0 : _a.close(1);
         };
     }
-    /**
-     * Add listbox command to Workflow builder steps when double-clicking.
-     *
-     * This listener is used in the Workflow Builder to allow users to quickly add
-     * commands to their workflow by double-clicking them. The selected command is
-     * added to the "steps" listbox, and special handling is provided for the
-     * "buildPicker" command which requires user input to create a custom picker.
-     *
-     * @param listbox - The ScriptUI ListBox to attach the double-click handler to.
-     */
     function addToStepsOnDoubleClick(listbox) {
         listbox.onDoubleClick = function () {
             var win = listbox.window;
@@ -14050,6 +15964,7 @@ See the LICENSE file for details.
             var newItem;
             if (command.id === "builtin_buildPicker") {
                 var newPicker = buildPicker();
+                if (!newPicker) return;
                 newItem = steps.add("item", newPicker.name);
                 newItem.subItems[0].text = newPicker.type;
                 newItem.id = newPicker.id;
@@ -14061,16 +15976,6 @@ See the LICENSE file for details.
             steps.notify("onChange");
         };
     }
-    /**
-     * Swap two listbox items in place (along with their corresponding IDs).
-     *
-     * This function exchanges all properties between two ListBox items, including
-     * their main text, subitem text, and custom ID property. Used in the Workflow
-     * Builder to reorder workflow steps.
-     *
-     * @param x - First listbox item to swap.
-     * @param y - Second listbox item to swap.
-     */
     function swapListboxItems(x, y) {
         var tempText = x.text;
         var tempSubText = x.subItems[0].text;
@@ -14082,20 +15987,6 @@ See the LICENSE file for details.
         y.subItems[0].text = tempSubText;
         y.id = tempId;
     }
-    /**
-     * Add arrow key navigation support to an EditText field for controlling a ListBoxWrapper.
-     * Allows users to navigate the listbox using arrow keys from the EditText input field.
-     *
-     * Features:
-     * - Up/Down arrows: Navigate through listbox items with frame scrolling
-     * - Shift+Up/Down: Simple navigation without frame adjustments
-     * - End-to-end wrapping: Jump from top to bottom or vice versa
-     * - Smart frame positioning: Keeps selected item visible in the listbox viewport
-     *
-     * @param q - The EditText field to attach navigation to
-     * @param list - The ListBoxWrapper instance to control
-     * @param callbacks - Optional callbacks for custom behavior (e.g., history scrolling)
-     */
     function addListboxArrowKeyNavigation(q, list, callbacks) {
         q.addEventListener("keydown", function (e) {
             var listbox = list.listbox;
@@ -14111,7 +16002,6 @@ See the LICENSE file for details.
                     listbox.selection = 0;
                     return;
                 }
-                // Check if Up navigation should be blocked (e.g., for history scrolling)
                 if (
                     e.keyName === "Up" &&
                     (callbacks === null || callbacks === void 0
@@ -14121,7 +16011,6 @@ See the LICENSE file for details.
                 ) {
                     return;
                 }
-                // Notify callback that navigation occurred
                 if (
                     callbacks === null || callbacks === void 0
                         ? void 0
@@ -14130,7 +16019,6 @@ See the LICENSE file for details.
                     callbacks.onNavigate();
                 }
                 if (e.getModifierState("Shift")) {
-                    // Simple navigation without frame adjustments
                     if (e.keyName === "Up") {
                         if (listboxSelection.index === 0) {
                             listbox.selection = listbox.items.length - 1;
@@ -14145,10 +16033,8 @@ See the LICENSE file for details.
                         }
                     }
                 } else {
-                    // Full navigation with frame scrolling
                     if (e.keyName === "Up") {
                         if (listboxSelection.index == 0) {
-                            // jump to the bottom it at top
                             listbox.selection = listbox.items.length - 1;
                             listbox.frameStart =
                                 listbox.items.length - 1 - visibleListItems;
@@ -14159,7 +16045,6 @@ See the LICENSE file for details.
                         }
                     } else if (e.keyName === "Down") {
                         if (listboxSelection.index === listbox.items.length - 1) {
-                            // jump to the top if at the bottom
                             listbox.selection = 0;
                             listbox.frameStart = 0;
                         } else {
@@ -14181,13 +16066,6 @@ See the LICENSE file for details.
                             }
                         }
                     }
-                    /*
-                If a selection is made inside of the actual listbox frame by the user,
-                the API doesn't offer any way to know which part of the list is currently
-                visible in the listbox "frame". If the user was to re-enter the `q` edittext
-                and then hit an arrow key the above event listener will not work correctly so
-                I just move the next selection (be it up or down) to the middle of the "frame".
-                */
                     var updatedListboxSelection = listbox.selection;
                     if (
                         updatedListboxSelection.index < listbox.frameStart ||
@@ -14197,31 +16075,13 @@ See the LICENSE file for details.
                         listbox.frameStart =
                             updatedListboxSelection.index -
                             Math.floor(visibleListItems / 2);
-                    // don't move the frame if list items don't fill the available rows
                     if (listbox.items.length <= visibleListItems) return;
-                    // move the frame by revealing the calculated `listbox.frameStart`
                     listbox.revealItem(listbox.frameStart);
                 }
             }
         });
     }
-    /**
-     * A custom wrapper for a ScriptUI ListBox that supports multiple columns,
-     * optional tooltips, multiselect, and command loading.
-     */
-    var ListBoxWrapper = /** @class */ (function () {
-        /**
-         * Create a new ListBoxWrapper instance.
-         *
-         * @param commands - The command IDs to populate the listbox.
-         * @param container - The ScriptUI container to which the listbox will be added.
-         * @param name - A name for the listbox instance.
-         * @param bounds - The bounds of the listbox (left, top, right, bottom).
-         * @param columns - Column definitions including width and key.
-         * @param multiselect - Whether multiple items can be selected.
-         * @param helptip - Optional help tooltip for the listbox.
-         * @param listeners - Optional array of event listeners to attach to the listbox.
-         */
+    var ListBoxWrapper = (function () {
         function ListBoxWrapper(
             commands,
             container,
@@ -14241,17 +16101,6 @@ See the LICENSE file for details.
             this.listeners = listeners;
             this.listbox = this.make(commands, this.bounds);
         }
-        /**
-         * Create and configure a new ScriptUI ListBox with columns and commands.
-         *
-         * This private method handles the actual creation of the ListBox ScriptUI element,
-         * configuring columns, loading commands, setting up event listeners, and enabling
-         * end-to-end scrolling (jumping from top to bottom and vice versa with arrow keys).
-         *
-         * @param commands - Array of command IDs to populate the listbox.
-         * @param bounds - The bounds of the listbox [left, top, right, bottom].
-         * @returns The configured ListBox ScriptUI element.
-         */
         ListBoxWrapper.prototype.make = function (commands, bounds) {
             var columnTitles = [];
             var columnWidths = [];
@@ -14276,7 +16125,6 @@ See the LICENSE file for details.
                 this.loadCommands(listbox, commands, columnKeys);
                 listbox.selection = 0;
             }
-            // Allow end-to-end scrolling from within a listbox.
             listbox.addEventListener("keydown", function (e) {
                 if (
                     typeof listbox.selection === "number" ||
@@ -14302,33 +16150,11 @@ See the LICENSE file for details.
             this.addListeners(listbox);
             return listbox;
         };
-        /**
-         * Update the listbox with a new set of commands.
-         *
-         * This method replaces the current listbox with a new one containing the specified
-         * commands. Used when filtering/searching to update the displayed results. The old
-         * listbox is removed and a new one is created with the same configuration but
-         * different content.
-         *
-         * @param matches - Array of command IDs to display in the updated listbox.
-         */
         ListBoxWrapper.prototype.update = function (matches) {
             var newListbox = this.make(matches, this.listbox.bounds);
             this.container.remove(this.listbox);
             this.listbox = newListbox;
         };
-        /**
-         * Load commands into the listbox by creating ListItem elements.
-         *
-         * For each command ID, this method creates a ListItem and populates it with
-         * data from the command object. The first column shows the main text (usually
-         * the command name), and subsequent columns are populated from the command
-         * properties specified in columnKeys.
-         *
-         * @param listbox - The ListBox to populate with items.
-         * @param commands - Array of command IDs to load.
-         * @param columnKeys - Array of property keys to display in each column.
-         */
         ListBoxWrapper.prototype.loadCommands = function (
             listbox,
             commands,
@@ -14347,21 +16173,13 @@ See the LICENSE file for details.
                     item = listbox.add("item", mainText);
                     for (var j = 1; j < columnKeys.length; j++) {
                         var str = determineCorrectString(command, columnKeys[j]);
-                        item.subItems[j - 1].text = str || "<missing>";
+                        item.subItems[j - 1].text =
+                            str || localize(strings.listbox_missing);
                     }
                 }
                 item.id = id;
             }
         };
-        /**
-         * Attach all custom event listeners to the listbox.
-         *
-         * This method iterates through the listeners array provided during construction
-         * and attaches each listener function to the listbox. Common listeners include
-         * double-click handlers and custom navigation behaviors.
-         *
-         * @param listbox - The ListBox to attach listeners to.
-         */
         ListBoxWrapper.prototype.addListeners = function (listbox) {
             for (var _i = 0, _a = this.listeners; _i < _a.length; _i++) {
                 var listener = _a[_i];
@@ -14370,18 +16188,6 @@ See the LICENSE file for details.
         };
         return ListBoxWrapper;
     })();
-    /**
-     * Display a modal command palette dialog and return user selection.
-     *
-     * @param commands - List of available command IDs. Defaults to user startup commands.
-     * @param title - Window title. Defaults to `_title_.
-     * @param columns - Column configuration for listbox. Defaults to `paletteSettings.columnSets.standard`
-     * @param multiselect - Whether multiple commands can be selected. Defaults to false.
-     * @param showOnly - Optional subset of commands to display. Defaults to null.
-     * @param saveHistory - Whether to store query and command in user history. Defaults to true.
-     * @param scrollHistory - Should command history be accessible via the up arrow. Defaults to false.
-     * @returns The selected command ID(s), or false if cancelled.
-     */
     function commandPalette(
         commands,
         title,
@@ -14434,7 +16240,7 @@ See the LICENSE file for details.
         var winButtons = win.add("group");
         winButtons.orientation = "row";
         winButtons.alignChildren = ["center", "center"];
-        var ok = winButtons.add("button", undefined, "OK");
+        var ok = winButtons.add("button", undefined, localize(strings.button_ok));
         ok.preferredSize.width = 100;
         var cancel = winButtons.add("button", undefined, localize(strings.cancel), {
             name: "cancel",
@@ -14445,7 +16251,6 @@ See the LICENSE file for details.
         } else {
             q.active = true;
         }
-        // catch escape key and close window to stop default startup command reload on escape
         win.addEventListener("keydown", function (e) {
             if (e.keyName === "Escape") {
                 e.preventDefault();
@@ -14478,7 +16283,6 @@ See the LICENSE file for details.
             });
             userHistory.save();
         };
-        // allow scrolling through query history
         if (scrollHistory) {
             q.addEventListener("keydown", function (e) {
                 if (e.keyName === "Up" && historyScrolling) {
@@ -14501,7 +16305,6 @@ See the LICENSE file for details.
                 }
             });
         }
-        // allow scrolling of the listbox from within the query input
         if (!multiselect) {
             addListboxArrowKeyNavigation(q, list, {
                 shouldBlockUpNavigation: function () {
@@ -14536,16 +16339,10 @@ See the LICENSE file for details.
         }
         return false;
     }
-    /**
-     * Show dialog for entering custom commands in CSV format.
-     * @returns User-entered CSV string, or empty string if cancelled.
-     */
     function addCustomCommandsDialog() {
-        // Create the dialog window
         var win = new Window("dialog");
         win.text = localize(strings.add_custom_commands_dialog_title);
         win.alignChildren = "fill";
-        // Header text
         var header = win.add(
             "statictext",
             [0, 0, 500, 100],
@@ -14553,12 +16350,10 @@ See the LICENSE file for details.
             { justify: "center", multiline: true }
         );
         header.justify = "center";
-        // Multiline input field for custom commands
         var customCommands = win.add("edittext", [0, 0, 400, 200], "", {
             multiline: true,
         });
         customCommands.text = "";
-        // Dialog buttons
         var winButtons = win.add("group");
         winButtons.orientation = "row";
         winButtons.alignChildren = ["center", "center"];
@@ -14571,19 +16366,12 @@ See the LICENSE file for details.
             name: "cancel",
         });
         cancel.preferredSize.width = 100;
-        // Enable save button only if text is entered
         customCommands.onChanging = function () {
             save.enabled = customCommands.text.length > 0;
         };
-        // Show the dialog and return the result
         var confirmed = win.show() === 1;
         return confirmed ? customCommands.text : "";
     }
-    /**
-     * Build or edit a picker command via dialog interface.
-     * @param editPickerId The ID of the picker to edit, if any.
-     * @returns Picker configuration object or false if canceled.
-     */
     function pickerBuilder(editPickerId) {
         var overwrite = false;
         var win = new Window("dialog");
@@ -14671,12 +16459,6 @@ See the LICENSE file for details.
         }
         return false;
     }
-    /**
-     * Launch the Workflow Builder dialog to create or edit command workflows.
-     * @param commands List of available command IDs.
-     * @param editWorkflowId ID of the workflow to edit, or undefined to create a new one.
-     * @returns Workflow data or false if cancelled.
-     */
     function workflowBuilder(commands, editWorkflowId) {
         var qCache = {};
         var overwrite = false;
@@ -14684,7 +16466,6 @@ See the LICENSE file for details.
         var win = new Window("dialog");
         win.text = localize(strings.wf_builder);
         win.alignChildren = "fill";
-        // Search panel
         var pSearch = win.add("panel", undefined, localize(strings.cd_search_for));
         pSearch.alignChildren = ["fill", "center"];
         pSearch.margins = 20;
@@ -14705,16 +16486,19 @@ See the LICENSE file for details.
         pSteps.alignChildren = ["fill", "center"];
         pSteps.margins = 20;
         var actionSteps = [];
+        var actionStepStatuses = [];
         if (editWorkflowId) {
             var editWorkflow_1 = commandsData[editWorkflowId];
             for (var i = 0; i < editWorkflow_1.actions.length; i++) {
                 var step = editWorkflow_1.actions[i];
+                var status = "";
                 if (!commandsData.hasOwnProperty(step)) {
-                    step += " [NOT FOUND]";
-                } else if (!commandVersionCheck(step)) {
-                    step += " [INCOMPATIBLE AI VERSION]";
+                    status = localize(strings.wf_step_not_found);
+                } else if (!commandVersionCheck(commandsData[step])) {
+                    status = localize(strings.wf_step_incompatible_ai_version);
                 }
                 actionSteps.push(step);
+                actionStepStatuses.push(status);
             }
         }
         var steps = new ListBoxWrapper(
@@ -14727,14 +16511,27 @@ See the LICENSE file for details.
             localize(strings.wf_steps_helptip),
             []
         );
+        for (var i = 0; i < actionStepStatuses.length; i++) {
+            if (actionStepStatuses[i]) {
+                steps.listbox.items[i].text += " [".concat(actionStepStatuses[i], "]");
+            }
+        }
         steps.listbox.onDoubleClick = function () {
-            var selectedItem = steps.listbox.selection[0];
+            var rawSelection = steps.listbox.selection;
+            if (!rawSelection || typeof rawSelection === "number") return;
+            var selectedItem = Array.isArray(rawSelection)
+                ? rawSelection[0]
+                : rawSelection;
             var command = commandsData[selectedItem.id];
-            if (!editableCommandTypes.includes(command.type.toLowerCase())) {
+            if (
+                !command ||
+                !editableCommandTypes.includes(command.type.toLowerCase())
+            ) {
                 alert(localize(strings.wf_step_not_editable));
                 return;
             }
             var updatedPicker = buildPicker(command.id);
+            if (!updatedPicker) return;
             if (updatedPicker.id !== command.id) selectedItem.id = updatedPicker.id;
             if (updatedPicker.name !== command.name)
                 selectedItem.text = updatedPicker.name;
@@ -14772,7 +16569,6 @@ See the LICENSE file for details.
         } else {
             q.active = true;
         }
-        // catch escape key and close window to stop default startup command reload/flicker on escape
         win.addEventListener("keydown", function (e) {
             if (e.keyName === "Escape") {
                 e.preventDefault();
@@ -14788,10 +16584,8 @@ See the LICENSE file for details.
                 matches = matcher(q.text, commands);
                 qCache[q.text] = matches;
             }
-            // alert(matches.length.toString());
             list.update(matches);
         };
-        // allow scrolling of the listbox from within the query input
         addListboxArrowKeyNavigation(q, list);
         steps.listbox.onChange = function () {
             workflowName.enabled = steps.listbox.items.length > 0;
@@ -14888,17 +16682,11 @@ See the LICENSE file for details.
         }
         return false;
     }
-    /**
-     * Launch the Startup Command Builder dialog for selecting and ordering startup commands.
-     * @param commands List of available command IDs.
-     * @returns An array of selected command IDs in the desired startup order, or `false` if cancelled.
-     */
     function startupBuilder(commands) {
         var qCache = {};
         var win = new Window("dialog");
         win.text = localize(strings.startup_builder);
         win.alignChildren = "fill";
-        // Search Panel
         var pSearch = win.add("panel", undefined, localize(strings.cd_search_for));
         pSearch.alignChildren = ["fill", "center"];
         pSearch.margins = 20;
@@ -14915,7 +16703,6 @@ See the LICENSE file for details.
             localize(strings.startup_helptip),
             [addToStepsOnDoubleClick]
         );
-        // Steps Panel
         var pSteps = win.add("panel", undefined, localize(strings.startup_steps));
         pSteps.alignChildren = ["fill", "center"];
         pSteps.margins = 20;
@@ -14937,7 +16724,6 @@ See the LICENSE file for details.
         down.preferredSize.width = 100;
         var del = stepButtons.add("button", undefined, localize(strings.step_delete));
         del.preferredSize.width = 100;
-        // Window Buttons
         var winButtons = win.add("group");
         winButtons.orientation = "row";
         winButtons.alignChildren = ["center", "center"];
@@ -14955,7 +16741,6 @@ See the LICENSE file for details.
         } else {
             q.active = true;
         }
-        // catch escape key and close window to stop default startup command reload/flicker on escape
         win.addEventListener("keydown", function (e) {
             if (e.keyName === "Escape") {
                 e.preventDefault();
@@ -14973,7 +16758,6 @@ See the LICENSE file for details.
             }
             list.update(matches);
         };
-        // allow scrolling of the listbox from within the query input
         addListboxArrowKeyNavigation(q, list);
         up.onClick = function () {
             var rawSelection = steps.listbox.selection;
@@ -15047,11 +16831,6 @@ See the LICENSE file for details.
         }
         return false;
     }
-    /**
-     * Process a command by its ID.
-     * Handles workflows recursively and validates them before execution.
-     * @param id - The ID of the command to process.
-     */
     function processCommand(id) {
         var command = commandsData[id];
         logger.log("processing command:", command.id);
@@ -15059,7 +16838,6 @@ See the LICENSE file for details.
             var badActions = checkWorkflowActions(command.actions);
             if (badActions.length > 0) {
                 alert(localize(strings.wf_needs_attention, badActions.join("\n")));
-                // TODO: should bad actions be displayed differently in the workflow builder?
                 buildWorkflow(id);
                 userPrefs.save();
                 return;
@@ -15072,12 +16850,7 @@ See the LICENSE file for details.
             executeAction(command);
         }
     }
-    /**
-     * Execute a command action based on its type.
-     * @param command - The command object to execute.
-     */
     function executeAction(command) {
-        // Check if an active document is required
         if (command.docRequired && app.documents.length < 1) {
             var shouldProceed = confirm(
                 localize(strings.cd_active_document_required, command.action),
@@ -15086,7 +16859,6 @@ See the LICENSE file for details.
             );
             if (!shouldProceed) return;
         }
-        // Check if an active selection is required
         if (command.selRequired && app.activeDocument.selection.length < 1) {
             var shouldProceed = confirm(
                 localize(strings.cd_active_selection_required, command.action),
@@ -15142,36 +16914,12 @@ See the LICENSE file for details.
             alert(localize(alertString, name, e.message));
         }
     }
-    /**
-     * Execute an Adobe Illustrator menu command.
-     *
-     * Calls the native app.executeMenuCommand() with the command's action string.
-     * This is the primary way to trigger Illustrator's built-in menu functionality.
-     *
-     * @param command - Command entry containing the menu command action string.
-     */
     function menuAction(command) {
         app.executeMenuCommand(command.action);
     }
-    /**
-     * Select a tool in Adobe Illustrator.
-     *
-     * Activates a tool using the app.selectTool() API. Note: This API is not
-     * officially documented in ExtendScript, hence the @ts-ignore directive.
-     *
-     * @param command - Command entry containing the tool identifier.
-     */
     function toolAction(command) {
         app.selectTool(command.action);
     }
-    /**
-     * Execute an Adobe Illustrator action (script recorded in Actions panel).
-     *
-     * Runs a user-recorded action using app.doScript(). The action must exist
-     * in the specified action set, or this will fail.
-     *
-     * @param command - Command entry containing the action name and set.
-     */
     function actionAction(command) {
         var actionName = isLocalizedEntry(command.name)
             ? localize(command.name)
@@ -15179,15 +16927,6 @@ See the LICENSE file for details.
         app.doScript(actionName, command.set);
         app.redraw();
     }
-    /**
-     * Open a bookmarked file or folder.
-     *
-     * Opens a file in Illustrator (if it's a .ai file) or opens a folder in the
-     * system file browser. Checks that the file/folder exists before attempting
-     * to open it.
-     *
-     * @param command - Command entry containing the file/folder path.
-     */
     function bookmarkAction(command) {
         if (command.type === "file") {
             var f = new File(command.path);
@@ -15205,18 +16944,6 @@ See the LICENSE file for details.
             f.execute();
         }
     }
-    /**
-     * Display a custom picker dialog and store the user's selection(s).
-     *
-     * Creates temporary command entries for each picker option, displays them in
-     * a command palette, and stores the selected option(s) in the environment
-     * variable 'aic_picker_last' for external scripts to access.
-     *
-     * Pickers support both single and multi-select modes based on the picker
-     * configuration.
-     *
-     * @param picker - Picker configuration with name, options, and multiselect flag.
-     */
     function runCustomPicker(picker) {
         var commands = [];
         for (var i = 0; i < picker.commands.length; i++) {
@@ -15224,7 +16951,7 @@ See the LICENSE file for details.
             var command = {
                 id: id,
                 action: "picker_option",
-                type: "Option",
+                type: "picker_option_type",
                 docRequired: false,
                 selRequired: false,
                 name: picker.commands[i],
@@ -15241,6 +16968,7 @@ See the LICENSE file for details.
         );
         if (!result) {
             $.setenv("aic_picker_last", null);
+            return;
         }
         var commandIds = Array.isArray(result) ? result : [result];
         var args = commandIds.map(function (id) {
@@ -15248,14 +16976,6 @@ See the LICENSE file for details.
         });
         $.setenv("aic_picker_last", args.toSource());
     }
-    /**
-     * Execute an external ExtendScript (.jsx or .js) file.
-     *
-     * Loads and runs a script file using $.evalFile(). The script is executed
-     * in the current scope. Checks that the file exists before attempting to run it.
-     *
-     * @param command - Command entry containing the script file path.
-     */
     function scriptAction(command) {
         var f = new File(command.path);
         if (!f.exists) {
@@ -15264,15 +16984,10 @@ See the LICENSE file for details.
         }
         $.evalFile(f);
     }
-    /**
-     * Execute internal script actions.
-     * @param command Command to execute.
-     */
     function internalAction(command) {
         var shouldWritePrefs = true;
         var action = command.action;
         switch (action) {
-            // config commands
             case "about":
                 shouldWritePrefs = false;
                 about();
@@ -15319,7 +17034,6 @@ See the LICENSE file for details.
                 shouldWritePrefs = false;
                 settings();
                 break;
-            // builtin commands
             case "addCustomCommands":
                 addCustomCommands();
                 break;
@@ -15427,21 +17141,16 @@ See the LICENSE file for details.
             userPrefs.save();
         }
     }
-    /**
-     * Ai Command Palette About Dialog.
-     */
     function about() {
         var win = new Window("dialog");
         win.text = localize(strings.about);
         win.alignChildren = "fill";
-        // Script info panel
         var pAbout = win.add("panel");
         pAbout.margins = 20;
         pAbout.alignChildren = "fill";
         pAbout.add("statictext", [0, 0, 500, 100], localize(strings.description), {
             multiline: true,
         });
-        // Info + GitHub link
         var links = pAbout.add("group");
         links.orientation = "column";
         links.alignChildren = ["center", "center"];
@@ -15452,21 +17161,16 @@ See the LICENSE file for details.
             ": https://github.com/joshbduncan/AiCommandPalette"
         );
         var github = links.add("statictext", undefined, githubText);
-        // Footer buttons
         var winButtons = win.add("group");
         winButtons.orientation = "row";
         winButtons.alignChildren = ["center", "center"];
-        var ok = winButtons.add("button", undefined, "OK");
+        var ok = winButtons.add("button", undefined, localize(strings.button_ok));
         ok.preferredSize.width = 100;
-        // Event: click GitHub link
         github.addEventListener("mousedown", function () {
             openURL("https://github.com/joshbduncan/AiCommandPalette");
         });
         win.show();
     }
-    /**
-     * Present a palette with Ai Command Palette configuration commands.
-     */
     function settings() {
         var configCommands = filterCommands(null, ["config"], true, false, [
             "config_settings",
@@ -15481,18 +17185,12 @@ See the LICENSE file for details.
         var commandId = Array.isArray(result) ? result[0] : result;
         processCommand(commandId);
     }
-    /**
-     * Present the Picker Builder dialog for building/editing a user picker.
-     * @param editPickerId Id of a current user picker to edit.
-     * @returns The created or updated PickerCommandEntry, or undefined if cancelled.
-     */
     function buildPicker(editPickerId) {
         var result = pickerBuilder(editPickerId);
         if (!result) return;
         var id;
         var picker;
         if (result.overwrite) {
-            // Update existing picker
             for (var i = prefs.pickers.length - 1; i >= 0; i--) {
                 if (prefs.pickers[i].name === result.name) {
                     prefs.pickers[i].commands = result.commands;
@@ -15503,7 +17201,6 @@ See the LICENSE file for details.
                 }
             }
         } else {
-            // Create new picker
             id = generateCommandId("picker_".concat(result.name.toLowerCase()));
             picker = {
                 id: id,
@@ -15522,10 +17219,6 @@ See the LICENSE file for details.
         addToStartup([id]);
         return picker;
     }
-    /**
-     * Present a palette with all user-created pickers. The selected picker will
-     * be opened in the picker builder.
-     */
     function editPicker() {
         var pickers = filterCommands(null, ["picker"], true, false);
         var result = commandPalette(
@@ -15538,23 +17231,17 @@ See the LICENSE file for details.
         var commandId = Array.isArray(result) ? result[0] : result;
         processCommand(commandId);
     }
-    /**
-     * Clear all user history.
-     */
     function clearHistory() {
         var confirmed = confirm(
             localize(strings.cd_clear_history_confirm),
             false,
-            localize(strings.cd_exception)
+            localize(strings.cd_clear_history_title)
         );
         if (confirmed) {
             userHistory.clear();
             alert(localize(strings.history_cleared));
         }
     }
-    /**
-     * Present the Ai Command Palette startup configurator dialog.
-     */
     function customizeStartup() {
         var availableStartupCommands = filterCommands(
             null,
@@ -15569,18 +17256,14 @@ See the LICENSE file for details.
                 "builtin",
                 "config",
             ],
-            true, // showHidden
-            true, // showNonRelevant
-            prefs.startupCommands // hideSpecificCommands
+            true,
+            true,
+            prefs.startupCommands
         );
-        // Show the startup builder dialog
         var result = startupBuilder(availableStartupCommands);
         if (!result) return;
         prefs.startupCommands = result;
     }
-    /**
-     * Present a dialog for adding/editing custom user commands.
-     */
     function addCustomCommands() {
         function parseCSVLine(line) {
             var result = [];
@@ -15608,9 +17291,6 @@ See the LICENSE file for details.
         }
         var result = addCustomCommandsDialog();
         if (!result || result == "") return;
-        // if (!("customCommands" in prefs)) {
-        //     prefs.customCommands = [];
-        // }
         var newCustomCommandIds = [];
         var normalized = result.replace(/\r\n|\r/g, "\n");
         var lines = normalized.split("\n");
@@ -15642,10 +17322,6 @@ See the LICENSE file for details.
         }
         addToStartup(newCustomCommandIds);
     }
-    /**
-     * Present a palette with all user-created commands (e.g. bookmarks, scripts, workflows).
-     * The selected command(s) will be deleted.
-     */
     function deleteCommand() {
         var deletableCommands = filterCommands(
             null,
@@ -15670,7 +17346,6 @@ See the LICENSE file for details.
             localize(strings.cd_delete_confirm_title)
         );
         if (!confirmed) return;
-        // Delete from prefs collections
         var typesToCheck = [
             prefs.workflows,
             prefs.bookmarks,
@@ -15689,17 +17364,12 @@ See the LICENSE file for details.
                 }
             }
         }
-        // Delete from startup commands
         for (var i = prefs.startupCommands.length - 1; i >= 0; i--) {
             if (result.includes(prefs.startupCommands[i])) {
                 prefs.startupCommands.splice(i, 1);
             }
         }
     }
-    /**
-     * Present a palette with all user watched folders.
-     * The selected command(s) will be deleted.
-     */
     function removeWatchedFolders() {
         var commands = [];
         for (var i = 0; i < prefs.watchedFolders.length; i++) {
@@ -15709,7 +17379,8 @@ See the LICENSE file for details.
                 id: id,
                 name: folder.fsName,
                 action: "Remove Watched Folder",
-                type: "Watched Folder",
+                type: "watched_folder_title_case",
+                path: folder.fsName,
                 docRequired: false,
                 selRequired: false,
                 hidden: false,
@@ -15741,11 +17412,9 @@ See the LICENSE file for details.
         var indexesToRemove = commandIds.map(function (id) {
             return commandsData[id].index;
         });
-        // sort descending so we remove from the end first
         indexesToRemove.sort(function (a, b) {
             return b - a;
         });
-        // Delete watched folders from prefs
         for (
             var _i = 0, indexesToRemove_1 = indexesToRemove;
             _i < indexesToRemove_1.length;
@@ -15757,22 +17426,12 @@ See the LICENSE file for details.
             }
         }
     }
-    /**
-     * Toggle fuzzy command matching in user preferences.
-     */
     function toggleFuzzyMatching() {
         prefs.fuzzy = Boolean(!prefs.fuzzy);
     }
-    /**
-     * Toggle debug logging by updating the environment variable.
-     */
     function toggleDebugLogging() {
         $.setenv("AICP_DEBUG_LOGGING", debugLogging ? "false" : "true");
     }
-    /**
-     * Present a palette with all possible commands (excluding config commands).
-     * The selected command(s) will be hidden from the palette.
-     */
     function hideCommand() {
         var hideableCommands = filterCommands(
             null,
@@ -15800,21 +17459,12 @@ See the LICENSE file for details.
         var commandIds = Array.isArray(result) ? result : [result];
         prefs.hiddenCommands = prefs.hiddenCommands.concat(commandIds);
     }
-    /**
-     * Reveal the plugin log file in the file system.
-     */
     function revealLog() {
         logger.reveal();
     }
-    /**
-     * Reveal the user preference file in the file system.
-     */
     function revealPrefFile() {
         userPrefs.reveal();
     }
-    /**
-     * Present a palette with all built-in commands.
-     */
     function builtinCommands() {
         var builtins = filterCommands(null, ["builtin"], true, false);
         var result = commandPalette(
@@ -15827,10 +17477,6 @@ See the LICENSE file for details.
         var commandId = Array.isArray(result) ? result[0] : result;
         processCommand(commandId);
     }
-    /**
-     * Present a palette with all hidden commands.
-     * The selected command will be unhidden.
-     */
     function unhideCommand() {
         var result = commandPalette(
             prefs.hiddenCommands,
@@ -15843,7 +17489,7 @@ See the LICENSE file for details.
         if (typeof result === "string") {
             ids = [result];
         } else {
-            ids = result; // CommandId[]
+            ids = result;
         }
         for (var i = 0; i < ids.length; i++) {
             var id = ids[i];
@@ -15851,26 +17497,29 @@ See the LICENSE file for details.
             if (index !== -1) prefs.hiddenCommands.splice(index, 1);
         }
     }
-    // AI COMMAND PALETTE BUILT-IN OPERATIONS
-    /**
-     * Display a comprehensive report about the active document.
-     *
-     * Generates and displays a dialog containing detailed information about the
-     * current document, including:
-     * - File information (name, path, color space, resolution, etc.)
-     * - Document dimensions and artboards
-     * - Layer structure and properties
-     * - Pattern, swatch, and symbol counts
-     * - Font usage and text properties
-     *
-     * The report can be customized by checking/unchecking sections, and can be
-     * saved to a text file.
-     */
     function documentReport() {
         var doc = app.activeDocument;
         var rulerUnits = doc.rulerUnits.toString().split(".").pop();
         var docUnitValue = new UnitValue(1, rulerUnits);
         var docUnitNameAbbrev = docUnitValue.type == "?" ? "pt" : docUnitValue.type;
+        function formatReportTimestamp(date) {
+            function pad2(value) {
+                return value < 10 ? "0" + value.toString() : value.toString();
+            }
+            return (
+                date.getFullYear().toString() +
+                "/" +
+                pad2(date.getMonth() + 1) +
+                "/" +
+                pad2(date.getDate()) +
+                " " +
+                pad2(date.getHours()) +
+                ":" +
+                pad2(date.getMinutes()) +
+                ":" +
+                pad2(date.getSeconds())
+            );
+        }
         var fileInfo = [
             localize(strings.dr_header),
             "".concat(localize(strings.dr_filename)).concat(doc.name),
@@ -15893,7 +17542,7 @@ See the LICENSE file for details.
                     UnitValue("".concat(doc.height, " pt")).as(docUnitNameAbbrev),
                     " "
                 )
-                .concat(docUnitValue.type),
+                .concat(docUnitNameAbbrev),
         ].join("\n");
         var artboards = getCollectionObjectNames(doc.artboards);
         var documentFonts = getDocumentFonts(doc);
@@ -15938,7 +17587,7 @@ See the LICENSE file for details.
             return ""
                 .concat(info, "\n\n")
                 .concat(localize(strings.dr_file_created))
-                .concat(new Date());
+                .concat(formatReportTimestamp(new Date()));
         }
         var win = new Window("dialog");
         win.text = localize(strings.document_report);
@@ -15958,12 +17607,16 @@ See the LICENSE file for details.
                 1
             );
         }
-        var pOptions = win.add("panel", undefined, "Include?");
+        var pOptions = win.add("panel", undefined, localize(strings.dr_include));
         pOptions.orientation = "row";
         pOptions.margins = 20;
-        var _loop_2 = function (key) {
+        var _loop_3 = function (key) {
             var option = reportOptions[key];
-            var cb = pOptions.add("checkbox", undefined, key);
+            var cb = pOptions.add(
+                "checkbox",
+                undefined,
+                localize(strings[key.toLowerCase()])
+            );
             cb.value = !!option.str;
             cb.enabled = !!option.str;
             cb.onClick = function () {
@@ -15972,7 +17625,7 @@ See the LICENSE file for details.
             };
         };
         for (var key in reportOptions) {
-            _loop_2(key);
+            _loop_3(key);
         }
         var info = win.add("edittext", [0, 0, 400, 400], buildReport(), {
             multiline: true,
@@ -16132,18 +17785,6 @@ See the LICENSE file for details.
         var commandId = Array.isArray(result) ? result[0] : result;
         processCommand(commandId);
     }
-    /**
-     * Launch the Workflow Builder to create or edit a command workflow.
-     *
-     * Displays a dialog where users can select commands from a filtered list and
-     * arrange them into a sequential workflow. Workflows allow users to execute
-     * multiple commands with a single palette selection.
-     *
-     * If editWorkflowId is provided, the workflow is opened for editing; otherwise,
-     * a new workflow is created.
-     *
-     * @param editWorkflowId - Optional ID of an existing workflow to edit.
-     */
     function buildWorkflow(editWorkflowId) {
         var commandsToHide = [
             "builtin_editPicker",
@@ -16196,10 +17837,6 @@ See the LICENSE file for details.
         }
         addToStartup([id]);
     }
-    /**
-     * Present a palette with all user-created workflows. The selected workflow will
-     * be opened in the workflow builder.
-     */
     function editWorkflow() {
         var workflows = filterCommands(null, ["workflow"], true, false);
         var result = commandPalette(
@@ -16212,10 +17849,6 @@ See the LICENSE file for details.
         var commandId = Array.isArray(result) ? result[0] : result;
         buildWorkflow(commandId);
     }
-    /**
-     * Export the active artboard as a PNG file using the `Document.imageCapture()` method.
-     * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html?#document-imagecapture
-     */
     function imageCapture() {
         if (app.documents.length === 0) {
             alert(localize(strings.no_active_document));
@@ -16230,7 +17863,6 @@ See the LICENSE file for details.
             alert(localize(strings.fl_error_writing, file));
             return;
         }
-        // Ensure the filename ends with ".png"
         if (!file.name.toLowerCase().endsWith(".png")) {
             file.rename("".concat(file.name, ".png"));
         }
@@ -16238,10 +17870,6 @@ See the LICENSE file for details.
             alert(localize(strings.file_saved, file.fsName));
         }
     }
-    /**
-     * Export active document dataset variables to a file.
-     * https://ai-scripting.docsforadobe.dev/jsobjref/Document.html#document-exportvariables
-     */
     function exportVariables() {
         var doc = app.activeDocument;
         if (doc.variables.length === 0) {
@@ -16261,10 +17889,6 @@ See the LICENSE file for details.
             alert(localize(strings.file_saved, file.fsName));
         }
     }
-    /**
-     * Load all artboards from the active document as objects into the data model.
-     * @returns Artboard command ids.
-     */
     function loadActiveDocumentArtboards() {
         var artboardIds = [];
         var artboards = app.activeDocument.artboards;
@@ -16286,10 +17910,6 @@ See the LICENSE file for details.
         }
         return artboardIds;
     }
-    /**
-     * Present a goto palette with artboards from the active document.
-     * The selected artboard is made active and brought into view.
-     */
     function goToArtboard() {
         var _a;
         var artboards = loadActiveDocumentArtboards();
@@ -16323,10 +17943,6 @@ See the LICENSE file for details.
         app.activeDocument.artboards.setActiveArtboardIndex(idx);
         app.executeMenuCommand("fitin");
     }
-    /**
-     * Load all page items from the active document as objects into the data model.
-     * @returns Object command IDs.
-     */
     function loadActiveDocumentPageItems() {
         var pageItems = [];
         for (var i = 0; i < app.activeDocument.pageItems.length; i++) {
@@ -16349,10 +17965,6 @@ See the LICENSE file for details.
         }
         return pageItems;
     }
-    /**
-     * Present a goto palette with named objects from the active document.
-     * The selected object is selected within the UI and brought into view.
-     */
     function goToNamedObject() {
         var _a;
         var doc = app.activeDocument;
@@ -16396,14 +18008,9 @@ See the LICENSE file for details.
         }
         doc.selection = null;
         pageItem.selected = true;
-        // reset zoom for current document
         doc.views[0].zoom = 1;
         zoomIntoPageItem(pageItem);
     }
-    /**
-     * Load all open documents into the data model.
-     * @returns Document command IDs.
-     */
     function loadOpenDocuments() {
         var _a, _b;
         var openDocuments = [];
@@ -16436,10 +18043,6 @@ See the LICENSE file for details.
         }
         return openDocuments;
     }
-    /**
-     * Present a goto palette with currently open documents.
-     * The selected document is activated.
-     */
     function goToOpenDocument() {
         var _a;
         var openDocuments = loadOpenDocuments();
@@ -16473,9 +18076,6 @@ See the LICENSE file for details.
         var entry = commandsData[commandId];
         entry.document.activate();
     }
-    /**
-     * Load file bookmarks from the user's system into the command palette.
-     */
     function loadFileBookmark() {
         var acceptedTypes = [
             ".ai",
@@ -16525,7 +18125,7 @@ See the LICENSE file for details.
             ".tiff",
             ".webp",
             ".wmf",
-        ]; // file types taken from Ai open dialog
+        ];
         var re = new RegExp("".concat(acceptedTypes.join("|"), "$"), "i");
         var files = loadFileTypes(
             localize(strings.bm_load_bookmark),
@@ -16568,9 +18168,6 @@ See the LICENSE file for details.
         );
         addToStartup(newBookmarkIds);
     }
-    /**
-     * Load folder bookmarks from the user's system into the command palette.
-     */
     function loadFolderBookmark() {
         var folder = Folder.selectDialog(localize(strings.bm_load_bookmark));
         if (!folder) return;
@@ -16599,14 +18196,9 @@ See the LICENSE file for details.
         prefs.bookmarks.push(bookmark);
         addToStartup([bookmark.id]);
     }
-    /**
-     * Watch a folder, and load all found scripts into the command palette.
-     */
     function watchScriptFolder() {
-        // pick a folder
         var folder = Folder.selectDialog(localize(strings.watched_folder_select));
         if (!folder) return;
-        // check prefs to see if folder is already watched
         if (prefs.watchedFolders.includes(folder.fsName)) {
             logger.log("watched folder already in prefs: ".concat(folder.fsName));
             alert(localize(strings.folder_already_watched, decodeURI(folder.name)));
@@ -16614,9 +18206,6 @@ See the LICENSE file for details.
         }
         prefs.watchedFolders.push(folder.fsName);
     }
-    /**
-     * Load ExtendScript (.jsx and .js) scripts into the command palette.
-     */
     function loadScripts() {
         var acceptedTypes = [".jsx", ".js"];
         var re = new RegExp("".concat(acceptedTypes.join("|"), "$"), "i");
@@ -16654,10 +18243,6 @@ See the LICENSE file for details.
         prefs.scripts = prefs.scripts.concat(scripts);
         addToStartup(newScriptIDs);
     }
-    /**
-     * Present a palette with the most recent user commands.
-     * The selected is executed.
-     */
     function recentUserCommands() {
         var result = commandPalette(
             mostRecentCommands,
@@ -16669,10 +18254,6 @@ See the LICENSE file for details.
         var commandId = Array.isArray(result) ? result[0] : result;
         processCommand(commandId);
     }
-    /**
-     * Load recently opened files as objects into the data model.
-     * @returns File command ids.
-     */
     function loadRecentFiles() {
         var recentFiles = [];
         var fileCount = app.preferences.getIntegerPreference("RecentFileNumber");
@@ -16699,10 +18280,6 @@ See the LICENSE file for details.
         }
         return recentFiles;
     }
-    /**
-     * Present a palette with recently opened files.
-     * The selected file is opened.
-     */
     function recentFiles() {
         var _a;
         var arr = loadRecentFiles();
@@ -16738,15 +18315,9 @@ See the LICENSE file for details.
             alert(localize(strings.fl_error_loading, result));
         }
     }
-    /**
-     * Redraw all application windows.
-     */
     function redrawWindows() {
         app.redraw();
     }
-    /**
-     * Reveal the active document on the user's system by opening its parent folder.
-     */
     function revealActiveDocument() {
         var _a;
         if (app.documents.length === 0) {
@@ -16764,11 +18335,6 @@ See the LICENSE file for details.
             alert(localize(strings.active_document_not_saved));
         }
     }
-    /**
-     * Check if any workflow actions are currently non-active (nonexistent or AI version incompatible).
-     * @param actions Array of command IDs representing workflow action steps.
-     * @returns Array of non-active command IDs.
-     */
     function checkWorkflowActions(actions) {
         var badActions = [];
         for (var i = 0; i < actions.length; i++) {
@@ -16783,26 +18349,20 @@ See the LICENSE file for details.
         return badActions;
     }
     logger.log("**SCRIPT LAUNCH**", _title, "v" + _version, $.fileName);
-    // load the user data
     userPrefs.load(true);
     userActions.load();
     userHistory.load();
     userPrefs.loadWatchedScripts();
-    // apply version updates for user preferences
     if (versionUpdate0_16_0) {
         userPrefs.update("0.16.0");
         userHistory.update("0.16.0");
     }
-    // debugging flag
     devMode && devInfo.save();
-    // set command palette matching algo
     var matcher = prefs["fuzzy"] ? fuzzy : scoreMatches;
     logger.log("fuzzy matcher ".concat(prefs["fuzzy"] ? "enabled" : "disabled"));
-    // add basic defaults to the startup on a first-run/fresh install
     if (!prefs.startupCommands) {
         prefs.startupCommands = ["builtin_recentCommands", "config_settings"];
     }
-    // SHOW THE COMMAND PALETTE
     var queryableCommands = filterCommands(null, null, false, false);
     var startupCommands = filterCommands(prefs.startupCommands, null, false, false);
     var result = commandPalette(

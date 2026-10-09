@@ -1,5 +1,3 @@
-//@target illustrator
-
 // SCRIPT INFORMATION
 
 const _title = "Ai Command Palette";

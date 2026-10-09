@@ -6,6 +6,14 @@ This all came about after a suggestion from [Kurt Gold](https://community.adobe.
 
 There are 650+ strings that need to be translated so to make things easier, Kurt and myself initially used to keep track of everything but now the files are version controlled in this [repository](/data/).
 
+Locale-specific overrides can also be stored in files named
+`data/strings.<locale>.csv`. Each override file must contain a `value` column
+and one or more locale columns. The build script merges these files into the
+main strings data and falls back to English for any empty translation.
+
+The Traditional Chinese localization is stored in
+`data/strings.zh_TW.csv`.
+
 ## How It Works
 
 All of the localization is done at runtime via the ExtendScript `localize()` function (learn more below).

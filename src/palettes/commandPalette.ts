@@ -50,7 +50,11 @@ function commandPalette(
     winButtons.orientation = "row";
     winButtons.alignChildren = ["center", "center"];
 
-    const ok = winButtons.add("button", undefined, "OK") as Button;
+    const ok = winButtons.add(
+        "button",
+        undefined,
+        localize(strings.button_ok)
+    ) as Button;
     ok.preferredSize.width = 100;
 
     const cancel = winButtons.add("button", undefined, localize(strings.cancel), {

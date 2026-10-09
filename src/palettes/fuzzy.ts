@@ -21,15 +21,21 @@ function fuzzy(q: string, commands: string[]): string[] {
 
     for (const id of commands) {
         const command = commandsData[id];
-        let commandName = determineCorrectString(command, "name").toLowerCase();
-        if (!commandName) commandName = id.toLowerCase().replace("_", " ");
-        commandName = stripRegExpChars(commandName).replace(regexEllipsis, "");
-
         const chunks = sanitizedQuery.split(" ");
-        const spans = findMatches(chunks, commandName);
-        if (!spans.length) continue;
+        const commandNames = getCommandSearchNames(command, id);
+        let score = -1;
 
-        let score = calculateScore(commandName, spans, chunks);
+        for (const rawName of commandNames) {
+            const commandName = stripRegExpChars(rawName.toLowerCase()).replace(
+                regexEllipsis,
+                ""
+            );
+            const spans = findMatches(chunks, commandName);
+            if (!spans.length) continue;
+            score = Math.max(score, calculateScore(commandName, spans, chunks));
+        }
+
+        if (score < 0) continue;
         let bonus = 0;
 
         if (latches.hasOwnProperty(q) && latches[q] == id) {

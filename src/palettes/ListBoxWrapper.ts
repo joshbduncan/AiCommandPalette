@@ -51,6 +51,7 @@ function addToStepsOnDoubleClick(listbox: ListBox): void {
 
         if (command.id === "builtin_buildPicker") {
             const newPicker = buildPicker();
+            if (!newPicker) return;
             newItem = steps.add("item", newPicker.name) as ListItemWithId;
             newItem.subItems[0].text = newPicker.type;
             newItem.id = newPicker.id;
@@ -394,7 +395,8 @@ class ListBoxWrapper {
 
                 for (let j = 1; j < columnKeys.length; j++) {
                     const str = determineCorrectString(command, columnKeys[j]);
-                    item.subItems[j - 1].text = str || "<missing>";
+                    item.subItems[j - 1].text =
+                        str || localize(strings.listbox_missing);
                 }
             }
 

@@ -1,0 +1,135 @@
+Command Name,Command Action,Command Type
+Rasterino｜編輯影像,_GenericPluginMenuItem 14,menu
+Rasterino｜更新影像,_GenericPluginMenuItem 15,menu
+Rasterino｜將嵌入影像轉為連結,_GenericPluginMenuItem 16,menu
+Phantasm｜亮度／對比（濾鏡）,Phantasm CS Brightness Contrast Filter,menu
+Phantasm｜曲線（濾鏡）,Phantasm CS Curves Filter,menu
+Phantasm｜去飽和（濾鏡）,Phantasm CS Desaturate Filter,menu
+Phantasm｜雙色調（濾鏡）,Phantasm CS Duotone Filter,menu
+Phantasm｜曝光（濾鏡）,Phantasm CS Exposure Filter,menu
+Phantasm｜網點（濾鏡）,Phantasm CS Halftone Filter,menu
+Phantasm｜色相／飽和度（濾鏡）,Phantasm CS Hue Saturation Filter,menu
+Phantasm｜反相（濾鏡）,Phantasm CS Invert Filter,menu
+Phantasm｜色階（濾鏡）,Phantasm CS Levels Filter,menu
+Phantasm｜印前校正（濾鏡）,Phantasm CS Prepress Correct Filter,menu
+Phantasm｜向指定顏色偏移（濾鏡）,Phantasm CS Color Shift Filter,menu
+Phantasm｜色溫／色調（濾鏡）,Phantasm CS Temperature Tint Filter,menu
+SubScribe｜像素轉向量 Pixels to Vector,AGPixelsToVector,menu
+Phantasm｜選取 Phantasm 效果,Phantasm Select Effects,menu
+Stipplism｜選取點描效果,Stipplism SelectLE,menu
+Stylism｜選取 AG Architect 效果,Stylism Select Architect,menu
+Stylism｜選取長陰影效果：全部,AGBSAll Menu Item,menu
+Stylism｜選取長陰影效果：標準,AGBSStandard Menu Item,menu
+Stylism｜選取長陰影效果：消失點,AGBSVP Menu Item,menu
+Stylism｜選取偏移效果,Stylism Select Offset,menu
+Stylism｜選取飛濺效果,Stylism Select Splatter,menu
+Randomino｜選取 Perturb 效果,Randomino Select Perturb,menu
+VectorScribe｜選取動態形狀：全部,DSAll Menu Item,menu
+VectorScribe｜選取動態形狀：正方形與矩形,DSSquRec Menu Item,menu
+VectorScribe｜選取動態形狀：圓形與橢圓形,DSCirEll Menu Item,menu
+VectorScribe｜選取動態形狀：正方形,DSSquares Menu Item,menu
+VectorScribe｜選取動態形狀：圓形,DSCircles Menu Item,menu
+VectorScribe｜選取動態形狀：矩形,DSRectangles Menu Item,menu
+VectorScribe｜選取動態形狀：橢圓形,DSEllipses Menu Item,menu
+VectorScribe｜選取動態形狀：多邊形,DSPolygons Menu Item,menu
+VectorScribe｜選取動態形狀：星形,DSStars Menu Item,menu
+VectorScribe｜選取動態形狀：圓環,DSDonuts Menu Item,menu
+VectorScribe｜選取動態形狀：箭頭,DSArrows Menu Item,menu
+VectorScribe｜選取動態形狀：雲形,DSClouds Menu Item,menu
+VectorScribe｜選取動態形狀：新月形,DSCrescents Menu Item,menu
+VectorScribe｜選取動態形狀：十字形,DSCrosses Menu Item,menu
+VectorScribe｜選取動態形狀：齒輪,DSGears Menu Item,menu
+VectorScribe｜選取動態形狀：心形,DSHearts Menu Item,menu
+VectorScribe｜選取動態形狀：對話泡泡,DSSpeech Bubbles Menu Item,menu
+VectorScribe｜增加錨點（即時效果）,Live ASTGVSLEAddPoints,menu
+VectorScribe｜陣列（即時效果）,Live ASTGVSLEAGArray,menu
+VectorScribe｜傾斜（即時效果）,Live ASTGVSLEAGShear,menu
+VectorScribe｜變形（即時效果）,Live ASTGVSLEAGTransform,menu
+VectorScribe｜傾斜端點 Angle Cap（即時效果）,Live ASTGVSLEAngleCap,menu
+VectorScribe｜封閉路徑（即時效果）,Live ASTGVSLEClosePath,menu
+VectorScribe｜轉為平滑點（即時效果）,Live ASTGVSLEConvertToSmooth,menu
+VectorScribe｜虛線化（即時效果）,Live ASTGVSLEDashify,menu
+VectorScribe｜延伸路徑（即時效果）,Live ASTGVSLEExtendPath,menu
+VectorScribe｜建立複合路徑（即時效果）,Live ASTGVSLEMakeCompoundPath,menu
+VectorScribe｜建立形狀（即時效果）,Live ASTGVSLEMakeShape,menu
+VectorScribe｜移除路徑（即時效果）,Live ASTGVSLEPathRemoval,menu
+VectorScribe｜路徑視覺化（即時效果）,Live ASTGVSLEPathVisualizer,menu
+VectorScribe｜移除錨點（即時效果）,Live ASTGVSLEPointRemoval,menu
+VectorScribe｜釋放複合路徑（即時效果）,Live ASTGVSLEReleaseCompoundPath,menu
+VectorScribe｜收回方向控制把手（即時效果）,Live ASTGVSLERetractHandles,menu
+VectorScribe｜反轉路徑方向（即時效果）,Live ASTGVSLEReversePathDirection,menu
+VectorScribe｜移除線段（即時效果）,Live ASTGVSLESegmentRemoval,menu
+VectorScribe｜智慧移除錨點（即時效果）,Live ASTGVSLESmartRemovePoints,menu
+VectorScribe｜將路徑分割為線段（即時效果）,Live ASTGVSLESplitPathToSegments,menu
+VectorScribe｜筆畫屬性（即時效果）,Live ASTGVSLEStrokeAttributes,menu
+Phantasm｜亮度／對比（即時效果）,Live Phantasm CS Brightness Contrast,menu
+Phantasm｜曲線（即時效果）,Live Phantasm CS Curves,menu
+Phantasm｜去飽和（即時效果）,Live Phantasm CS Desaturate,menu
+Phantasm｜雙色調（即時效果）,Live Phantasm CS Duotone,menu
+Phantasm｜曝光（即時效果）,Live Phantasm CS Exposure,menu
+Phantasm｜網點（即時效果）,Live Phantasm CS Halftone,menu
+Phantasm｜色相／飽和度（即時效果）,Live Phantasm CS Hue Saturation,menu
+Phantasm｜反相（即時效果）,Live Phantasm CS Invert,menu
+Phantasm｜色階（即時效果）,Live Phantasm CS Levels,menu
+Phantasm｜印前校正（即時效果）,Live Phantasm CS Prepress Correct,menu
+Phantasm｜向指定顏色偏移（即時效果）,Live Phantasm CS Color Shift,menu
+Phantasm｜色溫／色調（即時效果）,Live Phantasm CS Temperature Tint,menu
+Randomino｜隨機顏色,Live ASTGRAColorRandomizer,menu
+Randomino｜隨機不透明度,Live ASTGRAOpacityRandomizer,menu
+Randomino｜隨機擾動 Perturb,Live ASTGRAPerturb,menu
+Stipplism｜向量點描,Live ASTGStipple,menu
+Stipplism｜符號點描,Live ASTGSymbolStipple,menu
+Stylism｜AG Architect 延伸線,Live AG Architect,menu
+Stylism｜長陰影 Block Shadow,Live AG Block Shadow,menu
+Stylism｜曲率視覺化,Live AG Curvature Visualizer,menu
+Stylism｜偏移 Offset,Live AG Offset,menu
+Stylism｜飛濺 Splatter,Live AG Splatter,menu
+Texturino｜套用材質,Live ASTGTexture,menu
+VectorScribe｜AG Corners 轉角（即時效果）,Live ASTGVSAGCorners,menu
+SubScribe｜依點畫弧 Arc by Points,Arc by Points Tool,tool
+Stylism｜長陰影工具,AG Block Shadow Tool,tool
+SubScribe｜依點畫圓 Circle by Points,Circle by Points Tool,tool
+SubScribe｜顏色取樣 AG Color Select,AG Color Select Tool,tool
+SubScribe｜連接,Connect Tool,tool
+Rasterino｜裁切影像,Crop Image Tool,tool
+SubScribe｜曲率圓,Curvature Circle Tool,tool
+VectorScribe｜動態轉角工具,Dynamic Corners Tool,tool
+VectorScribe｜動態測量,Dynamic Measure Tool,tool
+VectorScribe｜動態形狀,Dynamic Shapes Tool,tool
+DynamicSketch｜動態手繪,Dynamic Sketch Tool,tool
+VectorScribe｜延伸路徑工具,Extend Path Tool,tool
+SubScribe｜從圖稿建立漸層,Gradient From Art Tool,tool
+ColliderScribe｜擴散／聚攏 Inflate Deflate,Inflate Deflate Tool,tool
+InkFlow｜筆墨流動,InkFlow Tool,tool
+InkScribe｜精準鋼筆,InkScribe Tool,tool
+SubScribe｜鎖定／解鎖,Lock Unlock Tool,tool
+MirrorMe｜鏡像對稱,MirrorMe Tool,tool
+Stylism｜偏移工具,AG Offset Tool,tool
+Texturino｜不透明度筆刷,OpacityBrushTool,tool
+SubScribe｜方向對齊,Orient Tool,tool
+SubScribe｜方向變形,Orient Transform Tool,tool
+VectorScribe｜路徑編修 PathScribe,PathScribe Tool,tool
+SubScribe｜垂線,Perpendicular Line Tool,tool
+SubScribe｜快速校正方向,Quick Orient Tool,tool
+Randomino｜隨機工具 Randomini,RandominiTool,tool
+Randomino｜設定隨機基準點,Reference Point Setter Tool,tool
+Reform｜重塑,Reform Tool,tool
+Reform｜文字重塑,Reform Text Tool,tool
+Reform｜重塑輪廓 Reprofile,Reprofile Tool,tool
+VectorScribe｜重新定位錨點,Reposition Point Tool,tool
+ColliderScribe｜碰撞時旋轉,Rotate At Collision Tool,tool
+ColliderScribe｜旋轉至碰撞,Rotate To Collision Tool,tool
+VectorScribe｜智慧刪除筆刷,Smart Remove Brush Tool,tool
+ColliderScribe｜碰撞吸附,Snap To Collisions Tool,tool
+SubScribe｜拉直,Straighten Tool,tool
+Stylism｜效果操控工具,Stylism Tool,tool
+ColliderScribe｜超級框選,Super Marquee Tool,tool
+SubScribe｜相切圓,Tangent Circle Tool,tool
+SubScribe｜切線,Tangent Line Tool,tool
+Texturino｜材質工具,TextureTool,tool
+Texturino｜材質筆刷,TextureBrushTool,tool
+DynamicSketch｜修剪並接合 Trim and Join,AG Trim and Join Tool,tool
+WidthScribe｜寬度筆刷,Width Brush Tool,tool
+WidthScribe｜寬度橡皮擦,Width Eraser Tool,tool
+WidthScribe｜寬度漸層,Width Gradient Tool,tool
+WidthScribe｜寬度選取,Width Selector Tool,tool

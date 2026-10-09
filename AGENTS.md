@@ -22,11 +22,14 @@ npm run build-strings     # Generate localized strings from CSV
 npm run build-commands    # Generate command data from CSV
 ```
 
-### Post-Build Steps (Automatic)
-These run automatically after `npm run build`:
-- `postbuild:strip-ts-comments` - Remove TypeScript comments
-- `postbuild:wrap-in-anon-func` - Wrap in anonymous function
-- `postbuild:prettier` - Format final output
+### Build Output Steps
+When TypeScript compilation completes successfully, npm runs `postbuild` automatically:
+- TypeScript emits a comment-free ES3 bundle
+- `postbuild` removes any remaining TypeScript-only directives
+- `postbuild` wraps the bundle in an anonymous function and formats the final output
+
+If TypeScript emits `build/bundle.jsx` while still reporting the project's known
+ES3/`noLib` type errors, run `npm run postbuild` manually before testing the final JSX.
 
 ### Deploy to Illustrator
 ```bash
@@ -61,7 +64,7 @@ Configured in `.pre-commit-config.yaml`:
 ### TypeScript Configuration
 - **Target:** ES3 (critical for ExtendScript compatibility)
 - **Output:** Single file bundle at `build/bundle.jsx`
-- **Comments:** `removeComments: false` (stripped in post-build)
+- **Comments:** `removeComments: true` for the compiled bundle; source comments remain in `src/`
 - **Types:** `types-for-adobe/Illustrator/2022`
 - **Strict:** `alwaysStrict: false` (ES3 limitation)
 
@@ -216,7 +219,7 @@ const debugLogging = $.getenv("AICP_DEBUG_LOGGING") !== "false" ? true : false;
 - **Order matters:** File compilation order in `tsconfig.json` is critical
 - **ExtendScript quirks:** Research Adobe ExtendScript limitations before using modern JS
 - **No NPM runtime dependencies:** `types-for-adobe` is dev-only
-- **Localization:** Support English (en), German (de), Russian (ru)
+- **Localization:** Support English (en), German (de), Russian (ru), and Traditional Chinese (zh_TW)
 - **Pre-commit hooks:** Automatically build before committing
 
 ## Resources
