@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.0] 2026-11-11
+
 ### Added
 
+- Support for Adobe Illustrator 2027 (v31.0)
 - New menu commands for Ai version 31.0 (Window > AI Assistant (beta), Window > Blend, Preferences > MCP & Tools (beta)) from [@sttk3](https://community.adobe.com/questions-652/executemenucommand-command-list-797322?postid=7809979#post7809979)
 - `check-menu-ids` and `check-tool-ids` npm scripts (also run as pre-commit hooks) that fail on duplicate command ids
 - `next-ids` npm script to find the next available menu and tool command ids
@@ -16,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Moved the `//@target illustrator` directive into `header.txt` so it sits at the top of the compiled script instead of inside the wrapper function
 - Removed the placeholder `test` npm script
+- `copy-to-ai` npm script now copies the script to both Illustrator 2026 and 2027
 
 ### Fixed
 

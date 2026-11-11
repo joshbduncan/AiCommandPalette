@@ -1,6 +1,6 @@
 {
     "name": "ai-command-palette",
-    "version": "0.16.1",
+    "version": "0.17.0",
     "description": "Adobe Illustrator Command Palette",
     "main": "src/index.ts",
     "scripts": {
@@ -9,7 +9,7 @@
         "next-ids": "python3 scripts/command_ids.py next",
         "build-strings": "zsh -c \"python3 scripts/build_strings.py | prettier --parser typescript > src/data/built_strings.ts\"",
         "build-commands": "zsh -c \"python3 scripts/build_commands.py | prettier --parser typescript > src/data/built_commands.ts\"",
-        "copy-to-ai": "zsh -c \"sudo cp AiCommandPalette.jsx /Applications/Adobe\\ Illustrator\\ 2026/Presets.localized/en_US/Scripts\"",
+        "copy-to-ai": "zsh -c \"for v in 2026 2027; do sudo cp AiCommandPalette.jsx /Applications/Adobe\\ Illustrator\\ $v/Presets.localized/en_US/Scripts; done\"",
         "build": "tsc",
         "postbuild": "zsh -c \"scripts/postbuild.sh\"",
         "dev": "chokidar 'src/**/*.ts' -c 'npm run build && npm run copy-to-ai'"
