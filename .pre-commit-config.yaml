@@ -3,6 +3,22 @@
 repos:
     - repo: local
       hooks:
+          - id: check-menu-ids
+            name: check menu ids
+            entry: npm run check-menu-ids
+            language: system
+            files: ^data/menu_commands\.csv$
+            pass_filenames: false
+    - repo: local
+      hooks:
+          - id: check-tool-ids
+            name: check tool ids
+            entry: npm run check-tool-ids
+            language: system
+            files: ^data/tool_commands\.csv$
+            pass_filenames: false
+    - repo: local
+      hooks:
           - id: build-strings
             name: build strings
             entry: npm run build-strings

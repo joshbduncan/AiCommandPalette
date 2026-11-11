@@ -555,6 +555,7 @@ menu_2156,,TRUE,menu,TRUE,FALSE,,,View > Snap to Glyph
 menu_1444,newview,FALSE,menu,TRUE,FALSE,,,View > New View...,Ansicht > Neue Ansicht …,Просмотр > Новый вид…
 menu_1445,editview,FALSE,menu,TRUE,FALSE,,,View > Edit Views...,Ansicht > Ansicht bearbeiten …,Просмотр > Редактировать виды…
 menu_1446,newwindow,FALSE,menu,TRUE,FALSE,,,Window > New Window,Fenster > Neues Fenster,Окно > Новое окно
+menu_2184,internal palettes posing as plug-in menus-aiassistant,FALSE,menu,FALSE,FALSE,31.0,,Window > AI Assistant (beta),
 menu_1447,cascade,FALSE,menu,TRUE,FALSE,,,Window > Arrange > Cascade,Fenster > Anordnen > Überlappend,Окно > Упорядить > Каскадом
 menu_1448,tile,FALSE,menu,TRUE,FALSE,,,Window > Arrange > Tile,Fenster > Anordnen > Nebeneinander,Окно > Упорядить > Мозаикой
 menu_1449,floatInWindow,FALSE,menu,TRUE,FALSE,,,Window > Arrange > Float in Window,Fenster > Anordnen > In Fenster verschiebbar machen,Окно > Упорядить > Плавающее в окне
@@ -580,7 +581,8 @@ menu_1466,Style Palette,FALSE,menu,FALSE,FALSE,,,Window > Appearance,Fenster > A
 menu_1467,Adobe Artboard Palette,FALSE,menu,FALSE,FALSE,,,Window > Artboards,Fenster > Zeichenflächen,Окно > Монтажные области
 menu_1468,Adobe SmartExport Panel Menu Item,FALSE,menu,FALSE,FALSE,20,,Window > Asset Export,Fenster > Export von Element,Окно > Экспорт ресурсов
 menu_1469,internal palettes posing as plug-in menus-attributes,FALSE,menu,FALSE,FALSE,,,Window > Attributes,Fenster > Attribute,Окно > Атрибуты
-menu_2181,"",FALSE,menu,FALSE,FALSE,30.7,,Window > Blend,,,,Note that the key is '' an empty string
+menu_2181,"",FALSE,menu,FALSE,FALSE,30.7,30.9,Window > Blend,,,,Note that the key is '' an empty string
+menu_2182,"Adobe Blend Palette",FALSE,menu,FALSE,FALSE,31.0,,Window > Blend
 menu_1470,Adobe BrushManager Menu Item,FALSE,menu,FALSE,FALSE,,,Window > Brushes,Fenster > Pinsel,Окно > Кисти
 menu_1471,Adobe Color Palette,FALSE,menu,FALSE,FALSE,,,Window > Color,Fenster > Farbe,Окно > Цвет
 menu_1472,Adobe Harmony Palette,FALSE,menu,FALSE,FALSE,,,Window > Color Guide,Fenster > Farbhilfe,Окно > Каталог цветов
@@ -834,6 +836,7 @@ menu_1715,FilePref,FALSE,menu,FALSE,FALSE,,,Preferences > File Handling...,Vorei
 menu_1716,ClipboardPref,FALSE,menu,FALSE,FALSE,25,,Preferences > Clipboard Handling,Voreinstellungen > Zwischenablageoptionen …,Установки > Обработка буфера…
 menu_1717,BlackPref,FALSE,menu,FALSE,FALSE,,,Preferences > Appearance of Black...,Bearbeiten > Voreinstellungen > Aussehen von Schwarz …,Установки > Воспроизведение черного цвета...
 menu_1718,DevicesPref,FALSE,menu,FALSE,FALSE,24,,Preferences > Devices,Voreinstellungen > Geräte …,Установки > Устройства…
+menu_2183,AIToolsPref,FALSE,menu,FALSE,FALSE,31.0,,Preferences > MCP & Tools (beta)...
 menu_1719,Debug Panel,FALSE,menu,FALSE,FALSE,,,Debug Panel
 menu_2020,faceSizeUp,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Point Size Up
 menu_2021,faceSizeDown,FALSE,menu,TRUE,TRUE,29.4,,Other Text > Point Size Down

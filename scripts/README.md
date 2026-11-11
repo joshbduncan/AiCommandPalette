@@ -76,24 +76,19 @@ To extract the currently known menu commands for comparison/diff with the a new 
 python scripts/extract_ai_menu_commands_from_csv.py data/menu_commands.csv
 ```
 
-### Find Next Menu Command ID
+### Find Next Menu and Tool Command IDs
 
 ```bash
-cut -d',' -f1 data/menu_commands.csv |
-tail -n +2 |
-sed 's/.*_//' |
-sort -n |
-tail -1
+npm run next-ids
 ```
 
-### Find Duplicate Menu Command IDs
+### Find Duplicate Menu and Tool Command IDs
+
+These also run as pre-commit hooks whenever the CSV files change, and exit with an error (printing the offending rows) when duplicates are found.
 
 ```bash
-cut -d',' -f1 data/menu_commands.csv |
-tail -n +2 |
-sort |
-uniq -c |
-awk '$1 > 1'
+npm run check-menu-ids
+npm run check-tool-ids
 ```
 
 ### Adding IDs to New Menu Commands

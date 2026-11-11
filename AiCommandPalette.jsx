@@ -6,6 +6,8 @@ https://joshbduncan.com
 This script is distributed under the MIT License.
 See the LICENSE file for details.
 */
+//@target illustrator
+
 (function () {
     var __spreadArray =
         (this && this.__spreadArray) ||
@@ -19,7 +21,6 @@ See the LICENSE file for details.
                 }
             return to.concat(ar || Array.prototype.slice.call(from));
         };
-    //@target illustrator
     // SCRIPT INFORMATION
     var _title = "Ai Command Palette";
     var _version = "0.16.1";
@@ -758,7 +759,7 @@ See the LICENSE file for details.
         Object.entries = function (obj) {
             var ownProps = Object.keys(obj);
             var resArray = new Array(ownProps.length);
-            for (var i = ownProps.length; i--; ) {
+            for (var i = ownProps.length; i--;) {
                 resArray[i] = [ownProps[i], obj[ownProps[i]]];
             }
             return resArray;
@@ -885,7 +886,7 @@ See the LICENSE file for details.
         var string = "";
         number = number.slice(2);
         var length = number.length;
-        for (var i = 0; i < length; ) {
+        for (var i = 0; i < length;) {
             var code = number.slice(i, (i += 2));
             string += String.fromCharCode(parseInt(code, 16));
         }
@@ -8489,6 +8490,21 @@ See the LICENSE file for details.
             },
             hidden: false,
         },
+        menu_2184: {
+            id: "menu_internal_palettes_posing_as_plug-in_menus-aiassistant",
+            action: "internal palettes posing as plug-in menus-aiassistant",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Window > AI Assistant (beta)",
+                de: "Window > AI Assistant (beta)",
+                ru: "Window > AI Assistant (beta)",
+                "zh-cn": "Window > AI Assistant (beta)",
+            },
+            hidden: false,
+            minVersion: "31.0",
+        },
         menu_1447: {
             id: "menu_cascade",
             action: "cascade",
@@ -8819,6 +8835,22 @@ See the LICENSE file for details.
             },
             hidden: false,
             minVersion: "30.7",
+            maxVersion: "30.9",
+        },
+        menu_2182: {
+            id: "menu_Adobe_Blend_Palette",
+            action: "Adobe Blend Palette",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Window > Blend",
+                de: "Window > Blend",
+                ru: "Window > Blend",
+                "zh-cn": "Window > Blend",
+            },
+            hidden: false,
+            minVersion: "31.0",
         },
         menu_1470: {
             id: "menu_Adobe_BrushManager_Menu_Item",
@@ -9948,6 +9980,21 @@ See the LICENSE file for details.
             },
             hidden: false,
             minVersion: "24",
+        },
+        menu_2183: {
+            id: "menu_AIToolsPref",
+            action: "AIToolsPref",
+            type: "menu",
+            docRequired: false,
+            selRequired: false,
+            name: {
+                en: "Preferences > MCP & Tools (beta)...",
+                de: "Preferences > MCP & Tools (beta)...",
+                ru: "Preferences > MCP & Tools (beta)...",
+                "zh-cn": "Preferences > MCP & Tools (beta)...",
+            },
+            hidden: false,
+            minVersion: "31.0",
         },
         menu_1719: {
             id: "menu_Debug_Panel",

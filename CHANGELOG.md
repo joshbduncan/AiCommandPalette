@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- New menu commands for Ai version 31.0 (Window > AI Assistant (beta), Window > Blend, Preferences > MCP & Tools (beta)) from [@sttk3](https://community.adobe.com/questions-652/executemenucommand-command-list-797322?postid=7809979#post7809979)
+- `check-menu-ids` and `check-tool-ids` npm scripts (also run as pre-commit hooks) that fail on duplicate command ids
+- `next-ids` npm script to find the next available menu and tool command ids
+
+### Changed
+
+- Moved the `//@target illustrator` directive into `header.txt` so it sits at the top of the compiled script instead of inside the wrapper function
+- Removed the placeholder `test` npm script
+
+### Fixed
+
+- Limited the original `Window > Blend` menu command (empty key) to Ai versions 30.7-30.9 so it does not duplicate the new 31.0 command
+
 ## [0.16.1] 2026-09-23
 
 ### Added
